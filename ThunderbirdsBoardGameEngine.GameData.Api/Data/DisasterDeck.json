@@ -1,0 +1,62 @@
+
+  [
+    {
+      "id": 1,
+      "name": "Asteroid Impact",
+      "difficultyNumber": 5,
+      "location": "Mars",
+      "rescueType": "Space",
+      "bonuses": [
+        {
+          "type": "CharacterBonus",
+          "bonusValue": 2,
+          "character": "Alan"
+        },
+        {
+          "type": "ThunderbirdBonus",
+          "bonusValue": 1,
+          "thunderbird": "Thunderbird3"
+        }
+      ],
+      "rewardOptions": [
+        {
+          "isUserChoice": false,
+          "bonusTokenChoices": [ "Determination" ]
+        },
+        {
+          "isUserChoice": false,
+          "bonusTokenChoices": [ "Intelligence" ]
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Earthquake",
+      "difficultyNumber": 9,
+      "location": "Asia",
+      "rescueType": "Land",
+      "bonuses": [
+        {
+          "type": "CharacterBonus",
+          "bonusValue": 2,
+          "character": "Virgil"
+        },
+        {
+          "type": "PodVehicleBonus",
+          "bonusValue": 3,
+          "podVehicles": "DOMO"
+        }
+      ],
+      "rewardOptions": [
+        {
+          "isUserChoice": true,
+          "bonusTokenChoices": [ "Technology", "Determination", "Intelligence", "Teamwork", "Logistics" ]
+        },
+        {
+          "isUserChoice": false,
+          "bonusTokenChoices": [ "Intelligence" ]
+        }
+      ]
+    }
+  ]
+
