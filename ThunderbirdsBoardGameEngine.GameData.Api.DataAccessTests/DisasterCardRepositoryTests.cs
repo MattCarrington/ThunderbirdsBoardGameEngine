@@ -9,7 +9,7 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.DataAccessTests
         public async Task GetAllDisasterCards_ShouldReturnAllDisasterCardsAsync()
         {
             // Arrange
-            var filepath = Path.Combine("Data", "DisasterDeck.json");
+            var filepath = Path.Combine("Data", "DisasterCards-test.json");
 
             var repository = new DisasterCardRepository(filepath);
 
