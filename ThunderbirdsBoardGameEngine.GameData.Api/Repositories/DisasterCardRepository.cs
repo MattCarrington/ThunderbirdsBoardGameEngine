@@ -3,10 +3,11 @@ using System.Text.Json.Serialization;
 using System.Threading;
 using ThunderbirdsBoardGameEngine.GameData.Api.Converters;
 using ThunderbirdsBoardGameEngine.GameData.Api.Entities;
+using ThunderbirdsBoardGameEngine.GameData.Api.Interfaces;
 
 namespace ThunderbirdsBoardGameEngine.GameData.Api.Repositories
 {
-    public class DisasterCardRepository
+    public class DisasterCardRepository : IDisasterCardRepository
     {
         private readonly string _filePath;
         private readonly JsonSerializerOptions _options;
