@@ -262,6 +262,24 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.UnitTests.Profiles
             Assert.Equal("Unknown bonus type", ex.InnerException?.Message);
         }
 
+        [Fact]
+        public void Map_WhenNonUserChoiceRewardWithoutSpecifiedToken_ThrowsInvalidOperationException()
+        {
+            // Arrange
+            var disasterCard = new DisasterCardBuilder()
+                .WithUserChoiceRewardOption()
+                .Build();
+
+            disasterCard.RewardOptions[0].IsUserChoice = false;
+
+            // Act & Assert
+            var ex = Assert.Throws<AutoMapperMappingException>(() =>
+                _mapper.Map<DisasterCardDto>(disasterCard));
+
+            Assert.IsType<InvalidOperationException>(ex.InnerException);
+            Assert.Equal("SpecifiedToken must be set for non-user-choice rewards", ex.InnerException?.Message);
+        }
+
         private class UnknownBonus : Bonus
         {
             // No extra fields needed — we just want it to be an unknown subtype.

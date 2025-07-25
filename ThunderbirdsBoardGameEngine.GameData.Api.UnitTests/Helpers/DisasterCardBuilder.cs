@@ -55,7 +55,7 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.UnitTests.Helpers
             _rewardOptions.Add(new RewardOption
             {
                 IsUserChoice = true,
-                BonusTokenChoices = Enum.GetValues<BonusTokens>().ToList()
+                
             });
             return this;
         }
@@ -64,8 +64,7 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.UnitTests.Helpers
         {
             _rewardOptions.Add(new RewardOption
             {
-                IsUserChoice = false,
-                BonusTokenChoices = new List<BonusTokens> { token }
+                SpecifiedToken = token,
             });
             return this;
         }
@@ -81,8 +80,7 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.UnitTests.Helpers
             {
                 _rewardOptions.Add(new RewardOption
                 {
-                    IsUserChoice = true,
-                    BonusTokenChoices = Enum.GetValues<BonusTokens>().ToList()
+                    IsUserChoice = true                    
                 });
             }
 

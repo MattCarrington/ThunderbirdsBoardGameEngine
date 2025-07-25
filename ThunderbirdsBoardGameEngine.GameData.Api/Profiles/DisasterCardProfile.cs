@@ -35,15 +35,9 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.Profiles
                 {
                     var dto = new RewardDto();
 
-                    if (reward.IsUserChoice)
-                    {
-                        dto.DisplayName = "User Choice";
-                    }
-                    else
-                    {
-                        var token = reward.BonusTokenChoices.FirstOrDefault();
-                        dto.DisplayName = token.ToString();
-                    }
+                    dto.DisplayName = reward.IsUserChoice
+                        ? "User Choice"
+                        : reward.SpecifiedToken?.ToString() ?? throw new InvalidOperationException("SpecifiedToken must be set for non-user-choice rewards");
 
                     return dto;
                 });

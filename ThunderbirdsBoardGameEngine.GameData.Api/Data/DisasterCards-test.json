@@ -49,12 +49,11 @@
       ],
       "rewardOptions": [
         {
-          "isUserChoice": true,
-          "bonusTokenChoices": [ "Technology", "Determination", "Intelligence", "Teamwork", "Logistics" ]
+          "isUserChoice": true          
         },
         {
           "isUserChoice": false,
-          "bonusTokenChoices": [ "Intelligence" ]
+          "specifiedToken": "Teamwork"
         }
       ]
     }
