@@ -14,6 +14,7 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.Controllers
             _service = service;
         }
 
+        [HttpGet]
         public async Task<IActionResult> Get()
         {
             var disasterCards = await _service.GetAllAsync();
