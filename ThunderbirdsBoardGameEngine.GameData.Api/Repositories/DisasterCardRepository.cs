@@ -15,7 +15,11 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.Repositories
 
         public DisasterCardRepository(IOptions<CardDataOptions> options)
         {
-            _filePath = options.Value.DisasterCardFilePath;
+            var filePath = options.Value.DisasterCardsFilePath;
+            if (string.IsNullOrWhiteSpace(filePath))
+                throw new ArgumentException("DisasterCardsFilePath must be set in configuration");
+
+            _filePath = filePath;
 
             _options = new JsonSerializerOptions
             {
@@ -27,6 +31,8 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.Repositories
 
         public async Task<IReadOnlyList<DisasterCard>> GetAllAsync()
         {
+            Console.WriteLine($"[DEBUG] Looking for file at: {Path.GetFullPath(_filePath)}");
+
             if (!File.Exists(_filePath))
                 throw new FileNotFoundException($"Disaster card file not found: {_filePath}");
 

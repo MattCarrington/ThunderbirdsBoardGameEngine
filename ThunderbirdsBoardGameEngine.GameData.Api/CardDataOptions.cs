@@ -2,6 +2,6 @@
 {
     public class CardDataOptions
     {
-        public string DisasterCardFilePath { get; set; } = string.Empty;
+        public string DisasterCardsFilePath { get; set; } = string.Empty;
     }
 }

@@ -12,7 +12,7 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.DataAccessTests.Repositories
             // Arrange
             var options = Options.Create(new CardDataOptions
             {
-                DisasterCardFilePath = "TestData/disasterCards-test.json"
+                DisasterCardsFilePath = "TestData/disasterCards-test.json"
             });
 
             var repository = new DisasterCardRepository(options);
