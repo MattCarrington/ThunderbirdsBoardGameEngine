@@ -5,7 +5,7 @@ using ThunderbirdsBoardGameEngine.GameData.Api.Messages.Dtos;
 
 namespace ThunderbirdsBoardGameEngine.GameData.Api.Services
 {
-    public class DisasterCardService
+    public class DisasterCardService : IDisasterCardService
     {
         private readonly IDisasterCardRepository _disasterCardRepository;
         private readonly IMapper _mapper;

@@ -16,10 +16,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\ThunderbirdsBoardGameEngine.GameData.Api.Domain\ThunderbirdsBoardGameEngine.GameData.Api.Domain.csproj" />
     <ProjectReference Include="..\ThunderbirdsBoardGameEngine.GameData.Api.Messages\ThunderbirdsBoardGameEngine.GameData.Api.Messages.csproj" />
   </ItemGroup>
