@@ -1,0 +1,251 @@
+[
+  {
+    "id": 0,
+    "name": "Signal From Sigma",
+    "difficultyNumber": 8,
+    "location": "asteroidBelt",
+    "rescueType": "space",
+    "bonuses": [
+      {
+        "type": "characterBonus",
+        "bonusValue": 1,
+        "character": "john"
+      },
+      {
+        "type": "podVehicleBonus",
+        "bonusValue": 3,
+        "podVehicle": "transmitterTruck",
+        "location": "southAmerica"
+      }
+    ],
+    "rewardOptions": [
+      {
+        "isUserChoice": true,
+        "specifiedToken": null
+      }
+    ]
+  },
+  {
+    "id": 1,
+    "name": "The Mighty Atom",
+    "difficultyNumber": 10,
+    "location": "africa",
+    "rescueType": "land",
+    "bonuses": [
+      {
+        "type": "thunderbirdBonus",
+        "bonusValue": 3,
+        "thunderbird": "thunderbird4"
+      },
+      {
+        "type": "characterBonus",
+        "bonusValue": 2,
+        "character": "ladyPenelope"
+      }
+    ],
+    "rewardOptions": [
+      {
+        "isUserChoice": false,
+        "specifiedToken": "technology"
+      },
+      {
+        "isUserChoice": true,
+        "specifiedToken": null
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "name": "The Moon Mine Menace",
+    "difficultyNumber": 8,
+    "location": "moon",
+    "rescueType": "space",
+    "bonuses": [
+      {
+        "type": "characterBonus",
+        "bonusValue": 2,
+        "character": "gordon"
+      },
+      {
+        "type": "characterBonus",
+        "bonusValue": 2,
+        "character": "john"
+      }
+    ],
+    "rewardOptions": [
+      {
+        "isUserChoice": true,
+        "specifiedToken": null
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "name": "The Perils of Penelope",
+    "difficultyNumber": 7,
+    "location": "europe",
+    "rescueType": "land",
+    "bonuses": [
+      {
+        "type": "characterBonus",
+        "bonusValue": 2,
+        "character": "ladyPenelope"
+      },
+      {
+        "type": "thunderbirdBonus",
+        "bonusValue": 1,
+        "thunderbird": "fab1"
+      }
+    ],
+    "rewardOptions": [
+      {
+        "isUserChoice": false,
+        "specifiedToken": "determination"
+      }
+    ]
+  },
+  {
+    "id": 4,
+    "name": "Towering Ocean",
+    "difficultyNumber": 8,
+    "location": "southPacific",
+    "rescueType": "sea",
+    "bonuses": [
+      {
+        "type": "thunderbirdBonus",
+        "bonusValue": 2,
+        "thunderbird": "thunderbird3"
+      },
+      {
+        "type": "thunderbirdBonus",
+        "bonusValue": 2,
+        "thunderbird": "thunderbird4"
+      }
+    ],
+    "rewardOptions": [
+      {
+        "isUserChoice": true,
+        "specifiedToken": null
+      }
+    ]
+  },
+  {
+    "id": 5,
+    "name": "30 Minutes After Noon",
+    "difficultyNumber": 8,
+    "location": "northAmerica",
+    "rescueType": "land",
+    "bonuses": [
+      {
+        "type": "thunderbirdBonus",
+        "bonusValue": 2,
+        "thunderbird": "thunderbird1"
+      },
+      {
+        "type": "podVehicleBonus",
+        "bonusValue": 3,
+        "podVehicle": "laserCutter",
+        "location": "europe"
+      }
+    ],
+    "rewardOptions": [
+      {
+        "isUserChoice": true,
+        "specifiedToken": null
+      }
+    ]
+  },
+  {
+    "id": 6,
+    "name": "City of Fire",
+    "difficultyNumber": 8,
+    "location": "northAmerica",
+    "rescueType": "land",
+    "bonuses": [
+      {
+        "type": "podVehicleBonus",
+        "bonusValue": 3,
+        "podVehicle": "firefly"
+      },
+      {
+        "type": "podVehicleBonus",
+        "bonusValue": 2,
+        "podVehicle": "mole"
+      }
+    ],
+    "rewardOptions": [
+      {
+        "isUserChoice": true,
+        "specifiedToken": null
+      }
+    ]
+  },
+  {
+    "id": 7,
+    "name": "Rockquake",
+    "difficultyNumber": 10,
+    "location": "australia",
+    "rescueType": "air",
+    "bonuses": [
+      {
+        "type": "podVehicleBonus",
+        "bonusValue": 2,
+        "podVehicle": "recoveryVehicles"
+      },
+      {
+        "type": "podVehicleBonus",
+        "bonusValue": 2,
+        "podVehicle": "excavator"
+      },
+      {
+        "type": "characterBonus",
+        "bonusValue": 2,
+        "character": "virgil"
+      }
+    ],
+    "rewardOptions": [
+      {
+        "isUserChoice": false,
+        "specifiedToken": "intelligence"
+      },
+      {
+        "isUserChoice": true,
+        "specifiedToken": null
+      }
+    ]
+  },
+  {
+    "id": 8,
+    "name": "Flight Path to Fear",
+    "difficultyNumber": 9,
+    "location": "asia",
+    "rescueType": "air",
+    "bonuses": [
+      {
+        "type": "podVehicleBonus",
+        "bonusValue": 2,
+        "podVehicle": "laserCutter"
+      },
+      {
+        "type": "podVehicleBonus",
+        "bonusValue": 2,
+        "podVehicle": "elevatorCars"
+      },
+      {
+        "type": "characterBonus",
+        "bonusValue": 2,
+        "character": "john"
+      }
+    ],
+    "rewardOptions": [
+      {
+        "isUserChoice": false,
+        "specifiedToken": "technology"
+      },
+      {
+        "isUserChoice": false,
+        "specifiedToken": "logistics"
+      }
+    ]
+  }
+]

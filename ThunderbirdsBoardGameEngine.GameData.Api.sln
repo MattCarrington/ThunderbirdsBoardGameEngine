@@ -17,11 +17,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThunderbirdsBoardGameEngine
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThunderbirdsBoardGameEngine.GameData.Api.Domain", "ThunderbirdsBoardGameEngine.GameData.Api.Domain\ThunderbirdsBoardGameEngine.GameData.Api.Domain.csproj", "{35873908-CE98-41B1-A3D3-12C041C441BD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThunderbirdsGameEnginer.GameData.Importer", "ThunderbirdsGameEnginer.GameData.Importer\ThunderbirdsGameEnginer.GameData.Importer.csproj", "{5E2DD4EE-D168-46D8-A19D-D29A2BB33972}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThunderbirdsBoardGameEngine.Serialization", "ThunderbirdsBoardGameEngine.Serialization\ThunderbirdsBoardGameEngine.Serialization.csproj", "{3B7EAE55-D91F-4317-8DFA-583F8208AA59}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThunderbirdsBoardGameEngine.Serialization.UnitTests", "ThunderbirdsBoardGameEngine.Serialization.UnitTests\ThunderbirdsBoardGameEngine.Serialization.UnitTests.csproj", "{9DE916CC-8E85-41B8-91BD-83739C65DAB4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThunderbirdsBoardGameEngine.GameData.Importer", "ThunderbirdsBoardGameEngine.GameData.Importer\ThunderbirdsBoardGameEngine.GameData.Importer.csproj", "{DFA200D4-ECCC-4289-8080-D7296A109119}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -49,10 +49,6 @@ Global
 		{35873908-CE98-41B1-A3D3-12C041C441BD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{35873908-CE98-41B1-A3D3-12C041C441BD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{35873908-CE98-41B1-A3D3-12C041C441BD}.Release|Any CPU.Build.0 = Release|Any CPU
-		{5E2DD4EE-D168-46D8-A19D-D29A2BB33972}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5E2DD4EE-D168-46D8-A19D-D29A2BB33972}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5E2DD4EE-D168-46D8-A19D-D29A2BB33972}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5E2DD4EE-D168-46D8-A19D-D29A2BB33972}.Release|Any CPU.Build.0 = Release|Any CPU
 		{3B7EAE55-D91F-4317-8DFA-583F8208AA59}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{3B7EAE55-D91F-4317-8DFA-583F8208AA59}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3B7EAE55-D91F-4317-8DFA-583F8208AA59}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -61,6 +57,10 @@ Global
 		{9DE916CC-8E85-41B8-91BD-83739C65DAB4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9DE916CC-8E85-41B8-91BD-83739C65DAB4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9DE916CC-8E85-41B8-91BD-83739C65DAB4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DFA200D4-ECCC-4289-8080-D7296A109119}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DFA200D4-ECCC-4289-8080-D7296A109119}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DFA200D4-ECCC-4289-8080-D7296A109119}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DFA200D4-ECCC-4289-8080-D7296A109119}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

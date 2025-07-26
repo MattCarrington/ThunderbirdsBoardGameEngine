@@ -33,7 +33,39 @@ namespace ThunderbirdsBoardGameEngine.Serialization.Converters
 
         public override void Write(Utf8JsonWriter writer, Bonus value, JsonSerializerOptions options)
         {
-            throw new NotImplementedException();
+            writer.WriteStartObject();
+
+            switch (value)
+            {
+                case CharacterBonus cb:
+                    writer.WriteString("type", "characterBonus");
+                    writer.WriteNumber("bonusValue", cb.BonusValue);
+                    writer.WriteString("character", JsonNamingPolicy.CamelCase.ConvertName(cb.Character.ToString()));
+                    if (cb.Location != null)
+                        writer.WriteString("location", JsonNamingPolicy.CamelCase.ConvertName(cb.Location.ToString()));
+                    break;
+
+                case ThunderbirdBonus tb:
+                    writer.WriteString("type", "thunderbirdBonus");
+                    writer.WriteNumber("bonusValue", tb.BonusValue);
+                    writer.WriteString("thunderbird", JsonNamingPolicy.CamelCase.ConvertName(tb.Thunderbird.ToString()));
+                    if (tb.Location != null)
+                        writer.WriteString("location", JsonNamingPolicy.CamelCase.ConvertName(tb.Location.ToString()));
+                    break;
+
+                case PodVehicleBonus pb:
+                    writer.WriteString("type", "podVehicleBonus");
+                    writer.WriteNumber("bonusValue", pb.BonusValue);
+                    writer.WriteString("podVehicle", JsonNamingPolicy.CamelCase.ConvertName(pb.PodVehicle.ToString()));
+                    if (pb.Location != null)
+                        writer.WriteString("location", JsonNamingPolicy.CamelCase.ConvertName(pb.Location.ToString()));
+                    break;
+
+                default:
+                    throw new JsonException($"Unknown Bonus type '{value.GetType().Name}'");
+            }
+
+            writer.WriteEndObject();
         }
     }
 }
