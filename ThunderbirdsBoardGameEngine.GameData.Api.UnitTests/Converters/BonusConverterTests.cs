@@ -27,9 +27,9 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.UnitTests.Converters
             // Arrange
             var input = """
             {
-                "type": "CharacterBonus",
+                "type": "characterBonus",
                 "bonusValue": 2,
-                "character": "Virgil"
+                "character": "virgil"
             }
             """;
 
@@ -48,9 +48,9 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.UnitTests.Converters
             // Arrange
             var input = """
             {
-                "type": "ThunderbirdBonus",
+                "type": "thunderbirdBonus",
                 "bonusValue": 2,
-                "thunderbird": "Thunderbird4"
+                "thunderbird": "thunderbird4"
             }
             """;
 
@@ -69,9 +69,9 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.UnitTests.Converters
             // Arrange
             var input = """
             {
-                "type": "PodVehicleBonus",
+                "type": "podVehicleBonus",
                 "bonusValue": 2,
-                "podVehicle": "ElevatorCars"
+                "podVehicle": "elevatorCars"
             }
             """;            
 
@@ -90,9 +90,9 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.UnitTests.Converters
             // Arrange
             var input = """
             {
-                "type": "UnknownBonus",
+                "type": "unknownBonus",
                 "bonusValue": 2,
-                "unknown": "Unknown"
+                "unknown": "unknown"
             }
             """;
 
@@ -107,7 +107,7 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.UnitTests.Converters
             var input = """
             {
                 "bonusValue": 2,
-                "unknown": "Unknown"
+                "unknown": "unknown"
             }
             """;
 

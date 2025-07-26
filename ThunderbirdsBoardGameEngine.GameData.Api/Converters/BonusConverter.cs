@@ -20,11 +20,11 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.Converters
 
             switch (typeDiscriminator)
             {
-                case "CharacterBonus":
+                case "characterBonus":
                     return JsonSerializer.Deserialize<CharacterBonus>(root.GetRawText(), options);
-                case "ThunderbirdBonus":
+                case "thunderbirdBonus":
                     return JsonSerializer.Deserialize<ThunderbirdBonus>(root.GetRawText(), options);
-                case "PodVehicleBonus":
+                case "podVehicleBonus":
                     return JsonSerializer.Deserialize<PodVehicleBonus>(root.GetRawText(), options);
                 default:
                     throw new JsonException($"Unknown Bonus type '{typeDiscriminator}'");
