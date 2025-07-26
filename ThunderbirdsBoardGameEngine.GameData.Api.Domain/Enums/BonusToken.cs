@@ -1,6 +1,6 @@
 ﻿namespace ThunderbirdsBoardGameEngine.GameData.Api.Domain.Enums
 {
-    public enum BonusTokens
+    public enum BonusToken
     {
         Teamwork,
         Intelligence,

@@ -6,6 +6,6 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.Entities
     {
         public bool IsUserChoice { get; set; }
 
-        public BonusTokens? SpecifiedToken { get; set; }
+        public BonusToken? SpecifiedToken { get; set; }
     }
 }

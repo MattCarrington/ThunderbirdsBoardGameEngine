@@ -60,7 +60,7 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.UnitTests.Helpers
             return this;
         }
 
-        public DisasterCardBuilder WithSpecifiedReward(BonusTokens token)
+        public DisasterCardBuilder WithSpecifiedReward(BonusToken token)
         {
             _rewardOptions.Add(new RewardOption
             {

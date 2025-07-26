@@ -197,7 +197,7 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.UnitTests.Profiles
         public void Map_WhenSpecifiedToken_ShouldCorrectlyMapRewardDto()
         {
             // Arrange
-            var rewardToken = BonusTokens.Technology;
+            var rewardToken = BonusToken.Technology;
 
             var disasterCard = new DisasterCardBuilder().WithSpecifiedReward(rewardToken).Build();
 
@@ -215,7 +215,7 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.UnitTests.Profiles
             // Arrange
             var disasterCard = new DisasterCardBuilder()
                 .WithUserChoiceRewardOption()
-                .WithSpecifiedReward(BonusTokens.Technology)
+                .WithSpecifiedReward(BonusToken.Technology)
                 .Build();
 
             // Act
@@ -224,7 +224,7 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.UnitTests.Profiles
             // Assert
             Assert.Equal(2, result.Rewards.Count);
             Assert.Contains(result.Rewards, r => r.DisplayName == "User Choice");
-            Assert.Contains(result.Rewards, r => r.DisplayName == BonusTokens.Technology.ToString());
+            Assert.Contains(result.Rewards, r => r.DisplayName == BonusToken.Technology.ToString());
         }
 
         [Fact]
@@ -232,8 +232,8 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.UnitTests.Profiles
         {
             // Arrange
             var disasterCard = new DisasterCardBuilder()
-                .WithSpecifiedReward(BonusTokens.Technology)
-                .WithSpecifiedReward(BonusTokens.Teamwork)
+                .WithSpecifiedReward(BonusToken.Technology)
+                .WithSpecifiedReward(BonusToken.Teamwork)
                 .Build();
 
             // Act
@@ -241,8 +241,8 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.UnitTests.Profiles
 
             // Assert
             Assert.Equal(2, result.Rewards.Count);
-            Assert.Contains(result.Rewards, r => r.DisplayName == BonusTokens.Technology.ToString());
-            Assert.Contains(result.Rewards, r => r.DisplayName == BonusTokens.Teamwork.ToString());
+            Assert.Contains(result.Rewards, r => r.DisplayName == BonusToken.Technology.ToString());
+            Assert.Contains(result.Rewards, r => r.DisplayName == BonusToken.Teamwork.ToString());
         }
 
         [Fact]
