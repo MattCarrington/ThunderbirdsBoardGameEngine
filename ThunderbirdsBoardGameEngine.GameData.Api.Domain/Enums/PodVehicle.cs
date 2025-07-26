@@ -1,4 +1,4 @@
-﻿namespace ThunderbirdsBoardGameEngine.GameData.Api.Enums
+﻿namespace ThunderbirdsBoardGameEngine.GameData.Api.Domain.Enums
 {
     public enum PodVehicle
     {

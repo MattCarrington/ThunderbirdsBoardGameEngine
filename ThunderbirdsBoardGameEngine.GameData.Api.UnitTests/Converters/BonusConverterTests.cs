@@ -2,7 +2,7 @@
 using System.Text.Json.Serialization;
 using ThunderbirdsBoardGameEngine.GameData.Api.Converters;
 using ThunderbirdsBoardGameEngine.GameData.Api.Entities;
-using ThunderbirdsBoardGameEngine.GameData.Api.Enums;
+using ThunderbirdsBoardGameEngine.GameData.Api.Domain.Enums;
 using Xunit;
 
 namespace ThunderbirdsBoardGameEngine.GameData.Api.UnitTests.Converters

@@ -1,4 +1,4 @@
-﻿using ThunderbirdsBoardGameEngine.GameData.Api.Enums;
+﻿using ThunderbirdsBoardGameEngine.GameData.Api.Domain.Enums;
 
 namespace ThunderbirdsBoardGameEngine.GameData.Api.Entities
 {

@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json.Linq;
 using ThunderbirdsBoardGameEngine.GameData.Api.Entities;
-using ThunderbirdsBoardGameEngine.GameData.Api.Enums;
+using ThunderbirdsBoardGameEngine.GameData.Api.Domain.Enums;
 
 namespace ThunderbirdsBoardGameEngine.GameData.Api.UnitTests.Helpers
 {
