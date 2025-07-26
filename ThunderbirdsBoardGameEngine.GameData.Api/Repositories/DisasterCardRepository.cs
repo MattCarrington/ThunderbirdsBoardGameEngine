@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using Microsoft.Extensions.Options;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading;
 using ThunderbirdsBoardGameEngine.GameData.Api.Converters;
@@ -12,9 +13,9 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.Repositories
         private readonly string _filePath;
         private readonly JsonSerializerOptions _options;
 
-        public DisasterCardRepository(string filepath)
+        public DisasterCardRepository(IOptions<CardDataOptions> options)
         {
-            _filePath = filepath;
+            _filePath = options.Value.DisasterCardFilePath;
 
             _options = new JsonSerializerOptions
             {

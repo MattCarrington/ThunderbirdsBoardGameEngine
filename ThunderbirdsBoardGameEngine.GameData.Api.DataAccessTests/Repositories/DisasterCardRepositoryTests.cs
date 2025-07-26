@@ -1,7 +1,8 @@
-﻿using ThunderbirdsBoardGameEngine.GameData.Api.Repositories;
+﻿using Microsoft.Extensions.Options;
+using ThunderbirdsBoardGameEngine.GameData.Api.Repositories;
 using Xunit;
 
-namespace ThunderbirdsBoardGameEngine.GameData.Api.DataAccessTests
+namespace ThunderbirdsBoardGameEngine.GameData.Api.DataAccessTests.Repositories
 {
     public class DisasterCardRepositoryTests
     {
@@ -9,9 +10,12 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.DataAccessTests
         public async Task GetAllDisasterCards_ShouldReturnAllDisasterCardsAsync()
         {
             // Arrange
-            var filepath = Path.Combine("Data", "DisasterCards-test.json");
+            var options = Options.Create(new CardDataOptions
+            {
+                DisasterCardFilePath = "TestData/disasterCards-test.json"
+            });
 
-            var repository = new DisasterCardRepository(filepath);
+            var repository = new DisasterCardRepository(options);
 
             // Act
             var disasterCards = await repository.GetAllAsync();
