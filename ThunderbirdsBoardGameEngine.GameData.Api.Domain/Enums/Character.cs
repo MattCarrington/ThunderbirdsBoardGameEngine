@@ -1,4 +1,6 @@
-﻿namespace ThunderbirdsBoardGameEngine.GameData.Api.Domain.Enums
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace ThunderbirdsBoardGameEngine.GameData.Api.Domain.Enums
 {
     public enum Character
     {
@@ -7,6 +9,8 @@
         Alan,
         Gordon,
         John,
+
+        [Display(Name = "Lady Penelope")]
         LadyPenelope,
     }
 }

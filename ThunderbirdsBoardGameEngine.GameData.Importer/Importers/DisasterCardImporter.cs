@@ -2,7 +2,9 @@
 using GameDataImporter.ConsoleApp.Helpers;
 using GameDataImporter.ConsoleApp.Parsers;
 using ThunderbirdsBoardGameEngine.GameData.Api.Domain.Entities;
-using ThunderbirdsBoardGameEngine.GameData.Importer.Helpers;
+using ThunderbirdsBoardGameEngine.GameData.Api.Domain.Enums;
+using ThunderbirdsBoardGameEngine.GameData.Importer.Parsers;
+using ThunderbirdsBoardGameEngine.Serialization.Enums;
 
 namespace ThunderbirdsBoardGameEngine.GameData.Importer.Importers
 {
@@ -64,8 +66,8 @@ namespace ThunderbirdsBoardGameEngine.GameData.Importer.Importers
                     Id = id++,
                     Name = row.Cell(header["Name"]).GetString(),
                     DifficultyNumber = row.Cell(header["Difficulty Number"]).GetValue<int>(),
-                    Location = EnumDisplayMapper.ParseLocation(row.Cell(header["Location"]).GetString()),
-                    RescueType = EnumDisplayMapper.ParseRescueType(row.Cell(header["Rescue Type"]).GetString()),
+                    Location = EnumDisplayHelper.ParseFromDisplayName<BoardLocation>(row.Cell(header["Location"]).GetString()),
+                    RescueType = EnumDisplayHelper.ParseFromDisplayName<RescueType>(row.Cell(header["Rescue Type"]).GetString()),
                     Bonuses = bonuses,
                     RewardOptions = rewards
                 };
