@@ -1,9 +1,9 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
-using ThunderbirdsBoardGameEngine.GameData.Api.Converters;
-using ThunderbirdsBoardGameEngine.GameData.Api.Domain.Enums;
-using Xunit;
 using ThunderbirdsBoardGameEngine.GameData.Api.Domain.Entities;
+using ThunderbirdsBoardGameEngine.GameData.Api.Domain.Enums;
+using ThunderbirdsBoardGameEngine.Serialization.Converters;
+using Xunit;
 
 namespace ThunderbirdsBoardGameEngine.GameData.Api.UnitTests.Converters
 {

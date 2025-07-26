@@ -2,7 +2,7 @@
 using System.Text.Json.Serialization;
 using ThunderbirdsBoardGameEngine.GameData.Api.Domain.Entities;
 
-namespace ThunderbirdsBoardGameEngine.GameData.Api.Converters
+namespace ThunderbirdsBoardGameEngine.Serialization.Converters
 {
     public class BonusConverter : JsonConverter<Bonus>
     {
