@@ -2,7 +2,7 @@
 using AutoFixture.Kernel;
 using AutoMapper;
 using NSubstitute;
-using ThunderbirdsBoardGameEngine.GameData.Api.Entities;
+using ThunderbirdsBoardGameEngine.GameData.Api.Domain.Entities;
 using ThunderbirdsBoardGameEngine.GameData.Api.Interfaces;
 using ThunderbirdsBoardGameEngine.GameData.Api.Messages.Dtos;
 using ThunderbirdsBoardGameEngine.GameData.Api.Services;

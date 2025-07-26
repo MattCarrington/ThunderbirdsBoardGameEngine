@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using ThunderbirdsBoardGameEngine.GameData.Api.Entities;
 using ThunderbirdsBoardGameEngine.GameData.Api.Interfaces;
 using ThunderbirdsBoardGameEngine.GameData.Api.Messages.Dtos;
 

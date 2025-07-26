@@ -3,7 +3,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading;
 using ThunderbirdsBoardGameEngine.GameData.Api.Converters;
-using ThunderbirdsBoardGameEngine.GameData.Api.Entities;
+using ThunderbirdsBoardGameEngine.GameData.Api.Domain.Entities;
 using ThunderbirdsBoardGameEngine.GameData.Api.Interfaces;
 
 namespace ThunderbirdsBoardGameEngine.GameData.Api.Repositories

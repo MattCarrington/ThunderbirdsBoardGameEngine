@@ -1,5 +1,5 @@
-﻿using AutoMapper; 
-using ThunderbirdsBoardGameEngine.GameData.Api.Entities;
+﻿using AutoMapper;
+using ThunderbirdsBoardGameEngine.GameData.Api.Domain.Entities;
 using ThunderbirdsBoardGameEngine.GameData.Api.Messages.Dtos;
 
 namespace ThunderbirdsBoardGameEngine.GameData.Api.Profiles

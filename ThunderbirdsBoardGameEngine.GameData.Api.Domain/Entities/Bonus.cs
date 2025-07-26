@@ -1,6 +1,6 @@
 ﻿using ThunderbirdsBoardGameEngine.GameData.Api.Domain.Enums;
 
-namespace ThunderbirdsBoardGameEngine.GameData.Api.Entities
+namespace ThunderbirdsBoardGameEngine.GameData.Api.Domain.Entities
 {
     public abstract class Bonus
     {

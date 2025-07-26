@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.Extensions.Logging.Abstractions;
-using ThunderbirdsBoardGameEngine.GameData.Api.Entities;
+using ThunderbirdsBoardGameEngine.GameData.Api.Domain.Entities;
 using ThunderbirdsBoardGameEngine.GameData.Api.Domain.Enums;
 using ThunderbirdsBoardGameEngine.GameData.Api.Messages.Dtos;
 using ThunderbirdsBoardGameEngine.GameData.Api.Profiles;
