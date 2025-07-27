@@ -5,6 +5,7 @@ using ThunderbirdsBoardGameEngine.GameData.Api.Domain.Enums;
 using ThunderbirdsBoardGameEngine.GameData.Api.Messages.Dtos;
 using ThunderbirdsBoardGameEngine.GameData.Api.Profiles;
 using ThunderbirdsBoardGameEngine.GameData.Api.TestHelpers.Builders;
+using ThunderbirdsBoardGameEngine.Serialization.Enums;
 using Xunit;
 
 namespace ThunderbirdsBoardGameEngine.GameData.Api.UnitTests.Profiles
@@ -34,7 +35,7 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.UnitTests.Profiles
             Assert.NotNull(result);
             Assert.Equal(disasterCard.Id, result.Id);
             Assert.Equal(disasterCard.Name, result.Name);
-            Assert.Equal(disasterCard.Location.ToString(), result.Location);
+            Assert.Equal(EnumDisplayHelper.GetDisplayName(disasterCard.Location), result.Location);
             Assert.Equal(disasterCard.RescueType.ToString(), result.RescueType);
             Assert.Equal(disasterCard.DifficultyNumber, result.DifficultyNumber);
         }
@@ -58,7 +59,7 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.UnitTests.Profiles
 
             // Assert
             var bonus = Assert.Single(result.Bonuses);
-            Assert.Equal(characterBonus.Character.ToString(), bonus.DisplayName);
+            Assert.Equal(EnumDisplayHelper.GetDisplayName(characterBonus.Character), bonus.DisplayName);
             Assert.Equal(characterBonus.BonusValue, bonus.BonusValue);
         }
 
@@ -81,7 +82,7 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.UnitTests.Profiles
 
             // Assert
             var bonus = Assert.Single(result.Bonuses);
-            Assert.Equal(thunderbirdBonus.Thunderbird.ToString(), bonus.DisplayName);
+            Assert.Equal(EnumDisplayHelper.GetDisplayName(thunderbirdBonus.Thunderbird), bonus.DisplayName);
             Assert.Equal(thunderbirdBonus.BonusValue, bonus.BonusValue);            
         }
 
@@ -104,7 +105,7 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.UnitTests.Profiles
 
             // Assert
             var bonus = Assert.Single(result.Bonuses);
-            Assert.Equal(podVehicleBonus.PodVehicle.ToString(), bonus.DisplayName);
+            Assert.Equal(EnumDisplayHelper.GetDisplayName(podVehicleBonus.PodVehicle), bonus.DisplayName);
             Assert.Equal(podVehicleBonus.BonusValue, bonus.BonusValue);
         }
 
@@ -141,10 +142,9 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.UnitTests.Profiles
 
             // Assert
             Assert.Equal(3, result.Bonuses.Count);
-
-            Assert.Contains(result.Bonuses, b => b.DisplayName == mobileCraneBonus.PodVehicle.ToString() && b.BonusValue == mobileCraneBonus.BonusValue);
-            Assert.Contains(result.Bonuses, b => b.DisplayName == thunderizerBonus.PodVehicle.ToString() && b.BonusValue == thunderizerBonus.BonusValue);
-            Assert.Contains(result.Bonuses, b => b.DisplayName == domoBonus.PodVehicle.ToString() && b.BonusValue == domoBonus.BonusValue);
+            Assert.Contains(result.Bonuses, b => b.DisplayName == EnumDisplayHelper.GetDisplayName(mobileCraneBonus.PodVehicle) && b.BonusValue == mobileCraneBonus.BonusValue);
+            Assert.Contains(result.Bonuses, b => b.DisplayName == EnumDisplayHelper.GetDisplayName(thunderizerBonus.PodVehicle) && b.BonusValue == thunderizerBonus.BonusValue);
+            Assert.Contains(result.Bonuses, b => b.DisplayName == EnumDisplayHelper.GetDisplayName(domoBonus.PodVehicle) && b.BonusValue == domoBonus.BonusValue);
         }
 
         [Fact]
@@ -174,8 +174,8 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.UnitTests.Profiles
             // Assert
             Assert.Equal(2, result.Bonuses.Count);
 
-            Assert.Contains(result.Bonuses, b => b.DisplayName == characterBonus.Character.ToString() && b.BonusValue == characterBonus.BonusValue);
-            Assert.Contains(result.Bonuses, b => b.DisplayName == thunderbirdBonus.Thunderbird.ToString() && b.BonusValue == thunderbirdBonus.BonusValue);
+            Assert.Contains(result.Bonuses, b => b.DisplayName == EnumDisplayHelper.GetDisplayName(characterBonus.Character) && b.BonusValue == characterBonus.BonusValue);
+            Assert.Contains(result.Bonuses, b => b.DisplayName == EnumDisplayHelper.GetDisplayName(thunderbirdBonus.Thunderbird) && b.BonusValue == thunderbirdBonus.BonusValue);
         }
 
         [Fact]
@@ -284,6 +284,5 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.UnitTests.Profiles
         {
             // No extra fields needed — we just want it to be an unknown subtype.
         }
-
     }
 }
