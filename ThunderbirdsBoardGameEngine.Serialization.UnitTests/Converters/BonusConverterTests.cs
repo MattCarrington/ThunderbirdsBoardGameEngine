@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using System.Runtime.CompilerServices;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 using ThunderbirdsBoardGameEngine.GameData.Api.Domain.Entities;
 using ThunderbirdsBoardGameEngine.GameData.Api.Domain.Enums;
@@ -22,7 +23,7 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.UnitTests.Converters
         }
 
         [Fact]
-        public void Deserialize_CharacterBonusJson_ReturnsExpectedCharacterBonus()
+        public void Deserialize_WhenCharacterBonusJson_ReturnsExpectedCharacterBonus()
         {
             // Arrange
             var input = """
@@ -43,7 +44,7 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.UnitTests.Converters
         }
 
         [Fact]
-        public void Deserialize_ThunderbirdBonusJson_ReturnsExpectedThunderbirdBonus()
+        public void Deserialize_WhenThunderbirdBonusJson_ReturnsExpectedThunderbirdBonus()
         {
             // Arrange
             var input = """
@@ -64,7 +65,7 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.UnitTests.Converters
         }
 
         [Fact]        
-        public void Deserialize_PodVehicleBonusJson_ReturnsExpectedPodVehicleBonus()
+        public void Deserialize_WhenPodVehicleBonusJson_ReturnsExpectedPodVehicleBonus()
         {
             // Arrange
             var input = """
@@ -85,7 +86,7 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.UnitTests.Converters
         }
 
         [Fact]
-        public void Deserialize_UnknownType_ThrowsJsonException()
+        public void Deserialize_WhenUnknownType_ThrowsJsonException()
         {
             // Arrange
             var input = """
@@ -101,7 +102,7 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.UnitTests.Converters
         }
 
         [Fact]
-        public void Deserilize_MissingType_ThrowsJsonException()
+        public void Deserialize_WhenMissingType_ThrowsJsonException()
         {
             // Arrange
             var input = """
@@ -113,6 +114,222 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.UnitTests.Converters
 
             // Act & Assert
             Assert.Throws<JsonException>(() => JsonSerializer.Deserialize<Bonus>(input, _options));
+        }
+
+        [Fact]
+        public void Serialize_WhenCharacterBonus_WritesExpectedJson()
+        {
+            // Arrange
+            var bonus = new CharacterBonus
+            {
+                BonusValue = 3,
+                Character = Character.Scott,
+                Location = BoardLocation.IndianOcean
+            };
+
+            // Act
+            var result = SerializeBonusToJson(bonus);
+
+            // Assert
+            Assert.Equal("characterBonus", result.GetProperty("type").GetString());
+            Assert.Equal(3, result.GetProperty("bonusValue").GetInt32());
+            Assert.Equal("scott", result.GetProperty("character").GetString());
+            Assert.Equal("indianOcean", result.GetProperty("location").GetString());
+        }
+
+        [Fact]
+        public void Serialize_WhenCharacterBonusWithoutLocation_WritesExpectedJson()
+        {
+            // Arrange
+            var bonus = new CharacterBonus
+            {
+                BonusValue = 5,
+                Character = Character.Alan
+            };
+
+            // Act
+            var result = SerializeBonusToJson(bonus); // assuming your helper method uses .Clone()
+
+            // Assert
+            Assert.Equal("characterBonus", result.GetProperty("type").GetString());
+            Assert.Equal(5, result.GetProperty("bonusValue").GetInt32());
+            Assert.Equal("alan", result.GetProperty("character").GetString());
+            Assert.False(result.TryGetProperty("location", out _), "Location should not be present in JSON");
+        }
+
+        [Fact]
+        public void Serialize_WhenThunderbirdBonus_WritesExpectedJson()
+        {
+            // Arrange
+            var bonus = new ThunderbirdBonus
+            {
+                BonusValue = 4,
+                Thunderbird = Thunderbird.Thunderbird2,
+                Location = BoardLocation.NorthPacific
+            };
+
+            // Act
+            var result = SerializeBonusToJson(bonus);
+
+            // Assert
+            Assert.Equal("thunderbirdBonus", result.GetProperty("type").GetString());
+            Assert.Equal(4, result.GetProperty("bonusValue").GetInt32());
+            Assert.Equal("thunderbird2", result.GetProperty("thunderbird").GetString());
+            Assert.Equal("northPacific", result.GetProperty("location").GetString());
+        }
+
+        [Fact]
+        public void Serialize_WhenThunderbirdBonusWithoutLocation_WritesExpectedJson()
+        {
+            // Arrange
+            var bonus = new ThunderbirdBonus
+            {
+                BonusValue = 6,
+                Thunderbird = Thunderbird.Thunderbird3
+            };
+
+            // Act
+            var result = SerializeBonusToJson(bonus);
+
+            // Assert
+            Assert.Equal("thunderbirdBonus", result.GetProperty("type").GetString());
+            Assert.Equal(6, result.GetProperty("bonusValue").GetInt32());
+            Assert.Equal("thunderbird3", result.GetProperty("thunderbird").GetString());
+            Assert.False(result.TryGetProperty("location", out _), "Location should not be present in JSON");
+        }
+
+        [Fact]
+        public void Serialize_WhenPodVehicleBonus_WritesExpectedJson()
+        {
+            // Arrange
+            var bonus = new PodVehicleBonus
+            {
+                BonusValue = 1,
+                PodVehicle = PodVehicle.ElevatorCars,
+                Location = BoardLocation.SouthAtlantic
+            };
+
+            // Act
+            var result = SerializeBonusToJson(bonus);
+
+            // Assert
+            Assert.Equal("podVehicleBonus", result.GetProperty("type").GetString());
+            Assert.Equal(1, result.GetProperty("bonusValue").GetInt32());
+            Assert.Equal("elevatorCars", result.GetProperty("podVehicle").GetString());
+            Assert.Equal("southAtlantic", result.GetProperty("location").GetString());
+        }
+
+        [Fact]
+        public void Serialize_WhenPodVehicleBonusWithoutLocation_WritesExpectedJson()
+        {
+            // Arrange
+            var bonus = new PodVehicleBonus
+            {
+                BonusValue = 3,
+                PodVehicle = PodVehicle.Mole
+            };
+
+            // Act
+            var result = SerializeBonusToJson(bonus);
+
+            // Assert
+            Assert.Equal("podVehicleBonus", result.GetProperty("type").GetString());
+            Assert.Equal(3, result.GetProperty("bonusValue").GetInt32());
+            Assert.Equal("mole", result.GetProperty("podVehicle").GetString());
+            Assert.False(result.TryGetProperty("location", out _), "Location should not be present in JSON");
+        }
+
+        [Fact]
+        public void Serialize_WhenInvalidBonus_ThrowsJsonException()
+        {
+            // Arrange
+            var bonus = new FakeBonus
+            {
+                BonusValue = 10,
+                FakeProperty = "Invalid"
+            };
+
+            // Act & Assert
+            Assert.Throws<JsonException>(() => JsonSerializer.Serialize<Bonus>(bonus, _options));
+        }
+
+        [Fact]
+        public void RoundTrip_WhenCharacterBonus_SerializesAndDeserializesCorrectly()
+        {
+            // Arrange
+            var characterBonus = new CharacterBonus
+            {
+                BonusValue = 2,
+                Character = Character.Virgil,
+                Location = BoardLocation.IndianOcean
+            };
+
+            // Act
+            var json = JsonSerializer.Serialize<Bonus>(characterBonus, _options);
+            var result = JsonSerializer.Deserialize<Bonus>(json, _options);
+
+            // Assert
+            var bonus = Assert.IsType<CharacterBonus>(result);
+            Assert.Equal(characterBonus.BonusValue, bonus.BonusValue);
+            Assert.Equal(characterBonus.Character, bonus.Character);
+            Assert.Equal(characterBonus.Location, bonus.Location);
+        }
+
+        [Fact]
+        public void RoundTrip_WhenThunderbirdBonus_SerializesAndDeserializesCorrectly()
+        {
+            // Arrange
+            var thunderbirdBonus = new ThunderbirdBonus
+            {
+                BonusValue = 3,
+                Thunderbird = Thunderbird.Thunderbird1,
+                Location = BoardLocation.NorthAtlantic
+            };
+
+            // Act
+            var json = JsonSerializer.Serialize<Bonus>(thunderbirdBonus, _options);
+            var result = JsonSerializer.Deserialize<Bonus>(json, _options);
+
+            // Assert
+            var bonus = Assert.IsType<ThunderbirdBonus>(result);
+            Assert.Equal(thunderbirdBonus.BonusValue, bonus.BonusValue);
+            Assert.Equal(thunderbirdBonus.Thunderbird, bonus.Thunderbird);
+            Assert.Equal(thunderbirdBonus.Location, bonus.Location);
+        }
+
+        [Fact]
+        public void RoundTrip_WhenPodVehicleBonus_SerializesAndDeserializesCorrectly()
+        {
+            // Arrange
+            var podVehicleBonus = new PodVehicleBonus
+            {
+                BonusValue = 4,
+                PodVehicle = PodVehicle.Mole,
+                Location = BoardLocation.SouthPacific
+            };
+
+            // Act
+            var json = JsonSerializer.Serialize<Bonus>(podVehicleBonus, _options);
+            var result = JsonSerializer.Deserialize<Bonus>(json, _options);
+
+            // Assert
+            var bonus = Assert.IsType<PodVehicleBonus>(result);
+            Assert.Equal(podVehicleBonus.BonusValue, bonus.BonusValue);
+            Assert.Equal(podVehicleBonus.PodVehicle, bonus.PodVehicle);
+            Assert.Equal(podVehicleBonus.Location, bonus.Location);
+        }
+
+        private JsonElement SerializeBonusToJson(Bonus bonus)
+        {
+            var json = JsonSerializer.Serialize<Bonus>(bonus, _options);
+
+            using var doc = JsonDocument.Parse(json);
+            return doc.RootElement.Clone();
+        }
+
+        private class FakeBonus : Bonus
+        {
+            public string? FakeProperty { get; set; }
         }
     }
 }
