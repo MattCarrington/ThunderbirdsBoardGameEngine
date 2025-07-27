@@ -126,7 +126,7 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.UnitTests.Profiles
 
             var domoBonus = new PodVehicleBonus()
             {
-                PodVehicle = PodVehicle.DOMO,
+                PodVehicle = PodVehicle.Domo,
                 BonusValue = 4
             };
 

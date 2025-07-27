@@ -11,7 +11,9 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.Domain.Enums
         MobileCrane,
         Excavator,
         Thunderizer,
-        DOMO,
+        
+        [Display(Name = "DOMO")]
+        Domo,
 
         [Display(Name = "Transmitter Truck")]
         TransmitterTruck,
