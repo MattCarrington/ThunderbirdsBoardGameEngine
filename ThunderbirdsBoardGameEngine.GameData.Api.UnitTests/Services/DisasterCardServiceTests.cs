@@ -2,6 +2,7 @@
 using AutoFixture.Kernel;
 using AutoMapper;
 using NSubstitute;
+using System.Threading.Tasks;
 using ThunderbirdsBoardGameEngine.GameData.Api.Domain.Entities;
 using ThunderbirdsBoardGameEngine.GameData.Api.Interfaces;
 using ThunderbirdsBoardGameEngine.GameData.Api.Messages.Dtos;
@@ -74,6 +75,56 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.UnitTests.Services
 
             await _repository.Received(1).GetAllAsync();
             _mapper.Received(1).Map<IReadOnlyList<DisasterCardDto>>(Arg.Any<IReadOnlyList<DisasterCard>>());
+        }
+
+        [Fact]
+        public async Task GetByIdAsync_WhenCardExists_ReturnsDisasterCardDto()
+        {
+            // Arrange
+            var disasterCard = _fixture.Create<DisasterCard>();
+
+            var expectedDto = new DisasterCardDto
+            {
+                Id = disasterCard.Id,
+                Name = disasterCard.Name,
+                DifficultyNumber = disasterCard.DifficultyNumber,
+                Location = disasterCard.Location.ToString(),
+                RescueType = disasterCard.RescueType.ToString(),
+                Bonuses = [],
+                Rewards = []
+            };
+
+            _repository.GetByIdAsync(disasterCard.Id).Returns(disasterCard);
+
+            _mapper.Map<DisasterCardDto>(disasterCard).Returns(expectedDto);
+
+            // Act
+            DisasterCardDto result = await _service.GetByIdAsync(disasterCard.Id);
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.IsType<DisasterCardDto>(result);
+
+            await _repository.Received(1).GetByIdAsync(disasterCard.Id);
+            _mapper.Received(1).Map<DisasterCardDto>(disasterCard);
+        }
+
+        [Fact]
+        public async Task GetByIdAsync_WhenCardDoesNotExist_ReturnsNull()
+        {
+            // Arrange
+            int nonExistentId = 999;
+
+            _repository.GetByIdAsync(nonExistentId).Returns((DisasterCard)null);
+
+            _mapper.Map<DisasterCardDto>(Arg.Any<DisasterCard>()).Returns((DisasterCardDto)null);
+
+            // Act
+            var result = await _service.GetByIdAsync(nonExistentId);
+
+            // Assert
+            Assert.Null(result);
+            await _repository.Received(1).GetByIdAsync(nonExistentId);
         }
     }
 }

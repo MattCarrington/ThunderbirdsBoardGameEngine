@@ -5,5 +5,6 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.Interfaces
     public interface IDisasterCardService
     {
         Task<IReadOnlyList<DisasterCardDto>> GetAllAsync();
+        Task<DisasterCardDto> GetByIdAsync(int id);
     }
 }

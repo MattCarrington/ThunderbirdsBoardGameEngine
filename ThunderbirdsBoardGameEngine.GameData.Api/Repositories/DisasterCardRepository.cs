@@ -29,6 +29,12 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.Repositories
             _options.Converters.Add(new BonusConverter());
         }
 
+        public async Task<DisasterCard> GetByIdAsync(int id)
+        {
+            var cards = await GetAllAsync();
+            return cards.FirstOrDefault(card => card.Id == id);
+        }
+
         public async Task<IReadOnlyList<DisasterCard>> GetAllAsync()
         {
             Console.WriteLine($"[DEBUG] Looking for file at: {Path.GetFullPath(_filePath)}");

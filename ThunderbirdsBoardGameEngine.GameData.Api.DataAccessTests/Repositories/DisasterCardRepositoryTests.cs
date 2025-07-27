@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Options;
 using System.Text.Json;
+using ThunderbirdsBoardGameEngine.GameData.Api.Domain.Enums;
 using ThunderbirdsBoardGameEngine.GameData.Api.Domain.Exceptions;
 using ThunderbirdsBoardGameEngine.GameData.Api.Repositories;
 using Xunit;
@@ -9,7 +10,7 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.DataAccessTests.Repositories
     public class DisasterCardRepositoryTests
     {
         [Fact]
-        public async Task GetAllDisasterCards_WhenValidFile_ShouldReturnAllDisasterCardsAsync()
+        public async Task GetAllAsync_WhenValidFile_ShouldReturnAllDisasterCardsAsync()
         {
             // Arrange
             var filepath = "TestData/disasterCards-test.json";
@@ -26,7 +27,7 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.DataAccessTests.Repositories
         }
 
         [Fact]
-        public async Task GetAllDisasterCards_WhenNoFileExists_ShouldThrowFileNotFoundException()
+        public async Task GetAllAsync_WhenNoFileExists_ShouldThrowFileNotFoundException()
         {
             // Arrange
             var filepath = "TestData/nonexistent-disasterCards.json";
@@ -38,7 +39,7 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.DataAccessTests.Repositories
         }
 
         [Fact]
-        public async Task GetAllDisasterCards_WhenFileIsEmpty_ShouldReturnEmptyListAsync()
+        public async Task GetAllAsync_WhenFileIsEmpty_ShouldReturnEmptyListAsync()
         {
             // Arrange
             var filepath = "TestData/invalid-json.json";
@@ -50,7 +51,7 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.DataAccessTests.Repositories
         }
 
         [Fact]
-        public async Task GetAllDisasterCards_WhenDisasterCardsInvalid_ShouldThrowDisasterCardValidationException()
+        public async Task GetAllAsync_WhenDisasterCardsInvalid_ShouldThrowDisasterCardValidationException()
         {
             // Arrange
             var filepath = "TestData/invalid-disasterCards.json";
@@ -59,6 +60,43 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.DataAccessTests.Repositories
 
             // Act & Assert
             await Assert.ThrowsAsync<DisasterCardValidationException>(() => repository.GetAllAsync());
+        }
+
+        [Fact]
+        public async Task GetByIdAsync_WhenDisasterCardExists_ShouldReturnDisasterCardWithExpectedPropertiesAsync()
+        {
+            // Arrange
+            var filepath = "TestData/disasterCards-test.json";
+
+            var repository = CreateRepository(filepath);
+
+            // Act
+            var disasterCard = await repository.GetByIdAsync(2);
+
+            // Assert
+            Assert.NotNull(disasterCard);
+            Assert.Equal(2, disasterCard.Id);
+            Assert.Equal("Earthquake", disasterCard.Name);
+            Assert.Equal(9, disasterCard.DifficultyNumber);
+            Assert.Equal(BoardLocation.Asia, disasterCard.Location);
+            Assert.Equal(RescueType.Land, disasterCard.RescueType);
+            Assert.Equal(2, disasterCard.Bonuses.Count);
+            Assert.Equal(2, disasterCard.RewardOptions.Count);
+        }
+
+        [Fact]
+        public async Task GetByIdAsync_WhenDisasterCardDoesNotExist_ShouldReturnNullAsync()
+        {
+            // Arrange
+            var filepath = "TestData/disasterCards-test.json";
+
+            var repository = CreateRepository(filepath);
+
+            // Act
+            var disasterCard = await repository.GetByIdAsync(999);
+
+            // Assert
+            Assert.Null(disasterCard);
         }
 
         private static DisasterCardRepository CreateRepository(string filepath)

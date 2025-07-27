@@ -1,7 +1,6 @@
 ﻿using AutoFixture;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
-using System.Threading.Tasks;
 using ThunderbirdsBoardGameEngine.GameData.Api.Controllers;
 using ThunderbirdsBoardGameEngine.GameData.Api.Interfaces;
 using ThunderbirdsBoardGameEngine.GameData.Api.Messages.Dtos;
@@ -11,27 +10,66 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.UnitTests.Controllers
 {
     public class DisasterCardControllerTests
     {
+        private readonly Fixture _fixture = new();
+        private readonly IDisasterCardService _service = Substitute.For<IDisasterCardService>();
+        private readonly DisasterCardController _controller;
+
+        public DisasterCardControllerTests()
+        {
+            _controller = new DisasterCardController(_service);
+        }
+
         [Fact]
         public async Task Get_WhenDisasterCardsExist_ReturnsOk()
         {
             // Arrange
-            var fixture = new Fixture();
-            var disasterCardsDtos = fixture.CreateMany<DisasterCardDto>(5).ToList();
+            var disasterCardsDtos = _fixture.CreateMany<DisasterCardDto>(5).ToList();
 
-            var service = Substitute.For<IDisasterCardService>();
-            service.GetAllAsync().Returns(disasterCardsDtos);
-
-            var controller = new DisasterCardController(service);
+            _service.GetAllAsync().Returns(disasterCardsDtos);
 
             // Act
-            var result = await controller.Get();
+            var result = await _controller.Get();
 
             // Assert
             var okResult = Assert.IsType<OkObjectResult>(result);
             var returnedCards = Assert.IsType<IReadOnlyList<DisasterCardDto>>(okResult.Value, exactMatch: false);
             Assert.NotEmpty(returnedCards);
 
-            await service.Received(1).GetAllAsync();
+            await _service.Received(1).GetAllAsync();
+        }
+
+        [Fact]
+        public async Task GetById_WhenCardExists_ReturnsOk()
+        {
+            // Arrange
+            var disasterCardDto = _fixture.Create<DisasterCardDto>();
+
+            _service.GetByIdAsync(disasterCardDto.Id).Returns(disasterCardDto);
+
+            // Act
+            var result = await _controller.GetById(disasterCardDto.Id);
+
+            // Assert
+            var okResult = Assert.IsType<OkObjectResult>(result);
+            var returnedCard = Assert.IsType<DisasterCardDto>(okResult.Value);
+            Assert.Equal(disasterCardDto.Id, returnedCard.Id);
+            await _service.Received(1).GetByIdAsync(disasterCardDto.Id);
+        }
+
+        [Fact]
+        public async Task GetById_WhenCardDoesNotExist_ReturnsNotFound()
+        {
+            // Arrange
+            var nonExistentId = 999;
+
+            _service.GetByIdAsync(nonExistentId).Returns((DisasterCardDto)null);
+
+            // Act
+            var result = await _controller.GetById(nonExistentId);
+
+            // Assert
+            var notFoundResult = Assert.IsType<NotFoundObjectResult>(result);
+            Assert.Contains($"Disaster card with ID {nonExistentId} not found.", notFoundResult.Value.ToString());
         }
     }
 }

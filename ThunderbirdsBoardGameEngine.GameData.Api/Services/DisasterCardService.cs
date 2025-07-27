@@ -21,5 +21,12 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.Services
 
             return _mapper.Map<IReadOnlyList<DisasterCardDto>>(cards);
         }
+
+        public async Task<DisasterCardDto> GetByIdAsync(int id)
+        {
+            var card = await _disasterCardRepository.GetByIdAsync(id);
+
+            return _mapper.Map<DisasterCardDto>(card);
+        }
     }
 }
