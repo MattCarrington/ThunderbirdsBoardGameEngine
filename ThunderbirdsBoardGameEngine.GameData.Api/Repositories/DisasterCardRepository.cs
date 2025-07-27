@@ -2,6 +2,7 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using ThunderbirdsBoardGameEngine.GameData.Api.Domain.Entities;
+using ThunderbirdsBoardGameEngine.GameData.Api.Domain.Validators;
 using ThunderbirdsBoardGameEngine.GameData.Api.Interfaces;
 using ThunderbirdsBoardGameEngine.Serialization.Converters;
 
@@ -39,7 +40,15 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.Repositories
 
             var cards = await JsonSerializer.DeserializeAsync<List<DisasterCard>>(stream, _options, CancellationToken.None);
 
-            return cards ?? [];
+            if (cards is null)
+            {
+                Console.WriteLine("[DEBUG] No disaster cards found in the file.");
+                return [];
+            }
+
+            DisasterCardValidator.ValidateAll(cards);
+
+            return cards;
         }
     }
 }

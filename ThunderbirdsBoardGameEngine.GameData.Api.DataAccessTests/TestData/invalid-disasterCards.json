@@ -35,18 +35,6 @@
       "difficultyNumber": 9,
       "location": "asia",
       "rescueType": "land",
-      "bonuses": [
-        {
-          "type": "characterBonus",
-          "bonusValue": 2,
-          "character": "virgil"
-        },
-        {
-          "type": "podVehicleBonus",
-          "bonusValue": 3,
-          "podVehicles": "domo"
-        }
-      ],
       "rewardOptions": [
         {
           "isUserChoice": true          
