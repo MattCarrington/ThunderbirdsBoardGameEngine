@@ -6,7 +6,7 @@ using ThunderbirdsBoardGameEngine.GameData.Api.Domain.Enums;
 using ThunderbirdsBoardGameEngine.Serialization.Converters;
 using Xunit;
 
-namespace ThunderbirdsBoardGameEngine.GameData.Api.UnitTests.Converters
+namespace ThunderbirdsBoardGameEngine.Serialization.UnitTests.Converters
 {
     public class BonusConverterTests
     {
@@ -321,7 +321,7 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.UnitTests.Converters
 
         private JsonElement SerializeBonusToJson(Bonus bonus)
         {
-            var json = JsonSerializer.Serialize<Bonus>(bonus, _options);
+            var json = JsonSerializer.Serialize(bonus, _options);
 
             using var doc = JsonDocument.Parse(json);
             return doc.RootElement.Clone();
