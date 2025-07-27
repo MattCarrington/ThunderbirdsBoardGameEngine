@@ -19,7 +19,8 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.Profiles
                     var dto = new BonusDto
                     {
                         BonusValue = bonus.BonusValue,
-                        Location = bonus.Location?.ToString(),
+                        // If null, bonus shares the same location as the disaster card 
+                        Location = bonus.Location.HasValue ? EnumDisplayHelper.GetDisplayName(bonus.Location.Value) : null,
                         DisplayName = bonus switch
                         {
                             CharacterBonus cb => EnumDisplayHelper.GetDisplayName(cb.Character),

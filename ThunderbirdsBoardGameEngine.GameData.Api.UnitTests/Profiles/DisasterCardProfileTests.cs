@@ -61,6 +61,7 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.UnitTests.Profiles
             var bonus = Assert.Single(result.Bonuses);
             Assert.Equal(EnumDisplayHelper.GetDisplayName(characterBonus.Character), bonus.DisplayName);
             Assert.Equal(characterBonus.BonusValue, bonus.BonusValue);
+            Assert.Null(bonus.Location); // No location specified for character bonus
         }
 
         [Fact]
@@ -83,7 +84,8 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.UnitTests.Profiles
             // Assert
             var bonus = Assert.Single(result.Bonuses);
             Assert.Equal(EnumDisplayHelper.GetDisplayName(thunderbirdBonus.Thunderbird), bonus.DisplayName);
-            Assert.Equal(thunderbirdBonus.BonusValue, bonus.BonusValue);            
+            Assert.Equal(thunderbirdBonus.BonusValue, bonus.BonusValue);        
+            Assert.Null(bonus.Location); // No location specified for thunderbird bonus
         }
 
         [Fact]
@@ -107,6 +109,7 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.UnitTests.Profiles
             var bonus = Assert.Single(result.Bonuses);
             Assert.Equal(EnumDisplayHelper.GetDisplayName(podVehicleBonus.PodVehicle), bonus.DisplayName);
             Assert.Equal(podVehicleBonus.BonusValue, bonus.BonusValue);
+            Assert.Null(bonus.Location); // No location specified for pod vehicle bonus
         }
 
         [Fact]
@@ -173,9 +176,31 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.UnitTests.Profiles
 
             // Assert
             Assert.Equal(2, result.Bonuses.Count);
-
             Assert.Contains(result.Bonuses, b => b.DisplayName == EnumDisplayHelper.GetDisplayName(characterBonus.Character) && b.BonusValue == characterBonus.BonusValue);
             Assert.Contains(result.Bonuses, b => b.DisplayName == EnumDisplayHelper.GetDisplayName(thunderbirdBonus.Thunderbird) && b.BonusValue == thunderbirdBonus.BonusValue);
+        }
+
+        [Fact]
+        public void Map_WhenBonusHasLocation_ShouldCorrectlyMapBonusDto()
+        {
+            // Arrange
+            var characterBonus = new CharacterBonus()
+            {
+                Character = Character.Gordon,
+                BonusValue = 2,
+                Location = BoardLocation.Venus
+            };
+
+            var disasterCard = new DisasterCardBuilder()
+                .WithBonus(characterBonus)
+                .Build();
+
+            // Act
+            var result = _mapper.Map<DisasterCardDto>(disasterCard);
+
+            // Assert
+            var bonus = Assert.Single(result.Bonuses);
+            Assert.Equal(EnumDisplayHelper.GetDisplayName(characterBonus.Location.Value), bonus.Location);
         }
 
         [Fact]
