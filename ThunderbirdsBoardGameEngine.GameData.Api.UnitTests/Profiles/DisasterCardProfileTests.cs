@@ -4,7 +4,7 @@ using ThunderbirdsBoardGameEngine.GameData.Api.Domain.Entities;
 using ThunderbirdsBoardGameEngine.GameData.Api.Domain.Enums;
 using ThunderbirdsBoardGameEngine.GameData.Api.Messages.Dtos;
 using ThunderbirdsBoardGameEngine.GameData.Api.Profiles;
-using ThunderbirdsBoardGameEngine.GameData.Api.UnitTests.Helpers;
+using ThunderbirdsBoardGameEngine.GameData.Api.TestHelpers.Builders;
 using Xunit;
 
 namespace ThunderbirdsBoardGameEngine.GameData.Api.UnitTests.Profiles
