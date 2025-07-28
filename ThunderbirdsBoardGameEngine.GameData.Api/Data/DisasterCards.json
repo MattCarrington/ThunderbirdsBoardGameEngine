@@ -1,4 +1,3 @@
-
   [
     {
       "id": 1,
@@ -6,7 +5,7 @@
       "difficultyNumber": 9,
       "location": "northPacific",
       "rescueType": "air",
-      "bonuses": [
+      "bonusConditions": [
         {
           "type": "characterBonus",
           "bonusValue": 2,
@@ -36,7 +35,7 @@
       "difficultyNumber": 8,
       "location": "indianOcean",
       "rescueType": "air",
-      "bonuses": [
+      "bonusConditions": [
         {
           "type": "characterBonus",
           "bonusValue": 2,
@@ -61,7 +60,7 @@
       "difficultyNumber": 7,
       "location": "europe",
       "rescueType": "sea",
-      "bonuses": [
+      "bonusConditions": [
         {
           "type": "characterBonus",
           "bonusValue": 2,
@@ -87,7 +86,7 @@
       "difficultyNumber": 7,
       "location": "mercury",
       "rescueType": "space",
-      "bonuses": [
+      "bonusConditions": [
         {
           "type": "characterBonus",
           "bonusValue": 2,
@@ -112,7 +111,7 @@
       "difficultyNumber": 9,
       "location": "southAmerica",
       "rescueType": "land",
-      "bonuses":[
+      "bonusConditions":[
         {
           "type": "podVehicleBonus",
           "bonusValue": 3,
@@ -142,7 +141,7 @@
       "difficultyNumber": 7,
       "location": "northAmerica",
       "rescueType": "land",
-      "bonuses":[
+      "bonusConditions":[
         {
           "type": "podVehicleBonus",
           "bonusValue": 3,
@@ -162,7 +161,7 @@
       "difficultyNumber": 9,
       "location": "europe",
       "rescueType": "sea",
-      "bonuses":[
+      "bonusConditions":[
         {
           "type": "thunderbirdBonus",
           "bonusValue": 3,
@@ -191,7 +190,7 @@
       "difficultyNumber": 8,
       "location":"asia",
       "rescueType": "air",
-      "bonuses": [
+      "bonusConditions": [
         {
           "type": "podVehicleBonus",
           "bonusValue": 2,
@@ -220,7 +219,7 @@
       "difficultyNumber": 8,
       "location":"asteroidBelt",
       "rescueType": "space",
-      "bonuses": [        
+      "bonusConditions": [        
         {
           "type": "characterBonus",
           "bonusValue": 1,

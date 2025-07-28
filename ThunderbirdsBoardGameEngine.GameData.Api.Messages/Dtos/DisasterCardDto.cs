@@ -12,7 +12,7 @@
 
         public string RescueType { get; set; }
 
-        public IReadOnlyList<BonusDto> Bonuses { get; set; }
+        public IReadOnlyList<BonusConditionDto> BonusConditions { get; set; }
 
         public IReadOnlyList<RewardDto> Rewards { get; set; }
     }

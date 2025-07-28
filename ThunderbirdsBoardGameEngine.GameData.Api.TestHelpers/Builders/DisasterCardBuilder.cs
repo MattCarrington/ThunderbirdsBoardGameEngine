@@ -10,7 +10,7 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.TestHelpers.Builders
         private int _difficultyNumber = 8;
         private BoardLocation _location = BoardLocation.NorthPacific;
         private RescueType _rescueType = RescueType.Sea;
-        private readonly List<Bonus> _bonuses = new List<Bonus>();
+        private readonly List<BonusCondition> _bonuses = new List<BonusCondition>();
         private readonly List<RewardOption> _rewardOptions = new List<RewardOption>();
         private bool _skipDefaultBonus = false;
         private bool _skipDefaultReward = false;
@@ -47,7 +47,7 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.TestHelpers.Builders
             return this;
         }
 
-        public DisasterCardBuilder WithBonus(Bonus bonus)
+        public DisasterCardBuilder WithBonusCondition(BonusCondition bonus)
         {
             _bonuses.Add(bonus);
             return this;
@@ -72,7 +72,7 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.TestHelpers.Builders
             return this;
         }
 
-        public DisasterCardBuilder WithoutBonuses()
+        public DisasterCardBuilder WithoutBonusConditions()
         {
             _bonuses.Clear();
             _skipDefaultBonus = true;
@@ -86,7 +86,7 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.TestHelpers.Builders
             return this;
         }
 
-        public DisasterCardBuilder WithNullBonuses()
+        public DisasterCardBuilder WithNullBonusConditions()
         {
             _forceNullBonus = true;
             return this;
@@ -102,7 +102,7 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.TestHelpers.Builders
         {
             if (_bonuses.Count == 0 && !_skipDefaultBonus && !_forceNullBonus)
             {
-                _bonuses.Add(new CharacterBonus { Character = Character.Scott, BonusValue = 1 });
+                _bonuses.Add(new CharacterBonusCondition { Character = Character.Scott, BonusValue = 1 });
             }
 
             if (_rewardOptions.Count == 0 && !_skipDefaultReward)
@@ -120,7 +120,7 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.TestHelpers.Builders
                 Location = _location,
                 RescueType = _rescueType,
                 DifficultyNumber = _difficultyNumber,
-                Bonuses = _forceNullBonus ? null : _bonuses,
+                BonusConditions = _forceNullBonus ? null : _bonuses,
                 RewardOptions = _forceNullReward ? null : _rewardOptions
             };
         }

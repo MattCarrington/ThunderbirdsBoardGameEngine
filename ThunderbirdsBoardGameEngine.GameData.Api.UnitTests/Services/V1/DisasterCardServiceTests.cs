@@ -21,7 +21,7 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.UnitTests.Services.V1
         public DisasterCardServiceTests()
         {
             _service = new DisasterCardService(_repository, _mapper);
-            _fixture.Customizations.Add(new TypeRelay(typeof(Bonus), typeof(CharacterBonus)));
+            _fixture.Customizations.Add(new TypeRelay(typeof(BonusCondition), typeof(CharacterBonusCondition)));
         }
 
         [Fact]
@@ -37,7 +37,7 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.UnitTests.Services.V1
                 DifficultyNumber = c.DifficultyNumber,
                 Location = c.Location.ToString(),
                 RescueType = c.RescueType.ToString(),
-                Bonuses = [],
+                BonusConditions = [],
                 Rewards = []
             }).ToList();
 
@@ -90,7 +90,7 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.UnitTests.Services.V1
                 DifficultyNumber = disasterCard.DifficultyNumber,
                 Location = disasterCard.Location.ToString(),
                 RescueType = disasterCard.RescueType.ToString(),
-                Bonuses = [],
+                BonusConditions = [],
                 Rewards = []
             };
 

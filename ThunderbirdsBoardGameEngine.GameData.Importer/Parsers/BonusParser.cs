@@ -6,14 +6,14 @@ namespace ThunderbirdsBoardGameEngine.GameData.Importer.Parsers
 {
     public static class BonusParser
     {
-        public static Bonus Parse(string target, int value, string? location)
+        public static BonusCondition Parse(string target, int value, string? location)
         {
             target = target.Trim();
 
-            // Try as Character Bonus
+            // Try as Character BonusCondition
             if (TryParseEnum<Character>(target, out var character))
             {
-                return new CharacterBonus
+                return new CharacterBonusCondition
                 {
                     Character = character,
                     BonusValue = value,
@@ -21,10 +21,10 @@ namespace ThunderbirdsBoardGameEngine.GameData.Importer.Parsers
                 };
             }
 
-            // Try as ThunderbirdMachine Bonus
+            // Try as ThunderbirdMachine BonusCondition
             if (TryParseEnum<ThunderbirdMachine>(target, out var thunderbird))
             {
-                return new ThunderbirdBonus
+                return new ThunderbirdBonusCondition
                 {
                     Thunderbird = thunderbird,
                     BonusValue = value,
@@ -32,10 +32,10 @@ namespace ThunderbirdsBoardGameEngine.GameData.Importer.Parsers
                 };
             }
 
-            // Try as PodVehicle Bonus
+            // Try as PodVehicle BonusCondition
             if (TryParseEnum<PodVehicle>(target, out var podVehicle))
             {
-                return new PodVehicleBonus
+                return new PodVehicleBonusCondition
                 {
                     PodVehicle = podVehicle,
                     BonusValue = value,

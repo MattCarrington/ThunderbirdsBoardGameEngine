@@ -80,7 +80,7 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.DataAccessTests.Repositories
             Assert.Equal(9, disasterCard.DifficultyNumber);
             Assert.Equal(BoardLocation.Asia, disasterCard.Location);
             Assert.Equal(RescueType.Land, disasterCard.RescueType);
-            Assert.Equal(2, disasterCard.Bonuses.Count);
+            Assert.Equal(2, disasterCard.BonusConditions.Count);
             Assert.Equal(2, disasterCard.RewardOptions.Count);
         }
 

@@ -14,7 +14,7 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.Domain.Entities
 
         public RescueType RescueType { get; set; }
 
-        public IReadOnlyList<Bonus> Bonuses { get; set; } = Array.Empty<Bonus>();
+        public IReadOnlyList<BonusCondition> BonusConditions { get; set; } = Array.Empty<BonusCondition>();
 
         public IReadOnlyList<RewardOption> RewardOptions { get; set; } = Array.Empty<RewardOption>();
     }

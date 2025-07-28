@@ -14,15 +14,15 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.Profiles.V1
                 .ForMember(dest => dest.Rewards, opt => opt.MapFrom(src => src.RewardOptions))
                 .ForMember(dest => dest.Location, opt => opt.MapFrom(src => EnumDisplayHelper.GetDisplayName(src.Location)));
                 
-            CreateMap<Bonus, BonusDto>()
+            CreateMap<BonusCondition, BonusConditionDto>()
                 .ConvertUsing((bonus, context) =>
                 {
                     var displayName = bonus switch
                     {
-                        CharacterBonus cb => EnumDisplayHelper.GetDisplayName(cb.Character),
-                        ThunderbirdBonus tb => EnumDisplayHelper.GetDisplayName(tb.Thunderbird),
-                        PodVehicleBonus pvb => EnumDisplayHelper.GetDisplayName(pvb.PodVehicle),
-                        _ => throw new InvalidOperationException("Unknown bonus type")
+                        CharacterBonusCondition cb => EnumDisplayHelper.GetDisplayName(cb.Character),
+                        ThunderbirdBonusCondition tb => EnumDisplayHelper.GetDisplayName(tb.Thunderbird),
+                        PodVehicleBonusCondition pvb => EnumDisplayHelper.GetDisplayName(pvb.PodVehicle),
+                        _ => throw new InvalidOperationException("Unknown bonus condition")
                     };
 
                     var locationText = bonus.Location switch
@@ -37,7 +37,7 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.Profiles.V1
                         : $"{displayName} (+{bonus.BonusValue}) (if {locationText})";
 
 
-                    var dto = new BonusDto
+                    var dto = new BonusConditionDto
                     {
                         Description = description
                     };

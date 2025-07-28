@@ -44,14 +44,14 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.UnitTests.Profiles.V1
         public void Map_WhenCharacterBonus_ShouldCorrectlyMapBonusDto()
         {
             // Arrange
-            var characterBonus = new CharacterBonus()
+            var characterBonusCondition = new CharacterBonusCondition()
             {
                 Character = Character.Virgil,
                 BonusValue = 2
             };
 
             var disasterCard = new DisasterCardBuilder()
-                .WithBonus(characterBonus)
+                .WithBonusCondition(characterBonusCondition)
                 .Build();
 
             
@@ -60,9 +60,9 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.UnitTests.Profiles.V1
             var result = _mapper.Map<DisasterCardDto>(disasterCard);
 
             // Assert
-            var bonus = Assert.Single(result.Bonuses);
+            var bonus = Assert.Single(result.BonusConditions);
             
-            var expectedDescription = GetExpectedDescription(EnumDisplayHelper.GetDisplayName(characterBonus.Character), characterBonus.BonusValue);
+            var expectedDescription = GetExpectedDescription(EnumDisplayHelper.GetDisplayName(characterBonusCondition.Character), characterBonusCondition.BonusValue);
 
             Assert.Equal(expectedDescription, bonus.Description);
         }
@@ -71,23 +71,23 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.UnitTests.Profiles.V1
         public void Map_WhenThunderbirdsBonus_ShouldCorrectlyMapBonusDto()
         {
             // Arrange
-            var thunderbirdBonus = new ThunderbirdBonus()
+            var thunderbirdBonusCondition = new ThunderbirdBonusCondition()
             {
                 Thunderbird = ThunderbirdMachine.Thunderbird4,
                 BonusValue = 3
             };
 
             var disasterCard = new DisasterCardBuilder()
-                .WithBonus(thunderbirdBonus)
+                .WithBonusCondition(thunderbirdBonusCondition)
                 .Build();
 
             // Act
             var result = _mapper.Map<DisasterCardDto>(disasterCard);
 
             // Assert
-            var bonus = Assert.Single(result.Bonuses);
+            var bonus = Assert.Single(result.BonusConditions);
 
-            var expectedDescription = GetExpectedDescription(EnumDisplayHelper.GetDisplayName(thunderbirdBonus.Thunderbird), thunderbirdBonus.BonusValue);
+            var expectedDescription = GetExpectedDescription(EnumDisplayHelper.GetDisplayName(thunderbirdBonusCondition.Thunderbird), thunderbirdBonusCondition.BonusValue);
 
             Assert.Equal(expectedDescription, bonus.Description);
         }
@@ -96,23 +96,23 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.UnitTests.Profiles.V1
         public void Map_WhenPodVehicleBonus_ShouldCorrectlyMapBonusDto()
         {
             // Arrange
-            var podVehicleBonus = new PodVehicleBonus()
+            var podVehicleBonusCondition = new PodVehicleBonusCondition()
             {
                 PodVehicle = PodVehicle.LaserCutter,
                 BonusValue = 4
             };
 
             var disasterCard = new DisasterCardBuilder()
-                .WithBonus(podVehicleBonus)
+                .WithBonusCondition(podVehicleBonusCondition)
                 .Build();
 
             // Act
             var result = _mapper.Map<DisasterCardDto>(disasterCard);
 
             // Assert
-            var bonus = Assert.Single(result.Bonuses);
+            var bonus = Assert.Single(result.BonusConditions);
             
-            var expectedDescription = GetExpectedDescription(EnumDisplayHelper.GetDisplayName(podVehicleBonus.PodVehicle), podVehicleBonus.BonusValue);
+            var expectedDescription = GetExpectedDescription(EnumDisplayHelper.GetDisplayName(podVehicleBonusCondition.PodVehicle), podVehicleBonusCondition.BonusValue);
 
             Assert.Equal(expectedDescription, bonus.Description);
         }
@@ -121,84 +121,97 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.UnitTests.Profiles.V1
         public void Map_WhenMultiplePodVehicleBonus_ShouldCorrectlyMapBonusDto()
         {
             // Arrange
-            var mobileCraneBonus = new PodVehicleBonus()
+            var mobileCraneBonusCondition = new PodVehicleBonusCondition()
             {
                 PodVehicle = PodVehicle.MobileCrane,
                 BonusValue = 2
             };
 
-            var thunderizerBonus = new PodVehicleBonus()
+            var thunderizerBonusCondition = new PodVehicleBonusCondition()
             {
                 PodVehicle = PodVehicle.Thunderizer,
                 BonusValue = 3
             };
 
-            var domoBonus = new PodVehicleBonus()
+            var domoBonusCondition = new PodVehicleBonusCondition()
             {
                 PodVehicle = PodVehicle.Domo,
                 BonusValue = 4
             };
 
             var disasterCard = new DisasterCardBuilder()
-                .WithBonus(mobileCraneBonus)
-                .WithBonus(thunderizerBonus)
-                .WithBonus(domoBonus)
+                .WithBonusCondition(mobileCraneBonusCondition)
+                .WithBonusCondition(thunderizerBonusCondition)
+                .WithBonusCondition(domoBonusCondition)
                 .Build();
 
             // Act
             var result = _mapper.Map<DisasterCardDto>(disasterCard);
 
             // Assert
-            Assert.Equal(3, result.Bonuses.Count);
+            Assert.Equal(3, result.BonusConditions.Count);
             
-            var expectedDescriptionMobileCrane = GetExpectedDescription(EnumDisplayHelper.GetDisplayName(mobileCraneBonus.PodVehicle), mobileCraneBonus.BonusValue);
-            var expectedDescriptionThunderizer = GetExpectedDescription(EnumDisplayHelper.GetDisplayName(thunderizerBonus.PodVehicle), thunderizerBonus.BonusValue);
-            var expectedDescriptionDomo = GetExpectedDescription(EnumDisplayHelper.GetDisplayName(domoBonus.PodVehicle), domoBonus.BonusValue);
+            var expectedDescriptionMobileCrane = GetExpectedDescription(
+                EnumDisplayHelper.GetDisplayName(mobileCraneBonusCondition.PodVehicle), 
+                mobileCraneBonusCondition.BonusValue);
 
-            Assert.Contains(result.Bonuses, b => b.Description == expectedDescriptionMobileCrane);
-            Assert.Contains(result.Bonuses, b => b.Description == expectedDescriptionThunderizer);
-            Assert.Contains(result.Bonuses, b => b.Description == expectedDescriptionDomo);
+            var expectedDescriptionThunderizer = GetExpectedDescription(
+                EnumDisplayHelper.GetDisplayName(thunderizerBonusCondition.PodVehicle), 
+                thunderizerBonusCondition.BonusValue);
+
+            var expectedDescriptionDomo = GetExpectedDescription(
+                EnumDisplayHelper.GetDisplayName(domoBonusCondition.PodVehicle), 
+                domoBonusCondition.BonusValue);
+
+            Assert.Contains(result.BonusConditions, b => b.Description == expectedDescriptionMobileCrane);
+            Assert.Contains(result.BonusConditions, b => b.Description == expectedDescriptionThunderizer);
+            Assert.Contains(result.BonusConditions, b => b.Description == expectedDescriptionDomo);
         }
 
         [Fact]
         public void Map_WhenDifferentBonus_ShouldCorrectlyMapBonusDto()
         {
             // Arrange
-            var characterBonus = new CharacterBonus()
+            var characterBonusCondition = new CharacterBonusCondition()
             {
                 Character = Character.Gordon,
                 BonusValue = 2
             };
 
-            var thunderbirdBonus = new ThunderbirdBonus()
+            var thunderbirdBonusCondition = new ThunderbirdBonusCondition()
             {
                 Thunderbird = ThunderbirdMachine.Thunderbird4,
                 BonusValue = 3
             };
 
             var disasterCard = new DisasterCardBuilder()
-                .WithBonus(characterBonus)
-                .WithBonus(thunderbirdBonus)
+                .WithBonusCondition(characterBonusCondition)
+                .WithBonusCondition(thunderbirdBonusCondition)
                 .Build();
 
             // Act
             var result = _mapper.Map<DisasterCardDto>(disasterCard);
 
             // Assert
-            Assert.Equal(2, result.Bonuses.Count);
+            Assert.Equal(2, result.BonusConditions.Count);
 
-            var expectedDescriptionCharacter = GetExpectedDescription(EnumDisplayHelper.GetDisplayName(characterBonus.Character), characterBonus.BonusValue);
-            var expectedDescriptionThunderbird = GetExpectedDescription(EnumDisplayHelper.GetDisplayName(thunderbirdBonus.Thunderbird), thunderbirdBonus.BonusValue);
+            var expectedDescriptionCharacter = GetExpectedDescription(
+                EnumDisplayHelper.GetDisplayName(characterBonusCondition.Character), 
+                characterBonusCondition.BonusValue);
 
-            Assert.Contains(result.Bonuses, b => b.Description == expectedDescriptionCharacter);
-            Assert.Contains(result.Bonuses, b => b.Description == expectedDescriptionThunderbird);
+            var expectedDescriptionThunderbird = GetExpectedDescription(
+                EnumDisplayHelper.GetDisplayName(thunderbirdBonusCondition.Thunderbird), 
+                thunderbirdBonusCondition.BonusValue);
+
+            Assert.Contains(result.BonusConditions, b => b.Description == expectedDescriptionCharacter);
+            Assert.Contains(result.BonusConditions, b => b.Description == expectedDescriptionThunderbird);
         }
 
         [Fact]
         public void Map_WhenBonusHasLocation_ShouldCorrectlyMapBonusDto()
         {
             // Arrange
-            var characterBonus = new CharacterBonus()
+            var characterBonusCondition = new CharacterBonusCondition()
             {
                 Character = Character.Gordon,
                 BonusValue = 2,
@@ -206,19 +219,19 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.UnitTests.Profiles.V1
             };
 
             var disasterCard = new DisasterCardBuilder()
-                .WithBonus(characterBonus)
+                .WithBonusCondition(characterBonusCondition)
                 .Build();
 
             // Act
             var result = _mapper.Map<DisasterCardDto>(disasterCard);
 
             // Assert
-            var bonus = Assert.Single(result.Bonuses);
+            var bonus = Assert.Single(result.BonusConditions);
 
             var expectedDescription = GetExpectedDescription(
-                EnumDisplayHelper.GetDisplayName(characterBonus.Character),
-                characterBonus.BonusValue,
-                characterBonus.Location);
+                EnumDisplayHelper.GetDisplayName(characterBonusCondition.Character),
+                characterBonusCondition.BonusValue,
+                characterBonusCondition.Location);
 
             Assert.Equal(expectedDescription, bonus.Description); // This should include "in Venus" in the description
         }
@@ -227,26 +240,26 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.UnitTests.Profiles.V1
         public void Map_WhenBonusHasGeoStationaryOrbitLocation_ShouldCorrectlyMapBonusDto()
         {
             // Arrange
-            var characterBonus = new CharacterBonus()
+            var characterBonusCondition = new CharacterBonusCondition()
             {
                 Character = Character.LadyPenelope,
                 BonusValue = 3,
                 Location = BoardLocation.GeoStationaryOrbit
             };
             var disasterCard = new DisasterCardBuilder()
-                .WithBonus(characterBonus)
+                .WithBonusCondition(characterBonusCondition)
                 .Build();
 
             // Act
             var result = _mapper.Map<DisasterCardDto>(disasterCard);
 
             // Assert
-            var bonus = Assert.Single(result.Bonuses);
+            var bonus = Assert.Single(result.BonusConditions);
 
             var expectedDescription = GetExpectedDescription(
-                EnumDisplayHelper.GetDisplayName(characterBonus.Character),
-                characterBonus.BonusValue,
-                characterBonus.Location); 
+                EnumDisplayHelper.GetDisplayName(characterBonusCondition.Character),
+                characterBonusCondition.BonusValue,
+                characterBonusCondition.Location); 
 
             Assert.Equal(expectedDescription, bonus.Description); // This should include "on Thunderbird 5" in the description
         }
@@ -318,12 +331,13 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.UnitTests.Profiles.V1
         }
 
         [Fact]
-        public void Map_WhenUnknownBonusType_ThrowsInvalidOperationException()
+        public void Map_WhenUnknownBonusCondition_ThrowsInvalidOperationException()
         {
             // Arrange
-            var unknownBonus = new UnknownBonus();
+            var unknownBonusCondition = new UnknownBonusCondition();
+
             var disasterCard = new DisasterCardBuilder()
-                .WithBonus(unknownBonus)
+                .WithBonusCondition(unknownBonusCondition)
                 .Build();
 
             // Act & Assert
@@ -331,7 +345,7 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.UnitTests.Profiles.V1
                 _mapper.Map<DisasterCardDto>(disasterCard));
 
             Assert.IsType<InvalidOperationException>(ex.InnerException);
-            Assert.Equal("Unknown bonus type", ex.InnerException?.Message);
+            Assert.Equal("Unknown bonus condition", ex.InnerException?.Message);
         }
 
         [Fact]
@@ -369,7 +383,7 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.UnitTests.Profiles.V1
         }
 
 
-        private class UnknownBonus : Bonus
+        private class UnknownBonusCondition : BonusCondition
         {
             // No extra fields needed — we just want it to be an unknown subtype.
         }

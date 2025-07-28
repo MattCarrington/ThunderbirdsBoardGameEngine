@@ -22,9 +22,9 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.Domain.Validators
 
         public static void Validate(DisasterCard card)
         {
-            if (card.Bonuses is null || !card.Bonuses.Any())
+            if (card.BonusConditions is null || !card.BonusConditions.Any())
             {
-                throw new DisasterCardValidationException($"Disaster Card {card.Name} must have at least one bonus.");
+                throw new DisasterCardValidationException($"Disaster Card {card.Name} must have at least one bonus condition.");
             }
 
             if (card.RewardOptions is null || !card.RewardOptions.Any())
@@ -47,29 +47,29 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.Domain.Validators
 
             var seen = new HashSet<string>();
 
-            foreach (var bonus in card.Bonuses ?? Enumerable.Empty<Bonus>())
+            foreach (var bonus in card.BonusConditions ?? Enumerable.Empty<BonusCondition>())
             {
                 if (bonus.BonusValue <= 0)
                 {
-                    throw new DisasterCardValidationException($"Disaster Card {card.Name} has a bonus with invalid BonusValue: {bonus.BonusValue}");
+                    throw new DisasterCardValidationException($"Disaster Card {card.Name} has a bonus condition with invalid BonusValue: {bonus.BonusValue}");
                 }
 
-                var signature = GetBonusSignature(bonus);
+                var signature = GetBonusConditionSignature(bonus);
                 if (!seen.Add(signature))
                 {
                     throw new DisasterCardValidationException(
-                        $"Card '{card.Name}' contains duplicate bonus: {signature}");
+                        $"Card '{card.Name}' contains duplicate bonus condition: {signature}");
                 }
             }
         }
 
-        private static string GetBonusSignature(Bonus bonus)
+        private static string GetBonusConditionSignature(BonusCondition bonus)
         {
             return bonus switch
             {
-                CharacterBonus cb => $"Character:{cb.Character}|Value:{cb.BonusValue}|Location:{cb.Location}",
-                ThunderbirdBonus tb => $"Thunderbird:{tb.Thunderbird}|Value:{tb.BonusValue}|Location:{tb.Location}",
-                PodVehicleBonus pb => $"PodVehicle:{pb.PodVehicle}|Value:{pb.BonusValue}|Location:{pb.Location}",
+                CharacterBonusCondition cb => $"Character:{cb.Character}|Value:{cb.BonusValue}|Location:{cb.Location}",
+                ThunderbirdBonusCondition tb => $"Thunderbird:{tb.Thunderbird}|Value:{tb.BonusValue}|Location:{tb.Location}",
+                PodVehicleBonusCondition pb => $"PodVehicle:{pb.PodVehicle}|Value:{pb.BonusValue}|Location:{pb.Location}",
                 _ => throw new DisasterCardValidationException($"Unknown bonus type: {bonus.GetType().Name}")
             };
         }

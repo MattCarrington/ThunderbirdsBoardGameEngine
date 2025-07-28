@@ -13,7 +13,7 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.Domain.UnitTests.Validators
         public void Validate_WhenDisasterCardHasNullBonuses_ThrowsValidationException()
         {
             // Arrange
-            var disasterCard = new DisasterCardBuilder().WithNullBonuses().Build();
+            var disasterCard = new DisasterCardBuilder().WithNullBonusConditions().Build();
 
             // Act & Assert
             var ex = Assert.Throws<DisasterCardValidationException>(() => DisasterCardValidator.Validate(disasterCard));
@@ -24,7 +24,7 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.Domain.UnitTests.Validators
         public void Validate_WhenDisasterCardHasNoBonuses_ThrowsValidationException()
         {
             // Arrange
-            var disasterCard = new DisasterCardBuilder().WithoutBonuses().Build();
+            var disasterCard = new DisasterCardBuilder().WithoutBonusConditions().Build();
 
             // Act & Assert
             var ex = Assert.Throws<DisasterCardValidationException>(() => DisasterCardValidator.Validate(disasterCard));
@@ -83,15 +83,15 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.Domain.UnitTests.Validators
         public void Validate_WhenDisasterCardHasDuplicateCharacterBonuses_ThrowsValidationException()
         {
             // Arrange
-            var bonus = new CharacterBonus()
+            var bonus = new CharacterBonusCondition()
             {
                 Character = Character.Gordon,
                 BonusValue = 2
             };
 
             var disasterCard = new DisasterCardBuilder()
-                .WithBonus(bonus)
-                .WithBonus(bonus) // Duplicate bonus
+                .WithBonusCondition(bonus)
+                .WithBonusCondition(bonus) // Duplicate bonus
                 .Build();
 
             // Act & Assert
@@ -103,15 +103,15 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.Domain.UnitTests.Validators
         public void Validate_WhenDisasterCardHasDuplicateThunderbirdBonuses_ThrowsValidationException()
         {
             // Arrange
-            var bonus = new ThunderbirdBonus()
+            var bonus = new ThunderbirdBonusCondition()
             {
                 Thunderbird = ThunderbirdMachine.Thunderbird3,
                 BonusValue = 2
             };
 
             var disasterCard = new DisasterCardBuilder()
-                .WithBonus(bonus)
-                .WithBonus(bonus) // Duplicate bonus
+                .WithBonusCondition(bonus)
+                .WithBonusCondition(bonus) // Duplicate bonus
                 .Build();
 
             // Act & Assert
@@ -123,15 +123,15 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.Domain.UnitTests.Validators
         public void Validate_WhenDisasterCardHasDuplicatePodVehicleBonuses_ThrowsValidationException()
         {
             // Arrange
-            var bonus = new PodVehicleBonus()
+            var bonus = new PodVehicleBonusCondition()
             {
                 PodVehicle = PodVehicle.TransmitterTruck,
                 BonusValue = 2
             };
 
             var disasterCard = new DisasterCardBuilder()
-                .WithBonus(bonus)
-                .WithBonus(bonus) // Duplicate bonus
+                .WithBonusCondition(bonus)
+                .WithBonusCondition(bonus) // Duplicate bonus
                 .Build();
 
             // Act & Assert
@@ -146,17 +146,17 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.Domain.UnitTests.Validators
         public void Validate_WhenDisasterCardHasInvalidBonusValue_ThrowsValidationException(int bonusValue)
         {
             // Arrange
-            var bonus = new CharacterBonus
+            var bonus = new CharacterBonusCondition
             {
                 Character = Character.John,
                 BonusValue = bonusValue // Using bonusValue to simulate invalid bonus value
             };
 
-            var disasterCard = new DisasterCardBuilder().WithBonus(bonus).Build();
+            var disasterCard = new DisasterCardBuilder().WithBonusCondition(bonus).Build();
 
             // Act & Assert
             var ex = Assert.Throws<DisasterCardValidationException>(() => DisasterCardValidator.Validate(disasterCard));
-            Assert.Contains("has a bonus with invalid BonusValue", ex.Message);
+            Assert.Contains("has a bonus condition with invalid BonusValue", ex.Message);
         }
 
         [Fact]
@@ -182,7 +182,7 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.Domain.UnitTests.Validators
             {
                 new DisasterCardBuilder().WithId(id++).Build(),
                 new DisasterCardBuilder().WithId(id++).WithDifficulty(2).Build(),
-                new DisasterCardBuilder().WithId(id).WithBonus(new CharacterBonus { Character = Character.Scott, BonusValue = 1 }).Build()
+                new DisasterCardBuilder().WithId(id).WithBonusCondition(new CharacterBonusCondition { Character = Character.Scott, BonusValue = 1 }).Build()
             };
 
             // Act
@@ -201,12 +201,12 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.Domain.UnitTests.Validators
             {
                 new DisasterCardBuilder().WithId(id++).Build(),
                 new DisasterCardBuilder().WithId(id++).WithDifficulty(2).Build(),
-                new DisasterCardBuilder().WithId(id).WithBonus(new CharacterBonus { Character = Character.Scott, BonusValue = 0 }).Build() // Invalid bonus value
+                new DisasterCardBuilder().WithId(id).WithBonusCondition(new CharacterBonusCondition { Character = Character.Scott, BonusValue = 0 }).Build() // Invalid bonus value
             };
 
             // Act & Assert
             var ex = Assert.Throws<DisasterCardValidationException>(() => DisasterCardValidator.ValidateAll(cards));
-            Assert.Contains("has a bonus with invalid BonusValue", ex.Message);
+            Assert.Contains("has a bonus condition with invalid BonusValue", ex.Message);
         }
 
         [Fact]

@@ -35,10 +35,10 @@ namespace ThunderbirdsBoardGameEngine.Serialization.UnitTests.Converters
             """;
 
             // Act
-            var result = JsonSerializer.Deserialize<Bonus>(input, _options);
+            var result = JsonSerializer.Deserialize<BonusCondition>(input, _options);
 
             // Assert
-            var characterBonus = Assert.IsType<CharacterBonus>(result);
+            var characterBonus = Assert.IsType<CharacterBonusCondition>(result);
             Assert.Equal(2, characterBonus.BonusValue);
             Assert.Equal(Character.Virgil, characterBonus.Character);
         }
@@ -56,10 +56,10 @@ namespace ThunderbirdsBoardGameEngine.Serialization.UnitTests.Converters
             """;
 
             // Act
-            var result = JsonSerializer.Deserialize<Bonus>(input, _options);
+            var result = JsonSerializer.Deserialize<BonusCondition>(input, _options);
 
             // Assert
-            var thunderbirdBonus = Assert.IsType<ThunderbirdBonus>(result);
+            var thunderbirdBonus = Assert.IsType<ThunderbirdBonusCondition>(result);
             Assert.Equal(2, thunderbirdBonus.BonusValue);
             Assert.Equal(ThunderbirdMachine.Thunderbird4, thunderbirdBonus.Thunderbird);
         }
@@ -77,10 +77,10 @@ namespace ThunderbirdsBoardGameEngine.Serialization.UnitTests.Converters
             """;            
 
             // Act
-            var result = JsonSerializer.Deserialize<Bonus>(input, _options);
+            var result = JsonSerializer.Deserialize<BonusCondition>(input, _options);
 
             // Assert
-            var podVehicleBonus = Assert.IsType<PodVehicleBonus>(result);
+            var podVehicleBonus = Assert.IsType<PodVehicleBonusCondition>(result);
             Assert.Equal(2, podVehicleBonus.BonusValue);
             Assert.Equal(PodVehicle.ElevatorCars, podVehicleBonus.PodVehicle);
         }
@@ -98,7 +98,7 @@ namespace ThunderbirdsBoardGameEngine.Serialization.UnitTests.Converters
             """;
 
             // Act & Assert
-            Assert.Throws<JsonException>(() => JsonSerializer.Deserialize<Bonus>(input, _options));
+            Assert.Throws<JsonException>(() => JsonSerializer.Deserialize<BonusCondition>(input, _options));
         }
 
         [Fact]
@@ -113,14 +113,14 @@ namespace ThunderbirdsBoardGameEngine.Serialization.UnitTests.Converters
             """;
 
             // Act & Assert
-            Assert.Throws<JsonException>(() => JsonSerializer.Deserialize<Bonus>(input, _options));
+            Assert.Throws<JsonException>(() => JsonSerializer.Deserialize<BonusCondition>(input, _options));
         }
 
         [Fact]
         public void Serialize_WhenCharacterBonus_WritesExpectedJson()
         {
             // Arrange
-            var bonus = new CharacterBonus
+            var bonus = new CharacterBonusCondition
             {
                 BonusValue = 3,
                 Character = Character.Scott,
@@ -141,7 +141,7 @@ namespace ThunderbirdsBoardGameEngine.Serialization.UnitTests.Converters
         public void Serialize_WhenCharacterBonusWithoutLocation_WritesExpectedJson()
         {
             // Arrange
-            var bonus = new CharacterBonus
+            var bonus = new CharacterBonusCondition
             {
                 BonusValue = 5,
                 Character = Character.Alan
@@ -161,7 +161,7 @@ namespace ThunderbirdsBoardGameEngine.Serialization.UnitTests.Converters
         public void Serialize_WhenThunderbirdBonus_WritesExpectedJson()
         {
             // Arrange
-            var bonus = new ThunderbirdBonus
+            var bonus = new ThunderbirdBonusCondition
             {
                 BonusValue = 4,
                 Thunderbird = ThunderbirdMachine.Thunderbird2,
@@ -182,7 +182,7 @@ namespace ThunderbirdsBoardGameEngine.Serialization.UnitTests.Converters
         public void Serialize_WhenThunderbirdBonusWithoutLocation_WritesExpectedJson()
         {
             // Arrange
-            var bonus = new ThunderbirdBonus
+            var bonus = new ThunderbirdBonusCondition
             {
                 BonusValue = 6,
                 Thunderbird = ThunderbirdMachine.Thunderbird3
@@ -202,7 +202,7 @@ namespace ThunderbirdsBoardGameEngine.Serialization.UnitTests.Converters
         public void Serialize_WhenPodVehicleBonus_WritesExpectedJson()
         {
             // Arrange
-            var bonus = new PodVehicleBonus
+            var bonus = new PodVehicleBonusCondition
             {
                 BonusValue = 1,
                 PodVehicle = PodVehicle.ElevatorCars,
@@ -223,7 +223,7 @@ namespace ThunderbirdsBoardGameEngine.Serialization.UnitTests.Converters
         public void Serialize_WhenPodVehicleBonusWithoutLocation_WritesExpectedJson()
         {
             // Arrange
-            var bonus = new PodVehicleBonus
+            var bonus = new PodVehicleBonusCondition
             {
                 BonusValue = 3,
                 PodVehicle = PodVehicle.Mole
@@ -250,14 +250,14 @@ namespace ThunderbirdsBoardGameEngine.Serialization.UnitTests.Converters
             };
 
             // Act & Assert
-            Assert.Throws<JsonException>(() => JsonSerializer.Serialize<Bonus>(bonus, _options));
+            Assert.Throws<JsonException>(() => JsonSerializer.Serialize<BonusCondition>(bonus, _options));
         }
 
         [Fact]
         public void RoundTrip_WhenCharacterBonus_SerializesAndDeserializesCorrectly()
         {
             // Arrange
-            var characterBonus = new CharacterBonus
+            var characterBonus = new CharacterBonusCondition
             {
                 BonusValue = 2,
                 Character = Character.Virgil,
@@ -265,11 +265,11 @@ namespace ThunderbirdsBoardGameEngine.Serialization.UnitTests.Converters
             };
 
             // Act
-            var json = JsonSerializer.Serialize<Bonus>(characterBonus, _options);
-            var result = JsonSerializer.Deserialize<Bonus>(json, _options);
+            var json = JsonSerializer.Serialize<BonusCondition>(characterBonus, _options);
+            var result = JsonSerializer.Deserialize<BonusCondition>(json, _options);
 
             // Assert
-            var bonus = Assert.IsType<CharacterBonus>(result);
+            var bonus = Assert.IsType<CharacterBonusCondition>(result);
             Assert.Equal(characterBonus.BonusValue, bonus.BonusValue);
             Assert.Equal(characterBonus.Character, bonus.Character);
             Assert.Equal(characterBonus.Location, bonus.Location);
@@ -279,7 +279,7 @@ namespace ThunderbirdsBoardGameEngine.Serialization.UnitTests.Converters
         public void RoundTrip_WhenThunderbirdBonus_SerializesAndDeserializesCorrectly()
         {
             // Arrange
-            var thunderbirdBonus = new ThunderbirdBonus
+            var thunderbirdBonus = new ThunderbirdBonusCondition
             {
                 BonusValue = 3,
                 Thunderbird = ThunderbirdMachine.Thunderbird1,
@@ -287,11 +287,11 @@ namespace ThunderbirdsBoardGameEngine.Serialization.UnitTests.Converters
             };
 
             // Act
-            var json = JsonSerializer.Serialize<Bonus>(thunderbirdBonus, _options);
-            var result = JsonSerializer.Deserialize<Bonus>(json, _options);
+            var json = JsonSerializer.Serialize<BonusCondition>(thunderbirdBonus, _options);
+            var result = JsonSerializer.Deserialize<BonusCondition>(json, _options);
 
             // Assert
-            var bonus = Assert.IsType<ThunderbirdBonus>(result);
+            var bonus = Assert.IsType<ThunderbirdBonusCondition>(result);
             Assert.Equal(thunderbirdBonus.BonusValue, bonus.BonusValue);
             Assert.Equal(thunderbirdBonus.Thunderbird, bonus.Thunderbird);
             Assert.Equal(thunderbirdBonus.Location, bonus.Location);
@@ -301,7 +301,7 @@ namespace ThunderbirdsBoardGameEngine.Serialization.UnitTests.Converters
         public void RoundTrip_WhenPodVehicleBonus_SerializesAndDeserializesCorrectly()
         {
             // Arrange
-            var podVehicleBonus = new PodVehicleBonus
+            var podVehicleBonus = new PodVehicleBonusCondition
             {
                 BonusValue = 4,
                 PodVehicle = PodVehicle.Mole,
@@ -309,17 +309,17 @@ namespace ThunderbirdsBoardGameEngine.Serialization.UnitTests.Converters
             };
 
             // Act
-            var json = JsonSerializer.Serialize<Bonus>(podVehicleBonus, _options);
-            var result = JsonSerializer.Deserialize<Bonus>(json, _options);
+            var json = JsonSerializer.Serialize<BonusCondition>(podVehicleBonus, _options);
+            var result = JsonSerializer.Deserialize<BonusCondition>(json, _options);
 
             // Assert
-            var bonus = Assert.IsType<PodVehicleBonus>(result);
+            var bonus = Assert.IsType<PodVehicleBonusCondition>(result);
             Assert.Equal(podVehicleBonus.BonusValue, bonus.BonusValue);
             Assert.Equal(podVehicleBonus.PodVehicle, bonus.PodVehicle);
             Assert.Equal(podVehicleBonus.Location, bonus.Location);
         }
 
-        private JsonElement SerializeBonusToJson(Bonus bonus)
+        private JsonElement SerializeBonusToJson(BonusCondition bonus)
         {
             var json = JsonSerializer.Serialize(bonus, _options);
 
@@ -327,7 +327,7 @@ namespace ThunderbirdsBoardGameEngine.Serialization.UnitTests.Converters
             return doc.RootElement.Clone();
         }
 
-        private class FakeBonus : Bonus
+        private class FakeBonus : BonusCondition
         {
             public string? FakeProperty { get; set; }
         }

@@ -22,7 +22,7 @@ namespace ThunderbirdsBoardGameEngine.GameData.Importer.Importers
 
             foreach (var row in sheet.RowsUsed().Skip(1)) // Skip header
             {
-                var bonuses = new List<Bonus>();
+                var bonuses = new List<BonusCondition>();
 
                 for (int i = 1; i <= 3; i++)
                 {                  
@@ -68,7 +68,7 @@ namespace ThunderbirdsBoardGameEngine.GameData.Importer.Importers
                     DifficultyNumber = row.Cell(header["Difficulty Number"]).GetValue<int>(),
                     Location = EnumDisplayHelper.ParseFromDisplayName<BoardLocation>(row.Cell(header["Location"]).GetString()),
                     RescueType = EnumDisplayHelper.ParseFromDisplayName<RescueType>(row.Cell(header["Rescue Type"]).GetString()),
-                    Bonuses = bonuses,
+                    BonusConditions = bonuses,
                     RewardOptions = rewards
                 };
 

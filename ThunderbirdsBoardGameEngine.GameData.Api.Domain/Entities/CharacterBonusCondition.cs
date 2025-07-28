@@ -2,8 +2,8 @@
 
 namespace ThunderbirdsBoardGameEngine.GameData.Api.Domain.Entities
 {
-    public sealed class PodVehicleBonus : Bonus
+    public sealed class CharacterBonusCondition : BonusCondition
     {
-        public PodVehicle PodVehicle { get; set; }
+        public Character Character { get; set; }
     }
 }

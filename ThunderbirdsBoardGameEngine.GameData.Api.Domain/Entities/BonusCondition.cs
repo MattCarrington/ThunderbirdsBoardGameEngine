@@ -2,7 +2,7 @@
 
 namespace ThunderbirdsBoardGameEngine.GameData.Api.Domain.Entities
 {
-    public abstract class Bonus
+    public abstract class BonusCondition
     {
         public int BonusValue { get; set; }
 

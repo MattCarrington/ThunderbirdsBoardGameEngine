@@ -4,9 +4,9 @@ using ThunderbirdsBoardGameEngine.GameData.Api.Domain.Entities;
 
 namespace ThunderbirdsBoardGameEngine.Serialization.Converters
 {
-    public class BonusConverter : JsonConverter<Bonus>
+    public class BonusConverter : JsonConverter<BonusCondition>
     {
-        public override Bonus? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        public override BonusCondition? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
             using var document = JsonDocument.ParseValue(ref reader);
             var root = document.RootElement;
@@ -21,23 +21,23 @@ namespace ThunderbirdsBoardGameEngine.Serialization.Converters
             switch (typeDiscriminator)
             {
                 case "characterBonus":
-                    return JsonSerializer.Deserialize<CharacterBonus>(root.GetRawText(), options);
+                    return JsonSerializer.Deserialize<CharacterBonusCondition>(root.GetRawText(), options);
                 case "thunderbirdBonus":
-                    return JsonSerializer.Deserialize<ThunderbirdBonus>(root.GetRawText(), options);
+                    return JsonSerializer.Deserialize<ThunderbirdBonusCondition>(root.GetRawText(), options);
                 case "podVehicleBonus":
-                    return JsonSerializer.Deserialize<PodVehicleBonus>(root.GetRawText(), options);
+                    return JsonSerializer.Deserialize<PodVehicleBonusCondition>(root.GetRawText(), options);
                 default:
                     throw new JsonException($"Unknown Bonus type '{typeDiscriminator}'");
             }            
         }
 
-        public override void Write(Utf8JsonWriter writer, Bonus value, JsonSerializerOptions options)
+        public override void Write(Utf8JsonWriter writer, BonusCondition value, JsonSerializerOptions options)
         {
             writer.WriteStartObject();
 
             switch (value)
             {
-                case CharacterBonus cb:
+                case CharacterBonusCondition cb:
                     writer.WriteString("type", "characterBonus");
                     writer.WriteNumber("bonusValue", cb.BonusValue);
                     writer.WriteString("character", JsonNamingPolicy.CamelCase.ConvertName(cb.Character.ToString()));
@@ -45,7 +45,7 @@ namespace ThunderbirdsBoardGameEngine.Serialization.Converters
                         writer.WriteString("location", JsonNamingPolicy.CamelCase.ConvertName(cb.Location.ToString()));
                     break;
 
-                case ThunderbirdBonus tb:
+                case ThunderbirdBonusCondition tb:
                     writer.WriteString("type", "thunderbirdBonus");
                     writer.WriteNumber("bonusValue", tb.BonusValue);
                     writer.WriteString("thunderbird", JsonNamingPolicy.CamelCase.ConvertName(tb.Thunderbird.ToString()));
@@ -53,7 +53,7 @@ namespace ThunderbirdsBoardGameEngine.Serialization.Converters
                         writer.WriteString("location", JsonNamingPolicy.CamelCase.ConvertName(tb.Location.ToString()));
                     break;
 
-                case PodVehicleBonus pb:
+                case PodVehicleBonusCondition pb:
                     writer.WriteString("type", "podVehicleBonus");
                     writer.WriteNumber("bonusValue", pb.BonusValue);
                     writer.WriteString("podVehicle", JsonNamingPolicy.CamelCase.ConvertName(pb.PodVehicle.ToString()));
