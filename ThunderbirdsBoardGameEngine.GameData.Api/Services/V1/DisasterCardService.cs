@@ -2,7 +2,7 @@
 using ThunderbirdsBoardGameEngine.GameData.Api.Interfaces;
 using ThunderbirdsBoardGameEngine.GameData.Api.Messages.Dtos;
 
-namespace ThunderbirdsBoardGameEngine.GameData.Api.Services
+namespace ThunderbirdsBoardGameEngine.GameData.Api.Services.V1
 {
     public class DisasterCardService : IDisasterCardService
     {

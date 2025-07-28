@@ -1,12 +1,12 @@
 ﻿using AutoFixture;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
-using ThunderbirdsBoardGameEngine.GameData.Api.Controllers;
+using ThunderbirdsBoardGameEngine.GameData.Api.Controllers.V1;
 using ThunderbirdsBoardGameEngine.GameData.Api.Interfaces;
 using ThunderbirdsBoardGameEngine.GameData.Api.Messages.Dtos;
 using Xunit;
 
-namespace ThunderbirdsBoardGameEngine.GameData.Api.UnitTests.Controllers
+namespace ThunderbirdsBoardGameEngine.GameData.Api.UnitTests.Controllers.V1
 {
     public class DisasterCardControllerTests
     {

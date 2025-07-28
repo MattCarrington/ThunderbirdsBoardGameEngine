@@ -3,12 +3,12 @@ using Microsoft.Extensions.Logging.Abstractions;
 using ThunderbirdsBoardGameEngine.GameData.Api.Domain.Entities;
 using ThunderbirdsBoardGameEngine.GameData.Api.Domain.Enums;
 using ThunderbirdsBoardGameEngine.GameData.Api.Messages.Dtos;
-using ThunderbirdsBoardGameEngine.GameData.Api.Profiles;
+using ThunderbirdsBoardGameEngine.GameData.Api.Profiles.V1;
 using ThunderbirdsBoardGameEngine.GameData.Api.TestHelpers.Builders;
 using ThunderbirdsBoardGameEngine.Serialization.Enums;
 using Xunit;
 
-namespace ThunderbirdsBoardGameEngine.GameData.Api.UnitTests.Profiles
+namespace ThunderbirdsBoardGameEngine.GameData.Api.UnitTests.Profiles.V1
 {
     public class DisasterCardProfileTests
     {

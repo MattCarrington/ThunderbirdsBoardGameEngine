@@ -1,10 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ThunderbirdsBoardGameEngine.GameData.Api.Interfaces;
 
-namespace ThunderbirdsBoardGameEngine.GameData.Api.Controllers
+namespace ThunderbirdsBoardGameEngine.GameData.Api.Controllers.V1
 {
     [Route("api/[controller]")]
     [ApiController]
+    [ApiVersion("1.0")]
     public class DisasterCardController : ControllerBase
     {
         private readonly IDisasterCardService _service;

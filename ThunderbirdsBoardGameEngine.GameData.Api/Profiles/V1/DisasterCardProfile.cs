@@ -4,7 +4,7 @@ using ThunderbirdsBoardGameEngine.GameData.Api.Domain.Enums;
 using ThunderbirdsBoardGameEngine.GameData.Api.Messages.Dtos;
 using ThunderbirdsBoardGameEngine.Serialization.Enums;
 
-namespace ThunderbirdsBoardGameEngine.GameData.Api.Profiles
+namespace ThunderbirdsBoardGameEngine.GameData.Api.Profiles.V1
 {
     public class DisasterCardProfile : Profile
     {

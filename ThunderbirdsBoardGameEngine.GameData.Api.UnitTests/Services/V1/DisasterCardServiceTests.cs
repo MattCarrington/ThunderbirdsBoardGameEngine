@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 using ThunderbirdsBoardGameEngine.GameData.Api.Domain.Entities;
 using ThunderbirdsBoardGameEngine.GameData.Api.Interfaces;
 using ThunderbirdsBoardGameEngine.GameData.Api.Messages.Dtos;
-using ThunderbirdsBoardGameEngine.GameData.Api.Services;
+using ThunderbirdsBoardGameEngine.GameData.Api.Services.V1;
 using Xunit;
 
-namespace ThunderbirdsBoardGameEngine.GameData.Api.UnitTests.Services
+namespace ThunderbirdsBoardGameEngine.GameData.Api.UnitTests.Services.V1
 {
     public class DisasterCardServiceTests
     {
