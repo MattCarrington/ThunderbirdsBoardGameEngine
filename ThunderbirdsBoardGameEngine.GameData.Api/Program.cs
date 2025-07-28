@@ -1,55 +1,63 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Versioning;
-using ThunderbirdsBoardGameEngine.GameData.Api;
 using ThunderbirdsBoardGameEngine.GameData.Api.Interfaces;
 using ThunderbirdsBoardGameEngine.GameData.Api.Profiles.V1;
 using ThunderbirdsBoardGameEngine.GameData.Api.Repositories;
 using ThunderbirdsBoardGameEngine.GameData.Api.Services.V1;
 
-var builder = WebApplication.CreateBuilder(args);
-
-// Add services to the container.
-builder.Services.AddControllers();
-
-builder.Services.AddApiVersioning(options =>
+namespace ThunderbirdsBoardGameEngine.GameData.Api
 {
-    options.AssumeDefaultVersionWhenUnspecified = true;
-    options.DefaultApiVersion = new ApiVersion(1, 0);
-    options.ReportApiVersions = true;
+    public class Program
+    {
+        public static void Main(string[] args)
+        {
+            var builder = WebApplication.CreateBuilder(args);
 
-    options.ApiVersionReader = new HeaderApiVersionReader("X-API-Version");
-});
+            // Add services to the container.
+            builder.Services.AddControllers();
 
-builder.Services.AddVersionedApiExplorer(options =>
-{
-    options.GroupNameFormat = "'v'VVV"; // e.g., v1, v2
-    options.SubstituteApiVersionInUrl = true;
-});
+            builder.Services.AddApiVersioning(options =>
+            {
+                options.AssumeDefaultVersionWhenUnspecified = true;
+                options.DefaultApiVersion = new ApiVersion(1, 0);
+                options.ReportApiVersions = true;
 
-builder.Services.AddAutoMapper(cfg => { }, typeof(DisasterCardProfile));
-builder.Services.AddScoped<IDisasterCardRepository, DisasterCardRepository>();
-builder.Services.AddScoped<IDisasterCardService, DisasterCardService>();
+                options.ApiVersionReader = new HeaderApiVersionReader("X-API-Version");
+            });
 
-builder.Services.Configure<CardDataOptions>(
-    builder.Configuration.GetSection("CardData"));
+            builder.Services.AddVersionedApiExplorer(options =>
+            {
+                options.GroupNameFormat = "'v'VVV"; // e.g., v1, v2
+                options.SubstituteApiVersionInUrl = true;
+            });
 
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+            builder.Services.AddAutoMapper(cfg => { }, typeof(DisasterCardProfile));
+            builder.Services.AddScoped<IDisasterCardRepository, DisasterCardRepository>();
+            builder.Services.AddScoped<IDisasterCardService, DisasterCardService>();
 
-var app = builder.Build();
+            builder.Services.Configure<CardDataOptions>(
+                builder.Configuration.GetSection("CardData"));
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
+            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+            builder.Services.AddEndpointsApiExplorer();
+            builder.Services.AddSwaggerGen();
+
+            var app = builder.Build();
+
+            // Configure the HTTP request pipeline.
+            if (app.Environment.IsDevelopment())
+            {
+                app.UseSwagger();
+                app.UseSwaggerUI();
+            }
+
+            app.UseHttpsRedirection();
+
+            app.UseAuthorization();
+
+            app.MapControllers();
+
+            app.Run();
+        }
+    }
 }
-
-app.UseHttpsRedirection();
-
-app.UseAuthorization();
-
-app.MapControllers();
-
-app.Run();
