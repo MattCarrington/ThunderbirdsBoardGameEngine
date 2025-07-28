@@ -61,7 +61,7 @@ namespace ThunderbirdsBoardGameEngine.Serialization.UnitTests.Converters
             // Assert
             var thunderbirdBonus = Assert.IsType<ThunderbirdBonus>(result);
             Assert.Equal(2, thunderbirdBonus.BonusValue);
-            Assert.Equal(Thunderbird.Thunderbird4, thunderbirdBonus.Thunderbird);
+            Assert.Equal(ThunderbirdMachine.Thunderbird4, thunderbirdBonus.Thunderbird);
         }
 
         [Fact]        
@@ -164,7 +164,7 @@ namespace ThunderbirdsBoardGameEngine.Serialization.UnitTests.Converters
             var bonus = new ThunderbirdBonus
             {
                 BonusValue = 4,
-                Thunderbird = Thunderbird.Thunderbird2,
+                Thunderbird = ThunderbirdMachine.Thunderbird2,
                 Location = BoardLocation.NorthPacific
             };
 
@@ -185,7 +185,7 @@ namespace ThunderbirdsBoardGameEngine.Serialization.UnitTests.Converters
             var bonus = new ThunderbirdBonus
             {
                 BonusValue = 6,
-                Thunderbird = Thunderbird.Thunderbird3
+                Thunderbird = ThunderbirdMachine.Thunderbird3
             };
 
             // Act
@@ -282,7 +282,7 @@ namespace ThunderbirdsBoardGameEngine.Serialization.UnitTests.Converters
             var thunderbirdBonus = new ThunderbirdBonus
             {
                 BonusValue = 3,
-                Thunderbird = Thunderbird.Thunderbird1,
+                Thunderbird = ThunderbirdMachine.Thunderbird1,
                 Location = BoardLocation.NorthAtlantic
             };
 

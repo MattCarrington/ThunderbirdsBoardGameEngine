@@ -21,8 +21,8 @@ namespace ThunderbirdsBoardGameEngine.GameData.Importer.Parsers
                 };
             }
 
-            // Try as Thunderbird Bonus
-            if (TryParseEnum<Thunderbird>(target, out var thunderbird))
+            // Try as ThunderbirdMachine Bonus
+            if (TryParseEnum<ThunderbirdMachine>(target, out var thunderbird))
             {
                 return new ThunderbirdBonus
                 {

@@ -7,7 +7,7 @@ namespace ThunderbirdsBoardGameEngine.Serialization.UnitTests.Enums
     public class EnumDisplayHelperTests
     {
         [Theory]
-        [InlineData(Thunderbird.Thunderbird1, "Thunderbird 1")]
+        [InlineData(ThunderbirdMachine.Thunderbird1, "Thunderbird 1")]
         [InlineData(PodVehicle.Domo, "DOMO")]
         [InlineData(BoardLocation.GeoStationaryOrbit, "Geo-Stationary Orbit")]
         [InlineData(Character.Gordon, "Gordon")]
@@ -20,7 +20,7 @@ namespace ThunderbirdsBoardGameEngine.Serialization.UnitTests.Enums
         }
 
         [Theory]
-        [InlineData("Thunderbird 1", Thunderbird.Thunderbird1)]
+        [InlineData("Thunderbird 1", ThunderbirdMachine.Thunderbird1)]
         [InlineData("lady penelope", Character.LadyPenelope)]
         [InlineData("gordon", Character.Gordon)]
         [InlineData("  DOMO  ", PodVehicle.Domo)]

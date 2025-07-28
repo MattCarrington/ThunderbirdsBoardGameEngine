@@ -105,7 +105,7 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.Domain.UnitTests.Validators
             // Arrange
             var bonus = new ThunderbirdBonus()
             {
-                Thunderbird = Thunderbird.Thunderbird3,
+                Thunderbird = ThunderbirdMachine.Thunderbird3,
                 BonusValue = 2
             };
 

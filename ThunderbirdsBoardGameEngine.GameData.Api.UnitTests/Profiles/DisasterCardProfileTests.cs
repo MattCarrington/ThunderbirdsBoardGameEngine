@@ -70,7 +70,7 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.UnitTests.Profiles
             // Arrange
             var thunderbirdBonus = new ThunderbirdBonus()
             {
-                Thunderbird = Thunderbird.Thunderbird4,
+                Thunderbird = ThunderbirdMachine.Thunderbird4,
                 BonusValue = 3
             };
 
@@ -162,7 +162,7 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.UnitTests.Profiles
 
             var thunderbirdBonus = new ThunderbirdBonus()
             {
-                Thunderbird = Thunderbird.Thunderbird4,
+                Thunderbird = ThunderbirdMachine.Thunderbird4,
                 BonusValue = 3
             };
 

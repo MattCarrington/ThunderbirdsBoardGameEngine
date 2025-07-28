@@ -2,7 +2,7 @@
 
 namespace ThunderbirdsBoardGameEngine.GameData.Api.Domain.Enums
 {
-    public enum Thunderbird
+    public enum ThunderbirdMachine
     {
         [Display(Name = "Thunderbird 1")]
         Thunderbird1,
@@ -15,6 +15,9 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.Domain.Enums
 
         [Display(Name = "Thunderbird 4")]
         Thunderbird4,
+
+        [Display(Name = "Thunderbird 5")]
+        Thunderbird5,
 
         [Display(Name = "Fab 1")]
         Fab1

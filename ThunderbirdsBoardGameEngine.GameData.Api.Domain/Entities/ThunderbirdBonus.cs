@@ -4,6 +4,6 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.Domain.Entities
 {
     public sealed class ThunderbirdBonus : Bonus
     {
-        public Thunderbird Thunderbird { get; set; }
+        public ThunderbirdMachine Thunderbird { get; set; }
     }
 }
