@@ -54,14 +54,17 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.UnitTests.Profiles
                 .WithBonus(characterBonus)
                 .Build();
 
+            
+
             // Act
             var result = _mapper.Map<DisasterCardDto>(disasterCard);
 
             // Assert
             var bonus = Assert.Single(result.Bonuses);
-            Assert.Equal(EnumDisplayHelper.GetDisplayName(characterBonus.Character), bonus.DisplayName);
-            Assert.Equal(characterBonus.BonusValue, bonus.BonusValue);
-            Assert.Null(bonus.Location); // No location specified for character bonus
+            
+            var expectedDescription = GetExpectedDescription(EnumDisplayHelper.GetDisplayName(characterBonus.Character), characterBonus.BonusValue);
+
+            Assert.Equal(expectedDescription, bonus.Description);
         }
 
         [Fact]
@@ -83,9 +86,10 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.UnitTests.Profiles
 
             // Assert
             var bonus = Assert.Single(result.Bonuses);
-            Assert.Equal(EnumDisplayHelper.GetDisplayName(thunderbirdBonus.Thunderbird), bonus.DisplayName);
-            Assert.Equal(thunderbirdBonus.BonusValue, bonus.BonusValue);        
-            Assert.Null(bonus.Location); // No location specified for thunderbird bonus
+
+            var expectedDescription = GetExpectedDescription(EnumDisplayHelper.GetDisplayName(thunderbirdBonus.Thunderbird), thunderbirdBonus.BonusValue);
+
+            Assert.Equal(expectedDescription, bonus.Description);
         }
 
         [Fact]
@@ -107,9 +111,10 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.UnitTests.Profiles
 
             // Assert
             var bonus = Assert.Single(result.Bonuses);
-            Assert.Equal(EnumDisplayHelper.GetDisplayName(podVehicleBonus.PodVehicle), bonus.DisplayName);
-            Assert.Equal(podVehicleBonus.BonusValue, bonus.BonusValue);
-            Assert.Null(bonus.Location); // No location specified for pod vehicle bonus
+            
+            var expectedDescription = GetExpectedDescription(EnumDisplayHelper.GetDisplayName(podVehicleBonus.PodVehicle), podVehicleBonus.BonusValue);
+
+            Assert.Equal(expectedDescription, bonus.Description);
         }
 
         [Fact]
@@ -145,9 +150,14 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.UnitTests.Profiles
 
             // Assert
             Assert.Equal(3, result.Bonuses.Count);
-            Assert.Contains(result.Bonuses, b => b.DisplayName == EnumDisplayHelper.GetDisplayName(mobileCraneBonus.PodVehicle) && b.BonusValue == mobileCraneBonus.BonusValue);
-            Assert.Contains(result.Bonuses, b => b.DisplayName == EnumDisplayHelper.GetDisplayName(thunderizerBonus.PodVehicle) && b.BonusValue == thunderizerBonus.BonusValue);
-            Assert.Contains(result.Bonuses, b => b.DisplayName == EnumDisplayHelper.GetDisplayName(domoBonus.PodVehicle) && b.BonusValue == domoBonus.BonusValue);
+            
+            var expectedDescriptionMobileCrane = GetExpectedDescription(EnumDisplayHelper.GetDisplayName(mobileCraneBonus.PodVehicle), mobileCraneBonus.BonusValue);
+            var expectedDescriptionThunderizer = GetExpectedDescription(EnumDisplayHelper.GetDisplayName(thunderizerBonus.PodVehicle), thunderizerBonus.BonusValue);
+            var expectedDescriptionDomo = GetExpectedDescription(EnumDisplayHelper.GetDisplayName(domoBonus.PodVehicle), domoBonus.BonusValue);
+
+            Assert.Contains(result.Bonuses, b => b.Description == expectedDescriptionMobileCrane);
+            Assert.Contains(result.Bonuses, b => b.Description == expectedDescriptionThunderizer);
+            Assert.Contains(result.Bonuses, b => b.Description == expectedDescriptionDomo);
         }
 
         [Fact]
@@ -176,8 +186,12 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.UnitTests.Profiles
 
             // Assert
             Assert.Equal(2, result.Bonuses.Count);
-            Assert.Contains(result.Bonuses, b => b.DisplayName == EnumDisplayHelper.GetDisplayName(characterBonus.Character) && b.BonusValue == characterBonus.BonusValue);
-            Assert.Contains(result.Bonuses, b => b.DisplayName == EnumDisplayHelper.GetDisplayName(thunderbirdBonus.Thunderbird) && b.BonusValue == thunderbirdBonus.BonusValue);
+
+            var expectedDescriptionCharacter = GetExpectedDescription(EnumDisplayHelper.GetDisplayName(characterBonus.Character), characterBonus.BonusValue);
+            var expectedDescriptionThunderbird = GetExpectedDescription(EnumDisplayHelper.GetDisplayName(thunderbirdBonus.Thunderbird), thunderbirdBonus.BonusValue);
+
+            Assert.Contains(result.Bonuses, b => b.Description == expectedDescriptionCharacter);
+            Assert.Contains(result.Bonuses, b => b.Description == expectedDescriptionThunderbird);
         }
 
         [Fact]
@@ -200,7 +214,41 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.UnitTests.Profiles
 
             // Assert
             var bonus = Assert.Single(result.Bonuses);
-            Assert.Equal(EnumDisplayHelper.GetDisplayName(characterBonus.Location.Value), bonus.Location);
+
+            var expectedDescription = GetExpectedDescription(
+                EnumDisplayHelper.GetDisplayName(characterBonus.Character),
+                characterBonus.BonusValue,
+                characterBonus.Location);
+
+            Assert.Equal(expectedDescription, bonus.Description); // This should include "in Venus" in the description
+        }
+
+        [Fact]
+        public void Map_WhenBonusHasGeoStationaryOrbitLocation_ShouldCorrectlyMapBonusDto()
+        {
+            // Arrange
+            var characterBonus = new CharacterBonus()
+            {
+                Character = Character.LadyPenelope,
+                BonusValue = 3,
+                Location = BoardLocation.GeoStationaryOrbit
+            };
+            var disasterCard = new DisasterCardBuilder()
+                .WithBonus(characterBonus)
+                .Build();
+
+            // Act
+            var result = _mapper.Map<DisasterCardDto>(disasterCard);
+
+            // Assert
+            var bonus = Assert.Single(result.Bonuses);
+
+            var expectedDescription = GetExpectedDescription(
+                EnumDisplayHelper.GetDisplayName(characterBonus.Character),
+                characterBonus.BonusValue,
+                characterBonus.Location); 
+
+            Assert.Equal(expectedDescription, bonus.Description); // This should include "on Thunderbird 5" in the description
         }
 
         [Fact]
@@ -216,7 +264,6 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.UnitTests.Profiles
             var reward = Assert.Single(result.Rewards);
             Assert.Equal("User Choice", reward.DisplayName);
         }
-
 
         [Fact]
         public void Map_WhenSpecifiedToken_ShouldCorrectlyMapRewardDto()
@@ -304,6 +351,23 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.UnitTests.Profiles
             Assert.IsType<InvalidOperationException>(ex.InnerException);
             Assert.Equal("SpecifiedToken must be set for non-user-choice rewards", ex.InnerException?.Message);
         }
+
+        private static string GetExpectedDescription(string bonusName, int bonusValue, BoardLocation? bonusLocation = null)
+        {
+            var description = $"{bonusName} (+{bonusValue})";
+
+            if (bonusLocation.HasValue)
+            {
+                var locationText = bonusLocation == BoardLocation.GeoStationaryOrbit
+                    ? "on Thunderbird 5"
+                    : $"in {EnumDisplayHelper.GetDisplayName(bonusLocation.Value)}";
+
+                description += $" (if {locationText})";
+            }
+
+            return description;
+        }
+
 
         private class UnknownBonus : Bonus
         {

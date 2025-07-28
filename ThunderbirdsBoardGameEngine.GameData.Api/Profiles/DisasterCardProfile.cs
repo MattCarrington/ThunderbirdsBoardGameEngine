@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using ThunderbirdsBoardGameEngine.GameData.Api.Domain.Entities;
+using ThunderbirdsBoardGameEngine.GameData.Api.Domain.Enums;
 using ThunderbirdsBoardGameEngine.GameData.Api.Messages.Dtos;
 using ThunderbirdsBoardGameEngine.Serialization.Enums;
 
@@ -16,18 +17,29 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.Profiles
             CreateMap<Bonus, BonusDto>()
                 .ConvertUsing((bonus, context) =>
                 {
+                    var displayName = bonus switch
+                    {
+                        CharacterBonus cb => EnumDisplayHelper.GetDisplayName(cb.Character),
+                        ThunderbirdBonus tb => EnumDisplayHelper.GetDisplayName(tb.Thunderbird),
+                        PodVehicleBonus pvb => EnumDisplayHelper.GetDisplayName(pvb.PodVehicle),
+                        _ => throw new InvalidOperationException("Unknown bonus type")
+                    };
+
+                    var locationText = bonus.Location switch
+                    {
+                        BoardLocation.GeoStationaryOrbit => "on Thunderbird 5",
+                        BoardLocation loc => $"in {EnumDisplayHelper.GetDisplayName(loc)}",
+                        _ => null
+                    };
+
+                    var description = locationText == null
+                        ? $"{displayName} (+{bonus.BonusValue})"
+                        : $"{displayName} (+{bonus.BonusValue}) (if {locationText})";
+
+
                     var dto = new BonusDto
                     {
-                        BonusValue = bonus.BonusValue,
-                        // If null, bonus shares the same location as the disaster card 
-                        Location = bonus.Location.HasValue ? EnumDisplayHelper.GetDisplayName(bonus.Location.Value) : null,
-                        DisplayName = bonus switch
-                        {
-                            CharacterBonus cb => EnumDisplayHelper.GetDisplayName(cb.Character),
-                            ThunderbirdBonus tb => EnumDisplayHelper.GetDisplayName(tb.Thunderbird),
-                            PodVehicleBonus pvb => EnumDisplayHelper.GetDisplayName(pvb.PodVehicle),
-                            _ => throw new InvalidOperationException("Unknown bonus type")
-                        }
+                        Description = description
                     };
 
                     return dto;
