@@ -18,7 +18,7 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api
 
             builder.Services.AddApiVersioning(options =>
             {
-                options.AssumeDefaultVersionWhenUnspecified = true;
+                options.AssumeDefaultVersionWhenUnspecified = false;
                 options.DefaultApiVersion = new ApiVersion(1, 0);
                 options.ReportApiVersions = true;
 
