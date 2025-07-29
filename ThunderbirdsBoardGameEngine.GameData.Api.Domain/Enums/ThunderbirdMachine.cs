@@ -19,7 +19,7 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.Domain.Enums
         [Display(Name = "Thunderbird 5")]
         Thunderbird5,
 
-        [Display(Name = "Fab 1")]
+        [Display(Name = "FAB 1")]
         Fab1
     }
 }
