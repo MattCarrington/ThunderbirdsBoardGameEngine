@@ -363,3 +363,4 @@ MigrationBackup/
 FodyWeavers.xsd
 /ThunderbirdsBoardGameEngine.GameData.Importer/Resources/DisasterCards.xlsx
 /ThunderbirdsBoardGameEngine.GameData.Importer/Output/DisasterCards.json
+/TemplateEngineHost/vs
