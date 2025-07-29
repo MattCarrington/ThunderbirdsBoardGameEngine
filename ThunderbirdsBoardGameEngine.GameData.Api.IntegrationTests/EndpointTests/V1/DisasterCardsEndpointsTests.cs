@@ -283,7 +283,7 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.IntegrationTests.EndpointTest
             var card = GetCard(cards, "Bolt from the Blue");
 
             card!.Rewards.Should().HaveCount(1);
-            card.Rewards[0].DisplayName.Should().Be("User Choice");
+            card.Rewards[0].DisplayName.Should().Be("Player Choice");
         }
 
         [Fact]
@@ -297,7 +297,7 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.IntegrationTests.EndpointTest
             // Assert
             var card = GetCard(cards, "Sunrise on Mars");
 
-            card!.Rewards.Should().Contain(r => r.DisplayName == "User Choice");
+            card!.Rewards.Should().Contain(r => r.DisplayName == "Player Choice");
             card.Rewards.Should().Contain(r => r.DisplayName == "Technology");
         }
 

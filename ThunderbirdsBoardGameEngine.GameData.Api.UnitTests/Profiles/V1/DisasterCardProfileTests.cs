@@ -275,7 +275,7 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.UnitTests.Profiles.V1
 
             // Assert            
             var reward = Assert.Single(result.Rewards);
-            Assert.Equal("User Choice", reward.DisplayName);
+            Assert.Equal("Player Choice", reward.DisplayName);
         }
 
         [Fact]
@@ -308,7 +308,7 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.UnitTests.Profiles.V1
 
             // Assert
             Assert.Equal(2, result.Rewards.Count);
-            Assert.Contains(result.Rewards, r => r.DisplayName == "User Choice");
+            Assert.Contains(result.Rewards, r => r.DisplayName == "Player Choice");
             Assert.Contains(result.Rewards, r => r.DisplayName == BonusToken.Technology.ToString());
         }
 
@@ -381,7 +381,6 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.UnitTests.Profiles.V1
 
             return description;
         }
-
 
         private class UnknownBonusCondition : BonusCondition
         {

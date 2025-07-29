@@ -56,7 +56,7 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.Profiles.V1
                     return new RewardDto
                     {
                         DisplayName = reward.IsUserChoice
-                            ? "User Choice"
+                            ? "Player Choice"
                             : reward.SpecifiedToken!.Value.ToString() // Safe because of guard
                     };
                 });
