@@ -1,9 +1,11 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Versioning;
+using Microsoft.OpenApi.Models;
 using ThunderbirdsBoardGameEngine.GameData.Api.Interfaces;
 using ThunderbirdsBoardGameEngine.GameData.Api.Profiles.V1;
 using ThunderbirdsBoardGameEngine.GameData.Api.Repositories;
 using ThunderbirdsBoardGameEngine.GameData.Api.Services.V1;
+using ThunderbirdsBoardGameEngine.GameData.Api.Swagger;
 
 namespace ThunderbirdsBoardGameEngine.GameData.Api
 {
@@ -40,7 +42,12 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
+            builder.Services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Your API", Version = "v1" });
+                c.OperationFilter<AddApiVersionHeaderParameter>();
+            });
+
 
             var app = builder.Build();
 
