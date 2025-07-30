@@ -1,5 +1,6 @@
 ﻿using System.Text.Json;
 using ThunderbirdsBoardGameEngine.GameData.Api.Client.Exceptions;
+using ThunderbirdsBoardGameEngine.GameData.Api.Client.Internal.Serialization;
 using ThunderbirdsBoardGameEngine.GameData.Api.Messages.Dtos;
 
 namespace ThunderbirdsBoardGameEngine.GameData.Api.Client.Clients.V1
@@ -7,8 +8,6 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.Client.Clients.V1
     public class DisasterCardClient
     {
         private readonly HttpClient _httpClient;
-
-        private readonly JsonSerializerOptions _options = new() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
 
         public DisasterCardClient(HttpClient httpClient)
         {
@@ -39,7 +38,7 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.Client.Clients.V1
                 if (response.IsSuccessStatusCode)
                 {
                     var content = await response.Content.ReadAsStringAsync();
-                    var data = JsonSerializer.Deserialize<T>(content, _options);
+                    var data = JsonSerializer.Deserialize<T>(content, JsonDefaults.CamelCase);
 
                     return data == null
                         ? throw new ApiDeserializationException("Deserialized content was null.")

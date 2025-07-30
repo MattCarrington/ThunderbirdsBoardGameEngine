@@ -2,6 +2,7 @@
 using System.Net;
 using System.Text.Json;
 using ThunderbirdsBoardGameEngine.GameData.Api.Client.Clients.V1;
+using ThunderbirdsBoardGameEngine.GameData.Api.Client.Internal.Serialization;
 using ThunderbirdsBoardGameEngine.GameData.Api.Client.UnitTests.Helpers;
 using ThunderbirdsBoardGameEngine.GameData.Api.Messages.Dtos;
 using Xunit;
@@ -11,8 +12,7 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.Client.UnitTests.Clients.V1
     public class DisasterCardClientTests
     {
         private readonly Fixture _fixture = new();
-        private readonly JsonSerializerOptions _options = new() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
-
+        
         public DisasterCardClientTests()
         {
             _fixture.Customize<DisasterCardDto>(c => c
@@ -24,7 +24,7 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.Client.UnitTests.Clients.V1
         public async Task GetAllAsync_WhenCalled_ShouldSetApiVersionHeader()
         {
             // Arrange
-            var json = JsonSerializer.Serialize(new List<DisasterCardDto>(), _options);
+            var json = JsonSerializer.Serialize(new List<DisasterCardDto>(), JsonDefaults.CamelCase);
 
             var stubHandler = new StubHttpMessageHandler(json, HttpStatusCode.OK);
 
@@ -47,7 +47,7 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.Client.UnitTests.Clients.V1
         public async Task GetAllAsync_WhenCalled_ShouldCallCorrectEndpoint()
         {
             // Arrange
-            var json = JsonSerializer.Serialize(new List<DisasterCardDto>(), _options);
+            var json = JsonSerializer.Serialize(new List<DisasterCardDto>(), JsonDefaults.CamelCase);
 
             var stubHandler = new StubHttpMessageHandler(json, HttpStatusCode.OK);
 
@@ -71,7 +71,7 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.Client.UnitTests.Clients.V1
             // Arrange
             var disasterCardDtos = _fixture.CreateMany<DisasterCardDto>(5).ToList();
 
-            var json = JsonSerializer.Serialize(disasterCardDtos, _options);
+            var json = JsonSerializer.Serialize(disasterCardDtos, JsonDefaults.CamelCase);
 
             var client = CreateDisasterCardClient(HttpStatusCode.OK, json);
 
@@ -96,7 +96,7 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.Client.UnitTests.Clients.V1
         public async Task GetAllAsync_WhenApiReturnsEmptyList_ReturnsEmptyDataList()
         {
             // Arrange
-            var json = JsonSerializer.Serialize(new List<DisasterCardDto>(), _options);
+            var json = JsonSerializer.Serialize(new List<DisasterCardDto>(), JsonDefaults.CamelCase);
 
             var client = CreateDisasterCardClient(HttpStatusCode.OK, json);
 
@@ -169,7 +169,7 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.Client.UnitTests.Clients.V1
         [Fact]
         public async Task GetByIdAsync_WhenCalled_ShouldSetApiVersionHeader()
         {
-            var json = JsonSerializer.Serialize(new DisasterCardDto(), _options);
+            var json = JsonSerializer.Serialize(new DisasterCardDto(), JsonDefaults.CamelCase);
 
             var stubHandler = new StubHttpMessageHandler(json, HttpStatusCode.OK);
 
@@ -192,7 +192,7 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.Client.UnitTests.Clients.V1
         public async Task GetByIdAsync_WhenCalled_ShouldCallCorrectEndpoint()
         {
             // Arrange
-            var json = JsonSerializer.Serialize(new DisasterCardDto(), _options);
+            var json = JsonSerializer.Serialize(new DisasterCardDto(), JsonDefaults.CamelCase);
 
             var stubHandler = new StubHttpMessageHandler(json, HttpStatusCode.OK);
 
@@ -216,7 +216,7 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.Client.UnitTests.Clients.V1
             // Arrange
             var disasterCardDto = _fixture.Create<DisasterCardDto>();
 
-            var json = JsonSerializer.Serialize(disasterCardDto, _options);
+            var json = JsonSerializer.Serialize(disasterCardDto, JsonDefaults.CamelCase);
 
             var client = CreateDisasterCardClient(HttpStatusCode.OK, json);
 
