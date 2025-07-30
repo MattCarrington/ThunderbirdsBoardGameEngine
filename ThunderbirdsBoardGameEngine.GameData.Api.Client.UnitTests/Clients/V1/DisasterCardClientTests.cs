@@ -4,7 +4,7 @@ using System.Text.Json;
 using ThunderbirdsBoardGameEngine.GameData.Api.Client.Clients.V1;
 using ThunderbirdsBoardGameEngine.GameData.Api.Client.Internal.Serialization;
 using ThunderbirdsBoardGameEngine.GameData.Api.Client.UnitTests.Helpers;
-using ThunderbirdsBoardGameEngine.GameData.Api.Messages.Dtos;
+using ThunderbirdsBoardGameEngine.GameData.Api.Messages.Dtos.V1;
 using Xunit;
 
 namespace ThunderbirdsBoardGameEngine.GameData.Api.Client.UnitTests.Clients.V1

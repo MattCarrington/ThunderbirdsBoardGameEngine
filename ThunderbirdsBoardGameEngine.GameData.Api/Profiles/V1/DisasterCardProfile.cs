@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using ThunderbirdsBoardGameEngine.GameData.Api.Domain.Entities;
 using ThunderbirdsBoardGameEngine.GameData.Api.Domain.Enums;
-using ThunderbirdsBoardGameEngine.GameData.Api.Messages.Dtos;
+using ThunderbirdsBoardGameEngine.GameData.Api.Messages.Dtos.V1;
 using ThunderbirdsBoardGameEngine.Serialization.Enums;
 
 namespace ThunderbirdsBoardGameEngine.GameData.Api.Profiles.V1

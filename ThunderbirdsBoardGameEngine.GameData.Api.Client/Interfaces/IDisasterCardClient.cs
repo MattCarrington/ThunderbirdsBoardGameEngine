@@ -1,4 +1,4 @@
-﻿using ThunderbirdsBoardGameEngine.GameData.Api.Messages.Dtos;
+﻿using ThunderbirdsBoardGameEngine.GameData.Api.Messages.Dtos.V1;
 
 namespace ThunderbirdsBoardGameEngine.GameData.Api.Client.Interfaces
 {

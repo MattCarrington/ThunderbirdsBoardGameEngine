@@ -1,7 +1,7 @@
 ﻿using FluentAssertions;
 using System.Net;
 using System.Text.Json;
-using ThunderbirdsBoardGameEngine.GameData.Api.Messages.Dtos;
+using ThunderbirdsBoardGameEngine.GameData.Api.Messages.Dtos.V1;
 using Xunit;
 
 namespace ThunderbirdsBoardGameEngine.GameData.Api.IntegrationTests.EndpointTests.V1

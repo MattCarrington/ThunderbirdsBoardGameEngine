@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
 using ThunderbirdsBoardGameEngine.GameData.Api.Controllers.V1;
 using ThunderbirdsBoardGameEngine.GameData.Api.Interfaces;
-using ThunderbirdsBoardGameEngine.GameData.Api.Messages.Dtos;
+using ThunderbirdsBoardGameEngine.GameData.Api.Messages.Dtos.V1;
 using Xunit;
 
 namespace ThunderbirdsBoardGameEngine.GameData.Api.UnitTests.Controllers.V1

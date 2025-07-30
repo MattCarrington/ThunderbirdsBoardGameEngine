@@ -5,7 +5,7 @@ using NSubstitute;
 using System.Threading.Tasks;
 using ThunderbirdsBoardGameEngine.GameData.Api.Domain.Entities;
 using ThunderbirdsBoardGameEngine.GameData.Api.Interfaces;
-using ThunderbirdsBoardGameEngine.GameData.Api.Messages.Dtos;
+using ThunderbirdsBoardGameEngine.GameData.Api.Messages.Dtos.V1;
 using ThunderbirdsBoardGameEngine.GameData.Api.Services.V1;
 using Xunit;
 
