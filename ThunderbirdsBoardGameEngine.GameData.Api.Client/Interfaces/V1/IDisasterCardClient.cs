@@ -1,6 +1,6 @@
 ﻿using ThunderbirdsBoardGameEngine.GameData.Api.Messages.Dtos.V1;
 
-namespace ThunderbirdsBoardGameEngine.GameData.Api.Client.Interfaces
+namespace ThunderbirdsBoardGameEngine.GameData.Api.Client.Interfaces.V1
 {
     public interface IDisasterCardClient
     {

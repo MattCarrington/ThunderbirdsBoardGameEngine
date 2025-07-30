@@ -1,6 +1,6 @@
 ﻿using System.Text.Json;
 using ThunderbirdsBoardGameEngine.GameData.Api.Client.Exceptions;
-using ThunderbirdsBoardGameEngine.GameData.Api.Client.Interfaces;
+using ThunderbirdsBoardGameEngine.GameData.Api.Client.Interfaces.V1;
 using ThunderbirdsBoardGameEngine.GameData.Api.Client.Internal.Serialization;
 using ThunderbirdsBoardGameEngine.GameData.Api.Messages.Dtos.V1;
 

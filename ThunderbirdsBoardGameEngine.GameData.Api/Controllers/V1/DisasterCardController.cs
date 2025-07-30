@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using ThunderbirdsBoardGameEngine.GameData.Api.Interfaces;
+using ThunderbirdsBoardGameEngine.GameData.Api.Interfaces.V1;
 
 namespace ThunderbirdsBoardGameEngine.GameData.Api.Controllers.V1
 {

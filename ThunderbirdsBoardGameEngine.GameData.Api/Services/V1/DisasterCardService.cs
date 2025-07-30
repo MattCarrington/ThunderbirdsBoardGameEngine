@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using ThunderbirdsBoardGameEngine.GameData.Api.Interfaces;
+using ThunderbirdsBoardGameEngine.GameData.Api.Interfaces.V1;
 using ThunderbirdsBoardGameEngine.GameData.Api.Messages.Dtos.V1;
 
 namespace ThunderbirdsBoardGameEngine.GameData.Api.Services.V1
