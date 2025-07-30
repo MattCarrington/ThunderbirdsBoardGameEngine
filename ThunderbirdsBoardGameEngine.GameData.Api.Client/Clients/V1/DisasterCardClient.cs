@@ -1,11 +1,12 @@
 ﻿using System.Text.Json;
 using ThunderbirdsBoardGameEngine.GameData.Api.Client.Exceptions;
+using ThunderbirdsBoardGameEngine.GameData.Api.Client.Interfaces;
 using ThunderbirdsBoardGameEngine.GameData.Api.Client.Internal.Serialization;
 using ThunderbirdsBoardGameEngine.GameData.Api.Messages.Dtos;
 
 namespace ThunderbirdsBoardGameEngine.GameData.Api.Client.Clients.V1
 {
-    public class DisasterCardClient
+    public class DisasterCardClient : IDisasterCardClient
     {
         private readonly HttpClient _httpClient;
 
