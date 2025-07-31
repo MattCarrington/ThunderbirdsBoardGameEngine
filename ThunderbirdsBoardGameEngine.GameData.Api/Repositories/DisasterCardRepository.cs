@@ -1,8 +1,8 @@
 ﻿using Microsoft.Extensions.Options;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using ThunderbirdsBoardGameEngine.GameData.Api.Domain.Entities;
-using ThunderbirdsBoardGameEngine.GameData.Api.Domain.Validators;
+using ThunderbirdsBoardGameEngine.GameData.Domain.Entities;
+using ThunderbirdsBoardGameEngine.GameData.Domain.Validators;
 using ThunderbirdsBoardGameEngine.GameData.Api.Interfaces;
 using ThunderbirdsBoardGameEngine.Serialization.Converters;
 

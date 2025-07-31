@@ -16,7 +16,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ThunderbirdsBoardGameEngine.GameData.Api.Domain\ThunderbirdsBoardGameEngine.GameData.Api.Domain.csproj" />
     <ProjectReference Include="..\ThunderbirdsBoardGameEngine.Serialization\ThunderbirdsBoardGameEngine.Serialization.csproj" />
   </ItemGroup>
 

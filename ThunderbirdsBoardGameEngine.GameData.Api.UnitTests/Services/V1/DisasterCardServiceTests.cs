@@ -2,11 +2,10 @@
 using AutoFixture.Kernel;
 using AutoMapper;
 using NSubstitute;
-using System.Threading.Tasks;
-using ThunderbirdsBoardGameEngine.GameData.Api.Domain.Entities;
 using ThunderbirdsBoardGameEngine.GameData.Api.Interfaces;
 using ThunderbirdsBoardGameEngine.GameData.Api.Messages.Dtos.V1;
 using ThunderbirdsBoardGameEngine.GameData.Api.Services.V1;
+using ThunderbirdsBoardGameEngine.GameData.Domain.Entities;
 using Xunit;
 
 namespace ThunderbirdsBoardGameEngine.GameData.Api.UnitTests.Services.V1

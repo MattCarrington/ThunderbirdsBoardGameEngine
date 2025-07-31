@@ -1,8 +1,8 @@
 ﻿using System.Runtime.CompilerServices;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using ThunderbirdsBoardGameEngine.GameData.Api.Domain.Entities;
-using ThunderbirdsBoardGameEngine.GameData.Api.Domain.Enums;
+using ThunderbirdsBoardGameEngine.GameData.Domain.Entities;
+using ThunderbirdsBoardGameEngine.GameData.Domain.Enums;
 using ThunderbirdsBoardGameEngine.Serialization.Converters;
 using Xunit;
 

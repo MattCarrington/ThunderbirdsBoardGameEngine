@@ -1,5 +1,5 @@
-﻿using ThunderbirdsBoardGameEngine.GameData.Api.Domain.Entities;
-using ThunderbirdsBoardGameEngine.GameData.Api.Domain.Enums;
+﻿using ThunderbirdsBoardGameEngine.GameData.Domain.Entities;
+using ThunderbirdsBoardGameEngine.GameData.Domain.Enums;
 
 namespace GameDataImporter.ConsoleApp.Parsers;
 

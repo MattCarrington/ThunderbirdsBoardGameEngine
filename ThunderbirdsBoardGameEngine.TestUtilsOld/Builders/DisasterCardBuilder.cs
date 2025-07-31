@@ -1,0 +1,128 @@
+﻿using ThunderbirdsBoardGameEngine.GameData.Domain.Entities;
+using ThunderbirdsBoardGameEngine.GameData.Domain.Enums;
+
+namespace ThunderbirdsBoardGameEngine.GameData.Api.TestHelpers.Builders
+{
+    public class DisasterCardBuilder
+    {
+        private int _id = 1;
+        private string _name = "Test Disaster";
+        private int _difficultyNumber = 8;
+        private BoardLocation _location = BoardLocation.NorthPacific;
+        private RescueType _rescueType = RescueType.Sea;
+        private readonly List<BonusCondition> _bonuses = new List<BonusCondition>();
+        private readonly List<RewardOption> _rewardOptions = new List<RewardOption>();
+        private bool _skipDefaultBonus = false;
+        private bool _skipDefaultReward = false;
+        private bool _forceNullBonus = false;
+        private bool _forceNullReward = false;
+
+        public DisasterCardBuilder WithId(int id)
+        {
+            _id = id;
+            return this;
+        }
+
+        public DisasterCardBuilder WithName(string name)
+        {
+            _name = name;
+            return this;
+        }
+
+        public DisasterCardBuilder WithLocation(BoardLocation location)
+        {
+            _location = location;
+            return this;
+        }
+
+        public DisasterCardBuilder WithRescueType(RescueType rescueType)
+        {
+            _rescueType = rescueType;
+            return this;
+        }
+
+        public DisasterCardBuilder WithDifficulty(int difficulty)
+        {
+            _difficultyNumber = difficulty;
+            return this;
+        }
+
+        public DisasterCardBuilder WithBonusCondition(BonusCondition bonus)
+        {
+            _bonuses.Add(bonus);
+            return this;
+        }
+
+        public DisasterCardBuilder WithUserChoiceRewardOption()
+        {
+            _rewardOptions.Add(new RewardOption
+            {
+                IsUserChoice = true,
+                
+            });
+            return this;
+        }
+
+        public DisasterCardBuilder WithSpecifiedReward(BonusToken token)
+        {
+            _rewardOptions.Add(new RewardOption
+            {
+                SpecifiedToken = token,
+            });
+            return this;
+        }
+
+        public DisasterCardBuilder WithoutBonusConditions()
+        {
+            _bonuses.Clear();
+            _skipDefaultBonus = true;
+            return this;
+        }
+
+        public DisasterCardBuilder WithoutRewards()
+        {
+            _rewardOptions.Clear();
+            _skipDefaultReward = true;
+            return this;
+        }
+
+        public DisasterCardBuilder WithNullBonusConditions()
+        {
+            _forceNullBonus = true;
+            return this;
+        }
+
+        public DisasterCardBuilder WithNullRewards()
+        {
+            _forceNullReward = true;
+            return this;
+        }
+
+        public DisasterCard Build()
+        {
+            if (_bonuses.Count == 0 && !_skipDefaultBonus && !_forceNullBonus)
+            {
+                _bonuses.Add(new CharacterBonusCondition { Character = Character.Scott, BonusValue = 1 });
+            }
+
+            if (_rewardOptions.Count == 0 && !_skipDefaultReward)
+            {
+                _rewardOptions.Add(new RewardOption
+                {
+                    IsUserChoice = true                    
+                });
+            }
+
+            return new DisasterCard
+            {
+                Id = _id,
+                Name = _name,
+                Location = _location,
+                RescueType = _rescueType,
+                DifficultyNumber = _difficultyNumber,
+                BonusConditions = _forceNullBonus ? null : _bonuses,
+                RewardOptions = _forceNullReward ? null : _rewardOptions
+            };
+        }
+    }
+}

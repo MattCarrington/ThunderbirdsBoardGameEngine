@@ -1,4 +1,4 @@
-﻿using ThunderbirdsBoardGameEngine.GameData.Api.Domain.Enums;
+﻿using ThunderbirdsBoardGameEngine.GameData.Domain.Enums;
 using ThunderbirdsBoardGameEngine.Serialization.Enums;
 using Xunit;
 

@@ -1,4 +1,4 @@
-﻿using ThunderbirdsBoardGameEngine.GameData.Api.Domain.Entities;
+﻿using ThunderbirdsBoardGameEngine.GameData.Domain.Entities;
 
 namespace ThunderbirdsBoardGameEngine.GameData.Api.Interfaces
 {

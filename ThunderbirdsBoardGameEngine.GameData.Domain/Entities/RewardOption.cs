@@ -1,6 +1,6 @@
-﻿using ThunderbirdsBoardGameEngine.GameData.Api.Domain.Enums;
+﻿using ThunderbirdsBoardGameEngine.GameData.Domain.Enums;
 
-namespace ThunderbirdsBoardGameEngine.GameData.Api.Domain.Entities
+namespace ThunderbirdsBoardGameEngine.GameData.Domain.Entities
 {
     public class RewardOption
     {

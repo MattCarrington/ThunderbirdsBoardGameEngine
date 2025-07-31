@@ -1,6 +1,6 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
-using ThunderbirdsBoardGameEngine.GameData.Api.Domain.Entities;
+using ThunderbirdsBoardGameEngine.GameData.Domain.Entities;
 using ThunderbirdsBoardGameEngine.Serialization.Converters;
 
 namespace ThunderbirdsBoardGameEngine.GameData.Importer.Output

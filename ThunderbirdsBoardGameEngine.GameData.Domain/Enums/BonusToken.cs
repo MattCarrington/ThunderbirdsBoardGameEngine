@@ -1,4 +1,4 @@
-﻿namespace ThunderbirdsBoardGameEngine.GameData.Api.Domain.Enums
+﻿namespace ThunderbirdsBoardGameEngine.GameData.Domain.Enums
 {
     public enum BonusToken
     {

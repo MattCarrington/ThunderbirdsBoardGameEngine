@@ -2,10 +2,10 @@
 using ThunderbirdsBoardGameEngine.GameData.Domain.Enums;
 using ThunderbirdsBoardGameEngine.GameData.Domain.Exceptions;
 using ThunderbirdsBoardGameEngine.GameData.Domain.Validators;
-using ThunderbirdsBoardGameEngine.GameData.Api.TestHelpers.Builders;
+using ThunderbirdsBoardGameEngine.TestUtils.Builders;
 using Xunit;
 
-namespace ThunderbirdsBoardGameEngine.GameData.Api.Domain.UnitTests.Validators
+namespace ThunderbirdsBoardGameEngine.GameData.Domain.UnitTests.Validators
 {
     public class DisasterCardValidatorTests
     {

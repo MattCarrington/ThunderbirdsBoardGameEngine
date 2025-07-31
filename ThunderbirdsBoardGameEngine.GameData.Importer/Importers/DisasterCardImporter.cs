@@ -1,8 +1,8 @@
 ﻿using ClosedXML.Excel;
 using GameDataImporter.ConsoleApp.Helpers;
 using GameDataImporter.ConsoleApp.Parsers;
-using ThunderbirdsBoardGameEngine.GameData.Api.Domain.Entities;
-using ThunderbirdsBoardGameEngine.GameData.Api.Domain.Enums;
+using ThunderbirdsBoardGameEngine.GameData.Domain.Entities;
+using ThunderbirdsBoardGameEngine.GameData.Domain.Enums;
 using ThunderbirdsBoardGameEngine.GameData.Importer.Parsers;
 using ThunderbirdsBoardGameEngine.Serialization.Enums;
 

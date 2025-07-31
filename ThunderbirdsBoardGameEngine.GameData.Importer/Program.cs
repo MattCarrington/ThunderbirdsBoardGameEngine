@@ -1,4 +1,4 @@
-﻿using ThunderbirdsBoardGameEngine.GameData.Api.Domain.Entities;
+﻿using ThunderbirdsBoardGameEngine.GameData.Domain.Entities;
 using ThunderbirdsBoardGameEngine.GameData.Importer.Importers;
 using ThunderbirdsBoardGameEngine.GameData.Importer.Output;
 

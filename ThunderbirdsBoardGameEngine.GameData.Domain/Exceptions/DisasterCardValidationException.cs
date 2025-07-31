@@ -1,6 +1,6 @@
 ﻿using System.Runtime.Serialization;
 
-namespace ThunderbirdsBoardGameEngine.GameData.Api.Domain.Exceptions
+namespace ThunderbirdsBoardGameEngine.GameData.Domain.Exceptions
 {
     [Serializable]
     public class DisasterCardValidationException : Exception

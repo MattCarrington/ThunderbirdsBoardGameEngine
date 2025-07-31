@@ -1,8 +1,8 @@
 ﻿using Microsoft.Extensions.Options;
 using System.Text.Json;
-using ThunderbirdsBoardGameEngine.GameData.Api.Domain.Enums;
-using ThunderbirdsBoardGameEngine.GameData.Api.Domain.Exceptions;
 using ThunderbirdsBoardGameEngine.GameData.Api.Repositories;
+using ThunderbirdsBoardGameEngine.GameData.Domain.Enums;
+using ThunderbirdsBoardGameEngine.GameData.Domain.Exceptions;
 using Xunit;
 
 namespace ThunderbirdsBoardGameEngine.GameData.Api.DataAccessTests.Repositories

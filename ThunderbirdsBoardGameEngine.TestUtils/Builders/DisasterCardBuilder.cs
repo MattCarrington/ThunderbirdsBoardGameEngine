@@ -1,7 +1,7 @@
-﻿using ThunderbirdsBoardGameEngine.GameData.Api.Domain.Entities;
-using ThunderbirdsBoardGameEngine.GameData.Api.Domain.Enums;
+﻿using ThunderbirdsBoardGameEngine.GameData.Domain.Entities;
+using ThunderbirdsBoardGameEngine.GameData.Domain.Enums;
 
-namespace ThunderbirdsBoardGameEngine.GameData.Api.TestHelpers.Builders
+namespace ThunderbirdsBoardGameEngine.TestUtils.Builders
 {
     public class DisasterCardBuilder
     {

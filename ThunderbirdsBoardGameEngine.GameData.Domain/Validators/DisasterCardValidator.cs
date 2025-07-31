@@ -1,7 +1,7 @@
-﻿using ThunderbirdsBoardGameEngine.GameData.Api.Domain.Entities;
-using ThunderbirdsBoardGameEngine.GameData.Api.Domain.Exceptions;
+﻿using ThunderbirdsBoardGameEngine.GameData.Domain.Exceptions;
+using ThunderbirdsBoardGameEngine.GameData.Domain.Entities;
 
-namespace ThunderbirdsBoardGameEngine.GameData.Api.Domain.Validators
+namespace ThunderbirdsBoardGameEngine.GameData.Domain.Validators
 {
     public static class DisasterCardValidator
     {
