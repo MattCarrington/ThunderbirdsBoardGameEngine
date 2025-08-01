@@ -33,6 +33,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThunderbirdsBoardGameEngine
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThunderbirdsBoardGameEngine.GameData.Domain.UnitTests", "ThunderbirdsBoardGameEngine.GameData.Domain.UnitTests\ThunderbirdsBoardGameEngine.GameData.Domain.UnitTests.csproj", "{559E152C-F960-410C-96A5-9A01BC411A24}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThunderbirdsBoardGameEngine.GameData.Api.Client.IntegrationTests", "ThunderbirdsBoardGameEngine.GameData.Api.Client.IntegrationTests\ThunderbirdsBoardGameEngine.GameData.Api.Client.IntegrationTests.csproj", "{91BFB63F-4A0A-4523-B777-2A8B40123A30}"
+EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "Docker\docker-compose.dcproj", "{81DDED9D-158B-E303-5F62-77A2896D2A5A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -91,6 +95,14 @@ Global
 		{559E152C-F960-410C-96A5-9A01BC411A24}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{559E152C-F960-410C-96A5-9A01BC411A24}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{559E152C-F960-410C-96A5-9A01BC411A24}.Release|Any CPU.Build.0 = Release|Any CPU
+		{91BFB63F-4A0A-4523-B777-2A8B40123A30}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{91BFB63F-4A0A-4523-B777-2A8B40123A30}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{91BFB63F-4A0A-4523-B777-2A8B40123A30}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{91BFB63F-4A0A-4523-B777-2A8B40123A30}.Release|Any CPU.Build.0 = Release|Any CPU
+		{81DDED9D-158B-E303-5F62-77A2896D2A5A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{81DDED9D-158B-E303-5F62-77A2896D2A5A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{81DDED9D-158B-E303-5F62-77A2896D2A5A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{81DDED9D-158B-E303-5F62-77A2896D2A5A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -103,6 +115,7 @@ Global
 		{F69C7496-B37E-4416-81D9-40DFBEA4DD48} = {D8475FB6-8FFD-4252-BF79-1BC0AF31A524}
 		{FAC8733C-43C8-4D28-B292-E447F20BCF2D} = {D8475FB6-8FFD-4252-BF79-1BC0AF31A524}
 		{559E152C-F960-410C-96A5-9A01BC411A24} = {D8475FB6-8FFD-4252-BF79-1BC0AF31A524}
+		{91BFB63F-4A0A-4523-B777-2A8B40123A30} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {92EB50C5-075F-4AF3-8107-0DC9EDBBAB83}

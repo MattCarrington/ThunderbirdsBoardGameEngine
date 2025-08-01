@@ -1,0 +1,19 @@
+﻿version: "3.9"
+
+services:
+  game-data-api:
+    container_name: game-data-api
+    build:
+      context: ../../                      
+      dockerfile: ThunderbirdsBoardGameEngine.GameData.Api/Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Docker
+    volumes:
+      - ../../ThunderbirdsBoardGameEngine.GameData.Api.Client.IntegrationTests/TestData:/app/TestData
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 5s
+      timeout: 3s
+      retries: 10

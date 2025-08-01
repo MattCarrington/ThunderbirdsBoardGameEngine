@@ -13,6 +13,9 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["ThunderbirdsBoardGameEngine.GameData.Api/ThunderbirdsBoardGameEngine.GameData.Api.csproj", "ThunderbirdsBoardGameEngine.GameData.Api/"]
+COPY ["ThunderbirdsBoardGameEngine.GameData.Api.Messages/ThunderbirdsBoardGameEngine.GameData.Api.Messages.csproj", "ThunderbirdsBoardGameEngine.GameData.Api.Messages/"]
+COPY ["ThunderbirdsBoardGameEngine.GameData.Domain/ThunderbirdsBoardGameEngine.GameData.Domain.csproj", "ThunderbirdsBoardGameEngine.GameData.Domain/"]
+COPY ["ThunderbirdsBoardGameEngine.Serialization/ThunderbirdsBoardGameEngine.Serialization.csproj", "ThunderbirdsBoardGameEngine.Serialization/"]
 RUN dotnet restore "./ThunderbirdsBoardGameEngine.GameData.Api/ThunderbirdsBoardGameEngine.GameData.Api.csproj"
 COPY . .
 WORKDIR "/src/ThunderbirdsBoardGameEngine.GameData.Api"
