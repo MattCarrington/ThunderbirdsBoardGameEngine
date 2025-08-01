@@ -2,9 +2,11 @@
 using System.Net;
 using System.Text.Json;
 using ThunderbirdsBoardGameEngine.GameData.Api.Client.Clients.V1;
+using ThunderbirdsBoardGameEngine.GameData.Api.Client.Internal.Routing;
 using ThunderbirdsBoardGameEngine.GameData.Api.Client.Internal.Serialization;
 using ThunderbirdsBoardGameEngine.GameData.Api.Client.UnitTests.Helpers;
 using ThunderbirdsBoardGameEngine.GameData.Api.Messages.Dtos.V1;
+using ThunderbirdsBoardGameEngine.TestUtils.Assertions;
 using Xunit;
 
 namespace ThunderbirdsBoardGameEngine.GameData.Api.Client.UnitTests.Clients.V1
@@ -62,7 +64,7 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.Client.UnitTests.Clients.V1
             _ = await client.GetAllAsync();
 
             // Assert
-            Assert.Equal("http://localhost/api/disastercards", stubHandler.CapturedRequest?.RequestUri?.ToString());
+            Assert.Equal($"http://localhost/{ApiRoutes.DisasterCard}", stubHandler.CapturedRequest?.RequestUri?.ToString());
         }
 
         [Fact]
@@ -88,7 +90,7 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.Client.UnitTests.Clients.V1
 
             for (int i = 0; i < disasterCardDtos.Count; i++)
             {
-                AssertDisasterCardDtoEqual(disasterCardDtos[i], result.Data[i]);
+                DisasterCardDtoAssertions.AssertDisasterCardDtoEqual(disasterCardDtos[i], result.Data[i]);
             }
         }
 
@@ -207,7 +209,7 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.Client.UnitTests.Clients.V1
             _ = await client.GetByIdAsync(4);
 
             // Assert
-            Assert.Equal("http://localhost/api/disastercards/4", stubHandler.CapturedRequest?.RequestUri?.ToString());
+            Assert.Equal($"http://localhost/{ApiRoutes.DisasterCard}/4", stubHandler.CapturedRequest?.RequestUri?.ToString());
         }
 
         [Fact]
@@ -230,7 +232,7 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.Client.UnitTests.Clients.V1
             Assert.Null(result.ErrorMessage);
             Assert.NotNull(result.Data);
 
-            AssertDisasterCardDtoEqual(disasterCardDto, result.Data);
+            DisasterCardDtoAssertions.AssertDisasterCardDtoEqual(disasterCardDto, result.Data);
         }
 
         [Theory]
@@ -298,26 +300,6 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.Client.UnitTests.Clients.V1
             };
 
             return new DisasterCardClient(httpClient);
-        }
-
-        private static void AssertDisasterCardDtoEqual(DisasterCardDto expected, DisasterCardDto actual)
-        {
-            // Assert DisasterCardDto properties
-            Assert.Equal(expected.Id, actual.Id);
-            Assert.Equal(expected.Name, actual.Name);
-            Assert.Equal(expected.DifficultyNumber, actual.DifficultyNumber);
-            Assert.Equal(expected.Location, actual.Location);
-            Assert.Equal(expected.RescueType, actual.RescueType);
-
-            // Assert BonusConditionDto collection
-            Assert.Equal(expected.BonusConditions.Count, actual.BonusConditions.Count);
-            Assert.All(actual.BonusConditions, bc =>
-                Assert.False(string.IsNullOrWhiteSpace(bc.Description)));
-
-            // Assert RewardDto collection
-            Assert.Equal(expected.Rewards.Count, actual.Rewards.Count);
-            Assert.All(actual.Rewards, r =>
-                Assert.False(string.IsNullOrWhiteSpace(r.DisplayName)));
         }
     }
 }

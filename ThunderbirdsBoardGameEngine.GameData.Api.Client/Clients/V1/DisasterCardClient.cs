@@ -1,6 +1,7 @@
 ﻿using System.Text.Json;
 using ThunderbirdsBoardGameEngine.GameData.Api.Client.Exceptions;
 using ThunderbirdsBoardGameEngine.GameData.Api.Client.Interfaces.V1;
+using ThunderbirdsBoardGameEngine.GameData.Api.Client.Internal.Routing;
 using ThunderbirdsBoardGameEngine.GameData.Api.Client.Internal.Serialization;
 using ThunderbirdsBoardGameEngine.GameData.Api.Messages.Dtos.V1;
 
@@ -22,13 +23,13 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.Client.Clients.V1
 
         public async Task<ApiResult<IReadOnlyList<DisasterCardDto>>> GetAllAsync()
         {
-            var response = await _httpClient.GetAsync("api/disastercards");
+            var response = await _httpClient.GetAsync(ApiRoutes.DisasterCard);
             return await HandleResponse<IReadOnlyList<DisasterCardDto>>(response);
         }
 
         public async Task<ApiResult<DisasterCardDto>> GetByIdAsync(int id)
         {
-            var response = await _httpClient.GetAsync($"api/disastercards/{id}");
+            var response = await _httpClient.GetAsync($"{ApiRoutes.DisasterCard}/{id}");
             return await HandleResponse<DisasterCardDto>(response);
         }
 
@@ -62,6 +63,5 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.Client.Clients.V1
                 return ApiResult<T>.Failure($"Unexpected error: {ex.Message}", response.StatusCode);
             }
         }
-
     }
 }
