@@ -4,7 +4,7 @@ using System.Text.Json;
 using ThunderbirdsBoardGameEngine.GameData.Api.Messages.Dtos.V1;
 using Xunit;
 
-namespace ThunderbirdsBoardGameEngine.GameData.Api.IntegrationTests.EndpointTests.V1
+namespace ThunderbirdsBoardGameEngine.GameData.Api.IntegrationTests.Endpoints.V1
 {
     public class DisasterCardsEndpointsTests : IClassFixture<CustomWebApplicationFactory>
     {
