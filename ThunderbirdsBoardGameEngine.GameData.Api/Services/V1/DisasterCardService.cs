@@ -1,10 +1,7 @@
-﻿using AutoMapper;
-using System.Reflection.Metadata.Ecma335;
-using ThunderbirdsBoardGameEngine.GameData.Api.Interfaces;
+﻿using ThunderbirdsBoardGameEngine.GameData.Api.Interfaces;
 using ThunderbirdsBoardGameEngine.GameData.Api.Interfaces.V1;
 using ThunderbirdsBoardGameEngine.GameData.Api.Mappers.V1;
 using ThunderbirdsBoardGameEngine.GameData.Api.Messages.Dtos.V1;
-using ThunderbirdsBoardGameEngine.GameData.Domain.Entities;
 
 namespace ThunderbirdsBoardGameEngine.GameData.Api.Services.V1
 {
