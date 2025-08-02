@@ -11,8 +11,7 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.Client.IntegrationTests.Clien
     public class DisasterCardClientTests : IClassFixture<TestServerFixture>
     {
         private readonly IDisasterCardClient _client;
-        private static readonly JsonSerializerOptions _jsonOptions = new() { PropertyNameCaseInsensitive = true };
-
+        
         public DisasterCardClientTests(TestServerFixture testServerFixture)
         {
             _client = testServerFixture.Client;
@@ -35,12 +34,10 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.Client.IntegrationTests.Clien
             Assert.NotEmpty(result.Data);
             Assert.Null(result.ErrorMessage);
 
-            var expected = TestDataLoader.LoadJsonFromFile<List<DisasterCardDto>>("DisasterCardDtos.json");
+            var expected = TestDataLoader.LoadJsonFromFile<List<DisasterCardDto>>("DisasterCardDtos.json")
+                ?? throw new InvalidOperationException("Failed to load expected data");
 
-            for (int i = 0; i < expected.Count; i++)
-            {
-                DisasterCardDtoAssertions.AssertDisasterCardDtoEqual(expected[i], result.Data[i]);
-            }
+            DisasterCardDtoAssertions.AssertDisasterCardDtosEqual(expected, result.Data.ToList());
         }
 
         [Fact]
