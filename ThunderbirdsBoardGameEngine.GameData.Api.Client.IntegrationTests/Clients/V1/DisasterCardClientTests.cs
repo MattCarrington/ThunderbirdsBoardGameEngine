@@ -1,5 +1,4 @@
-﻿using FluentAssertions;
-using System.Net;
+﻿using System.Net;
 using System.Text.Json;
 using ThunderbirdsBoardGameEngine.GameData.Api.Client.Interfaces.V1;
 using ThunderbirdsBoardGameEngine.GameData.Api.Messages.Dtos.V1;
@@ -27,17 +26,15 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.Client.IntegrationTests.Clien
             var result = await _client.GetAllAsync();
 
             // Assert
-            result.Should().NotBeNull();
-            result.Success.Should().BeTrue();
-            result.StatusCode.Should().Be(HttpStatusCode.OK);
-            result.Data.Should().NotBeNull();
-            result.Data.Should().NotBeEmpty();
-            result.Data.Should().BeAssignableTo<IReadOnlyList<DisasterCardDto>>();
-            result.ErrorMessage.Should().BeNullOrWhiteSpace();
+            Assert.NotNull(result);
+            Assert.True(result.Success);
+            Assert.Equal(HttpStatusCode.OK, result.StatusCode);
+            Assert.IsType<IReadOnlyList<DisasterCardDto>>(result.Data, exactMatch: false);
+            Assert.NotNull(result.Data);
+            Assert.NotEmpty(result.Data);
+            Assert.Null(result.ErrorMessage);
 
             var expected = GetExpectedDisasterCardDtos();
-
-            result.Data.Count.Should().Be(expected.Count);
 
             for (int i = 0; i < expected.Count; i++)
             {
@@ -55,12 +52,12 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.Client.IntegrationTests.Clien
             var result = await _client.GetByIdAsync(id);
 
             // Arrange
-            result.Should().NotBeNull();
-            result.Success.Should().BeTrue();
-            result.StatusCode.Should().Be(HttpStatusCode.OK);
-            result.Data.Should().NotBeNull();
-            result.Data.Should().BeAssignableTo<DisasterCardDto>();
-            result.ErrorMessage.Should().BeNullOrWhiteSpace();
+            Assert.NotNull(result);
+            Assert.True(result.Success);
+            Assert.Equal(HttpStatusCode.OK, result.StatusCode);
+            Assert.IsType<DisasterCardDto>(result.Data);
+            Assert.NotNull(result.Data);
+            Assert.Null(result.ErrorMessage);
 
             var expected = GetExpectedDisasterCardDtos().FirstOrDefault(dc => dc.Id == id)
                 ?? throw new InvalidOperationException($"Expected disaster card with ID {id} not found in expected data.");
@@ -78,11 +75,11 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.Client.IntegrationTests.Clien
             var result = await _client.GetByIdAsync(id);
 
             // Assert
-            result.Should().NotBeNull();
-            result.Success.Should().BeFalse();
-            result.StatusCode.Should().Be(HttpStatusCode.NotFound);
-            result.Data.Should().BeNull();
-            result.ErrorMessage.Should().NotBeNullOrWhiteSpace();
+            Assert.NotNull(result);
+            Assert.False(result.Success);
+            Assert.Equal(HttpStatusCode.NotFound, result.StatusCode);
+            Assert.Null(result.Data);
+            Assert.NotNull(result.ErrorMessage);
         }
 
         private static List<DisasterCardDto> GetExpectedDisasterCardDtos()

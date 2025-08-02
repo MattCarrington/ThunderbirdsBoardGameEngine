@@ -1,5 +1,4 @@
-﻿using FluentAssertions;
-using System.Net;
+﻿using System.Net;
 using System.Text.Json;
 using ThunderbirdsBoardGameEngine.GameData.Api.Messages.Dtos.V1;
 using Xunit;
@@ -31,15 +30,17 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.IntegrationTests.Endpoints.V1
             var cards = await GetDisasterCardsAsync();
 
             // Assert
-            cards.Should().NotBeNull();
-            cards.Count.Should().Be(9);
-            cards.Should().Contain(c => c.Name == "Target: Tiger One");
-            
+            Assert.NotNull(cards);
+            Assert.Equal(9, cards.Count);
+            Assert.Contains(cards, c => c.Name == "Target: Tiger One");
+
             foreach (var card in cards)
             {
-                card.BonusConditions.Should().NotBeNullOrEmpty();
-                card.Rewards.Should().NotBeNullOrEmpty();
-            }
+                Assert.NotNull(card.BonusConditions);
+                Assert.NotEmpty(card.BonusConditions);
+                Assert.NotNull(card.Rewards);
+                Assert.NotEmpty(card.Rewards);
+            }            
         }
 
         [Fact] 
@@ -53,15 +54,18 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.IntegrationTests.Endpoints.V1
             var response = await _client.SendAsync(request);
 
             // Assert
-            response.StatusCode.Should().Be(HttpStatusCode.OK);
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
             var json = await response.Content.ReadAsStringAsync();
             
             var card = JsonSerializer.Deserialize<DisasterCardDto>(json, _jsonOptions);
 
-            card.Should().NotBeNull();
-            card.BonusConditions.Should().NotBeNullOrEmpty();
-            card.Rewards.Should().NotBeNullOrEmpty();            
+            Assert.NotNull(card);
+            Assert.Equal(4, card.Id);
+            Assert.NotNull(card.BonusConditions);
+            Assert.NotEmpty(card.BonusConditions);
+            Assert.NotNull(card.Rewards);
+            Assert.NotEmpty(card.Rewards);
         }
 
         [Fact] 
@@ -75,9 +79,11 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.IntegrationTests.Endpoints.V1
             var response = await _client.SendAsync(request);
 
             // Assert
-            response.StatusCode.Should().Be(HttpStatusCode.NotFound);
+            Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+
             var content = await response.Content.ReadAsStringAsync();
-            content.Should().Contain("Disaster card with ID 9999 not found.");
+            
+            Assert.Contains("Disaster card with ID 9999 not found.", content);
         }
 
         [Fact] 
@@ -90,9 +96,11 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.IntegrationTests.Endpoints.V1
             var response = await _client.SendAsync(request);
 
             // Assert
-            response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+
             var content = await response.Content.ReadAsStringAsync();
-            content.Should().Contain("An API version is required, but was not specified.");
+
+            Assert.Contains("An API version is required, but was not specified.", content);
         }
 
         [Fact] 
@@ -106,9 +114,11 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.IntegrationTests.Endpoints.V1
             var response = await _client.SendAsync(request);
 
             // Assert
-            response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+
             var content = await response.Content.ReadAsStringAsync();
-            content.Should().Contain("does not support the API version '99999'");
+            
+            Assert.Contains("does not support the API version '99999'", content);
         }
 
         [Fact]
@@ -116,16 +126,22 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.IntegrationTests.Endpoints.V1
         {
             // Arrange
 
-
             // Act
             var cards = await GetDisasterCardsAsync();
-            
+
             // Assert
             var card = GetCard(cards, "Bolt from the Blue");
-            var characterBonuses = card.BonusConditions.Where(b => b.Description.Contains("John") || b.Description.Contains("Gordon"));
+            var characterBonuses = card.BonusConditions
+                .Where(b => b.Description.Contains("John") || b.Description.Contains("Gordon"))
+                .ToList();
 
-            characterBonuses.Should().NotBeEmpty("Character bonuses should be present in this card");
-            characterBonuses.Should().AllSatisfy(b => b.Description.Should().MatchRegex(@"\(\+\d+\)"), "Each character bonus should include a bonus value");
+            Assert.NotEmpty(characterBonuses); // At least one expected
+
+            foreach (var bonus in characterBonuses)
+            {
+                Assert.False(string.IsNullOrWhiteSpace(bonus.Description));
+                Assert.Matches(@"\(\+\d+\)", bonus.Description); // e.g., "(+2)"
+            }
         }
 
         [Fact]
@@ -133,16 +149,20 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.IntegrationTests.Endpoints.V1
         {
             // Arrange
 
-
             // Act
             var cards = await GetDisasterCardsAsync();
 
             // Assert
             var card = GetCard(cards, "Day of Disaster");
-            var thunderbirdBonuses = card!.BonusConditions.Where(b => b.Description.Contains("Thunderbird") || b.Description.Contains("FAB 1"));
+            var thunderbirdBonuses = card.BonusConditions
+                .Where(b => b.Description.Contains("Thunderbird") || b.Description.Contains("FAB 1"))
+                .ToList();
 
-            thunderbirdBonuses.Should().NotBeEmpty("Thunderbird bonuses should be present in this card");
-            thunderbirdBonuses.Should().AllSatisfy(b => b.Description.Should().MatchRegex(@"\(\+\d+\)"), "Each Thunderbird bonus should include a bonus value");
+            foreach (var bonus in thunderbirdBonuses)
+            {
+                Assert.False(string.IsNullOrWhiteSpace(bonus.Description));
+                Assert.Matches(@"\(\+\d+\)", bonus.Description); // e.g., "(+2)"
+            }
         }
 
         [Fact]
@@ -156,13 +176,15 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.IntegrationTests.Endpoints.V1
             // Assert
             var card = GetCard(cards, "They Call Him Mr. X");
                         
-            var podBonuses = card!.BonusConditions.Where(b =>
-                b.Description.Contains("Mobile Crane") ||
-                b.Description.Contains("Thunderizer") ||
-                b.Description.Contains("DOMO"));
+            var podBonuses = card!.BonusConditions
+                .Where(b => b.Description.Contains("Mobile Crane") || b.Description.Contains("Thunderizer") || b.Description.Contains("DOMO"))
+                .ToList();
 
-            podBonuses.Should().NotBeEmpty("Pod vehicle bonuses should be present in this card");
-            podBonuses.Should().AllSatisfy(b => b.Description.Should().MatchRegex(@"\(\+\d+\)"), "Each pod vehicle bonus should include a bonus value");
+            foreach (var bonus in podBonuses)
+            {
+                Assert.False(string.IsNullOrWhiteSpace(bonus.Description));
+                Assert.Matches(@"\(\+\d+\)", bonus.Description); // e.g., "(+2)"
+            }
         }
 
         [Fact]
@@ -175,8 +197,11 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.IntegrationTests.Endpoints.V1
             
             // Assert
             var card = GetCard(cards, "Martian Invasion");
-            card!.BonusConditions.Should().HaveCount(1, "This card should only have one bonus condition.");
-            card.BonusConditions[0].Description.Should().MatchRegex(@"\(\+\d+\)", "Bonus description should include a bonus value.");
+            
+            Assert.NotNull(card.BonusConditions);
+            
+            var bonus = Assert.Single(card.BonusConditions);
+            Assert.Matches(@"\(\+\d+\)", bonus.Description);
         }
 
             [Fact] 
@@ -190,8 +215,8 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.IntegrationTests.Endpoints.V1
             // Assert
             var card  = GetCard(cards, "Target: Tiger One");
 
-            card.BonusConditions.Should().Contain(b =>
-                b.Description.Contains("if in"));
+            Assert.Contains(card.BonusConditions, b => b.Description.Contains("if in"));
+
         }
 
         [Fact]
@@ -204,9 +229,9 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.IntegrationTests.Endpoints.V1
 
             // Assert
             var card = GetCard(cards, "Sunrise on Mars");
-            
-            card.BonusConditions.Should().Contain(b =>
-                b.Description.Contains("on Thunderbird 5"));
+
+            Assert.Contains(card.BonusConditions, b => b.Description.Contains("if on Thunderbird 5"));
+
         }
 
         [Fact] 
@@ -214,23 +239,21 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.IntegrationTests.Endpoints.V1
         {
             // Arrange
 
-
             // Act
             var cards = await GetDisasterCardsAsync();
 
             // Assert
-            var allDescriptions = cards
-                .SelectMany(c => c.BonusConditions)
-                .Select(b => b.Description)
-                .ToList();
-
-            allDescriptions.Should().NotBeEmpty("every disaster card should have at least one bonus");
-
-            allDescriptions.Should().AllSatisfy(description =>
+            foreach (var card in cards)
             {
-                description.Should().NotBeNullOrWhiteSpace("each bonus should have a description");
-                description.Should().MatchRegex(@"\(\+\d+\)", "description should include a bonus value like (+2)");
-            });
+                Assert.NotNull(card.BonusConditions);
+                Assert.NotEmpty(card.BonusConditions);
+                
+                foreach (var bonus in card.BonusConditions)
+                {
+                    Assert.False(string.IsNullOrWhiteSpace(bonus.Description), "Bonus description should not be null or empty");
+                    Assert.Matches(@"\(\+\d+\)", bonus.Description); // e.g., "(+2)"
+                }
+            }
         }
 
         [Fact]
@@ -243,17 +266,19 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.IntegrationTests.Endpoints.V1
 
             // Assert
             var card = GetCard(cards, "Terror in New York City");
-
             var descriptions = card!.BonusConditions.Select(b => b.Description).ToList();
 
-            // Check that we have all three types by looking for known labels
-            descriptions.Should().Contain(d => d.Contains("Firefly"), "should contain a Pod Vehicle bonus");
-            descriptions.Should().Contain(d => d.Contains("Virgil"), "should contain a Character bonus");
-            descriptions.Should().Contain(d => d.Contains("Thunderbird"), "should contain a Thunderbird bonus");
+            // Assert that it contains known labels
+            Assert.Contains(descriptions, d => d.Contains("Firefly"));       // Pod Vehicle
+            Assert.Contains(descriptions, d => d.Contains("Virgil"));        // Character
+            Assert.Contains(descriptions, d => d.Contains("Thunderbird"));   // Thunderbird
 
-            // Optional: check each description includes a bonus value
-            descriptions.Should().AllSatisfy(d =>
-                d.Should().MatchRegex(@"\(\+\d+\)"), "each bonus should include a value like (+2)");
+            // Assert all have a bonus value format (+X)
+            foreach (var desc in descriptions)
+            {
+                Assert.False(string.IsNullOrWhiteSpace(desc), "Bonus description should not be null or empty");
+                Assert.Matches(@"\(\+\d+\)", desc); // e.g., "(+2)"
+            }
         }
 
         [Fact]
@@ -267,8 +292,8 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.IntegrationTests.Endpoints.V1
             // Assert
             var card = GetCard(cards, "The Longest Day");
 
-            card!.Rewards.Should().HaveCount(1);
-            card.Rewards[0].DisplayName.Should().Be("Logistics");
+            var reward = Assert.Single(card.Rewards);
+            Assert.Equal("Logistics", reward.DisplayName);
         }
 
         [Fact]
@@ -282,8 +307,8 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.IntegrationTests.Endpoints.V1
             // Assert
             var card = GetCard(cards, "Bolt from the Blue");
 
-            card!.Rewards.Should().HaveCount(1);
-            card.Rewards[0].DisplayName.Should().Be("Player Choice");
+            var reward = Assert.Single(card.Rewards);
+            Assert.Equal("Player Choice", reward.DisplayName);
         }
 
         [Fact]
@@ -297,8 +322,10 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.IntegrationTests.Endpoints.V1
             // Assert
             var card = GetCard(cards, "Sunrise on Mars");
 
-            card!.Rewards.Should().Contain(r => r.DisplayName == "Player Choice");
-            card.Rewards.Should().Contain(r => r.DisplayName == "Technology");
+            Assert.NotNull(card.Rewards);
+            Assert.Equal(2, card.Rewards.Count);
+            Assert.Contains(card.Rewards, r => r.DisplayName == "Player Choice");
+            Assert.Contains(card.Rewards, r => r.DisplayName == "Technology");
         }
 
         [Fact]
@@ -312,9 +339,10 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.IntegrationTests.Endpoints.V1
             // Assert
             var card = GetCard(cards, "Terror in New York City");
 
-            card!.Rewards.Should().HaveCount(2);
-            card.Rewards.Should().Contain(r => r.DisplayName == "Determination");
-            card.Rewards.Should().Contain(r => r.DisplayName == "Teamwork");
+            Assert.NotNull(card.Rewards);
+            Assert.Equal(2, card.Rewards.Count);
+            Assert.Contains(card.Rewards, r => r.DisplayName == "Determination");
+            Assert.Contains(card.Rewards, r => r.DisplayName == "Teamwork");
         }
 
         [Fact]
@@ -326,11 +354,17 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.IntegrationTests.Endpoints.V1
             var cards = await GetDisasterCardsAsync();
 
             // Assert
-            var allRewards = cards.SelectMany(c => c.Rewards).ToList();
+            
+            foreach (var card in cards)
+            {
+                Assert.NotNull(card.Rewards);
+                Assert.NotEmpty(card.Rewards);
 
-            allRewards.Should().NotBeEmpty("each card should have at least one reward");
-            allRewards.Should().AllSatisfy(r =>
-                r.DisplayName.Should().NotBeNullOrWhiteSpace("each reward should have a DisplayName"));
+                foreach (var reward in card.Rewards)
+                {
+                    Assert.False(string.IsNullOrWhiteSpace(reward.DisplayName), "Reward display name should not be null or empty");
+                }
+            }
         }
 
         [Fact]
@@ -342,7 +376,7 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.IntegrationTests.Endpoints.V1
             var cards = await GetDisasterCardsAsync();
 
             // Assert
-            cards.Select(c => c.Id).Should().OnlyHaveUniqueItems("each card should have a unique ID");
+            Assert.Distinct(cards.Select(c => c.Id));
         }
 
         private async Task<List<DisasterCardDto>> GetDisasterCardsAsync()
@@ -360,8 +394,10 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.IntegrationTests.Endpoints.V1
         private static DisasterCardDto GetCard(List<DisasterCardDto> cards, string name)
         {
             var card = cards.FirstOrDefault(c => c.Name == name);
-            card.Should().NotBeNull($"Card '{name}' should exist in dataset.");
-            return card!;
+            
+            Assert.NotNull(card);
+
+            return card;
         }
 
     }
