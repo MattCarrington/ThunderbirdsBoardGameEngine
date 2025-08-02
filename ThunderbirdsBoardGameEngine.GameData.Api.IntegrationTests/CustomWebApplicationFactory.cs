@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.Configuration;
+using ThunderbirdsBoardGameEngine.TestUtils.Helpers;
 
 namespace ThunderbirdsBoardGameEngine.GameData.Api.IntegrationTests
 {
@@ -8,11 +9,13 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.IntegrationTests
     {
         protected override void ConfigureWebHost(IWebHostBuilder builder)
         {
+            var filepath = TestDataPathHelper.GetPath("DisasterCards.json");
+
             builder.ConfigureAppConfiguration((context, configBuilder) =>
             {
                 configBuilder.AddInMemoryCollection(new Dictionary<string, string?>
                 {
-                    { "CardData:DisasterCardsFilePath", "TestData/DisasterCards.json" }
+                    { "CardData:DisasterCardsFilePath", filepath }
                 });
             });
         }

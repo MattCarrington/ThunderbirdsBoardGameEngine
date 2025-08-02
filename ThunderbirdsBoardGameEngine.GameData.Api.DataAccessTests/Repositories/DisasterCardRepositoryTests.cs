@@ -3,6 +3,7 @@ using System.Text.Json;
 using ThunderbirdsBoardGameEngine.GameData.Api.Repositories;
 using ThunderbirdsBoardGameEngine.GameData.Domain.Enums;
 using ThunderbirdsBoardGameEngine.GameData.Domain.Exceptions;
+using ThunderbirdsBoardGameEngine.TestUtils.Helpers;
 using Xunit;
 
 namespace ThunderbirdsBoardGameEngine.GameData.Api.DataAccessTests.Repositories
@@ -13,7 +14,7 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.DataAccessTests.Repositories
         public async Task GetAllAsync_WhenValidFile_ShouldReturnAllDisasterCardsAsync()
         {
             // Arrange
-            var filepath = "TestData/disasterCards-test.json";
+            var filepath = TestDataPathHelper.GetPath("disasterCards-test.json");
 
             var repository = CreateRepository(filepath);
 
@@ -30,7 +31,7 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.DataAccessTests.Repositories
         public async Task GetAllAsync_WhenNoFileExists_ShouldThrowFileNotFoundException()
         {
             // Arrange
-            var filepath = "TestData/nonexistent-disasterCards.json";
+            var filepath = TestDataPathHelper.GetPath("nonexistent-disasterCards.json");
 
             var repository = CreateRepository(filepath);
 
@@ -42,7 +43,7 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.DataAccessTests.Repositories
         public async Task GetAllAsync_WhenFileIsEmpty_ShouldReturnEmptyListAsync()
         {
             // Arrange
-            var filepath = "TestData/invalid-json.json";
+            var filepath = TestDataPathHelper.GetPath("invalid-json.json");
 
             var repository = CreateRepository(filepath);
 
@@ -66,7 +67,7 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.DataAccessTests.Repositories
         public async Task GetByIdAsync_WhenDisasterCardExists_ShouldReturnDisasterCardWithExpectedPropertiesAsync()
         {
             // Arrange
-            var filepath = "TestData/disasterCards-test.json";
+            var filepath = TestDataPathHelper.GetPath("disasterCards-test.json");
 
             var repository = CreateRepository(filepath);
 
@@ -88,7 +89,7 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.DataAccessTests.Repositories
         public async Task GetByIdAsync_WhenDisasterCardDoesNotExist_ShouldReturnNullAsync()
         {
             // Arrange
-            var filepath = "TestData/disasterCards-test.json";
+            var filepath = TestDataPathHelper.GetPath("disasterCards-test.json");
 
             var repository = CreateRepository(filepath);
 

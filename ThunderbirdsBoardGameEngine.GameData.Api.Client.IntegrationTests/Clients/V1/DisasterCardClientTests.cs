@@ -3,6 +3,7 @@ using System.Text.Json;
 using ThunderbirdsBoardGameEngine.GameData.Api.Client.Interfaces.V1;
 using ThunderbirdsBoardGameEngine.GameData.Api.Messages.Dtos.V1;
 using ThunderbirdsBoardGameEngine.TestUtils.Assertions;
+using ThunderbirdsBoardGameEngine.TestUtils.Helpers;
 using Xunit;
 
 namespace ThunderbirdsBoardGameEngine.GameData.Api.Client.IntegrationTests.Clients.V1
@@ -34,7 +35,7 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.Client.IntegrationTests.Clien
             Assert.NotEmpty(result.Data);
             Assert.Null(result.ErrorMessage);
 
-            var expected = GetExpectedDisasterCardDtos();
+            var expected = TestDataLoader.LoadJsonFromFile<List<DisasterCardDto>>("DisasterCardDtos.json");
 
             for (int i = 0; i < expected.Count; i++)
             {
@@ -59,7 +60,7 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.Client.IntegrationTests.Clien
             Assert.NotNull(result.Data);
             Assert.Null(result.ErrorMessage);
 
-            var expected = GetExpectedDisasterCardDtos().FirstOrDefault(dc => dc.Id == id)
+            var expected = TestDataLoader.LoadJsonFromFile<List<DisasterCardDto>>("DisasterCardDtos.json").FirstOrDefault(x => x.Id == id)
                 ?? throw new InvalidOperationException($"Expected disaster card with ID {id} not found in expected data.");
 
             DisasterCardDtoAssertions.AssertDisasterCardDtoEqual(expected, result.Data);
@@ -80,13 +81,6 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.Client.IntegrationTests.Clien
             Assert.Equal(HttpStatusCode.NotFound, result.StatusCode);
             Assert.Null(result.Data);
             Assert.NotNull(result.ErrorMessage);
-        }
-
-        private static List<DisasterCardDto> GetExpectedDisasterCardDtos()
-        {
-            var json = File.ReadAllText("ExpectedData/DisasterCardDtos.json");
-            return JsonSerializer.Deserialize<List<DisasterCardDto>>(json, _jsonOptions)
-                ?? throw new InvalidOperationException("Failed to deserialize expected disaster card DTOs.");
         }
     }
 }

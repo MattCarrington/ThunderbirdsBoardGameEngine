@@ -11,7 +11,7 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Docker
     volumes:
-      - ../../ThunderbirdsBoardGameEngine.GameData.Api.Client.IntegrationTests/TestData:/app/TestData
+      - ../../ThunderbirdsBoardGameEngine.TestUtils/TestData:/app/TestData
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
       interval: 5s

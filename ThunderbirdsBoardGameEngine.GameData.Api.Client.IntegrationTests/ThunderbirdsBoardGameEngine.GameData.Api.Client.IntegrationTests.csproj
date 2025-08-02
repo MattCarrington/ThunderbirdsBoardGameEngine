@@ -7,17 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Include="ExpectedData\DisasterCardDtos.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="TestData\DisasterCards.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Hosting.Abstractions" Version="2.3.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="8.0.18" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
