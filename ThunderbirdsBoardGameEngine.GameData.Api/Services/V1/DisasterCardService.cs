@@ -1,33 +1,44 @@
 ﻿using AutoMapper;
+using System.Reflection.Metadata.Ecma335;
 using ThunderbirdsBoardGameEngine.GameData.Api.Interfaces;
 using ThunderbirdsBoardGameEngine.GameData.Api.Interfaces.V1;
+using ThunderbirdsBoardGameEngine.GameData.Api.Mappers.V1;
 using ThunderbirdsBoardGameEngine.GameData.Api.Messages.Dtos.V1;
+using ThunderbirdsBoardGameEngine.GameData.Domain.Entities;
 
 namespace ThunderbirdsBoardGameEngine.GameData.Api.Services.V1
 {
     public class DisasterCardService : IDisasterCardService
     {
         private readonly IDisasterCardRepository _disasterCardRepository;
-        private readonly IMapper _mapper;
-
-        public DisasterCardService(IDisasterCardRepository disasterCardRepository, IMapper mapper)
+        
+        public DisasterCardService(IDisasterCardRepository disasterCardRepository)
         {
             _disasterCardRepository = disasterCardRepository;
-            _mapper = mapper;
         }
 
         public async Task<IReadOnlyList<DisasterCardDto>> GetAllAsync()
         {
             var cards = await _disasterCardRepository.GetAllAsync();
 
-            return _mapper.Map<IReadOnlyList<DisasterCardDto>>(cards);
+            if (cards is null || !cards.Any())
+            {
+                return [];
+            }
+
+            return cards.ToDto();
         }
 
         public async Task<DisasterCardDto> GetByIdAsync(int id)
         {
             var card = await _disasterCardRepository.GetByIdAsync(id);
 
-            return _mapper.Map<DisasterCardDto>(card);
+            if (card is null)
+            {
+                return null;
+            }
+
+            return card.ToDto();
         }
     }
 }

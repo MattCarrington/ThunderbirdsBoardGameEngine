@@ -1,6 +1,5 @@
 ﻿using AutoFixture;
 using AutoFixture.Kernel;
-using AutoMapper;
 using NSubstitute;
 using ThunderbirdsBoardGameEngine.GameData.Api.Interfaces;
 using ThunderbirdsBoardGameEngine.GameData.Api.Messages.Dtos.V1;
@@ -14,12 +13,11 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.UnitTests.Services.V1
     {
         private readonly Fixture _fixture = new();
         private readonly IDisasterCardRepository _repository = Substitute.For<IDisasterCardRepository>();
-        private readonly IMapper _mapper = Substitute.For<IMapper>();
         private readonly DisasterCardService _service;
 
         public DisasterCardServiceTests()
         {
-            _service = new DisasterCardService(_repository, _mapper);
+            _service = new DisasterCardService(_repository);
             _fixture.Customizations.Add(new TypeRelay(typeof(BonusCondition), typeof(CharacterBonusCondition)));
         }
 
@@ -42,8 +40,6 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.UnitTests.Services.V1
 
             _repository.GetAllAsync().Returns(disasterCards);
 
-            _mapper.Map<IReadOnlyList<DisasterCardDto>>(disasterCards).Returns(expectedDtos);
-
             // Act
             var result = await _service.GetAllAsync();
 
@@ -52,8 +48,7 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.UnitTests.Services.V1
             Assert.Equal(expectedDtos.Count, result.Count);
             Assert.All(result, dto => Assert.IsType<DisasterCardDto>(dto));
 
-            await _repository.Received(1).GetAllAsync();
-            _mapper.Received(1).Map<IReadOnlyList<DisasterCardDto>>(disasterCards);
+            await _repository.Received(1).GetAllAsync();            
         }
 
         [Fact]
@@ -61,9 +56,6 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.UnitTests.Services.V1
         {
             // Arrange
             _repository.GetAllAsync().Returns(Array.Empty<DisasterCard>());
-
-            _mapper.Map<IReadOnlyList<DisasterCardDto>>(Arg.Any<IReadOnlyList<DisasterCard>>())
-                  .Returns(Array.Empty<DisasterCardDto>());
 
             // Act
             var result = await _service.GetAllAsync();
@@ -73,7 +65,22 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.UnitTests.Services.V1
             Assert.Empty(result);
 
             await _repository.Received(1).GetAllAsync();
-            _mapper.Received(1).Map<IReadOnlyList<DisasterCardDto>>(Arg.Any<IReadOnlyList<DisasterCard>>());
+        }
+
+        [Fact]
+        public async Task GetAllAsync_WhenDisasterCardsNull_ReturnsEmptyList()
+        {
+            // Arrange
+            _repository.GetAllAsync().Returns(null as IReadOnlyList<DisasterCard>);
+
+            // Act
+            var result = await _service.GetAllAsync();
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.Empty(result);
+
+            await _repository.Received(1).GetAllAsync();
         }
 
         [Fact]
@@ -95,8 +102,6 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.UnitTests.Services.V1
 
             _repository.GetByIdAsync(disasterCard.Id).Returns(disasterCard);
 
-            _mapper.Map<DisasterCardDto>(disasterCard).Returns(expectedDto);
-
             // Act
             DisasterCardDto result = await _service.GetByIdAsync(disasterCard.Id);
 
@@ -105,7 +110,6 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.UnitTests.Services.V1
             Assert.IsType<DisasterCardDto>(result);
 
             await _repository.Received(1).GetByIdAsync(disasterCard.Id);
-            _mapper.Received(1).Map<DisasterCardDto>(disasterCard);
         }
 
         [Fact]
@@ -115,8 +119,6 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.UnitTests.Services.V1
             int nonExistentId = 999;
 
             _repository.GetByIdAsync(nonExistentId).Returns((DisasterCard)null);
-
-            _mapper.Map<DisasterCardDto>(Arg.Any<DisasterCard>()).Returns((DisasterCardDto)null);
 
             // Act
             var result = await _service.GetByIdAsync(nonExistentId);

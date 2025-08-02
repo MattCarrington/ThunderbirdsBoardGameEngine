@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.OpenApi.Models;
 using ThunderbirdsBoardGameEngine.GameData.Api.Interfaces;
 using ThunderbirdsBoardGameEngine.GameData.Api.Interfaces.V1;
-using ThunderbirdsBoardGameEngine.GameData.Api.Profiles.V1;
 using ThunderbirdsBoardGameEngine.GameData.Api.Repositories;
 using ThunderbirdsBoardGameEngine.GameData.Api.Services.V1;
 using ThunderbirdsBoardGameEngine.GameData.Api.Swagger;
@@ -34,7 +33,6 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api
                 options.SubstituteApiVersionInUrl = true;
             });
 
-            builder.Services.AddAutoMapper(cfg => { }, typeof(DisasterCardProfile));
             builder.Services.AddScoped<IDisasterCardRepository, DisasterCardRepository>();
             builder.Services.AddScoped<IDisasterCardService, DisasterCardService>();
 
