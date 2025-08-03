@@ -2,7 +2,7 @@
 {
     public static class TestDataPathHelper
     {
-        public static string GetPath(string fileName, string subfolder = "Input")
+        public static string GetPath(string fileName, string subfolder = TestDataConstants.InputFolder)
         {
             // Navigate up until we find the solution root (heuristic: look for .sln file)
             var dir = AppContext.BaseDirectory;
@@ -15,7 +15,7 @@
             if (dir == null)
                 throw new DirectoryNotFoundException("Could not find solution root from AppContext.BaseDirectory.");
 
-            var baseDir = Path.Combine(dir, "TestData", subfolder);
+            var baseDir = Path.Combine(dir, TestDataConstants.TestDataFolder, subfolder);
             var fullPath = Path.Combine(baseDir, fileName);
 
             if (!File.Exists(fullPath))
