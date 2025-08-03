@@ -35,7 +35,7 @@ jobs:
     needs: dotnet-build
     steps:
       - uses: actions/checkout@v3
-      - run: docker build -t thunderbirds-api .
+      - run: docker build -t thunderbirds-api -f ThunderbirdsBoardGameEngine.GameData.Api/Dockerfile .
 
   integration-test:
     name: Run Integration Tests
