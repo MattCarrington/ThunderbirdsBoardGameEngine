@@ -7,8 +7,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThunderbirdsBoardGameEngine
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "IntegrationTests", "IntegrationTests", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThunderbirdsBoardGameEngine.GameData.Api.DataAccessTests", "ThunderbirdsBoardGameEngine.GameData.Api.DataAccessTests\ThunderbirdsBoardGameEngine.GameData.Api.DataAccessTests.csproj", "{8BF6D1B6-CE45-430E-9EB7-F22A1A47818E}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UnitTests", "UnitTests", "{D8475FB6-8FFD-4252-BF79-1BC0AF31A524}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThunderbirdsBoardGameEngine.GameData.Api.UnitTests", "ThunderbirdsBoardGameEngine.GameData.Api.UnitTests\ThunderbirdsBoardGameEngine.GameData.Api.UnitTests.csproj", "{F77F2925-BCBF-4AE2-8370-882CD12546C0}"
@@ -52,6 +50,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Input", "Input", "{07AD74EA
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{C005E618-80C1-4CCD-9774-336D558E958F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThunderbirdsBoardGameEngine.GameData.Api.DataAccess.IntegrationTests", "ThunderbirdsBoardGameEngine.GameData.Api.DataAccess.IntegrationTests\ThunderbirdsBoardGameEngine.GameData.Api.DataAccess.IntegrationTests.csproj", "{988FBB56-C254-478D-9B67-787216FCE66F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -62,10 +62,6 @@ Global
 		{A76FE72B-9451-4690-9D4A-705530521107}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A76FE72B-9451-4690-9D4A-705530521107}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A76FE72B-9451-4690-9D4A-705530521107}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8BF6D1B6-CE45-430E-9EB7-F22A1A47818E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8BF6D1B6-CE45-430E-9EB7-F22A1A47818E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8BF6D1B6-CE45-430E-9EB7-F22A1A47818E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8BF6D1B6-CE45-430E-9EB7-F22A1A47818E}.Release|Any CPU.Build.0 = Release|Any CPU
 		{F77F2925-BCBF-4AE2-8370-882CD12546C0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{F77F2925-BCBF-4AE2-8370-882CD12546C0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F77F2925-BCBF-4AE2-8370-882CD12546C0}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -114,13 +110,16 @@ Global
 		{81DDED9D-158B-E303-5F62-77A2896D2A5A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{81DDED9D-158B-E303-5F62-77A2896D2A5A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{81DDED9D-158B-E303-5F62-77A2896D2A5A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{988FBB56-C254-478D-9B67-787216FCE66F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{988FBB56-C254-478D-9B67-787216FCE66F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{988FBB56-C254-478D-9B67-787216FCE66F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{988FBB56-C254-478D-9B67-787216FCE66F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{02EA681E-C7D8-13C7-8484-4AC65E1B71E8} = {C005E618-80C1-4CCD-9774-336D558E958F}
-		{8BF6D1B6-CE45-430E-9EB7-F22A1A47818E} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 		{D8475FB6-8FFD-4252-BF79-1BC0AF31A524} = {C005E618-80C1-4CCD-9774-336D558E958F}
 		{F77F2925-BCBF-4AE2-8370-882CD12546C0} = {D8475FB6-8FFD-4252-BF79-1BC0AF31A524}
 		{9DE916CC-8E85-41B8-91BD-83739C65DAB4} = {D8475FB6-8FFD-4252-BF79-1BC0AF31A524}
@@ -132,6 +131,7 @@ Global
 		{A22F695E-1370-454C-B2B6-C3320CFAB8DD} = {C005E618-80C1-4CCD-9774-336D558E958F}
 		{58A31C2B-4B87-4916-9BA3-C812C5FF8354} = {A22F695E-1370-454C-B2B6-C3320CFAB8DD}
 		{07AD74EA-634C-4AF0-87A3-93076D26D76A} = {A22F695E-1370-454C-B2B6-C3320CFAB8DD}
+		{988FBB56-C254-478D-9B67-787216FCE66F} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {92EB50C5-075F-4AF3-8107-0DC9EDBBAB83}

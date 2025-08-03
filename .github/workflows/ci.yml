@@ -87,7 +87,6 @@ jobs:
       - name: Run Integration & DataAccess Tests
         run: |
           find . -name "*IntegrationTests.csproj" -exec dotnet test {} --configuration Release --no-restore \;
-          find . -name "*DataAccessTests.csproj" -exec dotnet test {} --configuration Release --no-restore \;
 
       - if: always()
         name: Tear Down Docker Container
