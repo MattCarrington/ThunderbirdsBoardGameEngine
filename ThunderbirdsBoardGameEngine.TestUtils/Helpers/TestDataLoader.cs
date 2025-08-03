@@ -6,23 +6,13 @@ namespace ThunderbirdsBoardGameEngine.TestUtils.Helpers
     {
         private static readonly JsonSerializerOptions _jsonOptions = new() { PropertyNameCaseInsensitive = true };
 
-        public static T LoadJsonFromFile<T>(string filename, string folder = "ExpectedData")
+        public static T LoadJsonFromFile<T>(string fileName, string folder = "Expected")
         {
-            var basePath = Path.Combine(AppContext.BaseDirectory, folder);
-
-            if (!Directory.Exists(basePath))
-            {
-                // fallback or debug info
-                throw new DirectoryNotFoundException($"Test data directory not found at {basePath}");
-            }
-
-            var fullPath = Path.Combine(basePath, filename);
-
-            if (!File.Exists(fullPath))
-                throw new FileNotFoundException($"Expected test data not found: {fullPath}");
+            var fullPath = TestDataPathHelper.GetPath(fileName, folder);
 
             var json = File.ReadAllText(fullPath);
-            return JsonSerializer.Deserialize<T>(json, _jsonOptions) ?? throw new InvalidOperationException("Failed to deserialize expected disaster card DTOs.");
+            return JsonSerializer.Deserialize<T>(json, _jsonOptions)
+                   ?? throw new InvalidOperationException("Failed to deserialize JSON file: " + fileName);
         }
     }
 }

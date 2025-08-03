@@ -2,17 +2,26 @@
 {
     public static class TestDataPathHelper
     {
-        public static string GetPath(string fileName)
+        public static string GetPath(string fileName, string subfolder = "Input")
         {
-            var baseDir = Path.Combine(AppContext.BaseDirectory, "TestData");
+            // Navigate up until we find the solution root (heuristic: look for .sln file)
+            var dir = AppContext.BaseDirectory;
 
-            if (!Directory.Exists(baseDir))
+            while (dir != null && !Directory.EnumerateFiles(dir, "*.sln").Any())
             {
-                // fallback or debug info
-                throw new DirectoryNotFoundException($"Test data directory not found at {baseDir}");
+                dir = Directory.GetParent(dir)?.FullName;
             }
 
-            return Path.Combine(baseDir, fileName);
+            if (dir == null)
+                throw new DirectoryNotFoundException("Could not find solution root from AppContext.BaseDirectory.");
+
+            var baseDir = Path.Combine(dir, "TestData", subfolder);
+            var fullPath = Path.Combine(baseDir, fileName);
+
+            if (!File.Exists(fullPath))
+                throw new FileNotFoundException($"Expected test data not found at: {fullPath}");
+
+            return fullPath;
         }
     }
 }

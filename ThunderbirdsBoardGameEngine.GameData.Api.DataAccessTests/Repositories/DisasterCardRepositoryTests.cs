@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Options;
 using System.Text.Json;
 using ThunderbirdsBoardGameEngine.GameData.Api.Repositories;
+using ThunderbirdsBoardGameEngine.GameData.Domain.Entities;
 using ThunderbirdsBoardGameEngine.GameData.Domain.Enums;
 using ThunderbirdsBoardGameEngine.GameData.Domain.Exceptions;
 using ThunderbirdsBoardGameEngine.TestUtils.Helpers;
@@ -31,7 +32,7 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.DataAccessTests.Repositories
         public async Task GetAllAsync_WhenNoFileExists_ShouldThrowFileNotFoundException()
         {
             // Arrange
-            var filepath = TestDataPathHelper.GetPath("nonexistent-disasterCards.json");
+            var filepath = "TestData/nonexistent-disasterCards.json";
 
             var repository = CreateRepository(filepath);
 
@@ -55,7 +56,7 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.DataAccessTests.Repositories
         public async Task GetAllAsync_WhenDisasterCardsInvalid_ShouldThrowDisasterCardValidationException()
         {
             // Arrange
-            var filepath = "TestData/invalid-disasterCards.json";
+            var filepath = TestDataPathHelper.GetPath("invalid-disasterCards.json");
 
             var repository = CreateRepository(filepath);
 

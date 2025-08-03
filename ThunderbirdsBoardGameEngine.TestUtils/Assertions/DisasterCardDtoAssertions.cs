@@ -19,10 +19,20 @@ namespace ThunderbirdsBoardGameEngine.TestUtils.Assertions
             Assert.All(actual.BonusConditions, bc =>
                 Assert.False(string.IsNullOrWhiteSpace(bc.Description), $"Bonus description is null or empty for card '{actual.Name}' (ID: {actual.Id})"));
 
+            for (int i = 0; i < expected.BonusConditions.Count; i++)
+            {
+                Assert.Equal(expected.BonusConditions[i].Description, actual.BonusConditions[i].Description);
+            }
+
             // Assert RewardDto collection
             Assert.Equal(expected.Rewards.Count, actual.Rewards.Count);
             Assert.All(actual.Rewards, r =>
                 Assert.False(string.IsNullOrWhiteSpace(r.DisplayName), $"Rewards is null or empty for card '{actual.Name}' (ID: {actual.Id})"));
+
+            for (int i = 0; i < expected.Rewards.Count; i++)
+            {
+                Assert.Equal(expected.Rewards[i].DisplayName, actual.Rewards[i].DisplayName);
+            }
         }
 
         public static void AssertDisasterCardDtosEqual(IList<DisasterCardDto> expected, IList<DisasterCardDto> actual)

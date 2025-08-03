@@ -37,6 +37,21 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThunderbirdsBoardGameEngine
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "Docker\docker-compose.dcproj", "{81DDED9D-158B-E303-5F62-77A2896D2A5A}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TestData", "TestData", "{A22F695E-1370-454C-B2B6-C3320CFAB8DD}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Expected", "Expected", "{58A31C2B-4B87-4916-9BA3-C812C5FF8354}"
+	ProjectSection(SolutionItems) = preProject
+		TestData\Expected\DisasterCardDtos.json = TestData\Expected\DisasterCardDtos.json
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Input", "Input", "{07AD74EA-634C-4AF0-87A3-93076D26D76A}"
+	ProjectSection(SolutionItems) = preProject
+		TestData\Input\DisasterCards-test.json = TestData\Input\DisasterCards-test.json
+		TestData\Input\DisasterCards.json = TestData\Input\DisasterCards.json
+		TestData\Input\invalid-disasterCards.json = TestData\Input\invalid-disasterCards.json
+		TestData\Input\invalid-json.json = TestData\Input\invalid-json.json
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -116,6 +131,8 @@ Global
 		{FAC8733C-43C8-4D28-B292-E447F20BCF2D} = {D8475FB6-8FFD-4252-BF79-1BC0AF31A524}
 		{559E152C-F960-410C-96A5-9A01BC411A24} = {D8475FB6-8FFD-4252-BF79-1BC0AF31A524}
 		{91BFB63F-4A0A-4523-B777-2A8B40123A30} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{58A31C2B-4B87-4916-9BA3-C812C5FF8354} = {A22F695E-1370-454C-B2B6-C3320CFAB8DD}
+		{07AD74EA-634C-4AF0-87A3-93076D26D76A} = {A22F695E-1370-454C-B2B6-C3320CFAB8DD}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {92EB50C5-075F-4AF3-8107-0DC9EDBBAB83}
