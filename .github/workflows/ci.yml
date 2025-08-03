@@ -6,51 +6,70 @@ on:
   pull_request:
 
 jobs:
-  dotnet-build:
+  build:
     name: Build .NET Solution
     runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: '8.x'
-      - run: dotnet restore ThunderbirdsBoardGameEngine.sln
-      - run: dotnet build ThunderbirdsBoardGameEngine.sln --configuration Release --no-restore
 
-  unit-test:
-    name: Run Unit Tests
-    runs-on: ubuntu-latest
-    needs: dotnet-build
     steps:
       - uses: actions/checkout@v3
+
       - uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '8.x'
-      - run: |
-          find . -name "*UnitTests.csproj" -exec dotnet test {} --configuration Release \;
+
+      - name: Restore & Build
+        run: |
+          dotnet restore ThunderbirdsBoardGameEngine.sln
+          dotnet build ThunderbirdsBoardGameEngine.sln --configuration Release --no-restore
 
   docker-build:
     name: Build Docker Image
     runs-on: ubuntu-latest
-    needs: dotnet-build
-    steps:
-      - uses: actions/checkout@v3
-      - run: docker build -t thunderbirds-api -f ThunderbirdsBoardGameEngine.GameData.Api/Dockerfile .
 
-  integration-test:
-    name: Run Integration Tests
-    runs-on: ubuntu-latest
-    needs: docker-build
     steps:
       - uses: actions/checkout@v3
+
+      - name: Build Docker Image
+        run: docker build -t thunderbirds-api -f ThunderbirdsBoardGameEngine.GameData.Api/Dockerfile .
+
+  unit-tests:
+    name: Run Unit Tests
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+      - uses: actions/checkout@v3
+
       - uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '8.x'
-      - run: |
+
+      - name: Run Unit Tests
+        run: |
+          find . -name "*UnitTests.csproj" -exec dotnet test {} --configuration Release --no-restore \;
+
+  integration-tests:
+    name: Run Integration & DataAccess Tests
+    runs-on: ubuntu-latest
+    needs: [build, docker-build]
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.x'
+
+      - name: Run API Docker Container
+        run: |
           docker run -d -p 8080:8080 --name thunderbirds-api-test thunderbirds-api
           sleep 5
-      - run: |
-          find . -name "*IntegrationTests.csproj" -exec dotnet test {} --configuration Release \;
-          find . -name "*DataAccessTests.csproj" -exec dotnet test {} --configuration Release \;
+
+      - name: Run Integration & DataAccess Tests
+        run: |
+          find . -name "*IntegrationTests.csproj" -exec dotnet test {} --configuration Release --no-restore \;
+          find . -name "*DataAccessTests.csproj" -exec dotnet test {} --configuration Release --no-restore \;
+
       - if: always()
+        name: Tear Down Docker Container
         run: docker rm -f thunderbirds-api-test
