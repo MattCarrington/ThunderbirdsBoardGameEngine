@@ -1,0 +1,81 @@
+﻿@page "/disasterCards"
+@using ThunderbirdsBoardGameEngine.GameData.Api.Messages.Dtos.V1
+@using ThunderbirdsBoardGameEngine.UI.Interfaces
+@inject IDisasterCardService DisasterCardService
+
+<h3>Select a Disaster Card</h3>
+
+@if (cards == null)
+{
+    <p>Loading cards...</p>
+}
+else
+{
+    <select class="form-select" @onchange="OnCardSelected">
+        <option value="">-- Select a card --</option>
+        @foreach (var c in cards)
+        {
+            <option value="@c.Id" selected="@(selectedCard?.Id == c.Id)">
+                @c.Name
+            </option>
+        }
+    </select>
+
+    @if (selectedCard != null)
+    {
+        <div class="mt-4">
+            <h3>Disaster Card Details</h3>
+            <div class="card shadow-sm p-3">
+                <h4>@selectedCard.Name</h4>
+                <p><strong>Difficulty:</strong> @selectedCard.DifficultyNumber</p>
+                <p><strong>Location:</strong> @selectedCard.Location</p>
+                <p><strong>Rescue Type:</strong> @selectedCard.RescueType</p>
+
+                @if (selectedCard.BonusConditions?.Any() == true)
+                {
+                    <h5>Bonus Conditions</h5>
+                    <ul>
+                        @foreach (var bonus in selectedCard.BonusConditions)
+                        {
+                            <li>@bonus.Description</li>
+                        }
+                    </ul>
+                }
+
+                @if (selectedCard.Rewards?.Any() == true)
+                {
+                    <h5>Rewards</h5>
+                    <ul>
+                        @foreach (var reward in selectedCard.Rewards)
+                        {
+                            <li>@reward.DisplayName</li>
+                        }
+                    </ul>
+                }
+            </div>
+        </div>
+    }
+}
+
+@code {
+    private IReadOnlyList<DisasterCardDto>? cards;
+    private DisasterCardDto? selectedCard;
+
+    protected override async Task OnInitializedAsync()
+    {
+        // Load once
+        cards = await DisasterCardService.GetAllAsync();
+    }
+
+    private void OnCardSelected(ChangeEventArgs e)
+    {
+        if (int.TryParse(e.Value?.ToString(), out var cardId))
+        {
+            selectedCard = cards?.FirstOrDefault(c => c.Id == cardId);
+        }
+        else
+        {
+            selectedCard = null;
+        }
+    }
+}

@@ -8,7 +8,7 @@ using Xunit;
 
 namespace ThunderbirdsBoardGameEngine.UI.UnitTests.Pages
 {
-    public class CardSelectorTests : TestContext
+    public class DisasterCardsTests : TestContext
     {
         [Fact]
         public void RendersDropdownWithCards()
@@ -25,12 +25,18 @@ namespace ThunderbirdsBoardGameEngine.UI.UnitTests.Pages
             Services.AddSingleton(mockService);
 
             // Act
-            var cut = RenderComponent<CardSelector>();
+            var cut = RenderComponent<DisasterCards>();
 
             // Assert
             var options = cut.FindAll("option");
             Assert.Contains(options, o => o.TextContent == "Card One");
             Assert.Contains(options, o => o.TextContent == "Card Two");
+        }
+
+        [Fact]
+        public void OnSelectDisplayCard()
+        {
+            throw new NotImplementedException();
         }
     }
 }
