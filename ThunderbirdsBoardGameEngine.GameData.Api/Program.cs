@@ -47,6 +47,15 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api
                 c.OperationFilter<AddApiVersionHeaderParameter>();
             });
 
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowBlazorDev", policy =>
+                {
+                    policy.WithOrigins("http://localhost:5109") // your Blazor UI's address
+                          .AllowAnyHeader()
+                          .AllowAnyMethod();
+                });
+            });
 
             var app = builder.Build();
 
@@ -60,6 +69,8 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api
             app.UseHttpsRedirection();
 
             app.UseAuthorization();
+
+            app.UseCors("AllowBlazorDev"); // Enable before MVC/endpoints
 
             app.MapControllers();
 
