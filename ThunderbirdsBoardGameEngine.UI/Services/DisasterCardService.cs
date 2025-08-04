@@ -1,9 +1,10 @@
 ﻿using ThunderbirdsBoardGameEngine.GameData.Api.Client.Interfaces.V1;
 using ThunderbirdsBoardGameEngine.GameData.Api.Messages.Dtos.V1;
+using ThunderbirdsBoardGameEngine.UI.Interfaces;
 
 namespace ThunderbirdsBoardGameEngine.UI.Services
 {
-    public class DisasterCardService
+    public class DisasterCardService : IDisasterCardService
     {
         private readonly IDisasterCardClient _client;
 
@@ -18,7 +19,7 @@ namespace ThunderbirdsBoardGameEngine.UI.Services
 
             if (result.Success && result.Data is not null)
             {
-                return result.Data; 
+                return result.Data;
             }
 
             return []; // Return an empty list if the request fails
@@ -30,7 +31,7 @@ namespace ThunderbirdsBoardGameEngine.UI.Services
 
             if (result.Success && result.Data is not null)
             {
-                return result.Data; 
+                return result.Data;
             }
 
             return null; // Return null if the request fails or data is null

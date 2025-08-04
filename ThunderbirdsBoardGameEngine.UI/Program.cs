@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using ThunderbirdsBoardGameEngine.GameData.Api.Client;
+using ThunderbirdsBoardGameEngine.UI.Interfaces;
+using ThunderbirdsBoardGameEngine.UI.Services;
 
 namespace ThunderbirdsBoardGameEngine.UI
 {
@@ -13,6 +15,9 @@ namespace ThunderbirdsBoardGameEngine.UI
             builder.RootComponents.Add<HeadOutlet>("head::after");
 
             builder.Services.AddGameDataClients(builder.Configuration);
+
+            // Register service layer
+            builder.Services.AddScoped<IDisasterCardService, DisasterCardService>();
 
             await builder.Build().RunAsync();
         }
