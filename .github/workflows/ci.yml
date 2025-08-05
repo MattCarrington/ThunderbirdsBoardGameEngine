@@ -115,17 +115,26 @@ jobs:
 
       - name: Run Integration Tests
         run: |
+          set -e
           echo "🚀 Running all Integration Tests..."
-          dotnet test ThunderbirdsBoardGameEngine.sln \
-            --no-build \
-            --configuration Release \
-            --logger:"trx" \
-            --results-directory ./TestResults \
-            --filter "ProjectName~IntegrationTests"
+          projects=$(find . -name "*.IntegrationTests.csproj")
+          if [ -z "$projects" ]; then
+            echo "❌ No integration test projects found!"
+            exit 1
+          fi
       
-          # Fail if no tests ran
-          if ! grep -q "Total tests: [1-9]" TestResults/*.trx; then
-            echo "❌ No integration tests were executed!"
+          tests_ran=false
+          for proj in $projects; do
+            echo "🧪 Testing $proj..."
+            dotnet test "$proj" \
+              --configuration Release \
+              --logger:"trx" \
+              --results-directory "./TestResults/$(basename $proj)"
+            tests_ran=true
+          done
+      
+          if [ "$tests_ran" = false ]; then
+            echo "❌ No tests executed!"
             exit 1
           fi
 
