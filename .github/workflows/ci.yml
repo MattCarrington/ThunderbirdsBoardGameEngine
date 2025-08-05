@@ -56,17 +56,27 @@ jobs:
 
       - name: Run Unit Tests
         run: |
+          set -e
           echo "🚀 Running all Unit Tests..."
-          dotnet test ThunderbirdsBoardGameEngine.sln \
-            --no-build \
-            --configuration Release \
-            --logger:"trx" \
-            --results-directory ./TestResults \
-            --filter "ProjectName~UnitTests"
+          projects=$(find . -name "*.UnitTests.csproj")
+          if [ -z "$projects" ]; then
+            echo "❌ No unit test projects found!"
+            exit 1
+          fi
       
-          # Fail if no tests ran
-          if ! grep -q "Total tests: [1-9]" TestResults/*.trx; then
-            echo "❌ No unit tests were executed!"
+          tests_ran=false
+          for proj in $projects; do
+            echo "🧪 Testing $proj..."
+            dotnet test "$proj" \
+              --no-build \
+              --configuration Release \
+              --logger:"trx" \
+              --results-directory "./TestResults/$(basename $proj)"
+            tests_ran=true
+          done
+      
+          if [ "$tests_ran" = false ]; then
+            echo "❌ No tests executed!"
             exit 1
           fi
 
