@@ -100,12 +100,12 @@ jobs:
           # Wait until health check passes
           echo "Waiting for API to become healthy..."
           for i in {1..30}; do
-              if curl -fs http://localhost:8080/health/ready > /dev/null; then
-              echo "API is healthy!"
-              break
-              fi
-              echo "API not ready yet... retrying ($i/30)"
-              sleep 1
+            if curl -fs http://localhost:8080/health/ready > /dev/null; then
+            echo "API is healthy!"
+            break
+            fi
+            echo "API not ready yet... retrying ($i/30)"
+            sleep 10
           done
 
       - name: Run Integration Tests
