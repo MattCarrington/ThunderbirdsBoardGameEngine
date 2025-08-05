@@ -37,14 +37,14 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TestData", "TestData", "{A2
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Expected", "Expected", "{58A31C2B-4B87-4916-9BA3-C812C5FF8354}"
 	ProjectSection(SolutionItems) = preProject
-		TestData\Expected\DisasterCardDtos.json = TestData\Expected\DisasterCardDtos.json
+		TestData\Expected\disaster-card-dtos.json = TestData\Expected\disaster-card-dtos.json
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Input", "Input", "{07AD74EA-634C-4AF0-87A3-93076D26D76A}"
 	ProjectSection(SolutionItems) = preProject
-		TestData\Input\DisasterCards-test.json = TestData\Input\DisasterCards-test.json
-		TestData\Input\DisasterCards.json = TestData\Input\DisasterCards.json
-		TestData\Input\invalid-disasterCards.json = TestData\Input\invalid-disasterCards.json
+		TestData\Input\disaster-cards-test.json = TestData\Input\disaster-cards-test.json
+		TestData\Input\disaster-cards.json = TestData\Input\disaster-cards.json
+		TestData\Input\invalid-disaster-cards.json = TestData\Input\invalid-disaster-cards.json
 		TestData\Input\invalid-json.json = TestData\Input\invalid-json.json
 	EndProjectSection
 EndProject

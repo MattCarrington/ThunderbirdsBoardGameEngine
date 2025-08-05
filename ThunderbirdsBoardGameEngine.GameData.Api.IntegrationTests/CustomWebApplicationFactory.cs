@@ -9,7 +9,7 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.IntegrationTests
     {
         protected override void ConfigureWebHost(IWebHostBuilder builder)
         {
-            var filepath = TestDataPathHelper.GetPath("DisasterCards.json");
+            var filepath = TestDataPathHelper.GetPath("disaster-cards.json");
 
             builder.ConfigureAppConfiguration((context, configBuilder) =>
             {

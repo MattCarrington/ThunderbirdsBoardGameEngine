@@ -13,7 +13,7 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.DataAccess.IntegrationTests.R
         public async Task GetAllAsync_WhenValidFile_ShouldReturnAllDisasterCardsAsync()
         {
             // Arrange
-            var filepath = TestDataPathHelper.GetPath("DisasterCards-test.json");
+            var filepath = TestDataPathHelper.GetPath("disaster-cards-test.json");
 
             var repository = CreateRepository(filepath);
 
@@ -30,7 +30,7 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.DataAccess.IntegrationTests.R
         public async Task GetAllAsync_WhenNoFileExists_ShouldThrowFileNotFoundException()
         {
             // Arrange
-            var filepath = "TestData/nonexistent-disasterCards.json";
+            var filepath = "TestData/nonexistent-disaster-cards.json";
 
             var repository = CreateRepository(filepath);
 
@@ -54,7 +54,7 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.DataAccess.IntegrationTests.R
         public async Task GetAllAsync_WhenDisasterCardsInvalid_ShouldThrowDisasterCardValidationException()
         {
             // Arrange
-            var filepath = TestDataPathHelper.GetPath("invalid-disasterCards.json");
+            var filepath = TestDataPathHelper.GetPath("invalid-disaster-cards.json");
 
             var repository = CreateRepository(filepath);
 
@@ -66,7 +66,7 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.DataAccess.IntegrationTests.R
         public async Task GetByIdAsync_WhenDisasterCardExists_ShouldReturnDisasterCardWithExpectedPropertiesAsync()
         {
             // Arrange
-            var filepath = TestDataPathHelper.GetPath("DisasterCards-test.json");
+            var filepath = TestDataPathHelper.GetPath("disaster-cards-test.json");
 
             var repository = CreateRepository(filepath);
 
@@ -88,7 +88,7 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.DataAccess.IntegrationTests.R
         public async Task GetByIdAsync_WhenDisasterCardDoesNotExist_ShouldReturnNullAsync()
         {
             // Arrange
-            var filepath = TestDataPathHelper.GetPath("DisasterCards-test.json");
+            var filepath = TestDataPathHelper.GetPath("disaster-cards-test.json");
 
             var repository = CreateRepository(filepath);
 
