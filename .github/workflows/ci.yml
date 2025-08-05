@@ -56,18 +56,19 @@ jobs:
 
       - name: Run Unit Tests
         run: |
-          set -e
-          echo "🚀 Running all Unit Test projects..."
-          projects=$(find . -name "*.UnitTests.csproj")
-          if [ -z "$projects" ]; then
-            echo "❌ No unit test projects found!"
-            exit 1
-          fi
-          dotnet test $projects \
+          echo "🚀 Running all Unit Tests..."
+          dotnet test ThunderbirdsBoardGameEngine.sln \
             --no-build \
             --configuration Release \
             --logger:"trx" \
-            --results-directory ./TestResults
+            --results-directory ./TestResults \
+            --filter "ProjectName~UnitTests"
+      
+          # Fail if no tests ran
+          if ! grep -q "Total tests: [1-9]" TestResults/*.trx; then
+            echo "❌ No unit tests were executed!"
+            exit 1
+          fi
 
       - name: Upload Test Results
         if: failure()  # Only upload if the tests failed
@@ -105,18 +106,19 @@ jobs:
 
       - name: Run Integration Tests
         run: |
-          set -e
-          echo "🚀 Running all Integration Test projects..."
-          projects=$(find . -name "*.IntegrationTests.csproj")
-          if [ -z "$projects" ]; then
-            echo "❌ No integration test projects found!"
-            exit 1
-          fi
-          dotnet test $projects \
+          echo "🚀 Running all Integration Tests..."
+          dotnet test ThunderbirdsBoardGameEngine.sln \
             --no-build \
             --configuration Release \
             --logger:"trx" \
-            --results-directory ./TestResults
+            --results-directory ./TestResults \
+            --filter "ProjectName~IntegrationTests"
+      
+          # Fail if no tests ran
+          if ! grep -q "Total tests: [1-9]" TestResults/*.trx; then
+            echo "❌ No integration tests were executed!"
+            exit 1
+          fi
 
       - if: always()
         name: Tear Down Docker Container
