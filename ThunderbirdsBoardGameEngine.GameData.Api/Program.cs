@@ -84,6 +84,8 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api
 
             app.MapControllers();
 
+            app.MapHealthChecks("/health/ready");
+
             app.Run();
         }
     }
