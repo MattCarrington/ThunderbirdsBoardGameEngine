@@ -32,11 +32,5 @@ namespace ThunderbirdsBoardGameEngine.UI.UnitTests.Pages
             Assert.Contains(options, o => o.TextContent == "Card One");
             Assert.Contains(options, o => o.TextContent == "Card Two");
         }
-
-        [Fact]
-        public void OnSelectDisplayCard()
-        {
-            throw new NotImplementedException();
-        }
     }
 }
