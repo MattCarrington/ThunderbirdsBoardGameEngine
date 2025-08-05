@@ -14,11 +14,11 @@
     <ProjectReference Include="..\ThunderbirdsBoardGameEngine.GameData.Api.Messages\ThunderbirdsBoardGameEngine.GameData.Api.Messages.csproj" />
     <ProjectReference Include="..\ThunderbirdsBoardGameEngine.GameData.Domain\ThunderbirdsBoardGameEngine.GameData.Domain.csproj" />
   </ItemGroup>
-
-	<ItemGroup>
-		<Content Include="..\TestData\**\*.*">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		</Content>
-	</ItemGroup>
-
+	
+  <ItemGroup>
+	<Content Include="$(SolutionDir)TestData\**\*.*">
+	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	</Content>
+  </ItemGroup>
+	
 </Project>
