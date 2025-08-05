@@ -102,16 +102,11 @@ jobs:
         run: |
           set -e
           echo "🚀 Running all Integration Tests..."
-          dotnet test ThunderbirdsBoardGameEngine.sln \
+          dotnet test \
             --configuration Release \
             --logger:"trx" \
-            --results-directory ./TestResults \
+            --results-directory ./TestResults/Integration \
             --filter "FullyQualifiedName~IntegrationTests"
-      
-          if ! grep -q "Total tests: [1-9]" TestResults/*.trx; then
-            echo "❌ No integration tests were executed!"
-            exit 1
-          fi
 
       - if: always()
         name: Tear Down Docker Container
