@@ -1,11 +1,9 @@
 ﻿using Microsoft.Extensions.Options;
 using System.Text.Json;
 using ThunderbirdsBoardGameEngine.GameData.Api.Repositories;
-using ThunderbirdsBoardGameEngine.GameData.Domain.Entities;
 using ThunderbirdsBoardGameEngine.GameData.Domain.Enums;
 using ThunderbirdsBoardGameEngine.GameData.Domain.Exceptions;
 using ThunderbirdsBoardGameEngine.TestUtils.Helpers;
-using Xunit;
 
 namespace ThunderbirdsBoardGameEngine.GameData.Api.DataAccess.IntegrationTests.Repositories
 {
@@ -15,7 +13,7 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.DataAccess.IntegrationTests.R
         public async Task GetAllAsync_WhenValidFile_ShouldReturnAllDisasterCardsAsync()
         {
             // Arrange
-            var filepath = TestDataPathHelper.GetPath("disasterCards-test.json");
+            var filepath = TestDataPathHelper.GetPath("DisasterCards-test.json");
 
             var repository = CreateRepository(filepath);
 
@@ -68,7 +66,7 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.DataAccess.IntegrationTests.R
         public async Task GetByIdAsync_WhenDisasterCardExists_ShouldReturnDisasterCardWithExpectedPropertiesAsync()
         {
             // Arrange
-            var filepath = TestDataPathHelper.GetPath("disasterCards-test.json");
+            var filepath = TestDataPathHelper.GetPath("DisasterCards-test.json");
 
             var repository = CreateRepository(filepath);
 
@@ -90,7 +88,7 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.DataAccess.IntegrationTests.R
         public async Task GetByIdAsync_WhenDisasterCardDoesNotExist_ShouldReturnNullAsync()
         {
             // Arrange
-            var filepath = TestDataPathHelper.GetPath("disasterCards-test.json");
+            var filepath = TestDataPathHelper.GetPath("DisasterCards-test.json");
 
             var repository = CreateRepository(filepath);
 

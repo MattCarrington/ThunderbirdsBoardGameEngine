@@ -4,8 +4,6 @@
     {
         public static string GetPath(string fileName, string subfolder = TestDataConstants.InputFolder)
         {
-            Console.WriteLine($"Starting path: {AppContext.BaseDirectory}");
-
             // Navigate up until we find the solution root (heuristic: look for .sln file)
             var dir = AppContext.BaseDirectory;
 
