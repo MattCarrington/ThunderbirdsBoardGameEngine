@@ -56,7 +56,12 @@ jobs:
 
       - name: Run Unit Tests
         run: |
-          find . -name "*UnitTests.csproj" -exec dotnet test {} --logger:"trx" --results-directory ./TestResults --configuration Release --no-restore \;
+          dotnet test ThunderbirdsBoardGameEngine.sln \
+          --filter "FullyQualifiedName~UnitTests" \
+          --no-build \
+          --logger:"trx" \
+          --results-directory ./TestResults \
+          --configuration Release
 
       - name: Upload Test Results
         if: failure()  # Only upload if the tests failed
