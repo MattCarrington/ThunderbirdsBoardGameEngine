@@ -58,7 +58,7 @@ jobs:
         run: |
           set -e
           echo "🚀 Running all Unit Tests..."
-          dotnet test ThunderbirdsBoardGameEngine.sln \
+          dotnet test \
             --configuration Release \
             --logger:"trx" \
             --results-directory ./TestResults \
