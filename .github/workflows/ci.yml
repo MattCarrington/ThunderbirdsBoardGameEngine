@@ -74,8 +74,8 @@ jobs:
         if: failure()  # Only upload if the tests failed
         uses: actions/upload-artifact@v4
         with:
-          name: test-results
-          path: ./TestResults
+          name: unit-test-results
+          path: ./TestResults/Unit
           retention-days: 7
 
   integration-tests:
@@ -127,6 +127,6 @@ jobs:
         if: failure()  # Only upload if the tests failed
         uses: actions/upload-artifact@v4
         with:
-          name: test-results
-          path: ./TestResults
+          name: integration-test-results
+          path: ./TestResults/Integration
           retention-days: 7
