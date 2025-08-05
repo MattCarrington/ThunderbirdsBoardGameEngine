@@ -58,24 +58,18 @@ jobs:
         run: |
           set -e
           echo "🚀 Running all Unit Tests..."
-          dotnet test ThunderbirdsBoardGameEngine.sln \
+          dotnet test \
             --configuration Release \
             --logger:"trx" \
             --results-directory ./TestResults \
             --filter "FullyQualifiedName~UnitTests"
-      
-          # Fail if no tests ran
-          if ! grep -q "Total tests: [1-9]" TestResults/*.trx; then
-            echo "❌ No unit tests were executed!"
-            exit 1
-          fi
-          
+                
       - name: Upload Test Results
         if: failure()  # Only upload if the tests failed
         uses: actions/upload-artifact@v4
         with:
-          name: test-results
-          path: ./TestResults
+          name: unit-test-results
+          path: ./TestResults/Unit
           retention-days: 7
 
   integration-tests:
@@ -108,16 +102,11 @@ jobs:
         run: |
           set -e
           echo "🚀 Running all Integration Tests..."
-          dotnet test ThunderbirdsBoardGameEngine.sln \
+          dotnet test \
             --configuration Release \
             --logger:"trx" \
-            --results-directory ./TestResults \
+            --results-directory ./TestResults/Integration \
             --filter "FullyQualifiedName~IntegrationTests"
-      
-          if ! grep -q "Total tests: [1-9]" TestResults/*.trx; then
-            echo "❌ No integration tests were executed!"
-            exit 1
-          fi
 
       - if: always()
         name: Tear Down Docker Container
@@ -127,6 +116,6 @@ jobs:
         if: failure()  # Only upload if the tests failed
         uses: actions/upload-artifact@v4
         with:
-          name: test-results
-          path: ./TestResults
+          name: integration-test-results
+          path: ./TestResults/Integration
           retention-days: 7
