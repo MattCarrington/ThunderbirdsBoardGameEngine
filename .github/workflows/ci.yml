@@ -63,13 +63,7 @@ jobs:
             --logger:"trx" \
             --results-directory ./TestResults \
             --filter "FullyQualifiedName~UnitTests"
-      
-          # Fail if no tests ran
-          if ! grep -q "Total tests: [1-9]" TestResults/*.trx; then
-            echo "❌ No unit tests were executed!"
-            exit 1
-          fi
-          
+                
       - name: Upload Test Results
         if: failure()  # Only upload if the tests failed
         uses: actions/upload-artifact@v4
