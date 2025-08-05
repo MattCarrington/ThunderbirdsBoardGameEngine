@@ -56,12 +56,18 @@ jobs:
 
       - name: Run Unit Tests
         run: |
-          dotnet test ThunderbirdsBoardGameEngine.sln \
-          --filter "FullyQualifiedName~UnitTests" \
-          --no-build \
-          --logger:"trx" \
-          --results-directory ./TestResults \
-          --configuration Release
+          set -e
+          echo "🚀 Running all Unit Test projects..."
+          projects=$(find . -name "*.UnitTests.csproj")
+          if [ -z "$projects" ]; then
+            echo "❌ No unit test projects found!"
+            exit 1
+          fi
+          dotnet test $projects \
+            --no-build \
+            --configuration Release \
+            --logger:"trx" \
+            --results-directory ./TestResults
 
       - name: Upload Test Results
         if: failure()  # Only upload if the tests failed
@@ -99,7 +105,18 @@ jobs:
 
       - name: Run Integration Tests
         run: |
-          find . -name "*IntegrationTests.csproj" -exec dotnet test {} --logger:"trx" --results-directory ./TestResults --configuration Release --no-restore \;
+          set -e
+          echo "🚀 Running all Integration Test projects..."
+          projects=$(find . -name "*.IntegrationTests.csproj")
+          if [ -z "$projects" ]; then
+            echo "❌ No integration test projects found!"
+            exit 1
+          fi
+          dotnet test $projects \
+            --no-build \
+            --configuration Release \
+            --logger:"trx" \
+            --results-directory ./TestResults
 
       - if: always()
         name: Tear Down Docker Container
