@@ -97,7 +97,9 @@ jobs:
         run: |
           docker run -d \
             -e ASPNETCORE_ENVIRONMENT=Docker \
-            -e ASPNETCORE_URLS=http://+:8080 \
+            -e Cors__AllowedOrigins=http://localhost:3000 \
+            -e CardData__DisasterCardsFilePath=/app/TestData/Input/disaster-cards.json \
+            -v "$PWD/TestData:/app/TestData" \
             -p 8080:8080 \
             --name thunderbirds-api-test \
             thunderbirds-api
