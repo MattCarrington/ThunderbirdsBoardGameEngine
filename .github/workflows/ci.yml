@@ -106,9 +106,13 @@ jobs:
         run: |
           set -euo pipefail
           for i in {1..60}; do
-            if curl -fsS http://localhost:8080/health; then exit 0; fi
-            echo "API not ready yet... ($i/60)"; sleep 2
+            if curl -fsS http://localhost:8080/health/ready; then
+              echo "API is healthy!"; exit 0
+            fi
+            echo "API not ready yet... ($i/60)"
+            sleep 2
           done
+          echo "API failed to become healthy"
           docker logs thunderbirds-api-test || true
           exit 1
 
