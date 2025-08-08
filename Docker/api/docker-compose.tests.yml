@@ -1,17 +1,13 @@
 ﻿version: "3.9"
 
 services:
-  game-data-api:
-    container_name: game-data-api
-    build:
-      context: ../../                      
-      dockerfile: ThunderbirdsBoardGameEngine.GameData.Api/Dockerfile
-    ports:
-      - "8080:8080"
+  thunderbirdsboardgameengine.gamedata.api:
     environment:
-      - ASPNETCORE_ENVIRONMENT=Docker
+      ASPNETCORE_ENVIRONMENT: Docker
+      Cors__AllowedOrigins: http://localhost:3000
+      CardData__DisasterCardsFilePath: /app/TestData/Input/disaster-cards.json
     volumes:
-      - ../../TestData:/app/TestData
+      - ./TestData:/app/TestData
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
       interval: 5s

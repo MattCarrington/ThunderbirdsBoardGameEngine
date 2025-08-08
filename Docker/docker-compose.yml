@@ -1,6 +1,5 @@
 services:
   thunderbirdsboardgameengine.gamedata.api:
-    image: ${DOCKER_REGISTRY-}thunderbirdsboardgameenginegamedataapi
     build:
       context: .
       dockerfile: ThunderbirdsBoardGameEngine.GameData.Api/Dockerfile
