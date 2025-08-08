@@ -95,18 +95,22 @@ jobs:
 
       - name: Run API Docker Container
         run: |
-          docker run -d -p 8080:8080 --name thunderbirds-api-test thunderbirds-api
-
-          # Wait until health check passes
-          echo "Waiting for API to become healthy..."
-          for i in {1..30}; do
-              if curl -fs http://localhost:8080/health/ready > /dev/null; then
-              echo "API is healthy!"
-              break
-              fi
-              echo "API not ready yet... retrying ($i/30)"
-              sleep 1
+          docker run -d \
+            -e ASPNETCORE_ENVIRONMENT=Docker \
+            -e ASPNETCORE_URLS=http://+:8080 \
+            -p 8080:8080 \
+            --name thunderbirds-api-test \
+            thunderbirds-api
+      
+      - name: Wait for API readiness
+        run: |
+          set -euo pipefail
+          for i in {1..60}; do
+            if curl -fsS http://localhost:8080/health; then exit 0; fi
+            echo "API not ready yet... ($i/60)"; sleep 2
           done
+          docker logs thunderbirds-api-test || true
+          exit 1
 
       - name: Run Integration Tests
         run: |
