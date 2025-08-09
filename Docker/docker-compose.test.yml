@@ -5,6 +5,6 @@
       Cors__AllowedOrigins: http://localhost:3000
       CardData__DisasterCardsFilePath: /app/TestData/Input/disaster-cards.json
     volumes:
-      - ./TestData:/app/TestData
+      - ../TestData:/app/TestData
     ports:
       - "8080:8080"   # publish so the host (runner) can call localhost:8080

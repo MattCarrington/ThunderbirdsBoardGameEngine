@@ -2,7 +2,7 @@ services:
   api:
     container_name: thunderbirds-api
     build:
-      context: .
+      context: ..
       dockerfile: ThunderbirdsBoardGameEngine.GameData.Api/Dockerfile
     environment:
       ASPNETCORE_URLS: http://+:8080
