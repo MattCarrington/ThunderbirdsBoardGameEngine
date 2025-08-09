@@ -99,7 +99,7 @@ jobs:
           unset COMPOSE_FILE
           docker compose \
             -f Docker/docker-compose.yml \
-            -f Docker/docker-compose.test.yml \
+            -f Docker/api/docker-compose.test.yml \
             up -d --build
       
       - name: Wait for readiness
