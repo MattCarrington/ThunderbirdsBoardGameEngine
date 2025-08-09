@@ -1,9 +1,9 @@
 services:
-  thunderbirdsboardgameengine.gamedata.api:
+  api:
     environment:
       ASPNETCORE_ENVIRONMENT: Development
       Cors__AllowedOrigins: http://localhost:3000
     ports:
-      - "8000:80"
+      - "8000:8080"
     volumes:
       - ./TestData:/app/TestData

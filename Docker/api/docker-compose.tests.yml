@@ -1,15 +1,10 @@
-﻿version: "3.9"
-
-services:
-  thunderbirdsboardgameengine.gamedata.api:
+﻿services:
+  api:
     environment:
       ASPNETCORE_ENVIRONMENT: Docker
       Cors__AllowedOrigins: http://localhost:3000
       CardData__DisasterCardsFilePath: /app/TestData/Input/disaster-cards.json
     volumes:
       - ./TestData:/app/TestData
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
-      interval: 5s
-      timeout: 3s
-      retries: 10
+    ports:
+      - "8080:8080"   # publish so the host (runner) can call localhost:8080
