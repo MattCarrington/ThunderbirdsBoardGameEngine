@@ -16,10 +16,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ThunderbirdsBoardGameEngine.Serialization\ThunderbirdsBoardGameEngine.Serialization.csproj" />
+	<ProjectReference Include="..\ThunderbirdsBoardGameEngine.GameData.Domain\ThunderbirdsBoardGameEngine.GameData.Domain.csproj" />
+	<ProjectReference Include="..\ThunderbirdsBoardGameEngine.Serialization\ThunderbirdsBoardGameEngine.Serialization.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
+	<ItemGroup>
     <Content Include="Resources\DisasterCards.xlsx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
