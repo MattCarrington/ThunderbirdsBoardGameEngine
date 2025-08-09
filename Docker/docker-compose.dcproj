@@ -14,9 +14,7 @@
     <None Include="api\docker-compose.override.yml">
       <DependentUpon>docker-compose.yml</DependentUpon>
     </None>
-    <None Include="api\docker-compose.tests.yml">
-      <DependentUpon>docker-compose.yml</DependentUpon>
-    </None>
+    <None Include="api\docker-compose.test.yml" />
     <None Include="docker-compose.yml" />
   </ItemGroup>
 </Project>
