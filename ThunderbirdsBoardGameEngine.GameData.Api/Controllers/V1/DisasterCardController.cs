@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ThunderbirdsBoardGameEngine.GameData.Api.Interfaces.V1;
+using ThunderbirdsBoardGameEngine.GameData.Api.Mappers.V1;
 
 namespace ThunderbirdsBoardGameEngine.GameData.Api.Controllers.V1
 {
@@ -20,7 +21,7 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.Controllers.V1
         {
             var disasterCards = await _service.GetAllAsync();
 
-            return Ok(disasterCards);
+            return Ok(disasterCards.ToDto());
 
         }
 
@@ -34,7 +35,7 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.Controllers.V1
                 return NotFound($"Disaster card with ID {id} not found.");
             }
 
-            return Ok(disasterCard);
+            return Ok(disasterCard.ToDto());
         }
     }
 }

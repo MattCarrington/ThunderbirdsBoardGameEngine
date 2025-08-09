@@ -1,7 +1,6 @@
 ﻿using ThunderbirdsBoardGameEngine.GameData.Api.Interfaces;
 using ThunderbirdsBoardGameEngine.GameData.Api.Interfaces.V1;
-using ThunderbirdsBoardGameEngine.GameData.Api.Mappers.V1;
-using ThunderbirdsBoardGameEngine.GameData.Api.Messages.Dtos.V1;
+using ThunderbirdsBoardGameEngine.GameData.Domain.Entities;
 
 namespace ThunderbirdsBoardGameEngine.GameData.Api.Services.V1
 {
@@ -14,7 +13,7 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.Services.V1
             _disasterCardRepository = disasterCardRepository;
         }
 
-        public async Task<IReadOnlyList<DisasterCardDto>> GetAllAsync()
+        public async Task<IReadOnlyList<DisasterCard>> GetAllAsync()
         {
             var cards = await _disasterCardRepository.GetAllAsync();
 
@@ -23,10 +22,10 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.Services.V1
                 return [];
             }
 
-            return cards.ToDto();
+            return cards;
         }
 
-        public async Task<DisasterCardDto> GetByIdAsync(int id)
+        public async Task<DisasterCard> GetByIdAsync(int id)
         {
             var card = await _disasterCardRepository.GetByIdAsync(id);
 
@@ -35,7 +34,7 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.Services.V1
                 return null;
             }
 
-            return card.ToDto();
+            return card;
         }
     }
 }

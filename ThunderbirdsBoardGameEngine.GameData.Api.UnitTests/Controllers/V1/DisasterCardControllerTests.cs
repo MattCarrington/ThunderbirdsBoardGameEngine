@@ -1,9 +1,11 @@
 ﻿using AutoFixture;
+using AutoFixture.Kernel;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
 using ThunderbirdsBoardGameEngine.GameData.Api.Controllers.V1;
 using ThunderbirdsBoardGameEngine.GameData.Api.Interfaces.V1;
 using ThunderbirdsBoardGameEngine.GameData.Api.Messages.Dtos.V1;
+using ThunderbirdsBoardGameEngine.GameData.Domain.Entities;
 using Xunit;
 
 namespace ThunderbirdsBoardGameEngine.GameData.Api.UnitTests.Controllers.V1
@@ -17,15 +19,16 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.UnitTests.Controllers.V1
         public DisasterCardControllerTests()
         {
             _controller = new DisasterCardController(_service);
+            _fixture.Customizations.Add(new TypeRelay(typeof(BonusCondition), typeof(CharacterBonusCondition)));
         }
 
         [Fact]
         public async Task Get_WhenDisasterCardsExist_ReturnsOk()
         {
             // Arrange
-            var disasterCardsDtos = _fixture.CreateMany<DisasterCardDto>(5).ToList();
+            var disasterCards = _fixture.CreateMany<DisasterCard>(5).ToList();
 
-            _service.GetAllAsync().Returns(disasterCardsDtos);
+            _service.GetAllAsync().Returns(disasterCards);
 
             // Act
             var result = await _controller.Get();
@@ -42,18 +45,18 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.UnitTests.Controllers.V1
         public async Task GetById_WhenCardExists_ReturnsOk()
         {
             // Arrange
-            var disasterCardDto = _fixture.Create<DisasterCardDto>();
+            var disasterCard = _fixture.Create<DisasterCard>();
 
-            _service.GetByIdAsync(disasterCardDto.Id).Returns(disasterCardDto);
+            _service.GetByIdAsync(disasterCard.Id).Returns(disasterCard);
 
             // Act
-            var result = await _controller.GetById(disasterCardDto.Id);
+            var result = await _controller.GetById(disasterCard.Id);
 
             // Assert
             var okResult = Assert.IsType<OkObjectResult>(result);
             var returnedCard = Assert.IsType<DisasterCardDto>(okResult.Value);
-            Assert.Equal(disasterCardDto.Id, returnedCard.Id);
-            await _service.Received(1).GetByIdAsync(disasterCardDto.Id);
+            Assert.Equal(disasterCard.Id, returnedCard.Id);
+            await _service.Received(1).GetByIdAsync(disasterCard.Id);
         }
 
         [Fact]
@@ -62,7 +65,7 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.UnitTests.Controllers.V1
             // Arrange
             var nonExistentId = 999;
 
-            _service.GetByIdAsync(nonExistentId).Returns((DisasterCardDto)null);
+            _service.GetByIdAsync(nonExistentId).Returns((DisasterCard)null);
 
             // Act
             var result = await _controller.GetById(nonExistentId);

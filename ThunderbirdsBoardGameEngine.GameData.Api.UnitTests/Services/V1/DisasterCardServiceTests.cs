@@ -22,22 +22,11 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.UnitTests.Services.V1
         }
 
         [Fact]
-        public async Task GetDisasterCards_WhenDisasterCardsExist_ReturnsDisasterCardDtosAsync()
+        public async Task GetDisasterCards_WhenDisasterCardsExist_ReturnsDisasterCardAsync()
         {
             // Arrange
             var disasterCards = _fixture.CreateMany<DisasterCard>(5).ToList();
             
-            var expectedDtos = disasterCards.Select(c => new DisasterCardDto
-            {
-                Id = c.Id,
-                Name = c.Name,
-                DifficultyNumber = c.DifficultyNumber,
-                Location = c.Location.ToString(),
-                RescueType = c.RescueType.ToString(),
-                BonusConditions = [],
-                Rewards = []
-            }).ToList();
-
             _repository.GetAllAsync().Returns(disasterCards);
 
             // Act
@@ -45,8 +34,8 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.UnitTests.Services.V1
 
             // Assert
             Assert.NotNull(result);
-            Assert.Equal(expectedDtos.Count, result.Count);
-            Assert.All(result, dto => Assert.IsType<DisasterCardDto>(dto));
+            Assert.Equal(disasterCards.Count, result.Count);
+            Assert.All(result, disasterCard => Assert.IsType<DisasterCard>(disasterCard));
 
             await _repository.Received(1).GetAllAsync();            
         }
@@ -84,30 +73,19 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.UnitTests.Services.V1
         }
 
         [Fact]
-        public async Task GetByIdAsync_WhenCardExists_ReturnsDisasterCardDto()
+        public async Task GetByIdAsync_WhenCardExists_ReturnsDisasterCard()
         {
             // Arrange
             var disasterCard = _fixture.Create<DisasterCard>();
 
-            var expectedDto = new DisasterCardDto
-            {
-                Id = disasterCard.Id,
-                Name = disasterCard.Name,
-                DifficultyNumber = disasterCard.DifficultyNumber,
-                Location = disasterCard.Location.ToString(),
-                RescueType = disasterCard.RescueType.ToString(),
-                BonusConditions = [],
-                Rewards = []
-            };
-
             _repository.GetByIdAsync(disasterCard.Id).Returns(disasterCard);
 
             // Act
-            DisasterCardDto result = await _service.GetByIdAsync(disasterCard.Id);
+            var result = await _service.GetByIdAsync(disasterCard.Id);
 
             // Assert
             Assert.NotNull(result);
-            Assert.IsType<DisasterCardDto>(result);
+            Assert.IsType<DisasterCard>(result);
 
             await _repository.Received(1).GetByIdAsync(disasterCard.Id);
         }
