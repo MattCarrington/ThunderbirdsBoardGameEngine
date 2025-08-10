@@ -13,7 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ThunderbirdsBoardGameEngine.GameData.Api.Messages\ThunderbirdsBoardGameEngine.GameData.Api.Messages.csproj" />
+    <ProjectReference Include="..\ThunderbirdsBoardGameEngine.GameData.Api.Contracts\ThunderbirdsBoardGameEngine.GameData.Api.Contracts.csproj" />
   </ItemGroup>
 
 </Project>

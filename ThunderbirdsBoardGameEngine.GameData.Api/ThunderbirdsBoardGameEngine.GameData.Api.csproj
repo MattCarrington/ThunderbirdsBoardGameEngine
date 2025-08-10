@@ -19,7 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ThunderbirdsBoardGameEngine.GameData.Api.Messages\ThunderbirdsBoardGameEngine.GameData.Api.Messages.csproj" />
+    <ProjectReference Include="..\ThunderbirdsBoardGameEngine.GameData.Api.Contracts\ThunderbirdsBoardGameEngine.GameData.Api.Contracts.csproj" />
     <ProjectReference Include="..\ThunderbirdsBoardGameEngine.GameData.Application\ThunderbirdsBoardGameEngine.GameData.Application.csproj" />
     <ProjectReference Include="..\ThunderbirdsBoardGameEngine.GameData.Domain\ThunderbirdsBoardGameEngine.GameData.Domain.csproj" />
     <ProjectReference Include="..\ThunderbirdsBoardGameEngine.GameData.Infrastructure\ThunderbirdsBoardGameEngine.GameData.Infrastructure.csproj" />

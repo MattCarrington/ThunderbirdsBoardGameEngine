@@ -3,7 +3,7 @@ using ThunderbirdsBoardGameEngine.GameData.Api.Client.Exceptions;
 using ThunderbirdsBoardGameEngine.GameData.Api.Client.Interfaces.V1;
 using ThunderbirdsBoardGameEngine.GameData.Api.Client.Internal.Routing;
 using ThunderbirdsBoardGameEngine.GameData.Api.Client.Internal.Serialization;
-using ThunderbirdsBoardGameEngine.GameData.Api.Messages.Dtos.V1;
+using ThunderbirdsBoardGameEngine.GameData.Api.Contracts.Dtos.V1;
 
 namespace ThunderbirdsBoardGameEngine.GameData.Api.Client.Clients.V1
 {

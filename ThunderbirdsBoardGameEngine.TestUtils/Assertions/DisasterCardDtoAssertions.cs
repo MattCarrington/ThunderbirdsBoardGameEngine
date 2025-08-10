@@ -1,4 +1,4 @@
-﻿using ThunderbirdsBoardGameEngine.GameData.Api.Messages.Dtos.V1;
+﻿using ThunderbirdsBoardGameEngine.GameData.Api.Contracts.Dtos.V1;
 using Xunit;
 
 namespace ThunderbirdsBoardGameEngine.TestUtils.Assertions

@@ -5,8 +5,9 @@ using ThunderbirdsBoardGameEngine.GameData.Domain.Exceptions;
 using ThunderbirdsBoardGameEngine.GameData.Infrastructure.Configuration;
 using ThunderbirdsBoardGameEngine.GameData.Infrastructure.Repositories;
 using ThunderbirdsBoardGameEngine.TestUtils.Helpers;
+using Xunit;
 
-namespace ThunderbirdsBoardGameEngine.GameData.Api.DataAccess.IntegrationTests.Repositories
+namespace ThunderbirdsBoardGameEngine.GameData.Infrastructure.IntegrationTests.Repositories
 {
     public class DisasterCardRepositoryTests
     {
