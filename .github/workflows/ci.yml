@@ -5,6 +5,9 @@ on:
     branches: ["**"]
   pull_request:
 
+env:
+  SOLUTION_FILE: ThunderbirdsBoardGameEngine.sln
+
 jobs:
   build:
     name: Build .NET Solution
@@ -19,8 +22,8 @@ jobs:
 
       - name: Restore & Build
         run: |
-          dotnet restore ThunderbirdsBoardGameEngine.sln
-          dotnet build ThunderbirdsBoardGameEngine.sln --configuration Release --no-restore
+          dotnet restore $SOLUTION_FILE
+          dotnet build $SOLUTION_FILE --configuration Release --no-restore
 
   docker-build:
     name: Build Docker Image
@@ -58,7 +61,7 @@ jobs:
         run: |
           set -e
           echo "🚀 Running all Unit Tests..."
-          dotnet test \
+          dotnet test $SOLUTION_FILE \
             --configuration Release \
             --logger:"trx" \
             --results-directory ./TestResults \
@@ -117,7 +120,7 @@ jobs:
         run: |
           set -e
           echo "🚀 Running all Integration Tests..."
-          dotnet test \
+          dotnet test $SOLUTION_FILE \
             --configuration Release \
             --logger:"trx" \
             --results-directory ./TestResults/Integration \
