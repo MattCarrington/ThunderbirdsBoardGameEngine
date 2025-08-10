@@ -15,7 +15,7 @@ WORKDIR /src
 COPY ["ThunderbirdsBoardGameEngine.GameData.Api/ThunderbirdsBoardGameEngine.GameData.Api.csproj", "ThunderbirdsBoardGameEngine.GameData.Api/"]
 COPY ["ThunderbirdsBoardGameEngine.GameData.Application/ThunderbirdsBoardGameEngine.GameData.Application.csproj", "ThunderbirdsBoardGameEngine.GameData.Application/"]
 COPY ["ThunderbirdsBoardGameEngine.GameData.Infrastructure/ThunderbirdsBoardGameEngine.GameData.Infrastructure.csproj", "ThunderbirdsBoardGameEngine.GameData.Infrastructure/"]
-COPY ["ThunderbirdsBoardGameEngine.GameData.Api.Messages/ThunderbirdsBoardGameEngine.GameData.Api.Contracts.csproj", "ThunderbirdsBoardGameEngine.GameData.Api.Messages/"]
+COPY ["ThunderbirdsBoardGameEngine.GameData.Api.Contracts/ThunderbirdsBoardGameEngine.GameData.Api.Contracts.csproj", "ThunderbirdsBoardGameEngine.GameData.Api.Contracts/"]
 COPY ["ThunderbirdsBoardGameEngine.GameData.Domain/ThunderbirdsBoardGameEngine.GameData.Domain.csproj", "ThunderbirdsBoardGameEngine.GameData.Domain/"]
 COPY ["ThunderbirdsBoardGameEngine.Serialization/ThunderbirdsBoardGameEngine.Serialization.csproj", "ThunderbirdsBoardGameEngine.Serialization/"]
 RUN dotnet restore "./ThunderbirdsBoardGameEngine.GameData.Api/ThunderbirdsBoardGameEngine.GameData.Api.csproj"
