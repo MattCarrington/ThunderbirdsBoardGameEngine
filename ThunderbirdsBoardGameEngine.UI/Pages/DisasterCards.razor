@@ -5,23 +5,29 @@
 
 <h3>Select a Disaster Card</h3>
 
-@if (cards == null)
+@if (cards is null)
 {
     <p>Loading cards...</p>
 }
+else if (cards.Count == 0)
+{
+    <p>No disaster cards available.</p>
+}
 else
 {
-    <select class="form-select" @onchange="OnCardSelected">
+    <label for="disasterSelect" class="form-label">Card</label>
+    <select id="disasterSelect"
+            class="form-select"
+            @bind-Value="SelectedCardId"
+            @bind-Value:event="onchange">
         <option value="">-- Select a card --</option>
         @foreach (var c in cards)
         {
-            <option value="@c.Id" selected="@(selectedCard?.Id == c.Id)">
-                @c.Name
-            </option>
+            <option value="@c.Id">@c.Name</option>  @* users see title; value is ID *@
         }
     </select>
 
-    @if (selectedCard != null)
+    @if (selectedCard is not null)
     {
         <div class="mt-4">
             <h3>Disaster Card Details</h3>
@@ -59,23 +65,31 @@ else
 
 @code {
     private IReadOnlyList<DisasterCardDto>? cards;
+    private IReadOnlyDictionary<int, DisasterCardDto>? cardsDictionary;
+
+    private int? selectedCardId;
     private DisasterCardDto? selectedCard;
 
     protected override async Task OnInitializedAsync()
     {
-        // Load once
+        // Load once (disaster cards only)
         cards = await DisasterCardService.GetAllAsync();
+
+        // Build an ID -> DTO index (handles duplicates by keeping the first)
+        var dict = new Dictionary<int, DisasterCardDto>(cards.Count);
+        foreach (var c in cards)
+            dict.TryAdd(c.Id, c);
+
+        cardsDictionary = dict;
     }
 
-    private void OnCardSelected(ChangeEventArgs e)
+    private int? SelectedCardId
     {
-        if (int.TryParse(e.Value?.ToString(), out var cardId))
+        get => selectedCardId;
+        set
         {
-            selectedCard = cards?.FirstOrDefault(c => c.Id == cardId);
-        }
-        else
-        {
-            selectedCard = null;
+            selectedCardId = value;
+            selectedCard = (value is int id && cardsDictionary?.TryGetValue(id, out var c) == true) ? c : null;
         }
     }
 }
