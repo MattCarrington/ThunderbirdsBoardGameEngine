@@ -3,8 +3,8 @@ using AutoFixture.Kernel;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
 using ThunderbirdsBoardGameEngine.GameData.Api.Controllers.V1;
-using ThunderbirdsBoardGameEngine.GameData.Api.Interfaces.V1;
 using ThunderbirdsBoardGameEngine.GameData.Api.Messages.Dtos.V1;
+using ThunderbirdsBoardGameEngine.GameData.Application.Interfaces;
 using ThunderbirdsBoardGameEngine.GameData.Domain.Entities;
 using Xunit;
 

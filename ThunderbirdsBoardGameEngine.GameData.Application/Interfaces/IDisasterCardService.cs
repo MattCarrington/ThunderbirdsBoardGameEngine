@@ -1,10 +1,11 @@
 ﻿using ThunderbirdsBoardGameEngine.GameData.Domain.Entities;
 
-namespace ThunderbirdsBoardGameEngine.GameData.Api.Interfaces
+namespace ThunderbirdsBoardGameEngine.GameData.Application.Interfaces
 {
-    public interface IDisasterCardRepository
+    public interface IDisasterCardService
     {
         Task<IReadOnlyList<DisasterCard>> GetAllAsync();
+
         Task<DisasterCard> GetByIdAsync(int id);
     }
 }

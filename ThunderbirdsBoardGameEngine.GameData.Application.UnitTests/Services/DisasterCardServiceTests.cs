@@ -1,13 +1,12 @@
 ﻿using AutoFixture;
 using AutoFixture.Kernel;
 using NSubstitute;
-using ThunderbirdsBoardGameEngine.GameData.Api.Interfaces;
-using ThunderbirdsBoardGameEngine.GameData.Api.Messages.Dtos.V1;
-using ThunderbirdsBoardGameEngine.GameData.Api.Services.V1;
+using ThunderbirdsBoardGameEngine.GameData.Application.Interfaces;
+using ThunderbirdsBoardGameEngine.GameData.Application.Services;
 using ThunderbirdsBoardGameEngine.GameData.Domain.Entities;
 using Xunit;
 
-namespace ThunderbirdsBoardGameEngine.GameData.Api.UnitTests.Services.V1
+namespace ThunderbirdsBoardGameEngine.GameData.Application.UnitTests.Services
 {
     public class DisasterCardServiceTests
     {

@@ -3,10 +3,11 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using ThunderbirdsBoardGameEngine.GameData.Domain.Entities;
 using ThunderbirdsBoardGameEngine.GameData.Domain.Validators;
-using ThunderbirdsBoardGameEngine.GameData.Api.Interfaces;
 using ThunderbirdsBoardGameEngine.Serialization.Converters;
+using ThunderbirdsBoardGameEngine.GameData.Application.Interfaces;
+using ThunderbirdsBoardGameEngine.GameData.Infrastructure.Configuration;
 
-namespace ThunderbirdsBoardGameEngine.GameData.Api.Repositories
+namespace ThunderbirdsBoardGameEngine.GameData.Infrastructure.Repositories
 {
     public class DisasterCardRepository : IDisasterCardRepository
     {

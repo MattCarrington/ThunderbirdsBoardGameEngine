@@ -1,8 +1,7 @@
-﻿using ThunderbirdsBoardGameEngine.GameData.Api.Interfaces;
-using ThunderbirdsBoardGameEngine.GameData.Api.Interfaces.V1;
+﻿using ThunderbirdsBoardGameEngine.GameData.Application.Interfaces;
 using ThunderbirdsBoardGameEngine.GameData.Domain.Entities;
 
-namespace ThunderbirdsBoardGameEngine.GameData.Api.Services.V1
+namespace ThunderbirdsBoardGameEngine.GameData.Application.Services
 {
     public class DisasterCardService : IDisasterCardService
     {

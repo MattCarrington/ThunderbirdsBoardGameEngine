@@ -20,18 +20,9 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ThunderbirdsBoardGameEngine.GameData.Api.Messages\ThunderbirdsBoardGameEngine.GameData.Api.Messages.csproj" />
+    <ProjectReference Include="..\ThunderbirdsBoardGameEngine.GameData.Application\ThunderbirdsBoardGameEngine.GameData.Application.csproj" />
     <ProjectReference Include="..\ThunderbirdsBoardGameEngine.GameData.Domain\ThunderbirdsBoardGameEngine.GameData.Domain.csproj" />
-    <ProjectReference Include="..\ThunderbirdsBoardGameEngine.Serialization\ThunderbirdsBoardGameEngine.Serialization.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Data\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Update="Data\DisasterCards.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    <ProjectReference Include="..\ThunderbirdsBoardGameEngine.GameData.Infrastructure\ThunderbirdsBoardGameEngine.GameData.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

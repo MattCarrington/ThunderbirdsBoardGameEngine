@@ -2,11 +2,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.OpenApi.Models;
 using ThunderbirdsBoardGameEngine.GameData.Api.Healthcheck;
-using ThunderbirdsBoardGameEngine.GameData.Api.Interfaces;
-using ThunderbirdsBoardGameEngine.GameData.Api.Interfaces.V1;
-using ThunderbirdsBoardGameEngine.GameData.Api.Repositories;
-using ThunderbirdsBoardGameEngine.GameData.Api.Services.V1;
 using ThunderbirdsBoardGameEngine.GameData.Api.Swagger;
+using ThunderbirdsBoardGameEngine.GameData.Application;
+using ThunderbirdsBoardGameEngine.GameData.Infrastructure;
+using ThunderbirdsBoardGameEngine.GameData.Infrastructure.Configuration;
 
 namespace ThunderbirdsBoardGameEngine.GameData.Api
 {
@@ -41,8 +40,8 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api
             builder.Services.AddHealthChecks()
                 .AddCheck<JsonDataHealthCheck>("json-data-check");
 
-            builder.Services.AddScoped<IDisasterCardRepository, DisasterCardRepository>();
-            builder.Services.AddScoped<IDisasterCardService, DisasterCardService>();
+            builder.Services.AddApplication();
+            builder.Services.AddInfrastructure(builder.Configuration);
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();

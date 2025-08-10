@@ -56,6 +56,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThunderbirdsBoardGameEngine
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThunderbirdsBoardGameEngine.UI.UnitTests", "ThunderbirdsBoardGameEngine.UI.UnitTests\ThunderbirdsBoardGameEngine.UI.UnitTests.csproj", "{77BBC935-7543-4ABC-9F2A-4F720812DC93}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThunderbirdsBoardGameEngine.GameData.Infrastructure", "ThunderbirdsBoardGameEngine.GameData.Infrastructure\ThunderbirdsBoardGameEngine.GameData.Infrastructure.csproj", "{B5DB5E6B-81AD-4653-9278-5F93F5CD4D9D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThunderbirdsBoardGameEngine.GameData.Application", "ThunderbirdsBoardGameEngine.GameData.Application\ThunderbirdsBoardGameEngine.GameData.Application.csproj", "{CA6603E7-B5B9-438B-B98D-AF662D3FAAD3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThunderbirdsBoardGameEngine.GameData.Application.UnitTests", "ThunderbirdsBoardGameEngine.GameData.Application.UnitTests\ThunderbirdsBoardGameEngine.GameData.Application.UnitTests.csproj", "{6FDFFD67-CCB2-4AE8-822E-5513EB92BF2F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -126,6 +132,18 @@ Global
 		{77BBC935-7543-4ABC-9F2A-4F720812DC93}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{77BBC935-7543-4ABC-9F2A-4F720812DC93}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{77BBC935-7543-4ABC-9F2A-4F720812DC93}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B5DB5E6B-81AD-4653-9278-5F93F5CD4D9D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B5DB5E6B-81AD-4653-9278-5F93F5CD4D9D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B5DB5E6B-81AD-4653-9278-5F93F5CD4D9D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B5DB5E6B-81AD-4653-9278-5F93F5CD4D9D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CA6603E7-B5B9-438B-B98D-AF662D3FAAD3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CA6603E7-B5B9-438B-B98D-AF662D3FAAD3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CA6603E7-B5B9-438B-B98D-AF662D3FAAD3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CA6603E7-B5B9-438B-B98D-AF662D3FAAD3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6FDFFD67-CCB2-4AE8-822E-5513EB92BF2F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6FDFFD67-CCB2-4AE8-822E-5513EB92BF2F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6FDFFD67-CCB2-4AE8-822E-5513EB92BF2F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6FDFFD67-CCB2-4AE8-822E-5513EB92BF2F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -145,6 +163,7 @@ Global
 		{07AD74EA-634C-4AF0-87A3-93076D26D76A} = {A22F695E-1370-454C-B2B6-C3320CFAB8DD}
 		{988FBB56-C254-478D-9B67-787216FCE66F} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 		{77BBC935-7543-4ABC-9F2A-4F720812DC93} = {D8475FB6-8FFD-4252-BF79-1BC0AF31A524}
+		{6FDFFD67-CCB2-4AE8-822E-5513EB92BF2F} = {D8475FB6-8FFD-4252-BF79-1BC0AF31A524}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {92EB50C5-075F-4AF3-8107-0DC9EDBBAB83}

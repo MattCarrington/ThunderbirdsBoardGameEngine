@@ -1,4 +1,4 @@
-﻿namespace ThunderbirdsBoardGameEngine.GameData.Api
+﻿namespace ThunderbirdsBoardGameEngine.GameData.Infrastructure.Configuration
 {
     public class CardDataOptions
     {
