@@ -3,7 +3,7 @@ using NSubstitute;
 using System.Net;
 using ThunderbirdsBoardGameEngine.GameData.Api.Client;
 using ThunderbirdsBoardGameEngine.GameData.Api.Client.Interfaces.V1;
-using ThunderbirdsBoardGameEngine.GameData.Api.Messages.Dtos.V1;
+using ThunderbirdsBoardGameEngine.GameData.Api.Contracts.Dtos.V1;
 using ThunderbirdsBoardGameEngine.TestUtils.Assertions;
 using ThunderbirdsBoardGameEngine.UI.Services;
 using Xunit;
