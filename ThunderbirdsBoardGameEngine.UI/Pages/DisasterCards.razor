@@ -73,7 +73,9 @@ else
     protected override async Task OnInitializedAsync()
     {
         // Load once (disaster cards only)
-        cards = await DisasterCardService.GetAllAsync();
+        var all = await DisasterCardService.GetAllAsync();
+
+        cards = all.OrderBy(c => c.Name ?? string.Empty, StringComparer.OrdinalIgnoreCase).ToList();
 
         // Build an ID -> DTO index (handles duplicates by keeping the first)
         var dict = new Dictionary<int, DisasterCardDto>(cards.Count);
