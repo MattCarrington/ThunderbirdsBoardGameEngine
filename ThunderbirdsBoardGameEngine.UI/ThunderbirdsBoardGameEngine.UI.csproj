@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
+﻿<Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
@@ -13,7 +13,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ThunderbirdsBoardGameEngine.GameData.Api.Client\ThunderbirdsBoardGameEngine.GameData.Api.Client.csproj" />
-    <ProjectReference Include="..\ThunderbirdsBoardGameEngine.GameData.Api.Contracts\ThunderbirdsBoardGameEngine.GameData.Api.Contracts.csproj" />
   </ItemGroup>
 
 </Project>
