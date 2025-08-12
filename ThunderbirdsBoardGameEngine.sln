@@ -62,6 +62,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThunderbirdsBoardGameEngine
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThunderbirdsBoardGameEngine.GameData.Infrastructure.IntegrationTests", "ThunderbirdsBoardGameEngine.GameData.Infrastructure.IntegrationTests\ThunderbirdsBoardGameEngine.GameData.Infrastructure.IntegrationTests.csproj", "{9764188D-7AE5-4A80-93BD-2CC0B36505F5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThunderbirdsBoardGameEngine.GameData.Api.WireMock", "ThunderbirdsBoardGameEngine.GameData.Api.WireMock\ThunderbirdsBoardGameEngine.GameData.Api.WireMock.csproj", "{A75ED89B-5059-4342-9787-58D4F40AA22C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Support", "Support", "{FC7280B4-F6FF-4E00-B8C0-6C5F6FA6219C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -144,6 +148,10 @@ Global
 		{9764188D-7AE5-4A80-93BD-2CC0B36505F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9764188D-7AE5-4A80-93BD-2CC0B36505F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9764188D-7AE5-4A80-93BD-2CC0B36505F5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A75ED89B-5059-4342-9787-58D4F40AA22C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A75ED89B-5059-4342-9787-58D4F40AA22C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A75ED89B-5059-4342-9787-58D4F40AA22C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A75ED89B-5059-4342-9787-58D4F40AA22C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -164,6 +172,7 @@ Global
 		{77BBC935-7543-4ABC-9F2A-4F720812DC93} = {D8475FB6-8FFD-4252-BF79-1BC0AF31A524}
 		{6FDFFD67-CCB2-4AE8-822E-5513EB92BF2F} = {D8475FB6-8FFD-4252-BF79-1BC0AF31A524}
 		{9764188D-7AE5-4A80-93BD-2CC0B36505F5} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{A75ED89B-5059-4342-9787-58D4F40AA22C} = {FC7280B4-F6FF-4E00-B8C0-6C5F6FA6219C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {92EB50C5-075F-4AF3-8107-0DC9EDBBAB83}
