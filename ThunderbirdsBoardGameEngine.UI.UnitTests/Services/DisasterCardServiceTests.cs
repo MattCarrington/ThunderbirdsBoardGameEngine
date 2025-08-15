@@ -29,7 +29,7 @@ namespace ThunderbirdsBoardGameEngine.UI.UnitTests.Services
 
             // Assert
             Assert.NotNull(result);
-            DisasterCardDtoAssertions.AssertDisasterCardDtosEqual(disasterCards.ToList(), result.ToList());
+            DisasterCardDtoAssertions.AssertOrderSensitive(disasterCards.ToList(), result.ToList());
         }
 
         [Fact]
@@ -81,7 +81,7 @@ namespace ThunderbirdsBoardGameEngine.UI.UnitTests.Services
 
             // Assert
             Assert.NotNull(result);
-            DisasterCardDtoAssertions.AssertDisasterCardDtoEqual(disasterCard, result);
+            DisasterCardDtoAssertions.AssertEqual(disasterCard, result);
         }
 
         [Fact]
