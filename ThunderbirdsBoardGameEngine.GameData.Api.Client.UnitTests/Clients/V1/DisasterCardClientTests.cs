@@ -88,10 +88,7 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.Client.UnitTests.Clients.V1
             Assert.NotNull(result.Data);
             Assert.Equal(disasterCardDtos.Count, result.Data.Count);
 
-            for (int i = 0; i < disasterCardDtos.Count; i++)
-            {
-                DisasterCardDtoAssertions.AssertDisasterCardDtoEqual(disasterCardDtos[i], result.Data[i]);
-            }
+            DisasterCardDtoAssertions.AssertOrderSensitive(disasterCardDtos, result.Data.ToList());
         }
 
         [Fact]
@@ -232,7 +229,7 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.Client.UnitTests.Clients.V1
             Assert.Null(result.ErrorMessage);
             Assert.NotNull(result.Data);
 
-            DisasterCardDtoAssertions.AssertDisasterCardDtoEqual(disasterCardDto, result.Data);
+            DisasterCardDtoAssertions.AssertEqual(disasterCardDto, result.Data);
         }
 
         [Theory]

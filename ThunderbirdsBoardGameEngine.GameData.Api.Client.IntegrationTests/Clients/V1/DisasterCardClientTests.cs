@@ -36,7 +36,7 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.Client.IntegrationTests.Clien
             var expected = TestDataLoader.LoadJsonFromFile<List<DisasterCardDto>>("disaster-card-dtos.json")
                 ?? throw new InvalidOperationException("Failed to load expected data");
 
-            DisasterCardDtoAssertions.AssertDisasterCardDtosEqual(expected, result.Data.ToList());
+            DisasterCardDtoAssertions.AssertOrderInsensitive(expected, result.Data.ToList());
         }
 
         [Fact]
@@ -59,7 +59,7 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.Client.IntegrationTests.Clien
             var expected = TestDataLoader.LoadJsonFromFile<List<DisasterCardDto>>("disaster-card-dtos.json").FirstOrDefault(x => x.Id == id)
                 ?? throw new InvalidOperationException($"Expected disaster card with ID {id} not found in expected data.");
 
-            DisasterCardDtoAssertions.AssertDisasterCardDtoEqual(expected, result.Data);
+            DisasterCardDtoAssertions.AssertEqual(expected, result.Data);
         }
 
         [Fact]
