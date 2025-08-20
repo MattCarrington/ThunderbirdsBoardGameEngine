@@ -1,54 +1,105 @@
-﻿using System.Net;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
+using System.Net;
 using ThunderbirdsBoardGameEngine.GameData.Api.Contracts.Dtos.V1;
+using WireMock.Matchers;
 using WireMock.RequestBuilders;
 using WireMock.ResponseBuilders;
 using WireMock.Server;
 
 namespace ThunderbirdsBoardGameEngine.GameData.Api.WireMock.Stubs.V1
 {
-    public class DisasterCardStub
+    public sealed class DisasterCardStub
     {
-        private readonly WireMockServer _wireMockServer;
+        public const string Route = "/api/DisasterCard";
+        public const string VersionHeader = "X-Api-Version";
+        public const string VersionValue = "1.0";
+        public const string Json = "application/json; charset=utf-8";
+        public const string Text = "text/plain; charset=utf-8";
 
-        public DisasterCardStub(WireMockServer wireMockServer)
+        private static readonly JsonSerializerSettings JsonSettings = new()
         {
-            _wireMockServer = wireMockServer;
+            ContractResolver = new CamelCasePropertyNamesContractResolver(),
+            NullValueHandling = NullValueHandling.Ignore
+        };
+
+        private readonly WireMockServer _server;
+
+        public DisasterCardStub(WireMockServer server) =>
+            _server = server ?? throw new ArgumentNullException(nameof(server));
+
+        private static string Serialize(object o) => JsonConvert.SerializeObject(o, JsonSettings);
+
+        private static IRequestBuilder BaseGet(string path) => Request.Create()
+            .WithPath(path)
+            .WithHeader(VersionHeader, new ExactMatcher(true, VersionValue)) // ignoreCase = true
+            .UsingGet();
+
+        private static IResponseBuilder JsonResponse(HttpStatusCode code, object body) => Response.Create()
+            .WithStatusCode(code)
+            .WithHeader("Content-Type", Json)
+            .WithBody(Serialize(body));
+
+        // -------- Success --------
+
+        // GET /api/DisasterCard
+        public void RegisterSuccess(IReadOnlyList<DisasterCardDto> dtos) =>
+            _server.Given(BaseGet(Route))
+                   .RespondWith(JsonResponse(HttpStatusCode.OK, dtos));
+
+        // GET /api/DisasterCard/{id}
+        public void RegisterSuccess(int id, DisasterCardDto dto) =>
+            _server.Given(BaseGet($"{Route}/{id}"))
+                   .RespondWith(JsonResponse(HttpStatusCode.OK, dto));
+
+        public void RegisterSuccess(DisasterCardDto dto) => RegisterSuccess(dto.Id, dto);
+
+        // -------- Not Found (matches current API: text/plain) --------
+
+        public void SimulateNotFound(int id) =>
+            _server.Given(Request.Create()
+                        .WithPath($"{Route}/{id}")
+                        .WithHeader(VersionHeader, new ExactMatcher(true, VersionValue))
+                        .UsingGet())
+                   .RespondWith(Response.Create()
+                        .WithStatusCode(HttpStatusCode.NotFound)
+                        .WithHeader("Content-Type", Text)
+                        .WithBody("Disaster card not found."));
+
+        // -------- Other errors (JSON { error }) --------
+
+        public void SimulateOtherErrorForGetAll(HttpStatusCode code, string message) =>
+            _server.Given(BaseGet(Route))
+                   .RespondWith(JsonResponse(code, new { error = message }));
+
+        public void SimulateOtherErrorForGetById(int id, HttpStatusCode code, string message) =>
+            _server.Given(BaseGet($"{Route}/{id}"))
+                   .RespondWith(JsonResponse(code, new { error = message }));
+
+        // -------- Guards (work for GetAll + GetById) --------
+
+        // 400 when header is MISSING
+        public void RegisterMissingHeaderGuard()
+        {
+            var path = new RegexMatcher($@"^{Route}(?:/\d+)?$");
+            _server.Given(Request.Create()
+                        .WithPath(path)
+                        .WithHeader(VersionHeader, new AbsentMatcher())
+                        .UsingGet())
+                   .RespondWith(JsonResponse(HttpStatusCode.BadRequest,
+                        new { error = $"Missing header '{VersionHeader}'." }));
         }
 
-        public void GetAllAsyncSuccess(IReadOnlyList<DisasterCardDto> disasterCardDtos)
+        // 400 when header value is WRONG
+        public void RegisterWrongHeaderGuard()
         {
-            _wireMockServer.Given(Request.Create().WithPath("/api/DisasterCard").WithHeader("X-Api-Version", "1.0").UsingGet())
-                .RespondWith(Response.Create()
-                    .WithStatusCode(HttpStatusCode.OK)
-                    .WithHeader("Content-Type", "application/json")
-                    .WithBodyAsJson(disasterCardDtos));
-        }
-
-        public void GetByIdAsyncSuccess(DisasterCardDto disasterCardDto)
-        {
-            _wireMockServer.Given(Request.Create().WithPath($"/api/DisasterCard/{disasterCardDto.Id}").WithHeader("X-Api-Version", "1.0").UsingGet())
-                .RespondWith(Response.Create()
-                    .WithStatusCode(HttpStatusCode.OK)
-                    .WithHeader("Content-Type", "application/json")
-                    .WithBodyAsJson(disasterCardDto));
-        }
-
-        public void GetAllAsyncError(HttpStatusCode statusCode, string errorMessage)
-        {
-            _wireMockServer.Given(Request.Create().WithPath("/api/DisasterCard").WithHeader("X-Api-Version", "1.0").UsingGet())
-                .RespondWith(Response.Create()
-                    .WithStatusCode(statusCode)
-                    .WithHeader("Content-Type", "application/json")
-                    .WithBodyAsJson(new { Error = errorMessage }));
-        }
-        
-        public void GetByIdAsyncError(int id, HttpStatusCode statusCode, string errorMessage)
-        {
-            _wireMockServer.Given(Request.Create().WithPath($"/api/DisasterCard/{id}").WithHeader("X-Api-Version", "1.0").UsingGet())
-                .RespondWith(Response.Create()
-                    .WithStatusCode(statusCode)
-                    .WithHeader("Content-Type", "application/json")
-                    .WithBodyAsJson(new { Error = errorMessage }));
+            var path = new RegexMatcher($@"^{Route}(?:/\d+)?$");
+            _server.Given(Request.Create()
+                        .WithPath(path)
+                        .WithHeader(VersionHeader, new NotMatcher(new ExactMatcher(true, VersionValue)))
+                        .UsingGet())
+                   .RespondWith(JsonResponse(HttpStatusCode.BadRequest,
+                        new { error = $"Incorrect '{VersionHeader}'. Expected '{VersionValue}'." }));
         }
     }
 }
