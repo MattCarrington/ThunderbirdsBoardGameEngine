@@ -66,6 +66,15 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThunderbirdsBoardGameEngine
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Support", "Support", "{FC7280B4-F6FF-4E00-B8C0-6C5F6FA6219C}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ComponentTests", "ComponentTests", "{987A2C73-51DA-4FCE-AEF0-DFB7C4B23F2E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThunderbirdsBoardGameEngine.GameData.Api.WireMock.ComponentTests", "ThunderbirdsBoardGameEngine.GameData.Api.WireMock.ComponentTests\ThunderbirdsBoardGameEngine.GameData.Api.WireMock.ComponentTests.csproj", "{076B2C79-C4C9-496E-967C-D3900F3F3B66}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "V1", "V1", "{98C81E9B-2BA9-4CA2-A8A7-DD6E30CD3E8E}"
+	ProjectSection(SolutionItems) = preProject
+		TestData\Input\V1\disaster-card-dto-data.json = TestData\Input\V1\disaster-card-dto-data.json
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -152,6 +161,10 @@ Global
 		{A75ED89B-5059-4342-9787-58D4F40AA22C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A75ED89B-5059-4342-9787-58D4F40AA22C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A75ED89B-5059-4342-9787-58D4F40AA22C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{076B2C79-C4C9-496E-967C-D3900F3F3B66}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{076B2C79-C4C9-496E-967C-D3900F3F3B66}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{076B2C79-C4C9-496E-967C-D3900F3F3B66}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{076B2C79-C4C9-496E-967C-D3900F3F3B66}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -173,6 +186,9 @@ Global
 		{6FDFFD67-CCB2-4AE8-822E-5513EB92BF2F} = {D8475FB6-8FFD-4252-BF79-1BC0AF31A524}
 		{9764188D-7AE5-4A80-93BD-2CC0B36505F5} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 		{A75ED89B-5059-4342-9787-58D4F40AA22C} = {FC7280B4-F6FF-4E00-B8C0-6C5F6FA6219C}
+		{987A2C73-51DA-4FCE-AEF0-DFB7C4B23F2E} = {C005E618-80C1-4CCD-9774-336D558E958F}
+		{076B2C79-C4C9-496E-967C-D3900F3F3B66} = {987A2C73-51DA-4FCE-AEF0-DFB7C4B23F2E}
+		{98C81E9B-2BA9-4CA2-A8A7-DD6E30CD3E8E} = {07AD74EA-634C-4AF0-87A3-93076D26D76A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {92EB50C5-075F-4AF3-8107-0DC9EDBBAB83}
