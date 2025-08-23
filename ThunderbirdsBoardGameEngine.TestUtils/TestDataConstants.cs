@@ -1,6 +1,4 @@
-﻿using System.Reflection.Metadata;
-
-namespace ThunderbirdsBoardGameEngine.TestUtils
+﻿namespace ThunderbirdsBoardGameEngine.TestUtils
 {
     public static class TestDataConstants
     {
@@ -10,6 +8,6 @@ namespace ThunderbirdsBoardGameEngine.TestUtils
 
         public const string ExpectedFolder = "Expected";
 
-        public const string V1InputFolder = "Input\\V1";
+        public static readonly string V1InputFolder = Path.Combine(InputFolder, "V1");
     }
 }
