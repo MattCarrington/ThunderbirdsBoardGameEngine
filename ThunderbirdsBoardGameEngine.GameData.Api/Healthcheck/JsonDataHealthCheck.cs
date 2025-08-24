@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Options;
-using ThunderbirdsBoardGameEngine.GameData.Infrastructure.Configuration;
+using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Configuration;
 
 namespace ThunderbirdsBoardGameEngine.GameData.Api.Healthcheck
 {

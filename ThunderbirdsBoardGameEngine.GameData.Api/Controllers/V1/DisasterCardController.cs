@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using ThunderbirdsBoardGameEngine.Catalog.Application.Interfaces;
 using ThunderbirdsBoardGameEngine.GameData.Api.Mappers.V1;
-using ThunderbirdsBoardGameEngine.GameData.Application.Interfaces;
 
 namespace ThunderbirdsBoardGameEngine.GameData.Api.Controllers.V1
 {

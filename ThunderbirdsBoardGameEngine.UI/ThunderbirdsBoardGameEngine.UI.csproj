@@ -12,7 +12,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ThunderbirdsBoardGameEngine.GameData.Api.Client\ThunderbirdsBoardGameEngine.GameData.Api.Client.csproj" />
+    <ProjectReference Include="..\ThunderbirdsBoardGameEngine.Catalog.Client\ThunderbirdsBoardGameEngine.Catalog.Client.csproj" />
+    <ProjectReference Include="..\ThunderbirdsBoardGameEngine.Catalog.Contracts\ThunderbirdsBoardGameEngine.Catalog.Contracts.csproj" />
   </ItemGroup>
 
 </Project>

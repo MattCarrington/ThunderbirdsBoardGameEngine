@@ -9,16 +9,16 @@
   <ItemGroup>
     <PackageReference Include="xunit.assert" Version="2.9.3" />
   </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\ThunderbirdsBoardGameEngine.GameData.Api.Contracts\ThunderbirdsBoardGameEngine.GameData.Api.Contracts.csproj" />
-    <ProjectReference Include="..\ThunderbirdsBoardGameEngine.GameData.Domain\ThunderbirdsBoardGameEngine.GameData.Domain.csproj" />
-  </ItemGroup>
 	
   <ItemGroup>
 	<Content Include="$(SolutionDir)TestData\**\*.*">
 	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	</Content>
+  </ItemGroup>
+	
+  <ItemGroup>
+    <ProjectReference Include="..\ThunderbirdsBoardGameEngine.Catalog.Contracts\ThunderbirdsBoardGameEngine.Catalog.Contracts.csproj" />
+    <ProjectReference Include="..\ThunderbirdsBoardGameEngine.Catalog.Domain\ThunderbirdsBoardGameEngine.Catalog.Domain.csproj" />
   </ItemGroup>
 	
 </Project>

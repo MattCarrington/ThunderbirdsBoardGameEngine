@@ -1,7 +1,7 @@
 ﻿using Bunit;
 using Microsoft.Extensions.DependencyInjection;
 using NSubstitute;
-using ThunderbirdsBoardGameEngine.GameData.Api.Contracts.Dtos.V1;
+using ThunderbirdsBoardGameEngine.Catalog.Contracts.Dtos.V1;
 using ThunderbirdsBoardGameEngine.UI.Interfaces;
 using ThunderbirdsBoardGameEngine.UI.Pages;
 using Xunit;

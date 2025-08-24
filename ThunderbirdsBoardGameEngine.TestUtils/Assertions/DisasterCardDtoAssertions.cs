@@ -1,4 +1,4 @@
-﻿using ThunderbirdsBoardGameEngine.GameData.Api.Contracts.Dtos.V1;
+﻿using ThunderbirdsBoardGameEngine.Catalog.Contracts.Dtos.V1;
 using ThunderbirdsBoardGameEngine.TestUtils.EqualityComparers;
 using Xunit;
 

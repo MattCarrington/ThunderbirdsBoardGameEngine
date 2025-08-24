@@ -1,5 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using ThunderbirdsBoardGameEngine.GameData.Api.Contracts.Dtos.V1;
+using ThunderbirdsBoardGameEngine.Catalog.Contracts.Dtos.V1;
 
 namespace ThunderbirdsBoardGameEngine.TestUtils.EqualityComparers
 {

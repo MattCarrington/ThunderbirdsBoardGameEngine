@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ThunderbirdsBoardGameEngine.GameData.Domain\ThunderbirdsBoardGameEngine.GameData.Domain.csproj" />
+    <ProjectReference Include="..\ThunderbirdsBoardGameEngine.Catalog.Domain\ThunderbirdsBoardGameEngine.Catalog.Domain.csproj" />
   </ItemGroup>
 
 </Project>

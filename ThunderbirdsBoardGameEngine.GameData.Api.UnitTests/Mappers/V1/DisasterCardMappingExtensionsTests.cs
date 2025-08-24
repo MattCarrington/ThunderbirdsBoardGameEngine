@@ -1,8 +1,8 @@
-﻿using ThunderbirdsBoardGameEngine.GameData.Api.Contracts.Dtos.V1;
+﻿using ThunderbirdsBoardGameEngine.Catalog.Contracts.Dtos.V1;
+using ThunderbirdsBoardGameEngine.Catalog.Domain.Entities;
+using ThunderbirdsBoardGameEngine.Catalog.Domain.Enums;
+using ThunderbirdsBoardGameEngine.Catalog.Domain.Exceptions;
 using ThunderbirdsBoardGameEngine.GameData.Api.Mappers.V1;
-using ThunderbirdsBoardGameEngine.GameData.Domain.Entities;
-using ThunderbirdsBoardGameEngine.GameData.Domain.Enums;
-using ThunderbirdsBoardGameEngine.GameData.Domain.Exceptions;
 using ThunderbirdsBoardGameEngine.Serialization.Enums;
 using ThunderbirdsBoardGameEngine.TestUtils.Builders;
 using Xunit;

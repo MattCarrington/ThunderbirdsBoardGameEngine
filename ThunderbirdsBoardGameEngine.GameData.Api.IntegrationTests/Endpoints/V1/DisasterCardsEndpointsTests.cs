@@ -1,6 +1,6 @@
 ﻿using System.Net;
 using System.Text.Json;
-using ThunderbirdsBoardGameEngine.GameData.Api.Contracts.Dtos.V1;
+using ThunderbirdsBoardGameEngine.Catalog.Contracts.Dtos.V1;
 using ThunderbirdsBoardGameEngine.TestUtils.Assertions;
 using ThunderbirdsBoardGameEngine.TestUtils.Helpers;
 using Xunit;

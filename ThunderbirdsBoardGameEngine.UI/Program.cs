@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
-using ThunderbirdsBoardGameEngine.GameData.Api.Client;
+using ThunderbirdsBoardGameEngine.Catalog.Client;
 using ThunderbirdsBoardGameEngine.UI.Interfaces;
 using ThunderbirdsBoardGameEngine.UI.Services;
 

@@ -1,5 +1,5 @@
-﻿using ThunderbirdsBoardGameEngine.GameData.Domain.Entities;
-using ThunderbirdsBoardGameEngine.GameData.Domain.Enums;
+﻿using ThunderbirdsBoardGameEngine.Catalog.Domain.Entities;
+using ThunderbirdsBoardGameEngine.Catalog.Domain.Enums;
 
 namespace ThunderbirdsBoardGameEngine.TestUtils.Builders
 {
