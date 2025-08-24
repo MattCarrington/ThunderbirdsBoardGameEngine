@@ -2,10 +2,10 @@
 using AutoFixture.Kernel;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
+using ThunderbirdsBoardGameEngine.Api.Controllers.V1;
 using ThunderbirdsBoardGameEngine.Catalog.Application.Interfaces;
 using ThunderbirdsBoardGameEngine.Catalog.Contracts.Dtos.V1;
 using ThunderbirdsBoardGameEngine.Catalog.Domain.Entities;
-using ThunderbirdsBoardGameEngine.GameData.Api.Controllers.V1;
 using Xunit;
 
 namespace ThunderbirdsBoardGameEngine.GameData.Api.UnitTests.Controllers.V1

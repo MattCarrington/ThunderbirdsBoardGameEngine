@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Options;
 using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Configuration;
 
-namespace ThunderbirdsBoardGameEngine.GameData.Api.Healthcheck
+namespace ThunderbirdsBoardGameEngine.Api.Healthcheck
 {
     public class JsonDataHealthCheck : IHealthCheck
     {

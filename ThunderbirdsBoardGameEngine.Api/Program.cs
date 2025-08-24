@@ -2,14 +2,14 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.OpenApi.Models;
+using ThunderbirdsBoardGameEngine.Api.Healthcheck;
 using ThunderbirdsBoardGameEngine.Api.Routing;
+using ThunderbirdsBoardGameEngine.Api.Swagger;
 using ThunderbirdsBoardGameEngine.Catalog.Application;
 using ThunderbirdsBoardGameEngine.Catalog.Infrastructure;
 using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Configuration;
-using ThunderbirdsBoardGameEngine.GameData.Api.Healthcheck;
-using ThunderbirdsBoardGameEngine.GameData.Api.Swagger;
 
-namespace ThunderbirdsBoardGameEngine.GameData.Api
+namespace ThunderbirdsBoardGameEngine.Api
 {
     public class Program
     {

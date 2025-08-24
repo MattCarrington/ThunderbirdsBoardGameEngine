@@ -2,7 +2,7 @@
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
-namespace ThunderbirdsBoardGameEngine.GameData.Api.Swagger
+namespace ThunderbirdsBoardGameEngine.Api.Swagger
 {
     public class AddApiVersionHeaderParameter : IOperationFilter
     {

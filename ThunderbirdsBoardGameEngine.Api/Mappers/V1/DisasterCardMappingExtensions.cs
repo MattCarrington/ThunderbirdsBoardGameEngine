@@ -4,7 +4,7 @@ using ThunderbirdsBoardGameEngine.Catalog.Domain.Enums;
 using ThunderbirdsBoardGameEngine.Catalog.Domain.Exceptions;
 using ThunderbirdsBoardGameEngine.Serialization.Enums;
 
-namespace ThunderbirdsBoardGameEngine.GameData.Api.Mappers.V1
+namespace ThunderbirdsBoardGameEngine.Api.Mappers.V1
 {
     public static class DisasterCardMappingExtensions
     {

@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.Configuration;
-using ThunderbirdsBoardGameEngine.GameData.Api;
 using ThunderbirdsBoardGameEngine.TestUtils.Helpers;
 
 namespace ThunderbirdsBoardGameEngine.Api.ComponentTests

@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using ThunderbirdsBoardGameEngine.Api.Mappers.V1;
 using ThunderbirdsBoardGameEngine.Catalog.Application.Interfaces;
-using ThunderbirdsBoardGameEngine.GameData.Api.Mappers.V1;
 
-namespace ThunderbirdsBoardGameEngine.GameData.Api.Controllers.V1
+namespace ThunderbirdsBoardGameEngine.Api.Controllers.V1
 {
     [Route("api/[controller]")]
     [ApiController]
