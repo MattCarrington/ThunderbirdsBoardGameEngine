@@ -9,7 +9,7 @@ using ThunderbirdsBoardGameEngine.Catalog.Domain.Validators;
 
 namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Repositories
 {
-    public class DisasterCardRepository : IDisasterCardRepository
+    internal class DisasterCardRepository : IDisasterCardRepository
     {
         private readonly string _filePath;
         private readonly JsonSerializerOptions _options;
