@@ -9,7 +9,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Client.IntegrationTests.Clients.V1
 {
     public class DisasterCardClientTests : IClassFixture<TestServerFixture>
     {
-        private readonly IDisasterCardClient _client;
+        private readonly IDisasterCardsClient _client;
         
         public DisasterCardClientTests(TestServerFixture testServerFixture)
         {

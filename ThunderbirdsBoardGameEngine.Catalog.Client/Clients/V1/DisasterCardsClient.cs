@@ -7,11 +7,11 @@ using ThunderbirdsBoardGameEngine.Catalog.Contracts.Dtos.V1;
 
 namespace ThunderbirdsBoardGameEngine.Catalog.Client.Clients.V1
 {
-    public class DisasterCardClient : IDisasterCardClient
+    public class DisasterCardsClient : IDisasterCardsClient
     {
         private readonly HttpClient _httpClient;
 
-        public DisasterCardClient(HttpClient httpClient)
+        public DisasterCardsClient(HttpClient httpClient)
         {
             _httpClient = httpClient;
 
@@ -23,13 +23,13 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Client.Clients.V1
 
         public async Task<ApiResult<IReadOnlyList<DisasterCardDto>>> GetAllAsync()
         {
-            var response = await _httpClient.GetAsync(ApiRoutes.DisasterCard);
+            var response = await _httpClient.GetAsync(ApiRoutes.DisasterCards);
             return await HandleResponse<IReadOnlyList<DisasterCardDto>>(response);
         }
 
         public async Task<ApiResult<DisasterCardDto>> GetByIdAsync(int id)
         {
-            var response = await _httpClient.GetAsync($"{ApiRoutes.DisasterCard}/{id}");
+            var response = await _httpClient.GetAsync($"{ApiRoutes.DisasterCards}/{id}");
             return await HandleResponse<DisasterCardDto>(response);
         }
 

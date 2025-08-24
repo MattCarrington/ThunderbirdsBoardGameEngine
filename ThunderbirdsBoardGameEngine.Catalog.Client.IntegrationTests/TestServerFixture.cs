@@ -6,7 +6,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Client.IntegrationTests
 {
     public class TestServerFixture
     {
-        public IDisasterCardClient Client { get; }
+        public IDisasterCardsClient Client { get; }
 
         public TestServerFixture()
         {
@@ -21,7 +21,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Client.IntegrationTests
             services.AddGameDataClients(config);
 
             var provider = services.BuildServiceProvider();
-            Client = provider.GetRequiredService<IDisasterCardClient>();
+            Client = provider.GetRequiredService<IDisasterCardsClient>();
         }
     }
 }

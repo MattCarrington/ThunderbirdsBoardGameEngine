@@ -1,9 +1,10 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.Configuration;
+using ThunderbirdsBoardGameEngine.GameData.Api;
 using ThunderbirdsBoardGameEngine.TestUtils.Helpers;
 
-namespace ThunderbirdsBoardGameEngine.GameData.Api.IntegrationTests
+namespace ThunderbirdsBoardGameEngine.Api.ComponentTests
 {
     public class CustomWebApplicationFactory : WebApplicationFactory<Program>
     {

@@ -116,7 +116,7 @@ namespace ThunderbirdsBoardGameEngine.UI.UnitTests.Services
 
         private static DisasterCardService CreateService(ApiResult<DisasterCardDto> apiResult)
         {
-            var client = Substitute.For<IDisasterCardClient>();
+            var client = Substitute.For<IDisasterCardsClient>();
             client.GetByIdAsync(Arg.Any<int>()).Returns(Task.FromResult(apiResult));
 
             return new DisasterCardService(client);
@@ -124,7 +124,7 @@ namespace ThunderbirdsBoardGameEngine.UI.UnitTests.Services
 
         private static DisasterCardService CreateService(ApiResult<IReadOnlyList<DisasterCardDto>> apiResult)
         {
-            var client = Substitute.For<IDisasterCardClient>();
+            var client = Substitute.For<IDisasterCardsClient>();
             client.GetAllAsync().Returns(Task.FromResult(apiResult));
             
             return new DisasterCardService(client);

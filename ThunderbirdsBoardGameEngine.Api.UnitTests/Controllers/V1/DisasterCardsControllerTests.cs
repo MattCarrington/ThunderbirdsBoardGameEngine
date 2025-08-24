@@ -10,15 +10,15 @@ using Xunit;
 
 namespace ThunderbirdsBoardGameEngine.GameData.Api.UnitTests.Controllers.V1
 {
-    public class DisasterCardControllerTests
+    public class DisasterCardsControllerTests
     {
         private readonly Fixture _fixture = new();
         private readonly IDisasterCardService _service = Substitute.For<IDisasterCardService>();
-        private readonly DisasterCardController _controller;
+        private readonly DisasterCardsController _controller;
 
-        public DisasterCardControllerTests()
+        public DisasterCardsControllerTests()
         {
-            _controller = new DisasterCardController(_service);
+            _controller = new DisasterCardsController(_service);
             _fixture.Customizations.Add(new TypeRelay(typeof(BonusCondition), typeof(CharacterBonusCondition)));
         }
 

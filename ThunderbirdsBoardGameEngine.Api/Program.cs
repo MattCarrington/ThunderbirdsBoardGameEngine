@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.OpenApi.Models;
+using ThunderbirdsBoardGameEngine.Api.Routing;
 using ThunderbirdsBoardGameEngine.Catalog.Application;
 using ThunderbirdsBoardGameEngine.Catalog.Infrastructure;
 using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Configuration;
@@ -19,7 +21,10 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api
                 builder.Configuration.GetSection("CardData"));
 
             // Add services to the container.
-            builder.Services.AddControllers();
+            builder.Services.AddControllers(options =>
+            {
+                options.Conventions.Add(new RouteTokenTransformerConvention(new KebabCaseParameterTransformer()));
+            });
 
             builder.Services.AddApiVersioning(options =>
             {

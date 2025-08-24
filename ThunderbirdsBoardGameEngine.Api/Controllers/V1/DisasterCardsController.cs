@@ -7,11 +7,11 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.Controllers.V1
     [Route("api/[controller]")]
     [ApiController]
     [ApiVersion("1.0")]
-    public class DisasterCardController : ControllerBase
+    public class DisasterCardsController : ControllerBase
     {
         private readonly IDisasterCardService _service;
 
-        public DisasterCardController(IDisasterCardService service)
+        public DisasterCardsController(IDisasterCardService service)
         {
             _service = service;
         }

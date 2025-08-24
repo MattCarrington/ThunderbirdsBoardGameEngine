@@ -11,11 +11,11 @@ using Xunit;
 
 namespace ThunderbirdsBoardGameEngine.Catalog.Client.UnitTests.Clients.V1
 {
-    public class DisasterCardClientTests
+    public class DisasterCardsClientTests
     {
         private readonly Fixture _fixture = new();
         
-        public DisasterCardClientTests()
+        public DisasterCardsClientTests()
         {
             _fixture.Customize<DisasterCardDto>(c => c
                 .With(d => d.BonusConditions, [.. _fixture.CreateMany<BonusConditionDto>(2)])
@@ -35,7 +35,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Client.UnitTests.Clients.V1
                 BaseAddress = new Uri("http://localhost/")
             };
 
-            var client = new DisasterCardClient(httpClient);
+            var client = new DisasterCardsClient(httpClient);
 
             // Act
             _ = await client.GetAllAsync();
@@ -58,13 +58,13 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Client.UnitTests.Clients.V1
                 BaseAddress = new Uri("http://localhost/")
             };
 
-            var client = new DisasterCardClient(httpClient);
+            var client = new DisasterCardsClient(httpClient);
 
             // Act
             _ = await client.GetAllAsync();
 
             // Assert
-            Assert.Equal($"http://localhost/{ApiRoutes.DisasterCard}", stubHandler.CapturedRequest?.RequestUri?.ToString());
+            Assert.Equal($"http://localhost/{ApiRoutes.DisasterCards}", stubHandler.CapturedRequest?.RequestUri?.ToString());
         }
 
         [Fact]
@@ -177,7 +177,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Client.UnitTests.Clients.V1
                 BaseAddress = new Uri("http://localhost/")
             };
 
-            var client = new DisasterCardClient(httpClient);
+            var client = new DisasterCardsClient(httpClient);
 
             // Act
             _ = await client.GetByIdAsync(4);
@@ -200,13 +200,13 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Client.UnitTests.Clients.V1
                 BaseAddress = new Uri("http://localhost/")
             };
 
-            var client = new DisasterCardClient(httpClient);
+            var client = new DisasterCardsClient(httpClient);
 
             // Act
             _ = await client.GetByIdAsync(4);
 
             // Assert
-            Assert.Equal($"http://localhost/{ApiRoutes.DisasterCard}/4", stubHandler.CapturedRequest?.RequestUri?.ToString());
+            Assert.Equal($"http://localhost/{ApiRoutes.DisasterCards}/4", stubHandler.CapturedRequest?.RequestUri?.ToString());
         }
 
         [Fact]
@@ -287,7 +287,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Client.UnitTests.Clients.V1
             Assert.Contains("Deserialized content was null.", result.ErrorMessage, StringComparison.OrdinalIgnoreCase);
         }
 
-        private static DisasterCardClient CreateDisasterCardClient(HttpStatusCode statusCode, string responseContent = "")
+        private static DisasterCardsClient CreateDisasterCardClient(HttpStatusCode statusCode, string responseContent = "")
         {
             var stubHandler = new StubHttpMessageHandler(responseContent, statusCode);
 
@@ -296,7 +296,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Client.UnitTests.Clients.V1
                 BaseAddress = new Uri("http://localhost/")
             };
 
-            return new DisasterCardClient(httpClient);
+            return new DisasterCardsClient(httpClient);
         }
     }
 }

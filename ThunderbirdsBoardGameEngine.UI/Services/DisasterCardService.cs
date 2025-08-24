@@ -6,9 +6,9 @@ namespace ThunderbirdsBoardGameEngine.UI.Services
 {
     public class DisasterCardService : IDisasterCardService
     {
-        private readonly IDisasterCardClient _client;
+        private readonly IDisasterCardsClient _client;
 
-        public DisasterCardService(IDisasterCardClient client)
+        public DisasterCardService(IDisasterCardsClient client)
         {
             _client = client;
         }

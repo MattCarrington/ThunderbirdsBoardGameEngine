@@ -2,6 +2,6 @@
 {
     internal static class ApiRoutes
     {
-        public const string DisasterCard = "api/DisasterCard";
+        public const string DisasterCards = "api/disaster-cards";
     }
 }

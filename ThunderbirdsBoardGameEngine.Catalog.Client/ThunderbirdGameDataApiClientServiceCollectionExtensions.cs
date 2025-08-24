@@ -14,7 +14,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Client
 
             var options = section.Get<GameDataClientOptions>()!;
 
-            services.AddHttpClient<IDisasterCardClient, DisasterCardClient>(client =>
+            services.AddHttpClient<IDisasterCardsClient, DisasterCardsClient>(client =>
             {
                 client.BaseAddress = new Uri(options.BaseAddress);
             });

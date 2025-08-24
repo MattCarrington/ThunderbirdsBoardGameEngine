@@ -5,7 +5,7 @@ using ThunderbirdsBoardGameEngine.TestUtils.Assertions;
 using ThunderbirdsBoardGameEngine.TestUtils.Helpers;
 using Xunit;
 
-namespace ThunderbirdsBoardGameEngine.GameData.Api.IntegrationTests.Endpoints.V1
+namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints.V1
 {
     public class DisasterCardsEndpointsTests : IClassFixture<CustomWebApplicationFactory>
     {
@@ -17,6 +17,7 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.IntegrationTests.Endpoints.V1
         };
 
         private const int ApiVersion = 1;
+        private const string Route = "/api/disaster-cards";
 
         public DisasterCardsEndpointsTests(CustomWebApplicationFactory factory)
         {
@@ -27,7 +28,7 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.IntegrationTests.Endpoints.V1
         public async Task GetAllDisasterCards_ReturnsExpectedDataset() 
         {
             // Arrange
-            var request = new HttpRequestMessage(HttpMethod.Get, "/api/DisasterCard");
+            var request = new HttpRequestMessage(HttpMethod.Get, Route);
             request.Headers.Add("X-API-Version", ApiVersion.ToString());
 
             // Act
@@ -55,7 +56,7 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.IntegrationTests.Endpoints.V1
             // Arrange
             var id = 4;
 
-            var request = new HttpRequestMessage(HttpMethod.Get, $"/api/DisasterCard/{id}");
+            var request = new HttpRequestMessage(HttpMethod.Get, $"{Route}/{id}");
             request.Headers.Add("X-API-Version", ApiVersion.ToString());
 
             // Act
@@ -80,7 +81,7 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.IntegrationTests.Endpoints.V1
         public async Task GetDisasterCardById_InvalidId_ReturnsNotFound()
         { 
             // Arrange
-            var request = new HttpRequestMessage(HttpMethod.Get, "/api/DisasterCard/9999");
+            var request = new HttpRequestMessage(HttpMethod.Get, $"{Route}/9999");
             request.Headers.Add("X-API-Version", "1");
 
             // Act
@@ -98,7 +99,7 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.IntegrationTests.Endpoints.V1
         public async Task GetDisasterCards_MissingApiVersionHeader_ReturnsBadRequest()
         {
             // Arrange
-            var request = new HttpRequestMessage(HttpMethod.Get, "/api/DisasterCard");
+            var request = new HttpRequestMessage(HttpMethod.Get, Route);
 
             // Act
             var response = await _client.SendAsync(request);
@@ -115,7 +116,7 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.IntegrationTests.Endpoints.V1
         public async Task GetDisasterCards_InvalidApiVersionHeader_ReturnsBadRequest()
         { 
             // Arrange
-            var request = new HttpRequestMessage(HttpMethod.Get, "/api/DisasterCard");
+            var request = new HttpRequestMessage(HttpMethod.Get, Route);
             request.Headers.Add("X-API-Version", "99999");
 
             // Act

@@ -2,7 +2,7 @@
 
 namespace ThunderbirdsBoardGameEngine.Catalog.Client.Interfaces.V1
 {
-    public interface IDisasterCardClient
+    public interface IDisasterCardsClient
     {
         Task<ApiResult<IReadOnlyList<DisasterCardDto>>> GetAllAsync();
 
