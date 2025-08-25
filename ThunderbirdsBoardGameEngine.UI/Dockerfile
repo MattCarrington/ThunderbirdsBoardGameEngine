@@ -4,7 +4,7 @@ WORKDIR /src
 
 # cache restore
 COPY ["ThunderbirdsBoardGameEngine.UI/ThunderbirdsBoardGameEngine.UI.csproj", "ThunderbirdsBoardGameEngine.UI/"]
-COPY ["ThunderbirdsBoardGameEngine.GameData.Api.Client/ThunderbirdsBoardGameEngine.GameData.Api.Client.csproj", "ThunderbirdsBoardGameEngine.GameData.Api.Client/"]
+COPY ["ThunderbirdsBoardGameEngine.Catalog.Client/ThunderbirdsBoardGameEngine.Catalog.Client.csproj", "ThunderbirdsBoardGameEngine.Catalog.Client/"]
 # COPY other referenced csproj if needed
 RUN dotnet restore "./ThunderbirdsBoardGameEngine.UI/ThunderbirdsBoardGameEngine.UI.csproj"
 
