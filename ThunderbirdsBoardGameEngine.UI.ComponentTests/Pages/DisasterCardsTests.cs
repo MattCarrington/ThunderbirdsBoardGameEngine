@@ -125,6 +125,7 @@ namespace ThunderbirdsBoardGameEngine.UI.UnitTests.Pages
 
             var service = Substitute.For<IDisasterCardService>();
             service.GetAllAsync().Returns(_ => tcs.Task);
+
             Services.AddSingleton(service);
 
             // Act
@@ -249,6 +250,7 @@ namespace ThunderbirdsBoardGameEngine.UI.UnitTests.Pages
                 new DisasterCardDto { Id = 9, Name = "Nulls", DifficultyNumber = 1, Location = "Test", RescueType = "Air",
                                       BonusConditions = null, Rewards = null }
             };
+
             _ = SetupMockService(withNulls);
 
             var cut = RenderComponent<DisasterCards>();
