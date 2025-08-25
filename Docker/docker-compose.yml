@@ -13,20 +13,3 @@ services:
       interval: 5s
       timeout: 3s
       retries: 20
-  ui:
-    container_name: thunderbirds-ui
-    build:
-      context: ..
-      dockerfile: ThunderbirdsBoardGameEngine.UI/Dockerfile
-    environment:
-      API_URL: http://api:8080
-    ports:
-      - "3000:80"
-    depends_on:
-      api:
-        condition: service_healthy
-    healthcheck:
-      test: ["CMD", "curl", "-fsS", "http://localhost/health/ready"]
-      interval: 5s
-      timeout: 3s
-      retries: 20
