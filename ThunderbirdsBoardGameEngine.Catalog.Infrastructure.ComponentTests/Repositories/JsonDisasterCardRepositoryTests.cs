@@ -9,7 +9,7 @@ using Xunit;
 
 namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.IntegrationTests.Repositories
 {
-    public class DisasterCardRepositoryTests
+    public class JsonDisasterCardRepositoryTests
     {
         [Fact]
         public async Task GetAllAsync_WhenValidFile_ShouldReturnAllDisasterCardsAsync()
@@ -101,14 +101,14 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.IntegrationTests.Re
             Assert.Null(disasterCard);
         }
 
-        private static DisasterCardRepository CreateRepository(string filepath)
+        private static JsonDisasterCardRepository CreateRepository(string filepath)
         {
             var options = Options.Create(new CardDataOptions
             {
                 DisasterCardsFilePath = filepath
             });
 
-            return new DisasterCardRepository(options);
+            return new JsonDisasterCardRepository(options);
         }
     }
 }

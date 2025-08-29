@@ -13,7 +13,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure
             services.Configure<CardDataOptions>(
                 configuration.GetSection("CardData"));
 
-            services.AddScoped<IDisasterCardRepository, DisasterCardRepository>();
+            services.AddScoped<IDisasterCardRepository, JsonDisasterCardRepository>();
 
             return services;
         }

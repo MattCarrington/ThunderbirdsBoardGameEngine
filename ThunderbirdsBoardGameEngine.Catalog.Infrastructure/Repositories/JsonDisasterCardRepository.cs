@@ -9,12 +9,12 @@ using ThunderbirdsBoardGameEngine.Catalog.Domain.Validators;
 
 namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Repositories
 {
-    internal class DisasterCardRepository : IDisasterCardRepository
+    internal class JsonDisasterCardRepository : IDisasterCardRepository
     {
         private readonly string _filePath;
         private readonly JsonSerializerOptions _options;
 
-        public DisasterCardRepository(IOptions<CardDataOptions> options)
+        public JsonDisasterCardRepository(IOptions<CardDataOptions> options)
         {
             var filePath = options.Value.DisasterCardsFilePath;
             if (string.IsNullOrWhiteSpace(filePath))
