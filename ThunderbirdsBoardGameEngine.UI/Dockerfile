@@ -17,7 +17,7 @@ RUN dotnet publish "./ThunderbirdsBoardGameEngine.UI.csproj" \
 # Serve static site
 FROM nginx:alpine AS final
 # SPA fallback
-COPY ThunderbirdsBoardGameEngine.UI/nginx.conf /etc/nginx/conf.d/default.conf
+COPY "./ThunderbirdsBoardGameEngine.UI/nginx.conf" /etc/nginx/conf.d/default.conf
 # static files
 COPY --from=build /app/publish/wwwroot /usr/share/nginx/html
 EXPOSE 80
