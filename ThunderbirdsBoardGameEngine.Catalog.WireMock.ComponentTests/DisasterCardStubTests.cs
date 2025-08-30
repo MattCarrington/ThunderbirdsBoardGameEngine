@@ -19,7 +19,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.WireMock.ComponentTests
 
         private static readonly JsonSerializerOptions JsonOptions = new(JsonSerializerDefaults.Web);
 
-        List<DisasterCardDto> _cards = TestDataLoader.LoadJsonFromFile<List<DisasterCardDto>>("disaster-card-dto-data.json", TestDataConstants.V1InputFolder);
+        private readonly List<DisasterCardDto> _cards = TestDataLoader.LoadJsonFromFile<List<DisasterCardDto>>("disaster-card-dto-data.json", TestDataConstants.V1InputFolder);
 
         private const string _json = "application/json";
 
