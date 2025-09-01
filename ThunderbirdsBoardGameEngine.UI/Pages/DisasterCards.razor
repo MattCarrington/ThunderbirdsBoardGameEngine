@@ -7,11 +7,11 @@
 
 @if (cards is null)
 {
-    <p>Loading cards...</p>
+    <p data-testid="loading">Loading cards...</p>
 }
 else if (cards.Count == 0)
 {
-    <p>No disaster cards available.</p>
+    <p data-testid="empty-state">No disaster cards available.</p>
 }
 else
 {
@@ -29,7 +29,7 @@ else
 
     @if (selectedCard is not null)
     {
-        <div class="mt-4">
+        <div class="mt-4" data-testid="details">
             <h3>Disaster Card Details</h3>
             <div class="card shadow-sm p-3">
                 <h4>@selectedCard.Name</h4>

@@ -71,6 +71,25 @@ namespace ThunderbirdsBoardGameEngine.Catalog.WireMock.ComponentTests
         }
 
         [Fact]
+        public async Task GetAllAsync_WhenRegisteredEmptyList_ReturnsSuccessAsync()
+        {
+            // Arrange
+            _stub.RegisterGetAllSuccess(new List<DisasterCardDto>());
+
+            // Act
+            var response = await _client.GetAsync(DisasterCardStub.Route);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            Assert.Equal(_json, response.Content.Headers.ContentType!.MediaType);
+
+            var result = await response.Content.ReadFromJsonAsync<IReadOnlyList<DisasterCardDto>>(JsonOptions);
+
+            Assert.NotNull(result);
+            //DisasterCardDtoAssertions.AssertOrderInsensitive(_cards.ToList(), result.ToList());
+        }
+
+        [Fact]
         public async Task GetAllAsync_WhenError_ReturnsError()
         {
             // Arrange
