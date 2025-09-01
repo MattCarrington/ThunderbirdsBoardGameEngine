@@ -2,7 +2,7 @@
 using System.Net;
 using System.Text.Json;
 using ThunderbirdsBoardGameEngine.Catalog.Client.Clients.V1;
-using ThunderbirdsBoardGameEngine.Catalog.Client.Internal.Routing;
+using ThunderbirdsBoardGameEngine.Catalog.Client.Internal.Routing.V1;
 using ThunderbirdsBoardGameEngine.Catalog.Client.Internal.Serialization;
 using ThunderbirdsBoardGameEngine.Catalog.Client.UnitTests.Helpers;
 using ThunderbirdsBoardGameEngine.Catalog.Contracts.Dtos.V1;

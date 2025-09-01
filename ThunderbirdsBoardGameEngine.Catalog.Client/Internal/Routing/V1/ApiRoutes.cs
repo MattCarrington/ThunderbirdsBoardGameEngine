@@ -1,4 +1,4 @@
-﻿namespace ThunderbirdsBoardGameEngine.Catalog.Client.Internal.Routing
+﻿namespace ThunderbirdsBoardGameEngine.Catalog.Client.Internal.Routing.V1
 {
     internal static class ApiRoutes
     {

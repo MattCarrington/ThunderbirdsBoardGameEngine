@@ -1,7 +1,7 @@
 ﻿using System.Text.Json;
 using ThunderbirdsBoardGameEngine.Catalog.Client.Exceptions;
 using ThunderbirdsBoardGameEngine.Catalog.Client.Interfaces.V1;
-using ThunderbirdsBoardGameEngine.Catalog.Client.Internal.Routing;
+using ThunderbirdsBoardGameEngine.Catalog.Client.Internal.Routing.V1;
 using ThunderbirdsBoardGameEngine.Catalog.Client.Internal.Serialization;
 using ThunderbirdsBoardGameEngine.Catalog.Contracts.Dtos.V1;
 
