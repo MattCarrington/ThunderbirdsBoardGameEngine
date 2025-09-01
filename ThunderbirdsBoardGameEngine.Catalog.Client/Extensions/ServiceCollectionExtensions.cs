@@ -4,22 +4,22 @@ using Microsoft.Extensions.Options;
 using ThunderbirdsBoardGameEngine.Catalog.Client.Clients.V1;
 using ThunderbirdsBoardGameEngine.Catalog.Client.Interfaces.V1;
 
-namespace ThunderbirdsBoardGameEngine.Catalog.Client
+namespace ThunderbirdsBoardGameEngine.Catalog.Client.Extensions
 {
-    public static class ClientServiceCollectionExtensions
+    public static class ServiceCollectionExtensions
     {
-        public static IServiceCollection AddGameDataClients(this IServiceCollection services, IConfiguration configuration)
+        public static IServiceCollection AddCatalogClients(this IServiceCollection services, IConfiguration configuration)
         {
-            var section = configuration.GetSection("GameDataClient");
+            var section = configuration.GetSection("CatalogClient");
 
-            services.AddOptions<GameDataClientOptions>()
+            services.AddOptions<CatalogClientOptions>()
                     .Bind(section)
                     .Validate(o => Uri.TryCreate(o.BaseAddress, UriKind.Absolute, out _),
-                              "GameDataClient.BaseAddress must be an absolute URI");
+                              "CatalogClient.BaseAddress must be an absolute URI");
 
             services.AddHttpClient<IDisasterCardsClient, DisasterCardsClient>((sp, client) =>
             {
-                var opts = sp.GetRequiredService<IOptions<GameDataClientOptions>>().Value;
+                var opts = sp.GetRequiredService<IOptions<CatalogClientOptions>>().Value;
                 client.BaseAddress = new Uri(opts.BaseAddress);
             });
 

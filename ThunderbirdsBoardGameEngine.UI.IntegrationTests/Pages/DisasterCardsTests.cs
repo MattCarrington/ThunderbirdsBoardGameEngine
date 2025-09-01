@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System.Net;
-using ThunderbirdsBoardGameEngine.Catalog.Client;
+using ThunderbirdsBoardGameEngine.Catalog.Client.Extensions;
 using ThunderbirdsBoardGameEngine.Catalog.Contracts.Dtos.V1;
 using ThunderbirdsBoardGameEngine.Catalog.WireMock;
 using ThunderbirdsBoardGameEngine.TestUtils;
@@ -26,11 +26,11 @@ namespace ThunderbirdsBoardGameEngine.UI.IntegrationTests.Pages
             var configuration = new ConfigurationBuilder()
                 .AddInMemoryCollection(new Dictionary<string, string?>
                 {
-                    { "GameDataClient:BaseAddress", _host.Url }
+                    { "CatalogClient:BaseAddress", _host.Url }
                 })
                 .Build();
 
-            Services.AddGameDataClients(configuration);
+            Services.AddCatalogClients(configuration);
             Services.AddSingleton<IDisasterCardService, DisasterCardService>();
 
             return Task.CompletedTask;
