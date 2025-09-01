@@ -14,8 +14,9 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Client.Extensions
 
             services.AddOptions<CatalogClientOptions>()
                     .Bind(section)
-                    .Validate(o => Uri.TryCreate(o.BaseAddress, UriKind.Absolute, out _),
-                              "CatalogClient.BaseAddress must be an absolute URI");
+                    .Validate(o => !string.IsNullOrWhiteSpace(o.BaseAddress), "CatalogClient:BaseAddress required")
+                    .Validate(o => Uri.TryCreate(o.BaseAddress, UriKind.Absolute, out _), "CatalogClient.BaseAddress must be an absolute URI")
+                    .ValidateOnStart();
 
             services.AddHttpClient<IDisasterCardsClient, DisasterCardsClient>((sp, client) =>
             {
