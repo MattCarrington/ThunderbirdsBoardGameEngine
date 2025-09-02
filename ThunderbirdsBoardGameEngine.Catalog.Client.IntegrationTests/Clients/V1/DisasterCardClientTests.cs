@@ -1,19 +1,22 @@
-﻿using System.Net;
+﻿using Microsoft.Extensions.DependencyInjection;
+using System.Net;
 using ThunderbirdsBoardGameEngine.Catalog.Client.Interfaces.V1;
 using ThunderbirdsBoardGameEngine.Catalog.Contracts.Dtos.V1;
 using ThunderbirdsBoardGameEngine.TestUtils.Assertions;
+using ThunderbirdsBoardGameEngine.TestUtils.Factories;
 using ThunderbirdsBoardGameEngine.TestUtils.Helpers;
 using Xunit;
 
 namespace ThunderbirdsBoardGameEngine.Catalog.Client.IntegrationTests.Clients.V1
 {
-    public class DisasterCardClientTests : IClassFixture<TestServerFixture>
+    public class DisasterCardClientTests
     {
         private readonly IDisasterCardsClient _client;
         
-        public DisasterCardClientTests(TestServerFixture testServerFixture)
+        public DisasterCardClientTests()
         {
-            _client = testServerFixture.Client;
+            var sp = CatalogClientProviderFactory.Build("http://localhost:8080");
+            _client = sp.GetRequiredService<IDisasterCardsClient>();
         }
 
         [Fact]

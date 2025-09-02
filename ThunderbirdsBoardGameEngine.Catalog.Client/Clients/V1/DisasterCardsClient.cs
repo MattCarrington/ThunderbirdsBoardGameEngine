@@ -14,11 +14,6 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Client.Clients.V1
         public DisasterCardsClient(HttpClient httpClient)
         {
             _httpClient = httpClient;
-
-            if (!httpClient.DefaultRequestHeaders.Contains("X-Api-Version"))
-            {
-                httpClient.DefaultRequestHeaders.Add("X-Api-Version", "1.0");
-            }
         }
 
         public async Task<ApiResult<IReadOnlyList<DisasterCardDto>>> GetAllAsync()

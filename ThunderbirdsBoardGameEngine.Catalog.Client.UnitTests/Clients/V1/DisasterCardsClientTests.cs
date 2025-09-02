@@ -23,29 +23,6 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Client.UnitTests.Clients.V1
         }
 
         [Fact]
-        public async Task GetAllAsync_WhenCalled_ShouldSetApiVersionHeader()
-        {
-            // Arrange
-            var json = JsonSerializer.Serialize(new List<DisasterCardDto>(), JsonDefaults.CamelCase);
-
-            var stubHandler = new StubHttpMessageHandler(json, HttpStatusCode.OK);
-
-            var httpClient = new HttpClient(stubHandler)
-            {
-                BaseAddress = new Uri("http://localhost/")
-            };
-
-            var client = new DisasterCardsClient(httpClient);
-
-            // Act
-            _ = await client.GetAllAsync();
-
-            // Assert
-            Assert.True(httpClient.DefaultRequestHeaders.Contains("X-Api-Version"));
-            Assert.Equal("1.0", httpClient.DefaultRequestHeaders.GetValues("X-Api-Version").FirstOrDefault());
-        }
-
-        [Fact]
         public async Task GetAllAsync_WhenCalled_ShouldCallCorrectEndpoint()
         {
             // Arrange
@@ -166,28 +143,6 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Client.UnitTests.Clients.V1
         }
 
         [Fact]
-        public async Task GetByIdAsync_WhenCalled_ShouldSetApiVersionHeader()
-        {
-            var json = JsonSerializer.Serialize(new DisasterCardDto(), JsonDefaults.CamelCase);
-
-            var stubHandler = new StubHttpMessageHandler(json, HttpStatusCode.OK);
-
-            var httpClient = new HttpClient(stubHandler)
-            {
-                BaseAddress = new Uri("http://localhost/")
-            };
-
-            var client = new DisasterCardsClient(httpClient);
-
-            // Act
-            _ = await client.GetByIdAsync(4);
-
-            // Assert
-            Assert.True(httpClient.DefaultRequestHeaders.Contains("X-Api-Version"));
-            Assert.Equal("1.0", httpClient.DefaultRequestHeaders.GetValues("X-Api-Version").FirstOrDefault());
-        }
-
-        [Fact]
         public async Task GetByIdAsync_WhenCalled_ShouldCallCorrectEndpoint()
         {
             // Arrange
@@ -197,7 +152,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Client.UnitTests.Clients.V1
 
             var httpClient = new HttpClient(stubHandler)
             {
-                BaseAddress = new Uri("http://localhost/")
+                BaseAddress = new Uri("http://example.test")
             };
 
             var client = new DisasterCardsClient(httpClient);
@@ -206,7 +161,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Client.UnitTests.Clients.V1
             _ = await client.GetByIdAsync(4);
 
             // Assert
-            Assert.Equal($"http://localhost/{ApiRoutes.DisasterCards}/4", stubHandler.CapturedRequest?.RequestUri?.ToString());
+            Assert.Equal($"http://example.test/{ApiRoutes.DisasterCards}/4", stubHandler.CapturedRequest?.RequestUri?.ToString());
         }
 
         [Fact]
@@ -293,7 +248,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Client.UnitTests.Clients.V1
 
             var httpClient = new HttpClient(stubHandler)
             {
-                BaseAddress = new Uri("http://localhost/")
+                BaseAddress = new Uri("http://example.test")
             };
 
             return new DisasterCardsClient(httpClient);

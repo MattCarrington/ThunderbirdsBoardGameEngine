@@ -1,6 +1,7 @@
 ﻿using System.Net;
 using System.Text.RegularExpressions;
 using ThunderbirdsBoardGameEngine.Catalog.Contracts.Dtos.V1;
+using WireMock.Logging;
 using WireMock.Matchers;
 using WireMock.RequestBuilders;
 using WireMock.ResponseBuilders;
@@ -125,6 +126,31 @@ namespace ThunderbirdsBoardGameEngine.Catalog.WireMock.Stubs.V1
                 .WithStatusCode(HttpStatusCode.BadRequest)
                 .WithHeader("Content-Type", Json)
                 .WithBodyAsJson(new { error = $"Unsupported version in header '{VersionHeader}'. Expected '{VersionValue}'." }));
+        }
+
+        public int CountGetAllAsyncCalls()
+        {
+            return _server.LogEntries.Count(le =>
+                le.RequestMessage.Method == "GET" &&
+                string.Equals(le.RequestMessage.Path, Route, StringComparison.OrdinalIgnoreCase));
+        }
+
+        public int CountGetByIdAsyncCalls()
+        {
+            var regex = new Regex($"^{Regex.Escape(Route)}/\\d+$", RegexOptions.IgnoreCase);
+            return _server.LogEntries.Count(le =>
+                le.RequestMessage.Method == "GET" &&
+                regex.IsMatch(le.RequestMessage.Path));
+        }
+
+        public IReadOnlyList<string> GetAllRequestPaths()
+        {
+            return _server.LogEntries.Select(le => le.RequestMessage.Path).ToList();
+        }
+
+        public ILogEntry? GetLastCall()
+        {
+            return _server.LogEntries.LastOrDefault();
         }
     }
 }

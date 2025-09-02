@@ -6,6 +6,7 @@ using ThunderbirdsBoardGameEngine.Catalog.Client.Extensions;
 using ThunderbirdsBoardGameEngine.Catalog.Contracts.Dtos.V1;
 using ThunderbirdsBoardGameEngine.Catalog.WireMock;
 using ThunderbirdsBoardGameEngine.TestUtils;
+using ThunderbirdsBoardGameEngine.TestUtils.Fixtures;
 using ThunderbirdsBoardGameEngine.TestUtils.Helpers;
 using ThunderbirdsBoardGameEngine.UI.Interfaces;
 using ThunderbirdsBoardGameEngine.UI.Pages;
@@ -14,15 +15,18 @@ using Xunit;
 
 namespace ThunderbirdsBoardGameEngine.UI.IntegrationTests.Pages
 {
-    public class DisasterCardsTests : TestContext, IAsyncLifetime
+    [Collection("WireMock")]
+    public class DisasterCardsTests : TestContext
     {
-        private WireMockHost _host;
+        private readonly WireMockHost _host;
 
-        private readonly IReadOnlyList<DisasterCardDto> _cards = TestDataLoader.LoadJsonFromFile<IReadOnlyList<DisasterCardDto>>("disaster-card-dto-data.json", TestDataConstants.V1InputFolder);
+        private readonly IReadOnlyList<DisasterCardDto> _cards = 
+            TestDataLoader.LoadJsonFromFile<IReadOnlyList<DisasterCardDto>>("disaster-card-dto-data.json", TestDataConstants.V1InputFolder);
 
-        public Task InitializeAsync()
+        public DisasterCardsTests(WireMockFixture fixture)
         {
-            _host = new WireMockHost();
+            _host = fixture.Host;
+
             var configuration = new ConfigurationBuilder()
                 .AddInMemoryCollection(new Dictionary<string, string?>
                 {
@@ -32,13 +36,6 @@ namespace ThunderbirdsBoardGameEngine.UI.IntegrationTests.Pages
 
             Services.AddCatalogClients(configuration);
             Services.AddSingleton<IDisasterCardService, DisasterCardService>();
-
-            return Task.CompletedTask;
-        }
-
-        public async Task DisposeAsync()
-        {
-            await _host.DisposeAsync();
         }
 
         [Fact]

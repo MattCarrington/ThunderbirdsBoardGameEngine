@@ -5,17 +5,19 @@ using ThunderbirdsBoardGameEngine.Catalog.Contracts.Dtos.V1;
 using ThunderbirdsBoardGameEngine.Catalog.WireMock.Stubs.V1;
 using ThunderbirdsBoardGameEngine.TestUtils;
 using ThunderbirdsBoardGameEngine.TestUtils.Assertions;
+using ThunderbirdsBoardGameEngine.TestUtils.Fixtures;
 using ThunderbirdsBoardGameEngine.TestUtils.Helpers;
 using WireMock.Server;
 using Xunit;
 
 namespace ThunderbirdsBoardGameEngine.Catalog.WireMock.ComponentTests
 {
-    public class DisasterCardStubTests : IAsyncLifetime
+    [Collection("WireMock")]
+    public class DisasterCardStubTests
     {
-        private WireMockServer _server = default!;
-        private DisasterCardStub _stub = default!;
-        private HttpClient _client = default!;
+        private readonly WireMockServer _server;
+        private readonly DisasterCardStub _stub;
+        private readonly HttpClient _client;
 
         private static readonly JsonSerializerOptions JsonOptions = new(JsonSerializerDefaults.Web);
 
@@ -23,32 +25,11 @@ namespace ThunderbirdsBoardGameEngine.Catalog.WireMock.ComponentTests
 
         private const string _json = "application/json";
 
-        public Task InitializeAsync()
+        public DisasterCardStubTests(WireMockFixture fixture)
         {
-            _server = WireMockServer.Start();
-            _stub = new DisasterCardStub(_server);
+            _server = fixture.Host.WireMockServer;
+            _stub = fixture.Host.DisasterCardStub;
             _client = CreateClient(withVersionHeader: true);
-            return Task.CompletedTask;
-        }
-
-        public Task DisposeAsync()
-        {
-            _client.Dispose();
-            _server.Stop();
-            _server.Dispose();
-            return Task.CompletedTask;
-        }
-
-        private HttpClient CreateClient(bool withVersionHeader = true, string? versionHeader = DisasterCardStub.VersionValue)
-        {
-            var client = new HttpClient { BaseAddress = new Uri(_server.Urls[0]) };
-
-            if (withVersionHeader)
-            {
-                client.DefaultRequestHeaders.Add(DisasterCardStub.VersionHeader, versionHeader);
-            }
-
-            return client;
         }
 
         [Fact]
@@ -245,6 +226,18 @@ namespace ThunderbirdsBoardGameEngine.Catalog.WireMock.ComponentTests
 
             Assert.Contains("Unsupported version in header 'X-Api-Version'. Expected '1.0'.", result);
             clientWithoutHeader.Dispose();
+        }
+
+        private HttpClient CreateClient(bool withVersionHeader = true, string? versionHeader = DisasterCardStub.VersionValue)
+        {
+            var client = new HttpClient { BaseAddress = new Uri(_server.Urls[0]) };
+
+            if (withVersionHeader)
+            {
+                client.DefaultRequestHeaders.Add(DisasterCardStub.VersionHeader, versionHeader);
+            }
+
+            return client;
         }
     }
 }
