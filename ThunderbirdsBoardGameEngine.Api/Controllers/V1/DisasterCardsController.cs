@@ -24,18 +24,5 @@ namespace ThunderbirdsBoardGameEngine.Api.Controllers.V1
             return Ok(disasterCards.ToDto());
 
         }
-
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetById(int id)
-        {
-            var disasterCard = await _service.GetByIdAsync(id);
-
-            if (disasterCard is null)
-            {
-                return NotFound($"Disaster card with ID {id} not found.");
-            }
-
-            return Ok(disasterCard.ToDto());
-        }
     }
 }

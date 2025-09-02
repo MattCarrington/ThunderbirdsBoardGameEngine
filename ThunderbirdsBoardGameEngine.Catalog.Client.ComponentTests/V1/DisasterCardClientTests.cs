@@ -78,59 +78,5 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Client.ComponentTests.V1
             Assert.Empty(response.Data);
             Assert.Null(response.ErrorMessage);
         }
-
-        [Fact]
-        public async Task GetByIdAsync_WhenCalled_CallsCorrectRouteOnce()
-        {
-            // Arrange
-            var card = _cards[7];
-
-            _host.DisasterCardStub.RegisterGetByIdSuccess(card);
-
-            // Act
-            _ = await _client.GetByIdAsync(card.Id);
-
-            // Assert
-            var hits = _host.DisasterCardStub.GetAllRequestPaths();
-
-            Assert.Single(hits);
-        }
-
-        [Fact]
-        public async Task GetByIdAsync_WhenValidJson_ReturnsSuccessApiResult()
-        {
-            // Arrange
-            var card = _cards[0];
-
-            _host.DisasterCardStub.RegisterGetByIdSuccess(card);
-
-            // Act
-            var response = await _client.GetByIdAsync(card.Id);
-
-            // Assert           
-            Assert.True(response.Success);
-            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-            Assert.NotNull(response.Data);
-            Assert.Null(response.ErrorMessage);
-            DisasterCardDtoAssertions.AssertEqual(card, response.Data);
-        }
-
-        [Fact]
-        public async Task GetByIdAsync_WhenRegisteredNotFound_ReturnsFailureApiResult()
-        {
-            // Arrange
-            _host.DisasterCardStub.RegisterGetByIdNotFound();
-
-            // Act
-            var response = await _client.GetByIdAsync(9999);
-
-            // Assert
-            Assert.False(response.Success);
-            Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
-            Assert.Null(response.Data);
-            Assert.NotNull(response.ErrorMessage);
-            Assert.NotEmpty(response.ErrorMessage);
-            Assert.Contains("Disaster card not found.", response.ErrorMessage);
-        }
     }
 }

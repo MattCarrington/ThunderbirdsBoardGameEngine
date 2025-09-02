@@ -23,17 +23,5 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Application.Services
 
             return cards;
         }
-
-        public async Task<DisasterCard> GetByIdAsync(int id)
-        {
-            var card = await _disasterCardRepository.GetByIdAsync(id);
-
-            if (card is null)
-            {
-                return null;
-            }
-
-            return card;
-        }
     }
 }

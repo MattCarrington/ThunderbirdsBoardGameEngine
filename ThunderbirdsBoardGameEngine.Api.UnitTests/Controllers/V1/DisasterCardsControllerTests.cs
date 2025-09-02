@@ -40,39 +40,5 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.UnitTests.Controllers.V1
 
             await _service.Received(1).GetAllAsync();
         }
-
-        [Fact]
-        public async Task GetById_WhenCardExists_ReturnsOk()
-        {
-            // Arrange
-            var disasterCard = _fixture.Create<DisasterCard>();
-
-            _service.GetByIdAsync(disasterCard.Id).Returns(disasterCard);
-
-            // Act
-            var result = await _controller.GetById(disasterCard.Id);
-
-            // Assert
-            var okResult = Assert.IsType<OkObjectResult>(result);
-            var returnedCard = Assert.IsType<DisasterCardDto>(okResult.Value);
-            Assert.Equal(disasterCard.Id, returnedCard.Id);
-            await _service.Received(1).GetByIdAsync(disasterCard.Id);
-        }
-
-        [Fact]
-        public async Task GetById_WhenCardDoesNotExist_ReturnsNotFound()
-        {
-            // Arrange
-            var nonExistentId = 999;
-
-            _service.GetByIdAsync(nonExistentId).Returns((DisasterCard)null);
-
-            // Act
-            var result = await _controller.GetById(nonExistentId);
-
-            // Assert
-            var notFoundResult = Assert.IsType<NotFoundObjectResult>(result);
-            Assert.Contains($"Disaster card with ID {nonExistentId} not found.", notFoundResult.Value.ToString());
-        }
     }
 }

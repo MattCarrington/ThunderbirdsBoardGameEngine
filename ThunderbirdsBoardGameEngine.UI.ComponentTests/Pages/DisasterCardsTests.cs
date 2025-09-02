@@ -222,7 +222,6 @@ namespace ThunderbirdsBoardGameEngine.UI.UnitTests.Pages
 
             // Assert
             service.Received(1).GetAllAsync(); // still only once
-            service.Received(0).GetByIdAsync(Arg.Any<int>());
         }
 
         [Fact]

@@ -22,12 +22,6 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Client.Clients.V1
             return await HandleResponse<IReadOnlyList<DisasterCardDto>>(response);
         }
 
-        public async Task<ApiResult<DisasterCardDto>> GetByIdAsync(int id)
-        {
-            var response = await _httpClient.GetAsync($"{ApiRoutes.DisasterCards}/{id}");
-            return await HandleResponse<DisasterCardDto>(response);
-        }
-
         private async Task<ApiResult<T>> HandleResponse<T>(HttpResponseMessage response)
         {
             try

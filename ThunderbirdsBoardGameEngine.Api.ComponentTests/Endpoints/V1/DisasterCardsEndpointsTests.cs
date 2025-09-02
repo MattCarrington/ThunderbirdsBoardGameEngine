@@ -51,51 +51,6 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints.V1
         }
 
         [Fact] 
-        public async Task GetDisasterCardById_ValidId_ReturnsOkAndExpectedData() 
-        {
-            // Arrange
-            var id = 4;
-
-            var request = new HttpRequestMessage(HttpMethod.Get, $"{Route}/{id}");
-            request.Headers.Add("X-API-Version", ApiVersion.ToString());
-
-            // Act
-            var response = await _client.SendAsync(request);
-
-            // Assert
-            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-
-            var json = await response.Content.ReadAsStringAsync();
-            var card = JsonSerializer.Deserialize<DisasterCardDto>(json, _jsonOptions);
-
-            Assert.NotNull(card);
-
-            var expected = TestDataLoader.LoadJsonFromFile<List<DisasterCardDto>>("disaster-card-dtos.json")
-                .FirstOrDefault(x => x.Id == 4) 
-                    ?? throw new InvalidOperationException($"Expected disaster card with ID {id} not found in expected data.");
-
-            DisasterCardDtoAssertions.AssertEqual(expected, card);
-        }
-
-        [Fact] 
-        public async Task GetDisasterCardById_InvalidId_ReturnsNotFound()
-        { 
-            // Arrange
-            var request = new HttpRequestMessage(HttpMethod.Get, $"{Route}/9999");
-            request.Headers.Add("X-API-Version", "1");
-
-            // Act
-            var response = await _client.SendAsync(request);
-
-            // Assert
-            Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
-
-            var content = await response.Content.ReadAsStringAsync();
-            
-            Assert.Contains("Disaster card with ID 9999 not found.", content);
-        }
-
-        [Fact] 
         public async Task GetDisasterCards_MissingApiVersionHeader_ReturnsBadRequest()
         {
             // Arrange

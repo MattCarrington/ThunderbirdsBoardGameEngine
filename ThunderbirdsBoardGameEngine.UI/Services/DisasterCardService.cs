@@ -24,17 +24,5 @@ namespace ThunderbirdsBoardGameEngine.UI.Services
 
             return []; // Return an empty list if the request fails
         }
-
-        public async Task<DisasterCardDto?> GetByIdAsync(int id)
-        {
-            var result = await _client.GetByIdAsync(id);
-
-            if (result.Success && result.Data is not null)
-            {
-                return result.Data;
-            }
-
-            return null; // Return null if the request fails or data is null
-        }
     }
 }

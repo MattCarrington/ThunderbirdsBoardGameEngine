@@ -64,43 +64,6 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.IntegrationTests.Re
             await Assert.ThrowsAsync<DisasterCardValidationException>(() => repository.GetAllAsync());
         }
 
-        [Fact]
-        public async Task GetByIdAsync_WhenDisasterCardExists_ShouldReturnDisasterCardWithExpectedPropertiesAsync()
-        {
-            // Arrange
-            var filepath = TestDataPathHelper.GetPath("disaster-cards-test.json");
-
-            var repository = CreateRepository(filepath);
-
-            // Act
-            var disasterCard = await repository.GetByIdAsync(2);
-
-            // Assert
-            Assert.NotNull(disasterCard);
-            Assert.Equal(2, disasterCard.Id);
-            Assert.Equal("Earthquake", disasterCard.Name);
-            Assert.Equal(9, disasterCard.DifficultyNumber);
-            Assert.Equal(BoardLocation.Asia, disasterCard.Location);
-            Assert.Equal(RescueType.Land, disasterCard.RescueType);
-            Assert.Equal(2, disasterCard.BonusConditions.Count);
-            Assert.Equal(2, disasterCard.RewardOptions.Count);
-        }
-
-        [Fact]
-        public async Task GetByIdAsync_WhenDisasterCardDoesNotExist_ShouldReturnNullAsync()
-        {
-            // Arrange
-            var filepath = TestDataPathHelper.GetPath("disaster-cards-test.json");
-
-            var repository = CreateRepository(filepath);
-
-            // Act
-            var disasterCard = await repository.GetByIdAsync(999);
-
-            // Assert
-            Assert.Null(disasterCard);
-        }
-
         private static JsonDisasterCardRepository CreateRepository(string filepath)
         {
             var options = Options.Create(new CardDataOptions
