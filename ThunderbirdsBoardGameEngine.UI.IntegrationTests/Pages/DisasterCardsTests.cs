@@ -1,7 +1,6 @@
 ﻿using Bunit;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System.Net;
 using ThunderbirdsBoardGameEngine.Catalog.Client.Extensions;
 using ThunderbirdsBoardGameEngine.Catalog.Contracts.Dtos.V1;
 using ThunderbirdsBoardGameEngine.Catalog.WireMock;
@@ -71,13 +70,13 @@ namespace ThunderbirdsBoardGameEngine.UI.IntegrationTests.Pages
             // Act
             var cut = RenderComponent<DisasterCards>();
 
-            // Await
-            cut.WaitForElement("[data-testid=empty-state]");
-
-            // Assert
-            Assert.Empty(cut.FindAll("#disasterSelect"));
-            Assert.DoesNotContain("Disaster Card Details", cut.Markup);
-
+            // Await & Assert
+            cut.WaitForAssertion(() =>
+            {
+                cut.Find("[data-testid='empty-state']");
+                Assert.Empty(cut.FindAll("#disasterSelect"));
+                Assert.DoesNotContain("Disaster Card Details", cut.Markup);
+            }, timeout: TimeSpan.FromSeconds(5));
         }
 
         [Fact]
@@ -89,12 +88,13 @@ namespace ThunderbirdsBoardGameEngine.UI.IntegrationTests.Pages
             // Act
             var cut = RenderComponent<DisasterCards>();
 
-            // Await
-            cut.WaitForElement("[data-testid=empty-state]");
-
-            // Assert
-            Assert.Empty(cut.FindAll("#disasterSelect"));
-            Assert.DoesNotContain("Disaster Card Details", cut.Markup);
+            // Await & Assert
+            cut.WaitForAssertion(() =>
+            {
+                cut.Find("[data-testid='empty-state']");
+                Assert.Empty(cut.FindAll("#disasterSelect"));
+                Assert.DoesNotContain("Disaster Card Details", cut.Markup);
+            }, timeout: TimeSpan.FromSeconds(5));
         }
     }
 }
