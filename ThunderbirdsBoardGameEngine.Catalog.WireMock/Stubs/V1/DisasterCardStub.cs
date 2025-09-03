@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using Microsoft.CodeAnalysis.CSharp;
+using System.Net;
 using System.Text.RegularExpressions;
 using ThunderbirdsBoardGameEngine.Catalog.Contracts.Dtos.V1;
 using WireMock.Logging;
@@ -26,121 +27,63 @@ namespace ThunderbirdsBoardGameEngine.Catalog.WireMock.Stubs.V1
 
         public void RegisterGetAllSuccess(IReadOnlyList<DisasterCardDto> dtos)
         {
-            _server.Given(Request.Create()
-                        .WithPath(Route)
-                        .WithHeader(VersionHeader, new ExactMatcher(true, VersionValue))
-                        .UsingGet())
-                   .RespondWith(Response.Create()
-                        .WithStatusCode(HttpStatusCode.OK)
-                        .WithHeader("Content-Type", Json)
-                        .WithBodyAsJson(dtos));
+            _server.Given(CreateRequest()).RespondWith(CreateJsonResponse(dtos, HttpStatusCode.OK));
         }
 
-        public void RegisterGetByIdSuccess(DisasterCardDto dto)
+        public void RegisterGetAllEmpty()
         {
-            _server.Given(Request.Create()
-                        .WithPath($"{Route}/{dto.Id}") // exact path for this id
-                        .WithHeader(VersionHeader, new ExactMatcher(true, VersionValue))
-                        .UsingGet())
-                   .RespondWith(Response.Create()
-                        .WithStatusCode(HttpStatusCode.OK)
-                        .WithHeader("Content-Type", Json)
-                        .WithBodyAsJson(dto));
+            _server.Given(CreateRequest()).RespondWith(CreateJsonResponse(Array.Empty<DisasterCardDto>(), HttpStatusCode.OK));
         }
 
-        public void RegisterGetByIdNotFound()
+        public void RegisterGetAllMalformedJson()
         {
-            _server.Given(Request.Create()
-                        .WithPath(new RegexMatcher($"^{Regex.Escape(Route)}/\\d+$", ignoreCase: true))
-                        .WithHeader(VersionHeader, new ExactMatcher(true, VersionValue))
-                        .UsingGet())
-                   .RespondWith(Response.Create()
-                        .WithStatusCode(HttpStatusCode.NotFound)
-                        .WithHeader("Content-Type", Text)
-                        .WithBody("Disaster card not found."));
+            _server.Given(CreateRequest()).RespondWith(CreateTextResponse("{ malformed json... ", HttpStatusCode.OK));
         }
 
-        public void RegisterGetAllError(HttpStatusCode status, string message)
+        public void RegisterGetAllError(HttpStatusCode status = HttpStatusCode.InternalServerError, string message = "An error occurred")
         {
-            _server.Given(Request.Create()
-                        .WithPath(Route)
-                        .WithHeader(VersionHeader, new ExactMatcher(true, VersionValue))
-                        .UsingGet())
-                   .RespondWith(Response.Create()
-                        .WithStatusCode(status)
-                        .WithHeader("Content-Type", Json)
-                        .WithBodyAsJson(new { error = message }));
-        }
+            var body = new { error = message };
 
-        public void RegisterGetByIdError(int id, HttpStatusCode status, string message)
-        {
-            _server.Given(Request.Create()
-                        .WithPath($"{Route}/{id}")
-                        .WithHeader(VersionHeader, new ExactMatcher(true, VersionValue))
-                        .UsingGet())
-                   .RespondWith(Response.Create()
-                        .WithStatusCode(status)
-                        .WithHeader("Content-Type", Json)
-                        .WithBodyAsJson(new { error = message }));
+            _server.Given(CreateRequest()).RespondWith(CreateJsonResponse(body, status));
         }
 
         public void RegisterMissingHeaderGuard()
         {
-            var bothRoutes = new RegexMatcher($"^{Regex.Escape(Route)}(?:/\\d+)?$", ignoreCase: true);
-
-            _server.Given(Request.Create()
-                .WithPath(bothRoutes)
-                .UsingGet()
-                .WithHeader(headers =>
-                {
-                    // Headers type: IDictionary<string, string[]>
-                    if (!headers.TryGetValue(VersionHeader, out var values) || values == null)
-                        return true; // header entirely missing
-
-                    // present but empty/whitespace only -> treat as missing
-                    return values.Length == 0 || values.All(string.IsNullOrWhiteSpace);
-                }))
-            .RespondWith(Response.Create()
-                .WithStatusCode(HttpStatusCode.BadRequest)
-                .WithHeader("Content-Type", Json)
-                .WithBodyAsJson(new { error = $"Missing header '{VersionHeader}'." }));
+            _server
+                .Given(Request.Create()
+                    .WithPath(new ExactMatcher(true, Route))
+                    .UsingGet()
+                    .WithHeader(headers =>
+                    {
+                        if (!headers.TryGetValue(VersionHeader, out var values) || values == null)
+                            return true;
+                        return values.Length == 0 || values.All(string.IsNullOrWhiteSpace);
+                    }))
+                .RespondWith(CreateJsonResponse(new { error = $"Missing header '{VersionHeader}'." }, HttpStatusCode.BadRequest));
         }
 
         public void RegisterIncorrectHeaderGuard()
         {
-            var bothRoutes = new RegexMatcher($"^{Regex.Escape(Route)}(?:/\\d+)?$", ignoreCase: true);
-
-            _server.Given(Request.Create()
-                .WithPath(bothRoutes)
-                .UsingGet()
-                .WithHeader(headerDict =>
-                {
-                    // headerDict is IDictionary<string, string[]>
-                    if (headerDict == null || !headerDict.TryGetValue(VersionHeader, out var values) || values == null)
-                        return false; // let missing header guard handle this
-
-                    // Check if any value matches the expected version
-                    return !values.Any(v => string.Equals(v, VersionValue, StringComparison.Ordinal));
-                }))
-            .RespondWith(Response.Create()
-                .WithStatusCode(HttpStatusCode.BadRequest)
-                .WithHeader("Content-Type", Json)
-                .WithBodyAsJson(new { error = $"Unsupported version in header '{VersionHeader}'. Expected '{VersionValue}'." }));
+            _server
+                .Given(Request.Create()
+                    .WithPath(new ExactMatcher(true, Route))
+                    .UsingGet()
+                    .WithHeader(dict =>
+                    {
+                        if (dict == null || !dict.TryGetValue(VersionHeader, out var values) || values == null)
+                            return false; // let missing-header guard catch it
+                        return !values.Any(v => string.Equals(v, VersionValue, StringComparison.Ordinal));
+                    }))
+                .RespondWith(CreateJsonResponse(
+                    new { error = $"Unsupported version in header '{VersionHeader}'. Expected '{VersionValue}'." },
+                    HttpStatusCode.BadRequest));
         }
 
-        public int CountGetAllAsyncCalls()
+        public int CountGetAllCalls()
         {
             return _server.LogEntries.Count(le =>
                 le.RequestMessage.Method == "GET" &&
                 string.Equals(le.RequestMessage.Path, Route, StringComparison.OrdinalIgnoreCase));
-        }
-
-        public int CountGetByIdAsyncCalls()
-        {
-            var regex = new Regex($"^{Regex.Escape(Route)}/\\d+$", RegexOptions.IgnoreCase);
-            return _server.LogEntries.Count(le =>
-                le.RequestMessage.Method == "GET" &&
-                regex.IsMatch(le.RequestMessage.Path));
         }
 
         public IReadOnlyList<string> GetAllRequestPaths()
@@ -151,6 +94,31 @@ namespace ThunderbirdsBoardGameEngine.Catalog.WireMock.Stubs.V1
         public ILogEntry? GetLastCall()
         {
             return _server.LogEntries.LastOrDefault();
+        }
+
+        private static IRequestBuilder CreateRequest()
+        {
+            return Request.Create()
+                .WithPath(Route)
+                .WithHeader(VersionHeader, new ExactMatcher(true, VersionValue))
+                .UsingGet();
+                
+        }
+
+        private static IResponseBuilder CreateJsonResponse(object body, HttpStatusCode httpStatusCode)
+        {
+            return Response.Create()
+                .WithStatusCode(httpStatusCode)
+                .WithHeader("Content-Type", Json)
+                .WithBodyAsJson(body);
+        }
+
+        private static IResponseBuilder CreateTextResponse(string body, HttpStatusCode httpStatusCode)
+        {
+            return Response.Create()
+                .WithStatusCode(httpStatusCode)
+                .WithHeader("Content-Type", Text)
+                .WithBody(body);
         }
     }
 }

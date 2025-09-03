@@ -22,6 +22,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.WireMock
         public void Reset()
         {
             _wireMockServer.Reset();
+            _wireMockServer.ResetLogEntries();
         }
 
         public async ValueTask DisposeAsync()
