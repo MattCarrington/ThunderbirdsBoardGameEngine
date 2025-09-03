@@ -26,6 +26,9 @@ namespace ThunderbirdsBoardGameEngine.UI.IntegrationTests.Pages
         public DisasterCardsTests(WireMockFixture fixture)
         {
             _host = fixture.Host;
+            _host.Reset();
+            _host.DisasterCardStub.RegisterMissingHeaderGuard();
+            _host.DisasterCardStub.RegisterIncorrectHeaderGuard();
 
             var configuration = new ConfigurationBuilder()
                 .AddInMemoryCollection(new Dictionary<string, string?>
@@ -35,17 +38,13 @@ namespace ThunderbirdsBoardGameEngine.UI.IntegrationTests.Pages
                 .Build();
 
             Services.AddCatalogClients(configuration);
-            Services.AddSingleton<IDisasterCardService, DisasterCardService>();
+            Services.AddSingleton<IDisasterCardService, DisasterCardService>();            
         }
 
         [Fact]
         public void Render_WhenCardsExist_CardsExist()
         {
             // Arrange      
-            _host.Reset();
-
-            _host.DisasterCardStub.RegisterMissingHeaderGuard();
-            _host.DisasterCardStub.RegisterIncorrectHeaderGuard();
             _host.DisasterCardStub.RegisterGetAllSuccess(_cards);
 
             // Act
@@ -67,11 +66,7 @@ namespace ThunderbirdsBoardGameEngine.UI.IntegrationTests.Pages
         public void Render_WhenNoCardExist_DisplaysEmptyState()
         {
             // Arrange
-            _host.Reset();
-
-            _host.DisasterCardStub.RegisterMissingHeaderGuard();
-            _host.DisasterCardStub.RegisterIncorrectHeaderGuard();
-            _host.DisasterCardStub.RegisterGetAllSuccess(new List<DisasterCardDto>());
+            _host.DisasterCardStub.RegisterGetAllEmpty();
 
             // Act
             var cut = RenderComponent<DisasterCards>();
@@ -89,11 +84,7 @@ namespace ThunderbirdsBoardGameEngine.UI.IntegrationTests.Pages
         public void Render_WhenErrorOccurs_DisplaysEmptyState()
         {
             // Arrange
-            _host.Reset();
-
-            _host.DisasterCardStub.RegisterMissingHeaderGuard();
-            _host.DisasterCardStub.RegisterIncorrectHeaderGuard();
-            _host.DisasterCardStub.RegisterGetAllError(HttpStatusCode.InternalServerError, "An error has occurred");
+            _host.DisasterCardStub.RegisterGetAllError();
 
             // Act
             var cut = RenderComponent<DisasterCards>();

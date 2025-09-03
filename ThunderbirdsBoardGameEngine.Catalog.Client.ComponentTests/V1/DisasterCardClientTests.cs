@@ -81,7 +81,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Client.ComponentTests.V1
         public async Task GetAllAsync_WhenEmptyList_ReturnsSuccessApiResult()
         {
             // Arrange
-            _host.DisasterCardStub.RegisterGetAllSuccess(new List<DisasterCardDto>());
+            _host.DisasterCardStub.RegisterGetAllEmpty();
 
             // Act
             var response = await _client.GetAllAsync();
@@ -98,7 +98,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Client.ComponentTests.V1
         public async Task GetAllAsync_WhenServerError_ReturnsFailureApiResult()
         {
             // Arrange
-            _host.DisasterCardStub.RegisterGetAllError(HttpStatusCode.InternalServerError, "An error has occurred");
+            _host.DisasterCardStub.RegisterGetAllError();
 
             // Act
             var response = await _client.GetAllAsync();
@@ -110,21 +110,21 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Client.ComponentTests.V1
             Assert.NotNull(response.ErrorMessage);
         }
 
-        //[Fact]
-        //public async Task GetAllAsync_WhenInvalidJson_ReturnsFailureApiResult()
-        //{
-        //    // Arrange
-        //    _host.DisasterCardStub.RegisterGetAllInvalidJson();
+        [Fact]
+        public async Task GetAllAsync_WhenInvalidJson_ReturnsFailureApiResult()
+        {
+            // Arrange
+            _host.DisasterCardStub.RegisterGetAllMalformedJson();
 
-        //    // Act
-        //    var response = await _client.GetAllAsync();
+            // Act
+            var response = await _client.GetAllAsync();
 
-        //    // Assert           
-        //    Assert.False(response.Success);
-        //    Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        //    Assert.Null(response.Data);
-        //    Assert.NotNull(response.ErrorMessage);
-        //}
+            // Assert           
+            Assert.False(response.Success);
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            Assert.Null(response.Data);
+            Assert.NotNull(response.ErrorMessage);
+        }
 
         [Fact]
         public async Task GetAllAsync_WhenConcurrentRequests_ReturnsSuccessApiResultsAsync()
