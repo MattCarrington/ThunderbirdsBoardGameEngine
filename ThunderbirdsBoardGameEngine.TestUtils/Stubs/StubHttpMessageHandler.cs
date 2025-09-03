@@ -1,7 +1,7 @@
 ﻿using System.Net;
 using System.Text;
 
-namespace ThunderbirdsBoardGameEngine.Catalog.Client.UnitTests.Helpers
+namespace ThunderbirdsBoardGameEngine.TestUtils.Stubs
 {
     public class StubHttpMessageHandler : HttpMessageHandler
     {

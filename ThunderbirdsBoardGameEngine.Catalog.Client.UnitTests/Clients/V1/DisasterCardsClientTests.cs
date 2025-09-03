@@ -4,9 +4,9 @@ using System.Text.Json;
 using ThunderbirdsBoardGameEngine.Catalog.Client.Clients.V1;
 using ThunderbirdsBoardGameEngine.Catalog.Client.Internal.Routing.V1;
 using ThunderbirdsBoardGameEngine.Catalog.Client.Internal.Serialization;
-using ThunderbirdsBoardGameEngine.Catalog.Client.UnitTests.Helpers;
 using ThunderbirdsBoardGameEngine.Catalog.Contracts.Dtos.V1;
 using ThunderbirdsBoardGameEngine.TestUtils.Assertions;
+using ThunderbirdsBoardGameEngine.TestUtils.Stubs;
 using Xunit;
 
 namespace ThunderbirdsBoardGameEngine.Catalog.Client.UnitTests.Clients.V1

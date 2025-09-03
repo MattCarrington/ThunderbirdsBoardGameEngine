@@ -1,6 +1,6 @@
 ﻿using System.Net;
 using ThunderbirdsBoardGameEngine.Catalog.Client.Handlers;
-using ThunderbirdsBoardGameEngine.Catalog.Client.UnitTests.Helpers;
+using ThunderbirdsBoardGameEngine.TestUtils.Stubs;
 using Xunit;
 
 namespace ThunderbirdsBoardGameEngine.Catalog.Client.UnitTests.Handlers
