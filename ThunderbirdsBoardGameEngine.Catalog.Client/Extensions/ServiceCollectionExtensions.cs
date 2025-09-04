@@ -4,8 +4,20 @@ using Microsoft.Extensions.Options;
 
 namespace ThunderbirdsBoardGameEngine.Catalog.Client.Extensions
 {
+    /// <summary>
+    /// Service registration for Catalog SDK clients.
+    /// </summary>
     public static class ServiceCollectionExtensions
     {
+        /// <summary>
+        /// Registers Catalog SDK clients and configures the shared HTTP pipeline.
+        /// </summary>
+        /// <param name="services">The DI container.</param>
+        /// <param name="configuration">App configuration containing the <c>CatalogClient</c> section.</param>
+        /// <remarks>
+        /// Requires <c>CatalogClient:BaseAddress</c> to be a valid absolute URI.
+        /// Use <see cref="CatalogClientsV1Registration"/> to add version-specific clients.
+        /// </remarks>
         public static IServiceCollection AddCatalogClients(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddOptions<CatalogClientOptions>()
