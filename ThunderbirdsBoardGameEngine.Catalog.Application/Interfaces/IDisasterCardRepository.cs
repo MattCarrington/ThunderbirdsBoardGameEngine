@@ -4,6 +4,6 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Application.Interfaces
 {
     public interface IDisasterCardRepository
     {
-        Task<IReadOnlyList<DisasterCard>> GetAllAsync();
+        Task<IReadOnlyList<DisasterCard>> GetAllAsync(CancellationToken cancellationToken);
     }
 }

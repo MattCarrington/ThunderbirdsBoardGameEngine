@@ -30,7 +30,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Repositories
             _options.Converters.Add(new BonusConverter());
         }
 
-        public async Task<IReadOnlyList<DisasterCard>> GetAllAsync()
+        public async Task<IReadOnlyList<DisasterCard>> GetAllAsync(CancellationToken cancellationToken)
         {
             Console.WriteLine($"[DEBUG] Looking for file at: {Path.GetFullPath(_filePath)}");
 
@@ -39,7 +39,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Repositories
 
             await using var stream = File.OpenRead(_filePath);
 
-            var cards = await JsonSerializer.DeserializeAsync<List<DisasterCard>>(stream, _options, CancellationToken.None);
+            var cards = await JsonSerializer.DeserializeAsync<List<DisasterCard>>(stream, _options, cancellationToken);
 
             if (cards is null)
             {

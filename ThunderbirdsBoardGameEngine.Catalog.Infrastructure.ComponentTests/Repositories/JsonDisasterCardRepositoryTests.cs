@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.Options;
 using System.Text.Json;
-using ThunderbirdsBoardGameEngine.Catalog.Domain.Enums;
 using ThunderbirdsBoardGameEngine.Catalog.Domain.Exceptions;
 using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Configuration;
 using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Repositories;
@@ -20,7 +19,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.IntegrationTests.Re
             var repository = CreateRepository(filepath);
 
             // Act
-            var disasterCards = await repository.GetAllAsync();
+            var disasterCards = await repository.GetAllAsync(CancellationToken.None);
 
             // Assert
             Assert.NotNull(disasterCards);
@@ -37,7 +36,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.IntegrationTests.Re
             var repository = CreateRepository(filepath);
 
             // Act & Assert
-            await Assert.ThrowsAsync<FileNotFoundException>(() => repository.GetAllAsync());
+            await Assert.ThrowsAsync<FileNotFoundException>(() => repository.GetAllAsync(CancellationToken.None));
         }
 
         [Fact]
@@ -49,7 +48,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.IntegrationTests.Re
             var repository = CreateRepository(filepath);
 
             // Act & Assert
-            await Assert.ThrowsAsync<JsonException>(() => repository.GetAllAsync());
+            await Assert.ThrowsAsync<JsonException>(() => repository.GetAllAsync(CancellationToken.None));
         }
 
         [Fact]
@@ -61,7 +60,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.IntegrationTests.Re
             var repository = CreateRepository(filepath);
 
             // Act & Assert
-            await Assert.ThrowsAsync<DisasterCardValidationException>(() => repository.GetAllAsync());
+            await Assert.ThrowsAsync<DisasterCardValidationException>(() => repository.GetAllAsync(CancellationToken.None));
         }
 
         private static JsonDisasterCardRepository CreateRepository(string filepath)

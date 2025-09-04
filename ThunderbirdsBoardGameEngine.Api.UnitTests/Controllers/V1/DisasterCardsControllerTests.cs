@@ -26,19 +26,21 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.UnitTests.Controllers.V1
         public async Task Get_WhenDisasterCardsExist_ReturnsOk()
         {
             // Arrange
+            var cancellationToken = CancellationToken.None;
+
             var disasterCards = _fixture.CreateMany<DisasterCard>(5).ToList();
 
-            _service.GetAllAsync().Returns(disasterCards);
+            _service.GetAllAsync(Arg.Any<CancellationToken>()).Returns(disasterCards);
 
             // Act
-            var result = await _controller.Get();
+            var result = await _controller.Get(cancellationToken);
 
             // Assert
             var okResult = Assert.IsType<OkObjectResult>(result);
             var returnedCards = Assert.IsType<IReadOnlyList<DisasterCardDto>>(okResult.Value, exactMatch: false);
             Assert.NotEmpty(returnedCards);
 
-            await _service.Received(1).GetAllAsync();
+            await _service.Received(1).GetAllAsync(Arg.Is<CancellationToken>(t => t == cancellationToken));
         }
     }
 }

@@ -17,12 +17,11 @@ namespace ThunderbirdsBoardGameEngine.Api.Controllers.V1
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> Get(CancellationToken cancellationToken)
         {
-            var disasterCards = await _service.GetAllAsync();
+            var disasterCards = await _service.GetAllAsync(cancellationToken);
 
             return Ok(disasterCards.ToDto());
-
         }
     }
 }
