@@ -1,5 +1,4 @@
 ﻿using System.Text.Json;
-using ThunderbirdsBoardGameEngine.Catalog.Client.Exceptions;
 using ThunderbirdsBoardGameEngine.Catalog.Client.Interfaces.V1;
 using ThunderbirdsBoardGameEngine.Catalog.Client.Internal.Routing.V1;
 using ThunderbirdsBoardGameEngine.Catalog.Client.Internal.Serialization;
@@ -7,6 +6,7 @@ using ThunderbirdsBoardGameEngine.Catalog.Contracts.Dtos.V1;
 
 namespace ThunderbirdsBoardGameEngine.Catalog.Client.Clients.V1
 {
+    
     public class DisasterCardsClient : IDisasterCardsClient
     {
         private readonly HttpClient _httpClient;
@@ -32,7 +32,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Client.Clients.V1
                     var data = JsonSerializer.Deserialize<T>(content, JsonDefaults.CamelCase);
 
                     return data == null
-                        ? throw new ApiDeserializationException("Deserialized content was null.")
+                        ? ApiResult<T>.Failure("Deserialized content was null.", response.StatusCode)
                         : ApiResult<T>.SuccessResult(data, response.StatusCode);
                 }
 
@@ -42,11 +42,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Client.Clients.V1
             catch (JsonException ex)
             {
                 return ApiResult<T>.Failure($"Deserialization error: {ex.Message}", response.StatusCode);
-            }
-            catch (ApiClientException ex)
-            {
-                return ApiResult<T>.Failure(ex.Message, response.StatusCode);
-            }
+            }           
             catch (Exception ex)
             {
                 return ApiResult<T>.Failure($"Unexpected error: {ex.Message}", response.StatusCode);
