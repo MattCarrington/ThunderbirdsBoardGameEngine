@@ -50,6 +50,10 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Client.Clients.V1
                 var errorMessage = await response.Content.ReadAsStringAsync(cancellationToken);
                 return ApiResult<T>.Failure(errorMessage, response.StatusCode);
             }
+            catch (OperationCanceledException)
+            {
+                throw; // Preserve cancellation
+            }
             catch (JsonException ex)
             {
                 return ApiResult<T>.Failure($"Deserialization error: {ex.Message}", response.StatusCode);
