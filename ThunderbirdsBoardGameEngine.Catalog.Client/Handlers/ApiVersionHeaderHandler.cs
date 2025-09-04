@@ -1,6 +1,6 @@
 ﻿namespace ThunderbirdsBoardGameEngine.Catalog.Client.Handlers
 {
-    public sealed class ApiVersionHeaderHandler : DelegatingHandler
+    internal sealed class ApiVersionHeaderHandler : DelegatingHandler
     {
         private const string HeaderName = "X-Api-Version";
         private readonly string _value;
