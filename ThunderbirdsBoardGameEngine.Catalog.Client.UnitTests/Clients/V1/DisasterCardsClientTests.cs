@@ -141,6 +141,20 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Client.UnitTests.Clients.V1
             Assert.NotNull(result.ErrorMessage);
             Assert.Contains("Deserialized content was null.", result.ErrorMessage, StringComparison.OrdinalIgnoreCase);
         }
+
+        [Fact]
+        public async Task GetAllAsync_WhenCancelled_ThrowsOperationCanceledExceptionAsync()
+        {
+            // Arrange
+            var client = CreateDisasterCardClient(HttpStatusCode.OK, "[]");
+
+            using var cancellationTokenSource = new CancellationTokenSource(TimeSpan.FromMilliseconds(1));
+
+            // Act & Assert
+            await Assert.ThrowsAsync<OperationCanceledException>(
+                () => client.GetAllAsync(cancellationTokenSource.Token));
+        }
+
         private static DisasterCardsClient CreateDisasterCardClient(HttpStatusCode statusCode, string responseContent = "")
         {
             var stubHandler = new StubHttpMessageHandler(responseContent, statusCode);

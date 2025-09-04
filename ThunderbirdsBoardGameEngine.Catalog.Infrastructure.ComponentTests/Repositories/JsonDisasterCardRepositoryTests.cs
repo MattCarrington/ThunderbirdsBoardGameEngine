@@ -63,6 +63,21 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.IntegrationTests.Re
             await Assert.ThrowsAsync<DisasterCardValidationException>(() => repository.GetAllAsync(CancellationToken.None));
         }
 
+        [Fact]
+        public async Task GetAllAsync_WhenCanceled_ThrowsOperationCanceledException()
+        {
+            // Arrange
+            var filepath = TestDataPathHelper.GetPath("disaster-cards-test.json");
+
+            var repository = CreateRepository(filepath);
+
+            using var cancellationTokenSource = new CancellationTokenSource(TimeSpan.FromMilliseconds(1));
+
+            // Act & Assert
+            await Assert.ThrowsAnyAsync<OperationCanceledException>(
+                () => repository.GetAllAsync(cancellationTokenSource.Token));
+        }
+
         private static JsonDisasterCardRepository CreateRepository(string filepath)
         {
             var options = Options.Create(new CardDataOptions
