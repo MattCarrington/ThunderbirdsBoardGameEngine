@@ -16,19 +16,19 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Client.Clients.V1
             _httpClient = httpClient;
         }
 
-        public async Task<ApiResult<IReadOnlyList<DisasterCardDto>>> GetAllAsync()
+        public async Task<ApiResult<IReadOnlyList<DisasterCardDto>>> GetAllAsync(CancellationToken cancellationToken = default)
         {
-            var response = await _httpClient.GetAsync(ApiRoutes.DisasterCards);
-            return await HandleResponse<IReadOnlyList<DisasterCardDto>>(response);
+            var response = await _httpClient.GetAsync(ApiRoutes.DisasterCards, cancellationToken);
+            return await HandleResponse<IReadOnlyList<DisasterCardDto>>(response, cancellationToken);
         }
 
-        private async Task<ApiResult<T>> HandleResponse<T>(HttpResponseMessage response)
+        private async Task<ApiResult<T>> HandleResponse<T>(HttpResponseMessage response, CancellationToken cancellationToken)
         {
             try
             {
                 if (response.IsSuccessStatusCode)
                 {
-                    var content = await response.Content.ReadAsStringAsync();
+                    var content = await response.Content.ReadAsStringAsync(cancellationToken);
                     var data = JsonSerializer.Deserialize<T>(content, JsonDefaults.CamelCase);
 
                     return data == null
@@ -36,7 +36,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Client.Clients.V1
                         : ApiResult<T>.SuccessResult(data, response.StatusCode);
                 }
 
-                var errorMessage = await response.Content.ReadAsStringAsync();
+                var errorMessage = await response.Content.ReadAsStringAsync(cancellationToken);
                 return ApiResult<T>.Failure(errorMessage, response.StatusCode);
             }
             catch (JsonException ex)
