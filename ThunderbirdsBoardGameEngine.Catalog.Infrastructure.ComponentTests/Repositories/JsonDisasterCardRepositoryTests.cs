@@ -2,6 +2,7 @@
 using System.Text.Json;
 using ThunderbirdsBoardGameEngine.Catalog.Domain.Exceptions;
 using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Configuration;
+using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Readers;
 using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Repositories;
 using ThunderbirdsBoardGameEngine.TestUtils.Helpers;
 using Xunit;
@@ -31,7 +32,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.IntegrationTests.Re
         public async Task GetAllAsync_WhenNoFileExists_ShouldThrowFileNotFoundException()
         {
             // Arrange
-            var filepath = "TestData/nonexistent-disaster-cards.json";
+            var filepath = "nonexistent-disaster-cards.json";
 
             var repository = CreateRepository(filepath);
 
@@ -40,7 +41,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.IntegrationTests.Re
         }
 
         [Fact]
-        public async Task GetAllAsync_WhenFileIsEmpty_ShouldReturnEmptyListAsync()
+        public async Task GetAllAsync_WhenJsonIsInvalid_ShouldThrowJsonException()
         {
             // Arrange
             var filepath = TestDataPathHelper.GetPath("invalid-json.json");
@@ -51,33 +52,6 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.IntegrationTests.Re
             await Assert.ThrowsAsync<JsonException>(() => repository.GetAllAsync(CancellationToken.None));
         }
 
-        [Fact]
-        public async Task GetAllAsync_WhenDisasterCardsInvalid_ShouldThrowDisasterCardValidationException()
-        {
-            // Arrange
-            var filepath = TestDataPathHelper.GetPath("invalid-disaster-cards.json");
-
-            var repository = CreateRepository(filepath);
-
-            // Act & Assert
-            await Assert.ThrowsAsync<DisasterCardValidationException>(() => repository.GetAllAsync(CancellationToken.None));
-        }
-
-        [Fact]
-        public async Task GetAllAsync_WhenCanceled_ThrowsOperationCanceledException()
-        {
-            // Arrange
-            var filepath = TestDataPathHelper.GetPath("disaster-cards-test.json");
-
-            var repository = CreateRepository(filepath);
-
-            using var cancellationTokenSource = new CancellationTokenSource(TimeSpan.FromMilliseconds(1));
-
-            // Act & Assert
-            await Assert.ThrowsAnyAsync<OperationCanceledException>(
-                () => repository.GetAllAsync(cancellationTokenSource.Token));
-        }
-
         private static JsonDisasterCardRepository CreateRepository(string filepath)
         {
             var options = Options.Create(new CardDataOptions
@@ -85,7 +59,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.IntegrationTests.Re
                 DisasterCardsFilePath = filepath
             });
 
-            return new JsonDisasterCardRepository(options);
+            return new JsonDisasterCardRepository(options, new FileReader());
         }
     }
 }

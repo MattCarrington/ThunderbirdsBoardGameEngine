@@ -6,6 +6,7 @@ using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Configuration;
 using ThunderbirdsBoardGameEngine.Catalog.Application.Interfaces;
 using ThunderbirdsBoardGameEngine.Catalog.Domain.Entities;
 using ThunderbirdsBoardGameEngine.Catalog.Domain.Validators;
+using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Interfaces;
 
 namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Repositories
 {
@@ -13,19 +14,15 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Repositories
     {
         private readonly string _filePath;
         private readonly JsonSerializerOptions _options;
+        private readonly IFileReader _fileReader;
 
-        public JsonDisasterCardRepository(IOptions<CardDataOptions> options)
+        public JsonDisasterCardRepository(IOptions<CardDataOptions> options, IFileReader fileReader)
         {
-            var filePath = options.Value.DisasterCardsFilePath;
-            if (string.IsNullOrWhiteSpace(filePath))
-                throw new ArgumentException("DisasterCardsFilePath must be set in configuration");
+            // Options already validated at startup
+            _filePath = options.Value.DisasterCardsFilePath;            
+            _fileReader = fileReader ?? throw new ArgumentNullException(nameof(fileReader));
 
-            _filePath = filePath;
-
-            _options = new JsonSerializerOptions
-            {
-                PropertyNameCaseInsensitive = true
-            };
+            _options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
             _options.Converters.Add(new JsonStringEnumConverter());
             _options.Converters.Add(new BonusConverter());
         }
@@ -34,17 +31,13 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Repositories
         {
             Console.WriteLine($"[DEBUG] Looking for file at: {Path.GetFullPath(_filePath)}");
 
-            if (!File.Exists(_filePath))
-                throw new FileNotFoundException($"Disaster card file not found: {_filePath}");
-
-            await using var stream = File.OpenRead(_filePath);
+            await using var stream = await _fileReader.OpenReadAsync(_filePath, cancellationToken);
 
             var cards = await JsonSerializer.DeserializeAsync<List<DisasterCard>>(stream, _options, cancellationToken);
 
-            if (cards is null)
+            if (cards is null || cards.Count == 0)
             {
-                Console.WriteLine("[DEBUG] No disaster cards found in the file.");
-                return [];
+                return Array.Empty<DisasterCard>();
             }
 
             DisasterCardValidator.ValidateAll(cards);

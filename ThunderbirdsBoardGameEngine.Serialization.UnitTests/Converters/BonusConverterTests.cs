@@ -1,25 +1,14 @@
 ﻿using System.Text.Json;
-using System.Text.Json.Serialization;
 using ThunderbirdsBoardGameEngine.Catalog.Domain.Entities;
 using ThunderbirdsBoardGameEngine.Catalog.Domain.Enums;
-using ThunderbirdsBoardGameEngine.Serialization.Converters;
+using ThunderbirdsBoardGameEngine.TestUtils;
 using Xunit;
 
 namespace ThunderbirdsBoardGameEngine.Serialization.UnitTests.Converters
 {
     public class BonusConverterTests
     {
-        private readonly JsonSerializerOptions _options;
-
-        public BonusConverterTests()
-        {
-            _options = new JsonSerializerOptions
-            {
-                PropertyNameCaseInsensitive = true
-            };
-            _options.Converters.Add(new JsonStringEnumConverter());
-            _options.Converters.Add(new BonusConverter());
-        }
+        private readonly JsonSerializerOptions _options = JsonDefaults.DisasterCards;
 
         [Fact]
         public void Deserialize_WhenCharacterBonusJson_ReturnsExpectedCharacterBonus()
