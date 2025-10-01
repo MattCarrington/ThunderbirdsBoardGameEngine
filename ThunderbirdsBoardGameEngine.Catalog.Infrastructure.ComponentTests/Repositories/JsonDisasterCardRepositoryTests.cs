@@ -1,13 +1,12 @@
 ﻿using Microsoft.Extensions.Options;
 using System.Text.Json;
-using ThunderbirdsBoardGameEngine.Catalog.Domain.Exceptions;
 using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Configuration;
 using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Readers;
 using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Repositories;
 using ThunderbirdsBoardGameEngine.TestUtils.Helpers;
 using Xunit;
 
-namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.IntegrationTests.Repositories
+namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.ComponentTests.Repositories
 {
     public class JsonDisasterCardRepositoryTests
     {
