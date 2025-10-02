@@ -17,9 +17,6 @@ namespace ThunderbirdsBoardGameEngine.Api
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            builder.Services.Configure<CardDataOptions>(
-                builder.Configuration.GetSection("CardData"));
-
             // Add services to the container.
             builder.Services.AddControllers(options =>
             {

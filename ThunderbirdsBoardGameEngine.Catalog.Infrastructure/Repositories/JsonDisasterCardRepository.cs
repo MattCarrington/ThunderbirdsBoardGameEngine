@@ -16,10 +16,10 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Repositories
         private readonly JsonSerializerOptions _options;
         private readonly IFileReader _fileReader;
 
-        public JsonDisasterCardRepository(IOptions<CardDataOptions> options, IFileReader fileReader)
+        public JsonDisasterCardRepository(IOptions<DisasterCardJsonOptions> options, IFileReader fileReader)
         {
             // Options already validated at startup
-            _filePath = options.Value.DisasterCardsFilePath;            
+            _filePath = options.Value.FilePath;            
             _fileReader = fileReader ?? throw new ArgumentNullException(nameof(fileReader));
 
             _options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };

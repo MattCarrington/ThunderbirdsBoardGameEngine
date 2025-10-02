@@ -139,9 +139,9 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Repositor
             // Arrange
             var path = "/cards.json";
 
-            var options = Options.Create(new CardDataOptions 
+            var options = Options.Create(new DisasterCardJsonOptions 
             { 
-                DisasterCardsFilePath = path
+                FilePath = path
             });
 
             var files = new FakeFileReader().AddCanceled(path);
@@ -156,9 +156,9 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Repositor
 
         private static JsonDisasterCardRepository CreateRepository(string jsonText)
         {
-            var options = Options.Create(new CardDataOptions
+            var options = Options.Create(new DisasterCardJsonOptions
             {
-                DisasterCardsFilePath = "/cards.json"
+                FilePath = "/cards.json"
             });
 
             var reader = new FakeFileReader().Add("/cards.json", jsonText);

@@ -1,0 +1,246 @@
+﻿Tighten Now (Phase 1)
+
+Rename options to be domain-specific
+
+Rename CardDataOptions ➜ DisasterCardOptions.
+
+Update all IOptions<CardDataOptions> usages.
+
+✅ Done when: solution builds; DI bindings reference DisasterCardOptions.
+
+Add PostConfigure (root/normalize the path once)
+
+Add DisasterCardOptionsPostConfigure (root relative path against ContentRootPath, call GetFullPath).
+
+Register: services.AddSingleton<IPostConfigureOptions<DisasterCardOptions>, DisasterCardOptionsPostConfigure>();
+
+✅ Done when: options.Value.DisasterCardsFilePath is absolute everywhere.
+
+Simplify the validator (fail-fast existence)
+
+DisasterCardOptionsFileValidator: check presence + File.Exists(absolutePath). No IHostEnvironment.
+
+Keep .ValidateOnStart() on the options.
+
+✅ Done when: app fails at startup if file is missing.
+
+Simplify IFileReader
+
+Remove Exists(string).
+
+Keep only Task<Stream> OpenReadAsync(string, CancellationToken).
+
+Update FileReader + fakes.
+
+✅ Done when: repo compiles without any Exists call.
+
+Slim the repository
+
+Constructor: trust DI (no path normalization). Keep JSON options local for now.
+
+Method: no existence checks; just OpenReadAsync → Deserialize → DisasterCardValidator.ValidateAll.
+
+Remove any Console.WriteLine (we’ll add ILogger in Phase 2).
+
+✅ Done when: repo only does IO + deserialize + domain validate.
+
+Tests (Phase 1)
+
+Unit tests for PostConfigure & Validator
+
+Add DisasterCardOptionsPostConfigureTests (relative→absolute, absolute passthrough, null→throws).
+
+Add DisasterCardOptionsFileValidatorTests (missing path fail, nonexistent fail, existing success).
+
+Reuse a shared StubHostEnvironment in tests that run PostConfigure.
+
+✅ Done when: these tests pass locally/CI.
+
+Repository tests (focused)
+
+Keep: valid → list, [] → empty, null → empty, invalid/whitespace/empty string → JsonException, invalid domain → DisasterCardValidationException, canceled token → throws.
+
+Remove/move: “file missing” to validator tests.
+
+✅ Done when: repo tests don’t assert existence; all pass.
+
+Component/DI test (registration)
+
+Register StubHostEnvironment in the test container.
+
+AddInfrastructure + resolve IOptions<DisasterCardOptions> to trigger PostConfigure+Validate.
+
+Assert the correct repo type is registered.
+
+✅ Done when: test passes and proves DI wiring.
+
+Next Improvements
+
+Replace Console with ILogger
+
+Inject ILogger<JsonDisasterCardRepository>.
+
+Log debug before read, info after deserialize (count).
+
+✅ Done when: no Console.WriteLine remains.
+
+Move validation to a decorator
+
+Add ValidatingDisasterCardRepository that wraps IDisasterCardRepository and calls DisasterCardValidator.ValidateAll.
+
+Remove validation from the JSON repo.
+
+Wire with Scrutor Decorate<…> or a factory.
+
+✅ Done when: base repo is pure IO; validation still occurs.
+
+Extract JSON settings to DI
+
+Register a singleton JsonSerializerOptions (with JsonStringEnumConverter).
+
+Inject it into the repo; remove in-class creation.
+
+✅ Done when: repo no longer constructs JsonSerializerOptions.
+
+(Later) Remove custom BonusConverter
+
+Switch to STJ polymorphism: [JsonPolymorphic(TypeDiscriminatorPropertyName="type")] + [JsonDerivedType(...)].
+
+Ensure JsonStringEnumConverter(JsonNamingPolicy.CamelCase) to match existing JSON.
+
+✅ Done when: same JSON works; BonusConverter deleted.
+
+(Later) Reshape config for multiple repos
+
+Move to per-repo sections:
+
+"Data": { "DisasterCards": { "FilePath": "..." }, "CharacterCards": { "FilePath": "..." } }
+
+
+Either one options class per repo (preferred) or named options.
+
+Add a temporary fallback in PostConfigure if you need backward compatibility.
+
+✅ Done when: repos have their own options & validation; no “god” options.
+
+Immediate (Phase-1 wrap-up)
+
+Repo cleanup (no cross-cutting concerns)
+
+Remove Console.WriteLine in JsonDisasterCardRepository.
+
+Add cancellationToken.ThrowIfCancellationRequested() at method start.
+
+Ensure new JsonStringEnumConverter(JsonNamingPolicy.CamelCase) is used.
+
+Done when: build + tests green; no Console usage in infra.
+
+Commit: refactor(repo): remove console logging, add cancellation, enforce camelCase enums
+
+Component tests alignment
+
+In DI tests: resolve IOptions<CardDataOptions>.Value to trigger PostConfigure+Validate.
+
+If repo is Scoped, resolve via sp.CreateScope().
+
+Done when: DI tests pass; fail-fast (missing file) asserts OptionsValidationException.
+
+Commit: test(component): trigger options pipeline and resolve repo from scope
+
+Validator/PostConfigure hygiene
+
+Remove unused usings (e.g., Microsoft.Extensions.Hosting in validator).
+
+Mark infra classes sealed where appropriate.
+
+Done when: build clean; no warnings.
+
+Commit: chore(validation): seal infra types and remove unused usings
+
+DI lifetime decision
+
+Decide: keep AddScoped<IDisasterCardRepository,...> or switch to AddSingleton (repo is stateless).
+
+Update tests accordingly (scope only needed for Scoped).
+
+Done when: provider builds with validateScopes: true; tests pass.
+
+Commit: chore(di): set repository lifetime and align tests
+
+(Optional right now) I/O signature alignment
+
+Decide whether to switch ValueTask<Stream> → Task<Stream> in IFileReader.OpenReadAsync.
+
+Update implementation + fakes/mocks consistently.
+
+Done when: solution compiles; tests pass; single signature everywhere.
+
+Commit: refactor(io): align IFileReader OpenReadAsync to Task<Stream>
+
+Next wave (separate, small PRs)
+
+Inject JSON settings
+
+Register singleton JsonSerializerOptions in DI; inject into repo.
+
+Done when: repo no longer constructs JsonSerializerOptions.
+
+Commit: feat(json): inject JsonSerializerOptions via DI
+
+Logging (no Console)
+
+Add ILogger<JsonDisasterCardRepository> or a LoggingDisasterCardRepository decorator.
+
+Done when: structured logs exist; still no Console.
+
+Commit: feat(logging): add structured logging for disaster card reads
+
+Domain validation decorator
+
+ValidatingDisasterCardRepository wraps base repo and calls DisasterCardValidator.ValidateAll.
+
+Done when: base repo is pure IO+deserialize.
+
+Commit: feat(validation): introduce repository decorator for domain validation
+
+Options rename & per-repo split
+
+CardDataOptions → DisasterCardOptions (later add CharacterCardOptions).
+
+Add shared FilePathPostConfigure<T> + FileExistsValidator<T> (via IFileBackedOptions).
+
+Done when: DI binds per-repo sections; tests updated.
+
+Commit: feat(config): split to per-repo options with shared postconfigure/validator
+
+Add CharacterCards repo
+
+New repo + options + DI + tests (extend [MemberData] in component tests).
+
+Done when: DI registers both repos; tests green.
+
+Commit: feat(repo): add JsonCharacterCardRepository and wiring
+
+Remove BonusConverter (later)
+
+Switch to STJ polymorphism attributes; keep enum converter camelCase.
+
+Done when: same JSON works; converter deleted; tests pass.
+
+Commit: refactor(json): replace BonusConverter with STJ polymorphism
+
+Config reshape (if not done in #9)
+
+Use:
+
+"Data": {
+  "DisasterCards": { "FilePath": "..." },
+  "CharacterCards": { "FilePath": "..." }
+}
+
+
+Optional temporary fallback for legacy keys.
+
+Done when: new sections live; old paths optionally supported during migration.
+
+Commit: feat(config): reshape to per-repo Data sections

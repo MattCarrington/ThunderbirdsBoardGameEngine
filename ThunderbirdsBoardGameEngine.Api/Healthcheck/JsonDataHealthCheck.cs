@@ -6,9 +6,9 @@ namespace ThunderbirdsBoardGameEngine.Api.Healthcheck
 {
     public class JsonDataHealthCheck : IHealthCheck
     {
-        private readonly IOptions<CardDataOptions> _options;
+        private readonly IOptions<DisasterCardJsonOptions> _options;
 
-        public JsonDataHealthCheck(IOptions<CardDataOptions> options)
+        public JsonDataHealthCheck(IOptions<DisasterCardJsonOptions> options)
         {
             _options = options;
         }
@@ -17,12 +17,12 @@ namespace ThunderbirdsBoardGameEngine.Api.Healthcheck
             HealthCheckContext context,
             CancellationToken cancellationToken = default)
         {
-            var path = _options.Value.DisasterCardsFilePath;
+            var path = _options.Value.FilePath;
 
             if (string.IsNullOrWhiteSpace(path))
             {
                 return Task.FromResult(
-                    HealthCheckResult.Unhealthy("DisasterCardsFilePath not configured"));
+                    HealthCheckResult.Unhealthy("FilePath not configured"));
             }
 
             if (!File.Exists(path))

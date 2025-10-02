@@ -61,8 +61,8 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.ComponentTests
                 new RepositoryCase(
                     typeof(IDisasterCardRepository),
                     typeof(JsonDisasterCardRepository),
-                    typeof(CardDataOptions),
-                    "CardData:DisasterCardsFilePath",
+                    typeof(DisasterCardJsonOptions),
+                    "Catalog:DisasterCards:Json:Filepath",
                     "disaster-cards-test.json")
             };            
         }

@@ -53,9 +53,9 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.ComponentTests.Repo
 
         private static JsonDisasterCardRepository CreateRepository(string filepath)
         {
-            var options = Options.Create(new CardDataOptions
+            var options = Options.Create(new DisasterCardJsonOptions
             {
-                DisasterCardsFilePath = filepath
+                FilePath = filepath
             });
 
             return new JsonDisasterCardRepository(options, new FileReader());
