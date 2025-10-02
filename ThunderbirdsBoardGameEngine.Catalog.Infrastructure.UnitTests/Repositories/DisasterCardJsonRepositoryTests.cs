@@ -12,7 +12,7 @@ using Xunit;
 
 namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Repositories
 {
-    public class JsonDisasterCardRepositoryTests
+    public class DisasterCardJsonRepositoryTests
     {
         [Fact]
         public async Task GetAllAsync_WhenValidData_ReturnsDisasterCardsAsync()
@@ -146,7 +146,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Repositor
 
             var files = new FakeFileReader().AddCanceled(path);
 
-            var repository = new JsonDisasterCardRepository(
+            var repository = new DisasterCardJsonRepository(
                 options,
                 files);
 
@@ -154,7 +154,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Repositor
                 () => repository.GetAllAsync(new CancellationToken(canceled: true)));
         }
 
-        private static JsonDisasterCardRepository CreateRepository(string jsonText)
+        private static DisasterCardJsonRepository CreateRepository(string jsonText)
         {
             var options = Options.Create(new DisasterCardJsonOptions
             {
@@ -163,7 +163,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Repositor
 
             var reader = new FakeFileReader().Add("/cards.json", jsonText);
 
-            return new JsonDisasterCardRepository(options, reader);
+            return new DisasterCardJsonRepository(options, reader);
         }
     }
 }

@@ -10,13 +10,13 @@ using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Interfaces;
 
 namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Repositories
 {
-    internal class JsonDisasterCardRepository : IDisasterCardRepository
+    internal class DisasterCardJsonRepository : IDisasterCardRepository
     {
         private readonly string _filePath;
         private readonly JsonSerializerOptions _options;
         private readonly IFileReader _fileReader;
 
-        public JsonDisasterCardRepository(IOptions<DisasterCardJsonOptions> options, IFileReader fileReader)
+        public DisasterCardJsonRepository(IOptions<DisasterCardJsonOptions> options, IFileReader fileReader)
         {
             // Options already validated at startup
             _filePath = options.Value.FilePath;            

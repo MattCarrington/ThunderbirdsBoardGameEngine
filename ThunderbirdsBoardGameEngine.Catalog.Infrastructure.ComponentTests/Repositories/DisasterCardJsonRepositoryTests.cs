@@ -8,7 +8,7 @@ using Xunit;
 
 namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.ComponentTests.Repositories
 {
-    public class JsonDisasterCardRepositoryTests
+    public class DisasterCardJsonRepositoryTests
     {
         [Fact]
         public async Task GetAllAsync_WhenValidFile_ShouldReturnAllDisasterCardsAsync()
@@ -51,14 +51,14 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.ComponentTests.Repo
             await Assert.ThrowsAsync<JsonException>(() => repository.GetAllAsync(CancellationToken.None));
         }
 
-        private static JsonDisasterCardRepository CreateRepository(string filepath)
+        private static DisasterCardJsonRepository CreateRepository(string filepath)
         {
             var options = Options.Create(new DisasterCardJsonOptions
             {
                 FilePath = filepath
             });
 
-            return new JsonDisasterCardRepository(options, new FileReader());
+            return new DisasterCardJsonRepository(options, new FileReader());
         }
     }
 }

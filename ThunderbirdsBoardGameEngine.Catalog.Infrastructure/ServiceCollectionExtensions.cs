@@ -23,7 +23,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure
             services.AddSingleton<IValidateOptions<DisasterCardJsonOptions>, DisasterCardJsonOptionsValidator>();
             services.AddSingleton<IFileReader, FileReader>();
 
-            services.AddScoped<IDisasterCardRepository, JsonDisasterCardRepository>();
+            services.AddScoped<IDisasterCardRepository, DisasterCardJsonRepository>();
             return services;
         }
     }

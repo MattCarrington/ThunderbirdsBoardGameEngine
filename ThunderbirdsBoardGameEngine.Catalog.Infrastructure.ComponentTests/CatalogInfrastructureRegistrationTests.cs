@@ -60,7 +60,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.ComponentTests
             yield return new object[] {
                 new RepositoryCase(
                     typeof(IDisasterCardRepository),
-                    typeof(JsonDisasterCardRepository),
+                    typeof(DisasterCardJsonRepository),
                     typeof(DisasterCardJsonOptions),
                     "Catalog:DisasterCards:Json:Filepath",
                     "disaster-cards-test.json")
