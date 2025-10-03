@@ -2,3 +2,4 @@
 
 [assembly: InternalsVisibleTo("ThunderbirdsBoardGameEngine.Catalog.Infrastructure.ComponentTests")]
 [assembly: InternalsVisibleTo("ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests")]
+[assembly: InternalsVisibleTo("DynamicProxyGenAssembly2")]

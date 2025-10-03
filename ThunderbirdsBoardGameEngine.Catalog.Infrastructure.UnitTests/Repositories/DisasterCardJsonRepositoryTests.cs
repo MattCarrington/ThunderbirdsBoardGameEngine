@@ -1,4 +1,7 @@
-﻿using Microsoft.Extensions.Options;
+﻿using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
+using Microsoft.Extensions.Options;
+using NSubstitute;
 using System.Text.Json;
 using ThunderbirdsBoardGameEngine.Catalog.Domain.Entities;
 using ThunderbirdsBoardGameEngine.Catalog.Domain.Enums;
@@ -14,6 +17,13 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Repositor
 {
     public class DisasterCardJsonRepositoryTests
     {
+        private const string TestPath = "/cards.json";
+
+        private readonly IOptions<DisasterCardJsonOptions> _options = Options.Create(new DisasterCardJsonOptions
+        {
+            FilePath = TestPath
+        });
+
         [Fact]
         public async Task GetAllAsync_WhenValidData_ReturnsDisasterCardsAsync()
         {
@@ -42,7 +52,10 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Repositor
         public async Task GetAllAsync_WhenNoData_ReturnsEmptyListAsync()
         {
             // Arrange
-            var repository = CreateRepository("[]");
+            var reader = new FakeFileReader().Add("/cards.json", "[]");
+            var logger = Substitute.For<ILogger<DisasterCardJsonRepository>>();
+
+            var repository = new DisasterCardJsonRepository(_options, reader, logger);
 
             // Act
             var result = await repository.GetAllAsync(CancellationToken.None);
@@ -50,6 +63,16 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Repositor
             // Assert
             Assert.NotNull(result);
             Assert.Empty(result);
+
+            logger.Received(1).Log(
+               LogLevel.Warning,
+               Arg.Any<EventId>(),
+               Arg.Is<object>(s => HasLogState(
+                   s,
+                   "No Disaster Cards found in the file {Path}. Returning empty list.",
+                   new ValueTuple<string, string>("Path", TestPath))),
+               Arg.Any<Exception>(),
+               Arg.Any<Func<object, Exception, string>>());
         }
 
         [Fact]
@@ -139,16 +162,9 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Repositor
             // Arrange
             var path = "/cards.json";
 
-            var options = Options.Create(new DisasterCardJsonOptions 
-            { 
-                FilePath = path
-            });
-
             var files = new FakeFileReader().AddCanceled(path);
 
-            var repository = new DisasterCardJsonRepository(
-                options,
-                files);
+            var repository = new DisasterCardJsonRepository(_options, files, NullLogger<DisasterCardJsonRepository>.Instance);
 
             await Assert.ThrowsAnyAsync<OperationCanceledException>(
                 () => repository.GetAllAsync(new CancellationToken(canceled: true)));
@@ -156,14 +172,25 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Repositor
 
         private static DisasterCardJsonRepository CreateRepository(string jsonText)
         {
-            var options = Options.Create(new DisasterCardJsonOptions
+            IOptions<DisasterCardJsonOptions> options = Options.Create(new DisasterCardJsonOptions
             {
-                FilePath = "/cards.json"
+                FilePath = TestPath
             });
 
             var reader = new FakeFileReader().Add("/cards.json", jsonText);
 
-            return new DisasterCardJsonRepository(options, reader);
+            return new DisasterCardJsonRepository(options, reader, NullLogger<DisasterCardJsonRepository>.Instance);
+        }
+
+        private static bool HasLogState(object state, string template, params (string Key, string Value)[] props)
+        {
+            if (state is IEnumerable<KeyValuePair<string, object>> kvps)
+            {
+                var dict = kvps.ToDictionary(k => k.Key, k => k.Value?.ToString() ?? "");
+                if (!dict.TryGetValue("{OriginalFormat}", out var fmt) || fmt != template) return false;
+                return props.All(p => dict.TryGetValue(p.Key, out var v) && v == p.Value);
+            }
+            return false;
         }
     }
 }
