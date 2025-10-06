@@ -26,7 +26,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.ComponentTests
 
             var services = new ServiceCollection();
             services.AddLogging();
-            services.AddSingleton<IHostEnvironment>(new StubHostEnvironment(Directory.GetCurrentDirectory()));
+            services.AddSingleton<IHostEnvironment>(StubHostEnvironment.WithNullProvider(Directory.GetCurrentDirectory()));
             services.AddInfrastructure(cfg);
 
             using var sp = services.BuildServiceProvider(validateScopes: true);
