@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
+using System.Security;
 using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Configuration;
 
 namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.PostConfigures
@@ -15,18 +16,45 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.PostConfigures
 
         public void PostConfigure(string? name, DisasterCardJsonOptions options)
         {
-            var raw = options.FilePath?.Trim();
+            var original = options.FilePath;
 
-            if (string.IsNullOrWhiteSpace(raw))
+            if (string.IsNullOrWhiteSpace(original))
             {
-                throw new OptionsValidationException(
-                    nameof(DisasterCardJsonOptions),
-                    typeof(DisasterCardJsonOptions),
-                    new[] { "CardData:FilePath is required." });
+                return; // return early so validation can catch the error
             }
 
-            var combined = Path.IsPathRooted(raw) ? raw : Path.Combine(_env.ContentRootPath, raw);
-            options.FilePath = Path.GetFullPath(combined);
+            var raw = original.Trim();
+
+            if (raw.Length >= 2)
+            {
+                var first = raw[0];
+                var last = raw[^1];
+                if ((first == '"' && last == '"') || (first == '\'' && last == '\''))
+                {
+                    raw = raw[1..^1];
+                }
+            }
+
+            raw = Environment.ExpandEnvironmentVariables(raw);
+
+            try
+            {
+                var absolute = Path.IsPathFullyQualified(raw)
+                    ? raw
+                    : Path.Combine(_env.ContentRootPath, raw);
+
+                raw = Path.GetFullPath(absolute);
+            }
+            catch (Exception ex) when (
+                ex is ArgumentException ||
+                ex is NotSupportedException ||
+                ex is PathTooLongException ||
+                ex is SecurityException)
+            {
+                raw = original; // revert to original if exception occurs
+            }
+
+            options.FilePath = raw;
         }
     }
 }
