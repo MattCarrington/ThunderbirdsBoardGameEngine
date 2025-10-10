@@ -1,13 +1,32 @@
-﻿using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Interfaces;
+﻿using System.IO.Abstractions;
+using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Interfaces;
 
 namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Readers
 {
     internal sealed class FileReader : IFileReader
     {
-        public ValueTask<Stream> OpenReadAsync(string path, CancellationToken cancellationToken)
+        private readonly IFileSystem _fileSystem;
+
+        public FileReader(IFileSystem fileSystem)
         {
-            return new(new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read, 4096,
-                                          FileOptions.Asynchronous | FileOptions.SequentialScan));
+            _fileSystem = fileSystem;
+        }
+        public Task<Stream> OpenReadAsync(string path, CancellationToken cancellationToken)
+        {
+            if (string.IsNullOrWhiteSpace(path))
+            {
+                throw new ArgumentException("Path cannot be null or whitespace.", nameof(path));
+            }
+
+            if (cancellationToken.IsCancellationRequested)
+            {
+                return Task.FromCanceled<Stream>(cancellationToken);
+            }
+
+            var stream = _fileSystem.FileStream.New(
+                path, FileMode.Open, FileAccess.Read, FileShare.Read, bufferSize: 4096, options: FileOptions.Asynchronous | FileOptions.SequentialScan);
+
+            return Task.FromResult<Stream>(stream);
         }
     }
 }

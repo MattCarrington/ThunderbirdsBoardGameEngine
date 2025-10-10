@@ -1,29 +1,77 @@
-﻿using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Interfaces;
+﻿using System.Text;
+using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Interfaces;
 
 namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Fakes
 {
-    public class FakeFileReader : IFileReader
+    public sealed class FakeFileReader : IFileReader
     {
-        private readonly Dictionary<string, Func<CancellationToken, ValueTask<Stream>>> _map = new();
+        private readonly Dictionary<string, Func<CancellationToken, Task<Stream>>> _map = new(StringComparer.OrdinalIgnoreCase);
 
         public FakeFileReader Add(string path, string content)
         {
-            _map[path] = _ => new ValueTask<Stream>(
-                new MemoryStream(System.Text.Encoding.UTF8.GetBytes(content)));
+            if (string.IsNullOrWhiteSpace(path))
+            {
+                throw new ArgumentException("Path is required.", nameof(path));
+            }
+
+            var bytes = Encoding.UTF8.GetBytes(content);
+
+            _map[path] = cancellationToken =>
+            {
+                if (cancellationToken.IsCancellationRequested) 
+                { 
+                    return Task.FromCanceled<Stream>(cancellationToken); 
+                }
+
+                return Task.FromResult<Stream>(new MemoryStream(bytes, writable: false));
+            };
+
             return this;
         }
 
         public FakeFileReader AddCanceled(string path)
         {
-            _map[path] = ValueTask.FromCanceled<Stream>;
+            if (string.IsNullOrWhiteSpace(path))
+            {
+                throw new ArgumentException("Path is required.", nameof(path));
+            }
+
+            _map[path] = cancellationToken => Task.FromCanceled<Stream>(
+                cancellationToken.IsCancellationRequested ? cancellationToken : new CancellationToken(true));
+
             return this;
         }
 
-        public ValueTask<Stream> OpenReadAsync(string path, CancellationToken cancellationToken)
+        public FakeFileReader AddException(string path, Exception ex)
         {
-            return _map.TryGetValue(path, out var factory)
-                ? factory(cancellationToken)
-                : ValueTask.FromException<Stream>(new FileNotFoundException(path));
+            if (string.IsNullOrWhiteSpace(path))
+            {
+                throw new ArgumentException("Path is required.", nameof(path));
+            }
+
+            _map[path] = _ => Task.FromException<Stream>(ex);
+
+            return this;
+        }
+
+        public Task<Stream> OpenReadAsync(string path, CancellationToken cancellationToken)
+        {
+            if (string.IsNullOrWhiteSpace(path))
+            {
+                return Task.FromException<Stream>(new ArgumentException("Path is required.", nameof(path)));
+            }
+
+            if (cancellationToken.IsCancellationRequested)
+            {
+                return Task.FromCanceled<Stream>(cancellationToken);
+            }
+
+            if (_map.TryGetValue(path, out var factory))
+            {
+                return factory(cancellationToken);
+            }
+
+            return Task.FromException<Stream>(new FileNotFoundException(path));
         }
     }
 }

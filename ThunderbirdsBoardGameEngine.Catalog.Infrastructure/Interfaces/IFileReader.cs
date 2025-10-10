@@ -2,6 +2,6 @@
 {
     internal interface IFileReader
     {
-        ValueTask<Stream> OpenReadAsync(string path, CancellationToken cancellationToken);
+        Task<Stream> OpenReadAsync(string path, CancellationToken cancellationToken);
     }
 }

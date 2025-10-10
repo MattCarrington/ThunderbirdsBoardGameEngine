@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
+using System.IO.Abstractions;
 using System.Text.Json;
 using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Configuration;
 using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Readers;
@@ -59,7 +60,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.ComponentTests.Repo
                 FilePath = filepath
             });
 
-            return new DisasterCardJsonRepository(options, new FileReader(), NullLogger<DisasterCardJsonRepository>.Instance);
+            return new DisasterCardJsonRepository(options, new FileReader(new FileSystem()), NullLogger<DisasterCardJsonRepository>.Instance);
         }
     }
 }
