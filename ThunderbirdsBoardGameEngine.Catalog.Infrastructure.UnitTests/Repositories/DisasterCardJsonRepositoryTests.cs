@@ -3,12 +3,14 @@ using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using NSubstitute;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using ThunderbirdsBoardGameEngine.Catalog.Domain.Entities;
 using ThunderbirdsBoardGameEngine.Catalog.Domain.Enums;
 using ThunderbirdsBoardGameEngine.Catalog.Domain.Exceptions;
 using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Configuration;
 using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Repositories;
 using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Fakes;
+using ThunderbirdsBoardGameEngine.Serialization.Converters;
 using ThunderbirdsBoardGameEngine.TestUtils;
 using ThunderbirdsBoardGameEngine.TestUtils.Builders;
 using Xunit;
@@ -55,7 +57,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Repositor
             var reader = new FakeFileReader().Add("/cards.json", "[]");
             var logger = Substitute.For<ILogger<DisasterCardJsonRepository>>();
 
-            var repository = new DisasterCardJsonRepository(_options, reader, logger);
+            var repository = new DisasterCardJsonRepository(_options, reader, logger, CreateJsonOptions());
 
             // Act
             var result = await repository.GetAllAsync(CancellationToken.None);
@@ -164,13 +166,13 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Repositor
 
             var files = new FakeFileReader().AddCanceled(path);
 
-            var repository = new DisasterCardJsonRepository(_options, files, NullLogger<DisasterCardJsonRepository>.Instance);
+            var repository = new DisasterCardJsonRepository(_options, files, NullLogger<DisasterCardJsonRepository>.Instance, CreateJsonOptions());
 
             await Assert.ThrowsAnyAsync<OperationCanceledException>(
                 () => repository.GetAllAsync(new CancellationToken(canceled: true)));
         }
 
-        private static DisasterCardJsonRepository CreateRepository(string jsonText)
+        private DisasterCardJsonRepository CreateRepository(string jsonText)
         {
             IOptions<DisasterCardJsonOptions> options = Options.Create(new DisasterCardJsonOptions
             {
@@ -179,7 +181,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Repositor
 
             var reader = new FakeFileReader().Add("/cards.json", jsonText);
 
-            return new DisasterCardJsonRepository(options, reader, NullLogger<DisasterCardJsonRepository>.Instance);
+            return new DisasterCardJsonRepository(options, reader, NullLogger<DisasterCardJsonRepository>.Instance, CreateJsonOptions());
         }
 
         private static bool HasLogState(object state, string template, params (string Key, string Value)[] props)
@@ -191,6 +193,33 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Repositor
                 return props.All(p => dict.TryGetValue(p.Key, out var v) && v == p.Value);
             }
             return false;
+        }
+
+        private static JsonOptionsSnapshot CreateJsonOptions()
+        {
+            var options = new JsonSerializerOptions
+            {
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                PropertyNameCaseInsensitive = true,
+                DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
+            };
+
+            options.Converters.Add(new JsonStringEnumConverter(JsonNamingPolicy.CamelCase));
+            options.Converters.Add(new BonusConverter()); // TEMP
+
+            return new JsonOptionsSnapshot(options);
+        }
+
+        private class JsonOptionsSnapshot : IOptionsSnapshot<JsonSerializerOptions>
+        {
+            private readonly JsonSerializerOptions _options;
+            public JsonOptionsSnapshot(JsonSerializerOptions options)
+            {
+                _options = options;
+            }
+            public JsonSerializerOptions Value => _options;
+
+            public JsonSerializerOptions Get(string name) => _options;
         }
     }
 }

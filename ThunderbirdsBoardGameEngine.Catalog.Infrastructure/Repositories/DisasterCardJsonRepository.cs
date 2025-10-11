@@ -1,33 +1,30 @@
 ﻿using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System.Text.Json;
-using System.Text.Json.Serialization;
 using ThunderbirdsBoardGameEngine.Catalog.Application.Interfaces;
 using ThunderbirdsBoardGameEngine.Catalog.Domain.Entities;
 using ThunderbirdsBoardGameEngine.Catalog.Domain.Validators;
 using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Configuration;
 using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Interfaces;
-using ThunderbirdsBoardGameEngine.Serialization.Converters;
+using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Serialization;
 
 namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Repositories
 {
     internal class DisasterCardJsonRepository : IDisasterCardRepository
     {
         private readonly string _filePath;
-        private readonly JsonSerializerOptions _options;
+        private readonly JsonSerializerOptions _jsonOptions;
         private readonly IFileReader _fileReader;
         private readonly ILogger<DisasterCardJsonRepository> _logger;
 
-        public DisasterCardJsonRepository(IOptions<DisasterCardJsonOptions> options, IFileReader fileReader, ILogger<DisasterCardJsonRepository> logger)
+        public DisasterCardJsonRepository(
+            IOptions<DisasterCardJsonOptions> options, IFileReader fileReader, ILogger<DisasterCardJsonRepository> logger, IOptionsSnapshot<JsonSerializerOptions> jsonOptions)
         {
             // Options already validated at startup
             _filePath = options.Value.FilePath;            
             _fileReader = fileReader ?? throw new ArgumentNullException(nameof(fileReader));
             _logger = logger;
-            
-            _options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
-            _options.Converters.Add(new JsonStringEnumConverter());
-            _options.Converters.Add(new BonusConverter());
+            _jsonOptions = jsonOptions.Get(CatalogJson.Name) ?? throw new ArgumentNullException(nameof(jsonOptions));
         }
 
         public async Task<IReadOnlyList<DisasterCard>> GetAllAsync(CancellationToken cancellationToken)
@@ -36,7 +33,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Repositories
 
             await using var stream = await _fileReader.OpenReadAsync(_filePath, cancellationToken);
 
-            var cards = await JsonSerializer.DeserializeAsync<List<DisasterCard>>(stream, _options, cancellationToken);
+            var cards = await JsonSerializer.DeserializeAsync<List<DisasterCard>>(stream, _jsonOptions, cancellationToken);
 
             if (cards is null || cards.Count == 0)
             {

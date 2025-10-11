@@ -2,12 +2,14 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using System.IO.Abstractions;
+using System.Text.Json;
 using ThunderbirdsBoardGameEngine.Catalog.Application.Interfaces;
 using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Configuration;
 using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Interfaces;
 using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.PostConfigures;
 using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Readers;
 using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Repositories;
+using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Serialization;
 using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Validators;
 
 namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure
@@ -26,6 +28,9 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure
             services.AddOptions<DisasterCardJsonOptions>()
                 .Bind(configuration.GetSection("Catalog:DisasterCards:Json"))
                 .ValidateOnStart(); // ← run all validators during startup
+
+            services.AddOptions<JsonSerializerOptions>("DisasterCards")
+                .Configure(CatalogJson.Configure);
 
             return services;
         }
