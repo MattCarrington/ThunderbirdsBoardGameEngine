@@ -1,4 +1,4 @@
-﻿namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests
+﻿namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Helpers
 {
     public sealed class EnvironmentVariableScope : IDisposable
     {

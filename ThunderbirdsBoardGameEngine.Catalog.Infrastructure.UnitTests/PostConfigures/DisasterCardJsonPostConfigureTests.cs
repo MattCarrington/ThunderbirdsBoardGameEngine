@@ -1,5 +1,6 @@
 ﻿using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Configuration;
 using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.PostConfigures;
+using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Helpers;
 using ThunderbirdsBoardGameEngine.TestUtils.Stubs;
 using Xunit;
 
