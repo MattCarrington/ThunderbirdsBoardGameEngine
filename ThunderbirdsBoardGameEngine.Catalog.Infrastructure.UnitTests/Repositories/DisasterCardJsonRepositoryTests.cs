@@ -321,25 +321,6 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Repositor
         }
 
         [Fact]
-        public async Task GetAllAsync_WhenInvalidDisasterCards_ThrowsDisasterCardValidationException()
-        {
-            // Arrange
-            var disasterCards = new List<DisasterCard>
-            {
-                new DisasterCardBuilder().WithId(1).WithNullBonusConditions().WithNullRewards().Build(),
-                new DisasterCardBuilder().WithId(2).WithName(string.Empty).WithLocation(BoardLocation.SouthPacific).WithRescueType(RescueType.Space).WithDifficulty(7).Build(), // Invalid: Name is empty
-                new DisasterCardBuilder().WithId(3).WithName("Another Valid Disaster").WithLocation(BoardLocation.Africa).WithRescueType(RescueType.Air).WithDifficulty(-9).Build()
-            };
-
-            var jsonText = SerializeDisasterCardData(disasterCards);
-
-            var repository = new DisasterCardJsonRepositoryBuilder().WithJson(jsonText).Build();
-
-            // Act & Assert
-            await Assert.ThrowsAsync<DisasterCardValidationException>(() => repository.GetAllAsync(CancellationToken.None));
-        }
-
-        [Fact]
         public async Task GetAllAsync_WhenCanceled_ThrowsOperationCanceledException()
         {
             // Arrange

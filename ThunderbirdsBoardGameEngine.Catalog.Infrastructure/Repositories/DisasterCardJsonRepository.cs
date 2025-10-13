@@ -58,8 +58,6 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Repositories
                     throw CatalogDataAccessException.DataMissing(_filePath, new InvalidDataException("Thunderbirds Disaster Card deck is null or empty"));
                 }
 
-                _logger.LogDebug("Deserialized {Count} disaster cards. Validating…", cards.Count);
-                DisasterCardValidator.ValidateAll(cards);
                 _logger.LogDebug("Loaded {Count} disaster cards from {Path}", cards.Count, _filePath);
 
                 return cards;
