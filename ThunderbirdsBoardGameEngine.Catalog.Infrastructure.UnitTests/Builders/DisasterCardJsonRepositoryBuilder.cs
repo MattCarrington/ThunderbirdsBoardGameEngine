@@ -17,7 +17,6 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Builders
         private IFileReader? _fileReader;
         private ILogger<DisasterCardJsonRepository> _logger = NullLogger<DisasterCardJsonRepository>.Instance;
         private string _filePath = "/disastercards.json";
-        
         private IOptionsSnapshot<JsonSerializerOptions> _jsonOptions = JsonOptionsFactory.CreateJsonOptions();
 
         internal DisasterCardJsonRepositoryBuilder WithLogger(ILogger<DisasterCardJsonRepository> logger)
@@ -46,6 +45,12 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Builders
             }
 
             _filePath = filePath;
+            return this;
+        }
+
+        internal DisasterCardJsonRepositoryBuilder WithJsonOptions(IOptionsSnapshot<JsonSerializerOptions> jsonOptions)
+        {
+            _jsonOptions = jsonOptions;
             return this;
         }
 
