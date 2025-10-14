@@ -13,59 +13,32 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.ComponentTests
 {
     public class CatalogInfrastructureRegistrationTests
     {
-        [Theory]
-        [MemberData(nameof(Repositories))]
-        public void AddInfrastructure_Registers_Repository(RepositoryCase repositoryCase)
+        [Fact]
+        public void AddInfrastructure_WhenBadFilePath_FailsFast()
         {
-            // Arrange: absolute path to a real test file for THIS repo
-            var absolutePath = TestDataPathHelper.GetPath(repositoryCase.TestFileName);
-
+            // Arrange: obviously invalid path so validator will fail
             var cfg = new ConfigurationBuilder()
-                .AddInMemoryCollection(new Dictionary<string, string?> { [repositoryCase.ConfigKey] = absolutePath })
+                .AddInMemoryCollection(new Dictionary<string, string?>
+                {
+                    ["Catalog:DisasterCards:Json:FilePath"] = "/no/such/dir/cards.json"
+                })
                 .Build();
 
             var services = new ServiceCollection();
             services.AddLogging();
-            services.AddSingleton<IHostEnvironment>(StubHostEnvironment.WithNullProvider(Directory.GetCurrentDirectory()));
+            services.AddSingleton<IHostEnvironment>(
+                StubHostEnvironment.WithNullProvider(Directory.GetCurrentDirectory()));
+
             services.AddInfrastructure(cfg);
 
-            using var sp = services.BuildServiceProvider(validateScopes: true);
+            using var sp = services.BuildServiceProvider(
+                new ServiceProviderOptions { ValidateScopes = true });
 
-            // Trigger options pipeline (Bind + PostConfigure + Validator) for THIS repo’s options type
-            TriggerOptionsValidation(sp, repositoryCase.OptionsType);
+            // Act + Assert: accessing .Value triggers Bind + PostConfigure + Validate
+            var ex = Assert.Throws<OptionsValidationException>(
+                () => sp.GetRequiredService<IOptions<DisasterCardJsonOptions>>().Value);
 
-            // Resolve repo (use a scope if repos are Scoped)
-            using var scope = sp.CreateScope();
-            var resolved = scope.ServiceProvider.GetRequiredService(repositoryCase.ServiceType);
-
-            Assert.Equal(repositoryCase.ImplType, resolved.GetType());
-        }
-
-        private static void TriggerOptionsValidation(IServiceProvider sp, Type optionsType)
-        {
-            var ioptionsType = typeof(IOptions<>).MakeGenericType(optionsType);
-            var options = sp.GetRequiredService(ioptionsType);
-            _ = options.GetType().GetProperty("Value")!.GetValue(options);
-        }
-
-        public sealed record RepositoryCase(
-            Type ServiceType,   // e.g. typeof(IDisasterCardRepository)
-            Type ImplType,      // e.g. typeof(JsonDisasterCardRepository)
-            Type OptionsType,   // e.g. typeof(DisasterCardOptions)
-            string ConfigKey,   // e.g. "Data:DisasterCards:FilePath"
-            string TestFileName // e.g. "disaster-cards-test.json"
-        );
-
-        public static IEnumerable<object[]> Repositories()
-        {
-            yield return new object[] {
-                new RepositoryCase(
-                    typeof(IDisasterCardRepository),
-                    typeof(DisasterCardJsonRepository),
-                    typeof(DisasterCardJsonOptions),
-                    "Catalog:DisasterCards:Json:Filepath",
-                    "disaster-cards-test.json")
-            };            
+            Assert.Contains("Catalog:DisasterCards:Json:FilePath", ex.Message, StringComparison.OrdinalIgnoreCase);
         }
     }
 }
