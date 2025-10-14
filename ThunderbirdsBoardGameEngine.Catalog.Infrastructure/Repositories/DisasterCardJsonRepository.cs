@@ -6,14 +6,13 @@ using ThunderbirdsBoardGameEngine.Catalog.Application.Exceptions;
 using ThunderbirdsBoardGameEngine.Catalog.Application.Interfaces;
 using ThunderbirdsBoardGameEngine.Catalog.Domain.Entities;
 using ThunderbirdsBoardGameEngine.Catalog.Domain.Exceptions;
-using ThunderbirdsBoardGameEngine.Catalog.Domain.Validators;
 using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Configuration;
 using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Interfaces;
 using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Serialization;
 
 namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Repositories
 {
-    internal class DisasterCardJsonRepository : IDisasterCardRepository
+    internal sealed class DisasterCardJsonRepository : IDisasterCardRepository
     {
         private readonly string _filePath;
         private readonly JsonSerializerOptions _jsonOptions;

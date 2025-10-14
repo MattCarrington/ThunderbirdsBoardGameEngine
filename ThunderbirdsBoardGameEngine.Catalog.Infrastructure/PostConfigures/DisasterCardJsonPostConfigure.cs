@@ -5,7 +5,7 @@ using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Configuration;
 
 namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.PostConfigures
 {
-    internal class DisasterCardJsonPostConfigure : IPostConfigureOptions<DisasterCardJsonOptions>
+    internal sealed class DisasterCardJsonPostConfigure : IPostConfigureOptions<DisasterCardJsonOptions>
     {
         private readonly IHostEnvironment _env;
 

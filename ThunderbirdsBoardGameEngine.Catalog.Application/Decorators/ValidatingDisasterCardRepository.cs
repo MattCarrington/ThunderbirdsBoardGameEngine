@@ -4,7 +4,7 @@ using ThunderbirdsBoardGameEngine.Catalog.Domain.Validators;
 
 namespace ThunderbirdsBoardGameEngine.Catalog.Application.Decorators
 {
-    public class ValidatingDisasterCardRepository : IDisasterCardRepository
+    public sealed class ValidatingDisasterCardRepository : IDisasterCardRepository
     {
         private readonly IDisasterCardRepository _inner;
 
