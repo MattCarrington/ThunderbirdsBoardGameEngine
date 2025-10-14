@@ -32,6 +32,8 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Repositories
 
         public async Task<IReadOnlyList<DisasterCard>> GetAllAsync(CancellationToken cancellationToken)
         {
+            cancellationToken.ThrowIfCancellationRequested();
+
             _logger.LogDebug("Loading Disaster Cards from {Path}", _filePath);
 
             try

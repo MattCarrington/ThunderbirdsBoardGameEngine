@@ -48,6 +48,20 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Repositor
             Assert.Equal(9, result.FirstOrDefault(x => x.Id == 3).DifficultyNumber);
         }
 
+        [Fact]
+        public async Task GetAllAsync_WhenCanceledBeforeCall_ThrowsOperationCanceledException()
+        {
+            // Arrange
+            var repository = new DisasterCardJsonRepositoryBuilder().WithFilePath(TestPath).Build();
+
+            using var cts = new CancellationTokenSource();
+            cts.Cancel();
+
+            // Act & Assert
+            await Assert.ThrowsAnyAsync<OperationCanceledException>(
+                () => repository.GetAllAsync(cts.Token));
+        }
+
         [Theory]
         [InlineData("[]")]
         [InlineData("null")]
