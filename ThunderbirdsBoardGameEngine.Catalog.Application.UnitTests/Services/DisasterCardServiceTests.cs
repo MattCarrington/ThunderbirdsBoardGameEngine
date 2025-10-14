@@ -1,75 +1,84 @@
-﻿using AutoFixture;
-using AutoFixture.Kernel;
-using NSubstitute;
+﻿using NSubstitute;
+using ThunderbirdsBoardGameEngine.Catalog.Application.Exceptions;
 using ThunderbirdsBoardGameEngine.Catalog.Application.Interfaces;
 using ThunderbirdsBoardGameEngine.Catalog.Application.Services;
 using ThunderbirdsBoardGameEngine.Catalog.Domain.Entities;
+using ThunderbirdsBoardGameEngine.Catalog.Domain.Enums;
+using ThunderbirdsBoardGameEngine.TestUtils.Builders;
 using Xunit;
 
 namespace ThunderbirdsBoardGameEngine.Catalog.Application.UnitTests.Services
 {
     public class DisasterCardServiceTests
     {
-        private readonly Fixture _fixture = new();
-        private readonly IDisasterCardRepository _repository = Substitute.For<IDisasterCardRepository>();
-        private readonly DisasterCardService _service;
-        private readonly CancellationToken cancellationToken = CancellationToken.None;
-
-        public DisasterCardServiceTests()
-        {
-            _service = new DisasterCardService(_repository);
-            _fixture.Customizations.Add(new TypeRelay(typeof(BonusCondition), typeof(CharacterBonusCondition)));
-        }
-
         [Fact]
         public async Task GetDisasterCards_WhenDisasterCardsExist_ReturnsDisasterCardAsync()
         {
             // Arrange
-            var disasterCards = _fixture.CreateMany<DisasterCard>(5).ToList();
-            
-            _repository.GetAllAsync(Arg.Any<CancellationToken>()).Returns(disasterCards);
+            var disasterCards = new List<DisasterCard>
+            {
+                new DisasterCardBuilder().WithId(1).WithName("Disaster 1").WithDifficulty(7).WithSpecifiedReward(BonusToken.Intelligence).Build(),
+                new DisasterCardBuilder().WithId(2).WithName("Disaster 2").WithDifficulty(8).WithLocation(BoardLocation.Asia).WithUserChoiceRewardOption().Build(),
+            };
+
+            var repository = Substitute.For<IDisasterCardRepository>();
+            repository.GetAllAsync(Arg.Any<CancellationToken>()).Returns(disasterCards);
+
+            var service = CreateDisasterCardService(repository);
 
             // Act
-            var result = await _service.GetAllAsync(cancellationToken);
+            var result = await service.GetAllAsync(CancellationToken.None);
 
             // Assert
             Assert.NotNull(result);
             Assert.Equal(disasterCards.Count, result.Count);
             Assert.All(result, disasterCard => Assert.IsType<DisasterCard>(disasterCard));
+            Assert.Same(disasterCards, result);
 
-            await _repository.Received(1).GetAllAsync(Arg.Is<CancellationToken>(t => t == cancellationToken));            
+            await repository.Received(1).GetAllAsync(Arg.Any<CancellationToken>());
         }
 
         [Fact]
-        public async Task GetAllAsync_WhenNoDisasterCardsExist_ReturnsEmptyList()
+
+        public async Task GetAllAsync_WithCancellationToken_Forwarded()
         {
             // Arrange
-            _repository.GetAllAsync(Arg.Any<CancellationToken>()).Returns(Array.Empty<DisasterCard>());
+            var repository = Substitute.For<IDisasterCardRepository>();
+            repository.GetAllAsync(Arg.Any<CancellationToken>())
+                     .Returns(new List<DisasterCard> { new DisasterCard { Id = 1, Name = "Sample Disaster" } });
+
+            var service = CreateDisasterCardService(repository);
+
+            using var cancellationTokenSource = new CancellationTokenSource();
+            var cancellationToken = cancellationTokenSource.Token;
 
             // Act
-            var result = await _service.GetAllAsync(cancellationToken);
+            var _ = await service.GetAllAsync(cancellationToken);
 
             // Assert
-            Assert.NotNull(result);
-            Assert.Empty(result);
-
-            await _repository.Received(1).GetAllAsync(Arg.Is<CancellationToken>(t => t == cancellationToken));
+            await repository.Received(1).GetAllAsync(Arg.Is<CancellationToken>(t => t == cancellationToken));
         }
 
         [Fact]
-        public async Task GetAllAsync_WhenDisasterCardsNull_ReturnsEmptyList()
+        public async Task GetAllAsync_WhenRepositoryThrowsException_Bubbles()
         {
             // Arrange
-            _repository.GetAllAsync(Arg.Any<CancellationToken>()).Returns(null as IReadOnlyList<DisasterCard>);
+            var repository = Substitute.For<IDisasterCardRepository>();
+            repository.GetAllAsync(Arg.Any<CancellationToken>())
+                .Returns(Task.FromException<IReadOnlyList<DisasterCard>>(CatalogDataAccessException.DataMissing("some path")));
 
-            // Act
-            var result = await _service.GetAllAsync(cancellationToken);
+            var service = CreateDisasterCardService(repository);
 
-            // Assert
-            Assert.NotNull(result);
-            Assert.Empty(result);
+            // Act & Assert
+            var exception = await Assert.ThrowsAsync<CatalogDataAccessException>(() => service.GetAllAsync(CancellationToken.None));
+            Assert.Equal("some path", exception.Path);
 
-            await _repository.Received(1).GetAllAsync(Arg.Is<CancellationToken>(t => t == cancellationToken));
+            await repository.Received(1).GetAllAsync(Arg.Any<CancellationToken>());
+        }
+
+        private static DisasterCardService CreateDisasterCardService(IDisasterCardRepository repository)
+        {
+            return new DisasterCardService(repository);
         }
     }
 }

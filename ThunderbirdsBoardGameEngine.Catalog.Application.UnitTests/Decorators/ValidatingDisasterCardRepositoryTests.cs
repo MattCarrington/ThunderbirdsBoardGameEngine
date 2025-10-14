@@ -26,7 +26,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Application.UnitTests.Decorators
             var inner = Substitute.For<IDisasterCardRepository>();
             inner.GetAllAsync(Arg.Any<CancellationToken>()).Returns(Task.FromResult<IReadOnlyList<DisasterCard>>(cards));
 
-            var repository = new ValidatingDisasterCardRepository(inner);
+            var repository = CreateValidatingDisasterCardRepository(inner);
 
             // Act
             var result = await repository.GetAllAsync(CancellationToken.None);
@@ -34,6 +34,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Application.UnitTests.Decorators
             // Assert
             Assert.NotNull(result);
             Assert.Equal(cards.Count, result.Count);
+
             await inner.Received(1).GetAllAsync(Arg.Any<CancellationToken>());
         }
 
@@ -45,7 +46,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Application.UnitTests.Decorators
             inner.GetAllAsync(Arg.Any<CancellationToken>())
                  .Returns(Task.FromResult<IReadOnlyList<DisasterCard>>(new[] { new DisasterCardBuilder().WithId(1).WithName("OK").Build() }));
 
-            var repository = new ValidatingDisasterCardRepository(inner);
+            var repository = CreateValidatingDisasterCardRepository(inner);
             using var cancellationToken = new CancellationTokenSource();
 
             // Act

@@ -9,19 +9,12 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Application.Services
         
         public DisasterCardService(IDisasterCardRepository disasterCardRepository)
         {
-            _disasterCardRepository = disasterCardRepository;
+            _disasterCardRepository = disasterCardRepository ?? throw new ArgumentNullException(nameof(disasterCardRepository));
         }
 
         public async Task<IReadOnlyList<DisasterCard>> GetAllAsync(CancellationToken cancellationToken)
         {
-            var cards = await _disasterCardRepository.GetAllAsync(CancellationToken.None);
-
-            if (cards is null || !cards.Any())
-            {
-                return [];
-            }
-
-            return cards;
+            return await _disasterCardRepository.GetAllAsync(cancellationToken);
         }
     }
 }
