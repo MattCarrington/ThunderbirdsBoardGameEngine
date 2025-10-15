@@ -15,7 +15,7 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests
             {
                 configBuilder.AddInMemoryCollection(new Dictionary<string, string?>
                 {
-                    { "Catalog:DisasterCards:Json:Filepath", filepath }
+                    { "Catalog:DisasterCards:Json:FilePath", filepath }
                 });
             });
         }

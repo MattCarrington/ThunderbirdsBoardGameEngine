@@ -1,13 +1,12 @@
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.OpenApi.Models;
-using ThunderbirdsBoardGameEngine.Api.Healthcheck;
 using ThunderbirdsBoardGameEngine.Api.Routing;
 using ThunderbirdsBoardGameEngine.Api.Swagger;
 using ThunderbirdsBoardGameEngine.Catalog.Application;
 using ThunderbirdsBoardGameEngine.Catalog.Infrastructure;
-using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Configuration;
 
 namespace ThunderbirdsBoardGameEngine.Api
 {
@@ -38,9 +37,7 @@ namespace ThunderbirdsBoardGameEngine.Api
                 options.SubstituteApiVersionInUrl = true;
             });
 
-            // Health Checks
-            builder.Services.AddHealthChecks()
-                .AddCheck<JsonDataHealthCheck>("json-data-check");
+            builder.Services.AddHealthChecks();
 
             builder.Services.AddApplication();
             builder.Services.AddInfrastructure(builder.Configuration);
@@ -85,7 +82,17 @@ namespace ThunderbirdsBoardGameEngine.Api
 
             app.MapControllers();
 
-            app.MapHealthChecks("/health/ready");
+            // liveness: dependency-free
+            app.MapHealthChecks("/health/live", new HealthCheckOptions
+            {
+                Predicate = _ => false
+            });
+
+            // readiness: only checks tagged "readiness" (none yet)
+            app.MapHealthChecks("/health/ready", new HealthCheckOptions
+            {
+                Predicate = r => r.Tags.Contains("readiness")
+            });
 
             app.Run();
         }
