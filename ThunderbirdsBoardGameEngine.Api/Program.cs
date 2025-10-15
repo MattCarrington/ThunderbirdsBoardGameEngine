@@ -86,13 +86,13 @@ namespace ThunderbirdsBoardGameEngine.Api
             app.MapHealthChecks("/health/live", new HealthCheckOptions
             {
                 Predicate = _ => false
-            });
+            }).AllowAnonymous();
 
             // readiness: only checks tagged "readiness" (none yet)
             app.MapHealthChecks("/health/ready", new HealthCheckOptions
             {
                 Predicate = r => r.Tags.Contains("readiness")
-            });
+            }).AllowAnonymous();
 
             app.Run();
         }
