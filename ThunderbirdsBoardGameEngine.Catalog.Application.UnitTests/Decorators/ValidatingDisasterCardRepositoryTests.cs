@@ -23,7 +23,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Application.UnitTests.Decorators
                 new DisasterCardBuilder().WithId(2).WithName("Disaster 2").WithDifficulty(8).WithLocation(BoardLocation.Asia).WithUserChoiceRewardOption().Build()
             };
             
-            var inner = Substitute.For<IDisasterCardRepository>();
+            var inner = Substitute.For<IDisasterCardReader>();
             inner.GetAllAsync(Arg.Any<CancellationToken>()).Returns(Task.FromResult<IReadOnlyList<DisasterCard>>(cards));
 
             var repository = CreateValidatingDisasterCardRepository(inner);
@@ -42,7 +42,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Application.UnitTests.Decorators
         public async Task GetAllAsync_WithCancellationToken_Forwarded()
         {
             // Arrange
-            var inner = Substitute.For<IDisasterCardRepository>();
+            var inner = Substitute.For<IDisasterCardReader>();
             inner.GetAllAsync(Arg.Any<CancellationToken>())
                  .Returns(Task.FromResult<IReadOnlyList<DisasterCard>>(new[] { new DisasterCardBuilder().WithId(1).WithName("OK").Build() }));
 
@@ -107,28 +107,28 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Application.UnitTests.Decorators
             Assert.Equal(CatalogDataAccessErrorCode.DataMissing, ex.ErrorCode);
         }
 
-        private static ValidatingDisasterCardRepository CreateValidatingDisasterCardRepository(IReadOnlyList<DisasterCard> cards)
+        private static ValidatingDisasterCardReader CreateValidatingDisasterCardRepository(IReadOnlyList<DisasterCard> cards)
         {
             var snapshot = cards is DisasterCard[] arr ? arr : cards.ToArray();
 
-            var inner = Substitute.For<IDisasterCardRepository>();
+            var inner = Substitute.For<IDisasterCardReader>();
             inner.GetAllAsync(Arg.Any<CancellationToken>()).Returns(Task.FromResult<IReadOnlyList<DisasterCard>>(snapshot));
 
             return CreateValidatingDisasterCardRepository(inner);
         }
 
-        private static ValidatingDisasterCardRepository CreateValidatingDisasterCardRepository(Exception ex)
+        private static ValidatingDisasterCardReader CreateValidatingDisasterCardRepository(Exception ex)
         {
-            var inner = Substitute.For<IDisasterCardRepository>();
+            var inner = Substitute.For<IDisasterCardReader>();
             inner.GetAllAsync(Arg.Any<CancellationToken>())
                  .Returns<Task<IReadOnlyList<DisasterCard>>>(_ => throw ex);
 
             return CreateValidatingDisasterCardRepository(inner);
         }
 
-        private static ValidatingDisasterCardRepository CreateValidatingDisasterCardRepository(IDisasterCardRepository inner)
+        private static ValidatingDisasterCardReader CreateValidatingDisasterCardRepository(IDisasterCardReader inner)
         {
-            return new ValidatingDisasterCardRepository(inner);
+            return new ValidatingDisasterCardReader(inner);
         }
     }
 }

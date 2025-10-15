@@ -9,8 +9,8 @@ using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Configuration;
 using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Interfaces;
 using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.PostConfigures;
 using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Readers;
-using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Repositories;
 using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Serialization;
+using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Utilities;
 using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Validators;
 
 namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure
@@ -19,13 +19,13 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure
     {
         public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddSingleton<IFileReader, FileReader>();
+            services.AddSingleton<IFileOpener, FileOpener>();
             services.AddSingleton<IFileSystem, FileSystem>();
 
             services.AddSingleton<IPostConfigureOptions<DisasterCardJsonOptions>, DisasterCardJsonPostConfigure>();
             services.AddSingleton<IValidateOptions<DisasterCardJsonOptions>, DisasterCardJsonOptionsValidator>();
-            services.AddScoped<IDisasterCardRepository, DisasterCardJsonRepository>();
-            services.Decorate<IDisasterCardRepository, ValidatingDisasterCardRepository>();
+            services.AddScoped<IDisasterCardReader, DisasterCardJsonReader>();
+            services.Decorate<IDisasterCardReader, ValidatingDisasterCardReader>();
 
             services.AddOptions<DisasterCardJsonOptions>()
                 .Bind(configuration.GetSection("Catalog:DisasterCards:Json"))

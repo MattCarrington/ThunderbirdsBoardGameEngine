@@ -10,17 +10,17 @@ using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Configuration;
 using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Interfaces;
 using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Serialization;
 
-namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Repositories
+namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Readers
 {
-    internal sealed class DisasterCardJsonRepository : IDisasterCardRepository
+    internal sealed class DisasterCardJsonReader : IDisasterCardReader
     {
         private readonly string _filePath;
         private readonly JsonSerializerOptions _jsonOptions;
-        private readonly IFileReader _fileReader;
-        private readonly ILogger<DisasterCardJsonRepository> _logger;
+        private readonly IFileOpener _fileReader;
+        private readonly ILogger<DisasterCardJsonReader> _logger;
 
-        public DisasterCardJsonRepository(
-            IOptions<DisasterCardJsonOptions> options, IFileReader fileReader, ILogger<DisasterCardJsonRepository> logger, IOptionsSnapshot<JsonSerializerOptions> jsonOptions)
+        public DisasterCardJsonReader(
+            IOptions<DisasterCardJsonOptions> options, IFileOpener fileReader, ILogger<DisasterCardJsonReader> logger, IOptionsSnapshot<JsonSerializerOptions> jsonOptions)
         {
             // Options already validated at startup
             _filePath = options.Value.FilePath;

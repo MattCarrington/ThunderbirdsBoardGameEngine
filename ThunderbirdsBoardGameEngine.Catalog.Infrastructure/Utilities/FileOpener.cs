@@ -1,13 +1,13 @@
 ﻿using System.IO.Abstractions;
 using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Interfaces;
 
-namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Readers
+namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Utilities
 {
-    internal sealed class FileReader : IFileReader
+    internal sealed class FileOpener : IFileOpener
     {
         private readonly IFileSystem _fileSystem;
 
-        public FileReader(IFileSystem fileSystem)
+        public FileOpener(IFileSystem fileSystem)
         {
             _fileSystem = fileSystem;
         }

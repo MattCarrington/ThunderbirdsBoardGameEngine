@@ -4,11 +4,11 @@ using ThunderbirdsBoardGameEngine.Catalog.Domain.Validators;
 
 namespace ThunderbirdsBoardGameEngine.Catalog.Application.Decorators
 {
-    public sealed class ValidatingDisasterCardRepository : IDisasterCardRepository
+    public sealed class ValidatingDisasterCardReader : IDisasterCardReader
     {
-        private readonly IDisasterCardRepository _inner;
+        private readonly IDisasterCardReader _inner;
 
-        public ValidatingDisasterCardRepository(IDisasterCardRepository inner)
+        public ValidatingDisasterCardReader(IDisasterCardReader inner)
         {
             _inner = inner;
         }

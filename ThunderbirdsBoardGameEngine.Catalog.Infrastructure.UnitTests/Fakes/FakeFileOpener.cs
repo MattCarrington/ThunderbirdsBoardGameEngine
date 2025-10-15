@@ -3,11 +3,11 @@ using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Interfaces;
 
 namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Fakes
 {
-    public sealed class FakeFileReader : IFileReader
+    public sealed class FakeFileOpener : IFileOpener
     {
         private readonly Dictionary<string, Func<CancellationToken, Task<Stream>>> _map = new(StringComparer.OrdinalIgnoreCase);
 
-        public FakeFileReader Add(string path, string content)
+        public FakeFileOpener Add(string path, string content)
         {
             if (string.IsNullOrWhiteSpace(path))
             {
@@ -29,7 +29,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Fakes
             return this;
         }
 
-        public FakeFileReader AddCanceled(string path)
+        public FakeFileOpener AddCanceled(string path)
         {
             if (string.IsNullOrWhiteSpace(path))
             {
@@ -42,7 +42,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Fakes
             return this;
         }
 
-        public FakeFileReader AddException(string path, Exception ex)
+        public FakeFileOpener AddException(string path, Exception ex)
         {
             if (string.IsNullOrWhiteSpace(path))
             {

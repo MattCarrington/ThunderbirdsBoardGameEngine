@@ -21,7 +21,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Application.UnitTests.Services
                 new DisasterCardBuilder().WithId(2).WithName("Disaster 2").WithDifficulty(8).WithLocation(BoardLocation.Asia).WithUserChoiceRewardOption().Build(),
             };
 
-            var repository = Substitute.For<IDisasterCardRepository>();
+            var repository = Substitute.For<IDisasterCardReader>();
             repository.GetAllAsync(Arg.Any<CancellationToken>()).Returns(disasterCards);
 
             var service = CreateDisasterCardService(repository);
@@ -43,7 +43,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Application.UnitTests.Services
         public async Task GetAllAsync_WithCancellationToken_Forwarded()
         {
             // Arrange
-            var repository = Substitute.For<IDisasterCardRepository>();
+            var repository = Substitute.For<IDisasterCardReader>();
             repository.GetAllAsync(Arg.Any<CancellationToken>())
                      .Returns(new List<DisasterCard> { new DisasterCard { Id = 1, Name = "Sample Disaster" } });
 
@@ -63,7 +63,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Application.UnitTests.Services
         public async Task GetAllAsync_WhenRepositoryThrowsException_Bubbles()
         {
             // Arrange
-            var repository = Substitute.For<IDisasterCardRepository>();
+            var repository = Substitute.For<IDisasterCardReader>();
             repository.GetAllAsync(Arg.Any<CancellationToken>())
                 .Returns(Task.FromException<IReadOnlyList<DisasterCard>>(CatalogDataAccessException.DataMissing("some path")));
 
@@ -76,7 +76,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Application.UnitTests.Services
             await repository.Received(1).GetAllAsync(Arg.Any<CancellationToken>());
         }
 
-        private static DisasterCardService CreateDisasterCardService(IDisasterCardRepository repository)
+        private static DisasterCardService CreateDisasterCardService(IDisasterCardReader repository)
         {
             return new DisasterCardService(repository);
         }

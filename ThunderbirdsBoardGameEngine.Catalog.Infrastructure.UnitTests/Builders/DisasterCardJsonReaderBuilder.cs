@@ -5,39 +5,38 @@ using System.Text.Json;
 using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Configuration;
 using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Interfaces;
 using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Readers;
-using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Repositories;
 using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Factories;
 using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Fakes;
 
 namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Builders
 {
-    public class DisasterCardJsonRepositoryBuilder
+    public class DisasterCardJsonReaderBuilder
     {
         private string _jsonContent = "[]";
-        private IFileReader? _fileReader;
-        private ILogger<DisasterCardJsonRepository> _logger = NullLogger<DisasterCardJsonRepository>.Instance;
+        private IFileOpener? _fileReader;
+        private ILogger<DisasterCardJsonReader> _logger = NullLogger<DisasterCardJsonReader>.Instance;
         private string _filePath = "/disastercards.json";
         private IOptionsSnapshot<JsonSerializerOptions> _jsonOptions = JsonOptionsFactory.CreateJsonOptions();
 
-        internal DisasterCardJsonRepositoryBuilder WithLogger(ILogger<DisasterCardJsonRepository> logger)
+        internal DisasterCardJsonReaderBuilder WithLogger(ILogger<DisasterCardJsonReader> logger)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             return this;
         }
 
-        internal DisasterCardJsonRepositoryBuilder WithJson(string jsonContent)
+        internal DisasterCardJsonReaderBuilder WithJson(string jsonContent)
         {
             _jsonContent = jsonContent ?? throw new ArgumentNullException(nameof(jsonContent));
             return this;
         }
 
-        internal DisasterCardJsonRepositoryBuilder WithFileReader(IFileReader fileReader)
+        internal DisasterCardJsonReaderBuilder WithFileReader(IFileOpener fileReader)
         {
             _fileReader = fileReader ?? throw new ArgumentNullException(nameof(fileReader));
             return this;
         }
 
-        internal DisasterCardJsonRepositoryBuilder WithFilePath(string filePath)
+        internal DisasterCardJsonReaderBuilder WithFilePath(string filePath)
         {
             if (string.IsNullOrWhiteSpace(filePath))
             {
@@ -48,22 +47,22 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Builders
             return this;
         }
 
-        internal DisasterCardJsonRepositoryBuilder WithJsonOptions(IOptionsSnapshot<JsonSerializerOptions> jsonOptions)
+        internal DisasterCardJsonReaderBuilder WithJsonOptions(IOptionsSnapshot<JsonSerializerOptions> jsonOptions)
         {
             _jsonOptions = jsonOptions;
             return this;
         }
 
-        internal DisasterCardJsonRepository Build()
+        internal DisasterCardJsonReader Build()
         {
             if (_fileReader is null)
             {
-                _fileReader = new FakeFileReader().Add(_filePath, _jsonContent);
+                _fileReader = new FakeFileOpener().Add(_filePath, _jsonContent);
             }
 
             var disasterCardJsonOptions = Options.Create(new DisasterCardJsonOptions { FilePath = _filePath });
 
-            return new DisasterCardJsonRepository(disasterCardJsonOptions, _fileReader, _logger, _jsonOptions);
+            return new DisasterCardJsonReader(disasterCardJsonOptions, _fileReader, _logger, _jsonOptions);
         }
     }
 }

@@ -2,10 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
-using ThunderbirdsBoardGameEngine.Catalog.Application.Interfaces;
 using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Configuration;
-using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Repositories;
-using ThunderbirdsBoardGameEngine.TestUtils.Helpers;
 using ThunderbirdsBoardGameEngine.TestUtils.Stubs;
 using Xunit;
 

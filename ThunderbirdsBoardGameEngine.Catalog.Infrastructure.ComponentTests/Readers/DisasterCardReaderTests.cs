@@ -8,12 +8,12 @@ using Xunit;
 
 namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.ComponentTests.Repositories
 {
-    public class DisasterCardRepositoryTests : IClassFixture<InfrastructureRegistrationFixture>
+    public class DisasterCardReaderTests : IClassFixture<InfrastructureRegistrationFixture>
     {
         private readonly InfrastructureRegistrationFixture _fixture;
         private const string ConfigKey = "Catalog:DisasterCards:Json:FilePath";
 
-        public DisasterCardRepositoryTests(InfrastructureRegistrationFixture fixture)
+        public DisasterCardReaderTests(InfrastructureRegistrationFixture fixture)
         {
             _fixture = fixture;
         }
@@ -27,7 +27,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.ComponentTests.Repo
             using var sp = _fixture.Build(ConfigKey, filePath);
             using var scope = sp.CreateScope();
             
-            var repository = scope.ServiceProvider.GetRequiredService<IDisasterCardRepository>();
+            var repository = scope.ServiceProvider.GetRequiredService<IDisasterCardReader>();
 
             // Act
             var cards = await repository.GetAllAsync(CancellationToken.None);
@@ -48,7 +48,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.ComponentTests.Repo
             using var sp = _fixture.Build(ConfigKey, filePath);
             using var scope = sp.CreateScope();
 
-            var repository = scope.ServiceProvider.GetRequiredService<IDisasterCardRepository>();
+            var repository = scope.ServiceProvider.GetRequiredService<IDisasterCardReader>();
 
             // Act & Assert: repo maps to CatalogDataAccessException.BadJson
             var ex = await Assert.ThrowsAsync<CatalogDataAccessException>(() => repository.GetAllAsync(CancellationToken.None));
@@ -64,7 +64,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.ComponentTests.Repo
             using var sp = _fixture.Build(ConfigKey, filePath);
             using var scope = sp.CreateScope();
 
-            var repository = scope.ServiceProvider.GetRequiredService<IDisasterCardRepository>();
+            var repository = scope.ServiceProvider.GetRequiredService<IDisasterCardReader>();
 
             // Act & Assert: repo maps to CatalogDataAccessException.BadJson
             var exception = await Assert.ThrowsAsync<DisasterCardValidationException>(() => repository.GetAllAsync(CancellationToken.None));
@@ -80,7 +80,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.ComponentTests.Repo
             using var sp = _fixture.Build(ConfigKey, filePath);
             using var scope = sp.CreateScope();
 
-            var repository = scope.ServiceProvider.GetRequiredService<IDisasterCardRepository>();
+            var repository = scope.ServiceProvider.GetRequiredService<IDisasterCardReader>();
 
             using var cts = new CancellationTokenSource();
             cts.Cancel();

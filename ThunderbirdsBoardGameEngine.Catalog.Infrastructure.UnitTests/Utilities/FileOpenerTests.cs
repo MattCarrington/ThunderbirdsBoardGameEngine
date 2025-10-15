@@ -1,11 +1,10 @@
 ﻿using System.IO.Abstractions.TestingHelpers;
-using System.Threading.Tasks;
-using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Readers;
+using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Utilities;
 using Xunit;
 
-namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Readers
+namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Utilities
 {
-    public class FileReaderTests
+    public class FileOpenerTests
     {
         [Fact]
         public async Task OpenReadAsync_WithStringEmptyPath_ThrowsArgumentNullException()
@@ -58,7 +57,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Readers
             var fileSystem = new MockFileSystem();
             fileSystem.AddFile(path, new MockFileData("{ \"key\": \"value\" }"));
 
-            var fileReader = new FileReader(fileSystem);
+            var fileReader = new FileOpener(fileSystem);
 
             // Act
             using var result = await fileReader.OpenReadAsync(path, CancellationToken.None);
@@ -83,11 +82,11 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Readers
                 fileReader.OpenReadAsync(@"C:\missing.json", CancellationToken.None));
         }
 
-        private static FileReader CreateFileReader() 
+        private static FileOpener CreateFileReader() 
         { 
             var fileSystem = new MockFileSystem();
 
-            return new FileReader(fileSystem); 
+            return new FileOpener(fileSystem); 
         }
     }
 }
