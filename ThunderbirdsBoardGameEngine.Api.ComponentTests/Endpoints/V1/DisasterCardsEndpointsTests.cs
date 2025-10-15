@@ -25,7 +25,7 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints.V1
         }
 
         [Fact] 
-        public async Task GetAllDisasterCards_ReturnsExpectedDataset() 
+        public async Task GetAllDisasterCards_WhenValidApiVersionHeader_ReturnsExpectedDataset() 
         {
             // Arrange
             var request = new HttpRequestMessage(HttpMethod.Get, Route);
