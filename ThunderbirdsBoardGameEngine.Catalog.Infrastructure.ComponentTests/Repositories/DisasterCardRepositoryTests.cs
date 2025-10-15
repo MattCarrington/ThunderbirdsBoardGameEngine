@@ -1,15 +1,9 @@
-﻿using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Options;
-using System.Runtime.InteropServices.Marshalling;
+﻿using Microsoft.Extensions.DependencyInjection;
 using ThunderbirdsBoardGameEngine.Catalog.Application.Exceptions;
 using ThunderbirdsBoardGameEngine.Catalog.Application.Interfaces;
 using ThunderbirdsBoardGameEngine.Catalog.Domain.Exceptions;
 using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.ComponentTests.Fixtures;
-using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Configuration;
 using ThunderbirdsBoardGameEngine.TestUtils.Helpers;
-using ThunderbirdsBoardGameEngine.TestUtils.Stubs;
 using Xunit;
 
 namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.ComponentTests.Repositories
