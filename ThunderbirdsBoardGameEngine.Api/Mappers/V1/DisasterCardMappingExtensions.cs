@@ -1,7 +1,7 @@
-﻿using ThunderbirdsBoardGameEngine.Catalog.Contracts.Dtos.V1;
+﻿using ThunderbirdsBoardGameEngine.Catalog.Application.Exceptions;
+using ThunderbirdsBoardGameEngine.Catalog.Contracts.Dtos.V1;
 using ThunderbirdsBoardGameEngine.Catalog.Domain.Entities;
 using ThunderbirdsBoardGameEngine.Catalog.Domain.Enums;
-using ThunderbirdsBoardGameEngine.Catalog.Domain.Exceptions;
 using ThunderbirdsBoardGameEngine.Serialization.Enums;
 
 namespace ThunderbirdsBoardGameEngine.Api.Mappers.V1
@@ -15,7 +15,12 @@ namespace ThunderbirdsBoardGameEngine.Api.Mappers.V1
                 CharacterBonusCondition cb => EnumDisplayHelper.GetDisplayName(cb.Character),
                 ThunderbirdBonusCondition tb => EnumDisplayHelper.GetDisplayName(tb.Thunderbird),
                 PodVehicleBonusCondition pvb => EnumDisplayHelper.GetDisplayName(pvb.PodVehicle),
-                _ => throw new InvalidBonusConditionTypeException("Unknown bonus condition")
+                _ => throw new ApplicationValidationException(
+                        "Unknown bonus condition type",
+                        new Dictionary<string, string[]>
+                        {
+                            ["BonusCondition.Type"] = new[] { bonusCondition.GetType().Name }
+                        })
             };
 
             var locationText = bonusCondition.Location switch
@@ -39,7 +44,12 @@ namespace ThunderbirdsBoardGameEngine.Api.Mappers.V1
         {
             if (!reward.IsUserChoice && reward.SpecifiedToken == null)
             {
-                throw new InvalidRewardConditionException("SpecifiedToken must be set for non-user-choice rewards");
+                throw new ApplicationValidationException(
+                    "SpecifiedToken must be set for non-user-choice rewards",
+                    new Dictionary<string, string[]> 
+                    { 
+                        ["Reward.SpecifiedToken"] = new[] { "Required" } 
+                    });
             }
 
             return new RewardDto

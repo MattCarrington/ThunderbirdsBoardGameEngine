@@ -1,8 +1,8 @@
 ﻿using ThunderbirdsBoardGameEngine.Api.Mappers.V1;
+using ThunderbirdsBoardGameEngine.Catalog.Application.Exceptions;
 using ThunderbirdsBoardGameEngine.Catalog.Contracts.Dtos.V1;
 using ThunderbirdsBoardGameEngine.Catalog.Domain.Entities;
 using ThunderbirdsBoardGameEngine.Catalog.Domain.Enums;
-using ThunderbirdsBoardGameEngine.Catalog.Domain.Exceptions;
 using ThunderbirdsBoardGameEngine.Serialization.Enums;
 using ThunderbirdsBoardGameEngine.TestUtils.Builders;
 using Xunit;
@@ -75,10 +75,10 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.UnitTests.Mappers.V1
             var unknownBonusCondition = new UnknownBonusCondition();
 
             // Act & Assert
-            var ex = Assert.Throws<InvalidBonusConditionTypeException>(() =>
+            var ex = Assert.Throws<ApplicationValidationException>(() =>
                 unknownBonusCondition.ToDto());
 
-            Assert.Equal("Unknown bonus condition", ex.Message);
+            Assert.Equal("Unknown bonus condition type", ex.Message);
         }
 
         [Fact]
@@ -174,7 +174,7 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.UnitTests.Mappers.V1
             };
 
             // Act & Assert
-            var ex = Assert.Throws<InvalidRewardConditionException>(() =>
+            var ex = Assert.Throws<ApplicationValidationException>(() =>
                 rewardOption.ToDto());
             Assert.Equal("SpecifiedToken must be set for non-user-choice rewards", ex.Message);
         }
