@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ThunderbirdsBoardGameEngine.Api.Mappers.V1;
 using ThunderbirdsBoardGameEngine.Catalog.Application.Interfaces;
+using ThunderbirdsBoardGameEngine.Catalog.Contracts.Dtos.V1;
 
 namespace ThunderbirdsBoardGameEngine.Api.Controllers.V1
 {
@@ -17,6 +18,10 @@ namespace ThunderbirdsBoardGameEngine.Api.Controllers.V1
         }
 
         [HttpGet]
+        [ProducesResponseType(typeof(IEnumerable<DisasterCardDto>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status503ServiceUnavailable)]
         public async Task<IActionResult> Get(CancellationToken cancellationToken)
         {
             var disasterCards = await _service.GetAllAsync(cancellationToken);
