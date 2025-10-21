@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.OpenApi.Models;
+using ThunderbirdsBoardGameEngine.Api.Composition;
 using ThunderbirdsBoardGameEngine.Api.Routing;
 using ThunderbirdsBoardGameEngine.Api.Swagger;
 using ThunderbirdsBoardGameEngine.Catalog.Application;
@@ -20,6 +21,10 @@ namespace ThunderbirdsBoardGameEngine.Api
             builder.Services.AddControllers(options =>
             {
                 options.Conventions.Add(new RouteTokenTransformerConvention(new KebabCaseParameterTransformer()));
+
+            }).ConfigureApiBehaviorOptions(options =>
+            {
+                options.SuppressMapClientErrors = false;
             });
 
             builder.Services.AddApiVersioning(options =>
@@ -64,6 +69,9 @@ namespace ThunderbirdsBoardGameEngine.Api
                 });
             });
 
+            builder.Services.AddApiExceptionHandling();
+            builder.Services.AddModelStateProblemDetails();
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -72,6 +80,9 @@ namespace ThunderbirdsBoardGameEngine.Api
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
+
+            app.UseApiExceptionHandling();
+            app.UseStatusCodeProblemDetails();
 
             app.UseHttpsRedirection();
 
