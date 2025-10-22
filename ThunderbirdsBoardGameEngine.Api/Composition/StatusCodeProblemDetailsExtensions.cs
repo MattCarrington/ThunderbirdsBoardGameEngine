@@ -1,76 +1,63 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
-namespace ThunderbirdsBoardGameEngine.Api.Composition
+namespace ThunderbirdsBoardGameEngine.Api.Composition;
+
+public static class StatusCodeProblemDetailsExtensions
 {
-    public static class StatusCodeProblemDetailsExtensions
+    // Services: ProblemDetails + (optional) model validation PD + your custom fields
+    public static IServiceCollection AddApiProblemDetails(this IServiceCollection services)
     {
-        public static IApplicationBuilder UseStatusCodeProblemDetails(this IApplicationBuilder app)
+        services.AddProblemDetails(options =>
         {
-            return app.UseStatusCodePages(async context =>
+            // runs for ANY ProblemDetails (incl. API versioning errors)
+            options.CustomizeProblemDetails = ctx =>
             {
-                var http = context.HttpContext;
+                var http = ctx.HttpContext;
+                var pd = ctx.ProblemDetails;
 
-                // only act on error codes with empty body
-                if (http.Response.StatusCode < 400 || http.Response.HasStarted) 
-                { 
-                    return; 
+                // ensure common fields
+                pd.Instance ??= http.Request.Path;
+                pd.Extensions["traceId"] = Activity.Current?.Id ?? http.TraceIdentifier;
+
+                // if you have a docs catalog, set a stable type
+                if (string.IsNullOrEmpty(pd.Type) && !string.IsNullOrEmpty(pd.Title))
+                {
+                    pd.Type = $"https://docs.yourapi.com/problems#{Slug(pd.Title)}";
                 }
+            };
+        });
 
-                var pds = http.RequestServices.GetRequiredService<IProblemDetailsService>();
-
-                var (title, type) = http.Response.StatusCode switch
-                {
-                    StatusCodes.Status401Unauthorized => ("Unauthorized", "about:blank"),
-                    StatusCodes.Status403Forbidden => ("Forbidden", "about:blank"),
-                    StatusCodes.Status404NotFound => ("Resource not found", "about:blank"),
-                    StatusCodes.Status405MethodNotAllowed => ("Method not allowed", "about:blank"),
-                    StatusCodes.Status406NotAcceptable => ("Not acceptable", "about:blank"),
-                    StatusCodes.Status415UnsupportedMediaType => ("Unsupported media type", "about:blank"),
-                    StatusCodes.Status422UnprocessableEntity => ("Unprocessable entity", "about:blank"),
-                    StatusCodes.Status429TooManyRequests => ("Too many requests", "about:blank"),
-                    _ => ("Request failed", "about:blank")
-                };
-
-                var problem = new ProblemDetails
-                {
-                    Status = http.Response.StatusCode,
-                    Title = title,
-                    Type = type,
-                    Instance = http.Request.Path
-                };
-
-                await pds.WriteAsync(new ProblemDetailsContext
-                {
-                    HttpContext = http,
-                    ProblemDetails = problem
-                });
-            });
-        }
-
-        public static IServiceCollection AddModelStateProblemDetails(this IServiceCollection services)
+        // Optional: make automatic 400 from model binding return ValidationProblemDetails with PD content-type
+        services.Configure<ApiBehaviorOptions>(options =>
         {
-            services.Configure<ApiBehaviorOptions>(options =>
+            options.InvalidModelStateResponseFactory = context =>
             {
-                options.InvalidModelStateResponseFactory = context =>
+                var pd = new ValidationProblemDetails(context.ModelState)
                 {
-                    var pd = new ValidationProblemDetails(context.ModelState)
-                    {
-                        Status = StatusCodes.Status400BadRequest,
-                        Title = "Request validation failed."
-                    };
-
-                    pd.Extensions["traceId"] =
-                        Activity.Current?.Id ?? context.HttpContext.TraceIdentifier;
-
-                    return new BadRequestObjectResult(pd)
-                    {
-                        ContentTypes = { "application/problem+json" }
-                    };
+                    Status = StatusCodes.Status400BadRequest,
+                    Title = "Request validation failed."
                 };
-            });
 
-            return services;
-        }
+                pd.Extensions["traceId"] =
+                    Activity.Current?.Id ?? context.HttpContext.TraceIdentifier;
+
+                return new BadRequestObjectResult(pd); // content-type will be problem+json via IProblemDetailsService
+            };
+        });
+
+        return services;
+
+        static string Slug(string s) =>
+            new string(s.ToLowerInvariant().Select(ch => char.IsLetterOrDigit(ch) ? ch : '-').ToArray())
+                .Trim('-');
+    }
+
+    // Pipeline: let framework produce PD for exceptions + bare status codes
+    public static IApplicationBuilder UseApiProblemDetails(this IApplicationBuilder app)
+    {
+        app.UseStatusCodePages();
+
+        return app;
     }
 }

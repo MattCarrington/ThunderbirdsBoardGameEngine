@@ -27,7 +27,7 @@ namespace ThunderbirdsBoardGameEngine.Api
                 options.SuppressMapClientErrors = false;
             });
 
-            builder.Services.AddApiVersioning(options =>
+            builder.Services.AddHeaderApiVersioning();
             {
                 options.AssumeDefaultVersionWhenUnspecified = false;
                 options.DefaultApiVersion = new ApiVersion(1, 0);
@@ -70,7 +70,7 @@ namespace ThunderbirdsBoardGameEngine.Api
             });
 
             builder.Services.AddApiExceptionHandling();
-            builder.Services.AddModelStateProblemDetails();
+            builder.Services.AddProblemDetails();
 
             var app = builder.Build();
 
@@ -82,7 +82,7 @@ namespace ThunderbirdsBoardGameEngine.Api
             }
 
             app.UseApiExceptionHandling();
-            app.UseStatusCodeProblemDetails();
+            app.UseApiProblemDetails();
 
             app.UseHttpsRedirection();
 

@@ -1,4 +1,7 @@
-﻿using System.Net;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using System.Net;
+using System.Net.Http.Json;
 using System.Text.Json;
 using ThunderbirdsBoardGameEngine.Catalog.Contracts.Dtos.V1;
 using ThunderbirdsBoardGameEngine.TestUtils.Assertions;
@@ -61,10 +64,15 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints.V1
 
             // Assert
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+            Assert.Equal("application/problem+json", response.Content.Headers.ContentType!.MediaType);
 
-            var content = await response.Content.ReadAsStringAsync();
+            var problem = await response.Content.ReadFromJsonAsync<ProblemDetails>();
 
-            Assert.Contains("An API version is required, but was not specified.", content);
+            Assert.NotNull(problem);
+            Assert.Equal(StatusCodes.Status400BadRequest, problem.Status);
+            Assert.Equal("ApiVersionUnspecified", problem.Title);
+            Assert.True(problem.Extensions.ContainsKey("traceId")); 
+            Assert.False(string.IsNullOrWhiteSpace(problem.Detail));
         }
 
         [Fact] 
@@ -79,10 +87,39 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints.V1
 
             // Assert
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+            Assert.Equal("application/problem+json", response.Content.Headers.ContentType!.MediaType);
 
-            var content = await response.Content.ReadAsStringAsync();
-            
-            Assert.Contains("does not support the API version '99999'", content);
+            var problem = await response.Content.ReadFromJsonAsync<ProblemDetails>();
+            Assert.NotNull(problem);
+            Assert.Equal(StatusCodes.Status400BadRequest, problem!.Status);
+            Assert.Equal("UnsupportedApiVersion", problem.Title);
+            Assert.True(problem.Extensions.ContainsKey("traceId"));
+
+            // When ReportApiVersions = true, library includes supported versions
+            Assert.True(response.Headers.Contains("api-supported-versions"));
+        }
+
+        [Fact]
+        public async Task GetDisasterCards_MultipleApiVersionHeaders_ReturnsBadRequest()
+        {
+            // Arrange
+            var request = new HttpRequestMessage(HttpMethod.Get, Route);
+            request.Headers.Add("X-API-Version", ApiVersion.ToString());
+            request.Headers.Add("X-API-Version", (ApiVersion + 1).ToString());
+
+            // Act
+            var response = await _client.SendAsync(request);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+            Assert.Equal("application/problem+json", response.Content.Headers.ContentType!.MediaType);
+
+            var problem = await response.Content.ReadFromJsonAsync<ProblemDetails>();
+
+            Assert.NotNull(problem);
+            Assert.Equal(StatusCodes.Status400BadRequest, problem!.Status);
+            Assert.Equal("AmbiguousApiVersion", problem.Title);
+            Assert.True(problem.Extensions.ContainsKey("traceId"));
         }
     }
 }
