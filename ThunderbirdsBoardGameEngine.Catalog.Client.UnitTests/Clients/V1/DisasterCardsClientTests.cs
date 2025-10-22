@@ -148,11 +148,12 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Client.UnitTests.Clients.V1
             // Arrange
             var client = CreateDisasterCardClient(HttpStatusCode.OK, "[]");
 
-            using var cancellationTokenSource = new CancellationTokenSource(TimeSpan.FromMilliseconds(1));
+            using var token = new CancellationTokenSource();
+            token.Cancel();
 
             // Act & Assert
-            await Assert.ThrowsAsync<OperationCanceledException>(
-                () => client.GetAllAsync(cancellationTokenSource.Token));
+            await Assert.ThrowsAnyAsync<OperationCanceledException>(
+                () => client.GetAllAsync(token.Token));
         }
 
         private static DisasterCardsClient CreateDisasterCardClient(HttpStatusCode statusCode, string responseContent = "")
