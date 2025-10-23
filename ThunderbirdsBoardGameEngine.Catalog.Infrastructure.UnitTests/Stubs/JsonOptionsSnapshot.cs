@@ -12,17 +12,11 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Stubs
             _options = options;
         }
 
-        public JsonSerializerOptions Value
-        {
-            get
-            {
-                return _options;
-            }
-        }
+        public JsonSerializerOptions Value => throw new NotImplementedException();
 
-        public JsonSerializerOptions Get(string name)
+        public JsonSerializerOptions Get(string? name)
         {
-            return _options;
+            throw new NotImplementedException();
         }
     }    
 }

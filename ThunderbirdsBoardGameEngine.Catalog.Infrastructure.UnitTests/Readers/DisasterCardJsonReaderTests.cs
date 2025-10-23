@@ -136,11 +136,11 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Readers
             // Arrange: non-empty JSON so the item converter is invoked
             var json = "[{}]";
 
-            var opts = new JsonSerializerOptions();
-            opts.Converters.Add(new ThrowingDisasterCardConverter());
+            var options = new JsonSerializerOptions();
+            options.Converters.Add(new ThrowingDisasterCardConverter());
 
-            var jsonOptions = Substitute.For<IOptionsSnapshot<JsonSerializerOptions>>();
-            jsonOptions.Get(CatalogJson.Name).Returns(opts);
+            var jsonOptions = Substitute.For<IOptionsMonitor<JsonSerializerOptions>>();
+            jsonOptions.Get(CatalogJson.Name).Returns(options);
 
             var repo = new DisasterCardJsonReaderBuilder()
                 .WithJson(json)

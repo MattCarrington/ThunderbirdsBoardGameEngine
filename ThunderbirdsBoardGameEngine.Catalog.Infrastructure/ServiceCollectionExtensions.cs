@@ -24,7 +24,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure
 
             services.AddSingleton<IPostConfigureOptions<DisasterCardJsonOptions>, DisasterCardJsonPostConfigure>();
             services.AddSingleton<IValidateOptions<DisasterCardJsonOptions>, DisasterCardJsonOptionsValidator>();
-            services.AddScoped<IDisasterCardReader, DisasterCardJsonReader>();
+            services.AddSingleton<IDisasterCardReader, DisasterCardJsonReader>();
             services.Decorate<IDisasterCardReader, ValidatingDisasterCardReader>();
 
             services.AddOptions<DisasterCardJsonOptions>()

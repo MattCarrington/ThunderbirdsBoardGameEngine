@@ -7,7 +7,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Factories
 {
     public static class JsonOptionsFactory
     {
-        public static JsonOptionsSnapshot CreateJsonOptions()
+        public static JsonOptionsMonitor CreateJsonOptions()
         {
             var options = new JsonSerializerOptions
             {
@@ -19,7 +19,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Factories
             options.Converters.Add(new JsonStringEnumConverter(JsonNamingPolicy.CamelCase));
             options.Converters.Add(new BonusConverter()); // TEMP
 
-            return new JsonOptionsSnapshot(options);
+            return new JsonOptionsMonitor(options); 
         }
     }
 }

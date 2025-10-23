@@ -20,7 +20,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Readers
         private readonly ILogger<DisasterCardJsonReader> _logger;
 
         public DisasterCardJsonReader(
-            IOptions<DisasterCardJsonOptions> options, IFileOpener fileReader, ILogger<DisasterCardJsonReader> logger, IOptionsSnapshot<JsonSerializerOptions> jsonOptions)
+            IOptions<DisasterCardJsonOptions> options, IFileOpener fileReader, ILogger<DisasterCardJsonReader> logger, IOptionsMonitor<JsonSerializerOptions> jsonOptions)
         {
             // Options already validated at startup
             _filePath = options.Value.FilePath;
