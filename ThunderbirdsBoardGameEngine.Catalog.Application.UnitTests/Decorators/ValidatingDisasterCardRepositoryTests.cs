@@ -26,10 +26,10 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Application.UnitTests.Decorators
             var inner = Substitute.For<IDisasterCardReader>();
             inner.GetAllAsync(Arg.Any<CancellationToken>()).Returns(Task.FromResult<IReadOnlyList<DisasterCard>>(cards));
 
-            var repository = CreateValidatingDisasterCardRepository(inner);
+            var validator = CreateValidator(inner);
 
             // Act
-            var result = await repository.GetAllAsync(CancellationToken.None);
+            var result = await validator.GetAllAsync(CancellationToken.None);
 
             // Assert
             Assert.NotNull(result);
@@ -46,11 +46,11 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Application.UnitTests.Decorators
             inner.GetAllAsync(Arg.Any<CancellationToken>())
                  .Returns(Task.FromResult<IReadOnlyList<DisasterCard>>(new[] { new DisasterCardBuilder().WithId(1).WithName("OK").Build() }));
 
-            var repository = CreateValidatingDisasterCardRepository(inner);
+            var validator = CreateValidator(inner);
             using var cancellationToken = new CancellationTokenSource();
 
             // Act
-            var _ = await repository.GetAllAsync(cancellationToken.Token);
+            var _ = await validator.GetAllAsync(cancellationToken.Token);
 
             // Assert
             await inner.Received(1).GetAllAsync(Arg.Is(cancellationToken.Token));
@@ -66,7 +66,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Application.UnitTests.Decorators
                 new DisasterCardBuilder().WithId(2).WithName("Disaster 2").WithDifficulty(8).WithLocation(BoardLocation.Asia).WithNullBonusConditions().Build()
             };
 
-            var repository = CreateValidatingDisasterCardRepository(cards);
+            var repository = CreateValidator(cards);
 
             // Act & Assert
             await Assert.ThrowsAsync<DisasterCardValidationException>(() => repository.GetAllAsync(CancellationToken.None));
@@ -76,10 +76,10 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Application.UnitTests.Decorators
         public async Task GetAllAsync_WhenInnerThrows_ExceptionBubbles()
         {
             // Arrange
-            var repository = CreateValidatingDisasterCardRepository(CatalogDataAccessException.SourceNotFound("/cards.json", new FileNotFoundException()));
+            var validator = CreateValidator(CatalogDataAccessException.SourceNotFound("/cards.json", new FileNotFoundException()));
 
             // Act & Assert
-            var exception = await Assert.ThrowsAsync<CatalogDataAccessException>(() => repository.GetAllAsync(CancellationToken.None));
+            var exception = await Assert.ThrowsAsync<CatalogDataAccessException>(() => validator.GetAllAsync(CancellationToken.None));
             Assert.Equal(CatalogDataAccessErrorCode.SourceNotFound, exception.ErrorCode);
         }
 
@@ -87,7 +87,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Application.UnitTests.Decorators
         public async Task GetAllAsync_WhenCancelled_ExceptionBubbles()
         {
             // Arrange
-            var repository = CreateValidatingDisasterCardRepository(new OperationCanceledException());
+            var repository = CreateValidator(new OperationCanceledException());
 
             using var cancellationToken = new CancellationTokenSource();
             cancellationToken.Cancel();
@@ -100,33 +100,33 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Application.UnitTests.Decorators
         public async Task GetAllAsync_WhenDataMissing_ExceptionBubbles()
         {
             // Arrange
-            var repository = CreateValidatingDisasterCardRepository(CatalogDataAccessException.DataMissing("/cards.json", new InvalidDataException()));
+            var repository = CreateValidator(CatalogDataAccessException.DataMissing("/cards.json", new InvalidDataException()));
 
             // Act & Assert
             var ex = await Assert.ThrowsAsync<CatalogDataAccessException>(() => repository.GetAllAsync(CancellationToken.None));
             Assert.Equal(CatalogDataAccessErrorCode.DataMissing, ex.ErrorCode);
         }
 
-        private static ValidatingDisasterCardReader CreateValidatingDisasterCardRepository(IReadOnlyList<DisasterCard> cards)
+        private static ValidatingDisasterCardReader CreateValidator(IReadOnlyList<DisasterCard> cards)
         {
             var snapshot = cards is DisasterCard[] arr ? arr : cards.ToArray();
 
             var inner = Substitute.For<IDisasterCardReader>();
             inner.GetAllAsync(Arg.Any<CancellationToken>()).Returns(Task.FromResult<IReadOnlyList<DisasterCard>>(snapshot));
 
-            return CreateValidatingDisasterCardRepository(inner);
+            return CreateValidator(inner);
         }
 
-        private static ValidatingDisasterCardReader CreateValidatingDisasterCardRepository(Exception ex)
+        private static ValidatingDisasterCardReader CreateValidator(Exception ex)
         {
             var inner = Substitute.For<IDisasterCardReader>();
             inner.GetAllAsync(Arg.Any<CancellationToken>())
                  .Returns<Task<IReadOnlyList<DisasterCard>>>(_ => throw ex);
 
-            return CreateValidatingDisasterCardRepository(inner);
+            return CreateValidator(inner);
         }
 
-        private static ValidatingDisasterCardReader CreateValidatingDisasterCardRepository(IDisasterCardReader inner)
+        private static ValidatingDisasterCardReader CreateValidator(IDisasterCardReader inner)
         {
             return new ValidatingDisasterCardReader(inner);
         }

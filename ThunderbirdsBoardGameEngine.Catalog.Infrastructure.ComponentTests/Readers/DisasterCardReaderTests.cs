@@ -27,10 +27,10 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.ComponentTests.Repo
             using var sp = _fixture.Build(ConfigKey, filePath);
             using var scope = sp.CreateScope();
             
-            var repository = scope.ServiceProvider.GetRequiredService<IDisasterCardReader>();
+            var reader = scope.ServiceProvider.GetRequiredService<IDisasterCardReader>();
 
             // Act
-            var cards = await repository.GetAllAsync(CancellationToken.None);
+            var cards = await reader.GetAllAsync(CancellationToken.None);
 
             // Assert
             Assert.NotNull(cards);
@@ -48,10 +48,10 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.ComponentTests.Repo
             using var sp = _fixture.Build(ConfigKey, filePath);
             using var scope = sp.CreateScope();
 
-            var repository = scope.ServiceProvider.GetRequiredService<IDisasterCardReader>();
+            var reader = scope.ServiceProvider.GetRequiredService<IDisasterCardReader>();
 
             // Act & Assert: repo maps to CatalogDataAccessException.BadJson
-            var ex = await Assert.ThrowsAsync<CatalogDataAccessException>(() => repository.GetAllAsync(CancellationToken.None));
+            var ex = await Assert.ThrowsAsync<CatalogDataAccessException>(() => reader.GetAllAsync(CancellationToken.None));
             Assert.Equal(expectedErrorCode, ex.ErrorCode);
         }
 
@@ -64,40 +64,19 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.ComponentTests.Repo
             using var sp = _fixture.Build(ConfigKey, filePath);
             using var scope = sp.CreateScope();
 
-            var repository = scope.ServiceProvider.GetRequiredService<IDisasterCardReader>();
+            var reader = scope.ServiceProvider.GetRequiredService<IDisasterCardReader>();
 
             // Act & Assert: repo maps to CatalogDataAccessException.BadJson
-            var exception = await Assert.ThrowsAsync<DisasterCardValidationException>(() => repository.GetAllAsync(CancellationToken.None));
+            var exception = await Assert.ThrowsAsync<DisasterCardValidationException>(() => reader.GetAllAsync(CancellationToken.None));
             Assert.Contains("Disaster Card Asteroid Impact must have at least one bonus condition.", exception.Message);
         }
 
-        [Fact]
-        public async Task GetAllAsync_WhenCancelledToken_ThrowsOperationCanceledException()
+        public static TheoryData<string, CatalogDataAccessErrorCode> InvalidFileCases()
         {
-            // Arrange
-            var filePath = TestDataPathHelper.GetPath("disaster-cards-test.json"); // non-empty valid JSON
-
-            using var sp = _fixture.Build(ConfigKey, filePath);
-            using var scope = sp.CreateScope();
-
-            var repository = scope.ServiceProvider.GetRequiredService<IDisasterCardReader>();
-
-            using var cts = new CancellationTokenSource();
-            cts.Cancel();
-
-            // Act & Assert
-            await Assert.ThrowsAsync<OperationCanceledException>(() => repository.GetAllAsync(cts.Token));
-        }
-
-        public static IEnumerable<object[]> InvalidFileCases()
-        {
-            yield return new object[] {
-                "invalid-json.json",
-                CatalogDataAccessErrorCode.BadJson
-            };
-            yield return new object[] {
-                "empty.json",
-                CatalogDataAccessErrorCode.DataMissing                
+            return new TheoryData<string, CatalogDataAccessErrorCode>
+            {
+                { "invalid-json.json", CatalogDataAccessErrorCode.BadJson },
+                { "empty.json", CatalogDataAccessErrorCode.DataMissing }
             };
         }
     }
