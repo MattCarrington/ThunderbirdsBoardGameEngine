@@ -8,7 +8,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Application
     {
         public static IServiceCollection AddApplication(this IServiceCollection services)
         {
-            services.AddScoped<IDisasterCardService, DisasterCardService>();
+            services.AddSingleton<IDisasterCardService, DisasterCardService>();
             return services;
         }
     }

@@ -28,24 +28,12 @@ namespace ThunderbirdsBoardGameEngine.Api
             });
 
             builder.Services.AddHeaderApiVersioning();
-            {
-                options.AssumeDefaultVersionWhenUnspecified = false;
-                options.DefaultApiVersion = new ApiVersion(1, 0);
-                options.ReportApiVersions = true;
-
-                options.ApiVersionReader = new HeaderApiVersionReader("X-API-Version");
-            });
-
-            builder.Services.AddVersionedApiExplorer(options =>
-            {
-                options.GroupNameFormat = "'v'VVV"; // e.g., v1, v2
-                options.SubstituteApiVersionInUrl = true;
-            });
 
             builder.Services.AddHealthChecks();
 
             builder.Services.AddApplication();
             builder.Services.AddInfrastructure(builder.Configuration);
+            builder.Services.AddCatalogWarmupServices(builder.Configuration);
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
