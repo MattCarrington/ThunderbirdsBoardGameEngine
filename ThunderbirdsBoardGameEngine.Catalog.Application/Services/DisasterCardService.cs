@@ -1,20 +1,21 @@
-﻿using ThunderbirdsBoardGameEngine.Catalog.Application.Interfaces;
+﻿using System.Collections.Immutable;
+using ThunderbirdsBoardGameEngine.Catalog.Application.Interfaces;
 using ThunderbirdsBoardGameEngine.Catalog.Domain.Entities;
 
 namespace ThunderbirdsBoardGameEngine.Catalog.Application.Services
 {
     public class DisasterCardService : IDisasterCardService
     {
-        private readonly IDisasterCardReader _disasterCardRepository;
+        private readonly IDisasterCardCatalog _disasterCardCatalog;
         
-        public DisasterCardService(IDisasterCardReader disasterCardRepository)
+        public DisasterCardService(IDisasterCardCatalog disasterCardCatalog)
         {
-            _disasterCardRepository = disasterCardRepository ?? throw new ArgumentNullException(nameof(disasterCardRepository));
+            _disasterCardCatalog = disasterCardCatalog ?? throw new ArgumentNullException(nameof(disasterCardCatalog));
         }
 
-        public async Task<IReadOnlyList<DisasterCard>> GetAllAsync(CancellationToken cancellationToken)
+        public ImmutableArray<DisasterCard> GetAll()
         {
-            return await _disasterCardRepository.GetAllAsync(cancellationToken);
+            return _disasterCardCatalog.Cards;
         }
     }
 }

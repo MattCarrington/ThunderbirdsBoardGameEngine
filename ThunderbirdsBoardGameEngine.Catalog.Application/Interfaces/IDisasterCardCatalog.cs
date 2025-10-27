@@ -7,6 +7,6 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Application.Interfaces
     {
         string Version { get; }
 
-        ImmutableArray<DisasterCard> All { get; }
+        ImmutableArray<DisasterCard> Cards { get; }
     }
 }

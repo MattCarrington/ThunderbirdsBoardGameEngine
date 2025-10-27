@@ -1,9 +1,10 @@
-﻿using ThunderbirdsBoardGameEngine.Catalog.Domain.Entities;
+﻿using System.Collections.Immutable;
+using ThunderbirdsBoardGameEngine.Catalog.Domain.Entities;
 
 namespace ThunderbirdsBoardGameEngine.Catalog.Application.Interfaces
 {
     public interface IDisasterCardService
     {
-        Task<IReadOnlyList<DisasterCard>> GetAllAsync(CancellationToken cancellationToken);
+        ImmutableArray<DisasterCard> GetAll();
     }
 }

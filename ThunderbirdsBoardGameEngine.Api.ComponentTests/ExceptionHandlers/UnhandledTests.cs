@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;   // IServiceCollection extensions
 using Microsoft.Extensions.DependencyInjection.Extensions; // RemoveAll<T>()
+using System.Collections.Immutable;
 using System.Net;
 using System.Net.Http.Json;
 using ThunderbirdsBoardGameEngine.Catalog.Application.Exceptions;
@@ -73,7 +74,7 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.ExceptionHandlers
 
             private readonly Exception _exception;
 
-            Task<IReadOnlyList<DisasterCard>> IDisasterCardService.GetAllAsync(CancellationToken cancellationToken)
+            ImmutableArray<DisasterCard> IDisasterCardService.GetAll()
             {
                 throw _exception;
             }

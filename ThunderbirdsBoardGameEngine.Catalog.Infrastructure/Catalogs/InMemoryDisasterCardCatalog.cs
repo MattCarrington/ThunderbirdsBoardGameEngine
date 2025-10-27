@@ -17,11 +17,11 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Catalogs
             }
 
             Version = version;
-            All = disasterCards;
+            Cards = disasterCards;
         }
 
         public string Version { get; }
 
-        public ImmutableArray<DisasterCard> All { get; }
+        public ImmutableArray<DisasterCard> Cards { get; }
     }
 }

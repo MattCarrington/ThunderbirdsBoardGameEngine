@@ -31,7 +31,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Initializ
             // Assert
             Assert.NotNull(result);
             Assert.Equal("card-2", result.Version);
-            Assert.Equal(2, result.All.Length);
+            Assert.Equal(2, result.Cards.Length);
         }
 
         [Fact]

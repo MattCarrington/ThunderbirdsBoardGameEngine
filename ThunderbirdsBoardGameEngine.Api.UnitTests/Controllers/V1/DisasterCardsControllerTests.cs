@@ -2,6 +2,7 @@
 using AutoFixture.Kernel;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
+using System.Collections.Immutable;
 using ThunderbirdsBoardGameEngine.Api.Controllers.V1;
 using ThunderbirdsBoardGameEngine.Catalog.Application.Interfaces;
 using ThunderbirdsBoardGameEngine.Catalog.Contracts.Dtos.V1;
@@ -23,24 +24,24 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.UnitTests.Controllers.V1
         }
 
         [Fact]
-        public async Task Get_WhenDisasterCardsExist_ReturnsOk()
+        public void Get_WhenDisasterCardsExist_ReturnsOk()
         {
             // Arrange
             var cancellationToken = CancellationToken.None;
 
-            var disasterCards = _fixture.CreateMany<DisasterCard>(5).ToList();
+            var disasterCards = _fixture.CreateMany<DisasterCard>(5).ToImmutableArray();
 
-            _service.GetAllAsync(Arg.Any<CancellationToken>()).Returns(disasterCards);
+            _service.GetAll().Returns(disasterCards);
 
             // Act
-            var result = await _controller.Get(cancellationToken);
+            var result = _controller.Get(cancellationToken);
 
             // Assert
             var okResult = Assert.IsType<OkObjectResult>(result);
             var returnedCards = Assert.IsType<IReadOnlyList<DisasterCardDto>>(okResult.Value, exactMatch: false);
             Assert.NotEmpty(returnedCards);
 
-            await _service.Received(1).GetAllAsync(Arg.Is<CancellationToken>(t => t == cancellationToken));
+            _service.Received(1).GetAll();
         }
     }
 }

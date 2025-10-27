@@ -26,9 +26,9 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Catalogs
 
             // Assert
             Assert.Equal(_version, catalog.Version);
-            Assert.Equal(2, catalog.All.Length);
-            Assert.Contains(catalog.All, c => c.Id == 1 && c.Name == "Test 1");
-            Assert.Contains(catalog.All, c => c.Id == 2 && c.Name == "Test 2");
+            Assert.Equal(2, catalog.Cards.Length);
+            Assert.Contains(catalog.Cards, c => c.Id == 1 && c.Name == "Test 1");
+            Assert.Contains(catalog.Cards, c => c.Id == 2 && c.Name == "Test 2");
         }
 
         [Theory]
@@ -73,7 +73,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Catalogs
             cards.Add(new DisasterCardBuilder().WithId(3).WithName("Test 3").Build());
 
             // Assert
-            Assert.Equal(2, catalog.All.Length);
+            Assert.Equal(2, catalog.Cards.Length);
         }
 
         private static InMemoryDisasterCardCatalog CreateCatalog(IReadOnlyList<DisasterCard> cards, string version)
