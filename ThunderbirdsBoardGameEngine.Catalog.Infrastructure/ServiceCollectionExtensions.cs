@@ -7,6 +7,7 @@ using ThunderbirdsBoardGameEngine.Catalog.Application.Decorators;
 using ThunderbirdsBoardGameEngine.Catalog.Application.Interfaces;
 using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Caches;
 using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Configuration;
+using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Initialisers;
 using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Interfaces;
 using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.PostConfigures;
 using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Readers;
@@ -28,6 +29,12 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure
             services.AddSingleton<IDisasterCardReader, DisasterCardJsonReader>();
             services.Decorate<IDisasterCardReader, ValidatingDisasterCardReader>();
             services.Decorate<IDisasterCardReader, CachingDisasterCardReader>();
+
+            services.AddSingleton<IDisasterCardCatalog>(sp =>
+            {
+                var init = new DisasterCardCatalogInitializer(sp.GetRequiredService<IDisasterCardReader>());
+                return init.InitializeAsync(CancellationToken.None).GetAwaiter().GetResult();
+            });
 
             services.AddOptions<DisasterCardJsonOptions>()
                 .Bind(configuration.GetSection("Catalog:DisasterCards:Json"))

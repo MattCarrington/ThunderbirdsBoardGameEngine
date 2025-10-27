@@ -1,4 +1,5 @@
-﻿using ThunderbirdsBoardGameEngine.Catalog.Domain.Entities;
+﻿using System.Collections.Immutable;
+using ThunderbirdsBoardGameEngine.Catalog.Domain.Entities;
 
 namespace ThunderbirdsBoardGameEngine.Catalog.Application.Interfaces
 {
@@ -6,6 +7,6 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Application.Interfaces
     {
         string Version { get; }
 
-        IReadOnlyList<DisasterCard> All { get; }
+        ImmutableArray<DisasterCard> All { get; }
     }
 }

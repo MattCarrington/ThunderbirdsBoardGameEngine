@@ -6,22 +6,22 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Catalogs
 {
     internal sealed class InMemoryDisasterCardCatalog : IDisasterCardCatalog
     {
-        public InMemoryDisasterCardCatalog(IReadOnlyList<DisasterCard> disasterCards, string version)
+        public InMemoryDisasterCardCatalog(ImmutableArray<DisasterCard> disasterCards, string version)
         {
             ArgumentNullException.ThrowIfNull(disasterCards);
             ArgumentException.ThrowIfNullOrWhiteSpace(version);
 
-            if (disasterCards.Count == 0)
+            if (disasterCards.IsDefaultOrEmpty)
             {
                 throw new ArgumentException("There must be at least one disaster card", nameof(disasterCards));
             }
 
             Version = version;
-            All = disasterCards.ToImmutableArray();
+            All = disasterCards;
         }
 
         public string Version { get; }
 
-        public IReadOnlyList<DisasterCard> All { get; }
+        public ImmutableArray<DisasterCard> All { get; }
     }
 }
