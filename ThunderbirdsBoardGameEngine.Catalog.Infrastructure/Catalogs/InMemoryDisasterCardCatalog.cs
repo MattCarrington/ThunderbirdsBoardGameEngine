@@ -4,7 +4,7 @@ using ThunderbirdsBoardGameEngine.Catalog.Domain.Entities;
 
 namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Catalogs
 {
-    internal sealed class InMemoryDisasterCardCatalog : IDisasterCardCatalog
+    internal sealed class InMemoryDisasterCardCatalog : IDisasterCardCatalog, IDisasterCardCatalogProbe
     {
         public InMemoryDisasterCardCatalog(ImmutableArray<DisasterCard> disasterCards, string version)
         {
@@ -23,5 +23,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Catalogs
         public string Version { get; }
 
         public ImmutableArray<DisasterCard> Cards { get; }
+
+        public int Count => Cards.Length;
     }
 }

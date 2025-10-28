@@ -7,7 +7,7 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints
 {
     public class HealthEndpointsTests : IClassFixture<CustomWebApplicationFactory>
     {
-        HttpClient _client;
+        private readonly HttpClient _client;
 
         public HealthEndpointsTests(CustomWebApplicationFactory factory)
         {

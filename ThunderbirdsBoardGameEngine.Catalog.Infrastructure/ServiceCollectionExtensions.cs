@@ -33,6 +33,9 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure
                 return init.InitializeAsync(CancellationToken.None).GetAwaiter().GetResult();
             });
 
+            services.AddSingleton(sp =>
+                (IDisasterCardCatalogProbe)sp.GetRequiredService<IDisasterCardCatalog>());
+
             services.AddOptions<DisasterCardJsonOptions>()
                 .Bind(configuration.GetSection("Catalog:DisasterCards:Json"))
                 .ValidateOnStart(); // ← run all validators during startup

@@ -59,6 +59,8 @@ namespace ThunderbirdsBoardGameEngine.Api
             builder.Services.AddApiExceptionHandling();
             builder.Services.AddProblemDetails();
 
+            builder.Services.AddCatalogHealthChecks();
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
