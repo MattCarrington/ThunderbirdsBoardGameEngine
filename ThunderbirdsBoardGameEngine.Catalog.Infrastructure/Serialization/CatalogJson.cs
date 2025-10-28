@@ -1,6 +1,6 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
-using ThunderbirdsBoardGameEngine.Serialization.Converters; // TEMP
+using ThunderbirdsBoardGameEngine.Catalog.Format.Converters;    // TEMP
 
 namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Serialization
 {

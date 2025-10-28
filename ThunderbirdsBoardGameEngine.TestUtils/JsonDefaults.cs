@@ -1,6 +1,6 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
-using ThunderbirdsBoardGameEngine.Serialization.Converters;
+using ThunderbirdsBoardGameEngine.Catalog.Format.Converters;
 
 namespace ThunderbirdsBoardGameEngine.TestUtils
 {

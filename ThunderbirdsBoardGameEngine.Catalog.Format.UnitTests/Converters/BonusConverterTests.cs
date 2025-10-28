@@ -4,7 +4,7 @@ using ThunderbirdsBoardGameEngine.Catalog.Domain.Enums;
 using ThunderbirdsBoardGameEngine.TestUtils;
 using Xunit;
 
-namespace ThunderbirdsBoardGameEngine.Serialization.UnitTests.Converters
+namespace ThunderbirdsBoardGameEngine.Catalog.Format.UnitTests.Converters
 {
     public class BonusConverterTests
     {

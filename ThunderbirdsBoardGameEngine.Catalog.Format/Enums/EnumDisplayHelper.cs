@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Reflection;
 
-namespace ThunderbirdsBoardGameEngine.Serialization.Enums
+namespace ThunderbirdsBoardGameEngine.Catalog.Format.Enums
 {
     public static class EnumDisplayHelper
     {

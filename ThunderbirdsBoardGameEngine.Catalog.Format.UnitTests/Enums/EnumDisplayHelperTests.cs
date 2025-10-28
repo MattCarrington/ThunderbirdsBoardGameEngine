@@ -1,8 +1,8 @@
 ﻿using ThunderbirdsBoardGameEngine.Catalog.Domain.Enums;
-using ThunderbirdsBoardGameEngine.Serialization.Enums;
+using ThunderbirdsBoardGameEngine.Catalog.Format.Enums;
 using Xunit;
 
-namespace ThunderbirdsBoardGameEngine.Serialization.UnitTests.Enums
+namespace ThunderbirdsBoardGameEngine.Catalog.Format.UnitTests.Enums
 {
     public class EnumDisplayHelperTests
     {

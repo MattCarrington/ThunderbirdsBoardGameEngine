@@ -1,7 +1,7 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
+using ThunderbirdsBoardGameEngine.Catalog.Format.Converters;
 using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Stubs;
-using ThunderbirdsBoardGameEngine.Serialization.Converters;
 
 namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Factories
 {

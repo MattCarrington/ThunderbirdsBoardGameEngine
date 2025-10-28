@@ -3,7 +3,7 @@ using ThunderbirdsBoardGameEngine.Catalog.Application.Exceptions;
 using ThunderbirdsBoardGameEngine.Catalog.Contracts.Dtos.V1;
 using ThunderbirdsBoardGameEngine.Catalog.Domain.Entities;
 using ThunderbirdsBoardGameEngine.Catalog.Domain.Enums;
-using ThunderbirdsBoardGameEngine.Serialization.Enums;
+using ThunderbirdsBoardGameEngine.Catalog.Format.Enums;
 using ThunderbirdsBoardGameEngine.TestUtils.Builders;
 using Xunit;
 
