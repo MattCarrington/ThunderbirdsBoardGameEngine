@@ -15,12 +15,8 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.UnitTests.Mappers.V1
         public void MapBonusDto_WhenCharacterBonus_ShouldCorrectlyMapBonusDto()
         {
             // Arrange
-            var characterBonusCondition = new CharacterBonusCondition()
-            {
-                Character = Character.Virgil,
-                BonusValue = 2
-            };
-
+            var characterBonusCondition = new CharacterBonusCondition(Character.Virgil, 2);
+            
             // Act
             var result = characterBonusCondition.ToDto();
 
@@ -34,12 +30,8 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.UnitTests.Mappers.V1
         public void MapBonusConditionDto_WhenThunderbirdsBonus_ShouldCorrectlyMapBonusDto()
         {
             // Arrange
-            var thunderbirdBonusCondition = new ThunderbirdBonusCondition()
-            {
-                Thunderbird = ThunderbirdMachine.Thunderbird4,
-                BonusValue = 3
-            };
-
+            var thunderbirdBonusCondition = new ThunderbirdBonusCondition(ThunderbirdMachine.Thunderbird4, 3);
+            
             // Act
             var result = thunderbirdBonusCondition.ToDto();
 
@@ -53,12 +45,8 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.UnitTests.Mappers.V1
         public void MapBonusConditionDto_WhenPodVehicleBonus_ShouldCorrectlyMapBonusDto()
         {
             // Arrange
-            var podVehicleBonusCondition = new PodVehicleBonusCondition()
-            {
-                PodVehicle = PodVehicle.LaserCutter,
-                BonusValue = 4
-            };
-
+            var podVehicleBonusCondition = new PodVehicleBonusCondition(PodVehicle.LaserCutter, 2);
+            
             // Act
             var result = podVehicleBonusCondition.ToDto();
 
@@ -85,12 +73,7 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.UnitTests.Mappers.V1
         public void Map_WhenBonusHasLocation_ShouldCorrectlyMapBonusDto()
         {
             // Arrange
-            var characterBonusCondition = new CharacterBonusCondition()
-            {
-                Character = Character.Gordon,
-                BonusValue = 2,
-                Location = BoardLocation.Venus
-            };
+            var characterBonusCondition = new CharacterBonusCondition(Character.Gordon, 2, BoardLocation.Venus);
 
             // Act
             var result = characterBonusCondition.ToDto();
@@ -108,12 +91,7 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.UnitTests.Mappers.V1
         public void Map_WhenBonusHasGeoStationaryOrbitLocation_ShouldCorrectlyMapBonusDto()
         {
             // Arrange
-            var characterBonusCondition = new CharacterBonusCondition()
-            {
-                Character = Character.LadyPenelope,
-                BonusValue = 3,
-                Location = BoardLocation.GeoStationaryOrbit
-            };
+            var characterBonusCondition = new CharacterBonusCondition(Character.LadyPenelope, 3, BoardLocation.GeoStationaryOrbit);
 
             // Act
             var result = characterBonusCondition.ToDto();
@@ -131,12 +109,8 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.UnitTests.Mappers.V1
         public void MapRewardDto_WhenUserChoiceToken_ShouldCorrectlyMapRewardDto()
         {
             // Arrange
-            var rewardOption = new RewardOption
-            {
-                IsUserChoice = true,
-                SpecifiedToken = null // User choice does not require a specified token
-            };
-
+            var rewardOption = RewardOption.PlayerChoice();
+            
             // Act
             var result = rewardOption.ToDto();
 
@@ -150,33 +124,13 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.UnitTests.Mappers.V1
             // Arrange
             var rewardToken = BonusToken.Technology;
 
-            var rewardOption = new RewardOption
-            {
-                IsUserChoice = false,
-                SpecifiedToken = rewardToken // Non-user-choice rewards must have a specified token
-            };
-
+            var rewardOption = RewardOption.SpecifiedToken(rewardToken);
+            
             // Act
             var result = rewardOption.ToDto();
 
             // Assert            
             Assert.Equal(rewardToken.ToString(), result.DisplayName);
-        }
-
-        [Fact]
-        public void MapRewardDto_WhenNoSpecifiedToken_ThrowsInvalidRewardConditionException()
-        {
-            // Arrange
-            var rewardOption = new RewardOption
-            {
-                IsUserChoice = false,
-                SpecifiedToken = null // Non-user-choice rewards must have a specified token
-            };
-
-            // Act & Assert
-            var ex = Assert.Throws<ApplicationValidationException>(() =>
-                rewardOption.ToDto());
-            Assert.Equal("SpecifiedToken must be set for non-user-choice rewards", ex.Message);
         }
 
         [Fact]
@@ -202,23 +156,11 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.UnitTests.Mappers.V1
         public void MapDisasterCardDto_WhenMultiplePodVehicleBonus_ShouldCorrectlyMapBonusDto()
         {
             // Arrange
-            var mobileCraneBonusCondition = new PodVehicleBonusCondition()
-            {
-                PodVehicle = PodVehicle.MobileCrane,
-                BonusValue = 2
-            };
+            var mobileCraneBonusCondition = new PodVehicleBonusCondition(PodVehicle.MobileCrane, 2);
 
-            var thunderizerBonusCondition = new PodVehicleBonusCondition()
-            {
-                PodVehicle = PodVehicle.Thunderizer,
-                BonusValue = 3
-            };
+            var thunderizerBonusCondition = new PodVehicleBonusCondition(PodVehicle.Thunderizer, 3);
 
-            var domoBonusCondition = new PodVehicleBonusCondition()
-            {
-                PodVehicle = PodVehicle.Domo,
-                BonusValue = 4
-            };
+            var domoBonusCondition = new PodVehicleBonusCondition(PodVehicle.Domo, 1);
 
             var disasterCard = new DisasterCardBuilder()
                 .WithBonusCondition(mobileCraneBonusCondition)
@@ -253,17 +195,9 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.UnitTests.Mappers.V1
         public void Map_WhenDifferentBonus_ShouldCorrectlyMapBonusDto()
         {
             // Arrange
-            var characterBonusCondition = new CharacterBonusCondition()
-            {
-                Character = Character.Gordon,
-                BonusValue = 2
-            };
+            var characterBonusCondition = new CharacterBonusCondition(Character.Gordon, 2);
 
-            var thunderbirdBonusCondition = new ThunderbirdBonusCondition()
-            {
-                Thunderbird = ThunderbirdMachine.Thunderbird4,
-                BonusValue = 3
-            };
+            var thunderbirdBonusCondition = new ThunderbirdBonusCondition(ThunderbirdMachine.Thunderbird4, 3);
 
             var disasterCard = new DisasterCardBuilder()
                 .WithBonusCondition(characterBonusCondition)
@@ -364,7 +298,9 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.UnitTests.Mappers.V1
 
         private class UnknownBonusCondition : BonusCondition
         {
-            // No extra fields needed — we just want it to be an unknown subtype.
+            public UnknownBonusCondition() : base(1, null)
+            {                
+            }
         }
     }
 }

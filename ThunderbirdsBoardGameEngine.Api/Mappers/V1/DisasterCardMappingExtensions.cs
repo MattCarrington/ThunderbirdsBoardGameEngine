@@ -42,21 +42,11 @@ namespace ThunderbirdsBoardGameEngine.Api.Mappers.V1
 
         public static RewardDto ToDto(this RewardOption reward)
         {
-            if (!reward.IsUserChoice && reward.SpecifiedToken == null)
-            {
-                throw new ApplicationValidationException(
-                    "SpecifiedToken must be set for non-user-choice rewards",
-                    new Dictionary<string, string[]> 
-                    { 
-                        ["Reward.SpecifiedToken"] = new[] { "Required" } 
-                    });
-            }
-
             return new RewardDto
             {
                 DisplayName = reward.IsUserChoice
                     ? "Player Choice"
-                    : reward.SpecifiedToken!.Value.ToString() // Safe because of guard
+                    : reward.Token!.Value.ToString() // Safe because of guard
             };
         }
 

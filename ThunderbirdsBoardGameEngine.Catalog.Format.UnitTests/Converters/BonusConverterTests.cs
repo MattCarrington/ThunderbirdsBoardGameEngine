@@ -108,13 +108,8 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Format.UnitTests.Converters
         public void Serialize_WhenCharacterBonus_WritesExpectedJson()
         {
             // Arrange
-            var bonus = new CharacterBonusCondition
-            {
-                BonusValue = 3,
-                Character = Character.Scott,
-                Location = BoardLocation.IndianOcean
-            };
-
+            var bonus = new CharacterBonusCondition(Character.Scott, 3, BoardLocation.IndianOcean);
+            
             // Act
             var result = SerializeBonusToJson(bonus);
 
@@ -129,12 +124,8 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Format.UnitTests.Converters
         public void Serialize_WhenCharacterBonusWithoutLocation_WritesExpectedJson()
         {
             // Arrange
-            var bonus = new CharacterBonusCondition
-            {
-                BonusValue = 5,
-                Character = Character.Alan
-            };
-
+            var bonus = new CharacterBonusCondition(Character.Alan, 5);
+            
             // Act
             var result = SerializeBonusToJson(bonus); // assuming your helper method uses .Clone()
 
@@ -149,13 +140,8 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Format.UnitTests.Converters
         public void Serialize_WhenThunderbirdBonus_WritesExpectedJson()
         {
             // Arrange
-            var bonus = new ThunderbirdBonusCondition
-            {
-                BonusValue = 4,
-                Thunderbird = ThunderbirdMachine.Thunderbird2,
-                Location = BoardLocation.NorthPacific
-            };
-
+            var bonus = new ThunderbirdBonusCondition(ThunderbirdMachine.Thunderbird2, 4, BoardLocation.NorthPacific);
+            
             // Act
             var result = SerializeBonusToJson(bonus);
 
@@ -170,18 +156,14 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Format.UnitTests.Converters
         public void Serialize_WhenThunderbirdBonusWithoutLocation_WritesExpectedJson()
         {
             // Arrange
-            var bonus = new ThunderbirdBonusCondition
-            {
-                BonusValue = 6,
-                Thunderbird = ThunderbirdMachine.Thunderbird3
-            };
+            var bonus = new ThunderbirdBonusCondition(ThunderbirdMachine.Thunderbird3, 3);
 
             // Act
             var result = SerializeBonusToJson(bonus);
 
             // Assert
             Assert.Equal("thunderbirdBonus", result.GetProperty("type").GetString());
-            Assert.Equal(6, result.GetProperty("bonusValue").GetInt32());
+            Assert.Equal(3, result.GetProperty("bonusValue").GetInt32());
             Assert.Equal("thunderbird3", result.GetProperty("thunderbird").GetString());
             Assert.False(result.TryGetProperty("location", out _), "Location should not be present in JSON");
         }
@@ -190,13 +172,8 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Format.UnitTests.Converters
         public void Serialize_WhenPodVehicleBonus_WritesExpectedJson()
         {
             // Arrange
-            var bonus = new PodVehicleBonusCondition
-            {
-                BonusValue = 1,
-                PodVehicle = PodVehicle.ElevatorCars,
-                Location = BoardLocation.SouthAtlantic
-            };
-
+            var bonus = new PodVehicleBonusCondition(PodVehicle.ElevatorCars, 1, BoardLocation.SouthAtlantic);  
+            
             // Act
             var result = SerializeBonusToJson(bonus);
 
@@ -211,12 +188,8 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Format.UnitTests.Converters
         public void Serialize_WhenPodVehicleBonusWithoutLocation_WritesExpectedJson()
         {
             // Arrange
-            var bonus = new PodVehicleBonusCondition
-            {
-                BonusValue = 3,
-                PodVehicle = PodVehicle.Mole
-            };
-
+            var bonus = new PodVehicleBonusCondition(PodVehicle.Mole, 3);
+            
             // Act
             var result = SerializeBonusToJson(bonus);
 
@@ -231,9 +204,8 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Format.UnitTests.Converters
         public void Serialize_WhenInvalidBonus_ThrowsJsonException()
         {
             // Arrange
-            var bonus = new FakeBonus
+            var bonus = new FakeBonus(10)
             {
-                BonusValue = 10,
                 FakeProperty = "Invalid"
             };
 
@@ -245,12 +217,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Format.UnitTests.Converters
         public void RoundTrip_WhenCharacterBonus_SerializesAndDeserializesCorrectly()
         {
             // Arrange
-            var characterBonus = new CharacterBonusCondition
-            {
-                BonusValue = 2,
-                Character = Character.Virgil,
-                Location = BoardLocation.IndianOcean
-            };
+            var characterBonus = new CharacterBonusCondition(Character.Virgil, 2, BoardLocation.IndianOcean);
 
             // Act
             var json = JsonSerializer.Serialize<BonusCondition>(characterBonus, _options);
@@ -267,13 +234,8 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Format.UnitTests.Converters
         public void RoundTrip_WhenThunderbirdBonus_SerializesAndDeserializesCorrectly()
         {
             // Arrange
-            var thunderbirdBonus = new ThunderbirdBonusCondition
-            {
-                BonusValue = 3,
-                Thunderbird = ThunderbirdMachine.Thunderbird1,
-                Location = BoardLocation.NorthAtlantic
-            };
-
+            var thunderbirdBonus = new ThunderbirdBonusCondition(ThunderbirdMachine.Thunderbird1, 3, BoardLocation.NorthAtlantic);
+            
             // Act
             var json = JsonSerializer.Serialize<BonusCondition>(thunderbirdBonus, _options);
             var result = JsonSerializer.Deserialize<BonusCondition>(json, _options);
@@ -289,13 +251,8 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Format.UnitTests.Converters
         public void RoundTrip_WhenPodVehicleBonus_SerializesAndDeserializesCorrectly()
         {
             // Arrange
-            var podVehicleBonus = new PodVehicleBonusCondition
-            {
-                BonusValue = 4,
-                PodVehicle = PodVehicle.Mole,
-                Location = BoardLocation.SouthPacific
-            };
-
+            var podVehicleBonus = new PodVehicleBonusCondition(PodVehicle.Mole, 4, BoardLocation.SouthPacific);
+            
             // Act
             var json = JsonSerializer.Serialize<BonusCondition>(podVehicleBonus, _options);
             var result = JsonSerializer.Deserialize<BonusCondition>(json, _options);
@@ -317,6 +274,10 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Format.UnitTests.Converters
 
         private class FakeBonus : BonusCondition
         {
+            public FakeBonus(int value) : base(value, null)
+            {                
+            }
+
             public string? FakeProperty { get; set; }
         }
     }

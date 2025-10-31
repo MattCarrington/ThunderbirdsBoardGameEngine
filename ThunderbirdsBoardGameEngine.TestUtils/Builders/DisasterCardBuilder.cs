@@ -10,13 +10,9 @@ namespace ThunderbirdsBoardGameEngine.TestUtils.Builders
         private int _difficultyNumber = 8;
         private BoardLocation _location = BoardLocation.NorthPacific;
         private RescueType _rescueType = RescueType.Sea;
-        private readonly List<BonusCondition> _bonuses = new List<BonusCondition>();
-        private readonly List<RewardOption> _rewardOptions = new List<RewardOption>();
-        private bool _skipDefaultBonus = false;
-        private bool _skipDefaultReward = false;
-        private bool _forceNullBonus = false;
-        private bool _forceNullReward = false;
-
+        private readonly List<BonusCondition> _bonuses = [];
+        private readonly List<RewardOption> _rewardOptions = [];
+        
         public DisasterCardBuilder WithId(int id)
         {
             _id = id;
@@ -55,74 +51,30 @@ namespace ThunderbirdsBoardGameEngine.TestUtils.Builders
 
         public DisasterCardBuilder WithUserChoiceRewardOption()
         {
-            _rewardOptions.Add(new RewardOption
-            {
-                IsUserChoice = true,
-                
-            });
+            _rewardOptions.Add(RewardOption.PlayerChoice());
             return this;
         }
 
         public DisasterCardBuilder WithSpecifiedReward(BonusToken token)
         {
-            _rewardOptions.Add(new RewardOption
-            {
-                SpecifiedToken = token,
-            });
-            return this;
-        }
-
-        public DisasterCardBuilder WithoutBonusConditions()
-        {
-            _bonuses.Clear();
-            _skipDefaultBonus = true;
-            return this;
-        }
-
-        public DisasterCardBuilder WithoutRewards()
-        {
-            _rewardOptions.Clear();
-            _skipDefaultReward = true;
-            return this;
-        }
-
-        public DisasterCardBuilder WithNullBonusConditions()
-        {
-            _forceNullBonus = true;
-            return this;
-        }
-
-        public DisasterCardBuilder WithNullRewards()
-        {
-            _forceNullReward = true;
+            _rewardOptions.Add(RewardOption.SpecifiedToken(token));
             return this;
         }
 
         public DisasterCard Build()
         {
-            if (_bonuses.Count == 0 && !_skipDefaultBonus && !_forceNullBonus)
+            if (_bonuses.Count == 0)
             {
-                _bonuses.Add(new CharacterBonusCondition { Character = Character.Scott, BonusValue = 1 });
+                _bonuses.Add(new CharacterBonusCondition(Character.Scott, 1));
             }
 
-            if (_rewardOptions.Count == 0 && !_skipDefaultReward)
+            if (_rewardOptions.Count == 0)
             {
-                _rewardOptions.Add(new RewardOption
-                {
-                    IsUserChoice = true                    
-                });
+                _rewardOptions.Add(RewardOption.PlayerChoice());
             }
 
-            return new DisasterCard
-            {
-                Id = _id,
-                Name = _name,
-                Location = _location,
-                RescueType = _rescueType,
-                DifficultyNumber = _difficultyNumber,
-                BonusConditions = _forceNullBonus ? null : _bonuses,
-                RewardOptions = _forceNullReward ? null : _rewardOptions
-            };
+            return new DisasterCard(_id, _name, _difficultyNumber, _location, _rescueType, _bonuses, _rewardOptions);
+
         }
     }
 }

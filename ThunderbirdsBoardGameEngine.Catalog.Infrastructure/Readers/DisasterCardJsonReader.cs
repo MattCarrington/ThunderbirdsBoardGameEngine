@@ -6,6 +6,7 @@ using ThunderbirdsBoardGameEngine.Catalog.Application.Exceptions;
 using ThunderbirdsBoardGameEngine.Catalog.Application.Interfaces;
 using ThunderbirdsBoardGameEngine.Catalog.Domain.Entities;
 using ThunderbirdsBoardGameEngine.Catalog.Domain.Exceptions;
+using ThunderbirdsBoardGameEngine.Catalog.Format.Dtos;
 using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Configuration;
 using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Interfaces;
 using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Serialization;
@@ -17,14 +18,20 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Readers
         private readonly string _filePath;
         private readonly JsonSerializerOptions _jsonOptions;
         private readonly IFileOpener _fileReader;
+        private readonly IDisasterCardMapper _mapper;
         private readonly ILogger<DisasterCardJsonReader> _logger;
 
         public DisasterCardJsonReader(
-            IOptions<DisasterCardJsonOptions> options, IFileOpener fileReader, ILogger<DisasterCardJsonReader> logger, IOptionsMonitor<JsonSerializerOptions> jsonOptions)
+            IOptions<DisasterCardJsonOptions> options, 
+            IFileOpener fileReader, 
+            IDisasterCardMapper mapper,
+            ILogger<DisasterCardJsonReader> logger, 
+            IOptionsMonitor<JsonSerializerOptions> jsonOptions)
         {
             // Options already validated at startup
             _filePath = options.Value.FilePath;
             _fileReader = fileReader ?? throw new ArgumentNullException(nameof(fileReader));
+            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             _logger = logger;
             _jsonOptions = jsonOptions.Get(CatalogJson.Name) ?? throw new ArgumentNullException(nameof(jsonOptions));
         }
@@ -43,7 +50,14 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Readers
                                 
                 try
                 {
-                    cards = await JsonSerializer.DeserializeAsync<List<DisasterCard>>(stream, _jsonOptions, cancellationToken);
+                    var dtos = await JsonSerializer.DeserializeAsync<List<DisasterCardCatalogDto>>(stream, _jsonOptions, cancellationToken);
+
+                    if (dtos is null)
+                    {
+                        throw CatalogDataAccessException.DataMissing(_filePath, new InvalidDataException("Deserialized Thunderbirds Disaster Card deck is null"));
+                    }
+
+                    cards = dtos.Select(_mapper.Map).ToList();
                 }
                 catch (JsonException ex)
                 {
@@ -52,7 +66,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Readers
                 catch (NotSupportedException ex)
                 {
                     throw CatalogDataAccessException.BadJson(_filePath, ex);
-                }
+                }                
 
                 if (cards is null || cards.Count == 0)
                 {

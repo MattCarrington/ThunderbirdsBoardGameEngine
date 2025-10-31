@@ -20,12 +20,12 @@
       ],
       "rewardOptions": [
         {
-          "isUserChoice": false,
-          "specifiedToken": "determination"
+          "type": "token",
+          "token": "determination"
         },
         {
-          "isUserChoice": false,
-          "specifiedToken": "intelligence"
+          "type": "token",
+          "token": "intelligence"
         }
       ]
     },
@@ -44,16 +44,14 @@
         {
           "type": "podVehicleBonus",
           "bonusValue": 3,
-          "podVehicles": "domo"
+          "podVehicle": "domo"
         }
       ],
       "rewardOptions": [
+        { "type": "playerChoice" },
         {
-          "isUserChoice": true          
-        },
-        {
-          "isUserChoice": false,
-          "specifiedToken": "teamwork"
+          "type": "token",
+          "token": "teamwork"
         }
       ]
     }

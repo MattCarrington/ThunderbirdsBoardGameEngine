@@ -68,7 +68,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.ComponentTests.Repo
 
             // Act & Assert: repo maps to CatalogDataAccessException.BadJson
             var exception = await Assert.ThrowsAsync<DisasterCardValidationException>(() => reader.GetAllAsync(CancellationToken.None));
-            Assert.Contains("Disaster Card Asteroid Impact must have at least one bonus condition.", exception.Message);
+            Assert.Contains("Duplicate Disaster Card Name found: Asteroid Impact", exception.Message);
         }
 
         public static TheoryData<string, CatalogDataAccessErrorCode> InvalidFileCases()

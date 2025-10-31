@@ -1,49 +1,58 @@
-
-  [
-    {
-      "id": 1,
-      "name": "Asteroid Impact",
-      "difficultyNumber": 5,
-      "location": "mars",
-      "rescueType": "space",
-      "bonuses": [
-        {
-          "type": "characterBonus",
-          "bonusValue": 2,
-          "character": "alan"
-        },
-        {
-          "type": "thunderbirdBonus",
-          "bonusValue": 1,
-          "thunderbird": "thunderbird3"
-        }
-      ],
-      "rewardOptions": [
-        {
-          "isUserChoice": false,
-          "specifiedToken": "determination"
-        },
-        {
-          "isUserChoice": false,
-          "specifiedToken": "intelligence"
-        }
-      ]
-    },
-    {
-      "id": 2,
-      "name": "Earthquake",
-      "difficultyNumber": 9,
-      "location": "asia",
-      "rescueType": "land",
-      "rewardOptions": [
-        {
-          "isUserChoice": true          
-        },
-        {
-          "isUserChoice": false,
-          "specifiedToken": "teamwork"
-        }
-      ]
-    }
-  ]
+[
+  {
+    "id": 1,
+    "name": "Asteroid Impact",
+    "difficultyNumber": 5,
+    "location": "mars",
+    "rescueType": "space",
+    "bonusConditions": [
+      {
+        "type": "characterBonus",
+        "bonusValue": 2,
+        "character": "alan"
+      },
+      {
+        "type": "thunderbirdBonus",
+        "bonusValue": 1,
+        "thunderbird": "thunderbird3"
+      }
+    ],
+    "rewardOptions": [
+      {
+        "type": "token",
+        "token": "determination"
+      },
+      {
+        "type": "token",
+        "token": "intelligence"
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "name": "Asteroid Impact", 
+    "difficultyNumber": 9,
+    "location": "asia",
+    "rescueType": "land",
+    "bonusConditions": [
+      {
+        "type": "characterBonus",
+        "bonusValue": 2,
+        "character": "virgil"
+      },
+      {
+        "type": "podVehicleBonus",
+        "bonusValue": 3,
+        "podVehicle": "domo"
+      }
+    ],
+    "rewardOptions": [
+      { "type": "playerChoice" },
+      {
+        "type": "token",
+        "token": "teamwork"
+      }
+    ]
+  }
+]
 

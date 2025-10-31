@@ -4,8 +4,8 @@ using System.Security;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using ThunderbirdsBoardGameEngine.Catalog.Application.Exceptions;
-using ThunderbirdsBoardGameEngine.Catalog.Domain.Entities;
 using ThunderbirdsBoardGameEngine.Catalog.Domain.Enums;
+using ThunderbirdsBoardGameEngine.Catalog.Format.Dtos;
 using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Serialization;
 using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Builders;
 using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Fakes;
@@ -23,11 +23,11 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Readers
         public async Task GetAllAsync_WhenValidData_ReturnsDisasterCards()
         {
             // Arrange
-            var disasterCards = new List<DisasterCard>
+            var disasterCards = new List<DisasterCardCatalogDto>
             {
-                new DisasterCardBuilder().WithId(1).WithName("Test Disaster 1").WithLocation(BoardLocation.NorthAtlantic).WithRescueType(RescueType.Land).WithDifficulty(5).Build(),
-                new DisasterCardBuilder().WithId(2).WithName("Test Disaster 2").WithLocation(BoardLocation.SouthPacific).WithRescueType(RescueType.Space).WithDifficulty(7).Build(),
-                new DisasterCardBuilder().WithId(3).WithName("Test Disaster 3").WithLocation(BoardLocation.Africa).WithRescueType(RescueType.Air).WithDifficulty(9).Build()
+                new DisasterCardCatalogDtoBuilder().WithId(1).WithName("Test Disaster 1").WithLocation("NorthAtlantic").WithRescueType("Land").WithDifficulty(8).Build(),
+                new DisasterCardCatalogDtoBuilder().WithId(2).WithName("Test Disaster 2").WithLocation("SouthPacific").WithRescueType("Space").WithDifficulty(7).Build(),
+                new DisasterCardCatalogDtoBuilder().WithId(3).WithName("Test Disaster 3").WithLocation("Africa").WithRescueType("Air").WithDifficulty(9).Build()
             };
 
             var jsonText = SerializeDisasterCardData(disasterCards);
@@ -111,17 +111,15 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Readers
         public async Task GetAllAsync_WhenBonusTypeMissing_ThrowsBadJsonException()
         {
             // Arrange
-            var card = new List<DisasterCard>
+            var card = new List<DisasterCardCatalogDto>
             {
-                new DisasterCardBuilder().WithId(1).Build(),
-                new DisasterCardBuilder().WithId(2).Build()
+                new DisasterCardCatalogDtoBuilder().WithId(1).WithLocation("Unknown").Build(),
+                new DisasterCardCatalogDtoBuilder().WithId(2).Build()
             };
 
             var json = SerializeDisasterCardData(card);
 
-            var missingType = json.Replace("\"type\":", "\"typ\":", StringComparison.Ordinal); // valid JSON, wrong key
-
-            var reader = new DisasterCardJsonReaderBuilder().WithJson(missingType).WithFilePath(TestPath).Build();
+            var reader = new DisasterCardJsonReaderBuilder().WithJson(json).WithFilePath(TestPath).Build();
 
             // Act & Assert
             await AssertCatalogDataAccessException<JsonException>(
@@ -371,7 +369,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Readers
             await Assert.ThrowsAsync<AccessViolationException>(() => reader.GetAllAsync(CancellationToken.None));
         }
 
-        private static string SerializeDisasterCardData(IList<DisasterCard> disasterCards)
+        private static string SerializeDisasterCardData(IList<DisasterCardCatalogDto> disasterCards)
         {
             return JsonSerializer.Serialize(disasterCards, JsonDefaults.DisasterCards);
         }
@@ -388,14 +386,14 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Readers
         {
         }
 
-        private sealed class ThrowingDisasterCardConverter : JsonConverter<DisasterCard>
+        private sealed class ThrowingDisasterCardConverter : JsonConverter<DisasterCardCatalogDto>
         {
-            public override DisasterCard? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+            public override DisasterCardCatalogDto? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
             {
                 throw new NotSupportedException("Unsupported type configuration for DisasterCard.");
             }
 
-            public override void Write(Utf8JsonWriter writer, DisasterCard value, JsonSerializerOptions options)
+            public override void Write(Utf8JsonWriter writer, DisasterCardCatalogDto value, JsonSerializerOptions options)
             {
                 throw new NotSupportedException("Write not supported.");
             }

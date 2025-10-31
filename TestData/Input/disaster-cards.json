@@ -20,12 +20,12 @@
     ],
     "rewardOptions": [
       {
-        "isUserChoice": false,
-        "specifiedToken": "determination"
+        "type": "token",
+        "token": "determination"
       },
       {
-        "isUserChoice": false,
-        "specifiedToken": "intelligence"
+        "type": "token",
+        "token": "intelligence"
       }
     ]
   },
@@ -49,9 +49,7 @@
       }
     ],
     "rewardOptions": [
-      {
-        "isUserChoice": true
-      }
+      { "type": "playerChoice" }
     ]
   },
   {
@@ -74,8 +72,8 @@
     ],
     "rewardOptions": [
       {
-        "isUserChoice": false,
-        "specifiedToken": "technology"
+        "type": "token",
+        "token": "technology"
       }
     ]
   },
@@ -99,8 +97,8 @@
     ],
     "rewardOptions": [
       {
-        "isUserChoice": false,
-        "specifiedToken": "logistics"
+        "type": "token",
+        "token": "logistics"
       }
     ]
   },
@@ -125,12 +123,12 @@
     ],
     "rewardOptions": [
       {
-        "isUserChoice": false,
-        "specifiedToken": "logistics"
+        "type": "token",
+        "token": "logistics"
       },
       {
-        "isUserChoice": false,
-        "specifiedToken": "determination"
+        "type": "token",
+        "token": "determination"
       }
     ]
   },
@@ -149,8 +147,8 @@
     ],
     "rewardOptions": [
       {
-        "isUserChoice": false,
-        "specifiedToken": "teamwork"
+        "type": "token",
+        "token": "teamwork"
       }
     ]
   },
@@ -179,12 +177,12 @@
     ],
     "rewardOptions": [
       {
-        "isUserChoice": false,
-        "specifiedToken": "determination"
+        "type": "token",
+        "token": "determination"
       },
       {
-        "isUserChoice": false,
-        "specifiedToken": "teamwork"
+        "type": "token",
+        "token": "teamwork"
       }
     ]
   },
@@ -212,9 +210,7 @@
       }
     ],
     "rewardOptions": [
-      {
-        "isUserChoice": true
-      }
+      { "type": "playerChoice" }
     ]
   },
   {
@@ -242,12 +238,10 @@
       }
     ],
     "rewardOptions": [
+      { "type": "playerChoice" },
       {
-        "isUserChoice": true
-      },
-      {
-        "isUserChoice": false,
-        "specifiedToken": "technology"
+        "type": "token",
+        "token": "technology"
       }
     ]
   }

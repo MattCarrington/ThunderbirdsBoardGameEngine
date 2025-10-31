@@ -4,6 +4,7 @@ using Microsoft.Extensions.Options;
 using System.Text.Json;
 using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Configuration;
 using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Interfaces;
+using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Mappers;
 using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Readers;
 using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Factories;
 using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Fakes;
@@ -14,6 +15,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Builders
     {
         private string _jsonContent = "[]";
         private IFileOpener? _fileReader;
+        private IDisasterCardMapper _mapper;
         private ILogger<DisasterCardJsonReader> _logger = NullLogger<DisasterCardJsonReader>.Instance;
         private string _filePath = "/disastercards.json";
         private IOptionsMonitor<JsonSerializerOptions> _jsonOptions = JsonOptionsFactory.CreateJsonOptions();
@@ -53,6 +55,12 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Builders
             return this;
         }
 
+        internal DisasterCardJsonReaderBuilder WithMapper(IDisasterCardMapper mapper)
+        {
+            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
+            return this;
+        }
+
         internal DisasterCardJsonReader Build()
         {
             if (_fileReader is null)
@@ -62,7 +70,9 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Builders
 
             var disasterCardJsonOptions = Options.Create(new DisasterCardJsonOptions { FilePath = _filePath });
 
-            return new DisasterCardJsonReader(disasterCardJsonOptions, _fileReader, _logger, _jsonOptions);
+            var mapper = _mapper ?? new DisasterCardMapper();  
+
+            return new DisasterCardJsonReader(disasterCardJsonOptions, _fileReader, mapper, _logger, _jsonOptions);
         }
     }
 }

@@ -62,8 +62,8 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Application.UnitTests.Decorators
             // Arrange
             var cards = new List<DisasterCard>
             {
-                new DisasterCardBuilder().WithId(1).WithName("Disaster 1").WithDifficulty(-1).WithSpecifiedReward(BonusToken.Intelligence).Build(),
-                new DisasterCardBuilder().WithId(2).WithName("Disaster 2").WithDifficulty(8).WithLocation(BoardLocation.Asia).WithNullBonusConditions().Build()
+                new DisasterCardBuilder().WithId(1).WithName("Disaster 1").WithDifficulty(7).WithSpecifiedReward(BonusToken.Intelligence).Build(),
+                new DisasterCardBuilder().WithId(2).WithName("Disaster 1").WithDifficulty(8).WithLocation(BoardLocation.Asia).Build()
             };
 
             var repository = CreateValidator(cards);
