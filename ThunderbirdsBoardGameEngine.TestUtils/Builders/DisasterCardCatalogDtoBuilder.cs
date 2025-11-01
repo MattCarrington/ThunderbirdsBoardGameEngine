@@ -12,6 +12,7 @@ namespace ThunderbirdsBoardGameEngine.TestUtils.Builders
         private string _rescueType = "Sea";
         private readonly List<BonusConditionCatalogDto> _bonuses = new();
         private readonly List<RewardOptionCatalogDto> _rewards = new();
+        private string _code = "test-disaster";
 
         // Behavior flags
         private bool _ensureDefaults = true;
@@ -28,6 +29,12 @@ namespace ThunderbirdsBoardGameEngine.TestUtils.Builders
         public DisasterCardCatalogDtoBuilder WithName(string name)
         {
             _name = name;
+            return this;
+        }
+
+        public DisasterCardCatalogDtoBuilder WithCode(string code)
+        {
+            _code = code;
             return this;
         }
 
@@ -136,6 +143,7 @@ namespace ThunderbirdsBoardGameEngine.TestUtils.Builders
             {
                 Id = _id,
                 Name = _name,
+                Code = _code,
                 DifficultyNumber = _difficultyNumber,
                 Location = _location,
                 RescueType = _rescueType,

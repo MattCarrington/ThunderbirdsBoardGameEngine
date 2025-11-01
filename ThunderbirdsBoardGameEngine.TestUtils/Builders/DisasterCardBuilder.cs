@@ -7,6 +7,7 @@ namespace ThunderbirdsBoardGameEngine.TestUtils.Builders
     {
         private int _id = 1;
         private string _name = "Test Disaster";
+        private string _code = "test-disaster";
         private int _difficultyNumber = 8;
         private BoardLocation _location = BoardLocation.NorthPacific;
         private RescueType _rescueType = RescueType.Sea;
@@ -22,6 +23,12 @@ namespace ThunderbirdsBoardGameEngine.TestUtils.Builders
         public DisasterCardBuilder WithName(string name)
         {
             _name = name;
+            return this;
+        }
+
+        public DisasterCardBuilder WithCode(string code)
+        {
+            _code = code;
             return this;
         }
 
@@ -73,7 +80,7 @@ namespace ThunderbirdsBoardGameEngine.TestUtils.Builders
                 _rewardOptions.Add(RewardOption.PlayerChoice());
             }
 
-            return new DisasterCard(_id, _name, _difficultyNumber, _location, _rescueType, _bonuses, _rewardOptions);
+            return new DisasterCard(_id, _name, _code, _difficultyNumber, _location, _rescueType, _bonuses, _rewardOptions);
 
         }
     }

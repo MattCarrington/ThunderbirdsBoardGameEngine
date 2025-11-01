@@ -1,14 +1,20 @@
 ﻿using System.Text;
 using System.Text.Json.Serialization;
+using System.Text.RegularExpressions;
 using ThunderbirdsBoardGameEngine.Catalog.Domain.Enums;
 
 namespace ThunderbirdsBoardGameEngine.Catalog.Domain.Entities
 {
     public class DisasterCard
     {
+        private static readonly Regex CodePattern =
+            new(@"^[a-z0-9]+(?:-[a-z0-9]+)*$", RegexOptions.Compiled);
+
         public int Id { get; }
 
         public string Name { get; }
+
+        public string Code { get; }
 
         public int DifficultyNumber { get; }
 
@@ -24,9 +30,11 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Domain.Entities
         private readonly List<RewardOption> _rewards;
 
         [JsonConstructor]
-        public DisasterCard(int id, string name, int difficultyNumber, BoardLocation location, RescueType rescueType,
+        public DisasterCard(int id, string name, string code, int difficultyNumber, BoardLocation location, RescueType rescueType,
             IEnumerable<BonusCondition> bonusConditions, IEnumerable<RewardOption> rewardOptions)
         {
+            ArgumentException.ThrowIfNullOrWhiteSpace(code, nameof(code));
+
             ArgumentOutOfRangeException.ThrowIfNegativeOrZero(difficultyNumber);
                 
             ArgumentNullException.ThrowIfNull(bonusConditions);
@@ -51,6 +59,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Domain.Entities
             EnsureUniqueBonusConditions(bonuses);
 
             Id = id;
+            Code = NormalizeCode(code, nameof(code));
             Name = NormalizeString(name, nameof(name));
             DifficultyNumber = difficultyNumber;
             Location = location;
@@ -61,7 +70,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Domain.Entities
 
         private static string NormalizeString(string? input, string parameterName)
         {
-            ArgumentException.ThrowIfNullOrWhiteSpace(input, nameof(input));
+            ArgumentException.ThrowIfNullOrWhiteSpace(input);
 
             var cleaned = input.Trim().Normalize(NormalizationForm.FormC);
 
@@ -76,6 +85,59 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Domain.Entities
             }
 
             return cleaned;
+        }
+
+        private static string NormalizeCode(string? code, string paramName)
+        {
+            ArgumentException.ThrowIfNullOrWhiteSpace(code, paramName);
+            var trimmed = code.Trim();
+
+            // 1. Reject control characters outright
+            if (trimmed.Any(char.IsControl))
+                throw new ArgumentException("Invalid code format: contains control characters.", paramName);
+
+            // 2. Reject illegal characters (anything outside safe ASCII set)
+            if (trimmed.Any(ch => ch > 127))
+                throw new ArgumentException("Invalid code format: contains non-ASCII characters.", paramName);
+
+            // 3. Reject leading/trailing hyphens or double hyphens BEFORE collapsing
+            if (trimmed.StartsWith('-') || trimmed.EndsWith('-') || trimmed.Contains("--"))
+                throw new ArgumentException("Invalid code format: leading/trailing/double hyphen.", paramName);
+
+            // 4. Reject any illegal symbol (skip space, dash, underscore, slash, dot)
+            foreach (var ch in trimmed)
+            {
+                if (!char.IsLetterOrDigit(ch) &&
+                    !" -_./".Contains(ch))
+                {
+                    throw new ArgumentException($"Invalid code format: contains illegal character '{ch}'.", paramName);
+                }
+            }
+
+            // 5. Proceed with canonical normalization
+            var s = trimmed.ToLowerInvariant().Normalize(NormalizationForm.FormKD);
+
+            var sb = new StringBuilder(s.Length);
+            bool dash = false;
+            foreach (var ch in s)
+            {
+                if (ch is >= 'a' and <= 'z' or >= '0' and <= '9')
+                {
+                    sb.Append(ch);
+                    dash = false;
+                }
+                else if (char.IsWhiteSpace(ch) || ch is '-' or '_' or '/' or '.')
+                {
+                    if (!dash) { sb.Append('-'); dash = true; }
+                }
+            }
+
+            var normalized = sb.ToString().Trim('-');
+
+            if (!CodePattern.IsMatch(normalized))
+                throw new ArgumentException($"Invalid code format: '{normalized}'", paramName);
+
+            return normalized;
         }
 
         private static void EnsureUniqueBonusConditions(IEnumerable<BonusCondition> bonusConditions)

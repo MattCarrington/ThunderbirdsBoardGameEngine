@@ -24,5 +24,8 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Format.Dtos
 
         [JsonPropertyOrder(6)]
         public required List<RewardOptionCatalogDto> RewardOptions { get; init; }
+
+        [JsonPropertyOrder(7)]
+        public required string Code { get; init; } = default!;
     }
 }

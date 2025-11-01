@@ -9,6 +9,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Domain.Validators
         {
             var ids = new HashSet<int>();
             var names = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            var codes = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 
             ArgumentNullException.ThrowIfNull(cards);
 
@@ -27,6 +28,11 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Domain.Validators
                 if (!names.Add(card.Name))
                 {
                     throw new DisasterCardValidationException($"Duplicate Disaster Card Name found: {card.Name}");
+                }
+
+                if (!codes.Add(card.Code))
+                {
+                    throw new DisasterCardValidationException($"Duplicate Disaster Card Code found: {card.Code}");
                 }
             }
         }

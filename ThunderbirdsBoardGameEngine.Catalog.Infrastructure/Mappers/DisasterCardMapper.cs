@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using System.Text;
+using System.Text.Json;
 using ThunderbirdsBoardGameEngine.Catalog.Domain.Entities;
 using ThunderbirdsBoardGameEngine.Catalog.Domain.Enums;
 using ThunderbirdsBoardGameEngine.Catalog.Format.Dtos;
@@ -15,12 +16,21 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Mappers
                 throw new JsonException("Root list is null");
             }
 
+            var code = string.IsNullOrWhiteSpace(dto.Code)
+                ? Slug(dto.Name)
+                : dto.Code.Trim().ToLowerInvariant();   // TEMPORARY: relax requirement for 'code' to allow legacy data to work
+
+            // if (string.IsNullOrWhiteSpace(dto.Code))
+            // throw new JsonException($"Card Id={dto.Id}, Name='{dto.Name}': 'code' is required.");
+
+
             var location = ParseEnum<BoardLocation>(dto.Location);
             var rescueType = ParseEnum<RescueType>(dto.RescueType);
 
             return new DisasterCard(
                 dto.Id,
                 dto.Name,
+                code,
                 dto.DifficultyNumber,
                 location,
                 rescueType,
@@ -88,6 +98,29 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Mappers
             }
 
             throw new JsonException($"Invalid enum value: {value}");
+        }
+
+        private string Slug(string input)
+        {
+            var cleaned = input.Trim().ToLowerInvariant();
+
+            var stringBuilder = new StringBuilder(cleaned.Length);
+
+            bool dash = false;
+
+            foreach (var ch in cleaned)
+            {
+                if (char.IsLetterOrDigit(ch)) 
+                { 
+                    stringBuilder.Append(ch); dash = false; 
+                }
+                else if (char.IsWhiteSpace(ch) || ch is '-' or '_' or '/' or '.') 
+                { 
+                    if (!dash) 
+                    { 
+                        stringBuilder.Append('-'); dash = true; } }
+            }
+            return stringBuilder.ToString().Trim('-');
         }
     }
 }

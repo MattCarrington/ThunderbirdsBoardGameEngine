@@ -17,9 +17,9 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Domain.UnitTests.Validators
 
             var cards = new List<DisasterCard>
             {
-                new DisasterCardBuilder().WithId(id++).WithName($"Test 1").Build(),
-                new DisasterCardBuilder().WithId(id++).WithName($"Test 2").WithDifficulty(2).Build(),
-                new DisasterCardBuilder().WithId(id).WithName($"Test 3").WithBonusCondition(new CharacterBonusCondition(Character.Scott, 1)).Build()
+                new DisasterCardBuilder().WithId(id).WithName($"Test {id}").WithCode($"test-{id++}").Build(),
+                new DisasterCardBuilder().WithId(id).WithName($"Test {id}").WithDifficulty(2).WithCode($"test-{id++}").Build(),
+                new DisasterCardBuilder().WithId(id).WithName($"Test {id}").WithBonusCondition(new CharacterBonusCondition(Character.Scott, 1)).WithCode($"test-{id}").Build()
             };
 
             // Act
@@ -37,9 +37,9 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Domain.UnitTests.Validators
 
             var cards = new List<DisasterCard>
             {
-                new DisasterCardBuilder().WithId(id).WithName("Test 1").Build(),
-                new DisasterCardBuilder().WithId(id).WithName("Test 2").Build(),
-                new DisasterCardBuilder().WithId(id).WithName("Test 3").Build()
+                new DisasterCardBuilder().WithId(id).WithName("Test 1").WithCode("Test-1").Build(),
+                new DisasterCardBuilder().WithId(id).WithName("Test 2").WithCode("Test-2").Build(),
+                new DisasterCardBuilder().WithId(id).WithName("Test 3").WithCode("Test-3").Build()
             };
 
             // Act & Assert
@@ -50,6 +50,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Domain.UnitTests.Validators
         [Theory]
         [InlineData("duplicate name")]
         [InlineData("DUPLICATE NAME")]
+        [InlineData("Duplicate Name")]
         public void ValidateAll_WhenDuplicateDisasterCardNames_ThrowsValidationException(string name)
         {
             // Arrange
@@ -57,13 +58,32 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Domain.UnitTests.Validators
 
             var cards = new List<DisasterCard>
             {
-                new DisasterCardBuilder().WithId(id++).WithName("Duplicate Name").Build(),
-                new DisasterCardBuilder().WithId(id).WithName(name).Build()
+                new DisasterCardBuilder().WithId(id).WithName("Duplicate Name").WithCode($"test-{id++}").Build(),
+                new DisasterCardBuilder().WithId(id).WithName(name).WithCode($"test-{id}").Build()
             };
 
             // Act & Assert
             var exception = Assert.Throws<DisasterCardValidationException>(() => DisasterCardValidator.ValidateAll(cards));
             Assert.Contains("Duplicate Disaster Card Name found", exception.Message);
+        }
+
+        [Theory]
+        [InlineData("duplicate-code")]
+        [InlineData("DUPLICATE-CODE")]
+        [InlineData("Duplicate-Code")]
+        public void ValidateAll_WhenDuplicateDisasterCardCodes_ThrowsValidationException(string code)
+        {
+            // Arrange
+            var id = 1;
+            
+            var cards = new List<DisasterCard>
+            {
+                new DisasterCardBuilder().WithId(id).WithName($"Test {id++}").WithCode("duplicate-code").Build(),
+                new DisasterCardBuilder().WithId(id).WithName($"Test {id}").WithCode(code).Build()
+            };
+            // Act & Assert
+            var exception = Assert.Throws<DisasterCardValidationException>(() => DisasterCardValidator.ValidateAll(cards));
+            Assert.Contains("Duplicate Disaster Card Code found", exception.Message);
         }
 
         [Fact]
@@ -80,6 +100,15 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Domain.UnitTests.Validators
             // Act & Assert
             var exception = Assert.Throws<DisasterCardValidationException>(() => DisasterCardValidator.ValidateAll(cards));
             Assert.Contains("Disaster Cards collection contains null entries.", exception.Message);
+        }
+
+        [Fact]
+        public void ValidateAll_WhenDisasterCardsNull_ThrowsValidationException()
+        {
+            // Arrange
+
+            // Act & Assert
+            Assert.Throws<ArgumentNullException>(() => DisasterCardValidator.ValidateAll(null!));
         }
 
         [Fact]
