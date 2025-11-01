@@ -2,6 +2,7 @@
   {
     "id": 1,
     "name": "Asteroid Impact",
+    "code": "asteroid-impact",
     "difficultyNumber": 5,
     "location": "mars",
     "rescueType": "space",
@@ -31,6 +32,7 @@
   {
     "id": 2,
     "name": "Asteroid Impact", 
+    "code": "asteroid-impact",
     "difficultyNumber": 9,
     "location": "asia",
     "rescueType": "land",

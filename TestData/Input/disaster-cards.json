@@ -2,6 +2,7 @@
   {
     "id": 1,
     "name": "Target: Tiger One",
+    "code": "target-tiger-one",
     "difficultyNumber": 9,
     "location": "northPacific",
     "rescueType": "air",
@@ -32,6 +33,7 @@
   {
     "id": 2,
     "name": "Bolt from the Blue",
+    "code": "bolt-from-the-blue",
     "difficultyNumber": 8,
     "location": "indianOcean",
     "rescueType": "air",
@@ -55,6 +57,7 @@
   {
     "id": 3,
     "name": "Day of Disaster",
+    "code": "day-of-disaster",
     "difficultyNumber": 9,
     "location": "europe",
     "rescueType": "sea",
@@ -80,6 +83,7 @@
   {
     "id": 4,
     "name": "The Longest Day",
+    "code": "the-longest-day",
     "difficultyNumber": 7,
     "location": "mercury",
     "rescueType": "space",
@@ -105,6 +109,7 @@
   {
     "id": 5,
     "name": "Path of Destruction",
+    "code": "path-of-destruction",
     "difficultyNumber": 9,
     "location": "southAmerica",
     "rescueType": "land",
@@ -135,6 +140,7 @@
   {
     "id": 6,
     "name": "Martian Invasion",
+    "code": "martian-invasion",
     "difficultyNumber": 7,
     "location": "northAmerica",
     "rescueType": "land",
@@ -155,6 +161,7 @@
   {
     "id": 7,
     "name": "Terror in New York City",
+    "code": "terror-in-new-york-city",
     "difficultyNumber": 11,
     "location": "northAmerica",
     "rescueType": "sea",
@@ -189,6 +196,7 @@
   {
     "id": 8,
     "name": "They Call Him Mr. X",
+    "code": "they-call-him-mr-x",
     "difficultyNumber": 8,
     "location": "asia",
     "rescueType": "air",
@@ -216,6 +224,7 @@
   {
     "id": 9,
     "name": "Sunrise on Mars",
+    "code": "sunrise-on-mars",
     "difficultyNumber": 10,
     "location": "mars",
     "rescueType": "space",

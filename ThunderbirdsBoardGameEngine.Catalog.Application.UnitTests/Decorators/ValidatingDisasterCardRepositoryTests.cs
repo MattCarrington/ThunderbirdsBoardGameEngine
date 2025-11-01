@@ -19,8 +19,8 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Application.UnitTests.Decorators
             // Arrange
             var cards = new List<DisasterCard>
             {
-                new DisasterCardBuilder().WithId(1).WithName("Disaster 1").WithDifficulty(7).WithSpecifiedReward(BonusToken.Intelligence).Build(),
-                new DisasterCardBuilder().WithId(2).WithName("Disaster 2").WithDifficulty(8).WithLocation(BoardLocation.Asia).WithUserChoiceRewardOption().Build()
+                new DisasterCardBuilder().WithId(1).WithName("Disaster 1").WithCode("disaster-1").WithDifficulty(7).WithSpecifiedReward(BonusToken.Intelligence).Build(),
+                new DisasterCardBuilder().WithId(2).WithName("Disaster 2").WithCode("disaster-2").WithDifficulty(8).WithLocation(BoardLocation.Asia).WithUserChoiceRewardOption().Build()
             };
             
             var inner = Substitute.For<IDisasterCardReader>();
