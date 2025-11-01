@@ -4,14 +4,14 @@ using ThunderbirdsBoardGameEngine.Catalog.Generator.Output;
 
 namespace ThunderbirdsBoardGameEngine.Catalog.Generator
 {
-    internal class Program
+    public static class Program
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("📥 Importing Disaster Cards...");
+            Console.WriteLine("📥 Importing Disaster Card Data...");
 
             var importer = new DisasterCardImporter();
-            List<DisasterCard> cards = importer.Import("Resources/DisasterCards.xlsx");
+            var cards = importer.ImportDisasterCardData("Resources/DisasterCards.xlsx");
 
             var options = JsonWriter.CreateDefaultOptions();
             JsonWriter.WriteJson(cards, "Output/DisasterCards.json", options);

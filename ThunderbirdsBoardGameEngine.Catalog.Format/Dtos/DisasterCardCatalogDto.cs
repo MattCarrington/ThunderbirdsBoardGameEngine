@@ -11,21 +11,21 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Format.Dtos
         public required string Name { get; init; } = default!;
 
         [JsonPropertyOrder(2)]
-        public required string RescueType { get; init; } = default!;
+        public required string Code { get; init; } = default!;
 
         [JsonPropertyOrder(3)]
-        public required int DifficultyNumber { get; init; }
+        public required string RescueType { get; init; } = default!;
 
         [JsonPropertyOrder(4)]
-        public required string Location { get; init; } = default!;
+        public required int DifficultyNumber { get; init; }
 
         [JsonPropertyOrder(5)]
-        public required List<BonusConditionCatalogDto> BonusConditions { get; init; }
+        public required string Location { get; init; } = default!;
 
         [JsonPropertyOrder(6)]
-        public required List<RewardOptionCatalogDto> RewardOptions { get; init; }
+        public required List<BonusConditionCatalogDto> BonusConditions { get; init; }
 
         [JsonPropertyOrder(7)]
-        public required string Code { get; init; } = default!;
+        public required List<RewardOptionCatalogDto> RewardOptions { get; init; }        
     }
 }

@@ -1,17 +1,15 @@
 ﻿using ClosedXML.Excel;
-using ThunderbirdsBoardGameEngine.Catalog.Domain.Entities;
-using ThunderbirdsBoardGameEngine.Catalog.Domain.Enums;
-using ThunderbirdsBoardGameEngine.Catalog.Format.Enums;
+using ThunderbirdsBoardGameEngine.Catalog.Format.Dtos;
 using ThunderbirdsBoardGameEngine.Catalog.Generator.Helpers;
-using ThunderbirdsBoardGameEngine.Catalog.Generator.Parsers;
+using ThunderbirdsBoardGameEngine.Catalog.Generator.Mappers;
 
 namespace ThunderbirdsBoardGameEngine.Catalog.Generator.Importers
 {
     public class DisasterCardImporter
     {
-        public List<DisasterCard> Import(string path)
+        public List<DisasterCardCatalogDto> ImportDisasterCardData(string path)
         {
-            var cards = new List<DisasterCard>();
+            var result = new List<DisasterCardCatalogDto>();
 
             using var workbook = new XLWorkbook(path);
             var sheet = workbook.Worksheet(1); // First sheet
@@ -21,60 +19,87 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Generator.Importers
 
             foreach (var row in sheet.RowsUsed().Skip(1)) // Skip header
             {
-                var bonuses = new List<BonusCondition>();
+                var name = Get(row, header, "Name");
+                var code = StringHelpers.Slugify(name);
+                var difficultyNumber = int.Parse(Get(row, header, "Difficulty Number"));
+                var location = Get(row, header, "Location");
+                var rescueType = Get(row, header, "Rescue Type");
 
-                for (int i = 1; i <= 3; i++)
-                {                  
-                    var bonusKey = $"Bonus {i}";
-                    if (!header.HasColumn(bonusKey)) break;
+                var bonuses = ParseBonuses(row, header);
+                var rewards = ParseRewards(row, header);
 
-                    var target = row.Cell(header[bonusKey]).GetString();
-                    var value = header.HasColumn($"{bonusKey} Value")
-                        ? row.Cell(header[$"{bonusKey} Value"]).GetValue<int?>()
-                        : 1;
+                result.Add(new DisasterCardCatalogDto
+                {
+                    Id = id++,
+                    Name = StringHelpers.NormalizeWhitespace(name, nameof(name)),
+                    Code = code,
+                    DifficultyNumber = difficultyNumber,
+                    RescueType = StringHelpers.RemoveSpaces(rescueType),
+                    Location = StringHelpers.RemoveSpaces(location),
+                    BonusConditions = bonuses,
+                    RewardOptions = rewards
+                });
+            }
 
-                    var loc = header.HasColumn($"{bonusKey} Location")
-                        ? row.Cell(header[$"{bonusKey} Location"]).GetString()
-                        : null;
+            return result;
+        }
+
+        private static List<RewardOptionCatalogDto> ParseRewards(IXLRow row, ExcelHeaderMap header)
+        {
+            var rewards = new List<RewardOptionCatalogDto>();
+
+            for (var i = 1; i < 2; i++)
+            {
+                var rewardKey = $"Reward {i}";
+                if (!header.HasColumn(rewardKey)) continue;
+
+                var value = Get(row, header, rewardKey);
+
+                if (!string.IsNullOrWhiteSpace(value))
+                {
+                    var reward = RewardOptionCatalogDtoMapper.MapReward(value);
+                    rewards.Add(reward);
+                }
+            }
+
+            return rewards;
+        }
+
+        private static List<BonusConditionCatalogDto> ParseBonuses(IXLRow row, ExcelHeaderMap header)
+        {
+            var bonuses = new List<BonusConditionCatalogDto>();
+
+            for (int i = 1; i <= 3; i++)
+            {
+                var bonusKey = $"Bonus {i}";
+
+                if (header.HasColumn(bonusKey))
+                {
+                    var target = Get(row, header, bonusKey);
 
                     if (!string.IsNullOrWhiteSpace(target))
                     {
-                        var bonus = BonusParser.Parse(target, value ?? 1, loc);
+                        var value = header.HasColumn($"{bonusKey} Value")
+                            ? row.Cell(header[$"{bonusKey} Value"]).GetValue<int>()
+                            : 1;
+
+                        var location = header.HasColumn($"{bonusKey} Location")
+                            ? Get(row, header, $"{bonusKey} Location")
+                            : null;
+
+                    
+                        var bonus = BonusConditionCatalogDtoMapper.MapBonus(target, value, location);
                         bonuses.Add(bonus);
                     }
                 }
-
-                var rewards = new List<RewardOption>();
-
-                for (int i = 1; i <= 2; i++)
-                {
-                    var rewardKey = $"Reward {i}";
-                    if (!header.HasColumn(rewardKey)) continue;
-
-                    var value = row.Cell(header[rewardKey]).GetString();
-
-                    if (!string.IsNullOrWhiteSpace(value))
-                    {
-                        var reward = RewardParser.Parse(value);
-                        rewards.Add(reward);
-                    }
-                }
-
-                var card = new DisasterCard(
-                    id++,
-                    row.Cell(header["Name"]).GetString(),
-                    row.Cell(header["Name"]).GetString().ToLowerInvariant().Replace(" ", "-"),
-                    row.Cell(header["Difficulty Number"]).GetValue<int>(),
-                    EnumDisplayHelper.ParseFromDisplayName<BoardLocation>(row.Cell(header["Location"]).GetString()),
-                    EnumDisplayHelper.ParseFromDisplayName<RescueType>(row.Cell(header["Rescue Type"]).GetString()),
-                    bonuses,
-                    rewards
-                );
-
-                cards.Add(card);
             }
 
-            return cards;
+            return bonuses;
+        }
+
+        private static string Get(IXLRow row, ExcelHeaderMap header, string name)
+        {
+            return row.Cell(header[name]).GetString().Trim();
         }
     }
 }
