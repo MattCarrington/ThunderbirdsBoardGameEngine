@@ -1,7 +1,7 @@
-﻿using ThunderbirdsBoardGameEngine.GameData.Domain.Entities;
-using ThunderbirdsBoardGameEngine.GameData.Domain.Enums;
+﻿using ThunderbirdsBoardGameEngine.Catalog.Domain.Entities;
+using ThunderbirdsBoardGameEngine.Catalog.Domain.Enums;
 
-namespace GameDataImporter.ConsoleApp.Parsers;
+namespace ThunderbirdsBoardGameEngine.Catalog.Generator.Parsers;
 
 public static class RewardParser
 {
@@ -11,20 +11,13 @@ public static class RewardParser
 
         if (string.Equals(input, "User Choice", StringComparison.OrdinalIgnoreCase))
         {
-            return new RewardOption
-            {
-                IsUserChoice = true
-            };
+            return RewardOption.PlayerChoice();
         }
 
         // Normalize enum value
         if (Enum.TryParse<BonusToken>(NormalizeEnumName(input), ignoreCase: true, out var token))
         {
-            return new RewardOption
-            {
-                IsUserChoice = false,
-                SpecifiedToken = token
-            };
+            return RewardOption.SpecifiedToken(token);
         }
 
         throw new ArgumentException($"Unknown reward type: '{input}'");

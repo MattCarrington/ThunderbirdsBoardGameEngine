@@ -1,12 +1,11 @@
 ﻿using ClosedXML.Excel;
-using GameDataImporter.ConsoleApp.Helpers;
-using GameDataImporter.ConsoleApp.Parsers;
-using ThunderbirdsBoardGameEngine.GameData.Domain.Entities;
-using ThunderbirdsBoardGameEngine.GameData.Domain.Enums;
-using ThunderbirdsBoardGameEngine.GameData.Importer.Parsers;
-using ThunderbirdsBoardGameEngine.Serialization.Enums;
+using ThunderbirdsBoardGameEngine.Catalog.Domain.Entities;
+using ThunderbirdsBoardGameEngine.Catalog.Domain.Enums;
+using ThunderbirdsBoardGameEngine.Catalog.Format.Enums;
+using ThunderbirdsBoardGameEngine.Catalog.Generator.Helpers;
+using ThunderbirdsBoardGameEngine.Catalog.Generator.Parsers;
 
-namespace ThunderbirdsBoardGameEngine.GameData.Importer.Importers
+namespace ThunderbirdsBoardGameEngine.Catalog.Generator.Importers
 {
     public class DisasterCardImporter
     {
@@ -61,16 +60,16 @@ namespace ThunderbirdsBoardGameEngine.GameData.Importer.Importers
                     }
                 }
 
-                var card = new DisasterCard
-                {
-                    Id = id++,
-                    Name = row.Cell(header["Name"]).GetString(),
-                    DifficultyNumber = row.Cell(header["Difficulty Number"]).GetValue<int>(),
-                    Location = EnumDisplayHelper.ParseFromDisplayName<BoardLocation>(row.Cell(header["Location"]).GetString()),
-                    RescueType = EnumDisplayHelper.ParseFromDisplayName<RescueType>(row.Cell(header["Rescue Type"]).GetString()),
-                    BonusConditions = bonuses,
-                    RewardOptions = rewards
-                };
+                var card = new DisasterCard(
+                    id++,
+                    row.Cell(header["Name"]).GetString(),
+                    row.Cell(header["Name"]).GetString().ToLowerInvariant().Replace(" ", "-"),
+                    row.Cell(header["Difficulty Number"]).GetValue<int>(),
+                    EnumDisplayHelper.ParseFromDisplayName<BoardLocation>(row.Cell(header["Location"]).GetString()),
+                    EnumDisplayHelper.ParseFromDisplayName<RescueType>(row.Cell(header["Rescue Type"]).GetString()),
+                    bonuses,
+                    rewards
+                );
 
                 cards.Add(card);
             }

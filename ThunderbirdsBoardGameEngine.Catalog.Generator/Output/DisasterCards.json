@@ -1,0 +1,964 @@
+[
+  {
+    "id": 0,
+    "name": "Signal From Sigma",
+    "difficultyNumber": 8,
+    "location": "asteroidBelt",
+    "rescueType": "space",
+    "bonusConditions": [
+      {
+        "type": "characterBonus",
+        "bonusValue": 1,
+        "character": "john"
+      },
+      {
+        "type": "podVehicleBonus",
+        "bonusValue": 3,
+        "podVehicle": "transmitterTruck",
+        "location": "southAmerica"
+      }
+    ],
+    "rewardOptions": [
+      {
+        "isUserChoice": true,
+        "specifiedToken": null
+      }
+    ]
+  },
+  {
+    "id": 1,
+    "name": "The Mighty Atom",
+    "difficultyNumber": 10,
+    "location": "africa",
+    "rescueType": "land",
+    "bonusConditions": [
+      {
+        "type": "thunderbirdBonus",
+        "bonusValue": 3,
+        "thunderbird": "thunderbird4"
+      },
+      {
+        "type": "characterBonus",
+        "bonusValue": 2,
+        "character": "ladyPenelope"
+      }
+    ],
+    "rewardOptions": [
+      {
+        "isUserChoice": false,
+        "specifiedToken": "technology"
+      },
+      {
+        "isUserChoice": true,
+        "specifiedToken": null
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "name": "The Moon Mine Menace",
+    "difficultyNumber": 8,
+    "location": "moon",
+    "rescueType": "space",
+    "bonusConditions": [
+      {
+        "type": "characterBonus",
+        "bonusValue": 2,
+        "character": "gordon"
+      },
+      {
+        "type": "characterBonus",
+        "bonusValue": 2,
+        "character": "john"
+      }
+    ],
+    "rewardOptions": [
+      {
+        "isUserChoice": true,
+        "specifiedToken": null
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "name": "The Perils of Penelope",
+    "difficultyNumber": 7,
+    "location": "europe",
+    "rescueType": "land",
+    "bonusConditions": [
+      {
+        "type": "characterBonus",
+        "bonusValue": 2,
+        "character": "ladyPenelope"
+      },
+      {
+        "type": "thunderbirdBonus",
+        "bonusValue": 1,
+        "thunderbird": "fab1"
+      }
+    ],
+    "rewardOptions": [
+      {
+        "isUserChoice": false,
+        "specifiedToken": "determination"
+      }
+    ]
+  },
+  {
+    "id": 4,
+    "name": "Towering Ocean",
+    "difficultyNumber": 8,
+    "location": "southPacific",
+    "rescueType": "sea",
+    "bonusConditions": [
+      {
+        "type": "thunderbirdBonus",
+        "bonusValue": 2,
+        "thunderbird": "thunderbird3"
+      },
+      {
+        "type": "thunderbirdBonus",
+        "bonusValue": 2,
+        "thunderbird": "thunderbird4"
+      }
+    ],
+    "rewardOptions": [
+      {
+        "isUserChoice": true,
+        "specifiedToken": null
+      }
+    ]
+  },
+  {
+    "id": 5,
+    "name": "30 Minutes After Noon",
+    "difficultyNumber": 8,
+    "location": "northAmerica",
+    "rescueType": "land",
+    "bonusConditions": [
+      {
+        "type": "thunderbirdBonus",
+        "bonusValue": 2,
+        "thunderbird": "thunderbird1"
+      },
+      {
+        "type": "podVehicleBonus",
+        "bonusValue": 3,
+        "podVehicle": "laserCutter",
+        "location": "europe"
+      }
+    ],
+    "rewardOptions": [
+      {
+        "isUserChoice": true,
+        "specifiedToken": null
+      }
+    ]
+  },
+  {
+    "id": 6,
+    "name": "City of Fire",
+    "difficultyNumber": 8,
+    "location": "northAmerica",
+    "rescueType": "land",
+    "bonusConditions": [
+      {
+        "type": "podVehicleBonus",
+        "bonusValue": 3,
+        "podVehicle": "firefly"
+      },
+      {
+        "type": "podVehicleBonus",
+        "bonusValue": 2,
+        "podVehicle": "mole"
+      }
+    ],
+    "rewardOptions": [
+      {
+        "isUserChoice": true,
+        "specifiedToken": null
+      }
+    ]
+  },
+  {
+    "id": 7,
+    "name": "Rockquake",
+    "difficultyNumber": 10,
+    "location": "australia",
+    "rescueType": "air",
+    "bonusConditions": [
+      {
+        "type": "podVehicleBonus",
+        "bonusValue": 2,
+        "podVehicle": "recoveryVehicles"
+      },
+      {
+        "type": "podVehicleBonus",
+        "bonusValue": 2,
+        "podVehicle": "excavator"
+      },
+      {
+        "type": "characterBonus",
+        "bonusValue": 2,
+        "character": "virgil"
+      }
+    ],
+    "rewardOptions": [
+      {
+        "isUserChoice": false,
+        "specifiedToken": "intelligence"
+      },
+      {
+        "isUserChoice": true,
+        "specifiedToken": null
+      }
+    ]
+  },
+  {
+    "id": 8,
+    "name": "Flight Path to Fear",
+    "difficultyNumber": 9,
+    "location": "asia",
+    "rescueType": "air",
+    "bonusConditions": [
+      {
+        "type": "podVehicleBonus",
+        "bonusValue": 2,
+        "podVehicle": "laserCutter"
+      },
+      {
+        "type": "podVehicleBonus",
+        "bonusValue": 2,
+        "podVehicle": "elevatorCars"
+      },
+      {
+        "type": "characterBonus",
+        "bonusValue": 2,
+        "character": "john"
+      }
+    ],
+    "rewardOptions": [
+      {
+        "isUserChoice": false,
+        "specifiedToken": "technology"
+      },
+      {
+        "isUserChoice": false,
+        "specifiedToken": "logistics"
+      }
+    ]
+  },
+  {
+    "id": 9,
+    "name": "Sun Probe",
+    "difficultyNumber": 11,
+    "location": "sun",
+    "rescueType": "space",
+    "bonusConditions": [
+      {
+        "type": "characterBonus",
+        "bonusValue": 2,
+        "character": "scott"
+      },
+      {
+        "type": "characterBonus",
+        "bonusValue": 2,
+        "character": "virgil",
+        "location": "asia"
+      },
+      {
+        "type": "podVehicleBonus",
+        "bonusValue": 3,
+        "podVehicle": "transmitterTruck",
+        "location": "asia"
+      }
+    ],
+    "rewardOptions": [
+      {
+        "isUserChoice": false,
+        "specifiedToken": "logistics"
+      },
+      {
+        "isUserChoice": true,
+        "specifiedToken": null
+      }
+    ]
+  },
+  {
+    "id": 10,
+    "name": "The Uninvited",
+    "difficultyNumber": 8,
+    "location": "africa",
+    "rescueType": "land",
+    "bonusConditions": [
+      {
+        "type": "characterBonus",
+        "bonusValue": 2,
+        "character": "scott"
+      },
+      {
+        "type": "characterBonus",
+        "bonusValue": 2,
+        "character": "gordon"
+      }
+    ],
+    "rewardOptions": [
+      {
+        "isUserChoice": true,
+        "specifiedToken": null
+      }
+    ]
+  },
+  {
+    "id": 11,
+    "name": "The Cham-Cham",
+    "difficultyNumber": 7,
+    "location": "europe",
+    "rescueType": "air",
+    "bonusConditions": [
+      {
+        "type": "characterBonus",
+        "bonusValue": 2,
+        "character": "ladyPenelope"
+      },
+      {
+        "type": "thunderbirdBonus",
+        "bonusValue": 2,
+        "thunderbird": "thunderbird1",
+        "location": "northAmerica"
+      }
+    ],
+    "rewardOptions": [
+      {
+        "isUserChoice": false,
+        "specifiedToken": "intelligence"
+      }
+    ]
+  },
+  {
+    "id": 12,
+    "name": "Trapped in the Sky",
+    "difficultyNumber": 11,
+    "location": "europe",
+    "rescueType": "air",
+    "bonusConditions": [
+      {
+        "type": "podVehicleBonus",
+        "bonusValue": 3,
+        "podVehicle": "elevatorCars"
+      },
+      {
+        "type": "thunderbirdBonus",
+        "bonusValue": 2,
+        "thunderbird": "fab1"
+      },
+      {
+        "type": "thunderbirdBonus",
+        "bonusValue": 2,
+        "thunderbird": "thunderbird1"
+      }
+    ],
+    "rewardOptions": [
+      {
+        "isUserChoice": false,
+        "specifiedToken": "intelligence"
+      },
+      {
+        "isUserChoice": true,
+        "specifiedToken": null
+      }
+    ]
+  },
+  {
+    "id": 13,
+    "name": "Terror in New York City",
+    "difficultyNumber": 11,
+    "location": "northAmerica",
+    "rescueType": "sea",
+    "bonusConditions": [
+      {
+        "type": "podVehicleBonus",
+        "bonusValue": 3,
+        "podVehicle": "firefly"
+      },
+      {
+        "type": "characterBonus",
+        "bonusValue": 2,
+        "character": "virgil"
+      },
+      {
+        "type": "thunderbirdBonus",
+        "bonusValue": 2,
+        "thunderbird": "thunderbird4"
+      }
+    ],
+    "rewardOptions": [
+      {
+        "isUserChoice": false,
+        "specifiedToken": "teamwork"
+      },
+      {
+        "isUserChoice": true,
+        "specifiedToken": null
+      }
+    ]
+  },
+  {
+    "id": 14,
+    "name": "End of the Road",
+    "difficultyNumber": 9,
+    "location": "asia",
+    "rescueType": "land",
+    "bonusConditions": [
+      {
+        "type": "characterBonus",
+        "bonusValue": 2,
+        "character": "alan"
+      },
+      {
+        "type": "thunderbirdBonus",
+        "bonusValue": 2,
+        "thunderbird": "thunderbird1"
+      }
+    ],
+    "rewardOptions": [
+      {
+        "isUserChoice": false,
+        "specifiedToken": "intelligence"
+      },
+      {
+        "isUserChoice": false,
+        "specifiedToken": "teamwork"
+      }
+    ]
+  },
+  {
+    "id": 15,
+    "name": "Attack of the Aligators",
+    "difficultyNumber": 10,
+    "location": "southAmerica",
+    "rescueType": "sea",
+    "bonusConditions": [
+      {
+        "type": "thunderbirdBonus",
+        "bonusValue": 3,
+        "thunderbird": "thunderbird4"
+      },
+      {
+        "type": "characterBonus",
+        "bonusValue": 2,
+        "character": "virgil"
+      }
+    ],
+    "rewardOptions": [
+      {
+        "isUserChoice": false,
+        "specifiedToken": "teamwork"
+      },
+      {
+        "isUserChoice": true,
+        "specifiedToken": null
+      }
+    ]
+  },
+  {
+    "id": 16,
+    "name": "Atlantic Inferno",
+    "difficultyNumber": 8,
+    "location": "southAtlantic",
+    "rescueType": "sea",
+    "bonusConditions": [
+      {
+        "type": "thunderbirdBonus",
+        "bonusValue": 2,
+        "thunderbird": "thunderbird4"
+      },
+      {
+        "type": "characterBonus",
+        "bonusValue": 3,
+        "character": "scott",
+        "location": "southPacific"
+      }
+    ],
+    "rewardOptions": [
+      {
+        "isUserChoice": true,
+        "specifiedToken": null
+      }
+    ]
+  },
+  {
+    "id": 17,
+    "name": "The Duchess Assignment",
+    "difficultyNumber": 8,
+    "location": "northAmerica",
+    "rescueType": "land",
+    "bonusConditions": [
+      {
+        "type": "podVehicleBonus",
+        "bonusValue": 3,
+        "podVehicle": "domo"
+      },
+      {
+        "type": "podVehicleBonus",
+        "bonusValue": 2,
+        "podVehicle": "mole"
+      }
+    ],
+    "rewardOptions": [
+      {
+        "isUserChoice": true,
+        "specifiedToken": null
+      }
+    ]
+  },
+  {
+    "id": 18,
+    "name": "Pit of Peril",
+    "difficultyNumber": 11,
+    "location": "africa",
+    "rescueType": "land",
+    "bonusConditions": [
+      {
+        "type": "podVehicleBonus",
+        "bonusValue": 3,
+        "podVehicle": "recoveryVehicles"
+      },
+      {
+        "type": "podVehicleBonus",
+        "bonusValue": 2,
+        "podVehicle": "mole"
+      },
+      {
+        "type": "characterBonus",
+        "bonusValue": 2,
+        "character": "scott"
+      }
+    ],
+    "rewardOptions": [
+      {
+        "isUserChoice": false,
+        "specifiedToken": "determination"
+      },
+      {
+        "isUserChoice": true,
+        "specifiedToken": null
+      }
+    ]
+  },
+  {
+    "id": 19,
+    "name": "Sunrise on Mars",
+    "difficultyNumber": 10,
+    "location": "mars",
+    "rescueType": "space",
+    "bonusConditions": [
+      {
+        "type": "characterBonus",
+        "bonusValue": 2,
+        "character": "ladyPenelope"
+      },
+      {
+        "type": "characterBonus",
+        "bonusValue": 2,
+        "character": "gordon"
+      },
+      {
+        "type": "characterBonus",
+        "bonusValue": 2,
+        "character": "john",
+        "location": "geoStationaryOrbit"
+      }
+    ],
+    "rewardOptions": [
+      {
+        "isUserChoice": false,
+        "specifiedToken": "technology"
+      },
+      {
+        "isUserChoice": true,
+        "specifiedToken": null
+      }
+    ]
+  },
+  {
+    "id": 20,
+    "name": "Ricochet",
+    "difficultyNumber": 9,
+    "location": "geoStationaryOrbit",
+    "rescueType": "space",
+    "bonusConditions": [
+      {
+        "type": "characterBonus",
+        "bonusValue": 2,
+        "character": "scott"
+      },
+      {
+        "type": "characterBonus",
+        "bonusValue": 2,
+        "character": "alan"
+      }
+    ],
+    "rewardOptions": [
+      {
+        "isUserChoice": false,
+        "specifiedToken": "teamwork"
+      },
+      {
+        "isUserChoice": false,
+        "specifiedToken": "technology"
+      }
+    ]
+  },
+  {
+    "id": 21,
+    "name": "Bound for Venus",
+    "difficultyNumber": 8,
+    "location": "venus",
+    "rescueType": "space",
+    "bonusConditions": [
+      {
+        "type": "characterBonus",
+        "bonusValue": 2,
+        "character": "john"
+      },
+      {
+        "type": "characterBonus",
+        "bonusValue": 2,
+        "character": "alan"
+      }
+    ],
+    "rewardOptions": [
+      {
+        "isUserChoice": true,
+        "specifiedToken": null
+      }
+    ]
+  },
+  {
+    "id": 22,
+    "name": "The Imposters",
+    "difficultyNumber": 9,
+    "location": "geoStationaryOrbit",
+    "rescueType": "space",
+    "bonusConditions": [
+      {
+        "type": "characterBonus",
+        "bonusValue": 2,
+        "character": "scott"
+      },
+      {
+        "type": "thunderbirdBonus",
+        "bonusValue": 3,
+        "thunderbird": "fab1",
+        "location": "northAmerica"
+      }
+    ],
+    "rewardOptions": [
+      {
+        "isUserChoice": false,
+        "specifiedToken": "logistics"
+      },
+      {
+        "isUserChoice": false,
+        "specifiedToken": "determination"
+      }
+    ]
+  },
+  {
+    "id": 23,
+    "name": "Desperate Intruder",
+    "difficultyNumber": 8,
+    "location": "africa",
+    "rescueType": "sea",
+    "bonusConditions": [
+      {
+        "type": "thunderbirdBonus",
+        "bonusValue": 2,
+        "thunderbird": "thunderbird1"
+      },
+      {
+        "type": "thunderbirdBonus",
+        "bonusValue": 2,
+        "thunderbird": "thunderbird4"
+      }
+    ],
+    "rewardOptions": [
+      {
+        "isUserChoice": true,
+        "specifiedToken": null
+      }
+    ]
+  },
+  {
+    "id": 24,
+    "name": "Edge of Impact",
+    "difficultyNumber": 8,
+    "location": "europe",
+    "rescueType": "air",
+    "bonusConditions": [
+      {
+        "type": "podVehicleBonus",
+        "bonusValue": 3,
+        "podVehicle": "thunderizer"
+      },
+      {
+        "type": "characterBonus",
+        "bonusValue": 2,
+        "character": "alan"
+      }
+    ],
+    "rewardOptions": [
+      {
+        "isUserChoice": true,
+        "specifiedToken": null
+      }
+    ]
+  },
+  {
+    "id": 25,
+    "name": "Operation Crash Dive",
+    "difficultyNumber": 9,
+    "location": "northAtlantic",
+    "rescueType": "sea",
+    "bonusConditions": [
+      {
+        "type": "thunderbirdBonus",
+        "bonusValue": 2,
+        "thunderbird": "thunderbird1"
+      },
+      {
+        "type": "characterBonus",
+        "bonusValue": 2,
+        "character": "alan",
+        "location": "geoStationaryOrbit"
+      }
+    ],
+    "rewardOptions": [
+      {
+        "isUserChoice": false,
+        "specifiedToken": "technology"
+      },
+      {
+        "isUserChoice": false,
+        "specifiedToken": "logistics"
+      }
+    ]
+  },
+  {
+    "id": 26,
+    "name": "Path of Destruction",
+    "difficultyNumber": 9,
+    "location": "southAmerica",
+    "rescueType": "land",
+    "bonusConditions": [
+      {
+        "type": "podVehicleBonus",
+        "bonusValue": 3,
+        "podVehicle": "mobileCrane"
+      },
+      {
+        "type": "characterBonus",
+        "bonusValue": 3,
+        "character": "ladyPenelope",
+        "location": "europe"
+      }
+    ],
+    "rewardOptions": [
+      {
+        "isUserChoice": false,
+        "specifiedToken": "logistics"
+      },
+      {
+        "isUserChoice": false,
+        "specifiedToken": "determination"
+      }
+    ]
+  },
+  {
+    "id": 27,
+    "name": "Target: Tiger One",
+    "difficultyNumber": 9,
+    "location": "northPacific",
+    "rescueType": "air",
+    "bonusConditions": [
+      {
+        "type": "characterBonus",
+        "bonusValue": 2,
+        "character": "alan"
+      },
+      {
+        "type": "thunderbirdBonus",
+        "bonusValue": 3,
+        "thunderbird": "fab1",
+        "location": "asia"
+      }
+    ],
+    "rewardOptions": [
+      {
+        "isUserChoice": false,
+        "specifiedToken": "determination"
+      },
+      {
+        "isUserChoice": false,
+        "specifiedToken": "intelligence"
+      }
+    ]
+  },
+  {
+    "id": 28,
+    "name": "Bolt from the Blue",
+    "difficultyNumber": 8,
+    "location": "indianOcean",
+    "rescueType": "air",
+    "bonusConditions": [
+      {
+        "type": "characterBonus",
+        "bonusValue": 2,
+        "character": "john"
+      },
+      {
+        "type": "characterBonus",
+        "bonusValue": 2,
+        "character": "gordon",
+        "location": "australia"
+      }
+    ],
+    "rewardOptions": [
+      {
+        "isUserChoice": true,
+        "specifiedToken": null
+      }
+    ]
+  },
+  {
+    "id": 29,
+    "name": "Danger at Ocean Deep",
+    "difficultyNumber": 7,
+    "location": "europe",
+    "rescueType": "sea",
+    "bonusConditions": [
+      {
+        "type": "characterBonus",
+        "bonusValue": 2,
+        "character": "john"
+      },
+      {
+        "type": "thunderbirdBonus",
+        "bonusValue": 2,
+        "thunderbird": "thunderbird1",
+        "location": "northPacific"
+      }
+    ],
+    "rewardOptions": [
+      {
+        "isUserChoice": false,
+        "specifiedToken": "technology"
+      }
+    ]
+  },
+  {
+    "id": 30,
+    "name": "The Longest Day",
+    "difficultyNumber": 7,
+    "location": "mercury",
+    "rescueType": "space",
+    "bonusConditions": [
+      {
+        "type": "characterBonus",
+        "bonusValue": 2,
+        "character": "gordon"
+      },
+      {
+        "type": "characterBonus",
+        "bonusValue": 1,
+        "character": "ladyPenelope"
+      }
+    ],
+    "rewardOptions": [
+      {
+        "isUserChoice": false,
+        "specifiedToken": "logistics"
+      }
+    ]
+  },
+  {
+    "id": 31,
+    "name": "Martian Invasion",
+    "difficultyNumber": 7,
+    "location": "northAmerica",
+    "rescueType": "land",
+    "bonusConditions": [
+      {
+        "type": "podVehicleBonus",
+        "bonusValue": 3,
+        "podVehicle": "excavator"
+      }
+    ],
+    "rewardOptions": [
+      {
+        "isUserChoice": false,
+        "specifiedToken": "teamwork"
+      }
+    ]
+  },
+  {
+    "id": 32,
+    "name": "Day of Disater",
+    "difficultyNumber": 9,
+    "location": "europe",
+    "rescueType": "sea",
+    "bonusConditions": [
+      {
+        "type": "thunderbirdBonus",
+        "bonusValue": 3,
+        "thunderbird": "thunderbird4"
+      },
+      {
+        "type": "thunderbirdBonus",
+        "bonusValue": 2,
+        "thunderbird": "fab1"
+      }
+    ],
+    "rewardOptions": [
+      {
+        "isUserChoice": false,
+        "specifiedToken": "determination"
+      },
+      {
+        "isUserChoice": false,
+        "specifiedToken": "teamwork"
+      }
+    ]
+  },
+  {
+    "id": 33,
+    "name": "They Call Him Mr. X",
+    "difficultyNumber": 8,
+    "location": "asia",
+    "rescueType": "air",
+    "bonusConditions": [
+      {
+        "type": "podVehicleBonus",
+        "bonusValue": 2,
+        "podVehicle": "mobileCrane"
+      },
+      {
+        "type": "podVehicleBonus",
+        "bonusValue": 2,
+        "podVehicle": "thunderizer"
+      },
+      {
+        "type": "podVehicleBonus",
+        "bonusValue": 2,
+        "podVehicle": "domo"
+      }
+    ],
+    "rewardOptions": [
+      {
+        "isUserChoice": true,
+        "specifiedToken": null
+      }
+    ]
+  }
+]

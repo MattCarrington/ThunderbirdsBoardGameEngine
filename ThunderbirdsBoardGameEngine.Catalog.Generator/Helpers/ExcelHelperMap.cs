@@ -1,6 +1,6 @@
 ﻿using ClosedXML.Excel;
 
-namespace GameDataImporter.ConsoleApp.Helpers;
+namespace ThunderbirdsBoardGameEngine.Catalog.Generator.Helpers;
 
 public class ExcelHeaderMap
 {

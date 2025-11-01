@@ -1,9 +1,9 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
-using ThunderbirdsBoardGameEngine.GameData.Domain.Entities;
-using ThunderbirdsBoardGameEngine.Serialization.Converters;
+using ThunderbirdsBoardGameEngine.Catalog.Domain.Entities;
+using ThunderbirdsBoardGameEngine.Catalog.Format.Converters;
 
-namespace ThunderbirdsBoardGameEngine.GameData.Importer.Output
+namespace ThunderbirdsBoardGameEngine.Catalog.Generator.Output
 {
     public static class JsonWriter
     {

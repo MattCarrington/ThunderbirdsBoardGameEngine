@@ -1,8 +1,8 @@
-﻿using ThunderbirdsBoardGameEngine.GameData.Domain.Entities;
-using ThunderbirdsBoardGameEngine.GameData.Domain.Enums;
-using ThunderbirdsBoardGameEngine.Serialization.Enums;
+﻿using ThunderbirdsBoardGameEngine.Catalog.Domain.Entities;
+using ThunderbirdsBoardGameEngine.Catalog.Domain.Enums;
+using ThunderbirdsBoardGameEngine.Catalog.Format.Enums;
 
-namespace ThunderbirdsBoardGameEngine.GameData.Importer.Parsers
+namespace ThunderbirdsBoardGameEngine.Catalog.Generator.Parsers
 {
     public static class BonusParser
     {
@@ -14,33 +14,33 @@ namespace ThunderbirdsBoardGameEngine.GameData.Importer.Parsers
             if (TryParseEnum<Character>(target, out var character))
             {
                 return new CharacterBonusCondition
-                {
-                    Character = character,
-                    BonusValue = value,
-                    Location = ParseOptionalLocation(location)
-                };
+                (
+                    character,
+                    value,
+                    ParseOptionalLocation(location)
+                );
             }
 
             // Try as ThunderbirdMachine BonusCondition
             if (TryParseEnum<ThunderbirdMachine>(target, out var thunderbird))
             {
                 return new ThunderbirdBonusCondition
-                {
-                    Thunderbird = thunderbird,
-                    BonusValue = value,
-                    Location = ParseOptionalLocation(location)
-                };
+                (
+                    thunderbird,
+                    value,
+                    ParseOptionalLocation(location)
+                );
             }
 
             // Try as PodVehicle BonusCondition
             if (TryParseEnum<PodVehicle>(target, out var podVehicle))
             {
                 return new PodVehicleBonusCondition
-                {
-                    PodVehicle = podVehicle,
-                    BonusValue = value,
-                    Location = ParseOptionalLocation(location)
-                };
+                (
+                    podVehicle,
+                    value,
+                    ParseOptionalLocation(location)
+                );
             }
 
             throw new ArgumentException($"Unknown bonus target: '{target}'");

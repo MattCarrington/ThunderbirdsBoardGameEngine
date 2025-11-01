@@ -1,8 +1,8 @@
-﻿using ThunderbirdsBoardGameEngine.GameData.Domain.Entities;
-using ThunderbirdsBoardGameEngine.GameData.Importer.Importers;
-using ThunderbirdsBoardGameEngine.GameData.Importer.Output;
+﻿using ThunderbirdsBoardGameEngine.Catalog.Domain.Entities;
+using ThunderbirdsBoardGameEngine.Catalog.Generator.Importers;
+using ThunderbirdsBoardGameEngine.Catalog.Generator.Output;
 
-namespace ThunderbirdsBoardGameEngine.GameData.Importer
+namespace ThunderbirdsBoardGameEngine.Catalog.Generator
 {
     internal class Program
     {
