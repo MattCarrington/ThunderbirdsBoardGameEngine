@@ -1,6 +1,5 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
-using ThunderbirdsBoardGameEngine.Catalog.Format.Converters;
 using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Stubs;
 
 namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Factories
@@ -17,7 +16,6 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Factories
             };
 
             options.Converters.Add(new JsonStringEnumConverter(JsonNamingPolicy.CamelCase));
-            options.Converters.Add(new BonusConverter()); // TEMP
 
             return new JsonOptionsMonitor(options); 
         }
