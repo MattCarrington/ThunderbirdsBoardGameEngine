@@ -7,9 +7,9 @@ using ThunderbirdsBoardGameEngine.Catalog.Application.Interfaces;
 using ThunderbirdsBoardGameEngine.Catalog.Domain.Entities;
 using ThunderbirdsBoardGameEngine.Catalog.Domain.Exceptions;
 using ThunderbirdsBoardGameEngine.Catalog.Format.Dtos;
+using ThunderbirdsBoardGameEngine.Catalog.Format.Serialization;
 using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Configuration;
 using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Interfaces;
-using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Serialization;
 
 namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Readers
 {
@@ -33,7 +33,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Readers
             _fileReader = fileReader ?? throw new ArgumentNullException(nameof(fileReader));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             _logger = logger;
-            _jsonOptions = jsonOptions.Get(CatalogJson.Name) ?? throw new ArgumentNullException(nameof(jsonOptions));
+            _jsonOptions = jsonOptions.Get(CatalogJsonDefaults.Name) ?? throw new ArgumentNullException(nameof(jsonOptions));
         }
 
         public async Task<IReadOnlyList<DisasterCard>> GetAllAsync(CancellationToken cancellationToken)

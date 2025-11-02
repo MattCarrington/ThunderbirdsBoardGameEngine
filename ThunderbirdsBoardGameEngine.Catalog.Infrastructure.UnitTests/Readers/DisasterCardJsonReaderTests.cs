@@ -6,7 +6,7 @@ using System.Text.Json.Serialization;
 using ThunderbirdsBoardGameEngine.Catalog.Application.Exceptions;
 using ThunderbirdsBoardGameEngine.Catalog.Domain.Enums;
 using ThunderbirdsBoardGameEngine.Catalog.Format.Dtos;
-using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Serialization;
+using ThunderbirdsBoardGameEngine.Catalog.Format.Serialization;
 using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Builders;
 using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Fakes;
 using ThunderbirdsBoardGameEngine.TestUtils;
@@ -138,7 +138,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Readers
             options.Converters.Add(new ThrowingDisasterCardConverter());
 
             var jsonOptions = Substitute.For<IOptionsMonitor<JsonSerializerOptions>>();
-            jsonOptions.Get(CatalogJson.Name).Returns(options);
+            jsonOptions.Get(CatalogJsonDefaults.Name).Returns(options);
 
             var reader = new DisasterCardJsonReaderBuilder()
                 .WithJson(json)

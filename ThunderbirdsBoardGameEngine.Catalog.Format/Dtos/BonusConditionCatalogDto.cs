@@ -1,5 +1,5 @@
 ﻿using System.Text.Json.Serialization;
-using ThunderbirdsBoardGameEngine.Catalog.Format.Schema;
+using ThunderbirdsBoardGameEngine.Catalog.Format.Discriminators;
 
 namespace ThunderbirdsBoardGameEngine.Catalog.Format.Dtos
 {

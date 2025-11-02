@@ -1,4 +1,4 @@
-﻿namespace ThunderbirdsBoardGameEngine.Catalog.Format.Schema
+﻿namespace ThunderbirdsBoardGameEngine.Catalog.Format.Discriminators
 {
     public static class RewardTokenDiscriminator
     {
