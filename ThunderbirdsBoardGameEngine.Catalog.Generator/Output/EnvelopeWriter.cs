@@ -2,7 +2,6 @@
 using ThunderbirdsBoardGameEngine.Catalog.Format.Dtos;
 using ThunderbirdsBoardGameEngine.Catalog.Format.Hashing;
 using ThunderbirdsBoardGameEngine.Catalog.Format.Manifest;
-using ThunderbirdsBoardGameEngine.Catalog.Generator.Helpers;
 
 namespace ThunderbirdsBoardGameEngine.Catalog.Generator.Output
 {
@@ -15,12 +14,17 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Generator.Output
                 throw new InvalidDataException("No items");
             }
 
-            if (items.Select(c => c.Id).Distinct().Count() != items.Count)
+            var ids = new HashSet<int>();
+            
+            foreach (var id in items.Select(i => i.Id))
             {
-                throw new InvalidDataException("Duplicate item IDs detected");
+                if (!ids.Add(id))
+                {
+                    throw new InvalidDataException($"Duplicate item ID: '{id}'.");
+                }
             }
 
-            var checksum = CatalogChecksum.ComputeChecksum(items, options);
+            var checksum = CatalogChecksum.ComputeChecksum(items);
 
             var meta = new CatalogManifest
             {

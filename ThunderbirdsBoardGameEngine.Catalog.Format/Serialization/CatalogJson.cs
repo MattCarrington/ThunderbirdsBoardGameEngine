@@ -3,16 +3,16 @@ using System.Text.Json.Serialization;
 
 namespace ThunderbirdsBoardGameEngine.Catalog.Format.Serialization
 {
-    public static class CatalogJsonDefaults
+    public static class CatalogJson
     {
         public const string Name = "Catalog";
 
-        public static readonly JsonSerializerOptions DisasterCards = Create();
+        public static readonly JsonSerializerOptions Catalog = Create();
 
         // For DI scenarios, call Configure(options)
         public static void Configure(JsonSerializerOptions options)
         {
-            var src = DisasterCards;
+            var src = Catalog;
             options.PropertyNamingPolicy = src.PropertyNamingPolicy;
             options.PropertyNameCaseInsensitive = src.PropertyNameCaseInsensitive;
             options.DefaultIgnoreCondition = src.DefaultIgnoreCondition;

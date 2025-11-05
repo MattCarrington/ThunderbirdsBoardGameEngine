@@ -1,6 +1,6 @@
 ﻿using System.Text.Json;
-using System.Text.Json.Serialization;
 using ThunderbirdsBoardGameEngine.Catalog.Format.Dtos;
+using ThunderbirdsBoardGameEngine.Catalog.Format.Serialization;
 
 namespace ThunderbirdsBoardGameEngine.Catalog.Generator.Output
 {
@@ -9,7 +9,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Generator.Output
         public static void WriteJson(IEnumerable<DisasterCardCatalogDto> cards, string outputPath, JsonSerializerOptions options)
         {
             var envelope = EnvelopeWriter.BuildEnvelope(cards.ToList(), options);
-            var json = JsonSerializer.Serialize(envelope, options);
+            var json = JsonSerializer.Serialize(envelope, CanonicalJson.Pretty());
 
             // Resolve to an absolute path (treat relative as based on the current working dir)
             var fullPath = Path.GetFullPath(outputPath);
