@@ -12,7 +12,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Generator.Mappers
             {
                 return new CharacterBonusCatalogDto
                 {
-                    Character = StringHelpers.RemoveSpaces(character),
+                    Character = character,
                     BonusValue = value,
                     Location = MapLocation(location)
                 };
@@ -22,7 +22,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Generator.Mappers
             {
                 return new ThunderbirdBonusCatalogDto
                 {
-                    Thunderbird = StringHelpers.RemoveSpaces(thunderbird),
+                    Thunderbird = thunderbird,
                     BonusValue = value,
                     Location = MapLocation(location)
                 };
@@ -32,7 +32,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Generator.Mappers
             {
                 return new PodVehicleBonusCatalogDto
                 {
-                    PodVehicle = StringHelpers.RemoveSpaces(podVehicle),
+                    PodVehicle = podVehicle,
                     BonusValue = value,
                     Location = MapLocation(location)
                 };
@@ -43,71 +43,63 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Generator.Mappers
 
         private static bool IsCharacter(string input, out string character)
         {
-            character = input.Trim();
+            character = default!;
 
-            if (string.IsNullOrWhiteSpace(input))
+            var trimmed = input.Trim();
+
+            if (string.IsNullOrWhiteSpace(trimmed))
             {
                 return false;
             }
 
-            var characters = new[]
+            if (EnumDictionary.Character.TryGetValue(trimmed, out var output))
             {
-                "Scott",
-                "Virgil",
-                "John",
-                "Gordon",
-                "Alan",
-                "Lady Penelope"
-            };
+                character = output;
+                return true;
+            }
 
-            return characters.Contains(character, StringComparer.OrdinalIgnoreCase);
+            return false;
         }
 
         private static bool IsThunderbirdMachine(string input, out string thunderbird)
         {
-            thunderbird = input.Trim();
+            thunderbird = default!;
 
-            if (string.IsNullOrWhiteSpace(input))
+            var trimmed = input.Trim();
+
+            if (string.IsNullOrWhiteSpace(trimmed))
             {
                 return false;
             }
-            var thunderbirds = new[]
-            {
-                "Thunderbird 1",
-                "Thunderbird 2",
-                "Thunderbird 3",
-                "Thunderbird 4",
-                "Thunderbird 5",
-                "Fab 1"
-            };
 
-            return thunderbirds.Contains(thunderbird, StringComparer.OrdinalIgnoreCase);
+            if (EnumDictionary. Thunderbird.TryGetValue(trimmed, out var output))
+            {
+                thunderbird = output;
+                return true;
+            }
+
+            return false;
         }
 
         private static bool IsPodVehicle(string input, out string podVehicle)
         {
-            podVehicle = input.Trim();
+            podVehicle = default!;
 
-            if (string.IsNullOrWhiteSpace(input))
+            var trimmed = input.Trim();
+
+            if (string.IsNullOrWhiteSpace(trimmed))
             {
+                podVehicle = default!;
                 return false;
             }
 
-            var podVehicles = new[]
+            if (EnumDictionary.PodVehicle.TryGetValue(trimmed, out var output))
             {
-                "Mole",
-                "DOMO",
-                "Transmitter Truck",
-                "Laser Cutter",
-                "Elevator Cars",
-                "Firefly",
-                "Thunderizer",
-                "Recovery Vehicles",
-                "Mobile Crane",
-                "Excavator"
-            };
+                podVehicle = output;
+                return true;
+            }
 
-            return podVehicles.Contains(podVehicle, StringComparer.OrdinalIgnoreCase);
+            return false;
         }
 
         private static string? MapLocation(string? location)
@@ -117,7 +109,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Generator.Mappers
                 return null;
             }
 
-            return StringHelpers.RemoveSpaces(location);
+            return LocationMapper.MapLocation(location);
         }
     }
 }

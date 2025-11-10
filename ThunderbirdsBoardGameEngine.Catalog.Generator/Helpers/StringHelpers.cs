@@ -21,13 +21,6 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Generator.Helpers
             return cleaned;
         }
 
-        public static string RemoveSpaces(string input)
-        {
-            var cleaned = NormalizeWhitespace(input, nameof(input));
-
-            return new string(cleaned.Where(c => !char.IsWhiteSpace(c)).ToArray());
-        }
-
         public static string Slugify(string input)
         {
             var cleaned = NormalizeWhitespace(input, nameof(input)).ToLowerInvariant();

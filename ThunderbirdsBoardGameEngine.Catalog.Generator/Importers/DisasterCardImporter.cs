@@ -34,8 +34,8 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Generator.Importers
                     Name = StringHelpers.NormalizeWhitespace(name, nameof(name)),
                     Code = code,
                     DifficultyNumber = difficultyNumber,
-                    RescueType = StringHelpers.RemoveSpaces(rescueType),
-                    Location = StringHelpers.RemoveSpaces(location),
+                    RescueType = RescueTypeMapper.MapRescueType(rescueType),
+                    Location = LocationMapper.MapLocation(location),
                     BonusConditions = bonuses,
                     RewardOptions = rewards
                 });

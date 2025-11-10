@@ -11,7 +11,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Generator.Mappers
             {
                 return new TokenRewardCatalogDto
                 {
-                    Token = StringHelpers.RemoveSpaces(token)
+                    Token = token
                 };
             }
 
@@ -25,23 +25,22 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Generator.Mappers
 
         private static bool IsBonusToken(string input, out string token)
         {
-            token = input.Trim();
+            token = default!;
 
-            if (string.IsNullOrWhiteSpace(token))
+            var trimmed = input.Trim();
+
+            if (string.IsNullOrWhiteSpace(trimmed))
             {
                 return false;
             }
 
-            var tokens = new[]
+            if (EnumDictionary.RewardToken.TryGetValue(trimmed, out var output))
             {
-                "Teamwork",
-                "Intelligence",
-                "Logistics",
-                "Determination",
-                "Technology"
-            };
+                token = output;
+                return true;
+            }
 
-            return tokens.Contains(token, StringComparer.OrdinalIgnoreCase);
+            return false;
         }
     }
 }
