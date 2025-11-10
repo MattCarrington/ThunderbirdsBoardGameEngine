@@ -1,6 +1,7 @@
 ﻿using System.Text.Json;
 using ThunderbirdsBoardGameEngine.Catalog.Domain.Entities;
 using ThunderbirdsBoardGameEngine.Catalog.Domain.Enums;
+using ThunderbirdsBoardGameEngine.Catalog.Domain.Exceptions;
 using ThunderbirdsBoardGameEngine.Catalog.Format.Dtos;
 using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Mappers;
 using ThunderbirdsBoardGameEngine.TestUtils.Builders;
@@ -610,7 +611,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Mappers
         }
 
         [Fact]
-        public void Map_WhenDifficultyNumberIsNegative_ShouldBubbleArgumentOutOfRangeException()
+        public void Map_WhenDifficultyNumberIsNegative_ShouldWrapArgumentOutOfRangeException()
         {
             // Arrange
             var dto = new DisasterCardCatalogDtoBuilder()
@@ -620,21 +621,19 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Mappers
             var mapper = CreateMapper();
 
             // Act & Assert
-            Assert.Throws<ArgumentOutOfRangeException>(() => mapper.Map(dto));
+            AssertOutOfRangeExceptionWrapped(dto);
         }
 
         [Fact]
-        public void Map_WhenEmptyBonusConditions_ShouldBubbleArgumentOutOfRangeException()
+        public void Map_WhenEmptyBonusConditions_ShouldWrapArgumentOutOfRangeException()
         {
             // Arrange
             var dto = new DisasterCardCatalogDtoBuilder()
                 .WithEmptyBonuses()
                 .Build();
 
-            var mapper = CreateMapper();
-
             // Act & Assert
-            Assert.Throws<ArgumentOutOfRangeException>(() => mapper.Map(dto));
+            AssertOutOfRangeExceptionWrapped(dto);
         }
 
         [Fact]
@@ -645,10 +644,8 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Mappers
                 .WithEmptyRewards()
                 .Build();
 
-            var mapper = CreateMapper();
-
             // Act & Assert
-            Assert.Throws<ArgumentOutOfRangeException>(() => mapper.Map(dto));
+            AssertOutOfRangeExceptionWrapped(dto);
         }
 
         private static DisasterCardMapper CreateMapper()
@@ -660,7 +657,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Mappers
         {
             var mapper = CreateMapper();
 
-            Assert.Throws<JsonException>(() => mapper.Map(dto));
+            Assert.Throws<DisasterCardValidationException>(() => mapper.Map(dto));
         }
 
         private static void AssertBonusConditionException(BonusConditionCatalogDto bonus)
@@ -668,6 +665,14 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Mappers
             var dto = new DisasterCardCatalogDtoBuilder().WithBonusCondition(bonus).Build();
 
             AssertMapperException(dto);
+        }
+
+        private static void AssertOutOfRangeExceptionWrapped(DisasterCardCatalogDto dto)
+        {
+            var mapper = CreateMapper();
+            
+            var exception = Assert.Throws<DisasterCardValidationException>(() => mapper.Map(dto));
+            Assert.IsType<ArgumentOutOfRangeException>(exception.InnerException);
         }
 
         private sealed record InvalidBonusConditionDto : BonusConditionCatalogDto

@@ -1,24 +1,36 @@
 ﻿using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
+using NSubstitute;
 using System.Text.Json;
+using ThunderbirdsBoardGameEngine.Catalog.Format.Dtos;
+using ThunderbirdsBoardGameEngine.Catalog.Format.Manifest;
 using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Configuration;
 using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Interfaces;
 using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Mappers;
 using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Readers;
-using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Factories;
 using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Fakes;
+using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Utilities;
+using ThunderbirdsBoardGameEngine.TestUtils.Builders;
 
 namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Builders
 {
     public class DisasterCardJsonReaderBuilder
     {
         private string _jsonContent = "[]";
+        private List<DisasterCardCatalogDto> _dtos;
         private IFileOpener? _fileReader;
-        private IDisasterCardMapper _mapper;
+        private IEnvelopeParser? _envelopeParser;
+        private IDisasterCardDeserializer? _deserializer;
+        private IDisasterCardMapper? _mapper;
         private ILogger<DisasterCardJsonReader> _logger = NullLogger<DisasterCardJsonReader>.Instance;
         private string _filePath = "/disastercards.json";
-        private IOptionsMonitor<JsonSerializerOptions> _jsonOptions = JsonOptionsFactory.CreateJsonOptions();
+
+        public DisasterCardJsonReaderBuilder()
+        {
+            var dto = new DisasterCardCatalogDtoBuilder().Build();
+            _dtos = [dto];
+        }
 
         internal DisasterCardJsonReaderBuilder WithLogger(ILogger<DisasterCardJsonReader> logger)
         {
@@ -32,9 +44,33 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Builders
             return this;
         }
 
-        internal DisasterCardJsonReaderBuilder WithFileReader(IFileOpener fileReader)
+        internal DisasterCardJsonReaderBuilder WithFileOpener(IFileOpener fileReader)
         {
             _fileReader = fileReader ?? throw new ArgumentNullException(nameof(fileReader));
+            return this;
+        }
+
+        internal DisasterCardJsonReaderBuilder WithEnvelopeParser(IEnvelopeParser envelopeParser)
+        {
+            _envelopeParser = envelopeParser ?? throw new ArgumentNullException(nameof(envelopeParser));
+            return this;
+        }
+
+        internal DisasterCardJsonReaderBuilder WithDeserializer(IDisasterCardDeserializer deserializer)
+        {
+            _deserializer = deserializer ?? throw new ArgumentNullException(nameof(deserializer));
+            return this;
+        }
+
+        internal DisasterCardJsonReaderBuilder WithMapper(IDisasterCardMapper mapper)
+        {
+            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
+            return this;
+        }
+
+        internal DisasterCardJsonReaderBuilder WithDtos(List<DisasterCardCatalogDto> dtos)
+        {
+            _dtos = dtos ?? throw new ArgumentNullException(nameof(dtos));
             return this;
         }
 
@@ -49,30 +85,56 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Builders
             return this;
         }
 
-        internal DisasterCardJsonReaderBuilder WithJsonOptions(IOptionsMonitor<JsonSerializerOptions> jsonOptions)
-        {
-            _jsonOptions = jsonOptions;
-            return this;
-        }
-
-        internal DisasterCardJsonReaderBuilder WithMapper(IDisasterCardMapper mapper)
-        {
-            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
-            return this;
-        }
-
         internal DisasterCardJsonReader Build()
         {
-            if (_fileReader is null)
+            _fileReader ??= new FakeFileOpener().Add(_filePath, _jsonContent);
+
+            var disasterCardJsonOptions = Options.Create(new DisasterCardJsonOptions 
+            { 
+                FilePath = _filePath 
+            });
+
+            _envelopeParser ??= CreateEnvelopeParser(_dtos.Count);
+            _deserializer ??= CreateDeserializer(_dtos);
+            _mapper ??= new DisasterCardMapper();
+
+            return new DisasterCardJsonReader(disasterCardJsonOptions, _fileReader, _envelopeParser, _deserializer, _mapper, _logger);
+        }
+
+        private IEnvelopeParser CreateEnvelopeParser(int itemCount)
+        {
+            var payload = new Payload
             {
-                _fileReader = new FakeFileOpener().Add(_filePath, _jsonContent);
-            }
+                Manifest = new CatalogManifest
+                {
+                    Catalog = "DisasterCards",
+                    SchemaVersion = "1.0",
+                    ContentVersion = "1.0.0",
+                    GeneratedAtUtc = DateTime.UtcNow,
+                    ItemCount = itemCount,
+                    Checksum = new Checksum
+                    {
+                        Algorithm = "SHA256",
+                        Value = "dummychecksumvalue"
+                    }
+                },
+                RawData = JsonDocument.Parse(_jsonContent).RootElement.Clone()
+            };
 
-            var disasterCardJsonOptions = Options.Create(new DisasterCardJsonOptions { FilePath = _filePath });
+            var envelopeParser = Substitute.For<IEnvelopeParser>();
+            envelopeParser.ReadEnvelopeAsync(Arg.Any<Stream>(), Arg.Any<CancellationToken>())
+                .Returns(Task.FromResult(payload));
 
-            var mapper = _mapper ?? new DisasterCardMapper();  
+            return envelopeParser;
+        }
 
-            return new DisasterCardJsonReader(disasterCardJsonOptions, _fileReader, mapper, _logger, _jsonOptions);
+        private static IDisasterCardDeserializer CreateDeserializer(List<DisasterCardCatalogDto>? list)
+        {
+            var deserializer = Substitute.For<IDisasterCardDeserializer>();
+            deserializer.Deserialize(Arg.Any<JsonElement>())
+                .Returns(list ?? []);
+
+            return deserializer;
         }
     }
 }

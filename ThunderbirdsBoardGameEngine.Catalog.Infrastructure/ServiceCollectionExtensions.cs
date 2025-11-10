@@ -7,6 +7,7 @@ using ThunderbirdsBoardGameEngine.Catalog.Application.Decorators;
 using ThunderbirdsBoardGameEngine.Catalog.Application.Interfaces;
 using ThunderbirdsBoardGameEngine.Catalog.Format.Serialization;
 using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Configuration;
+using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Deserializers;
 using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Initialisers;
 using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Interfaces;
 using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Mappers;
@@ -23,10 +24,12 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure
         {
             services.AddSingleton<IFileOpener, FileOpener>();
             services.AddSingleton<IFileSystem, FileSystem>();
+            services.AddSingleton<IEnvelopeParser,  EnvelopeParser>();
 
             services.AddSingleton<IPostConfigureOptions<DisasterCardJsonOptions>, DisasterCardJsonPostConfigure>();
             services.AddSingleton<IValidateOptions<DisasterCardJsonOptions>, DisasterCardJsonOptionsValidator>();
             services.AddSingleton<IDisasterCardMapper, DisasterCardMapper>();
+            services.AddSingleton<IDisasterCardDeserializer, DisasterCardDeserializer>();
             services.AddSingleton<IDisasterCardReader, DisasterCardJsonReader>();
             services.Decorate<IDisasterCardReader, ValidatingDisasterCardReader>();
             services.AddSingleton<IDisasterCardCatalog>(sp =>
@@ -42,8 +45,8 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure
                 .Bind(configuration.GetSection("Catalog:DisasterCards:Json"))
                 .ValidateOnStart(); // ← run all validators during startup
 
-            services.AddOptions<JsonSerializerOptions>(CatalogJsonDefaults.Name)
-                .Configure(CatalogJsonDefaults.Configure);
+            services.AddOptions<JsonSerializerOptions>(CatalogJson.Name)
+                .Configure(CatalogJson.Configure);
 
             return services;
         }

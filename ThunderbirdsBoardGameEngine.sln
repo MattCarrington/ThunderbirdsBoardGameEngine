@@ -22,6 +22,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Input", "Input", "{07AD74EA
 	ProjectSection(SolutionItems) = preProject
 		TestData\Input\disaster-cards-test.json = TestData\Input\disaster-cards-test.json
 		TestData\Input\disaster-cards.json = TestData\Input\disaster-cards.json
+		TestData\Input\empty.json = TestData\Input\empty.json
 		TestData\Input\invalid-disaster-cards.json = TestData\Input\invalid-disaster-cards.json
 		TestData\Input\invalid-json.json = TestData\Input\invalid-json.json
 	EndProjectSection

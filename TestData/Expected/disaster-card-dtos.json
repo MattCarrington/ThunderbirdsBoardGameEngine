@@ -1,6 +1,6 @@
 [
   {
-    "id": 1,
+    "id": 0,
     "name": "Target: Tiger One",
     "difficultyNumber": 9,
     "location": "North Pacific",
@@ -15,7 +15,7 @@
     ]
   },
   {
-    "id": 2,
+    "id": 1,
     "name": "Bolt from the Blue",
     "difficultyNumber": 8,
     "location": "Indian Ocean",
@@ -27,7 +27,7 @@
     "rewards": [ { "displayName": "Player Choice" } ]
   },
   {
-    "id": 3,
+    "id": 2,
     "name": "Day of Disaster",
     "difficultyNumber": 9,
     "location": "Europe",
@@ -36,10 +36,13 @@
       { "description": "Thunderbird 4 (+3)" },
       { "description": "FAB 1 (+2)" }
     ],
-    "rewards": [ { "displayName": "Technology" } ]
+    "rewards": [
+      { "displayName": "Determination" },
+      { "displayName": "Teamwork" }
+    ]
   },
   {
-    "id": 4,
+    "id": 3,
     "name": "The Longest Day",
     "difficultyNumber": 7,
     "location": "Mercury",
@@ -51,7 +54,7 @@
     "rewards": [ { "displayName": "Logistics" } ]
   },
   {
-    "id": 5,
+    "id": 4,
     "name": "Path of Destruction",
     "difficultyNumber": 9,
     "location": "South America",
@@ -66,7 +69,7 @@
     ]
   },
   {
-    "id": 6,
+    "id": 5,
     "name": "Martian Invasion",
     "difficultyNumber": 7,
     "location": "North America",
@@ -75,7 +78,7 @@
     "rewards": [ { "displayName": "Teamwork" } ]
   },
   {
-    "id": 7,
+    "id": 6,
     "name": "Terror in New York City",
     "difficultyNumber": 11,
     "location": "North America",
@@ -86,12 +89,12 @@
       { "description": "Thunderbird 4 (+2)" }
     ],
     "rewards": [
-      { "displayName": "Determination" },
-      { "displayName": "Teamwork" }
+      { "displayName": "Teamwork" },
+      { "displayName": "Player Choice" }
     ]
   },
   {
-    "id": 8,
+    "id": 7,
     "name": "They Call Him Mr. X",
     "difficultyNumber": 8,
     "location": "Asia",
@@ -104,7 +107,7 @@
     "rewards": [ { "displayName": "Player Choice" } ]
   },
   {
-    "id": 9,
+    "id": 8,
     "name": "Sunrise on Mars",
     "difficultyNumber": 10,
     "location": "Mars",
@@ -112,11 +115,11 @@
     "bonusConditions": [
       { "description": "Lady Penelope (+2)" },
       { "description": "Gordon (+2)" },
-      { "description": "John (+1) (if on Thunderbird 5)" }
+      { "description": "John (+2) (if on Thunderbird 5)" }
     ],
     "rewards": [
-      { "displayName": "Player Choice" },
-      { "displayName": "Technology" }
+      { "displayName": "Technology" },
+      { "displayName": "Player Choice" }
     ]
   }
 ]
