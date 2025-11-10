@@ -88,9 +88,18 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Generator
                             break;
                         default:
                             // tolerate `foo=bar` style
-                            if (args[i].StartsWith("--input=")) input = args[i]["--input=".Length..];
-                            else if (args[i].StartsWith("--out=")) output = args[i]["--out=".Length..];
-                            else help = true;
+                            if (args[i].StartsWith("--input=")) 
+                            { 
+                                input = args[i]["--input=".Length..]; 
+                            }
+                            else if (args[i].StartsWith("--out=")) 
+                            { 
+                                output = args[i]["--out=".Length..]; 
+                            }
+                            else 
+                            { 
+                                help = true; 
+                            }
                             break;
                     }
                 }

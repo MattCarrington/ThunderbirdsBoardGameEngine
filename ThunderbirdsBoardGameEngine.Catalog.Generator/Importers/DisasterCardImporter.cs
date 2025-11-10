@@ -48,17 +48,19 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Generator.Importers
         {
             var rewards = new List<RewardOptionCatalogDto>();
 
-            for (var i = 1; i < 2; i++)
+            for (var i = 1; i <= 2; i++)
             {
                 var rewardKey = $"Reward {i}";
-                if (!header.HasColumn(rewardKey)) continue;
 
-                var value = Get(row, header, rewardKey);
-
-                if (!string.IsNullOrWhiteSpace(value))
+                if (header.HasColumn(rewardKey))
                 {
-                    var reward = RewardOptionCatalogDtoMapper.MapReward(value);
-                    rewards.Add(reward);
+                    var value = Get(row, header, rewardKey);
+
+                    if (!string.IsNullOrWhiteSpace(value))
+                    {
+                        var reward = RewardOptionCatalogDtoMapper.MapReward(value);
+                        rewards.Add(reward);
+                    }
                 }
             }
 
