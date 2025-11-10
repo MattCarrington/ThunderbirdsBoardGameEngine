@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.AspNetCore.Rewrite;
+using Microsoft.Extensions.DependencyInjection;
 using ThunderbirdsBoardGameEngine.Catalog.Application.Exceptions;
 using ThunderbirdsBoardGameEngine.Catalog.Application.Interfaces;
 using ThunderbirdsBoardGameEngine.Catalog.Domain.Exceptions;
@@ -22,12 +23,11 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.ComponentTests.Repo
         public async Task GetAllAsync_WithValidFile_ReturnsCards()
         {
             // Arrange
-            var filePath = TestDataPathHelper.GetPath("disaster-cards-test.json"); // non-empty valid JSON
+            var filepath = EnvelopArray("disaster-cards-test.json"); // syntactically valid
 
-            using var sp = _fixture.Build(ConfigKey, filePath);
-            using var scope = sp.CreateScope();
+            using var provider = _fixture.Build(ConfigKey, filepath);
             
-            var reader = scope.ServiceProvider.GetRequiredService<IDisasterCardReader>();
+            var reader = provider.GetRequiredService<IDisasterCardReader>();
 
             // Act
             var cards = await reader.GetAllAsync(CancellationToken.None);
@@ -45,28 +45,64 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.ComponentTests.Repo
             // Arrange
             var filePath = TestDataPathHelper.GetPath(filename); // non-empty valid JSON
 
-            using var sp = _fixture.Build(ConfigKey, filePath);
-            using var scope = sp.CreateScope();
+            using var provider = _fixture.Build(ConfigKey, filePath);
+            
+            var reader = provider.GetRequiredService<IDisasterCardReader>();
 
-            var reader = scope.ServiceProvider.GetRequiredService<IDisasterCardReader>();
-
-            // Act & Assert: repo maps to CatalogDataAccessException.BadJson
+            // Act & Assert
             var ex = await Assert.ThrowsAsync<CatalogDataAccessException>(() => reader.GetAllAsync(CancellationToken.None));
             Assert.Equal(expectedErrorCode, ex.ErrorCode);
+        }
+
+        [Fact]
+        public async Task GetAllyAsync_WithEmptySpaceFile_ThrowsDataMissingException()
+        {
+            // Arrange
+            var path = Path.Combine(Path.GetTempPath(),
+                $"empty-{Path.GetRandomFileName()}.json");
+
+            await File.WriteAllTextAsync(path, new string(' ', 25 * 1024 * 1024));
+
+            using var provider = _fixture.Build(ConfigKey, path);
+
+            var reader = provider.GetRequiredService<IDisasterCardReader>();
+
+            // Act & Assert
+            var exception = await Assert.ThrowsAsync<CatalogDataAccessException>(() => reader.GetAllAsync(CancellationToken.None));
+            Assert.Equal(CatalogDataAccessErrorCode.DataMissing, exception.ErrorCode);
+        }
+
+        [Fact]
+        public async Task GetAllAsync_WhenFileUnreadable_ThrowsSourceUnreadableException()
+        {
+            // Arrange
+            var path = Path.Combine(Path.GetTempPath(),
+                $"unreadable-{Path.GetRandomFileName()}.json");
+
+            await File.WriteAllTextAsync(path, "{ \"x\": 1 }");
+
+            using var _ = new FileStream(path, FileMode.Open, FileAccess.ReadWrite, FileShare.None);
+
+            using var provider = _fixture.Build(ConfigKey, path);
+
+            var reader = provider.GetRequiredService<IDisasterCardReader>();
+
+            // Act & Assert
+            var exception = await Assert.ThrowsAsync<CatalogDataAccessException>(() => reader.GetAllAsync(CancellationToken.None));
+            Assert.Equal(CatalogDataAccessErrorCode.SourceUnreadable, exception.ErrorCode);
         }
 
         [Fact]
         public async Task GetAllAsync_WithInvalidDisasterCards_ThrowsDisasterCardValidationException()
         {
             // Arrange
-            var filePath = TestDataPathHelper.GetPath("invalid-disaster-cards.json"); // syntactically invalid
+            var filepath = EnvelopArray("invalid-disaster-cards.json"); // syntactically invalid
 
-            using var sp = _fixture.Build(ConfigKey, filePath);
-            using var scope = sp.CreateScope();
+            using var provider = _fixture.Build(ConfigKey, filepath);
+            
+            var reader = provider.GetRequiredService<IDisasterCardReader>();
 
-            var reader = scope.ServiceProvider.GetRequiredService<IDisasterCardReader>();
-
-            // Act & Assert: repo maps to CatalogDataAccessException.BadJson
+            // Act & Assert
             var exception = await Assert.ThrowsAsync<DisasterCardValidationException>(() => reader.GetAllAsync(CancellationToken.None));
             Assert.Contains("Duplicate Disaster Card Name found: Asteroid Impact", exception.Message);
         }
@@ -76,8 +112,17 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.ComponentTests.Repo
             return new TheoryData<string, CatalogDataAccessErrorCode>
             {
                 { "invalid-json.json", CatalogDataAccessErrorCode.BadJson },
-                { "empty.json", CatalogDataAccessErrorCode.DataMissing }
+                { "empty.json", CatalogDataAccessErrorCode.DataMissing },
+                { "disaster-cards-test.json", CatalogDataAccessErrorCode.BadJson },  // Don't add the envelope
+                // TODO: whitespace large file?
+                // TODO: BOM characters
             };
+        }
+
+        private static string EnvelopArray(string filepath)
+        {
+            var bareFilePath = TestDataPathHelper.GetPath(filepath); 
+            return TestJsonEnvelopeCreator.EnvelopArrayFile(bareFilePath);
         }
     }
 }

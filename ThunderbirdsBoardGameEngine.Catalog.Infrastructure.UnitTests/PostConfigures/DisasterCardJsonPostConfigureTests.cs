@@ -1,6 +1,7 @@
 ﻿using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Configuration;
 using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.PostConfigures;
 using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Helpers;
+using ThunderbirdsBoardGameEngine.TestUtils.ClassData;
 using ThunderbirdsBoardGameEngine.TestUtils.Stubs;
 using Xunit;
 
@@ -46,9 +47,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.PostConfi
             }
 
             [Theory]
-            [InlineData("    ")]
-            [InlineData("")]
-            [InlineData(null)]
+            [ClassData(typeof(NullOrWhiteSpaceStringData))]
             public void PostConfigure_WhenFilePathNullOrWhitespace_ShouldReturnEarly(string? input)
             {
                 // Arrange

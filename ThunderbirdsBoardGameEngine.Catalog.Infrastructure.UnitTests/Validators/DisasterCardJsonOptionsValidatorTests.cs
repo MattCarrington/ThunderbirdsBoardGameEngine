@@ -2,6 +2,7 @@
 using System.IO.Abstractions.TestingHelpers;
 using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Configuration;
 using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Validators;
+using ThunderbirdsBoardGameEngine.TestUtils.ClassData;
 using Xunit;
 
 namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Validators
@@ -47,28 +48,8 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Validator
             AssertFailureContains(result, "DisasterCardJsonOptions is required.");
         }
 
-        [Fact]
-        public void Validate_EmptyFilePath_ReturnsFailure()
-        {
-            // Arrange
-            var options = new DisasterCardJsonOptions
-            {
-                FilePath = string.Empty
-            };
-
-            var validator = CreateValidator();
-
-            // Act
-            var result = validator.Validate(null, options);
-
-            // Assert
-            AssertFailureContains(result, "Catalog:DisasterCards:Json:FilePath is required.");
-        }
-
         [Theory]
-        [InlineData(null)]
-        [InlineData("")]
-        [InlineData("   ")]
+        [ClassData(typeof(NullOrWhiteSpaceStringData))]
         public void Validate_WhenWhitespaceFilePath_ReturnsFailure(string filePath)
         {
             // Arrange
