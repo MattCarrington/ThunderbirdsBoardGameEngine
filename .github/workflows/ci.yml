@@ -60,12 +60,13 @@ jobs:
           dotnet-version: '8.x'
 
       - name: Run Unit Tests
+        shell: bash
         run: |
           set -e
           echo "🚀 Running all Unit Tests..."
-          dotnet test $SOLUTION_FILE \
+          dotnet test "$SOLUTION_FILE" \
             --configuration Release \
-            --logger:"trx" \
+            --logger:"trx;LogFileName=unit-${RUNNER_OS}.trx" \
             --results-directory ./TestResults \
             --filter "FullyQualifiedName~UnitTests"
                 
