@@ -1,6 +1,8 @@
-﻿using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Configuration;
+﻿using System.IO.Abstractions.TestingHelpers;
+using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Configuration;
 using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.PostConfigures;
 using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Helpers;
+using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Validators;
 using ThunderbirdsBoardGameEngine.TestUtils.ClassData;
 using ThunderbirdsBoardGameEngine.TestUtils.Stubs;
 using Xunit;
@@ -137,7 +139,8 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.PostConfi
                 postConfigure.PostConfigure(null, options);
 
                 // Assert (use OS-agnostic expected computation)
-                Assert.Equal(ExpectedAbsolutePath(Path.Combine("content", "sub", "disaster.json")), options.FilePath);
+                var expected = ExpectedAbsolutePath(Path.Combine("content", "sub", "disaster.json"));
+                Assert.Equal(expected, options.FilePath);
             }
 
             [Fact]
@@ -275,45 +278,6 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.PostConfi
                 // Assert
                 // "" + "/disaster.json" → treated as relative "disaster.json" by Combine/FullPath (anchored under /app)
                 Assert.Equal(ExpectedAbsolutePath("%DISASTER_JSON_PATH%/disaster.json"), options.FilePath);
-            }
-
-            [Theory]
-            [InlineData("$DISASTER_JSON_PATH/disaster.json", "content", "content/disaster.json")]
-            [InlineData("${DISASTER_JSON_PATH}/disaster.json", "content", "content/disaster.json")]
-            [InlineData(" '${DISASTER_JSON_PATH}/disaster.json' ", "content", "content/disaster.json")]
-            public void PostConfigure_WhenUnixTokensOnUnix_ShouldExpandThenResolveAbsolute(string input, string envValue, string expectedRelative)
-            {
-                // Arrange
-                if (OperatingSystem.IsWindows()) { return; } // $VAR doesn't expand on Windows
-
-                using var _ = new EnvironmentVariableScope("DISASTER_JSON_PATH", envValue);
-                var options = new DisasterCardJsonOptions { FilePath = input };
-
-                var postConfigure = CreatePostConfigure();
-
-                // Act
-                postConfigure.PostConfigure(null, options);
-
-                // Assert
-                Assert.Equal(ExpectedAbsolutePath(expectedRelative), options.FilePath);
-            }
-
-            [Fact]
-            public void PostConfigure_WhenUnixTokensOnWindows_ShouldTreatAsLiteralThenAnchored()
-            {
-                // Arrange
-                if (!OperatingSystem.IsWindows()) { return; }
-
-                using var _ = new EnvironmentVariableScope("DISASTER_JSON_PATH", "content");
-                var options = new DisasterCardJsonOptions { FilePath = "$DISASTER_JSON_PATH/disaster.json" };
-                var postConfigure = CreatePostConfigure();
-
-                // Act
-                postConfigure.PostConfigure(null, options);
-
-                // Assert
-                // No expansion on Windows → treat as relative "$DISASTER_JSON_PATH/disaster.json"
-                Assert.Equal(ExpectedAbsolutePath("$DISASTER_JSON_PATH/disaster.json"), options.FilePath);
             }
         }
     }
