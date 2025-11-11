@@ -30,24 +30,6 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.PostConfi
         public class PathResolution
         {
 
-            [Fact]
-            public void PostConfigure_WhenFilePathEmpty_ShouldReturnEarly()
-            {
-                // Arrange
-                var options = new DisasterCardJsonOptions
-                {
-                    FilePath = string.Empty
-                };
-
-                var postConfigure = CreatePostConfigure();
-
-                // Act
-                postConfigure.PostConfigure(null, options);
-
-                // Assert
-                Assert.Equal(string.Empty, options.FilePath);
-            }
-
             [Theory]
             [ClassData(typeof(NullOrWhiteSpaceStringData))]
             public void PostConfigure_WhenFilePathNullOrWhitespace_ShouldReturnEarly(string? input)
@@ -55,7 +37,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.PostConfi
                 // Arrange
                 var options = new DisasterCardJsonOptions
                 {
-                    FilePath = input
+                    FilePath = input!
                 };
 
                 var postConfigure = CreatePostConfigure();
@@ -160,7 +142,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.PostConfi
             }
 
             [Fact]
-            public void PostConfigure_WhenCalledTwice_ShouldBeIdempotent_After_First_Run()
+            public void PostConfigure_WhenCalledTwice_ShouldBeIdempotentAfterFirstRun()
             {
                 // Arrange
                 var options = new DisasterCardJsonOptions { FilePath = "content/disaster.json" };
@@ -168,7 +150,9 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.PostConfi
 
                 // Act
                 postConfigure.PostConfigure(null, options);
+                
                 var first = options.FilePath;
+                
                 postConfigure.PostConfigure(null, options);
 
                 // Assert
