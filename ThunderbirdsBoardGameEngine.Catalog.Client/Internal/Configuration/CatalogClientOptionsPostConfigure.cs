@@ -26,7 +26,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Client.Internal.Configuration
                 }
             }
 
-            if (Uri.TryCreate(baseAddress, UriKind.Absolute, out var uri))
+            if (Uri.TryCreate(baseAddress, UriKind.Absolute, out var uri) && (uri.Scheme == Uri.UriSchemeHttp || uri.Scheme == Uri.UriSchemeHttps))
             {
                 var uriBuilder = new UriBuilder(uri);
 
