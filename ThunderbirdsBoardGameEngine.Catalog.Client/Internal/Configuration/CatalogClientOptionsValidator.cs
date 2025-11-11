@@ -15,30 +15,31 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Client.Internal.Configuration
 
             if (string.IsNullOrWhiteSpace(options.BaseAddress))
             {
-                errors.Add("BaseAddress is required.");
+                return ValidateOptionsResult.Fail("BaseAddress is required.");
             }
-            else if (!Uri.TryCreate(options.BaseAddress, UriKind.Absolute, out var uri))
+
+            if (!Uri.TryCreate(options.BaseAddress, UriKind.Absolute, out var uri))
             {
                 errors.Add("BaseAddress must be a valid absolute URI.");
+                return ValidateOptionsResult.Fail(errors);
             }
-            else if (uri.Scheme != Uri.UriSchemeHttp && uri.Scheme != Uri.UriSchemeHttps)
+
+            if (uri.Scheme != Uri.UriSchemeHttp && uri.Scheme != Uri.UriSchemeHttps)
             {
                 errors.Add("BaseAddress must use http or https scheme.");
             }
-            else
-            {
-                if (!string.IsNullOrEmpty(uri.Query))
-                {
-                    errors.Add("BaseAddress must not contain query strings.");
-                }
 
-                if (!string.IsNullOrEmpty(uri.Fragment))
-                {
-                    errors.Add("BaseAddress must not contain a fragment.");
-                }
+            if (!string.IsNullOrEmpty(uri.Query))
+            {
+                errors.Add("BaseAddress must not contain query strings.");
             }
 
-                return errors.Count == 0 ? ValidateOptionsResult.Success : ValidateOptionsResult.Fail(errors);
+            if (!string.IsNullOrEmpty(uri.Fragment))
+            {
+                errors.Add("BaseAddress must not contain a fragment.");
+            }
+
+            return errors.Count == 0 ? ValidateOptionsResult.Success : ValidateOptionsResult.Fail(errors);
         }
     }
 }

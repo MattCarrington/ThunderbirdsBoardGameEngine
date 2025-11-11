@@ -50,7 +50,7 @@ namespace ThunderbirdsBoardGameEngine.Api
             {
                 options.AddPolicy("CorsPolicy", policy =>
                 {
-                    policy.WithOrigins(allowedOrigins)
+                    policy.WithOrigins("http://localhost:5109")
                           .AllowAnyHeader()
                           .AllowAnyMethod();
                 });
