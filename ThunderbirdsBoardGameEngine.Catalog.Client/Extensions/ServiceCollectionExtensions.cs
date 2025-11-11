@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using ThunderbirdsBoardGameEngine.Catalog.Client.Internal.Configuration;
 
 namespace ThunderbirdsBoardGameEngine.Catalog.Client.Extensions
 {
@@ -21,10 +22,11 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Client.Extensions
         public static IServiceCollection AddCatalogClients(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddOptions<CatalogClientOptions>()
-                .Bind(configuration.GetSection("CatalogClient")) // keep your current section name
-                .Validate(o => !string.IsNullOrWhiteSpace(o.BaseAddress), "CatalogClient:BaseAddress required")
-                .Validate(o => Uri.TryCreate(o.BaseAddress, UriKind.Absolute, out _), "CatalogClient.BaseAddress must be an absolute URI")
-                .ValidateOnStart();
+                .Bind(configuration.GetSection("CatalogClient"))
+                .ValidateOnStart(); 
+
+            services.AddSingleton<IPostConfigureOptions<CatalogClientOptions>, CatalogClientOptionsPostConfigure>();
+            services.AddSingleton<IValidateOptions<CatalogClientOptions>, CatalogClientOptionsValidator>();
 
             // Shared HttpClient configuration for ALL Catalog typed clients
             Action<IServiceProvider, HttpClient> configureBase = (sp, http) =>
