@@ -69,6 +69,18 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Client.UnitTests.Configuration
         [InlineData("localhost")]           // missing scheme
         [InlineData("/api")]                // relative
         [InlineData("http:/example.com")]   // malformed
+        [InlineData("file://localhost/api")]
+        [InlineData("ftp://example.com")]
+        [InlineData("gopher://example.com")]
+        [InlineData("ldap://example.com")]
+        [InlineData("mailto://example.com")]
+        [InlineData("net.pipe://example.com")]
+        [InlineData("net.tcp://example.com")]
+        [InlineData("news://news.example.com")]
+        [InlineData("nntp://news.example.com")]
+        [InlineData("telnet://example.com")]
+        [InlineData("uuid://example.com")]
+        [InlineData("smtp://mail.example.com")]
         public void Validate_InvalidBaseAddress_ReturnsFailure(string baseAddress)
         {
             // Arrange
@@ -83,37 +95,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Client.UnitTests.Configuration
             var result = validator.Validate(null, options);
 
             // Assert
-            AssertFailureContains(result, "BaseAddress must be a valid absolute URI.");
-        }
-
-        [Theory]
-        [InlineData("file://localhost/api")]
-        [InlineData("ftp://example.com")]
-        [InlineData("gopher://example.com")]
-        [InlineData("ldap://example.com")]
-        [InlineData("mailto://example.com")]
-        [InlineData("net.pipe://example.com")]
-        [InlineData("net.tcp://example.com")]
-        [InlineData("news://news.example.com")]
-        [InlineData("nntp://news.example.com")]
-        [InlineData("telnet://example.com")]
-        [InlineData("uuid://example.com")]
-        [InlineData("smtp://mail.example.com")]
-        public void Validate_UnsupportedSchemeInBaseAddress_ReturnsFailure(string baseAddress)
-        {
-            // Arrange
-            var options = new CatalogClientOptions
-            {
-                BaseAddress = baseAddress
-            };
-
-            var validator = CreateValidator();
-
-            // Act
-            var result = validator.Validate(null, options);
-
-            // Assert
-            AssertFailureContains(result, "BaseAddress must use http or https scheme.");
+            AssertFailureContains(result, "BaseAddress must be a valid absolute http(s) URI.");
         }
 
         [Fact]
