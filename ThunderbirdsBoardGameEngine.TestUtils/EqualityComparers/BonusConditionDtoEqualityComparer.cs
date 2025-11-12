@@ -6,9 +6,14 @@ namespace ThunderbirdsBoardGameEngine.TestUtils.EqualityComparers
     {
         public static readonly BonusConditionDtoEqualityComparer Instance = new();
 
-        public bool Equals(BonusConditionDto? x, BonusConditionDto? y) =>
-            string.Equals(x?.Description, y?.Description, StringComparison.Ordinal);
+        public bool Equals(BonusConditionDto? x, BonusConditionDto? y)
+        {
+            return string.Equals(x?.Description, y?.Description, StringComparison.Ordinal);
+        }
 
-        public int GetHashCode(BonusConditionDto obj) => obj.Description?.GetHashCode() ?? 0;
+        public int GetHashCode(BonusConditionDto obj)
+        {
+            return obj.Description?.GetHashCode() ?? 0;
+        }
     }
 }
