@@ -7,14 +7,13 @@ namespace ThunderbirdsBoardGameEngine.TestUtils.ClassData
     {
         public WhiteSpaceStringData()
         {
-            Add(string.Empty);
-            Add("");
-            Add(" ");
-            Add("\t");
-            Add("\r");
-            Add("\n");
-            Add("\r\n");
-            Add("   ");
+            Add(string.Empty);          // empty string
+            Add(new string(' ', 1));    // single space
+            Add(new string(' ', 10));   // whitespace
+            Add("\t");                  // tab
+            Add("\r");                  // carriage return
+            Add("\n");                  // linefeed
+            Add("\r\n");                // clrf
         }
     }
 }
