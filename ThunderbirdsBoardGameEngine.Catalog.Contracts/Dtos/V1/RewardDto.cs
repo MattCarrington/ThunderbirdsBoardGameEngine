@@ -1,7 +1,7 @@
 ﻿namespace ThunderbirdsBoardGameEngine.Catalog.Contracts.Dtos.V1
 {
-    public class RewardDto
+    public record RewardDto
     {
-        public string DisplayName { get; set; }
+        public string DisplayName { get; init; } = string.Empty;
     }
 }
