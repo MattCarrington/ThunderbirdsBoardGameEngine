@@ -1,6 +1,6 @@
 ﻿using Xunit;
 
-namespace ThunderbirdsBoardGameEngine.TestUtils.ClassData
+namespace ThunderbirdsBoardGameEngine.TestUtils.xUnit.ClassData
 {
     public sealed class JsonEmptyStringData : TheoryData<string?>
     {

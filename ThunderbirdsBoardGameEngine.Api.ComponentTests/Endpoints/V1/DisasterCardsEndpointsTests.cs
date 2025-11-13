@@ -4,8 +4,8 @@ using System.Net;
 using System.Net.Http.Json;
 using System.Text.Json;
 using ThunderbirdsBoardGameEngine.Catalog.Contracts.Dtos.V1;
-using ThunderbirdsBoardGameEngine.TestUtils.Assertions;
 using ThunderbirdsBoardGameEngine.TestUtils.Helpers;
+using ThunderbirdsBoardGameEngine.TestUtils.xUnit.Assertions;
 using Xunit;
 
 namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints.V1

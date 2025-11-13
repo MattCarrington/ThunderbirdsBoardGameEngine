@@ -1,4 +1,4 @@
-﻿using ThunderbirdsBoardGameEngine.TestUtils.Fixtures;
+﻿using ThunderbirdsBoardGameEngine.TestUtils.xUnit.Fixtures;
 using Xunit;
 
 namespace ThunderbirdsBoardGameEngine.Catalog.WireMock.ComponentTests

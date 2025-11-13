@@ -4,10 +4,10 @@ using ThunderbirdsBoardGameEngine.Catalog.Client.Interfaces.V1;
 using ThunderbirdsBoardGameEngine.Catalog.Contracts.Dtos.V1;
 using ThunderbirdsBoardGameEngine.Catalog.WireMock;
 using ThunderbirdsBoardGameEngine.TestUtils;
-using ThunderbirdsBoardGameEngine.TestUtils.Assertions;
 using ThunderbirdsBoardGameEngine.TestUtils.Factories;
-using ThunderbirdsBoardGameEngine.TestUtils.Fixtures;
 using ThunderbirdsBoardGameEngine.TestUtils.Helpers;
+using ThunderbirdsBoardGameEngine.TestUtils.xUnit.Assertions;
+using ThunderbirdsBoardGameEngine.TestUtils.xUnit.Fixtures;
 using Xunit;
 
 namespace ThunderbirdsBoardGameEngine.Catalog.Client.ComponentTests.V1

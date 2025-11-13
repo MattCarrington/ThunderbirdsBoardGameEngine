@@ -1,10 +1,8 @@
-﻿using System.IO.Abstractions.TestingHelpers;
-using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Configuration;
+﻿using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Configuration;
 using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.PostConfigures;
 using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Helpers;
-using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Validators;
-using ThunderbirdsBoardGameEngine.TestUtils.ClassData;
 using ThunderbirdsBoardGameEngine.TestUtils.Stubs;
+using ThunderbirdsBoardGameEngine.TestUtils.xUnit.ClassData;
 using Xunit;
 
 namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.PostConfigures

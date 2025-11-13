@@ -84,6 +84,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThunderbirdsBoardGameEngine
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThunderbirdsBoardGameEngine.Catalog.Format.UnitTests", "ThunderbirdsBoardGameEngine.Catalog.Format.UnitTests\ThunderbirdsBoardGameEngine.Catalog.Format.UnitTests.csproj", "{7F13FBAE-4E6A-3DE0-A54D-73683AB82AFF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThunderbirdsBoardGameEngine.TestUtils.xUnit", "ThunderbirdsBoardGameEngine.TestUtils.xUnit\ThunderbirdsBoardGameEngine.TestUtils.xUnit.csproj", "{4321919E-735B-42BD-B962-19F9627B5FC7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -190,6 +192,10 @@ Global
 		{7F13FBAE-4E6A-3DE0-A54D-73683AB82AFF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7F13FBAE-4E6A-3DE0-A54D-73683AB82AFF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7F13FBAE-4E6A-3DE0-A54D-73683AB82AFF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4321919E-735B-42BD-B962-19F9627B5FC7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4321919E-735B-42BD-B962-19F9627B5FC7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4321919E-735B-42BD-B962-19F9627B5FC7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4321919E-735B-42BD-B962-19F9627B5FC7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -218,6 +224,7 @@ Global
 		{4ED5054F-F4F0-4154-9D3A-805166E75894} = {987A2C73-51DA-4FCE-AEF0-DFB7C4B23F2E}
 		{601FEB3D-BAD6-4088-BDA0-6210254AC4AD} = {D8475FB6-8FFD-4252-BF79-1BC0AF31A524}
 		{7F13FBAE-4E6A-3DE0-A54D-73683AB82AFF} = {D8475FB6-8FFD-4252-BF79-1BC0AF31A524}
+		{4321919E-735B-42BD-B962-19F9627B5FC7} = {C005E618-80C1-4CCD-9774-336D558E958F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {92EB50C5-075F-4AF3-8107-0DC9EDBBAB83}

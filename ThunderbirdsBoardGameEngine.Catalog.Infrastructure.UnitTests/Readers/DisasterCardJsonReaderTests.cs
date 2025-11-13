@@ -1,21 +1,18 @@
-﻿using Microsoft.Extensions.Options;
-using NSubstitute;
+﻿using NSubstitute;
 using NSubstitute.ExceptionExtensions;
 using System.Security;
 using System.Text.Json;
-using System.Text.Json.Serialization;
 using ThunderbirdsBoardGameEngine.Catalog.Application.Exceptions;
 using ThunderbirdsBoardGameEngine.Catalog.Domain.Exceptions;
 using ThunderbirdsBoardGameEngine.Catalog.Format.Dtos;
 using ThunderbirdsBoardGameEngine.Catalog.Format.Manifest;
-using ThunderbirdsBoardGameEngine.Catalog.Format.Serialization;
 using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Interfaces;
 using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Builders;
 using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Fakes;
 using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Utilities;
 using ThunderbirdsBoardGameEngine.TestUtils;
 using ThunderbirdsBoardGameEngine.TestUtils.Builders;
-using ThunderbirdsBoardGameEngine.TestUtils.ClassData;
+using ThunderbirdsBoardGameEngine.TestUtils.xUnit.ClassData;
 using Xunit;
 
 namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Readers

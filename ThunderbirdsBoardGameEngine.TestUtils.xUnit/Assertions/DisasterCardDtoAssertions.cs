@@ -2,7 +2,7 @@
 using ThunderbirdsBoardGameEngine.TestUtils.EqualityComparers;
 using Xunit;
 
-namespace ThunderbirdsBoardGameEngine.TestUtils.Assertions
+namespace ThunderbirdsBoardGameEngine.TestUtils.xUnit.Assertions
 {
     public static class DisasterCardDtoAssertions
     {

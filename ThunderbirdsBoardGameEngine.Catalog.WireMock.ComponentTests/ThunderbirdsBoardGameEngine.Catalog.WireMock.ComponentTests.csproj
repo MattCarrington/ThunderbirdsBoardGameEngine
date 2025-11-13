@@ -18,6 +18,7 @@
   <ItemGroup>
     <ProjectReference Include="..\ThunderbirdsBoardGameEngine.Catalog.Contracts\ThunderbirdsBoardGameEngine.Catalog.Contracts.csproj" />
     <ProjectReference Include="..\ThunderbirdsBoardGameEngine.Catalog.WireMock\ThunderbirdsBoardGameEngine.Catalog.WireMock.csproj" />
+    <ProjectReference Include="..\ThunderbirdsBoardGameEngine.TestUtils.xUnit\ThunderbirdsBoardGameEngine.TestUtils.xUnit.csproj" />
     <ProjectReference Include="..\ThunderbirdsBoardGameEngine.TestUtils\ThunderbirdsBoardGameEngine.TestUtils.csproj" />
   </ItemGroup>
 

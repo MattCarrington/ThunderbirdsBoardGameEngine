@@ -1,6 +1,6 @@
 ﻿using Xunit;
 
-namespace ThunderbirdsBoardGameEngine.TestUtils.ClassData
+namespace ThunderbirdsBoardGameEngine.TestUtils.xUnit.ClassData
 {
     // Reusable xUnit ClassData for null/empty/whitespace strings
     public sealed class WhiteSpaceStringData : TheoryData<string>

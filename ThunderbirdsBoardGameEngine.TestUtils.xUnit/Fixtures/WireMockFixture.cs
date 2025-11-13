@@ -1,7 +1,7 @@
 ﻿using ThunderbirdsBoardGameEngine.Catalog.WireMock;
 using Xunit;
 
-namespace ThunderbirdsBoardGameEngine.TestUtils.Fixtures
+namespace ThunderbirdsBoardGameEngine.TestUtils.xUnit.Fixtures
 {
     public class WireMockFixture : IAsyncLifetime
     {

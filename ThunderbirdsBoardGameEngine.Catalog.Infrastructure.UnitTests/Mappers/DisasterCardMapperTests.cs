@@ -1,13 +1,11 @@
-﻿using System.Text.Json;
-using ThunderbirdsBoardGameEngine.Catalog.Domain.Entities;
+﻿using ThunderbirdsBoardGameEngine.Catalog.Domain.Entities;
 using ThunderbirdsBoardGameEngine.Catalog.Domain.Enums;
 using ThunderbirdsBoardGameEngine.Catalog.Domain.Exceptions;
 using ThunderbirdsBoardGameEngine.Catalog.Format.Dtos;
 using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Mappers;
 using ThunderbirdsBoardGameEngine.TestUtils.Builders;
-using ThunderbirdsBoardGameEngine.TestUtils.ClassData;
+using ThunderbirdsBoardGameEngine.TestUtils.xUnit.ClassData;
 using Xunit;
-using Xunit.Sdk;
 
 namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Mappers
 {

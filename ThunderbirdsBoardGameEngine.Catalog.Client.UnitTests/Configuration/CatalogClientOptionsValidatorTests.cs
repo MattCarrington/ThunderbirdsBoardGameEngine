@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Options;
 using ThunderbirdsBoardGameEngine.Catalog.Client.Internal.Configuration;
-using ThunderbirdsBoardGameEngine.TestUtils.ClassData;
+using ThunderbirdsBoardGameEngine.TestUtils.xUnit.ClassData;
 using Xunit;
 
 namespace ThunderbirdsBoardGameEngine.Catalog.Client.UnitTests.Configuration

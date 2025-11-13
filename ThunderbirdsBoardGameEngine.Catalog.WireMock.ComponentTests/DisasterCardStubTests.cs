@@ -4,9 +4,9 @@ using System.Text.Json;
 using ThunderbirdsBoardGameEngine.Catalog.Contracts.Dtos.V1;
 using ThunderbirdsBoardGameEngine.Catalog.WireMock.Stubs.V1;
 using ThunderbirdsBoardGameEngine.TestUtils;
-using ThunderbirdsBoardGameEngine.TestUtils.Assertions;
-using ThunderbirdsBoardGameEngine.TestUtils.Fixtures;
 using ThunderbirdsBoardGameEngine.TestUtils.Helpers;
+using ThunderbirdsBoardGameEngine.TestUtils.xUnit.Assertions;
+using ThunderbirdsBoardGameEngine.TestUtils.xUnit.Fixtures;
 using WireMock.Server;
 using Xunit;
 
