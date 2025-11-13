@@ -16,7 +16,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Mappers
             {
                 if (dto is null)
                 {
-                    throw new JsonException("Root list is null");
+                    throw DisasterCardValidationException.NullEntry();
                 }
 
                 var code = string.IsNullOrWhiteSpace(dto.Code)
@@ -37,21 +37,22 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Mappers
                     dto.DifficultyNumber,
                     location,
                     rescueType,
-                    dto.BonusConditions.Select(MapBonus).ToList(),
-                    dto.RewardOptions.Select(MapReward).ToList()
+                    dto.BonusConditions.Select(bc => MapBonus(bc, dto.Id, dto.Name)).ToList(),
+                    dto.RewardOptions.Select(ro => MapReward(ro, dto.Id, dto.Name)).ToList()
                 );
             }
             catch (ArgumentException ex)
             {
-                throw new DisasterCardValidationException("Invalid disaster card data", ex);
+                //throw new DisasterCardValidationException("Invalid disaster card data", cardId: ex);
+                throw DisasterCardValidationException.Unknown(dto?.Id, dto?.Name, ex);
             }
         }
 
-        private static BonusCondition MapBonus(BonusConditionCatalogDto dto)
+        private static BonusCondition MapBonus(BonusConditionCatalogDto dto, int id, string name)
         {
             if (dto is null)
             {
-                throw new DisasterCardValidationException("Bonus condition is null");
+                throw DisasterCardValidationException.NullBonusCondition(id, name);
             }
 
             var location = string.IsNullOrWhiteSpace(dto.Location) 
@@ -70,15 +71,15 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Mappers
                     var podVehicle = ParseEnum<PodVehicle>(podVehicleBonus.PodVehicle);
                     return new PodVehicleBonusCondition(podVehicle, podVehicleBonus.BonusValue, location);
                 default:
-                    throw new DisasterCardValidationException("Unknown bonus condition type");
+                    throw DisasterCardValidationException.UnknownBonusCondition(id, name);
             }
         }
 
-        private static RewardOption MapReward(RewardOptionCatalogDto dto)
+        private static RewardOption MapReward(RewardOptionCatalogDto dto, int id, string name)
         {
             if (dto is null)
             {
-                throw new DisasterCardValidationException("Reward option is null");
+                throw DisasterCardValidationException.NullRewardOption(id, name);
             }
 
             switch (dto)
@@ -89,7 +90,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Mappers
                     var token = ParseEnum<BonusToken>(specifiedToken.Token);
                     return RewardOption.SpecifiedToken(token);
                 default:
-                    throw new DisasterCardValidationException("Unknown reward option type");
+                    throw DisasterCardValidationException.UnknownRewardOption(id, name);
             }
         }
 

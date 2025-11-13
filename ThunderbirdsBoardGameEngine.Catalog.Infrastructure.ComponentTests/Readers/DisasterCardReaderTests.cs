@@ -104,7 +104,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.ComponentTests.Repo
 
             // Act & Assert
             var exception = await Assert.ThrowsAsync<DisasterCardValidationException>(() => reader.GetAllAsync(CancellationToken.None));
-            Assert.Contains("Duplicate Disaster Card Name found: Asteroid Impact", exception.Message);
+            Assert.Contains("A disaster card with the Name 'Asteroid Impact' already exists. (ID: 2)", exception.Message);
         }
 
         public static TheoryData<string, CatalogDataAccessErrorCode> InvalidFileCases()

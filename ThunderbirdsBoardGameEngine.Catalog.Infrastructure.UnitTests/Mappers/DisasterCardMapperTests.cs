@@ -448,7 +448,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Mappers
             DisasterCardCatalogDto dto = null!;
 
             // Act & Assert
-            Assert.Throws<JsonException>(() => CreateMapper().Map(dto));
+            AssertMapperException(dto, DisasterCardErrorCode.NullEntry);
         }
 
         [Theory]
@@ -462,7 +462,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Mappers
                 .Build();
 
             // Act & Assert
-            AssertMapperException(dto);
+            AssertMapperException(dto, DisasterCardErrorCode.Unknown);
         }
 
         [Theory]
@@ -476,7 +476,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Mappers
                 .Build();
 
             // Act & Assert
-            AssertMapperException(dto);
+            AssertMapperException(dto, DisasterCardErrorCode.Unknown);
         }
 
         [Theory]
@@ -550,7 +550,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Mappers
             var bonus = new InvalidBonusConditionDto { BonusValue = 5 };
 
             // Act & Assert
-            AssertBonusConditionException(bonus);
+            AssertBonusConditionException(bonus, DisasterCardErrorCode.UnknownBonusCondition);
         }
 
         [Fact]
@@ -562,7 +562,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Mappers
                 .Build();
 
             // Act & Assert
-            AssertMapperException(dto);
+            AssertMapperException(dto, DisasterCardErrorCode.NullBonusCondition);
         }
 
         [Fact]
@@ -576,7 +576,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Mappers
                 .Build();
 
             // Act & Assert
-            AssertMapperException(dto);
+            AssertMapperException(dto, DisasterCardErrorCode.UnknownRewardOption);
         }
 
         [Fact]
@@ -588,7 +588,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Mappers
                 .Build();
 
             // Act & Assert
-            AssertMapperException(dto);
+            AssertMapperException(dto, DisasterCardErrorCode.NullRewardOption);
         }
 
         [Theory]
@@ -607,7 +607,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Mappers
                 .Build();
 
             // Act & Assert
-            AssertMapperException(dto);
+            AssertMapperException(dto, DisasterCardErrorCode.Unknown);
         }
 
         [Fact]
@@ -617,8 +617,6 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Mappers
             var dto = new DisasterCardCatalogDtoBuilder()
                 .WithDifficulty(-1)
                 .Build();
-
-            var mapper = CreateMapper();
 
             // Act & Assert
             AssertOutOfRangeExceptionWrapped(dto);
@@ -653,18 +651,20 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Mappers
             return new DisasterCardMapper();
         }
 
-        private static void AssertMapperException(DisasterCardCatalogDto dto)
+        private static void AssertMapperException(DisasterCardCatalogDto dto, DisasterCardErrorCode expectedErrorCode)
         {
             var mapper = CreateMapper();
 
-            Assert.Throws<DisasterCardValidationException>(() => mapper.Map(dto));
+            var exception = Assert.Throws<DisasterCardValidationException>(() => mapper.Map(dto));
+
+            Assert.Equal(expectedErrorCode, exception.ErrorCode);
         }
 
-        private static void AssertBonusConditionException(BonusConditionCatalogDto bonus)
+        private static void AssertBonusConditionException(BonusConditionCatalogDto bonus, DisasterCardErrorCode errorCode = DisasterCardErrorCode.Unknown)
         {
             var dto = new DisasterCardCatalogDtoBuilder().WithBonusCondition(bonus).Build();
 
-            AssertMapperException(dto);
+            AssertMapperException(dto, errorCode);
         }
 
         private static void AssertOutOfRangeExceptionWrapped(DisasterCardCatalogDto dto)

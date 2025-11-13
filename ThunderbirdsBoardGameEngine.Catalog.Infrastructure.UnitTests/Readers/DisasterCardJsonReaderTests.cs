@@ -505,7 +505,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Readers
             // Arrange
             var mapper = Substitute.For<IDisasterCardMapper>();
             mapper.Map(Arg.Any<DisasterCardCatalogDto>())
-                .Throws(new DisasterCardValidationException("Invalid disaster card data"));
+                .Throws(DisasterCardValidationException.Unknown());
 
             var reader = new DisasterCardJsonReaderBuilder().WithMapper(mapper).WithFilePath(TestPath).Build();
 

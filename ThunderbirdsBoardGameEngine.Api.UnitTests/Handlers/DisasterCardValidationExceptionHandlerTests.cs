@@ -15,7 +15,7 @@ namespace ThunderbirdsBoardGameEngine.Api.UnitTests.Handlers
         public async Task TryHandleAsync_WhenDisasterCardValidationException_ReturnsTrue()
         {
             // Arrange
-            var exception = new DisasterCardValidationException("Bad card");
+            var exception = DisasterCardValidationException.Unknown();
 
             var service = ExceptionHandlerHelper.CreateProblemsDetailService();
 
@@ -29,7 +29,7 @@ namespace ThunderbirdsBoardGameEngine.Api.UnitTests.Handlers
             Assert.Equal(StatusCodes.Status500InternalServerError, status);
             Assert.Equal("application/problem+json; charset=utf-8", contentType);
             Assert.Equal(StatusCodes.Status500InternalServerError, body.Status);
-            Assert.Equal("Bad card", body.Title);
+            Assert.Equal("An unknown disaster card validation error occurred.", body.Title);
             Assert.Equal(ProblemTypes.Validation, body.Type);
 
             await service.Received(1).WriteAsync(Arg.Any<ProblemDetailsContext>());

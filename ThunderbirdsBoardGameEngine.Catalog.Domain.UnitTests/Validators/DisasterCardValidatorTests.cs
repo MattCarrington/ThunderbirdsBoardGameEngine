@@ -44,7 +44,9 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Domain.UnitTests.Validators
 
             // Act & Assert
             var exception = Assert.Throws<DisasterCardValidationException>(() => DisasterCardValidator.ValidateAll(cards));
-            Assert.Contains("Duplicate Disaster Card Id found", exception.Message);
+            Assert.Contains($"A disaster card with the id '{id}' already exists.", exception.Message);
+            Assert.Equal(DisasterCardErrorCode.DuplicateId, exception.ErrorCode);
+            Assert.Equal(id, exception.CardId);
         }
 
         [Theory]
@@ -64,7 +66,9 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Domain.UnitTests.Validators
 
             // Act & Assert
             var exception = Assert.Throws<DisasterCardValidationException>(() => DisasterCardValidator.ValidateAll(cards));
-            Assert.Contains("Duplicate Disaster Card Name found", exception.Message);
+            Assert.Contains($"A disaster card with the Name '{name}' already exists.", exception.Message);
+            Assert.Equal(DisasterCardErrorCode.DuplicateName, exception.ErrorCode);
+            Assert.Equal(name, exception.CardName);
         }
 
         [Theory]
@@ -83,7 +87,9 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Domain.UnitTests.Validators
             };
             // Act & Assert
             var exception = Assert.Throws<DisasterCardValidationException>(() => DisasterCardValidator.ValidateAll(cards));
-            Assert.Contains("Duplicate Disaster Card Code found", exception.Message);
+            Assert.Contains($"A disaster card with the Code '{code.ToLower()}' already exists.", exception.Message);
+            Assert.Equal(DisasterCardErrorCode.DuplicateCode, exception.ErrorCode);
+            Assert.Equal(id, exception.CardId);
         }
 
         [Fact]
@@ -99,7 +105,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Domain.UnitTests.Validators
 
             // Act & Assert
             var exception = Assert.Throws<DisasterCardValidationException>(() => DisasterCardValidator.ValidateAll(cards));
-            Assert.Contains("Disaster Cards collection contains null entries.", exception.Message);
+            Assert.Contains("The disaster cards collection contains a null entry.", exception.Message);
         }
 
         [Fact]
