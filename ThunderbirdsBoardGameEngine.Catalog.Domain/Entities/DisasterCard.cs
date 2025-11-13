@@ -1,14 +1,13 @@
 ﻿using System.Text;
-using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
 using ThunderbirdsBoardGameEngine.Catalog.Domain.Enums;
 
 namespace ThunderbirdsBoardGameEngine.Catalog.Domain.Entities
 {
-    public class DisasterCard
+    public partial class DisasterCard
     {
         private static readonly Regex CodePattern =
-            new(@"^[a-z0-9]+(?:-[a-z0-9]+)*$", RegexOptions.Compiled);
+            CodeSlugVariable();
 
         public int Id { get; }
 
@@ -29,7 +28,6 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Domain.Entities
         private readonly List<BonusCondition> _bonus;
         private readonly List<RewardOption> _rewards;
 
-        [JsonConstructor]
         public DisasterCard(int id, string name, string code, int difficultyNumber, BoardLocation location, RescueType rescueType,
             IEnumerable<BonusCondition> bonusConditions, IEnumerable<RewardOption> rewardOptions)
         {
@@ -94,15 +92,21 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Domain.Entities
 
             // 1. Reject control characters outright
             if (trimmed.Any(char.IsControl))
+            {
                 throw new ArgumentException("Invalid code format: contains control characters.", paramName);
+            }
 
             // 2. Reject illegal characters (anything outside safe ASCII set)
             if (trimmed.Any(ch => ch > 127))
+            {
                 throw new ArgumentException("Invalid code format: contains non-ASCII characters.", paramName);
+            }
 
             // 3. Reject leading/trailing hyphens or double hyphens BEFORE collapsing
             if (trimmed.StartsWith('-') || trimmed.EndsWith('-') || trimmed.Contains("--"))
-                throw new ArgumentException("Invalid code format: leading/trailing/double hyphen.", paramName);
+            { 
+                throw new ArgumentException("Invalid code format: leading/trailing/double hyphen.", paramName); 
+            }
 
             // 4. Reject any illegal symbol (skip space, dash, underscore, slash, dot)
             foreach (var ch in trimmed)
@@ -119,6 +123,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Domain.Entities
 
             var sb = new StringBuilder(s.Length);
             bool dash = false;
+
             foreach (var ch in s)
             {
                 if (ch is >= 'a' and <= 'z' or >= '0' and <= '9')
@@ -126,16 +131,18 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Domain.Entities
                     sb.Append(ch);
                     dash = false;
                 }
-                else if (char.IsWhiteSpace(ch) || ch is '-' or '_' or '/' or '.')
-                {
-                    if (!dash) { sb.Append('-'); dash = true; }
-                }
+                else if ((char.IsWhiteSpace(ch) || ch is '-' or '_' or '/' or '.') && !dash)
+                { 
+                    sb.Append('-'); 
+                    dash = true; }
             }
 
             var normalized = sb.ToString().Trim('-');
 
             if (!CodePattern.IsMatch(normalized))
+            {
                 throw new ArgumentException($"Invalid code format: '{normalized}'", paramName);
+            }
 
             return normalized;
         }
@@ -175,5 +182,8 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Domain.Entities
                 }
             }
         }
+
+        [GeneratedRegex(@"^[a-z0-9]+(?:-[a-z0-9]+)*$", RegexOptions.Compiled)]
+        private static partial Regex CodeSlugVariable();
     }
 }
