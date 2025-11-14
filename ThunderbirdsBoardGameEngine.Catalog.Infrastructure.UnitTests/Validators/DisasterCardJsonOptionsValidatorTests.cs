@@ -71,8 +71,8 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Validator
         }
 
         [Theory]
-        [ClassData(typeof(NullOrWhiteSpaceStringData))]
-        public void Validate_WhenWhitespaceFilePath_ReturnsFailure(string filePath)
+        [ClassData(typeof(NullOrWhitespaceStringData))]
+        public void Validate_WhenNullOrWhitespaceFilePath_ReturnsFailure(string? filePath)
         {
             // Arrange
             var options = new DisasterCardJsonOptions

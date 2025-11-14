@@ -2,13 +2,17 @@
 
 namespace ThunderbirdsBoardGameEngine.TestUtils.xUnit.ClassData
 {
-    public sealed class NullOrWhiteSpaceStringData : TheoryData<string?>
+    /// <summary>
+    /// Provides null and whitespace-only strings for validating guard clauses and parsing logic.
+    /// </summary>
+    public sealed class NullOrWhitespaceStringData : TheoryData<string?>
     {
-        public NullOrWhiteSpaceStringData()
+        /// <inheritdoc />
+        public NullOrWhitespaceStringData()
         {
             Add(null);
             
-            foreach (var item in new WhiteSpaceStringData())
+            foreach (var item in new WhitespaceStringData())
             {
                 Add(item);
             }

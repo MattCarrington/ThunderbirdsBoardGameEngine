@@ -46,8 +46,8 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Client.UnitTests.Configuration
         }
 
         [Theory]
-        [ClassData(typeof(NullOrWhiteSpaceStringData))]
-        public void Validate_EmptyBaseAddress_ReturnsFailure(string baseAddress)
+        [ClassData(typeof(NullOrWhitespaceStringData))]
+        public void Validate_WhenNullOrEmptyBaseAddress_ReturnsFailure(string? baseAddress)
         {
             // Arrange
             var options = new CatalogClientOptions

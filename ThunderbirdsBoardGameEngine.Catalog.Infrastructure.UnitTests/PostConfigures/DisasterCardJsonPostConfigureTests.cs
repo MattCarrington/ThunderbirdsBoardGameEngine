@@ -29,13 +29,13 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.PostConfi
         {
 
             [Theory]
-            [ClassData(typeof(NullOrWhiteSpaceStringData))]
+            [ClassData(typeof(NullOrWhitespaceStringData))]
             public void PostConfigure_WhenFilePathNullOrWhitespace_ShouldReturnEarly(string? input)
             {
                 // Arrange
                 var options = new DisasterCardJsonOptions
                 {
-                    FilePath = input!
+                    FilePath = input
                 };
 
                 var postConfigure = CreatePostConfigure();

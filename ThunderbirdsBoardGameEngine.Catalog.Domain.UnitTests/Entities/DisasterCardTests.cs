@@ -9,7 +9,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Domain.UnitTests.Entities
     public class DisasterCardTests
     {
         [Theory]
-        [ClassData(typeof(WhiteSpaceStringData))]
+        [ClassData(typeof(WhitespaceStringData))]
         public void Constructor_WhenNameIsInvalid_ThrowsArgumentException(string name)
         {
             // Arrange
@@ -276,7 +276,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Domain.UnitTests.Entities
         }
 
         [Theory]
-        [ClassData(typeof(WhiteSpaceStringData))]
+        [ClassData(typeof(WhitespaceStringData))]
         public void Constructor_WhenCodeWhiteSpace_ThrowsArgumentException(string? code)
         {
             // Arrange

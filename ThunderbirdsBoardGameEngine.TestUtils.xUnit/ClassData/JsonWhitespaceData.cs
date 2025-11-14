@@ -2,11 +2,16 @@
 
 namespace ThunderbirdsBoardGameEngine.TestUtils.xUnit.ClassData
 {
-    public sealed class JsonEmptyStringData : TheoryData<string?>
+    /// <summary>
+    /// Provides JSON payload strings that should be treated as empty or whitespace,
+    /// including BOM-only and large whitespace-only inputs.
+    /// </summary>
+    public sealed class JsonWhitespaceData : TheoryData<string?>
     {
-        public JsonEmptyStringData()
+        /// <inheritdoc />
+        public JsonWhitespaceData()
         {
-            foreach (var item in new WhiteSpaceStringData())
+            foreach (var item in new WhitespaceStringData())
             {
                 Add(item);
             }

@@ -130,7 +130,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Readers
         }
 
         [Theory]
-        [ClassData(typeof(JsonEmptyStringData))]
+        [ClassData(typeof(JsonWhitespaceData))]
         public async Task GetAllAsync_WhenStreamReturnsWhitespace_ThrowsDataMissingException(string jsonContent)
         {
             // Arrange

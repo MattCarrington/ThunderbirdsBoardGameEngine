@@ -285,7 +285,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Mappers
         }
 
         [Fact]
-        public void Map_WhenMultipleBonusConditionsOfSameType__ShouldMapAllConditionsCorrectly()
+        public void Map_WhenMultipleBonusConditionsOfSameType_ShouldMapAllConditionsCorrectly()
         {
             // Arrange
             var john = new CharacterBonusCatalogDto
@@ -450,9 +450,9 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Mappers
         }
 
         [Theory]
-        [ClassData(typeof(NullOrWhiteSpaceStringData))]
+        [ClassData(typeof(NullOrWhitespaceStringData))]
         [InlineData("InvalidLocation")]
-        public void Map_WhenLocationInvalid_ShouldThrowException(string location)
+        public void Map_WhenLocationInvalid_ShouldThrowException(string? location)
         {
             // Arrange
             var dto = new DisasterCardCatalogDtoBuilder()
@@ -464,9 +464,9 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Mappers
         }
 
         [Theory]
-        [ClassData(typeof(NullOrWhiteSpaceStringData))]
+        [ClassData(typeof(NullOrWhitespaceStringData))]
         [InlineData("Bob")]
-        public void Map_WhenRescueTypeInvalid_ShouldThrowException(string rescueType)
+        public void Map_WhenRescueTypeInvalid_ShouldThrowException(string? rescueType)
         {
             // Arrange
             var dto = new DisasterCardCatalogDtoBuilder()
@@ -478,9 +478,9 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Mappers
         }
 
         [Theory]
-        [ClassData(typeof(NullOrWhiteSpaceStringData))]
+        [ClassData(typeof(NullOrWhitespaceStringData))]
         [InlineData("invalid")]
-        public void Map_WhenCharacterInvalid_ShouldThrowException(string character)
+        public void Map_WhenCharacterInvalid_ShouldThrowException(string? character)
         {
             // Arrrange
             var bonus = new CharacterBonusCatalogDto
@@ -494,9 +494,9 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Mappers
         }
 
         [Theory]
-        [ClassData(typeof(NullOrWhiteSpaceStringData))]
+        [ClassData(typeof(NullOrWhitespaceStringData))]
         [InlineData("invalid")]
-        public void Map_WhenThunderbirdMachineInvalid_ShouldThrowException(string thunderbird)
+        public void Map_WhenThunderbirdMachineInvalid_ShouldThrowException(string? thunderbird)
         {
             // Arrange
             var bonus = new ThunderbirdBonusCatalogDto
@@ -510,9 +510,9 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Mappers
         }
 
         [Theory]
-        [ClassData(typeof(NullOrWhiteSpaceStringData))]
+        [ClassData(typeof(NullOrWhitespaceStringData))]
         [InlineData("invalidpod")]
-        public void Map_WhenPodVehicleInvalid_ShouldThrowException(string podVehicle)
+        public void Map_WhenPodVehicleInvalid_ShouldThrowException(string? podVehicle)
         {
             // Arrange
             var bonus = new PodVehicleBonusCatalogDto
@@ -590,9 +590,9 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Mappers
         }
 
         [Theory]
-        [ClassData(typeof(NullOrWhiteSpaceStringData))]
+        [ClassData(typeof(NullOrWhitespaceStringData))]
         [InlineData("InvalidToken")]
-        public void Map_WhenRewardOptionInvalidToken_ShouldThrowException(string token)
+        public void Map_WhenRewardOptionInvalidToken_ShouldThrowException(string? token)
         {
             // Arrange
             var rewardOption = new TokenRewardCatalogDto

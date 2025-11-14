@@ -35,8 +35,8 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Client.UnitTests.Configuration
         }
 
         [Theory]
-        [ClassData(typeof(NullOrWhiteSpaceStringData))]
-        public void PostConfigure_WhenBaseAddressNullOrWhiteSpace_ShouldReturnEarly(string emptyBaseAddress)
+        [ClassData(typeof(NullOrWhitespaceStringData))]
+        public void PostConfigure_WhenBaseAddressNullOrWhiteSpace_ShouldReturnEarly(string? emptyBaseAddress)
         {
             // Arrange
             var options = new CatalogClientOptions
