@@ -1,9 +1,8 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System;
 using ThunderbirdsBoardGameEngine.Catalog.Client.Extensions;
 
-namespace ThunderbirdsBoardGameEngine.TestUtils.Factories
+namespace ThunderbirdsBoardGameEngine.TestUtils.Catalog.Factories
 {
     public static class CatalogClientProviderFactory
     {

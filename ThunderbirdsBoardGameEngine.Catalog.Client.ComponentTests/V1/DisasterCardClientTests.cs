@@ -4,7 +4,7 @@ using ThunderbirdsBoardGameEngine.Catalog.Client.Interfaces.V1;
 using ThunderbirdsBoardGameEngine.Catalog.Contracts.Dtos.V1;
 using ThunderbirdsBoardGameEngine.Catalog.WireMock;
 using ThunderbirdsBoardGameEngine.TestUtils;
-using ThunderbirdsBoardGameEngine.TestUtils.Factories;
+using ThunderbirdsBoardGameEngine.TestUtils.Catalog.Factories;
 using ThunderbirdsBoardGameEngine.TestUtils.Helpers;
 using ThunderbirdsBoardGameEngine.TestUtils.xUnit.Assertions;
 using ThunderbirdsBoardGameEngine.TestUtils.xUnit.Fixtures;

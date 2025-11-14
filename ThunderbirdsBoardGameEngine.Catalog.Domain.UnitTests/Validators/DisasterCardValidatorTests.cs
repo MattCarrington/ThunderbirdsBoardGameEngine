@@ -2,7 +2,7 @@
 using ThunderbirdsBoardGameEngine.Catalog.Domain.Enums;
 using ThunderbirdsBoardGameEngine.Catalog.Domain.Exceptions;
 using ThunderbirdsBoardGameEngine.Catalog.Domain.Validators;
-using ThunderbirdsBoardGameEngine.TestUtils.Builders;
+using ThunderbirdsBoardGameEngine.TestUtils.Catalog.Builders;
 using Xunit;
 
 namespace ThunderbirdsBoardGameEngine.Catalog.Domain.UnitTests.Validators

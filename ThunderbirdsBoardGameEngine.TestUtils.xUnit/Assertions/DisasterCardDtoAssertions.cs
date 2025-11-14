@@ -1,5 +1,5 @@
 ﻿using ThunderbirdsBoardGameEngine.Catalog.Contracts.Dtos.V1;
-using ThunderbirdsBoardGameEngine.TestUtils.EqualityComparers;
+using ThunderbirdsBoardGameEngine.TestUtils.Catalog.EqualityComparers;
 using Xunit;
 
 namespace ThunderbirdsBoardGameEngine.TestUtils.xUnit.Assertions

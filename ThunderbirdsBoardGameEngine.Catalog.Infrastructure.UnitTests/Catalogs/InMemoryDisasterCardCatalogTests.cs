@@ -1,7 +1,7 @@
 ﻿using System.Collections.Immutable;
 using ThunderbirdsBoardGameEngine.Catalog.Domain.Entities;
 using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Catalogs;
-using ThunderbirdsBoardGameEngine.TestUtils.Builders;
+using ThunderbirdsBoardGameEngine.TestUtils.Catalog.Builders;
 using Xunit;
 
 namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Catalogs

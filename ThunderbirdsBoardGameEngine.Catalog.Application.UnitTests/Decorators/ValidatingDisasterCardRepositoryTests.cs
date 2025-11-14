@@ -5,7 +5,7 @@ using ThunderbirdsBoardGameEngine.Catalog.Application.Interfaces;
 using ThunderbirdsBoardGameEngine.Catalog.Domain.Entities;
 using ThunderbirdsBoardGameEngine.Catalog.Domain.Enums;
 using ThunderbirdsBoardGameEngine.Catalog.Domain.Exceptions;
-using ThunderbirdsBoardGameEngine.TestUtils.Builders;
+using ThunderbirdsBoardGameEngine.TestUtils.Catalog.Builders;
 using Xunit;
 
 namespace ThunderbirdsBoardGameEngine.Catalog.Application.UnitTests.Decorators

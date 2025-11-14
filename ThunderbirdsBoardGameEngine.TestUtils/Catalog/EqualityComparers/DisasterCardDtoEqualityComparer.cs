@@ -1,12 +1,19 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using ThunderbirdsBoardGameEngine.Catalog.Contracts.Dtos.V1;
 
-namespace ThunderbirdsBoardGameEngine.TestUtils.EqualityComparers
+namespace ThunderbirdsBoardGameEngine.TestUtils.Catalog.EqualityComparers
 {
+    /// <summary>
+    /// Defines domain-specific equality for <see cref="DisasterCardDto"/> instances,
+    /// comparing identity, core properties, and child collections rather than relying on
+    /// the record's default structural equality.
+    /// </summary>
     public sealed class DisasterCardDtoEqualityComparer : IEqualityComparer<DisasterCardDto>
     {
+        /// <inheritdoc />
         public static readonly DisasterCardDtoEqualityComparer Instance = new();
 
+        /// <inheritdoc />
         public bool Equals(DisasterCardDto? x, DisasterCardDto? y)
         {
             if (ReferenceEquals(x, y)) 
@@ -19,15 +26,22 @@ namespace ThunderbirdsBoardGameEngine.TestUtils.EqualityComparers
                 return false; 
             }
 
+            var xBonusConditions = x.BonusConditions ?? Array.Empty<BonusConditionDto>();
+            var yBonusConditions = y.BonusConditions ?? Array.Empty<BonusConditionDto>();
+            
+            var xRewards = x.Rewards ?? Array.Empty<RewardDto>();
+            var yRewards = y.Rewards ?? Array.Empty<RewardDto>();
+
             return x.Id == y.Id
                 && x.Name == y.Name
                 && x.DifficultyNumber == y.DifficultyNumber
                 && x.Location == y.Location
                 && x.RescueType == y.RescueType
-                && x.BonusConditions.SequenceEqual(y.BonusConditions, BonusConditionDtoEqualityComparer.Instance)
-                && x.Rewards.SequenceEqual(y.Rewards, RewardDtoEqualityComparer.Instance);
+                && xBonusConditions.SequenceEqual(yBonusConditions, BonusConditionDtoEqualityComparer.Instance)
+                && xRewards.SequenceEqual(yRewards, RewardDtoEqualityComparer.Instance);
         }
 
+        /// <inheritdoc />
         public int GetHashCode([DisallowNull] DisasterCardDto obj)
         {
             var hash = new HashCode();

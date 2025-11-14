@@ -4,7 +4,7 @@ using ThunderbirdsBoardGameEngine.Catalog.Application.Interfaces;
 using ThunderbirdsBoardGameEngine.Catalog.Application.Services;
 using ThunderbirdsBoardGameEngine.Catalog.Domain.Entities;
 using ThunderbirdsBoardGameEngine.Catalog.Domain.Enums;
-using ThunderbirdsBoardGameEngine.TestUtils.Builders;
+using ThunderbirdsBoardGameEngine.TestUtils.Catalog.Builders;
 using Xunit;
 
 namespace ThunderbirdsBoardGameEngine.Catalog.Application.UnitTests.Services

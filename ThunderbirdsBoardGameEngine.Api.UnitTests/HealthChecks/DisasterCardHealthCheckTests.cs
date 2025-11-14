@@ -3,9 +3,6 @@ using NSubstitute;
 using NSubstitute.ExceptionExtensions;
 using ThunderbirdsBoardGameEngine.Api.HealthChecks;
 using ThunderbirdsBoardGameEngine.Catalog.Application.Interfaces;
-using ThunderbirdsBoardGameEngine.Catalog.Domain.Entities;
-using ThunderbirdsBoardGameEngine.Catalog.Domain.Enums;
-using ThunderbirdsBoardGameEngine.TestUtils.Builders;
 using Xunit;
 
 namespace ThunderbirdsBoardGameEngine.Api.UnitTests.HealthChecks

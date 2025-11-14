@@ -1,6 +1,6 @@
 ﻿using ThunderbirdsBoardGameEngine.Catalog.Format.Dtos;
 
-namespace ThunderbirdsBoardGameEngine.TestUtils.Builders
+namespace ThunderbirdsBoardGameEngine.TestUtils.Catalog.Builders
 {
     public sealed class DisasterCardCatalogDtoBuilder
     {

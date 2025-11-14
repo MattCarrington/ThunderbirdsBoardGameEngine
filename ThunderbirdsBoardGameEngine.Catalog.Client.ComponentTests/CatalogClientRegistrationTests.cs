@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using ThunderbirdsBoardGameEngine.Catalog.Client.Interfaces.V1;
-using ThunderbirdsBoardGameEngine.TestUtils.Factories;
+using ThunderbirdsBoardGameEngine.TestUtils.Catalog.Factories;
 using Xunit;
 
 namespace ThunderbirdsBoardGameEngine.Catalog.Client.ComponentTests
