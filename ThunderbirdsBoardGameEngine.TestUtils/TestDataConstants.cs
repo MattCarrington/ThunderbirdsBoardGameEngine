@@ -4,10 +4,14 @@
     {
         public const string TestDataFolder = "TestData";
 
+        public const string CatalogFolder = "Catalog";
+
         public const string InputFolder = "Input";
 
         public const string ExpectedFolder = "Expected";
 
-        public static readonly string V1InputFolder = Path.Combine(InputFolder, "V1");
+        public const string FileFolder = "File";
+
+        public const string HttpFolder = "Http";
     }
 }

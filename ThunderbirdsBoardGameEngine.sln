@@ -13,20 +13,6 @@ Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "Docker\do
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TestData", "TestData", "{A22F695E-1370-454C-B2B6-C3320CFAB8DD}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Expected", "Expected", "{58A31C2B-4B87-4916-9BA3-C812C5FF8354}"
-	ProjectSection(SolutionItems) = preProject
-		TestData\Expected\disaster-card-dtos.json = TestData\Expected\disaster-card-dtos.json
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Input", "Input", "{07AD74EA-634C-4AF0-87A3-93076D26D76A}"
-	ProjectSection(SolutionItems) = preProject
-		TestData\Input\disaster-cards-test.json = TestData\Input\disaster-cards-test.json
-		TestData\Input\disaster-cards.json = TestData\Input\disaster-cards.json
-		TestData\Input\empty.json = TestData\Input\empty.json
-		TestData\Input\invalid-disaster-cards.json = TestData\Input\invalid-disaster-cards.json
-		TestData\Input\invalid-json.json = TestData\Input\invalid-json.json
-	EndProjectSection
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{C005E618-80C1-4CCD-9774-336D558E958F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThunderbirdsBoardGameEngine.UI", "ThunderbirdsBoardGameEngine.UI\ThunderbirdsBoardGameEngine.UI.csproj", "{7D6037AF-6A22-4E9F-938A-F3D26B82F178}"
@@ -36,11 +22,6 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Support", "Support", "{FC7280B4-F6FF-4E00-B8C0-6C5F6FA6219C}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ComponentTests", "ComponentTests", "{987A2C73-51DA-4FCE-AEF0-DFB7C4B23F2E}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "V1", "V1", "{98C81E9B-2BA9-4CA2-A8A7-DD6E30CD3E8E}"
-	ProjectSection(SolutionItems) = preProject
-		TestData\Input\V1\disaster-card-dto-data.json = TestData\Input\V1\disaster-card-dto-data.json
-	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThunderbirdsBoardGameEngine.Catalog.WireMock.ComponentTests", "ThunderbirdsBoardGameEngine.Catalog.WireMock.ComponentTests\ThunderbirdsBoardGameEngine.Catalog.WireMock.ComponentTests.csproj", "{92778ED2-185F-A6CA-477D-A3D1DD945FF9}"
 EndProject
@@ -85,6 +66,35 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThunderbirdsBoardGameEngine.Catalog.Format.UnitTests", "ThunderbirdsBoardGameEngine.Catalog.Format.UnitTests\ThunderbirdsBoardGameEngine.Catalog.Format.UnitTests.csproj", "{7F13FBAE-4E6A-3DE0-A54D-73683AB82AFF}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThunderbirdsBoardGameEngine.TestUtils.xUnit", "ThunderbirdsBoardGameEngine.TestUtils.xUnit\ThunderbirdsBoardGameEngine.TestUtils.xUnit.csproj", "{4321919E-735B-42BD-B962-19F9627B5FC7}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Catalog", "Catalog", "{250C3DAC-BF06-4CCB-943B-8451083D2D52}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Expected", "Expected", "{9B445555-8DE6-48E5-A0E2-15B7D37424BA}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Http", "Http", "{60DAC7DC-CA0C-4323-85D5-D31F474BAF3E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "V1", "V1", "{7F4388BF-BD40-4501-82C1-9A3F0D6327B3}"
+	ProjectSection(SolutionItems) = preProject
+		TestData\Catalog\Expected\Http\V1\disaster-card-dtos.json = TestData\Catalog\Expected\Http\V1\disaster-card-dtos.json
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Input", "Input", "{E0B03463-65F1-4BAF-B617-9CAD2D15CE2B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Http", "Http", "{AE0A4D6D-7871-4CF2-A8D5-14CAA2FEF6A8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "V1", "V1", "{46FFA4FD-EFFA-4CB0-9934-42BE9EAD8C30}"
+	ProjectSection(SolutionItems) = preProject
+		TestData\Catalog\Input\Http\V1\disaster-card-dto-data.json = TestData\Catalog\Input\Http\V1\disaster-card-dto-data.json
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "File", "File", "{96433914-34E0-48A6-BDB5-E513729B327E}"
+	ProjectSection(SolutionItems) = preProject
+		TestData\Catalog\Input\File\disaster-cards-test.json = TestData\Catalog\Input\File\disaster-cards-test.json
+		TestData\Catalog\Input\File\disaster-cards.json = TestData\Catalog\Input\File\disaster-cards.json
+		TestData\Catalog\Input\File\empty.json = TestData\Catalog\Input\File\empty.json
+		TestData\Catalog\Input\File\invalid-disaster-cards.json = TestData\Catalog\Input\File\invalid-disaster-cards.json
+		TestData\Catalog\Input\File\invalid-json.json = TestData\Catalog\Input\File\invalid-json.json
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -205,11 +215,8 @@ Global
 		{D8475FB6-8FFD-4252-BF79-1BC0AF31A524} = {C005E618-80C1-4CCD-9774-336D558E958F}
 		{FAC8733C-43C8-4D28-B292-E447F20BCF2D} = {C005E618-80C1-4CCD-9774-336D558E958F}
 		{A22F695E-1370-454C-B2B6-C3320CFAB8DD} = {C005E618-80C1-4CCD-9774-336D558E958F}
-		{58A31C2B-4B87-4916-9BA3-C812C5FF8354} = {A22F695E-1370-454C-B2B6-C3320CFAB8DD}
-		{07AD74EA-634C-4AF0-87A3-93076D26D76A} = {A22F695E-1370-454C-B2B6-C3320CFAB8DD}
 		{77BBC935-7543-4ABC-9F2A-4F720812DC93} = {D8475FB6-8FFD-4252-BF79-1BC0AF31A524}
 		{987A2C73-51DA-4FCE-AEF0-DFB7C4B23F2E} = {C005E618-80C1-4CCD-9774-336D558E958F}
-		{98C81E9B-2BA9-4CA2-A8A7-DD6E30CD3E8E} = {07AD74EA-634C-4AF0-87A3-93076D26D76A}
 		{92778ED2-185F-A6CA-477D-A3D1DD945FF9} = {987A2C73-51DA-4FCE-AEF0-DFB7C4B23F2E}
 		{3FD96C8D-8942-2BBB-B6ED-4103BC1D559F} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 		{4ADC3D54-7F83-9CCE-BDCE-9AB31F00D268} = {D8475FB6-8FFD-4252-BF79-1BC0AF31A524}
@@ -225,6 +232,14 @@ Global
 		{601FEB3D-BAD6-4088-BDA0-6210254AC4AD} = {D8475FB6-8FFD-4252-BF79-1BC0AF31A524}
 		{7F13FBAE-4E6A-3DE0-A54D-73683AB82AFF} = {D8475FB6-8FFD-4252-BF79-1BC0AF31A524}
 		{4321919E-735B-42BD-B962-19F9627B5FC7} = {C005E618-80C1-4CCD-9774-336D558E958F}
+		{250C3DAC-BF06-4CCB-943B-8451083D2D52} = {A22F695E-1370-454C-B2B6-C3320CFAB8DD}
+		{9B445555-8DE6-48E5-A0E2-15B7D37424BA} = {250C3DAC-BF06-4CCB-943B-8451083D2D52}
+		{60DAC7DC-CA0C-4323-85D5-D31F474BAF3E} = {9B445555-8DE6-48E5-A0E2-15B7D37424BA}
+		{7F4388BF-BD40-4501-82C1-9A3F0D6327B3} = {60DAC7DC-CA0C-4323-85D5-D31F474BAF3E}
+		{E0B03463-65F1-4BAF-B617-9CAD2D15CE2B} = {250C3DAC-BF06-4CCB-943B-8451083D2D52}
+		{AE0A4D6D-7871-4CF2-A8D5-14CAA2FEF6A8} = {E0B03463-65F1-4BAF-B617-9CAD2D15CE2B}
+		{46FFA4FD-EFFA-4CB0-9934-42BE9EAD8C30} = {AE0A4D6D-7871-4CF2-A8D5-14CAA2FEF6A8}
+		{96433914-34E0-48A6-BDB5-E513729B327E} = {E0B03463-65F1-4BAF-B617-9CAD2D15CE2B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {92EB50C5-075F-4AF3-8107-0DC9EDBBAB83}

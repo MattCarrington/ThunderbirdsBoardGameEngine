@@ -3,6 +3,7 @@ using System.Net;
 using ThunderbirdsBoardGameEngine.Catalog.Client.Interfaces.V1;
 using ThunderbirdsBoardGameEngine.Catalog.Contracts.Dtos.V1;
 using ThunderbirdsBoardGameEngine.TestUtils.Catalog.Factories;
+using ThunderbirdsBoardGameEngine.TestUtils.Catalog.Helpers;
 using ThunderbirdsBoardGameEngine.TestUtils.Helpers;
 using ThunderbirdsBoardGameEngine.TestUtils.xUnit.Assertions;
 using Xunit;
@@ -36,7 +37,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Client.IntegrationTests.Clients.V1
             Assert.NotEmpty(result.Data);
             Assert.Null(result.ErrorMessage);
 
-            var expected = TestDataLoader.LoadJsonFromFile<List<DisasterCardDto>>("disaster-card-dtos.json")
+            var expected = TestDataLoader.LoadJsonFromFile<List<DisasterCardDto>>(CatalogData.HttpExpectedResponse("disaster-card-dtos", 1))
                 ?? throw new InvalidOperationException("Failed to load expected data");
 
             DisasterCardDtoAssertions.AssertOrderInsensitive(expected, result.Data.ToList());

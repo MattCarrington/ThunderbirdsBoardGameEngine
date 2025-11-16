@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.Configuration;
+using ThunderbirdsBoardGameEngine.TestUtils.Catalog.Helpers;
 using ThunderbirdsBoardGameEngine.TestUtils.Helpers;
 
 namespace ThunderbirdsBoardGameEngine.Api.ComponentTests
@@ -9,7 +10,7 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests
     {
         protected override void ConfigureWebHost(IWebHostBuilder builder)
         {
-            var filepath = TestDataPathHelper.GetPath("disaster-cards.json");
+            var filepath = TestDataPathHelper.GetPath(CatalogData.FileInput("disaster-cards.json"));
 
             builder.ConfigureAppConfiguration((context, configBuilder) =>
             {

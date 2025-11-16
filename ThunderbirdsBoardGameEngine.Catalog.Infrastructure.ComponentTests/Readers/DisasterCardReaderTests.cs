@@ -1,9 +1,9 @@
-﻿using Microsoft.AspNetCore.Rewrite;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using ThunderbirdsBoardGameEngine.Catalog.Application.Exceptions;
 using ThunderbirdsBoardGameEngine.Catalog.Application.Interfaces;
 using ThunderbirdsBoardGameEngine.Catalog.Domain.Exceptions;
 using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.ComponentTests.Fixtures;
+using ThunderbirdsBoardGameEngine.TestUtils.Catalog.Helpers;
 using ThunderbirdsBoardGameEngine.TestUtils.Helpers;
 using Xunit;
 
@@ -43,7 +43,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.ComponentTests.Repo
         public async Task GetAllAsync_WithInvalidFiles_ThrowsCatalogDataAccessException(string filename, CatalogDataAccessErrorCode expectedErrorCode)
         {
             // Arrange
-            var filePath = TestDataPathHelper.GetPath(filename); // non-empty valid JSON
+            var filePath = TestDataPathHelper.GetPath(CatalogData.FileInput(filename)); // non-empty valid JSON
 
             using var provider = _fixture.Build(ConfigKey, filePath);
             
@@ -114,14 +114,12 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.ComponentTests.Repo
                 { "invalid-json.json", CatalogDataAccessErrorCode.BadJson },
                 { "empty.json", CatalogDataAccessErrorCode.DataMissing },
                 { "disaster-cards-test.json", CatalogDataAccessErrorCode.BadJson },  // Don't add the envelope
-                // TODO: whitespace large file?
-                // TODO: BOM characters
             };
         }
 
         private static string EnvelopArray(string filepath)
         {
-            var bareFilePath = TestDataPathHelper.GetPath(filepath); 
+            var bareFilePath = TestDataPathHelper.GetPath(CatalogData.FileInput(filepath)); 
             return TestJsonEnvelopeCreator.EnvelopArrayFile(bareFilePath);
         }
     }

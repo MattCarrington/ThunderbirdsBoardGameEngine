@@ -2,7 +2,7 @@
 using System.Text.Json.Nodes;
 using ThunderbirdsBoardGameEngine.Catalog.Format.Hashing;
 
-namespace ThunderbirdsBoardGameEngine.TestUtils.Helpers
+namespace ThunderbirdsBoardGameEngine.TestUtils.Catalog.Helpers
 {
     public static class TestJsonEnvelopeCreator
     {

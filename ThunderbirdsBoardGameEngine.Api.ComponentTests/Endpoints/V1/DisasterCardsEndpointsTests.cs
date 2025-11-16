@@ -4,6 +4,8 @@ using System.Net;
 using System.Net.Http.Json;
 using System.Text.Json;
 using ThunderbirdsBoardGameEngine.Catalog.Contracts.Dtos.V1;
+using ThunderbirdsBoardGameEngine.TestUtils.Catalog;
+using ThunderbirdsBoardGameEngine.TestUtils.Catalog.Helpers;
 using ThunderbirdsBoardGameEngine.TestUtils.Helpers;
 using ThunderbirdsBoardGameEngine.TestUtils.xUnit.Assertions;
 using Xunit;
@@ -45,7 +47,7 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints.V1
 
             Assert.NotNull(cards);
 
-            var expected = TestDataLoader.LoadJsonFromFile<List<DisasterCardDto>>("disaster-card-dtos.json")
+            var expected = TestDataLoader.LoadJsonFromFile<List<DisasterCardDto>>(CatalogData.HttpExpectedResponse("disaster-card-dtos", 1))
                 ?? throw new InvalidOperationException("Failed to load expected data.");
 
             DisasterCardDtoAssertions.AssertOrderInsensitive(expected, cards);

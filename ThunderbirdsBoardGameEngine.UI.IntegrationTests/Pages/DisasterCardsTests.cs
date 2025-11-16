@@ -4,7 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using ThunderbirdsBoardGameEngine.Catalog.Client.Extensions;
 using ThunderbirdsBoardGameEngine.Catalog.Contracts.Dtos.V1;
 using ThunderbirdsBoardGameEngine.Catalog.WireMock;
-using ThunderbirdsBoardGameEngine.TestUtils;
+using ThunderbirdsBoardGameEngine.TestUtils.Catalog.Helpers;
 using ThunderbirdsBoardGameEngine.TestUtils.Helpers;
 using ThunderbirdsBoardGameEngine.TestUtils.xUnit.Fixtures;
 using ThunderbirdsBoardGameEngine.UI.Interfaces;
@@ -20,7 +20,7 @@ namespace ThunderbirdsBoardGameEngine.UI.IntegrationTests.Pages
         private readonly WireMockHost _host;
 
         private readonly IReadOnlyList<DisasterCardDto> _cards = 
-            TestDataLoader.LoadJsonFromFile<IReadOnlyList<DisasterCardDto>>("disaster-card-dto-data.json", TestDataConstants.V1InputFolder);
+            TestDataLoader.LoadJsonFromFile<IReadOnlyList<DisasterCardDto>>(CatalogData.HttpRequest("disaster-card-dto-data.json", 1));
 
         public DisasterCardsTests(WireMockFixture fixture)
         {

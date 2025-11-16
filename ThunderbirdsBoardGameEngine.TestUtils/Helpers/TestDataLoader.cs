@@ -6,9 +6,9 @@ namespace ThunderbirdsBoardGameEngine.TestUtils.Helpers
     {
         private static readonly JsonSerializerOptions _jsonOptions = new() { PropertyNameCaseInsensitive = true };
 
-        public static T LoadJsonFromFile<T>(string fileName, string folder = TestDataConstants.ExpectedFolder)
+        public static T LoadJsonFromFile<T>(string fileName)
         {
-            var fullPath = TestDataPathHelper.GetPath(fileName, folder);
+            var fullPath = TestDataPathHelper.GetPath(fileName);
 
             var json = File.ReadAllText(fullPath);
             return JsonSerializer.Deserialize<T>(json, _jsonOptions)
