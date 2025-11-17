@@ -1,5 +1,6 @@
 ﻿using System.IO.Abstractions.TestingHelpers;
 using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Utilities;
+using ThunderbirdsBoardGameEngine.TestUtils.xUnit.ClassData;
 using Xunit;
 
 namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Utilities
@@ -13,22 +14,18 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Utilities
             var fileReader = CreateFileReader();
 
             // Act & Assert
-            await Assert.ThrowsAsync<ArgumentException>(async () =>
-                fileReader.OpenReadAsync(string.Empty, CancellationToken.None));
+            await Assert.ThrowsAsync<ArgumentException>(() => fileReader.OpenReadAsync(string.Empty, CancellationToken.None));
         }
 
         [Theory]
-        [InlineData(null)]
-        [InlineData("   ")]
-        [InlineData("")]
+        [ClassData(typeof(NullOrWhitespaceStringData))]
         public async Task OpenReadAsync_WithNullOrWhitespacePath_ThrowsArgumentNullException(string path)
         {
             // Arrange
             var fileReader = CreateFileReader();
 
             // Act & Assert
-            await Assert.ThrowsAsync<ArgumentException>(async () =>
-                fileReader.OpenReadAsync(path, CancellationToken.None));
+            await Assert.ThrowsAsync<ArgumentException>(() => fileReader.OpenReadAsync(path, CancellationToken.None));
         }
 
         [Fact]
@@ -36,7 +33,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Utilities
         {
             // Arrange
             using var cancellationToken = new CancellationTokenSource();
-            cancellationToken.Cancel();
+            await cancellationToken.CancelAsync();
 
             var fileReader = CreateFileReader();
 
@@ -57,7 +54,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Utilities
             var fileSystem = new MockFileSystem();
             fileSystem.AddFile(path, new MockFileData("{ \"key\": \"value\" }"));
 
-            var fileReader = new FileOpener(fileSystem);
+            var fileReader = CreateFileReader(fileSystem);
 
             // Act
             using var result = await fileReader.OpenReadAsync(path, CancellationToken.None);
@@ -82,11 +79,16 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Utilities
                 fileReader.OpenReadAsync(@"C:\missing.json", CancellationToken.None));
         }
 
-        private static FileOpener CreateFileReader() 
-        { 
+        private static FileOpener CreateFileReader()
+        {
             var fileSystem = new MockFileSystem();
 
-            return new FileOpener(fileSystem); 
+            return CreateFileReader(fileSystem);
+        }
+
+        private static FileOpener CreateFileReader(MockFileSystem fileSystem)
+        {
+            return new FileOpener(fileSystem);
         }
     }
 }
