@@ -45,7 +45,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Utilities
                 throw new InvalidDataException("'data' property is not an array.");
             }
 
-            if (manifest.ItemCount == 0)
+            if (manifest.ItemCount <= 0)
             {
                 throw new InvalidDataException("Manifest must specify a positive item count");
             }

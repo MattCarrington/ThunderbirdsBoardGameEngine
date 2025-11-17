@@ -111,6 +111,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Utilities
         {
             // Arrange
             var data = ValidData();
+
             using var stream = new EnvelopeStreamBuilder()
                 .WithData(data)
                 .WithItemCountOverride(0)
@@ -127,6 +128,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Utilities
         {
             // Arrange
             var data = ValidData();
+
             using var stream = new EnvelopeStreamBuilder()
                 .WithData(data)
                 .WithItemCountOverride(2)
@@ -143,6 +145,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Utilities
         {
             // Arrange
             var data = ValidData();
+
             using var stream = new EnvelopeStreamBuilder()
                 .WithData(data)
                 .WithChecksumAlgorithm("md5")
@@ -159,6 +162,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Utilities
         {
             // Arrange
             var data = ValidData();
+
             using var stream = new EnvelopeStreamBuilder()
                 .WithData(data)
                 .WithChecksumOverride("invalidchecksumvalue")
@@ -185,6 +189,26 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Utilities
 
             // Act & Assert
             await Assert.ThrowsAnyAsync<OperationCanceledException>(() => parser.ReadEnvelopeAsync(stream, token.Token));
+        }
+
+        [Theory]
+        [InlineData(0)]
+        [InlineData(-1)]
+        [InlineData(int.MinValue)]
+        public async Task ReadEnvelopeAsync_WhenItemCountInvalid_ThrowsInvalidDataException(int invalidItemCount)
+        {
+            // Arrange
+            var data = ValidData();
+
+            using var stream = new EnvelopeStreamBuilder()
+                .WithData(data)
+                .WithItemCountOverride(invalidItemCount)
+                .CreateStream();
+
+            var parser = CreateParser();
+
+            // Act & Assert
+            await Assert.ThrowsAsync<InvalidDataException>(() => parser.ReadEnvelopeAsync(stream, CancellationToken.None));
         }
 
         private static string ValidData() 
