@@ -31,7 +31,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Domain.Entities
         public DisasterCard(int id, string name, string code, int difficultyNumber, BoardLocation location, RescueType rescueType,
             IEnumerable<BonusCondition> bonusConditions, IEnumerable<RewardOption> rewardOptions)
         {
-            ArgumentException.ThrowIfNullOrWhiteSpace(code, nameof(code));
+            ArgumentException.ThrowIfNullOrWhiteSpace(code);
 
             ArgumentOutOfRangeException.ThrowIfNegativeOrZero(difficultyNumber);
                 
@@ -87,7 +87,8 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Domain.Entities
 
         private static string NormalizeCode(string? code, string paramName)
         {
-            ArgumentException.ThrowIfNullOrWhiteSpace(code, paramName);
+            ArgumentException.ThrowIfNullOrWhiteSpace(code);
+
             var trimmed = code.Trim();
 
             // 1. Reject control characters outright
@@ -160,19 +161,19 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Domain.Entities
                     case CharacterBonusCondition characterBonus:
                         if (!seenCharacters.Add(characterBonus.Character))
                         {
-                            throw new ArgumentException($"Duplicate bonus bonus for character {characterBonus.Character} found.", nameof(bonusConditions));
+                            throw new ArgumentException($"Duplicate bonus for character {characterBonus.Character} found.", nameof(bonusConditions));
                         }
                         break;
                     case ThunderbirdBonusCondition thunderbirdBonus:
                         if (!seenThunderbirds.Add(thunderbirdBonus.Thunderbird))
                         {
-                            throw new ArgumentException($"Duplicate bonus bonus for Thunderbird {thunderbirdBonus.Thunderbird} found.", nameof(bonusConditions));
+                            throw new ArgumentException($"Duplicate bonus for Thunderbird {thunderbirdBonus.Thunderbird} found.", nameof(bonusConditions));
                         }
                         break;
                     case PodVehicleBonusCondition podVehicleBonus:
                         if (!seenPodVehicles.Add(podVehicleBonus.PodVehicle))
                         {
-                            throw new ArgumentException($"Duplicate bonus bonus for Pod Vehicle {podVehicleBonus.PodVehicle} found.", nameof(bonusConditions));
+                            throw new ArgumentException($"Duplicate bonus for Pod Vehicle {podVehicleBonus.PodVehicle} found.", nameof(bonusConditions));
                         }
                         break;
                     default:
