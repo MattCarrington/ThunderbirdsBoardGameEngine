@@ -197,10 +197,16 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.PostConfi
             [InlineData(" %DISASTER_JSON_PATH% ", "content/disaster.json", "content/disaster.json")]
             [InlineData("\"%DISASTER_JSON_PATH%\"", "content/disaster.json", "content/disaster.json")]
             [InlineData("'%DISASTER_JSON_PATH%'", "content/disaster.json", "content/disaster.json")]
-            public void PostConfigure_WhenWindowsTokens_ShouldExpandThenResolveAbsolute(string input, string envValue, string expectedRelative)
+            [InlineData("$DISASTER_JSON_PATH/disaster.json", "content", "content/disaster.json")]
+            [InlineData(" $DISASTER_JSON_PATH/disaster.json ", "content", "content/disaster.json")]
+            [InlineData("\"$DISASTER_JSON_PATH/disaster.json\"", "content", "content/disaster.json")]
+            [InlineData("${DISASTER_JSON_PATH}/disaster.json", "content", "content/disaster.json")]
+            [InlineData(" ${DISASTER_JSON_PATH}/disaster.json ", "content", "content/disaster.json")]
+            [InlineData("\"${DISASTER_JSON_PATH}/disaster.json\"", "content", "content/disaster.json")]
+            public void PostConfigure_WhenEnvironmentTokens_ShouldExpandThenResolveAbsolute(string input, string envValue, string expectedRelative)
             {
                 // Arrange
-                using var _ = new EnvironmentVariableScope("DISASTER_JSON_PATH", envValue);
+                using var scope = new EnvironmentVariableScope("DISASTER_JSON_PATH", envValue);
                 var options = new DisasterCardJsonOptions { FilePath = input };
 
                 var postConfigure = CreatePostConfigure();
@@ -213,10 +219,10 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.PostConfi
             }
 
             [Fact]
-            public void PostConfigure_WhenWindowsTokenUnset_ShouldLeaveTokenThenResolvesUnderRoot()
+            public void PostConfigure_WhenEnvironmentTokenUnset_ShouldLeaveTokenThenResolvesUnderRoot()
             {
                 // Arrange
-                using var _ = new EnvironmentVariableScope("DISASTER_JSON_PATH", null);
+                using var scope = new EnvironmentVariableScope("DISASTER_JSON_PATH", null);
                 var options = new DisasterCardJsonOptions { FilePath = "%DISASTER_JSON_PATH%/disaster.json" };
 
                 var postConfigure = CreatePostConfigure();
@@ -230,10 +236,10 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.PostConfi
             }
 
             [Fact]
-            public void PostConfigure_WhenWindowsTokenWithAbsoluteValue_ShouldCanonicalized()
+            public void PostConfigure_WhenEnvironemtTokenWithAbsoluteValue_ShouldCanonicalized()
             {
                 // Arrange
-                using var _ = new EnvironmentVariableScope("DISASTER_JSON_PATH", "/var/data/../data/disaster.json");
+                using var scope = new EnvironmentVariableScope("DISASTER_JSON_PATH", "/var/data/../data/disaster.json");
                 var options = new DisasterCardJsonOptions { FilePath = "%DISASTER_JSON_PATH%" };
 
                 var postConfigure = CreatePostConfigure();
@@ -246,10 +252,10 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.PostConfi
             }
 
             [Fact]
-            public void PostConfigure_WhenWindowsTokenEmpty_ShouldResultInRootedRelativeThenAnchored()
+            public void PostConfigure_WhenEnvironmentTokenEmpty_ShouldResultInRootedRelativeThenAnchored()
             {
                 // Arrange
-                using var _ = new EnvironmentVariableScope("DISASTER_JSON_PATH", "");
+                using var scope = new EnvironmentVariableScope("DISASTER_JSON_PATH", "");
                 var options = new DisasterCardJsonOptions { FilePath = "%DISASTER_JSON_PATH%/disaster.json" };
 
                 var postConfigure = CreatePostConfigure();

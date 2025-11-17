@@ -79,11 +79,11 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.PostConfigures
 
             // ${VAR}
             var expanded = _bracedVariable.Replace(input, 
-                match => Environment.GetEnvironmentVariable(match.Groups["k"].Value) ?? match.Value);
+                match => Environment.GetEnvironmentVariable(match.Groups["brace"].Value) ?? match.Value);
 
             // $VAR (avoid ${...} already handled)
             expanded = _dollarVariable.Replace(expanded,
-                match => Environment.GetEnvironmentVariable(match.Groups["k"].Value) ?? match.Value);
+                match => Environment.GetEnvironmentVariable(match.Groups["dollar"].Value) ?? match.Value);
 
             return expanded;
         }
@@ -108,10 +108,10 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.PostConfigures
             return input.Replace('\\', sep).Replace('/', sep);
         }
 
-        [GeneratedRegex(@"(?<!\$)\$(?<name>[A-Za-z_][A-Za-z0-9_]*)", RegexOptions.Compiled | RegexOptions.CultureInvariant)]
+        [GeneratedRegex(@"(?<!\$)\$(?<dollar>[A-Za-z_][A-Za-z0-9_]*)", RegexOptions.Compiled | RegexOptions.CultureInvariant)]
         private static partial Regex DollarVariable();
 
-        [GeneratedRegex(@"\$\{(?<name>[A-Za-z_][A-Za-z0-9_]*)\}", RegexOptions.Compiled | RegexOptions.CultureInvariant)]
+        [GeneratedRegex(@"\$\{(?<brace>[A-Za-z_][A-Za-z0-9_]*)\}", RegexOptions.Compiled | RegexOptions.CultureInvariant)]
         private static partial Regex BracedVariable();
     }
 }
