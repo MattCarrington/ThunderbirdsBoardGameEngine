@@ -35,6 +35,11 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Utilities
             var manifest = JsonSerializer.Deserialize<CatalogManifest>(manifestElement, ManifestReadOptions)
                 ?? throw new InvalidDataException("Failed to deserialize 'manifest'.");
 
+            if (string.IsNullOrWhiteSpace(manifest.SchemaVersion))
+            {
+                throw new InvalidDataException("Schema version is missing or empty.");
+            }
+
             if (!manifest.SchemaVersion.StartsWith("1.", StringComparison.Ordinal))
             {
                 throw new NotSupportedException($"Unsupported schema version: {manifest.SchemaVersion}");
@@ -55,9 +60,19 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Utilities
                 throw new InvalidDataException($"Item count mismatch: manifest specifies {manifest.ItemCount}, but 'data' contains {dataElement.GetArrayLength()} items.");
             }
 
+            if (string.IsNullOrWhiteSpace(manifest.Checksum.Algorithm))
+            {
+                throw new InvalidDataException("Checksum algorithm is missing or empty.");
+            }
+
             if (!string.Equals(CatalogChecksum.Algorithm, manifest.Checksum.Algorithm, StringComparison.OrdinalIgnoreCase))
             {
                 throw new NotSupportedException($"Unsupported checksum algorithm: {manifest.Checksum.Algorithm}");
+            }
+
+            if (string.IsNullOrWhiteSpace(manifest.Checksum.Value))
+            {
+                throw new InvalidDataException("Checksum value is missing or empty.");
             }
 
             var computedChecksum = CatalogChecksum.ComputeForDataElement(dataElement);

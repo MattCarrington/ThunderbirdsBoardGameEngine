@@ -1,5 +1,6 @@
 ﻿using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Builders;
 using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Utilities;
+using ThunderbirdsBoardGameEngine.TestUtils.xUnit.ClassData;
 using Xunit;
 
 namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Utilities
@@ -203,6 +204,60 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Utilities
             using var stream = new EnvelopeStreamBuilder()
                 .WithData(data)
                 .WithItemCountOverride(invalidItemCount)
+                .CreateStream();
+
+            var parser = CreateParser();
+
+            // Act & Assert
+            await Assert.ThrowsAsync<InvalidDataException>(() => parser.ReadEnvelopeAsync(stream, CancellationToken.None));
+        }
+
+        [Theory]
+        [ClassData(typeof(WhitespaceStringData))]
+        public async Task ReadEnvelopeAsync_WhenSchemaValueIsNullOrWhitespace_ThrowsInvalidDataException(string? invalidSchemaVersion)
+        {
+            // Arrange
+            var data = ValidData();
+
+            using var stream = new EnvelopeStreamBuilder()
+                .WithData(data)
+                .WithSchemaVersion(invalidSchemaVersion)
+                .CreateStream();
+
+            var parser = CreateParser();
+
+            // Act & Assert
+            await Assert.ThrowsAsync<InvalidDataException>(() => parser.ReadEnvelopeAsync(stream, CancellationToken.None));
+        }
+
+        [Theory]
+        [ClassData(typeof(WhitespaceStringData))]
+        public async Task ReadEnvelopeAsync_WhenChecksumAlgorithmNullOrWhitespace_ThrowsInvalidDataException(string? invalidAlgorithm)
+        {
+            // Arrange
+            var data = ValidData();
+            
+            using var stream = new EnvelopeStreamBuilder()
+                .WithData(data)
+                .WithChecksumAlgorithm(invalidAlgorithm)
+                .CreateStream();
+
+            var parser = CreateParser();
+
+            // Act & Assert
+            await Assert.ThrowsAsync<InvalidDataException>(() => parser.ReadEnvelopeAsync(stream, CancellationToken.None));
+        }
+
+        [Theory]
+        [ClassData(typeof(WhitespaceStringData))]
+        public async Task ReadEnvelopeAsync_WhenChecksumValueIsNullOrWhitespace_ThrowsInvalidDataException(string? invalidChecksumValue)
+        {
+            // Arrange
+            var data = ValidData();
+
+            using var stream = new EnvelopeStreamBuilder()
+                .WithData(data)
+                .WithChecksumOverride(invalidChecksumValue)
                 .CreateStream();
 
             var parser = CreateParser();
