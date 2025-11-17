@@ -77,7 +77,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Readers
                 }
 
                 return dtos.Select(_mapper.Map).ToList();
-            }            
+            }
             catch (IOException ex) when (
                 ex is FileNotFoundException ||
                 ex is DirectoryNotFoundException ||
@@ -142,6 +142,28 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Readers
         {
             cancellationToken.ThrowIfCancellationRequested();
 
+            var validatedStream = await EnsureReadableSeekableStreamAsync(stream, cancellationToken);
+
+            // Empty?
+            if (validatedStream.Length == 0 || validatedStream.Position == validatedStream.Length)
+            {
+                throw CatalogDataAccessException.DataMissing(_filePath,
+                    new InvalidDataException("Opened stream is empty."));
+            }
+
+            if (!await HasNonWhitespaceJsonContentAsync(validatedStream, cancellationToken)
+                 .ConfigureAwait(false))
+            {
+                throw CatalogDataAccessException.DataMissing(
+                    _filePath,
+                    new InvalidDataException("Catalog data file contains no JSON content."));
+            }
+
+            return validatedStream;
+        }
+
+        private async Task<Stream> EnsureReadableSeekableStreamAsync(Stream stream, CancellationToken cancellationToken)
+        {
             if (stream is null)
             {
                 throw CatalogDataAccessException.DataMissing(_filePath, new InvalidDataException("Opened stream is null"));
@@ -153,73 +175,92 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Readers
             }
 
             // Normalise non-seekable
-            if (!stream.CanSeek)
+            if (stream.CanSeek)
             {
-                var ms = new MemoryStream();
-                await stream.CopyToAsync(ms, 81920, cancellationToken).ConfigureAwait(false);
-                await stream.DisposeAsync().ConfigureAwait(false);
-                ms.Position = 0;
-                stream = ms;
+                return stream;
             }
 
-            // Empty?
-            if (stream.Length == 0 || stream.Position == stream.Length)
-            {
-                throw CatalogDataAccessException.DataMissing(_filePath,
-                    new InvalidDataException("Opened stream is empty."));
-            }
+            var memoryStream = new MemoryStream();
+            await stream.CopyToAsync(memoryStream, 81920, cancellationToken).ConfigureAwait(false);
+            await stream.DisposeAsync().ConfigureAwait(false);
+            memoryStream.Position = 0;
 
-            // Peek for BOM + JSON whitespace only
-            long position = stream.Position;
-            var buf = new byte[Math.Min(4096, (int)(stream.Length - position))];
-            int n = await stream.ReadAsync(buf.AsMemory(0, buf.Length), cancellationToken).ConfigureAwait(false);
+            return memoryStream;
+
+        }
+
+        private static async Task<bool> HasNonWhitespaceJsonContentAsync(Stream stream, CancellationToken cancellationToken)
+        {
+            var position = stream.Position;
+            var buffer = new byte[Math.Min(4096, (int)(stream.Length - position))];
+            var read = await stream.ReadAsync(buffer.AsMemory(0, buffer.Length), cancellationToken).ConfigureAwait(false);
             stream.Position = position;
 
-            int i = 0;
-
-            if (position == 0 && n >= 3 && buf[0] == Utf8Bom[0] && buf[1] == Utf8Bom[1] && buf[2] == Utf8Bom[2])
+            if (read == 0)
             {
-                i = 3;
+                return false;
             }
 
-            for (; i < n; i++)
+            int index = SkipUtf8BomIfPresent(buffer, read, position);
+
+            if (ContainsNonWhitespace(buffer, index, read))
             {
-                byte b = buf[i];
-                if (b is not (0x20 /*SP*/ or 0x09 /*HT*/ or 0x0A /*LF*/ or 0x0D /*CR*/))
-                {
-                    return stream; // found content
-                }
+                return true;
             }
 
-            if (position + n >= stream.Length)
+            if (position + read >= stream.Length)
             {
-                throw CatalogDataAccessException.DataMissing(_filePath,
-                    new InvalidDataException("Catalog data file contains no JSON content."));
+                return false;
             }
 
-            // Scan the rest once
+            // Scan the rest
             var chunk = new byte[8192];
-            long saved = stream.Position;
-            stream.Position = position + n;
-            int read;
+            var saved = stream.Position;
+            stream.Position = position + read;
 
-            while ((read = await stream.ReadAsync(chunk.AsMemory(0, chunk.Length), cancellationToken).ConfigureAwait(false)) > 0)
+            int chunkRead;
+
+            while ((chunkRead = await stream.ReadAsync(chunk.AsMemory(0, chunk.Length), cancellationToken).ConfigureAwait(false)) > 0)
             {
-                for (int j = 0; j < read; j++)
+                if (ContainsNonWhitespace(chunk, 0, chunkRead))
                 {
-                    var b = chunk[j];
-                    if (b is not (0x20 or 0x09 or 0x0A or 0x0D))
-                    {
-                        stream.Position = saved;
-                        return stream;
-                    }
+                    stream.Position = saved;
+                    return true;
                 }
             }
 
             stream.Position = saved;
 
-            throw CatalogDataAccessException.DataMissing(_filePath,
-                new InvalidDataException("Catalog data file contains no JSON content."));
+            return false;
+        }
+
+        private static int SkipUtf8BomIfPresent(byte[] buffer, int count, long position)
+        {
+            if (position == 0 &&
+                count >= 3 &&
+                buffer[0] == Utf8Bom[0] &&
+                buffer[1] == Utf8Bom[1] &&
+                buffer[2] == Utf8Bom[2])
+            {
+                return 3;
+            }
+
+            return 0;
+        }
+
+        private static bool ContainsNonWhitespace(byte[] buffer, int start, int count)
+        {
+            for (int i = start; i < count; i++)
+            {
+                var b = buffer[i];
+
+                if (b is not (0x20 or 0x09 or 0x0A or 0x0D))
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
     }
 }
