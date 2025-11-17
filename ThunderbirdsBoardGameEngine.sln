@@ -69,7 +69,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThunderbirdsBoardGameEngine
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Catalog", "Catalog", "{250C3DAC-BF06-4CCB-943B-8451083D2D52}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DisasterCard", "DisasterCard", "{1A118D32-1321-4875-A309-50145271272A}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DisasterCards", "DisasterCards", "{1A118D32-1321-4875-A309-50145271272A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DataOnly", "DataOnly", "{618B8C51-10F5-424F-B2B3-324645965CEA}"
 	ProjectSection(SolutionItems) = preProject

@@ -1,12 +1,12 @@
 ﻿namespace ThunderbirdsBoardGameEngine.TestUtils
 {
-    public static class TestDataConstants
+    internal static class TestDataConstants
     {
         public const string TestDataFolder = "TestData";
 
         public const string CatalogFolder = "Catalog";
 
-        public const string DisasterCardFolder = "DisasterCard";
+        public const string DisasterCardFolder = "DisasterCards";
 
         public const string DataOnlyFolder = "DataOnly";
 

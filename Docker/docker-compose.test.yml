@@ -3,9 +3,7 @@
     environment:
       ASPNETCORE_ENVIRONMENT: Docker
       Cors__AllowedOrigins: http://localhost:3000
-      Catalog__DisasterCards__Json__FilePath: /app/TestData/Catalog/DisasterCard/Enveloped/disaster-cards.json
-      Catalog__DisasterCards__Warmup__Enabled: "true"
-      Catalog__DisasterCards__Warmup__Timeout: "00:00:10"
+      Catalog__DisasterCards__Json__FilePath: /app/TestData/Catalog/DisasterCards/Enveloped/disaster-cards.json
     volumes:
       - ../TestData:/app/TestData
     ports:
