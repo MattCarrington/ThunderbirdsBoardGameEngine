@@ -19,9 +19,6 @@ namespace ThunderbirdsBoardGameEngine.UI.IntegrationTests.Pages
     {
         private readonly WireMockHost _host;
 
-        private readonly IReadOnlyList<DisasterCardDto> _cards = 
-            TestDataLoader.LoadJsonFromFile<IReadOnlyList<DisasterCardDto>>(DisasterCardTestFileCatalog.DataOnly("disaster-card-dto-data.json"));
-
         public DisasterCardsTests(WireMockFixture fixture)
         {
             _host = fixture.Host;
@@ -41,10 +38,12 @@ namespace ThunderbirdsBoardGameEngine.UI.IntegrationTests.Pages
         }
 
         [Fact]
-        public void Render_WhenCardsExist_CardsExist()
+        public async Task Render_WhenCardsExist_CardsExist()
         {
-            // Arrange      
-            _host.DisasterCardStub.RegisterGetAllSuccess(_cards);
+            // Arrange
+            var cards = await GetCardDtosAsync();
+
+            _host.DisasterCardStub.RegisterGetAllSuccess(cards);
 
             // Act
             var cut = RenderComponent<DisasterCards>();
@@ -58,7 +57,7 @@ namespace ThunderbirdsBoardGameEngine.UI.IntegrationTests.Pages
                 .Select(o => o.TextContent.Trim())
                 .ToList();
 
-            Assert.Equal(_cards.Count + 1, result.Count);
+            Assert.Equal(cards.Count + 1, result.Count);
         }
 
         [Fact]
@@ -95,6 +94,11 @@ namespace ThunderbirdsBoardGameEngine.UI.IntegrationTests.Pages
                 Assert.Empty(cut.FindAll("#disasterSelect"));
                 Assert.DoesNotContain("Disaster Card Details", cut.Markup);
             }, timeout: TimeSpan.FromSeconds(5));
+        }
+
+        private async Task<IReadOnlyList<DisasterCardDto>> GetCardDtosAsync()
+        {
+            return await TestDataLoader.LoadJsonFromFileAsync<IReadOnlyList<DisasterCardDto>>(DisasterCardTestFileCatalog.DataOnly("disaster-card-dto-data.json"));
         }
     }
 }

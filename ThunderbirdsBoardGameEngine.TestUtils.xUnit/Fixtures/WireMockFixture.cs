@@ -8,7 +8,7 @@ namespace ThunderbirdsBoardGameEngine.TestUtils.xUnit.Fixtures
     /// </summary>
     public class WireMockFixture : IAsyncLifetime
     {
-        // <summary>
+        /// <summary>
         /// Gets the initialised WireMock host for use in integration tests.
         /// </summary>
         public WireMockHost Host { get; private set; } = null!;

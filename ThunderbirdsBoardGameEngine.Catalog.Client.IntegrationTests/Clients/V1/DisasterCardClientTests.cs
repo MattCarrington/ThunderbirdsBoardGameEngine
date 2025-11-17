@@ -37,7 +37,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Client.IntegrationTests.Clients.V1
             Assert.NotEmpty(result.Data);
             Assert.Null(result.ErrorMessage);
 
-            var expected = TestDataLoader.LoadJsonFromFile<List<DisasterCardDto>>(DisasterCardTestFileCatalog.DataOnly("disaster-card-dtos.json"))
+            var expected = await TestDataLoader.LoadJsonFromFileAsync<List<DisasterCardDto>>(DisasterCardTestFileCatalog.DataOnly("disaster-card-dtos.json"))
                 ?? throw new InvalidOperationException("Failed to load expected data");
 
             DisasterCardDtoAssertions.AssertOrderInsensitive(expected, result.Data.ToList());

@@ -21,9 +21,6 @@ namespace ThunderbirdsBoardGameEngine.Catalog.WireMock.ComponentTests
 
         private static readonly JsonSerializerOptions JsonOptions = new(JsonSerializerDefaults.Web);
 
-        private readonly List<DisasterCardDto> _cards = 
-            TestDataLoader.LoadJsonFromFile<List<DisasterCardDto>>(DisasterCardTestFileCatalog.DataOnly("disaster-card-dto-data.json"));
-
         private const string _json = "application/json";
 
         public DisasterCardStubTests(WireMockFixture fixture)
@@ -53,7 +50,9 @@ namespace ThunderbirdsBoardGameEngine.Catalog.WireMock.ComponentTests
         public async Task GetAllAsync_WhenRegistered_ReturnsSuccessAsync()
         {
             // Arrange
-            _stub.RegisterGetAllSuccess(_cards);
+            var cards = await GetCardDtosAsync();
+
+            _stub.RegisterGetAllSuccess(cards);
 
             // Act
             var response = await _client.GetAsync(DisasterCardStub.Route);
@@ -65,7 +64,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.WireMock.ComponentTests
             var result = await response.Content.ReadFromJsonAsync<IReadOnlyList<DisasterCardDto>>(JsonOptions);
 
             Assert.NotNull(result);
-            DisasterCardDtoAssertions.AssertOrderInsensitive(_cards.ToList(), result.ToList());
+            DisasterCardDtoAssertions.AssertOrderInsensitive(cards.ToList(), result.ToList());
         }
 
         [Fact]
@@ -142,9 +141,11 @@ namespace ThunderbirdsBoardGameEngine.Catalog.WireMock.ComponentTests
         public async Task GetAllAsync_WhenNoVersionHeader_ReturnsBadRequestAsync()
         {
             // Arrange
+            var cards = await GetCardDtosAsync();
+
             var clientWithoutHeader = CreateClient(withVersionHeader: false);
 
-            _stub.RegisterGetAllSuccess(_cards); // should not be called
+            _stub.RegisterGetAllSuccess(cards); // should not be called
 
             // Act
             var response = await clientWithoutHeader.GetAsync(DisasterCardStub.Route);
@@ -162,9 +163,11 @@ namespace ThunderbirdsBoardGameEngine.Catalog.WireMock.ComponentTests
         public async Task GetAllAsync_WhenWrongVersionHeader_ReturnsBadRequestAsync()
         {
             // Arrange
+            var cards = await GetCardDtosAsync();
+
             var clientWithoutHeader = CreateClient(versionHeader: "2.0");
 
-            _stub.RegisterGetAllSuccess(_cards); // should not be called
+            _stub.RegisterGetAllSuccess(cards); // should not be called
 
             // Act
             var response = await clientWithoutHeader.GetAsync(DisasterCardStub.Route);
@@ -187,6 +190,11 @@ namespace ThunderbirdsBoardGameEngine.Catalog.WireMock.ComponentTests
             }
 
             return client;
+        }
+
+        private async Task<IReadOnlyList<DisasterCardDto>> GetCardDtosAsync()
+        {
+            return await TestDataLoader.LoadJsonFromFileAsync<IReadOnlyList<DisasterCardDto>>(DisasterCardTestFileCatalog.DataOnly("disaster-card-dto-data.json"));
         }
     }
 }

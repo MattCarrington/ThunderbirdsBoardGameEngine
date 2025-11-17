@@ -15,9 +15,6 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Client.ComponentTests.V1
     [Collection("WireMock")]
     public class DisasterCardClientTests : IAsyncLifetime
     {
-        private readonly IReadOnlyList<DisasterCardDto> _cards =
-            TestDataLoader.LoadJsonFromFile<IReadOnlyList<DisasterCardDto>>(DisasterCardTestFileCatalog.DataOnly("disaster-card-dto-data.json"));
-
         private readonly WireMockHost _host;
         private readonly IDisasterCardsClient _client;
         private readonly ServiceProvider _sp;
@@ -47,7 +44,9 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Client.ComponentTests.V1
         public async Task GetAllAsync_WhenCalled_CallsCorrectRouteOnce()
         {
             // Arrange
-            _host.DisasterCardStub.RegisterGetAllSuccess(_cards);
+            var cards = await GetExpectedCardDtosAsync();
+
+            _host.DisasterCardStub.RegisterGetAllSuccess(cards);
 
             // Act
             _ = await _client.GetAllAsync();
@@ -63,7 +62,9 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Client.ComponentTests.V1
         public async Task GetAllAsync_WhenValidJson_ReturnsSuccessApiResult()
         {
             // Arrange
-            _host.DisasterCardStub.RegisterGetAllSuccess(_cards);
+            var cards = await GetExpectedCardDtosAsync();
+
+            _host.DisasterCardStub.RegisterGetAllSuccess(cards);
 
             // Act
             var response = await _client.GetAllAsync();
@@ -72,9 +73,9 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Client.ComponentTests.V1
             Assert.True(response.Success);
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
             Assert.NotNull(response.Data);
-            Assert.Equal(_cards.Count, response.Data.Count);
+            Assert.Equal(cards.Count, response.Data.Count);
             Assert.Null(response.ErrorMessage);
-            DisasterCardDtoAssertions.AssertOrderSensitive(_cards.ToList(), response.Data.ToList());
+            DisasterCardDtoAssertions.AssertOrderSensitive(cards.ToList(), response.Data.ToList());
         }
 
         [Fact]
@@ -130,7 +131,9 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Client.ComponentTests.V1
         public async Task GetAllAsync_WhenConcurrentRequests_ReturnsSuccessApiResultsAsync()
         {
             // Arrange
-            _host.DisasterCardStub.RegisterGetAllSuccess(_cards);
+            var cards = await GetExpectedCardDtosAsync();
+
+            _host.DisasterCardStub.RegisterGetAllSuccess(cards);
 
             var tasks = Enumerable.Range(0, 20)
                 .Select(_ => _client.GetAllAsync())
@@ -146,12 +149,17 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Client.ComponentTests.V1
                 Assert.True(response.Success);
                 Assert.Equal(HttpStatusCode.OK, response.StatusCode);
                 Assert.NotNull(response.Data);
-                Assert.Equal(_cards.Count, response.Data.Count);
+                Assert.Equal(cards.Count, response.Data.Count);
                 Assert.Null(response.ErrorMessage);
-                DisasterCardDtoAssertions.AssertOrderSensitive(_cards.ToList(), response.Data.ToList());
+                DisasterCardDtoAssertions.AssertOrderSensitive(cards.ToList(), response.Data.ToList());
             }
             var hits = _host.DisasterCardStub.GetAllRequestPaths();
             Assert.Equal(20, hits.Count());
+        }
+
+        private static async Task<IReadOnlyList<DisasterCardDto>> GetExpectedCardDtosAsync()
+        {
+            return await TestDataLoader.LoadJsonFromFileAsync<IReadOnlyList<DisasterCardDto>>(DisasterCardTestFileCatalog.DataOnly("disaster-card-dto-data.json"));
         }
     }
 }

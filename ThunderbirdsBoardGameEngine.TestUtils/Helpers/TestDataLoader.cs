@@ -6,9 +6,10 @@ namespace ThunderbirdsBoardGameEngine.TestUtils.Helpers
     {
         private static readonly JsonSerializerOptions _jsonOptions = new() { PropertyNameCaseInsensitive = true };
 
-        public static T LoadJsonFromFile<T>(string fileName)
+        public static async Task<T> LoadJsonFromFileAsync<T>(string fileName)
         {
-            var json = File.ReadAllText(fileName);
+            var json = await File.ReadAllTextAsync(fileName);
+
             return JsonSerializer.Deserialize<T>(json, _jsonOptions)
                    ?? throw new InvalidOperationException("Failed to deserialize JSON file: " + fileName);
         }
