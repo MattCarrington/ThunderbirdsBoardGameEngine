@@ -4,7 +4,7 @@ using ThunderbirdsBoardGameEngine.Catalog.Client.Interfaces.V1;
 using ThunderbirdsBoardGameEngine.Catalog.Contracts.Dtos.V1;
 using ThunderbirdsBoardGameEngine.Catalog.WireMock;
 using ThunderbirdsBoardGameEngine.TestUtils.Catalog.Factories;
-using ThunderbirdsBoardGameEngine.TestUtils.Catalog.Helpers;
+using ThunderbirdsBoardGameEngine.TestUtils.Catalog.TestFileCatalogs;
 using ThunderbirdsBoardGameEngine.TestUtils.Helpers;
 using ThunderbirdsBoardGameEngine.TestUtils.xUnit.Assertions;
 using ThunderbirdsBoardGameEngine.TestUtils.xUnit.Fixtures;
@@ -16,7 +16,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Client.ComponentTests.V1
     public class DisasterCardClientTests : IAsyncLifetime
     {
         private readonly IReadOnlyList<DisasterCardDto> _cards =
-            TestDataLoader.LoadJsonFromFile<IReadOnlyList<DisasterCardDto>>(CatalogData.HttpRequest("disaster-card-dto-data", 1));
+            TestDataLoader.LoadJsonFromFile<IReadOnlyList<DisasterCardDto>>(DisasterCardTestFileCatalog.DataOnly("disaster-card-dto-data.json"));
 
         private readonly WireMockHost _host;
         private readonly IDisasterCardsClient _client;

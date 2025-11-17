@@ -4,6 +4,7 @@ using ThunderbirdsBoardGameEngine.Catalog.Application.Interfaces;
 using ThunderbirdsBoardGameEngine.Catalog.Domain.Exceptions;
 using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.ComponentTests.Fixtures;
 using ThunderbirdsBoardGameEngine.TestUtils.Catalog.Helpers;
+using ThunderbirdsBoardGameEngine.TestUtils.Catalog.TestFileCatalogs;
 using ThunderbirdsBoardGameEngine.TestUtils.Helpers;
 using Xunit;
 
@@ -43,7 +44,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.ComponentTests.Repo
         public async Task GetAllAsync_WithInvalidFiles_ThrowsCatalogDataAccessException(string filename, CatalogDataAccessErrorCode expectedErrorCode)
         {
             // Arrange
-            var filePath = TestDataPathHelper.GetPath(CatalogData.FileInput(filename)); // non-empty valid JSON
+            var filePath = TestDataPathHelper.GetPath(DisasterCardTestFileCatalog.Invalid(filename)); // non-empty valid JSON
 
             using var provider = _fixture.Build(ConfigKey, filePath);
             
@@ -96,9 +97,11 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.ComponentTests.Repo
         public async Task GetAllAsync_WithInvalidDisasterCards_ThrowsDisasterCardValidationException()
         {
             // Arrange
-            var filepath = EnvelopArray("invalid-disaster-cards.json"); // syntactically invalid
+            //var filepath = EnvelopArray("invalid-disaster-cards.json"); // syntactically invalid
+            var bare = TestDataPathHelper.GetPath(DisasterCardTestFileCatalog.Invalid("invalid-disaster-cards.json"));
+            var enveloped = TestJsonEnvelopeCreator.EnvelopArrayFile(bare);
 
-            using var provider = _fixture.Build(ConfigKey, filepath);
+            using var provider = _fixture.Build(ConfigKey, enveloped);
             
             var reader = provider.GetRequiredService<IDisasterCardReader>();
 
@@ -107,19 +110,33 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.ComponentTests.Repo
             Assert.Contains("A disaster card with the Name 'Asteroid Impact' already exists. (ID: 2)", exception.Message);
         }
 
+        [Fact]
+        public async Task GetAllAsync_WithDataWithoutEnvelope_ThrowsCatalogDataAccessException()
+        {
+            // Arrange
+            var bareFilePath = TestDataPathHelper.GetPath(DisasterCardTestFileCatalog.DataOnly("disaster-cards-test.json"));    // Don't add the envelope
+
+            using var provider = _fixture.Build(ConfigKey, bareFilePath);
+            
+            var reader = provider.GetRequiredService<IDisasterCardReader>();
+            
+            // Act & Assert
+            var exception = await Assert.ThrowsAsync<CatalogDataAccessException>(() => reader.GetAllAsync(CancellationToken.None));
+            Assert.Equal(CatalogDataAccessErrorCode.BadJson, exception.ErrorCode);
+        }
+
         public static TheoryData<string, CatalogDataAccessErrorCode> InvalidFileCases()
         {
             return new TheoryData<string, CatalogDataAccessErrorCode>
             {
                 { "invalid-json.json", CatalogDataAccessErrorCode.BadJson },
-                { "empty.json", CatalogDataAccessErrorCode.DataMissing },
-                { "disaster-cards-test.json", CatalogDataAccessErrorCode.BadJson },  // Don't add the envelope
+                { "empty.json", CatalogDataAccessErrorCode.DataMissing } 
             };
         }
 
         private static string EnvelopArray(string filepath)
         {
-            var bareFilePath = TestDataPathHelper.GetPath(CatalogData.FileInput(filepath)); 
+            var bareFilePath = TestDataPathHelper.GetPath(DisasterCardTestFileCatalog.DataOnly(filepath)); 
             return TestJsonEnvelopeCreator.EnvelopArrayFile(bareFilePath);
         }
     }

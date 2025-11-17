@@ -3,7 +3,7 @@ using System.Net.Http.Json;
 using System.Text.Json;
 using ThunderbirdsBoardGameEngine.Catalog.Contracts.Dtos.V1;
 using ThunderbirdsBoardGameEngine.Catalog.WireMock.Stubs.V1;
-using ThunderbirdsBoardGameEngine.TestUtils.Catalog.Helpers;
+using ThunderbirdsBoardGameEngine.TestUtils.Catalog.TestFileCatalogs;
 using ThunderbirdsBoardGameEngine.TestUtils.Helpers;
 using ThunderbirdsBoardGameEngine.TestUtils.xUnit.Assertions;
 using ThunderbirdsBoardGameEngine.TestUtils.xUnit.Fixtures;
@@ -22,7 +22,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.WireMock.ComponentTests
         private static readonly JsonSerializerOptions JsonOptions = new(JsonSerializerDefaults.Web);
 
         private readonly List<DisasterCardDto> _cards = 
-            TestDataLoader.LoadJsonFromFile<List<DisasterCardDto>>(CatalogData.HttpRequest("disaster-card-dto-data", 1));
+            TestDataLoader.LoadJsonFromFile<List<DisasterCardDto>>(DisasterCardTestFileCatalog.DataOnly("disaster-card-dto-data.json"));
 
         private const string _json = "application/json";
 

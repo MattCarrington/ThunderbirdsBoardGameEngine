@@ -6,12 +6,12 @@
 
         public const string CatalogFolder = "Catalog";
 
-        public const string InputFolder = "Input";
+        public const string DisasterCardFolder = "DisasterCard";
 
-        public const string ExpectedFolder = "Expected";
+        public const string DataOnlyFolder = "DataOnly";
 
-        public const string FileFolder = "File";
+        public const string EnvelopedFolder = "Enveloped";
 
-        public const string HttpFolder = "Http";
+        public const string InvalidFolder = "Invalid";
     }
 }
