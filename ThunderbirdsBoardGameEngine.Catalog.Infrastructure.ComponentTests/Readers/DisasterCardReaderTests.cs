@@ -44,7 +44,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.ComponentTests.Repo
         public async Task GetAllAsync_WithInvalidFiles_ThrowsCatalogDataAccessException(string filename, CatalogDataAccessErrorCode expectedErrorCode)
         {
             // Arrange
-            var filePath = TestDataPathHelper.GetPath(DisasterCardTestFileCatalog.Invalid(filename)); // non-empty valid JSON
+            var filePath = DisasterCardTestFileCatalog.Invalid(filename); // non-empty valid JSON
 
             using var provider = _fixture.Build(ConfigKey, filePath);
             
@@ -98,7 +98,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.ComponentTests.Repo
         {
             // Arrange
             //var filepath = EnvelopArray("invalid-disaster-cards.json"); // syntactically invalid
-            var bare = TestDataPathHelper.GetPath(DisasterCardTestFileCatalog.Invalid("invalid-disaster-cards.json"));
+            var bare = DisasterCardTestFileCatalog.Invalid("invalid-disaster-cards.json");
             var enveloped = TestJsonEnvelopeCreator.EnvelopArrayFile(bare);
 
             using var provider = _fixture.Build(ConfigKey, enveloped);
@@ -114,7 +114,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.ComponentTests.Repo
         public async Task GetAllAsync_WithDataWithoutEnvelope_ThrowsCatalogDataAccessException()
         {
             // Arrange
-            var bareFilePath = TestDataPathHelper.GetPath(DisasterCardTestFileCatalog.DataOnly("disaster-cards-test.json"));    // Don't add the envelope
+            var bareFilePath = DisasterCardTestFileCatalog.DataOnly("disaster-cards-test.json");    // Don't add the envelope
 
             using var provider = _fixture.Build(ConfigKey, bareFilePath);
             
@@ -136,7 +136,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.ComponentTests.Repo
 
         private static string EnvelopArray(string filepath)
         {
-            var bareFilePath = TestDataPathHelper.GetPath(DisasterCardTestFileCatalog.DataOnly(filepath)); 
+            var bareFilePath = DisasterCardTestFileCatalog.DataOnly(filepath); 
             return TestJsonEnvelopeCreator.EnvelopArrayFile(bareFilePath);
         }
     }

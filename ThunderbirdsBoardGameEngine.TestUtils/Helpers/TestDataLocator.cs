@@ -20,22 +20,6 @@
             return fullPath;
         }
 
-        /// <summary>
-        /// Legacy: your existing GetPath-style API, so current code still works.
-        /// Assumes the caller passes a path relative to the solution root.
-        /// </summary>
-        public static string FromSolutionRelativePath(string relativePath)
-        {
-            var fullPath = Path.Combine(SolutionRoot.Value, relativePath);
-
-            if (!File.Exists(fullPath))
-            {
-                throw new FileNotFoundException($"Expected test data not found at: {fullPath}", fullPath);
-            }
-
-            return fullPath;
-        }
-
         private static readonly Lazy<string> SolutionRoot = new(() =>
         {
             var dir = AppContext.BaseDirectory;

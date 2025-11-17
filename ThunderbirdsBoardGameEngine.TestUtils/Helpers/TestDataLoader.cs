@@ -8,9 +8,7 @@ namespace ThunderbirdsBoardGameEngine.TestUtils.Helpers
 
         public static T LoadJsonFromFile<T>(string fileName)
         {
-            var fullPath = TestDataPathHelper.GetPath(fileName);
-
-            var json = File.ReadAllText(fullPath);
+            var json = File.ReadAllText(fileName);
             return JsonSerializer.Deserialize<T>(json, _jsonOptions)
                    ?? throw new InvalidOperationException("Failed to deserialize JSON file: " + fileName);
         }
