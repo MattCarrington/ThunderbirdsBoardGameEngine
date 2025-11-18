@@ -13,11 +13,10 @@ using Xunit;
 namespace ThunderbirdsBoardGameEngine.Catalog.WireMock.ComponentTests
 {
     [Collection("WireMock")]
-    public class DisasterCardStubTests : IAsyncLifetime
+    public class DisasterCardStubTests
     {
         private readonly WireMockServer _server;
         private readonly DisasterCardStub _stub;
-        private readonly HttpClient _client;
 
         private static readonly JsonSerializerOptions JsonOptions = new(JsonSerializerDefaults.Web);
 
@@ -29,21 +28,8 @@ namespace ThunderbirdsBoardGameEngine.Catalog.WireMock.ComponentTests
             _server.Reset();
 
             _stub = fixture.Host.DisasterCardStub;
-            _stub.RegisterMissingHeaderGuard();
+            _stub.RegisterMissingHeaderGuard();           
             _stub.RegisterIncorrectHeaderGuard();
-
-            _client = CreateClient(withVersionHeader: true);
-        }
-
-        public Task InitializeAsync()
-        {
-            return Task.CompletedTask;
-        }
-
-        public async Task DisposeAsync()
-        {
-            _client.Dispose();
-            await Task.CompletedTask;
         }
 
         [Fact]
@@ -54,8 +40,10 @@ namespace ThunderbirdsBoardGameEngine.Catalog.WireMock.ComponentTests
 
             _stub.RegisterGetAllSuccess(cards);
 
+            using var client = CreateClient();
+
             // Act
-            var response = await _client.GetAsync(DisasterCardStub.Route);
+            using var response = await client.GetAsync(DisasterCardStub.Route);
 
             // Assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
@@ -73,26 +61,10 @@ namespace ThunderbirdsBoardGameEngine.Catalog.WireMock.ComponentTests
             // Arrange
             _stub.RegisterGetAllEmpty();
 
-            // Act
-            var response = await _client.GetAsync(DisasterCardStub.Route);
-
-            // Assert
-            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-            Assert.Equal(_json, response.Content.Headers.ContentType!.MediaType);
-
-            var result = await response.Content.ReadFromJsonAsync<IReadOnlyList<DisasterCardDto>>(JsonOptions);
-
-            Assert.NotNull(result);
-        }
-
-        [Fact]
-        public async Task GetAllAsync_WhenRegisteredMalformed_ReturnsSuccessAsync()
-        {
-            // Arrange
-            _stub.RegisterGetAllEmpty();
+            using var client = CreateClient();
 
             // Act
-            var response = await _client.GetAsync(DisasterCardStub.Route);
+            using var response = await client.GetAsync(DisasterCardStub.Route);
 
             // Assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
@@ -109,8 +81,10 @@ namespace ThunderbirdsBoardGameEngine.Catalog.WireMock.ComponentTests
             // Arrange
             _stub.RegisterGetAllError();
 
+            using var client = CreateClient();
+
             // Act
-            var response = await _client.GetAsync(DisasterCardStub.Route);
+            using var response = await client.GetAsync(DisasterCardStub.Route);
 
             // Assert
             Assert.Equal(HttpStatusCode.InternalServerError, response.StatusCode);
@@ -127,8 +101,10 @@ namespace ThunderbirdsBoardGameEngine.Catalog.WireMock.ComponentTests
 
             _stub.RegisterGetAllError(HttpStatusCode.ServiceUnavailable, errorMessage);
 
+            using var client = CreateClient();
+
             // Act
-            var response = await _client.GetAsync(DisasterCardStub.Route);
+            using var response = await client.GetAsync(DisasterCardStub.Route);
 
             // Assert
             Assert.Equal(HttpStatusCode.ServiceUnavailable, response.StatusCode);
@@ -143,12 +119,12 @@ namespace ThunderbirdsBoardGameEngine.Catalog.WireMock.ComponentTests
             // Arrange
             var cards = await GetCardDtosAsync();
 
-            var clientWithoutHeader = CreateClient(withVersionHeader: false);
+            using var client = new HttpClient { BaseAddress = new Uri(_server.Urls[0]) };
 
             _stub.RegisterGetAllSuccess(cards); // should not be called
 
             // Act
-            var response = await clientWithoutHeader.GetAsync(DisasterCardStub.Route);
+            using var response = await client.GetAsync(DisasterCardStub.Route);
 
             // Assert
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
@@ -156,7 +132,6 @@ namespace ThunderbirdsBoardGameEngine.Catalog.WireMock.ComponentTests
             var result = await response.Content.ReadAsStringAsync();
 
             Assert.Contains($"Missing header 'X-Api-Version'", result);
-            clientWithoutHeader.Dispose();
         }
 
         [Fact]
@@ -165,12 +140,12 @@ namespace ThunderbirdsBoardGameEngine.Catalog.WireMock.ComponentTests
             // Arrange
             var cards = await GetCardDtosAsync();
 
-            var clientWithoutHeader = CreateClient(versionHeader: "2.0");
-
             _stub.RegisterGetAllSuccess(cards); // should not be called
 
+            using var client = CreateClient("2.0");
+
             // Act
-            var response = await clientWithoutHeader.GetAsync(DisasterCardStub.Route);
+            using var response = await client.GetAsync(DisasterCardStub.Route);
 
             // Assert
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
@@ -178,21 +153,22 @@ namespace ThunderbirdsBoardGameEngine.Catalog.WireMock.ComponentTests
             var result = await response.Content.ReadAsStringAsync();
 
             Assert.Contains("Unsupported version in header 'X-Api-Version'. Expected '1.0'.", result);
-            clientWithoutHeader.Dispose();
         }
-        private HttpClient CreateClient(bool withVersionHeader = true, string? versionHeader = DisasterCardStub.VersionValue)
+
+        private HttpClient CreateClient(string versionHeader)
         {
             var client = new HttpClient { BaseAddress = new Uri(_server.Urls[0]) };
-
-            if (withVersionHeader)
-            {
-                client.DefaultRequestHeaders.Add(DisasterCardStub.VersionHeader, versionHeader);
-            }
+            client.DefaultRequestHeaders.Add(DisasterCardStub.VersionHeader, versionHeader);
 
             return client;
         }
 
-        private async Task<IReadOnlyList<DisasterCardDto>> GetCardDtosAsync()
+        private HttpClient CreateClient()
+        {
+            return CreateClient(DisasterCardStub.VersionValue);
+        }
+
+        private static async Task<IReadOnlyList<DisasterCardDto>> GetCardDtosAsync()
         {
             return await TestDataLoader.LoadJsonFromFileAsync<IReadOnlyList<DisasterCardDto>>(DisasterCardTestFileCatalog.DataOnly("disaster-card-dto-data.json"));
         }
