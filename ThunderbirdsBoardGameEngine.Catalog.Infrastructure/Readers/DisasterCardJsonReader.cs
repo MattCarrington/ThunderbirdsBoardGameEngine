@@ -132,7 +132,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Readers
             catch (Exception ex) when (
                 ex is not OutOfMemoryException &&
                 ex is not AccessViolationException &&
-                ex is not StackOverflowException)   /// Added for clarity even though can't be caught anyway
+                ex is not StackOverflowException)   // Added for clarity even though can't be caught anyway
             {
                 throw CatalogDataAccessException.Unknown(_filePath, ex);
             }

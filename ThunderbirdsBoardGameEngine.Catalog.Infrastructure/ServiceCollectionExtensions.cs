@@ -18,8 +18,47 @@ using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Validators;
 
 namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure
 {
+    /// <summary>
+    /// Extension methods for registering catalog infrastructure services.
+    /// </summary>
     public static class ServiceCollectionExtensions
     {
+        /// <summary>
+        /// Registers the catalog infrastructure services required to load and validate
+        /// disaster card data from JSON into an in-memory catalog.
+        /// </summary>
+        /// <param name="services">The service collection to add services to.</param>
+        /// <param name="configuration">
+        /// The application configuration, used to bind
+        /// <see cref="DisasterCardJsonOptions"/> and JSON serialization options.
+        /// </param>
+        /// <returns>The same <see cref="IServiceCollection"/> instance, for chaining.</returns>
+        /// <remarks>
+        /// This method configures:
+        /// <list type="bullet">
+        ///   <item>
+        ///     <description>
+        ///       <see cref="DisasterCardJsonOptions"/> bound from <c>Catalog:DisasterCards:Json</c>
+        ///       and validated on startup.
+        ///     </description>
+        ///   </item>
+        ///   <item>
+        ///     <description>
+        ///       File system abstractions and JSON readers/deserializers for disaster cards.
+        ///     </description>
+        ///   </item>
+        ///   <item>
+        ///     <description>
+        ///       An <see cref="IDisasterCardCatalog"/> that is initialized eagerly at startup.
+        ///     </description>
+        ///   </item>
+        ///   <item>
+        ///     <description>
+        ///       A named <see cref="JsonSerializerOptions"/> instance for catalog serialization.
+        ///     </description>
+        ///   </item>
+        /// </list>
+        /// </remarks>
         public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddSingleton<IFileOpener, FileOpener>();
