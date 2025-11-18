@@ -33,11 +33,11 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints.V1
         public async Task GetAllDisasterCards_WhenValidApiVersionHeader_ReturnsExpectedDataset() 
         {
             // Arrange
-            var request = new HttpRequestMessage(HttpMethod.Get, Route);
+            using var request = new HttpRequestMessage(HttpMethod.Get, Route);
             request.Headers.Add("X-API-Version", ApiVersion.ToString());
 
             // Act
-            var response = await _client.SendAsync(request);
+            using var response = await _client.SendAsync(request);
 
             // Assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
@@ -59,10 +59,10 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints.V1
         public async Task GetDisasterCards_MissingApiVersionHeader_ReturnsBadRequest()
         {
             // Arrange
-            var request = new HttpRequestMessage(HttpMethod.Get, Route);
+            using var request = new HttpRequestMessage(HttpMethod.Get, Route);
 
             // Act
-            var response = await _client.SendAsync(request);
+            using var response = await _client.SendAsync(request);
 
             // Assert
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
@@ -81,11 +81,11 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints.V1
         public async Task GetDisasterCards_InvalidApiVersionHeader_ReturnsBadRequest()
         { 
             // Arrange
-            var request = new HttpRequestMessage(HttpMethod.Get, Route);
+            using var request = new HttpRequestMessage(HttpMethod.Get, Route);
             request.Headers.Add("X-API-Version", "99999");
 
             // Act
-            var response = await _client.SendAsync(request);
+            using var response = await _client.SendAsync(request);
 
             // Assert
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
@@ -105,12 +105,12 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints.V1
         public async Task GetDisasterCards_MultipleApiVersionHeaders_ReturnsBadRequest()
         {
             // Arrange
-            var request = new HttpRequestMessage(HttpMethod.Get, Route);
+            using var request = new HttpRequestMessage(HttpMethod.Get, Route);
             request.Headers.Add("X-API-Version", ApiVersion.ToString());
             request.Headers.Add("X-API-Version", (ApiVersion + 1).ToString());
 
             // Act
-            var response = await _client.SendAsync(request);
+            using var response = await _client.SendAsync(request);
 
             // Assert
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);

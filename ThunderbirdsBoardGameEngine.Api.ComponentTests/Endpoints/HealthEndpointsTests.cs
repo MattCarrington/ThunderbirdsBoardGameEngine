@@ -18,10 +18,10 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints
         public async Task GetLiveness_WhenCalled_ReturnsOk()
         {
             // Arrange
-            var request = new HttpRequestMessage(HttpMethod.Get, "/health/live");
+            using var request = new HttpRequestMessage(HttpMethod.Get, "/health/live");
 
             // Act
-            var response = await _client.SendAsync(request);
+            using var response = await _client.SendAsync(request);
 
             // Assert
             Assert.True(response.IsSuccessStatusCode); // Status Code 200-299
@@ -31,10 +31,10 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints
         public async Task GetReadiness_WhenCalled_ReturnsOk()
         {
             // Arrange
-            var request = new HttpRequestMessage(HttpMethod.Get, "/health/ready");
+            using var request = new HttpRequestMessage(HttpMethod.Get, "/health/ready");
 
             // Act
-            var response = await _client.SendAsync(request);
+            using var response = await _client.SendAsync(request);
 
             // Assert
             Assert.True(response.IsSuccessStatusCode); // Status Code 200-299

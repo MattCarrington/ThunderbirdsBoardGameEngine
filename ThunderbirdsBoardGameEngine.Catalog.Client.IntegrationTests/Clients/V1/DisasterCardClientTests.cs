@@ -12,21 +12,15 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Client.IntegrationTests.Clients.V1
 {
     public class DisasterCardClientTests
     {
-        private readonly IDisasterCardsClient _client;
-        
-        public DisasterCardClientTests()
-        {
-            var sp = CatalogClientProviderFactory.Build("http://localhost:8080");
-            _client = sp.GetRequiredService<IDisasterCardsClient>();
-        }
-
         [Fact]
         public async Task GetAllAsync_ReturnsAllDisasterCards()
         {
             // Arrange
+            using var sp = CatalogClientProviderFactory.Build("http://localhost:8080");
+            var client = sp.GetRequiredService<IDisasterCardsClient>();
 
             // Act
-            var result = await _client.GetAllAsync();
+            var result = await client.GetAllAsync();
 
             // Assert
             Assert.NotNull(result);

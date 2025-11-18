@@ -26,7 +26,7 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.ExceptionHandlers
         public async Task GetDisasterCards_WhennExceptionThrows_ReturnsProblemDetails(Exception exception, HttpStatusCode expectedStatusCode, string expectedTitle)
         {
             // Arrange
-            var throwingFactory = _factory.WithWebHostBuilder(builder =>
+            using var throwingFactory = _factory.WithWebHostBuilder(builder =>
             {
                 builder.ConfigureServices(services =>
                 {
@@ -35,13 +35,13 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.ExceptionHandlers
                 });
             });
 
-            var client = throwingFactory.CreateClient();
+            using var client = throwingFactory.CreateClient();
 
-            var request = new HttpRequestMessage(HttpMethod.Get, "/api/disaster-cards");
+            using var request = new HttpRequestMessage(HttpMethod.Get, "/api/disaster-cards");
             request.Headers.Add("X-API-Version", "1");
 
             // Act
-            var response = await client.SendAsync(request);
+            using var response = await client.SendAsync(request);
 
             // Assert
             Assert.Equal(expectedStatusCode, response.StatusCode);

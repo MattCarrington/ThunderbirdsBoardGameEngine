@@ -29,7 +29,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Client.Clients.V1
         /// <inheritdoc />
         public async Task<ApiResult<IReadOnlyList<DisasterCardDto>>> GetAllAsync(CancellationToken cancellationToken = default)
         {
-            var response = await _httpClient.GetAsync(ApiRoutes.DisasterCards, cancellationToken);
+            using var response = await _httpClient.GetAsync(ApiRoutes.DisasterCards, cancellationToken);
             return await HandleResponse<IReadOnlyList<DisasterCardDto>>(response, cancellationToken);
         }
         
