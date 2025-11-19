@@ -6,15 +6,6 @@ namespace ThunderbirdsBoardGameEngine.Api.Composition
     {
         public static IServiceCollection AddApiExceptionHandling(this IServiceCollection services)
         {
-            services.AddProblemDetails(o =>
-            {
-                o.CustomizeProblemDetails = ctx =>
-                {
-                    var traceId = System.Diagnostics.Activity.Current?.Id ?? ctx.HttpContext.TraceIdentifier;
-                    ctx.ProblemDetails.Extensions["traceId"] = traceId;
-                };
-            });
-
             // Order: specific → fallback
             services.AddExceptionHandler<CatalogDataAccessExceptionHandler>();
             services.AddExceptionHandler<ApplicationValidationExceptionHandler>();

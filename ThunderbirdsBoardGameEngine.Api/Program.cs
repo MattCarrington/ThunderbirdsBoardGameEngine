@@ -1,7 +1,4 @@
-using Microsoft.AspNetCore.Diagnostics.HealthChecks;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
-using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.OpenApi.Models;
 using ThunderbirdsBoardGameEngine.Api.Composition;
 using ThunderbirdsBoardGameEngine.Api.Routing;
@@ -27,12 +24,9 @@ namespace ThunderbirdsBoardGameEngine.Api
                 options.SuppressMapClientErrors = false;
             });
 
-            builder.Services.AddHeaderApiVersioning();
-
-            builder.Services.AddHealthChecks();
-
             builder.Services.AddApplication();
             builder.Services.AddInfrastructure(builder.Configuration);
+            builder.Services.AddApiServices(builder.Configuration);
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
@@ -41,25 +35,6 @@ namespace ThunderbirdsBoardGameEngine.Api
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Your API", Version = "v1" });
                 c.OperationFilter<AddApiVersionHeaderParameter>();
             });
-
-            var allowedOrigins = builder.Configuration
-                .GetSection("Cors:AllowedOrigins")
-                .Get<string[]>();
-
-            builder.Services.AddCors(options =>
-            {
-                options.AddPolicy("CorsPolicy", policy =>
-                {
-                    policy.WithOrigins(allowedOrigins)
-                          .AllowAnyHeader()
-                          .AllowAnyMethod();
-                });
-            });
-
-            builder.Services.AddApiExceptionHandling();
-            builder.Services.AddProblemDetails();
-
-            builder.Services.AddCatalogHealthChecks();
 
             var app = builder.Build();
 
@@ -71,28 +46,17 @@ namespace ThunderbirdsBoardGameEngine.Api
             }
 
             app.UseApiExceptionHandling();
-            app.UseApiProblemDetails();
 
             app.UseHttpsRedirection();
 
+            app.UseRouting();
+
+            app.UseApiCors();
+            
             app.UseAuthorization();
 
-            // Apply the CORS policy globally
-            app.UseCors("CorsPolicy");
-
             app.MapControllers();
-
-            // liveness: dependency-free
-            app.MapHealthChecks("/health/live", new HealthCheckOptions
-            {
-                Predicate = _ => false
-            }).AllowAnonymous();
-
-            // readiness: only checks tagged "readiness" (none yet)
-            app.MapHealthChecks("/health/ready", new HealthCheckOptions
-            {
-                Predicate = r => r.Tags.Contains("readiness")
-            }).AllowAnonymous();
+            app.MapApiHealthChecks();
 
             app.Run();
         }
