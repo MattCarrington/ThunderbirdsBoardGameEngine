@@ -22,7 +22,7 @@ namespace ThunderbirdsBoardGameEngine.Api.Controllers.V1
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status503ServiceUnavailable)]
-        public IActionResult Get(CancellationToken _)
+        public IActionResult Get()
         {
             var cards = _service.GetAll();
 

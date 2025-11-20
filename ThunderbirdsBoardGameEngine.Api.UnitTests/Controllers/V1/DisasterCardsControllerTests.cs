@@ -27,14 +27,12 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.UnitTests.Controllers.V1
         public void Get_WhenDisasterCardsExist_ReturnsOk()
         {
             // Arrange
-            var cancellationToken = CancellationToken.None;
-
             var disasterCards = _fixture.CreateMany<DisasterCard>(5).ToImmutableArray();
 
             _service.GetAll().Returns(disasterCards);
 
             // Act
-            var result = _controller.Get(cancellationToken);
+            var result = _controller.Get();
 
             // Assert
             var okResult = Assert.IsType<OkObjectResult>(result);
