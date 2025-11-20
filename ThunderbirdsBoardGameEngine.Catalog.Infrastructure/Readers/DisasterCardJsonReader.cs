@@ -8,6 +8,7 @@ using ThunderbirdsBoardGameEngine.Catalog.Domain.Entities;
 using ThunderbirdsBoardGameEngine.Catalog.Domain.Exceptions;
 using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Configuration;
 using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Interfaces;
+using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Utilities;
 
 namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Readers
 {
@@ -18,8 +19,8 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Readers
         private readonly string _filePath;
         private readonly IFileOpener _fileOpener;
         private readonly IEnvelopeParser _envelopeParser;
-        private readonly IDisasterCardDeserializer _deserializer;
-        private readonly IDisasterCardMapper _mapper;
+        private readonly IDisasterCardDeserializer _disasterCardDeserializer;
+        private readonly IDisasterCardMapper _disasterCardMapper;
         private readonly ILogger<DisasterCardJsonReader> _logger;
 
         public DisasterCardJsonReader(
@@ -39,8 +40,8 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Readers
             _filePath = options.Value.FilePath;
             _fileOpener = fileOpener ?? throw new ArgumentNullException(nameof(fileOpener));
             _envelopeParser = envelopeParser ?? throw new ArgumentNullException(nameof(envelopeParser));
-            _deserializer = deserializer ?? throw new ArgumentNullException(nameof(deserializer));
-            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
+            _disasterCardDeserializer = deserializer ?? throw new ArgumentNullException(nameof(deserializer));
+            _disasterCardMapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
@@ -58,25 +59,18 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Readers
 
                 var payload = await _envelopeParser.ReadEnvelopeAsync(validatedStream, cancellationToken);
 
-                var dtos = _deserializer.Deserialize(payload.RawData);
+                var dtos = _disasterCardDeserializer.Deserialize(payload.RawData);
 
-                if (dtos is null || dtos.Count == 0)
-                {
-                    throw CatalogDataAccessException.DataMissing(_filePath, new InvalidDataException("Deserialized Disaster Card deck is null or empty"));
-                }
+                ValidateDisasterCardCatalogDtos(dtos, payload.Manifest.ItemCount);
 
-                if (dtos.Any(dto => dto is null))
-                {
-                    throw CatalogDataAccessException.DataMissing(_filePath, new InvalidDataException("One or more Disaster Card DTOs are null"));
-                }
+                var cards = dtos.Select(_disasterCardMapper.Map).ToList();
 
-                if (payload.Manifest.ItemCount != dtos.Count)
-                {
-                    throw CatalogDataAccessException.BadJson(_filePath,
-                        new InvalidDataException($"Manifest itemCount {payload.Manifest.ItemCount} != deserialized count {dtos.Count}"));
-                }
+                _logger.LogInformation(
+                    "Successfully loaded Disaster Card catalog. CardCount = {CardCount}, ManifestItemCount = {ManifestItemCount}",
+                    cards.Count,
+                    payload.Manifest.ItemCount);
 
-                return dtos.Select(_mapper.Map).ToList();
+                return cards;
             }
             catch (IOException ex) when (
                 ex is FileNotFoundException ||
@@ -138,6 +132,25 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Readers
             }
         }
 
+        private void ValidateDisasterCardCatalogDtos(IReadOnlyList<Format.Dtos.DisasterCardCatalogDto>? dtos, int itemCount)
+        {
+            if (dtos is null || dtos.Count == 0)
+            {
+                throw CatalogDataAccessException.DataMissing(_filePath, new InvalidDataException("Deserialized Disaster Card deck is null or empty"));
+            }
+
+            if (dtos.Any(dto => dto is null))
+            {
+                throw CatalogDataAccessException.DataMissing(_filePath, new InvalidDataException("One or more Disaster Card DTOs are null"));
+            }
+
+            if (itemCount != dtos.Count)
+            {
+                throw CatalogDataAccessException.BadJson(_filePath,
+                    new InvalidDataException($"Manifest itemCount {itemCount} != deserialized count {dtos.Count}"));
+            }
+        }
+
         private async Task<Stream> ValidateStreamAsync(Stream stream, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
@@ -186,7 +199,6 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Readers
             memoryStream.Position = 0;
 
             return memoryStream;
-
         }
 
         private static async Task<bool> HasNonWhitespaceJsonContentAsync(Stream stream, CancellationToken cancellationToken)
