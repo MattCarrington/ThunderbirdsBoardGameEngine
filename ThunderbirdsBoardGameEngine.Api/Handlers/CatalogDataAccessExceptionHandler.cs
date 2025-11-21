@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Diagnostics;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using ThunderbirdsBoardGameEngine.Api.Error;
 using ThunderbirdsBoardGameEngine.Catalog.Application.Exceptions;
@@ -10,11 +9,16 @@ namespace ThunderbirdsBoardGameEngine.Api.Handlers
     {
         private readonly ProblemDetailsFactory _problemDetailsFactory;
         private readonly IProblemDetailsService _problemDetailsService;
+        private readonly ILogger<CatalogDataAccessExceptionHandler> _logger;
 
-        public CatalogDataAccessExceptionHandler(ProblemDetailsFactory problemDetailsFactory, IProblemDetailsService problemDetailsService)
+        public CatalogDataAccessExceptionHandler(
+            ProblemDetailsFactory problemDetailsFactory,
+            IProblemDetailsService problemDetailsService,
+            ILogger<CatalogDataAccessExceptionHandler> logger)
         {
-            _problemDetailsFactory = problemDetailsFactory;
-            _problemDetailsService = problemDetailsService;
+            _problemDetailsFactory = problemDetailsFactory ?? throw new ArgumentNullException(nameof(problemDetailsFactory));
+            _problemDetailsService = problemDetailsService ?? throw new ArgumentNullException(nameof(problemDetailsService));
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
         public async ValueTask<bool> TryHandleAsync(HttpContext httpContext, Exception exception, CancellationToken cancellationToken)
@@ -55,6 +59,13 @@ namespace ThunderbirdsBoardGameEngine.Api.Handlers
                     httpContext.Response.Headers.TryAdd("Retry-After", "30");
                 }
 
+                _logger.LogError(
+                    catalogDataAccessException,
+                    "Catalog data access error. ErrorCode = {ErrorCode}, Path = {Path}, TraceId = {TraceId}",
+                    catalogDataAccessException.ErrorCode,
+                    catalogDataAccessException.Path,
+                    httpContext.TraceIdentifier);
+
                 var problemDetails = _problemDetailsFactory.CreateProblemDetails(
                     httpContext,
                     status,
@@ -62,7 +73,7 @@ namespace ThunderbirdsBoardGameEngine.Api.Handlers
                     type,
                     detail);
 
-                httpContext.Response.StatusCode = problemDetails.Status.Value;
+                httpContext.Response.StatusCode = problemDetails.Status ?? StatusCodes.Status500InternalServerError;
                 
                 var problemDetailsContext = new ProblemDetailsContext
                 {

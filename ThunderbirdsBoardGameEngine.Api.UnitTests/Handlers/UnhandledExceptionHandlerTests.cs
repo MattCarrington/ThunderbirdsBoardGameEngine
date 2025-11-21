@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging.Abstractions;
 using NSubstitute;
 using ThunderbirdsBoardGameEngine.Api.Error;
 using ThunderbirdsBoardGameEngine.Api.Handlers;
@@ -37,7 +38,9 @@ namespace ThunderbirdsBoardGameEngine.Api.UnitTests.Handlers
         private static UnhandledExceptionHandler CreateHandler(IProblemDetailsService service)
         {
             var factory = new FakeProblemDetailsFactory();
-            return new UnhandledExceptionHandler(factory, service);
+            var logger = NullLogger<UnhandledExceptionHandler>.Instance;
+
+            return new UnhandledExceptionHandler(factory, service, logger);
         }
     }
 }

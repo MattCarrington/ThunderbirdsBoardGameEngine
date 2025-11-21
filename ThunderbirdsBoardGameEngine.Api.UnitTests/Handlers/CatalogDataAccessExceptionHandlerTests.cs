@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging.Abstractions;
 using NSubstitute;
 using ThunderbirdsBoardGameEngine.Api.Error;
 using ThunderbirdsBoardGameEngine.Api.Handlers;
@@ -62,7 +63,9 @@ namespace ThunderbirdsBoardGameEngine.Api.UnitTests.Handlers
         private static CatalogDataAccessExceptionHandler CreateHandler(IProblemDetailsService service)
         {
             var factory = new FakeProblemDetailsFactory();
-            return new CatalogDataAccessExceptionHandler(factory, service);
+            var logger = NullLogger<CatalogDataAccessExceptionHandler>.Instance;
+
+            return new CatalogDataAccessExceptionHandler(factory, service, logger);
         }
 
         public static TheoryData<CatalogDataAccessExceptionHandlerTestCase> GetCatalogDataAccessExceptionMapperTestCases()

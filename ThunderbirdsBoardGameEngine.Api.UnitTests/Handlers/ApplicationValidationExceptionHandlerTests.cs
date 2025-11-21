@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging.Abstractions;
 using NSubstitute;
 using ThunderbirdsBoardGameEngine.Api.Error;
 using ThunderbirdsBoardGameEngine.Api.Handlers;
@@ -67,7 +68,10 @@ namespace ThunderbirdsBoardGameEngine.Api.UnitTests.Handlers
         private static ApplicationValidationExceptionHandler CreateHandler(IProblemDetailsService service)
         {
             var factory = new FakeProblemDetailsFactory();
-            return new ApplicationValidationExceptionHandler(factory, service);
+
+            var logger = NullLogger<ApplicationValidationExceptionHandler>.Instance;
+
+            return new ApplicationValidationExceptionHandler(factory, service, logger);
         }
     }
 }

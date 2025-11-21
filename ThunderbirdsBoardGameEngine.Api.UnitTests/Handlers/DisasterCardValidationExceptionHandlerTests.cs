@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Castle.Core.Logging;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging.Abstractions;
 using NSubstitute;
 using ThunderbirdsBoardGameEngine.Api.Error;
 using ThunderbirdsBoardGameEngine.Api.Handlers;
@@ -29,7 +31,7 @@ namespace ThunderbirdsBoardGameEngine.Api.UnitTests.Handlers
             Assert.Equal(StatusCodes.Status500InternalServerError, status);
             Assert.Equal("application/problem+json; charset=utf-8", contentType);
             Assert.Equal(StatusCodes.Status500InternalServerError, body.Status);
-            Assert.Equal("An unknown disaster card validation error occurred.", body.Title);
+            Assert.Equal("Disaster catalog configuration error", body.Title);
             Assert.Equal(ProblemTypes.Validation, body.Type);
 
             await service.Received(1).WriteAsync(Arg.Any<ProblemDetailsContext>());
@@ -60,7 +62,9 @@ namespace ThunderbirdsBoardGameEngine.Api.UnitTests.Handlers
         private static DisasterCardValidationExceptionHandler CreateHandler(IProblemDetailsService problemDetailsService)
         {
             var factory = new FakeProblemDetailsFactory();
-            return new DisasterCardValidationExceptionHandler(factory, problemDetailsService);
+            var logger = NullLogger<DisasterCardValidationExceptionHandler>.Instance;
+
+            return new DisasterCardValidationExceptionHandler(factory, problemDetailsService, logger);
         }
     }
 }
