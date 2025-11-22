@@ -19,7 +19,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Client.Internal.Configuration
             }
 
             if (!Uri.TryCreate(options.BaseAddress, UriKind.Absolute, out var uri) ||
-                (uri.Scheme != Uri.UriSchemeHttp && uri.Scheme != Uri.UriSchemeHttps))
+                (uri.Scheme != Uri.UriSchemeHttp && uri.Scheme != Uri.UriSchemeHttps))  // Tighten to https-only in production once deployment story is in place.
             {
                 return ValidateOptionsResult.Fail("BaseAddress must be a valid absolute http(s) URI.");
             }

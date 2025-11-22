@@ -45,6 +45,11 @@ namespace ThunderbirdsBoardGameEngine.Api
                 app.UseSwaggerUI();
             }
 
+            if (!app.Environment.IsDevelopment())
+            {
+                app.UseHsts();
+            }
+
             app.UseApiExceptionHandling();
 
             app.UseHttpsRedirection();
