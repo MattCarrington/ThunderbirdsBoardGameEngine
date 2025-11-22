@@ -8,29 +8,24 @@
         {
             var allowedOrigins = configuration.GetSection("Cors:AllowedOrigins").Get<string[]>() ?? [];
 
+            if (allowedOrigins.Length == 0)
+            {
+                throw new InvalidOperationException(
+                    "CORS is not configured. Please set 'Cors:AllowedOrigins' in configuration.");
+            }
+
             services.AddCors(options =>
             {
                 options.AddPolicy(ApiCorsPolicyName, policy =>
                 {
-                    if (allowedOrigins.Length > 0)
-                    {
-                        policy.WithOrigins(allowedOrigins)
-                              .AllowAnyHeader()
-                              .AllowAnyMethod();
-                        // .AllowCredentials(); // only if you actually need cookies/auth from browser
-                    }
-                    else
-                    {
-                        // Optional: dev-only fallback
-                        policy
-                            .AllowAnyOrigin()
-                            .AllowAnyHeader()
-                            .AllowAnyMethod();
-                    }
+                    policy.WithOrigins(allowedOrigins)
+                          .AllowAnyHeader()
+                          .AllowAnyMethod();
+                    // .AllowCredentials(); // only if you actually need cookies/auth from browser
                 });
             });
 
-            return services;
+            return services;            
         }
 
         public static IApplicationBuilder UseApiCors(this IApplicationBuilder app)
