@@ -15,6 +15,8 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Client.ComponentTests.V1
     [Collection("WireMock")]
     public class DisasterCardClientTests : IAsyncLifetime
     {
+        private const int ConcurrentRequests = 20;
+
         private readonly WireMockHost _host;
         private readonly IDisasterCardsClient _client;
         private readonly ServiceProvider _sp;
@@ -135,12 +137,12 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Client.ComponentTests.V1
 
             _host.DisasterCardStub.RegisterGetAllSuccess(cards);
 
-            var tasks = Enumerable.Range(0, 20)
+            var tasks = Enumerable.Range(0, ConcurrentRequests)
                 .Select(_ => _client.GetAllAsync())
                 .ToArray();
 
             // Act
-            Task.WaitAll(tasks);
+            await Task.WhenAll(tasks);
 
             // Assert
             foreach (var task in tasks)
@@ -153,8 +155,9 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Client.ComponentTests.V1
                 Assert.Null(response.ErrorMessage);
                 DisasterCardDtoAssertions.AssertOrderSensitive(cards.ToList(), response.Data.ToList());
             }
+
             var hits = _host.DisasterCardStub.GetAllRequestPaths();
-            Assert.Equal(20, hits.Count());
+            Assert.Equal(20, hits.Count);
         }
 
         private static async Task<IReadOnlyList<DisasterCardDto>> GetExpectedCardDtosAsync()
