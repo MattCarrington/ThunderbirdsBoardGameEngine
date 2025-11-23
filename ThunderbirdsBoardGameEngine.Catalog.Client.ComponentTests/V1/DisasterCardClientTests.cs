@@ -159,7 +159,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Client.ComponentTests.V1
 
         private static async Task<IReadOnlyList<DisasterCardDto>> GetExpectedCardDtosAsync()
         {
-            return await TestDataLoader.LoadJsonFromFileAsync<IReadOnlyList<DisasterCardDto>>(DisasterCardTestFileCatalog.DataOnly("disaster-card-dto-data.json"));
+            return await TestDataLoader.LoadJsonFromFileAsync<IReadOnlyList<DisasterCardDto>>(DisasterCardTestFileCatalog.DataOnly("disaster-card-dtos.json"));
         }
     }
 }

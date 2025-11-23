@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.14.36310.24
+# Visual Studio Version 18
+VisualStudioVersion = 18.0.11217.181 d18.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "IntegrationTests", "IntegrationTests", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
 EndProject
@@ -73,7 +73,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DisasterCards", "DisasterCa
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DataOnly", "DataOnly", "{618B8C51-10F5-424F-B2B3-324645965CEA}"
 	ProjectSection(SolutionItems) = preProject
-		TestData\Catalog\DisasterCard\DataOnly\disaster-card-dto-data.json = TestData\Catalog\DisasterCard\DataOnly\disaster-card-dto-data.json
 		TestData\Catalog\DisasterCard\DataOnly\disaster-card-dtos.json = TestData\Catalog\DisasterCard\DataOnly\disaster-card-dtos.json
 		TestData\Catalog\DisasterCard\DataOnly\disaster-cards-test.json = TestData\Catalog\DisasterCard\DataOnly\disaster-cards-test.json
 	EndProjectSection

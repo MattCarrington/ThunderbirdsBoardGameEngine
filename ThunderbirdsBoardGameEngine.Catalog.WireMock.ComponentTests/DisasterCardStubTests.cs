@@ -170,7 +170,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.WireMock.ComponentTests
 
         private static async Task<IReadOnlyList<DisasterCardDto>> GetCardDtosAsync()
         {
-            return await TestDataLoader.LoadJsonFromFileAsync<IReadOnlyList<DisasterCardDto>>(DisasterCardTestFileCatalog.DataOnly("disaster-card-dto-data.json"));
+            return await TestDataLoader.LoadJsonFromFileAsync<IReadOnlyList<DisasterCardDto>>(DisasterCardTestFileCatalog.DataOnly("disaster-card-dtos.json"));
         }
     }
 }
