@@ -16,7 +16,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Client.IntegrationTests.Clients.V1
         public async Task GetAllAsync_ReturnsAllDisasterCards()
         {
             // Arrange
-            using var sp = CatalogClientProviderFactory.Build("http://localhost:8080");
+            using var sp = CatalogClientProviderFactory.Build(CatalogTestConfig.CatalogBaseUrl);
             var client = sp.GetRequiredService<IDisasterCardsClient>();
 
             // Act
