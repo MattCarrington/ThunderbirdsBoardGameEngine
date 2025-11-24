@@ -51,6 +51,7 @@ namespace ThunderbirdsBoardGameEngine.Api
             }
 
             app.UseApiExceptionHandling();
+            app.UseApiProblemDetails();
 
             app.UseHttpsRedirection();
 
