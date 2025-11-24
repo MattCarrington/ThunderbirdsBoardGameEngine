@@ -28,6 +28,8 @@ namespace ThunderbirdsBoardGameEngine.Api
             builder.Services.AddInfrastructure(builder.Configuration);
             builder.Services.AddApiServices(builder.Configuration);
 
+            builder.Services.AddAuthorization();
+
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen(c =>

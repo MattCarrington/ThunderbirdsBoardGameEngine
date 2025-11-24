@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using ThunderbirdsBoardGameEngine.Api.Mappers.V1;
 using ThunderbirdsBoardGameEngine.Catalog.Application.Interfaces;
 using ThunderbirdsBoardGameEngine.Catalog.Contracts.Dtos.V1;
@@ -8,6 +9,7 @@ namespace ThunderbirdsBoardGameEngine.Api.Controllers.V1
     [Route("api/[controller]")]
     [ApiController]
     [ApiVersion("1.0")]
+    [AllowAnonymous]
     public class DisasterCardsController : ControllerBase
     {
         private readonly IDisasterCardService _service;
