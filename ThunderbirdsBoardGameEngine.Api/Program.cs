@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.OpenApi.Models;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using ThunderbirdsBoardGameEngine.Api.Composition;
 using ThunderbirdsBoardGameEngine.Api.Routing;
 using ThunderbirdsBoardGameEngine.Api.Swagger;
@@ -22,6 +24,10 @@ namespace ThunderbirdsBoardGameEngine.Api
             }).ConfigureApiBehaviorOptions(options =>
             {
                 options.SuppressMapClientErrors = false;
+            }).AddJsonOptions(options =>
+            {
+                options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+                options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
             });
 
             builder.Services.AddApplication();
@@ -39,6 +45,11 @@ namespace ThunderbirdsBoardGameEngine.Api
             });
 
             var app = builder.Build();
+
+            var logger = app.Services.GetRequiredService<ILogger<Program>>();
+            logger.LogInformation(
+                "Thunderbirds API started in {Environment} mode",
+                app.Environment.EnvironmentName);
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
