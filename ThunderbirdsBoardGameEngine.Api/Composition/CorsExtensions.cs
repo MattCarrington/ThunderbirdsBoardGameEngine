@@ -8,22 +8,19 @@
         {
             var allowedOrigins = configuration.GetSection("Cors:AllowedOrigins").Get<string[]>() ?? [];
 
-            if (allowedOrigins.Length == 0)
+            if (allowedOrigins.Length > 0)
             {
-                throw new InvalidOperationException(
-                    "CORS is not configured. Please set 'Cors:AllowedOrigins' in configuration.");
+                services.AddCors(options =>
+                    {
+                        options.AddPolicy(ApiCorsPolicyName, policy =>
+                        {
+                            policy.WithOrigins(allowedOrigins)
+                                  .AllowAnyHeader()
+                                  .AllowAnyMethod();
+                            // .AllowCredentials(); // only if you actually need cookies/auth from browser
+                        });
+                    }); 
             }
-
-            services.AddCors(options =>
-            {
-                options.AddPolicy(ApiCorsPolicyName, policy =>
-                {
-                    policy.WithOrigins(allowedOrigins)
-                          .AllowAnyHeader()
-                          .AllowAnyMethod();
-                    // .AllowCredentials(); // only if you actually need cookies/auth from browser
-                });
-            });
 
             return services;            
         }

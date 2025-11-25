@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
+using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.OpenApi.Models;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -68,6 +69,9 @@ namespace ThunderbirdsBoardGameEngine.Api
 
             app.UseHttpsRedirection();
 
+            // Static files: add .dat mapping so ICU files are served
+            app.UseCustomStaticFiles();
+
             app.UseRouting();
 
             app.UseApiCors();
@@ -76,6 +80,9 @@ namespace ThunderbirdsBoardGameEngine.Api
 
             app.MapControllers();
             app.MapApiHealthChecks();
+
+            // SPA fallback: anything not matched goes to index.html
+            app.MapFallbackToFile("index.html");
 
             app.Run();
         }
