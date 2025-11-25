@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.Extensions.FileProviders;
+﻿using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 
 namespace ThunderbirdsBoardGameEngine.TestUtils.Stubs

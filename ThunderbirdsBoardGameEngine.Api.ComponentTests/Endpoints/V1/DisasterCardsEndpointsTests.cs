@@ -4,7 +4,6 @@ using System.Net;
 using System.Net.Http.Json;
 using System.Text.Json;
 using ThunderbirdsBoardGameEngine.Catalog.Contracts.Dtos.V1;
-using ThunderbirdsBoardGameEngine.TestUtils.Catalog;
 using ThunderbirdsBoardGameEngine.TestUtils.Catalog.TestFileCatalogs;
 using ThunderbirdsBoardGameEngine.TestUtils.Helpers;
 using ThunderbirdsBoardGameEngine.TestUtils.xUnit.Assertions;

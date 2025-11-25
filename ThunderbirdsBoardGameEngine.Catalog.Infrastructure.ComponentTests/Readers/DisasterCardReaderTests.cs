@@ -5,7 +5,6 @@ using ThunderbirdsBoardGameEngine.Catalog.Domain.Exceptions;
 using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.ComponentTests.Fixtures;
 using ThunderbirdsBoardGameEngine.TestUtils.Catalog.Helpers;
 using ThunderbirdsBoardGameEngine.TestUtils.Catalog.TestFileCatalogs;
-using ThunderbirdsBoardGameEngine.TestUtils.Helpers;
 using Xunit;
 
 namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.ComponentTests.Repositories

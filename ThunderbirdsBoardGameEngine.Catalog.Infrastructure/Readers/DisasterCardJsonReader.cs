@@ -8,7 +8,6 @@ using ThunderbirdsBoardGameEngine.Catalog.Domain.Entities;
 using ThunderbirdsBoardGameEngine.Catalog.Domain.Exceptions;
 using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Configuration;
 using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Interfaces;
-using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Utilities;
 
 namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Readers
 {
