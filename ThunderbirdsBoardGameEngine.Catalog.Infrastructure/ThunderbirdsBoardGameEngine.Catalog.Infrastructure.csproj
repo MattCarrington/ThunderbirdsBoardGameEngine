@@ -8,10 +8,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Include="Data\DisasterCards.json">
+    <Content Include="Data\disaster-cards.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
   </ItemGroup>
 
