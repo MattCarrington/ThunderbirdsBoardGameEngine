@@ -13,11 +13,7 @@ jobs:
     uses: ./.github/workflows/build.yml
     with:
       solution_file: *solution
-
-  docker-build:
-    uses: ./.github/workflows/docker-build.yml
-    with:
-      solution_file: *solution
+      docker_build: true
 
   tests:
     uses: ./.github/workflows/tests.yml
@@ -29,4 +25,3 @@ jobs:
       run_playwright: true
     needs:
       - build
-      - docker-build
