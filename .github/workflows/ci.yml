@@ -11,7 +11,7 @@ env:
 
 jobs:
   build:
-    uses: ./.github/workflows/build-reusable.yml   # 👈 call the reusable workflow
+    uses: ./.github/workflows/build.yml   # 👈 call the reusable workflow
     with:
       solution_file: $SOLUTION_FILE
 
