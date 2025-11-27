@@ -1,0 +1,32 @@
+name: Static Analysis (reusable)
+
+on:
+  workflow_call:
+    inputs:
+      solution_file:
+        required: true
+        type: string
+
+jobs:
+  static-analysis:
+    name: Static Analysis
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.x'
+
+      # Optional but nice: ensure formatting is clean
+      - name: Check code format
+        run: |
+          dotnet format "${{ inputs.solution_file }}" --verify-no-changes
+
+      # Build with analyzers and treat warnings as errors
+      - name: Build with analyzers
+        run: |
+          dotnet build "${{ inputs.solution_file }}" \
+            --configuration Release \
+            /warnaserror

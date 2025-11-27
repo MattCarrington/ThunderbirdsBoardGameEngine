@@ -10,11 +10,18 @@ env:
   SOLUTION_FILE: &solution ThunderbirdsBoardGameEngine.sln
 
 jobs:
+  static-analysis:
+    uses: ./.github/workflows/static-analysis.yml
+    with:
+      solution_file: *solution
+
   build:
     uses: ./.github/workflows/build.yml
     with:
       solution_file: *solution
       docker_build: true # switch to false later
+    needs:
+      - static-analysis  
 
   tests:
     uses: ./.github/workflows/tests.yml
