@@ -13,7 +13,7 @@ jobs:
   build:
     uses: ./.github/workflows/build.yml   # 👈 call the reusable workflow
     with:
-      solution_file: $SOLUTION_FILE
+      solution_file: ${{ env.SOLUTION_FILE }}
 
   unit-tests:
     name: Run Unit Tests
