@@ -27,3 +27,6 @@ jobs:
       run_component: true
       run_integration: true
       run_playwright: true
+    needs:
+      - build
+      - docker-build

@@ -15,8 +15,8 @@ jobs:
     with:
       solution_file: *solution
 
-  docker-build:
-    uses: ./.github/workflows/docker-build.yml 
+  # docker-build:
+  #   uses: ./.github/workflows/docker-build.yml 
 
   tests:
     uses: ./.github/workflows/tests.yml
@@ -24,5 +24,7 @@ jobs:
       solution_file: *solution
       run_unit: true
       run_component: true
-      run_integration: true
-      run_playwright: true
+      run_integration: false
+      run_playwright: false
+    needs:
+      - build
