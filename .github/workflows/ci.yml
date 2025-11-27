@@ -219,9 +219,13 @@ jobs:
             sleep 2
           done
 
-      - name: Install Playwright CLI & browsers
+      - name: Install Playwright CLI
+        run: dotnet tool install --global Microsoft.Playwright.CLI
+
+      - name: Build Playwright test project & install browsers
+        working-directory: ThunderbirdsBoardGameEngine.PlaywrightTests
         run: |
-          dotnet tool install --global Microsoft.Playwright.CLI
+          dotnet build --configuration Release
           playwright install
 
       - name: Run Playwright tests
