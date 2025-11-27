@@ -48,7 +48,7 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.ExceptionHandlers
             Assert.Equal("application/problem+json", response.Content.Headers.ContentType?.ToString());
 
             var content = await response.Content.ReadFromJsonAsync<ProblemDetails>();
-            
+
             Assert.NotNull(content);
             Assert.Equal((int)expectedStatusCode, content.Status);
             Assert.Equal(expectedTitle, content.Title);
@@ -79,5 +79,5 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.ExceptionHandlers
                 throw _exception;
             }
         }
-}
+    }
 }

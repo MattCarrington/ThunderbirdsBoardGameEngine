@@ -15,7 +15,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Application.UnitTests.Services
         public void GetAll_WhenCardsExist_ReturnsCatalogCards()
         {
             // Arrange
-            var disasterCards = ImmutableArray.Create(            
+            var disasterCards = ImmutableArray.Create(
                 new DisasterCardBuilder().WithId(1).WithName("Disaster 1").WithDifficulty(7).WithSpecifiedReward(BonusToken.Intelligence).Build(),
                 new DisasterCardBuilder().WithId(2).WithName("Disaster 2").WithDifficulty(8).WithLocation(BoardLocation.Asia).WithUserChoiceRewardOption().Build()
             );

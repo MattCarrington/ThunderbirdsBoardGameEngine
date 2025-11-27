@@ -31,13 +31,13 @@ namespace ThunderbirdsBoardGameEngine.UI.UnitTests.Pages
         {
             // Arrange
             var service = SetupMockService(Cards);
-            
+
             // Act
             var cut = RenderComponent<DisasterCards>();
 
             // Assert
             cut.WaitForElement("#disasterSelect option[value='1']"); // waits for card to render
-            
+
             service.Received(1).GetAllAsync();
         }
 
@@ -205,7 +205,7 @@ namespace ThunderbirdsBoardGameEngine.UI.UnitTests.Pages
             select.Change(string.Empty); // choose placeholder
             cut.WaitForAssertion(() => Assert.DoesNotContain("Disaster Card Details", cut.Markup));
         }
-        
+
         [Fact]
         public void Select_ChangesSelection_DoesNotRefetch()
         {
@@ -240,7 +240,7 @@ namespace ThunderbirdsBoardGameEngine.UI.UnitTests.Pages
             cut.WaitForAssertion(() =>
                 Assert.DoesNotContain("Disaster Card Details", cut.Markup));
         }
-        
+
         [Fact]
         public void SelectingCard_WithNullBonusAndRewards_HidesSections()
         {

@@ -30,7 +30,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Utilities
         {
             // Arrange
             using var stream = StreamFrom("""{ "data": [] }""");
-            
+
             var parser = CreateParser();
 
             // Act & Assert
@@ -236,7 +236,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Utilities
         {
             // Arrange
             var data = ValidData();
-            
+
             using var stream = new EnvelopeStreamBuilder()
                 .WithData(data)
                 .WithChecksumAlgorithm(invalidAlgorithm)
@@ -266,8 +266,8 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Utilities
             await Assert.ThrowsAsync<InvalidDataException>(() => parser.ReadEnvelopeAsync(stream, CancellationToken.None));
         }
 
-        private static string ValidData() 
-        {             
+        private static string ValidData()
+        {
             return """
             [
                 { "id": 1, "name": "Storm", "code": "storm", "location": "Africa", "rescueType": "Air", "difficultyNumber": 3 }

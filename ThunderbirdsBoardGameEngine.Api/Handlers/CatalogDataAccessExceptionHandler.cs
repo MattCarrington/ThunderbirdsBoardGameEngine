@@ -74,7 +74,7 @@ namespace ThunderbirdsBoardGameEngine.Api.Handlers
                     detail);
 
                 httpContext.Response.StatusCode = problemDetails.Status ?? StatusCodes.Status500InternalServerError;
-                
+
                 var problemDetailsContext = new ProblemDetailsContext
                 {
                     HttpContext = httpContext,

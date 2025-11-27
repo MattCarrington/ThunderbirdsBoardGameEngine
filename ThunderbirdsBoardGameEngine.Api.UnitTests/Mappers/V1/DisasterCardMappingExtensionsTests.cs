@@ -16,7 +16,7 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.UnitTests.Mappers.V1
         {
             // Arrange
             var characterBonusCondition = new CharacterBonusCondition(Character.Virgil, 2);
-            
+
             // Act
             var result = characterBonusCondition.ToDto();
 
@@ -31,7 +31,7 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.UnitTests.Mappers.V1
         {
             // Arrange
             var thunderbirdBonusCondition = new ThunderbirdBonusCondition(ThunderbirdMachine.Thunderbird4, 3);
-            
+
             // Act
             var result = thunderbirdBonusCondition.ToDto();
 
@@ -46,7 +46,7 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.UnitTests.Mappers.V1
         {
             // Arrange
             var podVehicleBonusCondition = new PodVehicleBonusCondition(PodVehicle.LaserCutter, 2);
-            
+
             // Act
             var result = podVehicleBonusCondition.ToDto();
 
@@ -110,7 +110,7 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.UnitTests.Mappers.V1
         {
             // Arrange
             var rewardOption = RewardOption.PlayerChoice();
-            
+
             // Act
             var result = rewardOption.ToDto();
 
@@ -125,7 +125,7 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.UnitTests.Mappers.V1
             var rewardToken = BonusToken.Technology;
 
             var rewardOption = RewardOption.SpecifiedToken(rewardToken);
-            
+
             // Act
             var result = rewardOption.ToDto();
 
@@ -299,7 +299,7 @@ namespace ThunderbirdsBoardGameEngine.GameData.Api.UnitTests.Mappers.V1
         private class UnknownBonusCondition : BonusCondition
         {
             public UnknownBonusCondition() : base(1, null)
-            {                
+            {
             }
         }
     }

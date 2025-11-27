@@ -24,6 +24,6 @@ namespace ThunderbirdsBoardGameEngine.TestUtils.xUnit.Fixtures
         public async Task DisposeAsync()
         {
             await Host.DisposeAsync();
-        }        
+        }
     }
 }

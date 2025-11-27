@@ -148,9 +148,9 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.PostConfi
 
                 // Act
                 postConfigure.PostConfigure(null, options);
-                
+
                 var first = options.FilePath;
-                
+
                 postConfigure.PostConfigure(null, options);
 
                 // Assert

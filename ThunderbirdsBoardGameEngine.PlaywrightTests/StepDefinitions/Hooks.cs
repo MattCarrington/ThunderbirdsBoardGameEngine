@@ -33,17 +33,17 @@ namespace ThunderbirdsBoardGameEngine.PlaywrightTests.StepDefinitions
         {
             if (_ui.Page is { })
             {
-                await _ui.Page.CloseAsync(); 
+                await _ui.Page.CloseAsync();
             }
 
             if (_ui.BrowserContext is { })
             {
-                await _ui.BrowserContext.CloseAsync(); 
+                await _ui.BrowserContext.CloseAsync();
             }
 
             if (_ui.Browser is { })
             {
-                await _ui.Browser.CloseAsync(); 
+                await _ui.Browser.CloseAsync();
             }
 
             _ui.Playwright?.Dispose();

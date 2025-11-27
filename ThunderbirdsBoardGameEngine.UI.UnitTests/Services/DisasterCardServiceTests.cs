@@ -69,7 +69,7 @@ namespace ThunderbirdsBoardGameEngine.UI.UnitTests.Services
         {
             var client = Substitute.For<IDisasterCardsClient>();
             client.GetAllAsync().Returns(Task.FromResult(apiResult));
-            
+
             return new DisasterCardService(client);
         }
     }

@@ -19,10 +19,10 @@
                                   .AllowAnyMethod();
                             // .AllowCredentials(); // only if you actually need cookies/auth from browser
                         });
-                    }); 
+                    });
             }
 
-            return services;            
+            return services;
         }
 
         public static IApplicationBuilder UseApiCors(this IApplicationBuilder app)

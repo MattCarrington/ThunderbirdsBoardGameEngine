@@ -33,7 +33,7 @@ namespace ThunderbirdsBoardGameEngine.Api.HealthChecks
             }
             catch (Exception ex)
             {
-                return HealthCheckResult.Unhealthy("Disaster card catalog check failed.", ex);                
+                return HealthCheckResult.Unhealthy("Disaster card catalog check failed.", ex);
             }
         }
     }

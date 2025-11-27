@@ -112,7 +112,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Client.UnitTests.Configuration
 
         [Fact]
         public void PostConfigure_WhenCalledTwice_ShouldBeIdempotentAfterFirstRun()
-        { 
+        {
             // Arrange
             var options = new CatalogClientOptions
             {

@@ -8,7 +8,7 @@ namespace ThunderbirdsBoardGameEngine.PlaywrightTests.Pages
     {
         private readonly UiContext _ui;
         private readonly TestSettings _settings;
-        
+
         private IPage Page => _ui.Page;
 
         private ILocator Dropdown => Page.Locator("#disasterSelect");

@@ -4,7 +4,7 @@
     {
         protected DomainValidationException(string message, Exception? innerException = null)
             : base(message, innerException)
-        {            
+        {
         }
     }
 }

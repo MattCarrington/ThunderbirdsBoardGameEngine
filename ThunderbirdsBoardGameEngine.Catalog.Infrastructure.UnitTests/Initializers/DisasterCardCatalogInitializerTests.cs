@@ -64,5 +64,5 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Initializ
         {
             return new DisasterCardCatalogInitializer(reader);
         }
-    }   
+    }
 }

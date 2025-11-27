@@ -79,7 +79,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Domain.UnitTests.Validators
         {
             // Arrange
             var id = 1;
-            
+
             var cards = new List<DisasterCard>
             {
                 new DisasterCardBuilder().WithId(id).WithName($"Test {id++}").WithCode("duplicate-code").Build(),

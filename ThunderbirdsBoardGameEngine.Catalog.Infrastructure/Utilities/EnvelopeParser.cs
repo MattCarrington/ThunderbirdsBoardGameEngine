@@ -17,7 +17,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Utilities
             using var document = await JsonDocument.ParseAsync(stream, new JsonDocumentOptions
             {
                 AllowTrailingCommas = false
-            }, 
+            },
             cancellationToken);
 
             var root = document.RootElement;

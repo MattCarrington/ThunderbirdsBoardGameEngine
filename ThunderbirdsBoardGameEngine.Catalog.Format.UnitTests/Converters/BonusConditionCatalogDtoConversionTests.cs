@@ -100,7 +100,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Format.UnitTests.Converters
             Assert.Equal("NorthPacific", thunderbirdBonus.Location, ignoreCase: true);
         }
 
-        [Fact]        
+        [Fact]
         public void Deserialize_WhenPodVehicleBonusJson_ReturnsExpectedPodVehicleBonusCatalogDto()
         {
             // Arrange
@@ -110,7 +110,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Format.UnitTests.Converters
                 "bonusValue": 2,
                 "podVehicle": "elevatorCars"
             }
-            """;            
+            """;
 
             // Act
             var result = DeserializeBonusFromJson(input);
@@ -143,7 +143,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Format.UnitTests.Converters
             Assert.Equal(2, podVehicleBonus.BonusValue);
             Assert.Equal("ElevatorCars", podVehicleBonus.PodVehicle, ignoreCase: true);
             Assert.Equal("SouthAtlantic", podVehicleBonus.Location, ignoreCase: true);
-        }                
+        }
 
         [Fact]
         public void Deserialize_WhenUnknownType_ThrowsJsonException()
@@ -207,7 +207,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Format.UnitTests.Converters
                 BonusValue = 5,
                 Location = null
             };
-            
+
             // Act
             var result = SerializeBonusToJson(bonus); // assuming your helper method uses .Clone()
 
@@ -301,7 +301,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Format.UnitTests.Converters
             Assert.Equal("mole", result.GetProperty("podVehicle").GetString());
             Assert.False(result.TryGetProperty("location", out _), "Location should not be present in JSON");
         }
-        
+
         [Fact]
         public void Serialize_WhenInvalidBonus_ThrowsJsonException()
         {
@@ -399,7 +399,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Format.UnitTests.Converters
         {
             [JsonConstructor]
             public FakeBonus()
-            {                
+            {
             }
 
             public string? FakeProperty { get; set; }

@@ -7,7 +7,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Application.Services
     public class DisasterCardService : IDisasterCardService
     {
         private readonly IDisasterCardCatalog _disasterCardCatalog;
-        
+
         public DisasterCardService(IDisasterCardCatalog disasterCardCatalog)
         {
             _disasterCardCatalog = disasterCardCatalog ?? throw new ArgumentNullException(nameof(disasterCardCatalog));

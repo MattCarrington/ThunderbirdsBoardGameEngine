@@ -11,7 +11,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Builders
         private string _schemaVersion = "1.0";
         private string _contentVersion = "1.0.0";
         private DateTime _generatedAtUtc = DateTime.UtcNow;
-        private string _checksumAlgorithm = CatalogChecksum.Algorithm;        
+        private string _checksumAlgorithm = CatalogChecksum.Algorithm;
         private int? _itemCountOverride;
         private string? _checksumOverride;
 

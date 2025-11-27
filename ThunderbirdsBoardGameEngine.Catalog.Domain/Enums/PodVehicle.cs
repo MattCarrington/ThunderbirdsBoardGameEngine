@@ -11,7 +11,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Domain.Enums
         MobileCrane,
         Excavator,
         Thunderizer,
-        
+
         [Display(Name = "DOMO")]
         Domo,
 

@@ -12,7 +12,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Format.Hashing
         public static string ComputeChecksum(IReadOnlyList<DisasterCardCatalogDto> items)
         {
             var json = JsonSerializer.SerializeToUtf8Bytes(items, CanonicalJson.Options);
-            
+
             Span<byte> hash = stackalloc byte[32];
             SHA256.HashData(json, hash);
             return Convert.ToHexString(hash).ToLowerInvariant();

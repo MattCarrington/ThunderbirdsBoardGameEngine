@@ -8,7 +8,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Client.Internal.Configuration
         {
             var baseAddress = options.BaseAddress;
 
-            if (string.IsNullOrWhiteSpace(baseAddress   ))
+            if (string.IsNullOrWhiteSpace(baseAddress))
             {
                 return; // Return early so validation can catch the error
             }

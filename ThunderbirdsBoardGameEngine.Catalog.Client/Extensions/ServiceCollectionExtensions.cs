@@ -23,7 +23,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Client.Extensions
         {
             services.AddOptions<CatalogClientOptions>()
                 .Bind(configuration.GetSection("CatalogClient"))
-                .ValidateOnStart(); 
+                .ValidateOnStart();
 
             services.AddSingleton<IPostConfigureOptions<CatalogClientOptions>, CatalogClientOptionsPostConfigure>();
             services.AddSingleton<IValidateOptions<CatalogClientOptions>, CatalogClientOptionsValidator>();

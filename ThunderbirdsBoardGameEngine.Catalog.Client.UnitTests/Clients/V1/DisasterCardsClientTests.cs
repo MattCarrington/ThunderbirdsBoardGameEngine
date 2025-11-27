@@ -14,7 +14,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Client.UnitTests.Clients.V1
     public class DisasterCardsClientTests
     {
         private readonly Fixture _fixture = new();
-        
+
         public DisasterCardsClientTests()
         {
             _fixture.Customize<DisasterCardDto>(c => c

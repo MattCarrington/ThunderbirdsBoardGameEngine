@@ -25,7 +25,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Client.ComponentTests
         {
             await using var sp = CatalogClientProviderFactory.Build("https://example.com/");
             var instance = sp.GetRequiredService(service);
-            Assert.Equal(impl, instance.GetType()); 
+            Assert.Equal(impl, instance.GetType());
         }
 
         public static IEnumerable<object[]> Clients()

@@ -12,7 +12,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Domain.UnitTests.Entities
             Func<int, BonusCondition> factory)
         {
             // Arrange
-            
+
             // Act & Assert
             Assert.Throws<ArgumentOutOfRangeException>(() => factory(0));
             Assert.Throws<ArgumentOutOfRangeException>(() => factory(-1));
@@ -25,10 +25,10 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Domain.UnitTests.Entities
             Func<int, BonusCondition> createBonusCondition)
         {
             // Arrange
-            
+
             // Act
             var result = createBonusCondition(1);
-            
+
             // Assert
             Assert.NotNull(result);
             Assert.Equal(1, result.BonusValue);
@@ -71,7 +71,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Domain.UnitTests.Entities
 
         public static TheoryData<Func<int, BoardLocation?, BonusCondition>> BonusConditionsWithLocation()
         {
-            return 
+            return
             [
                 (value, location) => new CharacterBonusCondition(Character.John, value, location),
                 (value, location) => new ThunderbirdBonusCondition(ThunderbirdMachine.Thunderbird1, value, location),

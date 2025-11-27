@@ -9,15 +9,15 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Format.Serialization
         {
             PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
             DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
-            WriteIndented = false            
+            WriteIndented = false
         };
 
         public static JsonSerializerOptions Pretty()
         {
             // Clone from canonical to ensure policy stays aligned; only change indentation.
-            var options = new JsonSerializerOptions(Options) 
-            { 
-                WriteIndented = true 
+            var options = new JsonSerializerOptions(Options)
+            {
+                WriteIndented = true
             };
 
             return options;

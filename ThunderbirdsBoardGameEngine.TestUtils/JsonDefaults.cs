@@ -9,8 +9,8 @@ namespace ThunderbirdsBoardGameEngine.TestUtils
 
         private static JsonSerializerOptions CreateDisasterCardsOptions()
         {
-            var options = new JsonSerializerOptions 
-            { 
+            var options = new JsonSerializerOptions
+            {
                 PropertyNameCaseInsensitive = true,
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
             };

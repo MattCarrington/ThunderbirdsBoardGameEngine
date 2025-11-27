@@ -13,7 +13,7 @@ namespace ThunderbirdsBoardGameEngine.TestUtils.Catalog.Builders
         private RescueType _rescueType = RescueType.Sea;
         private readonly List<BonusCondition> _bonuses = [];
         private readonly List<RewardOption> _rewardOptions = [];
-        
+
         public DisasterCardBuilder WithId(int id)
         {
             _id = id;

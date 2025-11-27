@@ -38,8 +38,8 @@ internal sealed class DisasterCardJsonOptionsValidator : IValidateOptions<Disast
         }
 
         if (!_fileSystem.Path.IsPathFullyQualified(path))
-        { 
-            failures.Add($"{Key} must be a fully qualified absolute path after normalisation. Path {path}"); 
+        {
+            failures.Add($"{Key} must be a fully qualified absolute path after normalisation. Path {path}");
         }
 
         var extension = _fileSystem.Path.GetExtension(path);

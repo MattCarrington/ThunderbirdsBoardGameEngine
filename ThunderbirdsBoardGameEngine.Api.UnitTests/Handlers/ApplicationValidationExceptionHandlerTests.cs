@@ -22,7 +22,7 @@ namespace ThunderbirdsBoardGameEngine.Api.UnitTests.Handlers
             var exception = new ApplicationValidationException("Validation failed", errors);
 
             var service = ExceptionHandlerHelper.CreateProblemsDetailService();
-            
+
             var handler = CreateHandler(service);
 
             // Act
@@ -48,7 +48,7 @@ namespace ThunderbirdsBoardGameEngine.Api.UnitTests.Handlers
             // Arrange
             var exception = new InvalidOperationException("Some error");
 
-            
+
             var service = ExceptionHandlerHelper.CreateProblemsDetailService();
 
             var handler = CreateHandler(service);

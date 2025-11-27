@@ -74,7 +74,7 @@ namespace ThunderbirdsBoardGameEngine.Api
             app.UseRouting();
 
             app.UseApiCors();
-            
+
             app.UseAuthorization();
 
             app.MapControllers();

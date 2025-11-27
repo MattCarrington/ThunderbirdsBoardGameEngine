@@ -22,28 +22,28 @@ namespace ThunderbirdsBoardGameEngine.TestUtils.Stubs
         /// <summary>Absolute content root path.</summary>
         public string ContentRootPath { get; }
 
-        string IHostEnvironment.ApplicationName 
-        { 
-            get => ApplicationName; 
-            set => throw new NotSupportedException("StubHostEnvironment is immutable. Use factory methods to create a new instance."); 
-        }
-
-        IFileProvider IHostEnvironment.ContentRootFileProvider 
-        { 
-            get => ContentRootFileProvider; 
-            set => throw new NotSupportedException("StubHostEnvironment is immutable. Use factory methods to create a new instance."); 
-        }
-
-        string IHostEnvironment.ContentRootPath 
-        { 
-            get => ContentRootPath; 
-            set => throw new NotSupportedException("StubHostEnvironment is immutable. Use factory methods to create a new instance."); 
-        }
-
-        string IHostEnvironment.EnvironmentName 
+        string IHostEnvironment.ApplicationName
         {
-            get => EnvironmentName; 
-            set => throw new NotSupportedException("StubHostEnvironment is immutable. Use factory methods to create a new instance."); 
+            get => ApplicationName;
+            set => throw new NotSupportedException("StubHostEnvironment is immutable. Use factory methods to create a new instance.");
+        }
+
+        IFileProvider IHostEnvironment.ContentRootFileProvider
+        {
+            get => ContentRootFileProvider;
+            set => throw new NotSupportedException("StubHostEnvironment is immutable. Use factory methods to create a new instance.");
+        }
+
+        string IHostEnvironment.ContentRootPath
+        {
+            get => ContentRootPath;
+            set => throw new NotSupportedException("StubHostEnvironment is immutable. Use factory methods to create a new instance.");
+        }
+
+        string IHostEnvironment.EnvironmentName
+        {
+            get => EnvironmentName;
+            set => throw new NotSupportedException("StubHostEnvironment is immutable. Use factory methods to create a new instance.");
         }
 
         private readonly bool _disposeProvider;

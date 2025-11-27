@@ -60,7 +60,7 @@ namespace ThunderbirdsBoardGameEngine.TestUtils.Catalog.Helpers
             // Compute checksum using your canonical rules
             // (hash of the 'data' element, serialised with CanonicalJson.Options)
             var dataChecksum = CatalogChecksum.ComputeForDataElement(doc.RootElement);
-            
+
             // Build envelope
             var dataNode = JsonNode.Parse(arrayJson)!.AsArray(); // re-use original structure as 'data'
             var meta = new JsonObject

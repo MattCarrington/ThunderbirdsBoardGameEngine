@@ -75,7 +75,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Readers
             Assert.NotNull(result);
             Assert.NotEmpty(result);
             Assert.Equal(disasterCards.Count, result.Count);
-            
+
             await file.Received(1).OpenReadAsync(Arg.Is<string>(p => p == TestPath), Arg.Any<CancellationToken>());
             await parser.Received(1).ReadEnvelopeAsync(Arg.Any<Stream>(), Arg.Any<CancellationToken>());
             deserializer.Received(1).Deserialize(Arg.Any<JsonElement>());
@@ -219,7 +219,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Readers
                 CatalogDataAccessErrorCode.BadJson,
                 TestPath);
         }
-                
+
         [Fact]
         public async Task GetAllAsync_WhenFileMissing_WrapsSourceNotFound()
         {

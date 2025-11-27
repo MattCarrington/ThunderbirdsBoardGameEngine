@@ -32,7 +32,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Client.Clients.V1
             using var response = await _httpClient.GetAsync(ApiRoutes.DisasterCards, cancellationToken);
             return await HandleResponse<IReadOnlyList<DisasterCardDto>>(response, cancellationToken);
         }
-        
+
         private static async Task<ApiResult<T>> HandleResponse<T>(HttpResponseMessage response, CancellationToken cancellationToken)
         {
             try
@@ -57,7 +57,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Client.Clients.V1
             catch (JsonException ex)
             {
                 return ApiResult<T>.Failure($"Deserialization error: {ex.Message}", response.StatusCode);
-            }           
+            }
             catch (Exception ex)
             {
                 return ApiResult<T>.Failure($"Unexpected error: {ex.Message}", response.StatusCode);

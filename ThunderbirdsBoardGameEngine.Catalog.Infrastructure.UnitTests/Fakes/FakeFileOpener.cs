@@ -18,9 +18,9 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Fakes
 
             _map[path] = cancellationToken =>
             {
-                if (cancellationToken.IsCancellationRequested) 
-                { 
-                    return Task.FromCanceled<Stream>(cancellationToken); 
+                if (cancellationToken.IsCancellationRequested)
+                {
+                    return Task.FromCanceled<Stream>(cancellationToken);
                 }
 
                 return Task.FromResult<Stream>(new MemoryStream(bytes, writable: false));

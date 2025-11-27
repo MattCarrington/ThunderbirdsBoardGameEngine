@@ -34,7 +34,7 @@ namespace ThunderbirdsBoardGameEngine.UI.IntegrationTests.Pages
                 .Build();
 
             Services.AddCatalogClients(configuration);
-            Services.AddSingleton<IDisasterCardService, DisasterCardService>();            
+            Services.AddSingleton<IDisasterCardService, DisasterCardService>();
         }
 
         [Fact]

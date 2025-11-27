@@ -89,9 +89,9 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Builders
         {
             _fileReader ??= new FakeFileOpener().Add(_filePath, _jsonContent);
 
-            var disasterCardJsonOptions = Options.Create(new DisasterCardJsonOptions 
-            { 
-                FilePath = _filePath 
+            var disasterCardJsonOptions = Options.Create(new DisasterCardJsonOptions
+            {
+                FilePath = _filePath
             });
 
             _envelopeParser ??= CreateEnvelopeParser(_dtos.Count);

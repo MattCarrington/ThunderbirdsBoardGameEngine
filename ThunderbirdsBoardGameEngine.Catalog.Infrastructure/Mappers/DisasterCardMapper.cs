@@ -44,8 +44,8 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Mappers
                 throw DisasterCardValidationException.NullBonusCondition(id, name);
             }
 
-            var location = string.IsNullOrWhiteSpace(dto.Location) 
-                ? (BoardLocation?)null 
+            var location = string.IsNullOrWhiteSpace(dto.Location)
+                ? (BoardLocation?)null
                 : ParseEnum<BoardLocation>(dto.Location);
 
             switch (dto)
@@ -90,7 +90,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Mappers
                 throw new ArgumentException("Enum value cannot be null or empty");
             }
 
-            if (Enum.TryParse<TEnum>(value, ignoreCase: true,out var result))
+            if (Enum.TryParse<TEnum>(value, ignoreCase: true, out var result))
             {
                 return result;
             }

@@ -100,7 +100,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.WireMock.Stubs.V1
                 .WithPath(Route)
                 .WithHeader(VersionHeader, new ExactMatcher(true, VersionValue))
                 .UsingGet();
-                
+
         }
 
         private static IResponseBuilder CreateJsonResponse(object body, HttpStatusCode httpStatusCode)

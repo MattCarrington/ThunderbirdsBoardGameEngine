@@ -26,7 +26,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.ComponentTests.Repo
             var filepath = EnvelopArray("disaster-cards-test.json"); // syntactically valid
 
             using var provider = _fixture.Build(ConfigKey, filepath);
-            
+
             var reader = provider.GetRequiredService<IDisasterCardReader>();
 
             // Act
@@ -46,7 +46,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.ComponentTests.Repo
             var filePath = DisasterCardTestFileCatalog.Invalid(filename); // non-empty valid JSON
 
             using var provider = _fixture.Build(ConfigKey, filePath);
-            
+
             var reader = provider.GetRequiredService<IDisasterCardReader>();
 
             // Act & Assert
@@ -101,7 +101,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.ComponentTests.Repo
             var enveloped = TestJsonEnvelopeCreator.EnvelopArrayFile(bare);
 
             using var provider = _fixture.Build(ConfigKey, enveloped);
-            
+
             var reader = provider.GetRequiredService<IDisasterCardReader>();
 
             // Act & Assert
@@ -116,9 +116,9 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.ComponentTests.Repo
             var bareFilePath = DisasterCardTestFileCatalog.DataOnly("disaster-cards-test.json");    // Don't add the envelope
 
             using var provider = _fixture.Build(ConfigKey, bareFilePath);
-            
+
             var reader = provider.GetRequiredService<IDisasterCardReader>();
-            
+
             // Act & Assert
             var exception = await Assert.ThrowsAsync<CatalogDataAccessException>(() => reader.GetAllAsync(CancellationToken.None));
             Assert.Equal(CatalogDataAccessErrorCode.BadJson, exception.ErrorCode);
@@ -129,13 +129,13 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.ComponentTests.Repo
             return new TheoryData<string, CatalogDataAccessErrorCode>
             {
                 { "invalid-json.json", CatalogDataAccessErrorCode.BadJson },
-                { "empty.json", CatalogDataAccessErrorCode.DataMissing } 
+                { "empty.json", CatalogDataAccessErrorCode.DataMissing }
             };
         }
 
         private static string EnvelopArray(string filepath)
         {
-            var bareFilePath = DisasterCardTestFileCatalog.DataOnly(filepath); 
+            var bareFilePath = DisasterCardTestFileCatalog.DataOnly(filepath);
             return TestJsonEnvelopeCreator.EnvelopArrayFile(bareFilePath);
         }
     }

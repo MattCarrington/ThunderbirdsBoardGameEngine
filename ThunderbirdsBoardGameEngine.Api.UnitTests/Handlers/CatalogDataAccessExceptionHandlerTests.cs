@@ -73,34 +73,34 @@ namespace ThunderbirdsBoardGameEngine.Api.UnitTests.Handlers
             return
             [
                 new CatalogDataAccessExceptionHandlerTestCase(
-                    CatalogDataAccessErrorCode.Unknown, 
+                    CatalogDataAccessErrorCode.Unknown,
                     StatusCodes.Status500InternalServerError,
-                    "An unexpected error occurred while accessing catalog data", 
+                    "An unexpected error occurred while accessing catalog data",
                     ProblemTypes.Unexpected),
                 new CatalogDataAccessExceptionHandlerTestCase(
-                    CatalogDataAccessErrorCode.SourceNotFound, 
+                    CatalogDataAccessErrorCode.SourceNotFound,
                     StatusCodes.Status500InternalServerError,
-                    "The catalog data source was not found", 
+                    "The catalog data source was not found",
                     ProblemTypes.ServerError),
                 new CatalogDataAccessExceptionHandlerTestCase(
-                    CatalogDataAccessErrorCode.BadJson, 
+                    CatalogDataAccessErrorCode.BadJson,
                     StatusCodes.Status500InternalServerError,
-                    "The catalog data source contains invalid JSON", 
+                    "The catalog data source contains invalid JSON",
                     ProblemTypes.ServerError),
                 new CatalogDataAccessExceptionHandlerTestCase(
-                    CatalogDataAccessErrorCode.AccessDenied, 
+                    CatalogDataAccessErrorCode.AccessDenied,
                     StatusCodes.Status500InternalServerError,
-                    "Access to the catalog data source was denied", 
+                    "Access to the catalog data source was denied",
                     ProblemTypes.ServerError),
                 new CatalogDataAccessExceptionHandlerTestCase(
-                    CatalogDataAccessErrorCode.SourceUnreadable, 
-                    StatusCodes.Status503ServiceUnavailable, 
-                    "The catalog data source could not be read", 
+                    CatalogDataAccessErrorCode.SourceUnreadable,
+                    StatusCodes.Status503ServiceUnavailable,
+                    "The catalog data source could not be read",
                     ProblemTypes.Unavailable),
                 new CatalogDataAccessExceptionHandlerTestCase(
-                    CatalogDataAccessErrorCode.DataMissing, 
+                    CatalogDataAccessErrorCode.DataMissing,
                     StatusCodes.Status500InternalServerError,
-                    "The catalog data is missing", 
+                    "The catalog data is missing",
                     ProblemTypes.ServerError)
             ];
         }
@@ -142,7 +142,7 @@ namespace ThunderbirdsBoardGameEngine.Api.UnitTests.Handlers
                 ExpectedStatus = info.GetValue<int>(nameof(ExpectedStatus));
                 ExpectedTitle = info.GetValue<string>(nameof(ExpectedTitle))!;
                 ExpectedType = info.GetValue<string>(nameof(ExpectedType))!;
-            }            
+            }
         }
     }
 }

@@ -26,6 +26,6 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Format.Dtos
         public required List<BonusConditionCatalogDto> BonusConditions { get; init; }
 
         [JsonPropertyOrder(7)]
-        public required List<RewardOptionCatalogDto> RewardOptions { get; init; }        
+        public required List<RewardOptionCatalogDto> RewardOptions { get; init; }
     }
 }

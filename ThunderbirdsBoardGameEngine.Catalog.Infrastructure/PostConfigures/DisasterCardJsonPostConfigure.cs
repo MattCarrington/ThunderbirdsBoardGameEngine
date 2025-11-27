@@ -72,13 +72,13 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.PostConfigures
 
         private static string ExpandUnixEnvironmentTokens(string input)
         {
-            if (string.IsNullOrEmpty(input)) 
-            { 
-                return input; 
+            if (string.IsNullOrEmpty(input))
+            {
+                return input;
             }
 
             // ${VAR}
-            var expanded = _bracedVariable.Replace(input, 
+            var expanded = _bracedVariable.Replace(input,
                 match => Environment.GetEnvironmentVariable(match.Groups["brace"].Value) ?? match.Value);
 
             // $VAR (avoid ${...} already handled)
@@ -93,9 +93,9 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.PostConfigures
             // Keep UNC prefix intact on Windows; only normalise '/' → '\'.
             // Do not touch leading backslashes or collapse them.
 
-            if (string.IsNullOrEmpty(input)) 
-            { 
-                return input; 
+            if (string.IsNullOrEmpty(input))
+            {
+                return input;
             }
 
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows) && input.StartsWith(@"\\"))

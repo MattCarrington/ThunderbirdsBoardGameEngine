@@ -34,7 +34,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Domain.Entities
             ArgumentException.ThrowIfNullOrWhiteSpace(code);
 
             ArgumentOutOfRangeException.ThrowIfNegativeOrZero(difficultyNumber);
-                
+
             ArgumentNullException.ThrowIfNull(bonusConditions);
             ArgumentNullException.ThrowIfNull(rewardOptions);
 
@@ -72,7 +72,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Domain.Entities
 
             var cleaned = input.Trim().Normalize(NormalizationForm.FormC);
 
-            if (cleaned.Length == 0) 
+            if (cleaned.Length == 0)
             {
                 throw new ArgumentException("String cannot be empty or whitespace after cleaning.", parameterName);
             }
@@ -105,8 +105,8 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Domain.Entities
 
             // 3. Reject leading/trailing hyphens or double hyphens BEFORE collapsing
             if (trimmed.StartsWith('-') || trimmed.EndsWith('-') || trimmed.Contains("--"))
-            { 
-                throw new ArgumentException("Invalid code format: leading/trailing/double hyphen.", paramName); 
+            {
+                throw new ArgumentException("Invalid code format: leading/trailing/double hyphen.", paramName);
             }
 
             // 4. Reject any illegal symbol (skip space, dash, underscore, slash, dot)
@@ -133,9 +133,10 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Domain.Entities
                     dash = false;
                 }
                 else if ((char.IsWhiteSpace(ch) || ch is '-' or '_' or '/' or '.') && !dash)
-                { 
-                    sb.Append('-'); 
-                    dash = true; }
+                {
+                    sb.Append('-');
+                    dash = true;
+                }
             }
 
             var normalized = sb.ToString().Trim('-');

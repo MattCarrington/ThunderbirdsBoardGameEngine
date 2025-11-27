@@ -28,7 +28,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.WireMock.ComponentTests
             _server.Reset();
 
             _stub = fixture.Host.DisasterCardStub;
-            _stub.RegisterMissingHeaderGuard();           
+            _stub.RegisterMissingHeaderGuard();
             _stub.RegisterIncorrectHeaderGuard();
         }
 
@@ -128,7 +128,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.WireMock.ComponentTests
 
             // Assert
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
-            
+
             var result = await response.Content.ReadAsStringAsync();
 
             Assert.Contains($"Missing header 'X-Api-Version'", result);
@@ -149,7 +149,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.WireMock.ComponentTests
 
             // Assert
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
-            
+
             var result = await response.Content.ReadAsStringAsync();
 
             Assert.Contains("Unsupported version in header 'X-Api-Version'. Expected '1.0'.", result);

@@ -66,7 +66,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Mappers
 
             // Assert
             Assert.IsType<DisasterCard>(result);
-            var characterBonus = Assert.Single(result.BonusConditions) ;
+            var characterBonus = Assert.Single(result.BonusConditions);
             var character = Assert.IsType<CharacterBonusCondition>(characterBonus);
             Assert.NotNull(characterBonus);
             Assert.Equal(Character.LadyPenelope, character.Character);
@@ -120,7 +120,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Mappers
             };
 
             var dto = new DisasterCardCatalogDtoBuilder().WithBonusCondition(bonus).Build();
-            
+
             var mapper = CreateMapper();
 
             // Act
@@ -183,7 +183,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Mappers
             };
 
             var dto = new DisasterCardCatalogDtoBuilder().WithBonusCondition(bonus).Build();
-            
+
             var mapper = CreateMapper();
 
             // Act
@@ -668,7 +668,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Mappers
         private static void AssertOutOfRangeExceptionWrapped(DisasterCardCatalogDto dto)
         {
             var mapper = CreateMapper();
-            
+
             var exception = Assert.Throws<DisasterCardValidationException>(() => mapper.Map(dto));
             Assert.IsType<ArgumentOutOfRangeException>(exception.InnerException);
         }

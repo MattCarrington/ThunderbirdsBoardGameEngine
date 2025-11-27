@@ -28,8 +28,8 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints.V1
             _client = factory.CreateClient();
         }
 
-        [Fact] 
-        public async Task GetAllDisasterCards_WhenValidApiVersionHeader_ReturnsExpectedDataset() 
+        [Fact]
+        public async Task GetAllDisasterCards_WhenValidApiVersionHeader_ReturnsExpectedDataset()
         {
             // Arrange
             using var request = new HttpRequestMessage(HttpMethod.Get, Route);
@@ -54,7 +54,7 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints.V1
             Assert.Distinct(cards.Select(c => c.Id)); // Assert each card has a unique ID
         }
 
-        [Fact] 
+        [Fact]
         public async Task GetDisasterCards_MissingApiVersionHeader_ReturnsBadRequest()
         {
             // Arrange
@@ -72,13 +72,13 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints.V1
             Assert.NotNull(problem);
             Assert.Equal(StatusCodes.Status400BadRequest, problem.Status);
             Assert.Equal("ApiVersionUnspecified", problem.Title);
-            Assert.True(problem.Extensions.ContainsKey("traceId")); 
+            Assert.True(problem.Extensions.ContainsKey("traceId"));
             Assert.False(string.IsNullOrWhiteSpace(problem.Detail));
         }
 
-        [Fact] 
+        [Fact]
         public async Task GetDisasterCards_InvalidApiVersionHeader_ReturnsBadRequest()
-        { 
+        {
             // Arrange
             using var request = new HttpRequestMessage(HttpMethod.Get, Route);
             request.Headers.Add("X-API-Version", "99999");

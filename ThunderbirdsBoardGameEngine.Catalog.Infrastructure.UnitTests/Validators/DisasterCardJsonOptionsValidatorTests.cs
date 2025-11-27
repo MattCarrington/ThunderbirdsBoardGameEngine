@@ -113,7 +113,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Validator
             // Arrange
             var fileSystem = new MockFileSystem();
 
-            var directory = IsWindows 
+            var directory = IsWindows
                 ? "C:/path/to/directory/"
                 : "/path/to/directory/";
 
@@ -139,7 +139,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Validator
             // Arrange
             var fileSystem = new MockFileSystem();
 
-            var directory = IsWindows 
+            var directory = IsWindows
                 ? "C:/path/to/"
                 : "/path/to/";
 

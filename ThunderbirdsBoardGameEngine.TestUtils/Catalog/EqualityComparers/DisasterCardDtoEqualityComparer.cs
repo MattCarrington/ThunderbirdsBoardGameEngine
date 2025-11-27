@@ -16,19 +16,19 @@ namespace ThunderbirdsBoardGameEngine.TestUtils.Catalog.EqualityComparers
         /// <inheritdoc />
         public bool Equals(DisasterCardDto? x, DisasterCardDto? y)
         {
-            if (ReferenceEquals(x, y)) 
-            { 
-                return true; 
+            if (ReferenceEquals(x, y))
+            {
+                return true;
             }
 
-            if (x is null || y is null) 
-            { 
-                return false; 
+            if (x is null || y is null)
+            {
+                return false;
             }
 
             var xBonusConditions = x.BonusConditions ?? Array.Empty<BonusConditionDto>();
             var yBonusConditions = y.BonusConditions ?? Array.Empty<BonusConditionDto>();
-            
+
             var xRewards = x.Rewards ?? Array.Empty<RewardDto>();
             var yRewards = y.Rewards ?? Array.Empty<RewardDto>();
 
@@ -53,11 +53,11 @@ namespace ThunderbirdsBoardGameEngine.TestUtils.Catalog.EqualityComparers
 
             foreach (var bc in obj.BonusConditions)
             {
-                hash.Add(BonusConditionDtoEqualityComparer.Instance.GetHashCode(bc)); 
+                hash.Add(BonusConditionDtoEqualityComparer.Instance.GetHashCode(bc));
             }
 
-            foreach (var r in obj.Rewards) 
-            { 
+            foreach (var r in obj.Rewards)
+            {
                 hash.Add(RewardDtoEqualityComparer.Instance.GetHashCode(r));
             }
 

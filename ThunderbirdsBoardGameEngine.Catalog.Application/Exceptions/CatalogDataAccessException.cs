@@ -42,7 +42,7 @@
         {
             return new CatalogDataAccessException(CatalogDataAccessErrorCode.SourceUnreadable, path, $"Unable to read catalog data file: {path}", innerException);
         }
-    }    
+    }
 
     public enum CatalogDataAccessErrorCode
     {

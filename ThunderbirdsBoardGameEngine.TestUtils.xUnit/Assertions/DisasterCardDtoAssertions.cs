@@ -52,6 +52,6 @@ namespace ThunderbirdsBoardGameEngine.TestUtils.xUnit.Assertions
 
             Assert.Equal(expectedList.Count, actualList.Count); // Technically redundant but clearer message on size mismatch
             Assert.Equal(expectedList, actualList, Comparer);
-        }        
+        }
     }
 }

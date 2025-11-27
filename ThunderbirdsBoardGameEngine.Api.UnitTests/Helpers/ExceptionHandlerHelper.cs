@@ -40,7 +40,7 @@ namespace ThunderbirdsBoardGameEngine.Api.UnitTests.Helpers
             var handled = await handler.TryHandleAsync(httpContext, ex, CancellationToken.None);
 
             httpContext.Response.Body.Position = 0;
-            
+
             TProblemDetails? body = null;
 
             if (httpContext.Response.Body.Length > 0)
