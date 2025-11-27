@@ -7,13 +7,13 @@ on:
   pull_request:
 
 env:
-  SOLUTION_FILE: ThunderbirdsBoardGameEngine.sln
+  SOLUTION_FILE: &solution ThunderbirdsBoardGameEngine.sln
 
 jobs:
   build:
     uses: ./.github/workflows/build.yml   # 👈 call the reusable workflow
     with:
-      solution_file: ${{ env.SOLUTION_FILE }}
+      solution_file: *solution
 
   unit-tests:
     name: Run Unit Tests
