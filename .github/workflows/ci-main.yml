@@ -6,7 +6,7 @@ on:
         - main
 
 env:
-  SOLUTION_FILE: ThunderbirdsBoardGameEngine.sln
+  SOLUTION_FILE: &solution ThunderbirdsBoardGameEngine.sln
 
 jobs:
   build:
