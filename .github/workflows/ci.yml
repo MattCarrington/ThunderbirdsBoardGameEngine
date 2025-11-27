@@ -17,8 +17,6 @@ jobs:
 
   docker-build:
     uses: ./.github/workflows/docker-build.yml   # 👈 call the reusable workflow
-    with:
-      solution_file: *solution
 
   unit-tests:
     name: Run Unit Tests
