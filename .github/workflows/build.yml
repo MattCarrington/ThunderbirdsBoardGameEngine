@@ -21,5 +21,6 @@ jobs:
 
       - name: Restore & Build
         run: |
-          dotnet restore $SOLUTION_FILE
-          dotnet build $SOLUTION_FILE --configuration Release --no-restore
+          dotnet restore "${{ inputs.solution_file }}"
+          dotnet build "${{ inputs.solution_file }}" --configuration Release --no-restore
+      
