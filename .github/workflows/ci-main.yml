@@ -15,7 +15,7 @@ jobs:
       solution_file: *solution
 
   docker-build:
-    uses: ./.github/workflows/build.yml   # 👈 call the reusable workflow
+    uses: ./.github/workflows/docker-build.yml   # 👈 call the reusable workflow
     with:
       solution_file: *solution
 
