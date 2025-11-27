@@ -173,3 +173,81 @@ jobs:
           name: integration-test-results
           path: ./TestResults/Integration
           retention-days: 7
+
+  playwright-tests:
+    name: Run Playwright Tests
+    runs-on: ubuntu-latest
+    needs: [unit-tests, component-tests, integration-tests]
+
+    env:
+      BASE_URL: "http://localhost:8080"
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.x'
+
+      # Reuse the built API image artifact so docker-compose uses the same image
+      - name: Download API Image Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: thunderbirds-api-image
+          path: .
+
+      - name: Load Docker Image
+        run: docker load -i thunderbirds-api.tar
+
+      - name: Bring up app with docker compose
+        run: |
+          set -euo pipefail
+          unset COMPOSE_FILE
+          docker compose \
+            -f Docker/docker-compose.yml \
+            -f Docker/docker-compose.test.yml \
+            up -d --build
+
+      - name: Wait for readiness
+        run: |
+          set -euo pipefail
+          for i in {1..60}; do
+            if curl -fsS http://localhost:8080/health/ready >/dev/null; then
+              echo "App is healthy!"; break
+            fi
+            echo "App not ready yet... ($i/60)"
+            sleep 2
+          done
+
+      - name: Install Playwright CLI & browsers
+        run: |
+          dotnet tool install --global Microsoft.Playwright.CLI
+          playwright install
+
+      - name: Run Playwright tests
+        env:
+          BASE_URL: ${{ env.BASE_URL }}
+        run: |
+          dotnet test $SOLUTION_FILE \
+            --configuration Release \
+            --logger:"trx" \
+            --results-directory ./TestResults/Playwright \
+            --filter "FullyQualifiedName~PlaywrightTests"
+
+      - name: Upload Playwright test results (on failure)
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-test-results
+          path: ./TestResults/Playwright
+          retention-days: 7
+
+      - name: Tear down docker compose
+        if: always()
+        run: |
+          set -euo pipefail
+          unset COMPOSE_FILE
+          docker compose \
+            -f Docker/docker-compose.yml \
+            -f Docker/docker-compose.test.yml \
+            down -v

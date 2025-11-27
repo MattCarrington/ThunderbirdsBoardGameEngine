@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 18
-VisualStudioVersion = 18.0.11217.181 d18.0
+VisualStudioVersion = 18.0.11217.181
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "IntegrationTests", "IntegrationTests", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
 EndProject
@@ -87,6 +87,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Invalid", "Invalid", "{9167
 		TestData\Catalog\DisasterCard\Invalid\empty.json = TestData\Catalog\DisasterCard\Invalid\empty.json
 		TestData\Catalog\DisasterCard\Invalid\invalid-disaster-cards.json = TestData\Catalog\DisasterCard\Invalid\invalid-disaster-cards.json
 		TestData\Catalog\DisasterCard\Invalid\invalid-json.json = TestData\Catalog\DisasterCard\Invalid\invalid-json.json
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "EndToEndTests", "EndToEndTests", "{925ACEE6-F02D-4573-8653-EE865CF90C82}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThunderbirdsBoardGameEngine.PlaywrightTests", "ThunderbirdsBoardGameEngine.PlaywrightTests\ThunderbirdsBoardGameEngine.PlaywrightTests.csproj", "{1048B844-97CA-4990-8A7C-72DED89A1818}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{C0EA190C-A160-430F-92B9-AD21405C1502}"
+	ProjectSection(SolutionItems) = preProject
+		.github\workflows\ci.yml = .github\workflows\ci.yml
 	EndProjectSection
 EndProject
 Global
@@ -199,6 +208,10 @@ Global
 		{4321919E-735B-42BD-B962-19F9627B5FC7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4321919E-735B-42BD-B962-19F9627B5FC7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4321919E-735B-42BD-B962-19F9627B5FC7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1048B844-97CA-4990-8A7C-72DED89A1818}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1048B844-97CA-4990-8A7C-72DED89A1818}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1048B844-97CA-4990-8A7C-72DED89A1818}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1048B844-97CA-4990-8A7C-72DED89A1818}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -230,6 +243,8 @@ Global
 		{618B8C51-10F5-424F-B2B3-324645965CEA} = {1A118D32-1321-4875-A309-50145271272A}
 		{DAF4B856-FCC5-4676-87EF-9EF117EC0D3B} = {1A118D32-1321-4875-A309-50145271272A}
 		{9167DD61-87D3-4C0D-8158-6CF9544B1A0A} = {1A118D32-1321-4875-A309-50145271272A}
+		{925ACEE6-F02D-4573-8653-EE865CF90C82} = {C005E618-80C1-4CCD-9774-336D558E958F}
+		{1048B844-97CA-4990-8A7C-72DED89A1818} = {925ACEE6-F02D-4573-8653-EE865CF90C82}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {92EB50C5-075F-4AF3-8107-0DC9EDBBAB83}
