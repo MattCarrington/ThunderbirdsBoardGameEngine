@@ -32,8 +32,8 @@ on:
         default: "http://localhost:8080"
 
 jobs:
-  unit-tests:
-    name: Run Unit Tests
+  tests:
+    name: Run Tests
     runs-on: ubuntu-latest
     
     steps:
@@ -53,28 +53,16 @@ jobs:
             --results-directory ./TestResults \
             --filter "FullyQualifiedName~UnitTests"
                 
-      - name: Upload Test Results
-        if: failure()  # Only upload if the tests failed
-        uses: actions/upload-artifact@v4
-        with:
-          name: unit-test-results
-          path: ./TestResults/Unit
-          retention-days: 7
-
-  component-tests:
-    name: Run Component Tests
-    runs-on: ubuntu-latest
-    if: ${{ inputs.run_component }}
-    needs: unit-tests
-
-    steps:
-      - uses: actions/checkout@v3
-
-      - uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: '8.x'
+    #   - name: Upload Test Results
+    #     if: failure()  # Only upload if the tests failed
+    #     uses: actions/upload-artifact@v4
+    #     with:
+    #       name: unit-test-results
+    #       path: ./TestResults/Unit
+    #       retention-days: 7
 
       - name: Run Component Tests
+        if: ${{ inputs.run_component }}
         run: |
           set -e
           echo "🚀 Running all Component Tests..."
@@ -84,31 +72,48 @@ jobs:
             --results-directory ./TestResults \
             --filter "FullyQualifiedName~ComponentTests"
                 
-      - name: Upload Test Results
-        if: failure()  # Only upload if the tests failed
-        uses: actions/upload-artifact@v4
+    #   - name: Upload Test Results
+    #     if: failure()  # Only upload if the tests failed
+    #     uses: actions/upload-artifact@v4
+    #     with:
+    #       name: component-test-results
+    #       path: ./TestResults/Component
+    #       retention-days: 7
+            
+      - name: Download Docker image artifact
+        if: ${{ inputs.run_integration || inputs.run_playwright }}
+        uses: actions/download-artifact@v4
         with:
-          name: component-test-results
-          path: ./TestResults/Component
-          retention-days: 7
+          name: thunderbirds-api-image
+          path: .
 
-  integration-tests:
-    name: Run Integration
-    runs-on: ubuntu-latest
-    if: ${{ inputs.run_integration }}
-    needs: component-tests
+      - name: Load Docker image
+        run: docker load -i thunderbirds-api.tar
 
-    env:
-      CatalogBaseUrl: ${{ inputs.base_url }}
+      - name: Start API env
+        if: ${{ inputs.run_integration || inputs.run_playwright }}
+        run: |
+          set -euo pipefail
+          unset COMPOSE_FILE
+          docker compose \
+          -f Docker/docker-compose.yml \
+          -f Docker/docker-compose.test.yml \
+          up -d
 
-    steps:
-      - uses: actions/checkout@v3
-
-      - uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: '8.x'
+      - name: Wait for readiness
+        run: |
+          set -euo pipefail
+          for i in {1..60}; do
+          if curl -fsS "${{ inputs.api_url }}/health/ready" >/dev/null; then
+            echo "API is healthy!"; exit 0;
+          fi
+          echo "API not ready yet... ($i/60)"
+          sleep 2
+          done
+          echo "API did not become ready in time"; exit 1
 
       - name: Run Integration Tests
+        if: ${{ inputs.run_integration }}
         run: |
           set -e
           echo "🚀 Running all Integration Tests..."
@@ -117,43 +122,33 @@ jobs:
             --logger:"trx" \
             --results-directory ./TestResults/Integration \
             --filter "FullyQualifiedName~IntegrationTests"
+        env:
+          CatalogBaseUrl: ${{ inputs.base_url }}
 
-      - name: Upload Test Results
-        if: failure()  # Only upload if the tests failed
-        uses: actions/upload-artifact@v4
-        with:
-          name: integration-test-results
-          path: ./TestResults/Integration
-          retention-days: 7
+    #   - name: Upload Test Results
+    #     if: failure()  Only upload if the tests failed
+    #     uses: actions/upload-artifact@v4
+    #     with:
+    #       name: integration-test-results
+    #       path: ./TestResults/Integration
+    #       retention-days: 7
 
-  playwright-tests:
-    name: Run Playwright Tests
-    runs-on: ubuntu-latest
-    if: ${{ inputs.run_playwright }}
-    needs: integration-tests
-
-    env:
-      BASE_URL: ${{ inputs.base_url }}
-
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: '8.x'
-
+  
       - name: Install Playwright CLI
+        if: ${{ inputs.run_playwright }}
         run: dotnet tool install --global Microsoft.Playwright.CLI
 
       - name: Build Playwright test project & install browsers
+        if: ${{ inputs.run_playwright }}
         working-directory: ThunderbirdsBoardGameEngine.PlaywrightTests
         run: |
           dotnet build --configuration Release
           playwright install
 
       - name: Run Playwright tests
+        if: ${{ inputs.run_playwright }}
         env:
-          BASE_URL: ${{ env.BASE_URL }}
+          BASE_URL: ${{ inputs.base_url }}
         run: |
           dotnet test ${{ inputs.solution_file }} \
             --configuration Release \
@@ -161,10 +156,21 @@ jobs:
             --results-directory ./TestResults/Playwright \
             --filter "FullyQualifiedName~PlaywrightTests"
 
-      - name: Upload Playwright test results (on failure)
-        if: failure()
-        uses: actions/upload-artifact@v4
-        with:
-          name: playwright-test-results
-          path: ./TestResults/Playwright
-          retention-days: 7
+    #   - name: Upload Playwright test results (on failure)
+    #     if: failure()
+    #     uses: actions/upload-artifact@v4
+    #     with:
+    #       name: playwright-test-results
+    #       path: ./TestResults/Playwright
+    #       retention-days: 7
+  
+      
+      - name: Stop containers
+        if: ${{ inputs.run_integration || inputs.run_playwright }}
+        run: |
+            set -euo pipefail
+            unset COMPOSE_FILE
+            docker compose \
+                -f Docker/docker-compose.yml \
+                -f Docker/docker-compose.test.yml \
+                down -v
