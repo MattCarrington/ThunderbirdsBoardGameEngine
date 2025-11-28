@@ -36,7 +36,7 @@ jobs:
       run_playwright: true
     needs:
       #- Build
-      - docker-env
+      - start-docker-env
 
   teardown-docker-env: # remove after testing
     uses: ./.github/workflows/docker-teardown.yml
