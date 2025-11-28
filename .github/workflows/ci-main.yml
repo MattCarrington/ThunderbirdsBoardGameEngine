@@ -22,6 +22,11 @@ jobs:
     needs:
       - static-analysis
 
+  docker-env:
+    uses: ./.github/workflows/docker-env.yml
+    needs: 
+      - build
+
   tests:
     uses: ./.github/workflows/tests.yml
     with:
@@ -30,4 +35,9 @@ jobs:
       run_integration: true
       run_playwright: true
     needs:
-      - build
+      - docker-env
+    
+  teardown:
+    uses: ./.github/workflows/docker-teardown.yml
+    needs: 
+      - tests

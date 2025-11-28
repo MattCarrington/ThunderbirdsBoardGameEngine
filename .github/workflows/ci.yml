@@ -23,12 +23,22 @@ jobs:
     needs:
       - static-analysis  
 
+  start-docker-env: # remove after testing
+    uses: ./.github/workflows/docker-env.yml
+    needs: build
+
   tests:
     uses: ./.github/workflows/tests.yml
     with:
       solution_file: *solution
       run_component: true
-      run_integration: false
-      run_playwright: false
+      run_integration: true # swtich back to false later
+      run_playwright: true
     needs:
-      - build
+      #- Build
+      - docker-env
+
+  teardown-docker-env: # remove after testing
+    uses: ./.github/workflows/docker-teardown.yml
+    needs: 
+      - tests

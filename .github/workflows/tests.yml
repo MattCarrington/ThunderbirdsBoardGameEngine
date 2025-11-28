@@ -102,35 +102,6 @@ jobs:
         with:
           dotnet-version: '8.x'
 
-      - name: Download Image Artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: thunderbirds-api-image
-          path: .
-      
-      - name: Load Docker Image
-        run: docker load -i thunderbirds-api.tar
-
-      - name: Bring up API with docker compose
-        run: |
-          set -euo pipefail
-          unset COMPOSE_FILE
-          docker compose \
-            -f Docker/docker-compose.yml \
-            -f Docker/docker-compose.test.yml \
-            up -d --build
-      
-      - name: Wait for readiness
-        run: |
-          set -euo pipefail
-          for i in {1..60}; do
-            if curl -fsS http://localhost:8080/health/ready >/dev/null; then
-              echo "API is healthy!"; break
-            fi
-            echo "API not ready yet... ($i/60)"
-            sleep 2
-          done
-
       - name: Run Integration Tests
         run: |
           set -e
@@ -140,10 +111,6 @@ jobs:
             --logger:"trx" \
             --results-directory ./TestResults/Integration \
             --filter "FullyQualifiedName~IntegrationTests"
-
-      - if: always()
-        name: Tear Down Docker Container
-        run: docker rm -f thunderbirds-api-test
 
       - name: Upload Test Results
         if: failure()  # Only upload if the tests failed
@@ -168,36 +135,6 @@ jobs:
       - uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '8.x'
-
-      # Reuse the built API image artifact so docker-compose uses the same image
-      - name: Download API Image Artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: thunderbirds-api-image
-          path: .
-
-      - name: Load Docker Image
-        run: docker load -i thunderbirds-api.tar
-
-      - name: Bring up app with docker compose
-        run: |
-          set -euo pipefail
-          unset COMPOSE_FILE
-          docker compose \
-            -f Docker/docker-compose.yml \
-            -f Docker/docker-compose.test.yml \
-            up -d --build
-
-      - name: Wait for readiness
-        run: |
-          set -euo pipefail
-          for i in {1..60}; do
-            if curl -fsS http://localhost:8080/health/ready >/dev/null; then
-              echo "App is healthy!"; break
-            fi
-            echo "App not ready yet... ($i/60)"
-            sleep 2
-          done
 
       - name: Install Playwright CLI
         run: dotnet tool install --global Microsoft.Playwright.CLI
@@ -225,13 +162,3 @@ jobs:
           name: playwright-test-results
           path: ./TestResults/Playwright
           retention-days: 7
-
-      - name: Tear down docker compose
-        if: always()
-        run: |
-          set -euo pipefail
-          unset COMPOSE_FILE
-          docker compose \
-            -f Docker/docker-compose.yml \
-            -f Docker/docker-compose.test.yml \
-            down -v
