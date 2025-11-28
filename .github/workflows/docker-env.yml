@@ -3,45 +3,45 @@ name: docker-env (reusable)
 on:
   workflow_call:
     inputs:
-        api_url:
-            description: "The base URL of the API to wait for readiness"
-            required: false
-            type: string
-            default: "http://localhost:5000"
+      api_url:
+        description: "The base URL of the API to wait for readiness"
+        required: false
+        type: string
+        default: "http://localhost:5000"
 jobs:
   docker-env:
     name: Start API env from built image
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+    - uses: actions/checkout@v4
 
-      - name: Download Docker image artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: thunderbirds-api-image
-          path: .
+    - name: Download Docker image artifact
+      uses: actions/download-artifact@v4
+      with:
+        name: thunderbirds-api-image
+        path: .
 
-      - name: Load Docker image
-        run: docker load -i thunderbirds-api.tar
+    - name: Load Docker image
+      run: docker load -i thunderbirds-api.tar
 
-      - name: Start API env
-        run: |
-          set -euo pipefail
-          unset COMPOSE_FILE
-          docker compose \
-            -f Docker/docker-compose.yml \
-            -f Docker/docker-compose.test.yml \
-            up -d
+    - name: Start API env
+      run: |
+        set -euo pipefail
+        unset COMPOSE_FILE
+        docker compose \
+        -f Docker/docker-compose.yml \
+        -f Docker/docker-compose.test.yml \
+        up -d
 
-      - name: Wait for readiness
-        run: |
-          set -euo pipefail
-          for i in {1..60}; do
-            if curl -fsS "${{ inputs.api_url }}/health/ready" >/dev/null; then
-              echo "API is healthy!"; exit 0;
-            fi
-            echo "API not ready yet... ($i/60)"
-            sleep 2
-          done
-          echo "API did not become ready in time"; exit 1
+    - name: Wait for readiness
+      run: |
+        set -euo pipefail
+        for i in {1..60}; do
+        if curl -fsS "${{ inputs.api_url }}/health/ready" >/dev/null; then
+            echo "API is healthy!"; exit 0;
+        fi
+        echo "API not ready yet... ($i/60)"
+        sleep 2
+        done
+        echo "API did not become ready in time"; exit 1

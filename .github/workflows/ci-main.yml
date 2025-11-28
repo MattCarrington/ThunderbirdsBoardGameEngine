@@ -4,6 +4,7 @@ on:
   push:
     branches: 
         - main
+  workflow_dispatch: {}
 
 env:
   SOLUTION_FILE: &solution ThunderbirdsBoardGameEngine.sln
@@ -23,7 +24,7 @@ jobs:
     needs:
       - static-analysis
 
-  docker-env:
+  startup-docker-env:
     uses: ./.github/workflows/docker-env.yml
     with:
       api_url: *base_url
@@ -39,9 +40,10 @@ jobs:
       run_playwright: true
       base_url: *base_url
     needs:
-      - docker-env
+      - startup-docker-env
     
-  teardown:
+  teardown-docker-env:
     uses: ./.github/workflows/docker-teardown.yml
+    if: always()
     needs: 
       - tests

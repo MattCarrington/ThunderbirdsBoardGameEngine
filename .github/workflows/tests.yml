@@ -27,8 +27,9 @@ on:
 
       base_url:
         description: "Base URL for the API"
-        required: true
+        required: false
         type: string
+        default: "http://localhost:8080"
 
 jobs:
   unit-tests:
