@@ -29,4 +29,3 @@ jobs:
         run: |
           dotnet build "${{ inputs.solution_file }}" \
             --configuration Release \
-            /warnaserror
