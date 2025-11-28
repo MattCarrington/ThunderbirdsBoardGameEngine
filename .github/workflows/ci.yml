@@ -8,6 +8,7 @@ on:
 
 env:
   SOLUTION_FILE: &solution ThunderbirdsBoardGameEngine.sln
+  BASE_URL: &base_url "http://localhost:8080"
 
 jobs:
   static-analysis:
@@ -25,6 +26,8 @@ jobs:
 
   start-docker-env: # remove after testing
     uses: ./.github/workflows/docker-env.yml
+    with:
+      api_url: *base_url
     needs: build
 
   tests:

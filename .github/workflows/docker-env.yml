@@ -2,7 +2,12 @@ name: docker-env (reusable)
 
 on:
   workflow_call:
-    
+    inputs:
+        api_url:
+            description: "The base URL of the API to wait for readiness"
+            required: false
+            type: string
+            default: "http://localhost:5000"
 jobs:
   docker-env:
     name: Start API env from built image
@@ -33,7 +38,7 @@ jobs:
         run: |
           set -euo pipefail
           for i in {1..60}; do
-            if curl -fsS "*api_url*/health/ready" >/dev/null; then
+            if curl -fsS "${{ inputs.api_url }}/health/ready" >/dev/null; then
               echo "API is healthy!"; exit 0;
             fi
             echo "API not ready yet... ($i/60)"
