@@ -6,7 +6,7 @@ using ThunderbirdsBoardGameEngine.UI.Interfaces;
 using ThunderbirdsBoardGameEngine.UI.Pages;
 using Xunit;
 
-namespace ThunderbirdsBoardGameEngine.UI.UnitTests.Pages
+namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Pages
 {
     public class DisasterCardsTests : TestContext
     {
@@ -14,13 +14,21 @@ namespace ThunderbirdsBoardGameEngine.UI.UnitTests.Pages
         [
             new DisasterCardDto
             {
-                Id = 1, Name = "Volcano", DifficultyNumber = 5, Location = "Pacific", RescueType = "Air",
+                Id = 1,
+                Name = "Volcano",
+                DifficultyNumber = 5,
+                Location = "Pacific",
+                RescueType = "Air",
                 BonusConditions = [new BonusConditionDto { Description = "Have Fire Suit" }],
                 Rewards = [new RewardDto { DisplayName = "2 Reputation" }]
             },
             new DisasterCardDto
             {
-                Id = 2, Name = "Flood", DifficultyNumber = 3, Location = "Europe", RescueType = "Sea",
+                Id = 2,
+                Name = "Flood",
+                DifficultyNumber = 3,
+                Location = "Europe",
+                RescueType = "Sea",
                 BonusConditions = [],
                 Rewards = []
             }
@@ -246,8 +254,16 @@ namespace ThunderbirdsBoardGameEngine.UI.UnitTests.Pages
         {
             var withNulls = new[]
             {
-                new DisasterCardDto { Id = 9, Name = "Nulls", DifficultyNumber = 1, Location = "Test", RescueType = "Air",
-                                      BonusConditions = null, Rewards = null }
+                new DisasterCardDto
+                {
+                    Id = 9,
+                    Name = "Nulls",
+                    DifficultyNumber = 1,
+                    Location = "Test",
+                    RescueType = "Air",
+                    BonusConditions = null,
+                    Rewards = null
+                }
             };
 
             _ = SetupMockService(withNulls);
