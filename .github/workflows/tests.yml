@@ -104,7 +104,7 @@ jobs:
         run: |
           set -euo pipefail
           for i in {1..60}; do
-          if curl -fsS "${{ inputs.api_url }}/health/ready" >/dev/null; then
+          if curl -fsS "${{ inputs.base_url }}/health/ready" >/dev/null; then
             echo "API is healthy!"; exit 0;
           fi
           echo "API not ready yet... ($i/60)"
