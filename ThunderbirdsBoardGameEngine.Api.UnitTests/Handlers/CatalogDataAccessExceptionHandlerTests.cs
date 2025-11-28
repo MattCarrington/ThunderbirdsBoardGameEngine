@@ -3,11 +3,11 @@ using Microsoft.Extensions.Logging.Abstractions;
 using NSubstitute;
 using ThunderbirdsBoardGameEngine.Api.Error;
 using ThunderbirdsBoardGameEngine.Api.Handlers;
+using ThunderbirdsBoardGameEngine.Api.UnitTests.ClassData;
 using ThunderbirdsBoardGameEngine.Api.UnitTests.Fakes;
 using ThunderbirdsBoardGameEngine.Api.UnitTests.Helpers;
 using ThunderbirdsBoardGameEngine.Catalog.Application.Exceptions;
 using Xunit;
-using Xunit.Abstractions;
 
 namespace ThunderbirdsBoardGameEngine.Api.UnitTests.Handlers
 {
@@ -103,46 +103,6 @@ namespace ThunderbirdsBoardGameEngine.Api.UnitTests.Handlers
                     "The catalog data is missing",
                     ProblemTypes.ServerError)
             ];
-        }
-
-        public class CatalogDataAccessExceptionHandlerTestCase : IXunitSerializable
-        {
-            public CatalogDataAccessErrorCode ErrorCode { get; private set; }
-
-            public int ExpectedStatus { get; private set; }
-
-            public string ExpectedTitle { get; private set; }
-
-            public string ExpectedType { get; private set; }
-
-            [Obsolete("Called by the de-serializer; should only be called by deriving classes for de-serialization purposes")]
-            public CatalogDataAccessExceptionHandlerTestCase()
-            {
-            }
-
-            public CatalogDataAccessExceptionHandlerTestCase(CatalogDataAccessErrorCode errorCode, int expectedStatus, string expectedTitle, string expectedType)
-            {
-                ErrorCode = errorCode;
-                ExpectedStatus = expectedStatus;
-                ExpectedTitle = expectedTitle;
-                ExpectedType = expectedType;
-            }
-
-            public void Serialize(IXunitSerializationInfo info)
-            {
-                info.AddValue(nameof(ErrorCode), ErrorCode);
-                info.AddValue(nameof(ExpectedStatus), ExpectedStatus);
-                info.AddValue(nameof(ExpectedTitle), ExpectedTitle);
-                info.AddValue(nameof(ExpectedType), ExpectedType);
-            }
-
-            public void Deserialize(IXunitSerializationInfo info)
-            {
-                ErrorCode = info.GetValue<CatalogDataAccessErrorCode>(nameof(ErrorCode));
-                ExpectedStatus = info.GetValue<int>(nameof(ExpectedStatus));
-                ExpectedTitle = info.GetValue<string>(nameof(ExpectedTitle))!;
-                ExpectedType = info.GetValue<string>(nameof(ExpectedType))!;
-            }
         }
     }
 }
