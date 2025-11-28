@@ -37,6 +37,7 @@ jobs:
       run_component: true
       run_integration: true # swtich back to false later
       run_playwright: true
+      base_url: *base_url
     needs:
       #- Build
       - start-docker-env

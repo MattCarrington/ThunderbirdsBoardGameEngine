@@ -25,6 +25,11 @@ on:
         type: boolean
         default: true
 
+      base_url:
+        description: "Base URL for the API"
+        required: true
+        type: string
+
 jobs:
   unit-tests:
     name: Run Unit Tests
@@ -93,7 +98,7 @@ jobs:
     needs: component-tests
 
     env:
-      CatalogBaseUrl: "http://localhost:8080"
+      CatalogBaseUrl: ${{ inputs.base_url }}
 
     steps:
       - uses: actions/checkout@v3
@@ -127,7 +132,7 @@ jobs:
     needs: integration-tests
 
     env:
-      BASE_URL: "http://localhost:8080"
+      BASE_URL: ${{ inputs.base_url }}
 
     steps:
       - uses: actions/checkout@v4
