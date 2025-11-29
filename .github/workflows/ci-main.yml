@@ -4,7 +4,7 @@ on:
   push:
     branches: 
         - main
-  pull_request:
+  pull_request: # TODO: remove once testing complete
 
 env:
   SOLUTION_FILE: &solution ThunderbirdsBoardGameEngine.sln
