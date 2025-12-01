@@ -6,6 +6,12 @@ on:
         - main
   pull_request: # TODO: remove once testing complete
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+permissions:
+  contents: read
+
 env:
   SOLUTION_FILE: &solution ThunderbirdsBoardGameEngine.sln
   BASE_URL: &base_url "http://localhost:8080"
