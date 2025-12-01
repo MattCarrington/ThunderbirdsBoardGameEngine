@@ -57,7 +57,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Client.ComponentTests.V1
             var hits = _host.DisasterCardStub.GetAllRequestPaths();
 
             var route = Assert.Single(hits);
-            Assert.Equal("/api/disaster-cards", route);
+            Assert.Equal("/api/catalog/disaster-cards", route);
         }
 
         [Fact]

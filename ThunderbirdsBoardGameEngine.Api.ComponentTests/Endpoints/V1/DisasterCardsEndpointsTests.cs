@@ -21,7 +21,7 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints.V1
         };
 
         private const int ApiVersion = 1;
-        private const string Route = "/api/disaster-cards";
+        private const string Route = "/api/catalog/disaster-cards";
 
         public DisasterCardsEndpointsTests(CustomWebApplicationFactory factory)
         {

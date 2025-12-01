@@ -37,7 +37,7 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.ExceptionHandlers
 
             using var client = throwingFactory.CreateClient();
 
-            using var request = new HttpRequestMessage(HttpMethod.Get, "/api/disaster-cards");
+            using var request = new HttpRequestMessage(HttpMethod.Get, "/api/catalog/disaster-cards");
             request.Headers.Add("X-API-Version", "1");
 
             // Act

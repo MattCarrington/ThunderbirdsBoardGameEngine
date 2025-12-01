@@ -4,9 +4,9 @@ using ThunderbirdsBoardGameEngine.Api.Mappers.V1;
 using ThunderbirdsBoardGameEngine.Catalog.Application.Interfaces;
 using ThunderbirdsBoardGameEngine.Catalog.Contracts.Dtos.V1;
 
-namespace ThunderbirdsBoardGameEngine.Api.Controllers.V1
+namespace ThunderbirdsBoardGameEngine.Api.Controllers.Catalog.V1
 {
-    [Route("api/[controller]")]
+    [Route("api/catalog/[controller]")]
     [ApiController]
     [ApiVersion("1.0")]
     [AllowAnonymous]

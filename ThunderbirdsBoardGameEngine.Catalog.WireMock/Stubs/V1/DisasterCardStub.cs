@@ -10,7 +10,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.WireMock.Stubs.V1
 {
     public sealed class DisasterCardStub
     {
-        public const string Route = "/api/disaster-cards";
+        public const string Route = "/api/catalog/disaster-cards";
         public const string VersionHeader = "X-Api-Version";
         public const string VersionValue = "1.0";
         public const string Json = "application/json; charset=utf-8";
