@@ -102,6 +102,7 @@ jobs:
           up -d
 
       - name: Wait for readiness
+        if: ${{ inputs.run_integration || inputs.run_playwright }}
         run: |
           set -euo pipefail
           for i in {1..60}; do
