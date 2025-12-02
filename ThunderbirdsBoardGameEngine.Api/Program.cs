@@ -77,6 +77,8 @@ namespace ThunderbirdsBoardGameEngine.Api
 
             app.UseAuthorization();
 
+            app.MapMetaEndpoint();
+
             app.MapControllers();
             app.MapApiHealthChecks();
 
