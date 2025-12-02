@@ -40,3 +40,8 @@ jobs:
       base_url: *base_url
     needs:
       - build
+
+  compute_version:
+    uses: ./.github/workflows/version.yml
+    needs:
+      - tests

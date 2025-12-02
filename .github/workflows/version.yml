@@ -1,0 +1,64 @@
+name: Compute Server Version (reusable)
+
+on:
+  workflow_call:
+    outputs:
+      version:
+        description: "Calculated server version"
+        value: ${{ jobs.compute.outputs.version }}
+
+jobs:
+  compute:
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.compute_version.outputs.version }}
+
+    steps:
+      - name: Checkout full history
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Compute version
+        id: compute_version
+        run: |
+          # Find last server tag
+          LAST_TAG=$(git tag --list 'server/v*' | sort -V | tail -n1)
+
+          if [ -z "$LAST_TAG" ]; then
+            LAST_VERSION="0.0.0"
+            RANGE_ARG=""
+            echo "No tag found, starting from 0.0.0"
+          else
+            LAST_VERSION=${LAST_TAG#server/v}
+            RANGE_ARG="$LAST_TAG..HEAD"
+            echo "Found last tag: $LAST_TAG"
+          fi
+
+          IFS='.' read -r MAJOR MINOR PATCH <<< "$LAST_VERSION"
+
+          COMMITS=$(git log $RANGE_ARG --pretty=format:%s || echo "")
+
+          BUMP="patch"
+
+          if echo "$COMMITS" | grep -E 'BREAKING CHANGE|!:' -q; then
+            BUMP="major"
+          elif echo "$COMMITS" | grep -E '^feat(\(|:)' -q; then
+            BUMP="minor"
+          fi
+
+          if [ "$BUMP" = "major" ]; then
+            MAJOR=$((MAJOR + 1))
+            MINOR=0
+            PATCH=0
+          elif [ "$BUMP" = "minor" ]; then
+            MINOR=$((MINOR + 1))
+            PATCH=0
+          else
+            PATCH=$((PATCH + 1))
+          fi
+
+          NEXT_VERSION="$MAJOR.$MINOR.$PATCH"
+          echo "Calculated version: $NEXT_VERSION"
+
+          echo "version=$NEXT_VERSION" >> $GITHUB_OUTPUT
