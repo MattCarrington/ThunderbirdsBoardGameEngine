@@ -44,7 +44,8 @@ jobs:
           VERSION="${{ inputs.version }}"
           SHA_TAG="sha-${GITHUB_SHA::7}"
 
-          OWNER="${{ github.repository_owner,, }}"
+          OWNER="${{ github.repository_owner }}"
+          OWNER="${OWNER,,}"   # LOWERCASE here
           GHCR="ghcr.io/$OWNER/$IMAGE"
 
           docker tag "$IMAGE:$SHA_TAG" "$GHCR:$VERSION"
@@ -59,9 +60,9 @@ jobs:
           IMAGE="${{ inputs.image_name }}"
           VERSION="${{ inputs.version }}"
           SHA_TAG="sha-${GITHUB_SHA::7}"
-          OWNER="${{ github.repository_owner,, }}"
+          OWNER="${{ github.repository_owner }}"
+          OWNER="${OWNER,,}"   # LOWERCASE here
           GHCR="ghcr.io/$OWNER/$IMAGE"
-
 
           docker push "$GHCR:$VERSION"
           docker push "$GHCR:$SHA_TAG"
