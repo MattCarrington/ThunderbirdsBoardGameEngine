@@ -6,8 +6,10 @@ on:
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
+  
 permissions:
-  contents: read
+  contents: write
+  actions: read
 
 env:
   SOLUTION_FILE: &solution ThunderbirdsBoardGameEngine.sln  
@@ -43,7 +45,7 @@ jobs:
     needs:
       - tests
 
-  tag_repo:
+  tag-repo:
     uses: ./.github/workflows/tag-repo.yml
     with:
       version: ${{ needs.compute-version.outputs.version }}
