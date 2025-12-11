@@ -17,6 +17,7 @@ permissions:
 env:
   SOLUTION_FILE: &solution ThunderbirdsBoardGameEngine.sln
   BASE_URL: &base_url "http://localhost:8080"
+  IMAGE_NAME: &image_name "thunderbirds-api"
 
 jobs:
   static-analysis:
@@ -28,6 +29,7 @@ jobs:
     uses: ./.github/workflows/build.yml
     with:
       solution_file: *solution
+      image_name: *image_name
       docker_build: true
     needs:
       - static-analysis
@@ -36,6 +38,7 @@ jobs:
     uses: ./.github/workflows/tests.yml
     with:
       solution_file: *solution
+      image_name: *image_name
       run_component: true
       run_integration: true
       run_playwright: true
@@ -61,7 +64,7 @@ jobs:
   docker_publish:
     uses: ./.github/workflows/publish-docker.yml
     with:
-      image_name: thunderbirds-api
+      image_name: *image_name
       version: ${{ needs.compute-version.outputs.version }}
       push_latest: ${{ github.ref == 'refs/heads/main' }}
     secrets:

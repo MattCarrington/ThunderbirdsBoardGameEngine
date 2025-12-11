@@ -6,25 +6,26 @@ on:
       solution_file:
         required: true
         type: string
-
+      image_name:
+        description: "Docker image name to use for API"
+        required: false
+        type: string
+        default: "thunderbirds-api"  
       run_component:
         description: "Run component tests"
         required: false
         type: boolean
         default: true
-
       run_integration:
         description: "Run integration tests (assumes API is already running)"
         required: false
         type: boolean
         default: true
-
       run_playwright:
         description: "Run Playwright UI tests (assumes app/API is already running)"
         required: false
         type: boolean
         default: true
-
       base_url:
         description: "Base URL for the API"
         required: false
@@ -87,12 +88,12 @@ jobs:
         if: ${{ inputs.run_integration || inputs.run_playwright }}
         uses: actions/download-artifact@v4
         with:
-          name: thunderbirds-api-image
+          name: ${{ inputs.image_name }}-image
           path: .
 
       - name: Load Docker image
         if: ${{ inputs.run_integration || inputs.run_playwright }}
-        run: docker load -i thunderbirds-api.tar
+        run: docker load -i ${{ inputs.image_name }}.tar
 
       - name: Start API env
         if: ${{ inputs.run_integration || inputs.run_playwright }}
@@ -138,7 +139,6 @@ jobs:
     #       name: integration-test-results
     #       path: ./TestResults/Integration
     #       retention-days: 7
-
   
       - name: Install Playwright CLI
         if: ${{ inputs.run_playwright }}
@@ -168,8 +168,7 @@ jobs:
     #     with:
     #       name: playwright-test-results
     #       path: ./TestResults/Playwright
-    #       retention-days: 7
-  
+    #       retention-days: 7  
       
       - name: Stop containers
         if: ${{ inputs.run_integration || inputs.run_playwright }}

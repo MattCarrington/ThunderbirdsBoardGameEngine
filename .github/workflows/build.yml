@@ -5,12 +5,15 @@ on:
     inputs:
       solution_file:
         required: true
-        type: string
-      
+        type: string      
       docker_build:
         required: false
         type: boolean
         default: false
+      image_name:
+        required: false
+        type: string
+        default: "thunderbirds-api"
 
 jobs:
   build:
@@ -39,7 +42,7 @@ jobs:
 
       - name: Build Docker Image (SHA-tagged)
         run: |
-          IMAGE="thunderbirds-api"
+          IMAGE="${{ inputs.image_name }}"
           SHA_TAG="sha-${GITHUB_SHA::7}"
 
           # Build once, with deterministic SHA tag
@@ -50,11 +53,11 @@ jobs:
       - name: Save Docker Image
         run: |
           SHA_TAG="sha-${GITHUB_SHA::7}"
-          docker save "thunderbirds-api:$SHA_TAG" -o thunderbirds-api.tar
+          docker save "${{ inputs.image_name }}:$SHA_TAG" -o "${{ inputs.image_name }}.tar"
 
       - name: Upload Image Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: thunderbirds-api-image
-          path: thunderbirds-api.tar
+          name: ${{ inputs.image_name }}-image
+          path: ${{ inputs.image_name }}.tar
           retention-days: 7
