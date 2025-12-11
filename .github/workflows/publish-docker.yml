@@ -16,7 +16,7 @@ on:
         default: false
 
     secrets:
-      github_token:
+      registry_token:
         required: false
 
 jobs:

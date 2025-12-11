@@ -60,6 +60,6 @@ jobs:
       version: ${{ needs.compute_version.outputs.version }}
       push_latest: ${{ github.ref == 'refs/heads/main' }}
     secrets:
-      github_token: ${{ secrets.GITHUB_TOKEN }}
+      registry_token: ${{ secrets.GITHUB_TOKEN }}
     needs:
       - compute-version
