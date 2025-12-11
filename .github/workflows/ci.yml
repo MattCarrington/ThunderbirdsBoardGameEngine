@@ -52,3 +52,14 @@ jobs:
       tag_prefix: "test/server/v"
     needs:
       - compute-version
+
+  docker_publish:
+    uses: ./.github/workflows/publish-docker.yml
+    with:
+      image_name: thunderbirds-api
+      version: ${{ needs.compute_version.outputs.version }}
+      push_latest: ${{ github.ref == 'refs/heads/main' }}
+    secrets:
+      github_token: ${{ secrets.GITHUB_TOKEN }}
+    needs:
+      - compute-version
