@@ -2,6 +2,11 @@ name: Compute Server Version (reusable)
 
 on:
   workflow_call:
+    inputs:
+      pr_title:
+        description: "The title of the pull request or commit message"
+        required: true
+        type: string
     outputs:
       version:
         description: "Calculated server version"
@@ -22,6 +27,10 @@ jobs:
       - name: Compute version
         id: compute_version
         run: |
+          PR_TITLE="${{ inputs.pr_title }}"
+
+          echo "PR Title: $PR_TITLE"
+
           # Find last server tag
           LAST_TAG=$(git tag --list 'server/v*' | sort -V | tail -n1)
 
@@ -37,15 +46,15 @@ jobs:
 
           IFS='.' read -r MAJOR MINOR PATCH <<< "$LAST_VERSION"
 
-          COMMITS=$(git log $RANGE_ARG --pretty=format:%s || echo "")
-
-          BUMP="patch"
-
-          if echo "$COMMITS" | grep -E 'BREAKING CHANGE|!:' -q; then
+          if [[ "$PR_TITLE" =~ BREAKING\ CHANGE || "$PR_TITLE" =~ "!:" ]]; then
             BUMP="major"
-          elif echo "$COMMITS" | grep -E '^feat(\(|:)' -q; then
+          elif [[ "$PR_TITLE" =~ ^feat ]]; then
             BUMP="minor"
+          else
+            BUMP="patch"
           fi
+
+          echo "Determined bump type: $BUMP"
 
           if [ "$BUMP" = "major" ]; then
             MAJOR=$((MAJOR + 1))

@@ -43,5 +43,7 @@ jobs:
 
   compute_version:
     uses: ./.github/workflows/version.yml
+    with:
+      pr_title: ${{ github.event.pull_request.title || github.event.head_commit.message }}
     needs:
       - tests
