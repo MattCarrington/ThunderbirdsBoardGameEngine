@@ -6,15 +6,12 @@ on:
       image_name:
         type: string
         required: true
-
       version:
         type: string
         required: true
-
       push_latest:
         type: boolean
         default: false
-
     secrets:
       registry_token:
         required: false
@@ -22,10 +19,7 @@ on:
 jobs:
   publish:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      packages: write
-
+    
     steps:
       - uses: actions/checkout@v4
 
