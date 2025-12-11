@@ -24,7 +24,7 @@ jobs:
     uses: ./.github/workflows/build.yml
     with:
       solution_file: *solution
-      docker_build: false
+      docker_build: true
     needs:
       - static-analysis  
 

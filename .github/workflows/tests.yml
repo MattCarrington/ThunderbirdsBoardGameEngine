@@ -31,6 +31,9 @@ on:
         type: string
         default: "http://localhost:8080"
 
+env:
+  API_IMAGE_TAG: sha-${GITHUB_SHA::7}
+
 jobs:
   tests:
     name: Run Tests
@@ -99,6 +102,7 @@ jobs:
           docker compose \
           -f Docker/docker-compose.yml \
           -f Docker/docker-compose.test.yml \
+          -f Docker/docker-compose.ci.override.yml \
           up -d
 
       - name: Wait for readiness

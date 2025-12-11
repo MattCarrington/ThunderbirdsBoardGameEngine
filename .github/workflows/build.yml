@@ -37,12 +37,21 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Build Docker Image
-        run: docker build -t thunderbirds-api -f ThunderbirdsBoardGameEngine.Api/Dockerfile .
+      - name: Build Docker Image (SHA-tagged)
+        run: |
+          IMAGE="thunderbirds-api"
+          SHA_TAG="sha-${GITHUB_SHA::7}"
+
+          # Build once, with deterministic SHA tag
+          docker build -t "$IMAGE:$SHA_TAG" \
+                       -t "$IMAGE:dev" \
+                       -f ThunderbirdsBoardGameEngine.Api/Dockerfile .
 
       - name: Save Docker Image
-        run: docker save thunderbirds-api -o thunderbirds-api.tar
-      
+        run: |
+          SHA_TAG="sha-${GITHUB_SHA::7}"
+          docker save "thunderbirds-api:$SHA_TAG" -o thunderbirds-api.tar
+
       - name: Upload Image Artifact
         uses: actions/upload-artifact@v4
         with:
