@@ -70,4 +70,11 @@ jobs:
           NEXT_VERSION="$MAJOR.$MINOR.$PATCH"
           echo "Calculated version: $NEXT_VERSION"
 
+          if [[ "${GITHUB_REF}" != "refs/heads/main" ]]; then
+            NEXT_VERSION="${NEXT_VERSION}-beta.${GITHUB_RUN_NUMBER}"
+            echo "Beta prerelease version applied: $NEXT_VERSION"
+          else
+            echo "Main branch detected — producing stable version"
+          fi
+
           echo "version=$NEXT_VERSION" >> $GITHUB_OUTPUT
