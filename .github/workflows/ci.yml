@@ -1,9 +1,6 @@
 name: CI - PR/Branch
 
 on:
-  push:
-    branches-ignore:
-      - main
   pull_request:
 
 concurrency:
