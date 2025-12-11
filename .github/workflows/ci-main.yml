@@ -62,7 +62,7 @@ jobs:
     uses: ./.github/workflows/publish-docker.yml
     with:
       image_name: thunderbirds-api
-      version: ${{ needs.compute_version.outputs.version }}
+      version: ${{ needs.compute-version.outputs.version }}
       push_latest: ${{ github.ref == 'refs/heads/main' }}
     secrets:
       registry_token: ${{ secrets.GITHUB_TOKEN }}

@@ -36,7 +36,7 @@ jobs:
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
-          password: ${{ secrets.github_token || github.token }}
+          password: ${{ secrets.registry_token || github.token }}
 
       - name: Tag Image
         run: |
@@ -44,7 +44,8 @@ jobs:
           VERSION="${{ inputs.version }}"
           SHA_TAG="sha-${GITHUB_SHA::7}"
 
-          GHCR="ghcr.io/${{ github.repository_owner }}/$IMAGE"
+          OWNER="${{ github.repository_owner,, }}"
+          GHCR="ghcr.io/$OWNER/$IMAGE"
 
           docker tag "$IMAGE:$SHA_TAG" "$GHCR:$VERSION"
           docker tag "$IMAGE:$SHA_TAG" "$GHCR:$SHA_TAG"
@@ -58,7 +59,9 @@ jobs:
           IMAGE="${{ inputs.image_name }}"
           VERSION="${{ inputs.version }}"
           SHA_TAG="sha-${GITHUB_SHA::7}"
-          GHCR="ghcr.io/${{ github.repository_owner }}/$IMAGE"
+          OWNER="${{ github.repository_owner,, }}"
+          GHCR="ghcr.io/$OWNER/$IMAGE"
+
 
           docker push "$GHCR:$VERSION"
           docker push "$GHCR:$SHA_TAG"
