@@ -40,9 +40,17 @@ jobs:
     needs:
       - build
 
-  compute_version:
+  compute-version:
     uses: ./.github/workflows/version.yml
     with:
       pr_title: ${{ github.event.pull_request.title || github.event.head_commit.message }}
     needs:
       - tests
+
+  tag_repo:
+    uses: ./.github/workflows/tag-repo.yml
+    with:
+      version: ${{ needs.compute-version.outputs.version }}
+      tag_prefix: "server/v"
+    needs:
+      - compute-version
