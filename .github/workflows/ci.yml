@@ -49,14 +49,6 @@ jobs:
     needs:
       - tests
 
-  tag-repo:
-    uses: ./.github/workflows/tag-repo.yml
-    with:
-      version: ${{ needs.compute-version.outputs.version }}
-      tag_prefix: "test/server/v"
-    needs:
-      - compute-version
-
   docker_publish:
     uses: ./.github/workflows/publish-docker.yml
     with:
