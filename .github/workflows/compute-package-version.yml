@@ -19,7 +19,7 @@ jobs:
       - name: Compute package version (Contracts)
         id: compute
         run: |
-          BASE_VERSION=$(dotnet msbuild src/ThunderbirdsBoardGameEngine.Catalog.Contracts/ThunderbirdsBoardGameEngine.Catalog.Contracts.csproj \
+          BASE_VERSION=$(dotnet msbuild ThunderbirdsBoardGameEngine.Catalog.Contracts/ThunderbirdsBoardGameEngine.Catalog.Contracts.csproj \
             -getProperty:Version -nologo)
           if [[ "${GITHUB_REF}" == "refs/heads/main" ]]; then
             FINAL_VERSION="$BASE_VERSION"
