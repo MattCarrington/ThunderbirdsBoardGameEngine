@@ -14,7 +14,7 @@ permissions:
 
 env:
   SOLUTION_FILE: &solution ThunderbirdsBoardGameEngine.sln
-  IMAGE_NAME: &image_name "thunderbirds-api"
+  IMAGE_NAME: &image_name "thunderbirds-app"
   CONTRACTS_PROJECT_PATH: &contracts_project_path "ThunderbirdsBoardGameEngine.Catalog.Contracts/ThunderbirdsBoardGameEngine.Catalog.Contracts.csproj"
 
 jobs:
