@@ -49,6 +49,11 @@ jobs:
     needs:
       - tests
 
+  compute-contracts-version:
+    uses: ./.github/workflows/compute-package-version.yml
+    needs:
+      - tests
+
   docker_publish:
     uses: ./.github/workflows/publish-docker.yml
     with:
@@ -59,3 +64,11 @@ jobs:
       registry_token: ${{ secrets.GITHUB_TOKEN }}
     needs:
       - compute-version
+  
+  publish-contracts:
+    uses: ./.github/workflows/publish-dotnet-package.yml
+    with:
+      project_path: ThunderbirdsBoardGameEngine.Catalog.Contracts/ThunderbirdsBoardGameEngine.Catalog.Contracts.csproj
+      base_version: ${{ needs.compute-contracts-version.outputs.version }}
+    needs:
+      - compute-contracts-version

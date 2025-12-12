@@ -1,0 +1,32 @@
+name: Compute Package Version
+
+on:
+  workflow_call:
+    outputs:
+      version:
+        description: "Computed package version"
+        value: ${{ jobs.compute-package-version.outputs.version }}
+
+jobs:
+  compute-package-version:
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.compute.outputs.version }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Compute package version (Contracts)
+        id: compute
+        run: |
+          BASE_VERSION=$(dotnet msbuild src/ThunderbirdsBoardGameEngine.Catalog.Contracts/ThunderbirdsBoardGameEngine.Catalog.Contracts.csproj \
+            -getProperty:Version -nologo)
+          if [[ "${GITHUB_REF}" == "refs/heads/main" ]]; then
+            FINAL_VERSION="$BASE_VERSION"
+            echo "Main branch → stable package version: $FINAL_VERSION"
+          else
+            FINAL_VERSION="${BASE_VERSION}-beta.${GITHUB_RUN_NUMBER}"
+            echo "Non-main branch → prerelease package version: $FINAL_VERSION"
+          fi
+
+          echo "version=$FINAL_VERSION" >> $GITHUB_OUTPUT
