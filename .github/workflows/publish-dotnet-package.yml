@@ -36,7 +36,6 @@ jobs:
             -o ./artifacts
 
       - name: Publish to GitHub Packages
-        if: github.event_name == 'push'
         run: |
           dotnet nuget push "./artifacts/*.nupkg" \
             --source "https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json" \
