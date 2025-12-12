@@ -32,7 +32,6 @@ jobs:
         run: |
           dotnet pack "${{ inputs.project_path }}" \
             -c Release \
-            --no-build \
             -p:PackageVersion=${{ inputs.package_version }} \
             -o ./artifacts
 
