@@ -19,6 +19,8 @@ env:
   BASE_URL: &base_url "http://localhost:8080"
   IMAGE_NAME: &image_name "thunderbirds-app"
   CONTRACTS_PROJECT_PATH: &contracts_project_path "ThunderbirdsBoardGameEngine.Catalog.Contracts/ThunderbirdsBoardGameEngine.Catalog.Contracts.csproj"
+  CLIENT_PROJECT_PATH: &client_project_path "ThunderbirdsBoardGameEngine.Catalog.Client/ThunderbirdsBoardGameEngine.Catalog.Client.csproj"
+  WIREMOCK_PROJECT_PATH: &wiremock_project_path "ThunderbirdsBoardGameEngine.Catalog.WireMock/ThunderbirdsBoardGameEngine.Catalog.WireMock.csproj"
 
 jobs:
   static-analysis:
@@ -61,6 +63,20 @@ jobs:
     needs:
       - tests
 
+  compute-client-version:
+    uses: ./.github/workflows/compute-package-version.yml
+    with:
+      project_path: *client_project_path
+    needs:
+      - tests
+
+  compute-wiremock-version:
+    uses: ./.github/workflows/compute-package-version.yml
+    with:
+      project_path: *wiremock_project_path
+    needs:
+      - tests
+
   tag-repo:
     uses: ./.github/workflows/tag-repo.yml
     with:
@@ -87,3 +103,19 @@ jobs:
       package_version: ${{ needs.compute-contracts-version.outputs.version }}
     needs:
       - compute-contracts-version
+
+  publish-client:
+    uses: ./.github/workflows/publish-dotnet-package.yml
+    with:
+      project_path: *client_project_path
+      package_version: ${{ needs.compute-client-version.outputs.version }}
+    needs:
+      - compute-client-version
+
+  publish-wiremock:
+    uses: ./.github/workflows/publish-dotnet-package.yml
+    with:
+      project_path: *wiremock_project_path
+      package_version: ${{ needs.compute-wiremock-version.outputs.version }}
+    needs:
+      - compute-wiremock-version
