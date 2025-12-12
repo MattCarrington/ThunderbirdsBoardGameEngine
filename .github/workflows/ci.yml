@@ -69,6 +69,6 @@ jobs:
     uses: ./.github/workflows/publish-dotnet-package.yml
     with:
       project_path: ThunderbirdsBoardGameEngine.Catalog.Contracts/ThunderbirdsBoardGameEngine.Catalog.Contracts.csproj
-      base_version: ${{ needs.compute-contracts-version.outputs.version }}
+      package_version: ${{ needs.compute-contracts-version.outputs.version }}
     needs:
       - compute-contracts-version
