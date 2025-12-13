@@ -4,6 +4,13 @@
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <PackageId>ThunderbirdsBoardGameEngine.Catalog.WireMock</PackageId>
+    <Version>0.0.1</Version>
+    <Authors>Matthew Carrington</Authors>
+    <Description>WireMock.NET stubs and mock server setup for the Catalog bounded context of ThunderbirdsBoardGameEngine.</Description>
+	<PackageLicenseExpression>UNLICENSED</PackageLicenseExpression>
+    <RepositoryUrl>https://github.com/MattCarrington/ThunderbirdsBoardGameEngine</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
   </PropertyGroup>
 
   <ItemGroup>
