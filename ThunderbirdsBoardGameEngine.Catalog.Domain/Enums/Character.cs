@@ -2,6 +2,9 @@
 
 namespace ThunderbirdsBoardGameEngine.Catalog.Domain.Enums
 {
+    /// <summary>
+    /// Identifies a playable character in the Thunderbirds game.
+    /// </summary>
     public enum Character
     {
         Scott,

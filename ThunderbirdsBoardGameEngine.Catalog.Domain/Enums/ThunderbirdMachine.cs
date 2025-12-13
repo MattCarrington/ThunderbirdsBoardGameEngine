@@ -2,6 +2,9 @@
 
 namespace ThunderbirdsBoardGameEngine.Catalog.Domain.Enums
 {
+    /// <summary>
+    /// Identifies a usable Thunderbird Machine in the Thunderbirds game.
+    /// </summary>
     public enum ThunderbirdMachine
     {
         [Display(Name = "Thunderbird 1")]

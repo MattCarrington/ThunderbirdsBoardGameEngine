@@ -4,6 +4,17 @@ using ThunderbirdsBoardGameEngine.Catalog.Domain.Enums;
 
 namespace ThunderbirdsBoardGameEngine.Catalog.Domain.Entities
 {
+    /// <summary>
+    /// Represents a disaster card in the Catalog bounded context.
+    /// </summary>
+    /// <remarks>
+    /// A disaster card is a validated aggregate root that defines the
+    /// difficulty, location, rescue type, bonuses, and rewards associated
+    /// with a single disaster scenario.
+    ///
+    /// Instances enforce domain invariants at construction time and are
+    /// always created in a valid state.
+    /// </remarks>
     public partial class DisasterCard
     {
         private static readonly Regex CodePattern =
@@ -28,8 +39,15 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Domain.Entities
         private readonly List<BonusCondition> _bonus;
         private readonly List<RewardOption> _rewards;
 
-        public DisasterCard(int id, string name, string code, int difficultyNumber, BoardLocation location, RescueType rescueType,
-            IEnumerable<BonusCondition> bonusConditions, IEnumerable<RewardOption> rewardOptions)
+        public DisasterCard(
+            int id,
+            string name,
+            string code,
+            int difficultyNumber,
+            BoardLocation location,
+            RescueType rescueType,
+            IEnumerable<BonusCondition> bonusConditions,
+            IEnumerable<RewardOption> rewardOptions)
         {
             ArgumentException.ThrowIfNullOrWhiteSpace(code);
 

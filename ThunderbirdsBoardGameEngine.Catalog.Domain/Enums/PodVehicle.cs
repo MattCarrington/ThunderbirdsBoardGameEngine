@@ -2,6 +2,9 @@
 
 namespace ThunderbirdsBoardGameEngine.Catalog.Domain.Enums
 {
+    /// <summary>
+    /// Identifies a usable pod vehicle in the Thunderbirds game.
+    /// </summary>
     public enum PodVehicle
     {
         Mole,

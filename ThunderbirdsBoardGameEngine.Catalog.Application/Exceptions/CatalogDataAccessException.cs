@@ -46,7 +46,6 @@
         /// <summary>
         /// Creates an exception representing an unknown error with reading the catalog data.
         /// </summary>
-
         public static CatalogDataAccessException Unknown(string path, Exception? innerException = null)
         {
             return new CatalogDataAccessException(CatalogDataAccessErrorCode.Unknown, path, $"Unknown error reading catalog data from {path}", innerException);

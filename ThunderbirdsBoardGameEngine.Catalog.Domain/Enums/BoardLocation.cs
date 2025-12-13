@@ -2,6 +2,13 @@
 
 namespace ThunderbirdsBoardGameEngine.Catalog.Domain.Enums
 {
+    /// <summary>
+    /// Represents the physical location associated with a the game board.
+    /// </summary>
+    /// <remarks>
+    /// Values mirror the locations printed on the physical Thunderbirds
+    /// game board. Display names are intended for UI presentation.
+    /// </remarks>
     public enum BoardLocation
     {
         Europe,

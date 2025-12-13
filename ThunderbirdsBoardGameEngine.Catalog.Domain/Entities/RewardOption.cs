@@ -2,6 +2,13 @@
 
 namespace ThunderbirdsBoardGameEngine.Catalog.Domain.Entities
 {
+    /// <summary>
+    /// Represents a reward option granted by a disaster card.
+    /// </summary>
+    /// <remarks>
+    /// A reward may either allow the player to choose a bonus token or
+    /// specify a concrete token directly.
+    /// </remarks>
     public sealed class RewardOption
     {
         public bool IsUserChoice { get; }
