@@ -6,12 +6,13 @@
     <Nullable>enable</Nullable>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
     <Title></Title>
-    <Version>1.0.0</Version>
+    <Version>0.1.0</Version>
     <Authors>Matthew Carrington</Authors>
     <PackageId>ThunderbirdsBoardGameEngine.Catalog.Contracts</PackageId>
     <Description>Public DTO contracts for the Thunderbirds Board Game Engine catalog API.</Description>
     <PackageLicenseExpression>UNLICENSED</PackageLicenseExpression>
     <RepositoryUrl>https://github.com/MattCarrington/ThunderbirdsBoardGameEngine</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
