@@ -113,8 +113,8 @@ namespace ThunderbirdsBoardGameEngine.Catalog.WireMock.Stubs.V1
                     .WithHeader(headers =>
                     {
                         if (!headers.TryGetValue(VersionHeader, out var values) || values == null)
-                        { 
-                            return true; 
+                        {
+                            return true;
                         }
 
                         return values.Length == 0 || values.All(string.IsNullOrWhiteSpace);
@@ -134,7 +134,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.WireMock.Stubs.V1
                     .WithHeader(dict =>
                     {
                         if (dict == null || !dict.TryGetValue(VersionHeader, out var values) || values == null)
-                        { 
+                        {
                             return false; // let missing-header guard catch it
                         }
 
