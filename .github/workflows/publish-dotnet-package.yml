@@ -15,6 +15,7 @@ on:
 jobs:
   publish:
     runs-on: ubuntu-latest
+    if: ${{ inputs.package_version != '' }}
 
     steps:
       - name: Checkout
