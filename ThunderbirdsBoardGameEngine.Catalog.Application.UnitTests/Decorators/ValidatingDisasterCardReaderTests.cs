@@ -10,7 +10,7 @@ using Xunit;
 
 namespace ThunderbirdsBoardGameEngine.Catalog.Application.UnitTests.Decorators
 {
-    public class ValidatingDisasterCardRepositoryTests
+    public class ValidatingDisasterCardReaderTests
     {
 
         [Fact]
@@ -50,7 +50,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Application.UnitTests.Decorators
             using var cancellationToken = new CancellationTokenSource();
 
             // Act
-            var _ = await validator.GetAllAsync(cancellationToken.Token);
+            _ = await validator.GetAllAsync(cancellationToken.Token);
 
             // Assert
             await inner.Received(1).GetAllAsync(Arg.Is(cancellationToken.Token));
@@ -66,10 +66,10 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Application.UnitTests.Decorators
                 new DisasterCardBuilder().WithId(2).WithName("Disaster 1").WithDifficulty(8).WithLocation(BoardLocation.Asia).Build()
             };
 
-            var repository = CreateValidator(cards);
+            var validator = CreateValidator(cards);
 
             // Act & Assert
-            await Assert.ThrowsAsync<DisasterCardValidationException>(() => repository.GetAllAsync(CancellationToken.None));
+            await Assert.ThrowsAsync<DisasterCardValidationException>(() => validator.GetAllAsync(CancellationToken.None));
         }
 
         [Fact]
@@ -87,23 +87,23 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Application.UnitTests.Decorators
         public async Task GetAllAsync_WhenCancelled_ExceptionBubbles()
         {
             // Arrange
-            var repository = CreateValidator(new OperationCanceledException());
+            var validator = CreateValidator(new OperationCanceledException());
 
             using var cancellationToken = new CancellationTokenSource();
-            cancellationToken.Cancel();
+            await cancellationToken.CancelAsync();
 
             // Act & Assert
-            await Assert.ThrowsAsync<OperationCanceledException>(async () => await repository.GetAllAsync(cancellationToken.Token));
+            await Assert.ThrowsAsync<OperationCanceledException>(async () => await validator.GetAllAsync(cancellationToken.Token));
         }
 
         [Fact]
         public async Task GetAllAsync_WhenDataMissing_ExceptionBubbles()
         {
             // Arrange
-            var repository = CreateValidator(CatalogDataAccessException.DataMissing("/cards.json", new InvalidDataException()));
+            var validator = CreateValidator(CatalogDataAccessException.DataMissing("/cards.json", new InvalidDataException()));
 
             // Act & Assert
-            var ex = await Assert.ThrowsAsync<CatalogDataAccessException>(() => repository.GetAllAsync(CancellationToken.None));
+            var ex = await Assert.ThrowsAsync<CatalogDataAccessException>(() => validator.GetAllAsync(CancellationToken.None));
             Assert.Equal(CatalogDataAccessErrorCode.DataMissing, ex.ErrorCode);
         }
 
