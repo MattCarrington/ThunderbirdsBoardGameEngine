@@ -10,7 +10,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Builders
         private readonly string _catalog = "DisasterCards";
         private string _schemaVersion = "1.0";
         private readonly string _contentVersion = "1.0.0";
-        private readonly DateTime _generatedAtUtc = DateTime.UtcNow;
+        private DateTime _generatedAtUtc = DateTime.UtcNow;
         private string _checksumAlgorithm = CatalogChecksum.Algorithm;
         private int? _itemCountOverride;
         private string? _checksumOverride;
