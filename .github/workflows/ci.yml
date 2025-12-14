@@ -2,6 +2,9 @@ name: CI - PR/Branch
 
 on:
   pull_request:
+  push:
+    branches-ignore:
+      - main
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -46,6 +49,7 @@ jobs:
       - build
 
   compute-version:
+    if: github.event_name == 'push'
     uses: ./.github/workflows/version.yml
     with:
       pr_title: ${{ github.event.pull_request.title || github.event.head_commit.message }}
@@ -53,6 +57,7 @@ jobs:
       - tests
 
   compute-contracts-version:
+    if: github.event_name == 'push'
     uses: ./.github/workflows/compute-package-version.yml
     with:
       project_path: *contracts_project_path
@@ -60,6 +65,7 @@ jobs:
       - tests
       
   compute-client-version:
+    if: github.event_name == 'push'
     uses: ./.github/workflows/compute-package-version.yml
     with:
       project_path: *client_project_path
@@ -67,6 +73,7 @@ jobs:
       - tests
 
   compute-wiremock-version:
+    if: github.event_name == 'push'
     uses: ./.github/workflows/compute-package-version.yml
     with:
       project_path: *wiremock_project_path
@@ -74,6 +81,7 @@ jobs:
       - tests
 
   docker_publish:
+    if: github.event_name == 'push'
     uses: ./.github/workflows/publish-docker.yml
     with:
       image_name: *image_name
@@ -85,6 +93,7 @@ jobs:
       - compute-version
   
   publish-contracts:
+    if: github.event_name == 'push'
     uses: ./.github/workflows/publish-dotnet-package.yml
     with:
       project_path: *contracts_project_path
@@ -93,6 +102,7 @@ jobs:
       - compute-contracts-version
 
   publish-client:
+    if: github.event_name == 'push'
     uses: ./.github/workflows/publish-dotnet-package.yml
     with:
       project_path: *client_project_path
@@ -101,6 +111,7 @@ jobs:
       - compute-client-version
 
   publish-wiremock:
+    if: github.event_name == 'push'
     uses: ./.github/workflows/publish-dotnet-package.yml
     with:
       project_path: *wiremock_project_path
