@@ -20,7 +20,7 @@ jobs:
       version: ${{ steps.compute.outputs.version }}
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Compute package version
         id: compute
