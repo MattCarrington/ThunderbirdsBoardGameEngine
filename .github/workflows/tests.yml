@@ -32,9 +32,6 @@ on:
         type: string
         default: "http://localhost:8080"
 
-env:
-  API_IMAGE_TAG: sha-${GITHUB_SHA::7}
-
 jobs:
   tests:
     name: Run Tests
@@ -46,6 +43,13 @@ jobs:
       - uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '8.x'
+
+      - name: Compute API image tag
+        run: |
+          echo "API_IMAGE_TAG=sha-${GITHUB_SHA::7}" >> $GITHUB_ENV
+          
+      - name: Debug image tag
+        run: echo "Using API_IMAGE_TAG=$API_IMAGE_TAG"   
 
       - name: Run Unit Tests
         run: |
