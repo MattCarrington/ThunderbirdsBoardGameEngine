@@ -47,7 +47,9 @@ jobs:
       - name: Compute API image tag
         run: |
           echo "API_IMAGE_TAG=sha-${GITHUB_SHA::7}" >> $GITHUB_ENV
-          echo "Using API_IMAGE_TAG=$API_IMAGE_TAG"
+          
+      - name: Debug image tag
+        run: echo "Using API_IMAGE_TAG=$API_IMAGE_TAG"   
 
       - name: Run Unit Tests
         run: |
