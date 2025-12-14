@@ -1,0 +1,70 @@
+name: Tag Repository (resuable)
+
+on:
+  workflow_call:
+    inputs:
+      version:
+        description: "The version to tag the repository with"
+        required: true
+        type: string
+      tag_prefix:
+        required: true
+        type: string
+      ref:
+        required: false
+        type: string
+        default: ${{ github.sha }}
+      skip_if_exists:
+        required: false
+        type: boolean
+        default: true
+    secrets:
+      token:
+        required: false
+
+jobs:
+  tag:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout full history
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Build tag name
+        id: build
+        run: |
+          TAG="${{ inputs.tag_prefix }}${{ inputs.version }}"
+          echo "tag=$TAG" >> $GITHUB_OUTPUT
+          echo "Tag to create: $TAG"
+
+      - name: Configure git
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+
+      - name: Skip if tag exists
+        if: inputs.skip_if_exists == true
+        run: |
+          TAG="${{ steps.build.outputs.tag }}"
+
+          if git rev-parse "$TAG" >/dev/null 2>&1; then
+            echo "Tag $TAG already exists — skipping."
+            exit 0
+          fi
+
+      - name: Create tag
+        run: |
+          TAG="${{ steps.build.outputs.tag }}"
+          REF="${{ inputs.ref }}"
+
+          git tag "$TAG" "$REF"
+
+      - name: Push tag
+        run: |
+          TAG="${{ steps.build.outputs.tag }}"
+          git push origin "$TAG"
+

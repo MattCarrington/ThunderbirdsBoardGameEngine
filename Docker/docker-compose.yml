@@ -1,0 +1,16 @@
+services:
+  api:
+    container_name: thunderbirds-api
+    build:
+      context: ..
+      dockerfile: ThunderbirdsBoardGameEngine.Api/Dockerfile
+    environment:
+      ASPNETCORE_URLS: http://+:8080
+    expose:
+      - "8080"
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://localhost:8080/health/ready"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+      start_period: 10s

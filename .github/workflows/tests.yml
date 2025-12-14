@@ -1,0 +1,181 @@
+name: Tests (reusable)
+
+on:
+  workflow_call:
+    inputs:
+      solution_file:
+        required: true
+        type: string
+      image_name:
+        description: "Docker image name to use for API"
+        required: false
+        type: string
+        default: "thunderbirds-api"  
+      run_component:
+        description: "Run component tests"
+        required: false
+        type: boolean
+        default: true
+      run_integration:
+        description: "Run integration tests (assumes API is already running)"
+        required: false
+        type: boolean
+        default: true
+      run_playwright:
+        description: "Run Playwright UI tests (assumes app/API is already running)"
+        required: false
+        type: boolean
+        default: true
+      base_url:
+        description: "Base URL for the API"
+        required: false
+        type: string
+        default: "http://localhost:8080"
+
+env:
+  API_IMAGE_TAG: sha-${GITHUB_SHA::7}
+
+jobs:
+  tests:
+    name: Run Tests
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.x'
+
+      - name: Run Unit Tests
+        run: |
+          set -e
+          echo "🚀 Running all Unit Tests..."
+          dotnet test "${{ inputs.solution_file }}" \
+            --configuration Release \
+            --logger:"trx;LogFileName=unit-${RUNNER_OS}.trx" \
+            --results-directory ./TestResults \
+            --filter "FullyQualifiedName~UnitTests"
+                
+    #   - name: Upload Test Results
+    #     if: failure()  # Only upload if the tests failed
+    #     uses: actions/upload-artifact@v4
+    #     with:
+    #       name: unit-test-results
+    #       path: ./TestResults/Unit
+    #       retention-days: 7
+
+      - name: Run Component Tests
+        if: ${{ inputs.run_component }}
+        run: |
+          set -e
+          echo "🚀 Running all Component Tests..."
+          dotnet test ${{ inputs.solution_file }} \
+            --configuration Release \
+            --logger:"trx" \
+            --results-directory ./TestResults \
+            --filter "FullyQualifiedName~ComponentTests"
+                
+    #   - name: Upload Test Results
+    #     if: failure()  # Only upload if the tests failed
+    #     uses: actions/upload-artifact@v4
+    #     with:
+    #       name: component-test-results
+    #       path: ./TestResults/Component
+    #       retention-days: 7
+            
+      - name: Download Docker image artifact
+        if: ${{ inputs.run_integration || inputs.run_playwright }}
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ inputs.image_name }}-image
+          path: .
+
+      - name: Load Docker image
+        if: ${{ inputs.run_integration || inputs.run_playwright }}
+        run: docker load -i ${{ inputs.image_name }}.tar
+
+      - name: Start API env
+        if: ${{ inputs.run_integration || inputs.run_playwright }}
+        run: |
+          set -euo pipefail
+          unset COMPOSE_FILE
+          docker compose \
+          -f Docker/docker-compose.yml \
+          -f Docker/docker-compose.test.yml \
+          -f Docker/docker-compose.ci.override.yml \
+          up -d
+
+      - name: Wait for readiness
+        if: ${{ inputs.run_integration || inputs.run_playwright }}
+        run: |
+          set -euo pipefail
+          for i in {1..60}; do
+          if curl -fsS "${{ inputs.base_url }}/health/ready" >/dev/null; then
+            echo "API is healthy!"; exit 0;
+          fi
+          echo "API not ready yet... ($i/60)"
+          sleep 2
+          done
+          echo "API did not become ready in time"; exit 1
+
+      - name: Run Integration Tests
+        if: ${{ inputs.run_integration }}
+        run: |
+          set -e
+          echo "🚀 Running all Integration Tests..."
+          dotnet test ${{ inputs.solution_file }} \
+            --configuration Release \
+            --logger:"trx" \
+            --results-directory ./TestResults/Integration \
+            --filter "FullyQualifiedName~IntegrationTests"
+        env:
+          CatalogBaseUrl: ${{ inputs.base_url }}
+
+    #   - name: Upload Test Results
+    #     if: failure()  Only upload if the tests failed
+    #     uses: actions/upload-artifact@v4
+    #     with:
+    #       name: integration-test-results
+    #       path: ./TestResults/Integration
+    #       retention-days: 7
+  
+      - name: Install Playwright CLI
+        if: ${{ inputs.run_playwright }}
+        run: dotnet tool install --global Microsoft.Playwright.CLI
+
+      - name: Build Playwright test project & install browsers
+        if: ${{ inputs.run_playwright }}
+        working-directory: ThunderbirdsBoardGameEngine.PlaywrightTests
+        run: |
+          dotnet build --configuration Release
+          playwright install
+
+      - name: Run Playwright tests
+        if: ${{ inputs.run_playwright }}
+        env:
+          BASE_URL: ${{ inputs.base_url }}
+        run: |
+          dotnet test ${{ inputs.solution_file }} \
+            --configuration Release \
+            --logger:"trx" \
+            --results-directory ./TestResults/Playwright \
+            --filter "FullyQualifiedName~PlaywrightTests"
+
+    #   - name: Upload Playwright test results (on failure)
+    #     if: failure()
+    #     uses: actions/upload-artifact@v4
+    #     with:
+    #       name: playwright-test-results
+    #       path: ./TestResults/Playwright
+    #       retention-days: 7  
+      
+      - name: Stop containers
+        if: ${{ inputs.run_integration || inputs.run_playwright }}
+        run: |
+            set -euo pipefail
+            unset COMPOSE_FILE
+            docker compose \
+                -f Docker/docker-compose.yml \
+                -f Docker/docker-compose.test.yml \
+                down -v

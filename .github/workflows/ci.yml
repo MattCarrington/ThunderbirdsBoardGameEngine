@@ -1,0 +1,109 @@
+name: CI - PR/Branch
+
+on:
+  pull_request:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+  
+permissions:
+  contents: write
+  actions: read
+  packages: write
+
+env:
+  SOLUTION_FILE: &solution ThunderbirdsBoardGameEngine.sln
+  IMAGE_NAME: &image_name "thunderbirds-app"
+  CONTRACTS_PROJECT_PATH: &contracts_project_path "ThunderbirdsBoardGameEngine.Catalog.Contracts/ThunderbirdsBoardGameEngine.Catalog.Contracts.csproj"
+  CLIENT_PROJECT_PATH: &client_project_path "ThunderbirdsBoardGameEngine.Catalog.Client/ThunderbirdsBoardGameEngine.Catalog.Client.csproj"
+  WIREMOCK_PROJECT_PATH: &wiremock_project_path "ThunderbirdsBoardGameEngine.Catalog.WireMock/ThunderbirdsBoardGameEngine.Catalog.WireMock.csproj"
+
+jobs:
+  static-analysis:
+    uses: ./.github/workflows/static-analysis.yml
+    with:
+      solution_file: *solution
+
+  build:
+    uses: ./.github/workflows/build.yml
+    with:
+      solution_file: *solution
+      image_name: *image_name
+      docker_build: true
+    needs:
+      - static-analysis  
+
+  tests:
+    uses: ./.github/workflows/tests.yml
+    with:
+      solution_file: *solution
+      image_name: *image_name
+      run_component: true
+      run_integration: false
+      run_playwright: false      
+    needs:
+      - build
+
+  compute-version:
+    uses: ./.github/workflows/version.yml
+    with:
+      pr_title: ${{ github.event.pull_request.title || github.event.head_commit.message }}
+    needs:
+      - tests
+
+  compute-contracts-version:
+    uses: ./.github/workflows/compute-package-version.yml
+    with:
+      project_path: *contracts_project_path
+    needs:
+      - tests
+      
+  compute-client-version:
+    uses: ./.github/workflows/compute-package-version.yml
+    with:
+      project_path: *client_project_path
+    needs:
+      - tests
+
+  compute-wiremock-version:
+    uses: ./.github/workflows/compute-package-version.yml
+    with:
+      project_path: *wiremock_project_path
+    needs:
+      - tests
+
+  docker_publish:
+    uses: ./.github/workflows/publish-docker.yml
+    with:
+      image_name: *image_name
+      version: ${{ needs.compute-version.outputs.version }}
+      push_latest: ${{ github.ref == 'refs/heads/main' }}
+    secrets:
+      registry_token: ${{ secrets.GITHUB_TOKEN }}
+    needs:
+      - compute-version
+  
+  publish-contracts:
+    uses: ./.github/workflows/publish-dotnet-package.yml
+    with:
+      project_path: *contracts_project_path
+      package_version: ${{ needs.compute-contracts-version.outputs.version }}
+    needs:
+      - compute-contracts-version
+
+  publish-client:
+    uses: ./.github/workflows/publish-dotnet-package.yml
+    with:
+      project_path: *client_project_path
+      package_version: ${{ needs.compute-client-version.outputs.version }}
+    needs:
+      - compute-client-version
+
+  publish-wiremock:
+    uses: ./.github/workflows/publish-dotnet-package.yml
+    with:
+      project_path: *wiremock_project_path
+      package_version: ${{ needs.compute-wiremock-version.outputs.version }}
+    needs:
+      - compute-wiremock-version

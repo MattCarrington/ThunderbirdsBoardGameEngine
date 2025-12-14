@@ -1,0 +1,63 @@
+name: Build (reusable)
+
+on:
+  workflow_call:
+    inputs:
+      solution_file:
+        required: true
+        type: string      
+      docker_build:
+        required: false
+        type: boolean
+        default: false
+      image_name:
+        required: false
+        type: string
+        default: "thunderbirds-api"
+
+jobs:
+  build:
+    name: Build .NET Solution
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.x'
+
+      - name: Restore & Build
+        run: |
+          dotnet restore "${{ inputs.solution_file }}"
+          dotnet build "${{ inputs.solution_file }}" --configuration Release --no-restore      
+
+  docker-build:
+    name: Build Docker Image
+    runs-on: ubuntu-latest
+    if: ${{ inputs.docker_build }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build Docker Image (SHA-tagged)
+        run: |
+          IMAGE="${{ inputs.image_name }}"
+          SHA_TAG="sha-${GITHUB_SHA::7}"
+
+          # Build once, with deterministic SHA tag
+          docker build -t "$IMAGE:$SHA_TAG" \
+                       -t "$IMAGE:dev" \
+                       -f ThunderbirdsBoardGameEngine.Api/Dockerfile .
+
+      - name: Save Docker Image
+        run: |
+          SHA_TAG="sha-${GITHUB_SHA::7}"
+          docker save "${{ inputs.image_name }}:$SHA_TAG" -o "${{ inputs.image_name }}.tar"
+
+      - name: Upload Image Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ inputs.image_name }}-image
+          path: ${{ inputs.image_name }}.tar
+          retention-days: 7

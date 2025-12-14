@@ -1,0 +1,9 @@
+﻿using ThunderbirdsBoardGameEngine.Catalog.Contracts.Dtos.V1;
+
+namespace ThunderbirdsBoardGameEngine.UI.Interfaces
+{
+    public interface IDisasterCardService
+    {
+        Task<IReadOnlyList<DisasterCardDto>> GetAllAsync();
+    }
+}
