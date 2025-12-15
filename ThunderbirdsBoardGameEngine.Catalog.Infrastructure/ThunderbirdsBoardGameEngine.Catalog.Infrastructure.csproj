@@ -27,7 +27,7 @@
     <PackageReference Include="Microsoft.Extensions.Options" Version="8.0.2" />
     <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="8.0.0" />
     <PackageReference Include="Scrutor" Version="6.1.0" />
-    <PackageReference Include="System.IO.Abstractions" Version="22.0.16" />
+    <PackageReference Include="System.IO.Abstractions" Version="22.1.0" />
   </ItemGroup>
 
   <ItemGroup>
