@@ -76,6 +76,31 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Catalogs
             Assert.Equal(2, catalog.Cards.Length);
         }
 
+        [Fact]
+        public void GetById_WithExistingId_ReturnsCorrectCard()
+        {
+            // Arrange
+            var catalog = CreateCatalog(_cards);
+
+            // Act
+            var card = catalog.GetById(1);
+
+            // Assert
+            Assert.NotNull(card);
+            Assert.Equal(1, card.Id);
+            Assert.Equal("Test 1", card.Name);
+        }
+
+        [Fact]
+        public void GetById_WithNonExistingId_ThrowsKeyNotFoundException()
+        {
+            // Arrange
+            var catalog = CreateCatalog(_cards);
+
+            // Act & Assert
+            Assert.Throws<KeyNotFoundException>(() => catalog.GetById(999));
+        }
+
         private static InMemoryDisasterCardCatalog CreateCatalog(IReadOnlyList<DisasterCard> cards, string version)
         {
             return new InMemoryDisasterCardCatalog(cards.ToImmutableArray(), version);

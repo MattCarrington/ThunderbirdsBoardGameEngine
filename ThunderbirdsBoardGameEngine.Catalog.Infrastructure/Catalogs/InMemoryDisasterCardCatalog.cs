@@ -1,4 +1,5 @@
-﻿using System.Collections.Immutable;
+﻿using System.Collections.Frozen;
+using System.Collections.Immutable;
 using ThunderbirdsBoardGameEngine.Catalog.Application.Interfaces;
 using ThunderbirdsBoardGameEngine.Catalog.Domain.Entities;
 
@@ -6,6 +7,8 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Catalogs
 {
     internal sealed class InMemoryDisasterCardCatalog : IDisasterCardCatalog, IDisasterCardCatalogProbe
     {
+        FrozenDictionary<int, DisasterCard> _cards;
+
         public InMemoryDisasterCardCatalog(ImmutableArray<DisasterCard> disasterCards, string version)
         {
             ArgumentNullException.ThrowIfNull(disasterCards);
@@ -18,6 +21,8 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Catalogs
 
             Version = version;
             Cards = disasterCards;
+
+            _cards = disasterCards.ToFrozenDictionary(c => c.Id);
         }
 
         public string Version { get; }
@@ -25,5 +30,15 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Catalogs
         public ImmutableArray<DisasterCard> Cards { get; }
 
         public int Count => Cards.Length;
+
+        public DisasterCard GetById(int id)
+        {
+            if (!_cards.TryGetValue(id, out var card))
+            {
+                throw new KeyNotFoundException($"Disaster card with id {id} was not found");
+            }
+
+            return card;
+        }
     }
 }
