@@ -2,9 +2,9 @@
 {
     public class BonusCalculator
     {
-        public BonusCalculationResult CalculateRescueTarget(int difficultyNumber, IReadOnlyCollection<string> appliedBonusKeys, IReadOnlyCollection<RuleBonus> cardBonuses)
+        public BonusCalculationResult CalculateRescueTarget(IReadOnlyCollection<string> appliedBonusKeys, RescueContext rescueContext)
         {
-            var appliedBonuses = cardBonuses
+            var appliedBonuses = rescueContext.Bonuses
                 .Where(b => appliedBonusKeys.Contains(b.Key))
                 .ToList();
 
@@ -12,7 +12,7 @@
 
             return new BonusCalculationResult
             {
-                TargetRoll = difficultyNumber - bonus,
+                TargetRoll = rescueContext.DifficultyNumber - bonus,
                 TotalBonus = bonus
             };
         }            
