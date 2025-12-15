@@ -23,5 +23,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Application.Interfaces
         /// Gets all disaster cards in the catalog.
         /// </summary>
         ImmutableArray<DisasterCard> Cards { get; }
+
+        DisasterCard GetById(int id);
     }
 }
