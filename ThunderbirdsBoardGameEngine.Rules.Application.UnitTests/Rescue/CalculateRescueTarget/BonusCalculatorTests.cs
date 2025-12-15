@@ -10,7 +10,8 @@ namespace ThunderbirdsBoardGameEngine.Rules.Application.UnitTests.Rescue.Calcula
             Bonuses: new List<RescueContextBonus>
             {
                 new RescueContextBonus("BONUS_1", 2),
-                new RescueContextBonus("BONUS_2", 3)
+                new RescueContextBonus("BONUS_2", 3),
+                new RescueContextBonus("BONUS_X", 5)
             });
 
         [Fact]
@@ -27,6 +28,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Application.UnitTests.Rescue.Calcula
             // Assert
             Assert.Equal(9, result.TargetRoll);
             Assert.Equal(0, result.TotalBonus);
+            Assert.Empty(result.AppliedBonuses);
         }
 
         [Fact]
@@ -47,6 +49,16 @@ namespace ThunderbirdsBoardGameEngine.Rules.Application.UnitTests.Rescue.Calcula
             // Assert
             Assert.Equal(4, result.TargetRoll);
             Assert.Equal(5, result.TotalBonus);
+
+            var expectedBonuses = new[]
+            {
+                new RescueContextBonus("BONUS_1", 2),
+                new RescueContextBonus("BONUS_2", 3)
+            };
+
+            Assert.Equal(expectedBonuses.Length, result.AppliedBonuses.Count);
+            Assert.All(expectedBonuses, expected =>
+                Assert.Contains(expected, result.AppliedBonuses));
         }
 
         [Fact]
@@ -67,6 +79,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Application.UnitTests.Rescue.Calcula
             // Assert
             Assert.Equal(9, result.TargetRoll);
             Assert.Equal(0, result.TotalBonus);
+            Assert.Empty(result.AppliedBonuses);
         }
 
         private static BonusCalculator CreateBonusCalculator()
