@@ -13,7 +13,8 @@
             return new BonusCalculationResult
             {
                 TargetRoll = rescueContext.DifficultyNumber - bonus,
-                TotalBonus = bonus
+                TotalBonus = bonus,
+                AppliedBonuses = appliedBonuses
             };
         }            
     }
