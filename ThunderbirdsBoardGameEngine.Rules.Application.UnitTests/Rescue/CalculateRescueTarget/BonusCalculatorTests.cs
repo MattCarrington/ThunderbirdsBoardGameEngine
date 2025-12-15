@@ -5,23 +5,23 @@ namespace ThunderbirdsBoardGameEngine.Rules.Application.UnitTests.Rescue.Calcula
 {
     public class BonusCalculatorTests
     {
+        private readonly List<RuleBonus> _cardBonuses = new()
+        {
+            new() { Key = "BONUS_1", Value = 2 },
+            new() { Key = "BONUS_2", Value = 3 }
+        };
+
         [Fact]
         public void CalculateRescueTarget_NoBonusesToApply_ReturnsTargetRollEqualDifficultyNumber()
         {
             // Arrange
-            var bonusCalculator = new BonusCalculator();
+            var bonusCalculator = CreateBonusCalculator();
 
             var difficultyNumber = 5;
             var appliedBonusKeys = Array.Empty<string>();
 
-            var cardBonuses = new List<RuleBonus>
-            {
-                new() { Key = "BONUS_1", Value = 2 },
-                new() { Key = "BONUS_2", Value = 3 }
-            };
-
             // Act
-            var result = bonusCalculator.CalculateRescueTarget(difficultyNumber, appliedBonusKeys, cardBonuses);
+            var result = bonusCalculator.CalculateRescueTarget(difficultyNumber, appliedBonusKeys, _cardBonuses);
 
             // Assert
             Assert.Equal(difficultyNumber, result.TargetRoll);
@@ -32,7 +32,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Application.UnitTests.Rescue.Calcula
         public void CalculateRescueTarget_WhenBonusesToBeApplied_ReturnsTargetRoll()
         {
             // Arrange
-            var bonusCalculator = new BonusCalculator();
+            var bonusCalculator = CreateBonusCalculator();
 
             var difficultyNumber = 9;
 
@@ -42,14 +42,8 @@ namespace ThunderbirdsBoardGameEngine.Rules.Application.UnitTests.Rescue.Calcula
                 "BONUS_2"
             };
 
-            var cardBonuses = new List<RuleBonus>
-            {
-                new() { Key = "BONUS_1", Value = 2 },
-                new() { Key = "BONUS_2", Value = 3 }
-            };
-
             // Act
-            var result = bonusCalculator.CalculateRescueTarget(difficultyNumber, bonusKeys, cardBonuses);
+            var result = bonusCalculator.CalculateRescueTarget(difficultyNumber, bonusKeys, _cardBonuses);
 
             // Assert
             Assert.Equal(4, result.TargetRoll);
@@ -60,7 +54,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Application.UnitTests.Rescue.Calcula
         public void CalculateRescueResult_WhenInvalidBonusKey_ReturnsTargetRoll()
         {
             // Arrange
-            var bonusCalculator = new BonusCalculator();
+            var bonusCalculator = CreateBonusCalculator();
 
             var difficultyNumber = 9;
 
@@ -70,18 +64,17 @@ namespace ThunderbirdsBoardGameEngine.Rules.Application.UnitTests.Rescue.Calcula
                 "BONUS_4"
             };
 
-            var cardBonuses = new List<RuleBonus>
-            {
-                new() { Key = "BONUS_1", Value = 2 },
-                new() { Key = "BONUS_2", Value = 3 }
-            };
-
             // Act
-            var result = bonusCalculator.CalculateRescueTarget(difficultyNumber, bonusKeys, cardBonuses);
+            var result = bonusCalculator.CalculateRescueTarget(difficultyNumber, bonusKeys, _cardBonuses);
 
             // Assert
             Assert.Equal(9, result.TargetRoll);
             Assert.Equal(0, result.TotalBonus);
+        }
+
+        private static BonusCalculator CreateBonusCalculator()
+        {
+            return new BonusCalculator();
         }
     }
 }
