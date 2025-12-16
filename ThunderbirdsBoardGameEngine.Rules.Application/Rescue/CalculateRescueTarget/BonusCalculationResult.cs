@@ -6,6 +6,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Application.Rescue.CalculateRescueTa
         public required int TargetRoll { get; init; }
 
         public required int TotalBonus { get; init; }
-        public List<RescueContextBonus> AppliedBonuses { get; internal set; }
+
+        public IReadOnlyList<RescueContextBonus> AppliedBonuses { get; init; } = Array.Empty<RescueContextBonus>();
     }
 }
