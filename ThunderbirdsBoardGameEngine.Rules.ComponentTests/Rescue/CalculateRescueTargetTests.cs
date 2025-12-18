@@ -72,7 +72,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Rescue
                 ]
             );
 
-            var source = new FakeDisasterCardCatalog(sunProbe, pitOfPeril, terrorInNewYorkCity);
+            var source = new FakeDisasterCardReferenceSource(sunProbe, pitOfPeril, terrorInNewYorkCity);
 
             var provider = new CatalogRescueContextProvider(source);
 

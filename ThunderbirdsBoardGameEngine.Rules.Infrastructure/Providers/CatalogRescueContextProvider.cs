@@ -6,16 +6,16 @@ namespace ThunderbirdsBoardGameEngine.Rules.Infrastructure.Providers
 {
     public sealed class CatalogRescueContextProvider : IRescueProjectionProvider
     {
-        private readonly IDisasterCardCatalog _disasterCardCatalog;
+        private readonly IDisasterCardReferenceSource _disasterCardReferenceSource;
 
-        public CatalogRescueContextProvider(IDisasterCardCatalog disasterCardCatalog)
+        public CatalogRescueContextProvider(IDisasterCardReferenceSource disasterCardReferenceSource)
         {
-            _disasterCardCatalog = disasterCardCatalog ?? throw new ArgumentNullException(nameof(disasterCardCatalog));
+            _disasterCardReferenceSource = disasterCardReferenceSource ?? throw new ArgumentNullException(nameof(disasterCardReferenceSource));
         }
 
         public RescueProjection GetRescueContext(int disasterCardId)
         {
-            var disasterCard = _disasterCardCatalog.GetById(disasterCardId);
+            var disasterCard = _disasterCardReferenceSource.GetById(disasterCardId);
 
             return new RescueProjection
             (

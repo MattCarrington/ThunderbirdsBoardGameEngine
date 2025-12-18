@@ -20,10 +20,10 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Application.UnitTests.Services
                 new DisasterCardBuilder().WithId(2).WithName("Disaster 2").WithDifficulty(8).WithLocation(BoardLocation.Asia).WithUserChoiceRewardOption().Build()
             );
 
-            var catalog = Substitute.For<IDisasterCardCatalog>();
-            catalog.Cards.Returns(disasterCards);
+            var source = Substitute.For<IDisasterCardReferenceSource>();
+            source.Cards.Returns(disasterCards);
 
-            var service = new DisasterCardService(catalog);
+            var service = new DisasterCardService(source);
 
             // Act
             var result = service.GetAll();
@@ -32,7 +32,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Application.UnitTests.Services
             Assert.IsType<ImmutableArray<DisasterCard>>(result);
             Assert.Equal(disasterCards, result);
 
-            _ = catalog.Received(1).Cards;
+            _ = source.Received(1).Cards;
         }
     }
 }

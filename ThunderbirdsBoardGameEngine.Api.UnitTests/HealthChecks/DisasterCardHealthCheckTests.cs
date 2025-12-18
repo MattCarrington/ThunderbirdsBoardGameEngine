@@ -52,7 +52,7 @@ namespace ThunderbirdsBoardGameEngine.Api.UnitTests.HealthChecks
         public async Task CheckHealthPoint_WhenServiceThrows_ReturnsUnhealthy()
         {
             // Arrange
-            var probe = Substitute.For<IDisasterCardCatalogProbe>();
+            var probe = Substitute.For<IDisasterCardReferenceSourceProbe>();
             probe.Count.Throws(new InvalidOperationException("Database error"));
 
             // Act
@@ -64,15 +64,15 @@ namespace ThunderbirdsBoardGameEngine.Api.UnitTests.HealthChecks
             Assert.IsType<InvalidOperationException>(result.Exception);
         }
 
-        private static IDisasterCardCatalogProbe CreateProbe(int count)
+        private static IDisasterCardReferenceSourceProbe CreateProbe(int count)
         {
-            var probe = Substitute.For<IDisasterCardCatalogProbe>();
+            var probe = Substitute.For<IDisasterCardReferenceSourceProbe>();
             probe.Count.Returns(count);
             probe.Version.Returns("v1.0.0");
             return probe;
         }
 
-        private async static Task<HealthCheckResult> PerformHealthCheck(IDisasterCardCatalogProbe probe)
+        private async static Task<HealthCheckResult> PerformHealthCheck(IDisasterCardReferenceSourceProbe probe)
         {
             var healthCheck = new DisasterCardCatalogHealthCheck(probe);
 

@@ -1,20 +1,20 @@
 ﻿using System.Collections.Immutable;
 using ThunderbirdsBoardGameEngine.Catalog.Application.Interfaces;
 using ThunderbirdsBoardGameEngine.Catalog.Domain.Entities;
-using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Catalogs;
+using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.ReferenceSources;
 
 namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Initialisers
 {
-    internal class DisasterCardCatalogInitializer
+    internal class DisasterCardReferenceSourceInitializer
     {
         private readonly IDisasterCardReader _disasterCardReader;
 
-        public DisasterCardCatalogInitializer(IDisasterCardReader disasterCardReader)
+        public DisasterCardReferenceSourceInitializer(IDisasterCardReader disasterCardReader)
         {
             _disasterCardReader = disasterCardReader ?? throw new ArgumentNullException(nameof(disasterCardReader));
         }
 
-        public async Task<InMemoryDisasterCardCatalog> InitializeAsync(CancellationToken cancellationToken = default)
+        public async Task<InMemoryDisasterCardReferenceSource> InitializeAsync(CancellationToken cancellationToken = default)
         {
             var cards = await _disasterCardReader.GetAllAsync(cancellationToken);
 
@@ -27,7 +27,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Initialisers
 
             var version = $"card-{cards.Count}";
 
-            return new InMemoryDisasterCardCatalog(snapshot, version);
+            return new InMemoryDisasterCardReferenceSource(snapshot, version);
         }
     }
 }

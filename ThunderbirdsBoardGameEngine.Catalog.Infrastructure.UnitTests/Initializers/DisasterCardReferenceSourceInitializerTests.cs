@@ -8,7 +8,7 @@ using Xunit;
 
 namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Initializers
 {
-    public class DisasterCardCatalogInitializerTests
+    public class DisasterCardReferenceSourceInitializerTests
     {
         [Fact]
         public async Task BuildAsync_WithValidParameters_ReturnsCatalog()
@@ -60,9 +60,9 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Initializ
             await Assert.ThrowsAsync<ArgumentNullException>(() => initializer.InitializeAsync(CancellationToken.None));
         }
 
-        private static DisasterCardCatalogInitializer CreateIntialiser(IDisasterCardReader reader)
+        private static DisasterCardReferenceSourceInitializer CreateIntialiser(IDisasterCardReader reader)
         {
-            return new DisasterCardCatalogInitializer(reader);
+            return new DisasterCardReferenceSourceInitializer(reader);
         }
     }
 }

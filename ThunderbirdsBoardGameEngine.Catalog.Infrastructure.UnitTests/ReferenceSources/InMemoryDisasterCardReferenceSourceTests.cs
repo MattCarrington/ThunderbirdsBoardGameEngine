@@ -1,12 +1,12 @@
 ﻿using System.Collections.Immutable;
 using ThunderbirdsBoardGameEngine.Catalog.Domain.Entities;
-using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Catalogs;
+using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.ReferenceSources;
 using ThunderbirdsBoardGameEngine.TestUtils.Catalog.Builders;
 using Xunit;
 
-namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Catalogs
+namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.ReferenceSources
 {
-    public class InMemoryDisasterCardCatalogTests
+    public class InMemoryDisasterCardReferenceSourceTests
     {
         private readonly ImmutableArray<DisasterCard> _cards =
         [
@@ -22,13 +22,13 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Catalogs
             // Arrange          
 
             // Act
-            var catalog = CreateCatalog(_cards, _version);
+            var source = CreateReferenceSource(_cards, _version);
 
             // Assert
-            Assert.Equal(_version, catalog.Version);
-            Assert.Equal(2, catalog.Cards.Length);
-            Assert.Contains(catalog.Cards, c => c.Id == 1 && c.Name == "Test 1");
-            Assert.Contains(catalog.Cards, c => c.Id == 2 && c.Name == "Test 2");
+            Assert.Equal(_version, source.Version);
+            Assert.Equal(2, source.Cards.Length);
+            Assert.Contains(source.Cards, c => c.Id == 1 && c.Name == "Test 1");
+            Assert.Contains(source.Cards, c => c.Id == 2 && c.Name == "Test 2");
         }
 
         [Theory]
@@ -39,7 +39,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Catalogs
             // Arrange
 
             // Act & Assert
-            Assert.Throws<ArgumentException>(() => new InMemoryDisasterCardCatalog(_cards, invalidVersion));
+            Assert.Throws<ArgumentException>(() => new InMemoryDisasterCardReferenceSource(_cards, invalidVersion));
         }
 
         [Fact]
@@ -48,7 +48,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Catalogs
             // Arrange
 
             // Act & Assert
-            Assert.Throws<ArgumentNullException>(() => new InMemoryDisasterCardCatalog(_cards, null!));
+            Assert.Throws<ArgumentNullException>(() => new InMemoryDisasterCardReferenceSource(_cards, null!));
         }
 
         [Fact]
@@ -58,7 +58,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Catalogs
             var emptyCards = ImmutableArray<DisasterCard>.Empty;
 
             // Act & Assert
-            Assert.Throws<ArgumentException>(() => new InMemoryDisasterCardCatalog(emptyCards, _version));
+            Assert.Throws<ArgumentException>(() => new InMemoryDisasterCardReferenceSource(emptyCards, _version));
         }
 
         [Fact]
@@ -67,23 +67,23 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Catalogs
             // Arrange
             var cards = _cards.ToList();
 
-            var catalog = CreateCatalog(cards);
+            var source = CreateReferenceSource(cards);
 
             // Act
             cards.Add(new DisasterCardBuilder().WithId(3).WithName("Test 3").Build());
 
             // Assert
-            Assert.Equal(2, catalog.Cards.Length);
+            Assert.Equal(2, source.Cards.Length);
         }
 
         [Fact]
         public void GetById_WithExistingId_ReturnsCorrectCard()
         {
             // Arrange
-            var catalog = CreateCatalog(_cards);
+            var source = CreateReferenceSource(_cards);
 
             // Act
-            var card = catalog.GetById(1);
+            var card = source.GetById(1);
 
             // Assert
             Assert.NotNull(card);
@@ -95,20 +95,20 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Catalogs
         public void GetById_WithNonExistingId_ThrowsKeyNotFoundException()
         {
             // Arrange
-            var catalog = CreateCatalog(_cards);
+            var source = CreateReferenceSource(_cards);
 
             // Act & Assert
-            Assert.Throws<KeyNotFoundException>(() => catalog.GetById(999));
+            Assert.Throws<KeyNotFoundException>(() => source.GetById(999));
         }
 
-        private static InMemoryDisasterCardCatalog CreateCatalog(IReadOnlyList<DisasterCard> cards, string version)
+        private static InMemoryDisasterCardReferenceSource CreateReferenceSource(IReadOnlyList<DisasterCard> cards, string version)
         {
-            return new InMemoryDisasterCardCatalog(cards.ToImmutableArray(), version);
+            return new InMemoryDisasterCardReferenceSource(cards.ToImmutableArray(), version);
         }
 
-        private static InMemoryDisasterCardCatalog CreateCatalog(IReadOnlyList<DisasterCard> cards)
+        private static InMemoryDisasterCardReferenceSource CreateReferenceSource(IReadOnlyList<DisasterCard> cards)
         {
-            return CreateCatalog(cards, _version);
+            return CreateReferenceSource(cards, _version);
         }
     }
 }
