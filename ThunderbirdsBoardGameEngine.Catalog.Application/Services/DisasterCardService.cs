@@ -6,16 +6,16 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Application.Services
 {
     public class DisasterCardService : IDisasterCardService
     {
-        private readonly IDisasterCardCatalog _disasterCardCatalog;
+        private readonly IDisasterCardReferenceSource _disasterCardReferenceSource;
 
-        public DisasterCardService(IDisasterCardCatalog disasterCardCatalog)
+        public DisasterCardService(IDisasterCardReferenceSource disasterCardReferenceSource)
         {
-            _disasterCardCatalog = disasterCardCatalog ?? throw new ArgumentNullException(nameof(disasterCardCatalog));
+            _disasterCardReferenceSource = disasterCardReferenceSource ?? throw new ArgumentNullException(nameof(disasterCardReferenceSource));
         }
 
         public ImmutableArray<DisasterCard> GetAll()
         {
-            return _disasterCardCatalog.Cards;
+            return _disasterCardReferenceSource.Cards;
         }
     }
 }

@@ -12,7 +12,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Application.Interfaces
     /// without allowing modification.
     /// </para>
     /// </remarks>
-    public interface IDisasterCardCatalog
+    public interface IDisasterCardReferenceSource
     {
         /// <summary>
         /// Gets the version of the catalog.

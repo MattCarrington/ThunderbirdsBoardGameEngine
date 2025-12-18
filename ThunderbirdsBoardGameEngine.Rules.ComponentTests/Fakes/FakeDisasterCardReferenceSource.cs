@@ -5,7 +5,7 @@ using ThunderbirdsBoardGameEngine.Catalog.Domain.Entities;
 
 namespace ThunderbirdsBoardGameEngine.Rules.Application.ComponentTests.Fakes
 {
-    public class FakeDisasterCardCatalog : IDisasterCardCatalog
+    public class FakeDisasterCardReferenceSource : IDisasterCardReferenceSource
     {
         private readonly FrozenDictionary<int, DisasterCard> _cards;
 
@@ -13,7 +13,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Application.ComponentTests.Fakes
 
         public ImmutableArray<DisasterCard> Cards => _cards.Values.ToImmutableArray();
 
-        public FakeDisasterCardCatalog(params DisasterCard[] disasterCards)
+        public FakeDisasterCardReferenceSource(params DisasterCard[] disasterCards)
         {
              _cards = disasterCards.ToFrozenDictionary(card => card.Id);
         }

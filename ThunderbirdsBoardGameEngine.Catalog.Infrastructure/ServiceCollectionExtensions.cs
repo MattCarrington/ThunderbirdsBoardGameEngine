@@ -49,7 +49,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure
         ///   </item>
         ///   <item>
         ///     <description>
-        ///       An <see cref="IDisasterCardCatalog"/> that is initialized eagerly at startup.
+        ///       An <see cref="IDisasterCardReferenceSource"/> that is initialized eagerly at startup.
         ///     </description>
         ///   </item>
         ///   <item>
@@ -71,14 +71,14 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure
             services.AddSingleton<IDisasterCardDeserializer, DisasterCardDeserializer>();
             services.AddSingleton<IDisasterCardReader, DisasterCardJsonReader>();
             services.Decorate<IDisasterCardReader, ValidatingDisasterCardReader>();
-            services.AddSingleton<IDisasterCardCatalog>(sp =>
+            services.AddSingleton<IDisasterCardReferenceSource>(sp =>
             {
-                var init = new DisasterCardCatalogInitializer(sp.GetRequiredService<IDisasterCardReader>());
+                var init = new DisasterCardReferenceSourceInitializer(sp.GetRequiredService<IDisasterCardReader>());
                 return init.InitializeAsync(CancellationToken.None).GetAwaiter().GetResult();
             });
 
             services.AddSingleton(sp =>
-                (IDisasterCardCatalogProbe)sp.GetRequiredService<IDisasterCardCatalog>());
+                (IDisasterCardReferenceSourceProbe)sp.GetRequiredService<IDisasterCardReferenceSource>());
 
             services.AddOptions<DisasterCardJsonOptions>()
                 .Bind(configuration.GetSection("Catalog:DisasterCards:Json"))

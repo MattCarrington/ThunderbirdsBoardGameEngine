@@ -12,7 +12,7 @@
     /// This interface should not be used for application logic.
     /// </para>
     /// </remarks>
-    public interface IDisasterCardCatalogProbe
+    public interface IDisasterCardReferenceSourceProbe
     {
         /// <summary>
         /// Gets the version of the catalog.

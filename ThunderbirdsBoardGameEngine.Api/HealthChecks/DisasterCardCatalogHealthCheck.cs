@@ -5,9 +5,9 @@ namespace ThunderbirdsBoardGameEngine.Api.HealthChecks
 {
     public class DisasterCardCatalogHealthCheck : IHealthCheck
     {
-        private readonly IDisasterCardCatalogProbe _disasterCardProbe;
+        private readonly IDisasterCardReferenceSourceProbe _disasterCardProbe;
 
-        public DisasterCardCatalogHealthCheck(IDisasterCardCatalogProbe disasterCardProbe)
+        public DisasterCardCatalogHealthCheck(IDisasterCardReferenceSourceProbe disasterCardProbe)
         {
             _disasterCardProbe = disasterCardProbe;
         }

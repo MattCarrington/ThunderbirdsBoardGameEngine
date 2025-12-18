@@ -28,7 +28,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Infrastructure.UnitTests.Providers
                 .WithBonusCondition(podVehicleBonus)
                 .Build();
 
-            var catalog = Substitute.For<IDisasterCardCatalog>();
+            var catalog = Substitute.For<IDisasterCardReferenceSource>();
             catalog.GetById(disasterCard.Id).Returns(disasterCard);
 
             var provider = new CatalogRescueContextProvider(catalog);

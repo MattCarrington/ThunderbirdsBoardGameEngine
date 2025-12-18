@@ -3,13 +3,13 @@ using System.Collections.Immutable;
 using ThunderbirdsBoardGameEngine.Catalog.Application.Interfaces;
 using ThunderbirdsBoardGameEngine.Catalog.Domain.Entities;
 
-namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Catalogs
+namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.ReferenceSources
 {
-    internal sealed class InMemoryDisasterCardCatalog : IDisasterCardCatalog, IDisasterCardCatalogProbe
+    internal sealed class InMemoryDisasterCardReferenceSource : IDisasterCardReferenceSource, IDisasterCardReferenceSourceProbe
     {
         FrozenDictionary<int, DisasterCard> _cards;
 
-        public InMemoryDisasterCardCatalog(ImmutableArray<DisasterCard> disasterCards, string version)
+        public InMemoryDisasterCardReferenceSource(ImmutableArray<DisasterCard> disasterCards, string version)
         {
             ArgumentNullException.ThrowIfNull(disasterCards);
             ArgumentException.ThrowIfNullOrWhiteSpace(version);
