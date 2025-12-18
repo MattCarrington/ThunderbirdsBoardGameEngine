@@ -42,9 +42,9 @@ namespace ThunderbirdsBoardGameEngine.Rules.Infrastructure.UnitTests.Providers
             
             var expectedBonuses = new[]
             {
-                new RescueContextBonus("ladypenelope", 2),
-                new RescueContextBonus("thunderbird2", 1),
-                new RescueContextBonus("transmittertruck", 3)
+                new RescueBonus("ladypenelope", 2),
+                new RescueBonus("thunderbird2", 1),
+                new RescueBonus("transmittertruck", 3)
             };
 
             Assert.Equal(expectedBonuses.Length, rescueContext.Bonuses.Count);

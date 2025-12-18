@@ -2,10 +2,10 @@
 {
     public class CalculateRescueTargetHandler
     {
-        private readonly IRescueContextProvider _rescueContextProvider;
-        private readonly BonusCalculator _bonusCalculator;
+        private readonly IRescueProjectionProvider _rescueContextProvider;
+        private readonly RescueTargetCalculator _bonusCalculator;
 
-        public CalculateRescueTargetHandler(IRescueContextProvider rescueContextProvider, BonusCalculator bonusCalculator)
+        public CalculateRescueTargetHandler(IRescueProjectionProvider rescueContextProvider, RescueTargetCalculator bonusCalculator)
         {
             _rescueContextProvider = rescueContextProvider;
             _bonusCalculator = bonusCalculator;

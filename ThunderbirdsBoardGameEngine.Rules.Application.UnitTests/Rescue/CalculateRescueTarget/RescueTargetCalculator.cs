@@ -3,15 +3,15 @@ using Xunit;
 
 namespace ThunderbirdsBoardGameEngine.Rules.Application.UnitTests.Rescue.CalculateRescueTarget
 {
-    public class BonusCalculatorTests
+    public class RescueTargetCalculator
     {
-        private readonly RescueContext _rescueContext = new(
+        private readonly RescueProjection _rescueContext = new(
             DifficultyNumber: 9,
-            Bonuses: new List<RescueContextBonus>
+            Bonuses: new List<RescueBonus>
             {
-                new RescueContextBonus("BONUS_1", 2),
-                new RescueContextBonus("BONUS_2", 3),
-                new RescueContextBonus("BONUS_X", 5)
+                new RescueBonus("BONUS_1", 2),
+                new RescueBonus("BONUS_2", 3),
+                new RescueBonus("BONUS_X", 5)
             });
 
         [Fact]
@@ -52,8 +52,8 @@ namespace ThunderbirdsBoardGameEngine.Rules.Application.UnitTests.Rescue.Calcula
 
             var expectedBonuses = new[]
             {
-                new RescueContextBonus("BONUS_1", 2),
-                new RescueContextBonus("BONUS_2", 3)
+                new RescueBonus("BONUS_1", 2),
+                new RescueBonus("BONUS_2", 3)
             };
 
             Assert.Equal(expectedBonuses.Length, result.AppliedBonuses.Count);
@@ -82,9 +82,9 @@ namespace ThunderbirdsBoardGameEngine.Rules.Application.UnitTests.Rescue.Calcula
             Assert.Empty(result.AppliedBonuses);
         }
 
-        private static BonusCalculator CreateBonusCalculator()
+        private static Application.Rescue.CalculateRescueTarget.RescueTargetCalculator CreateBonusCalculator()
         {
-            return new BonusCalculator();
+            return new Application.Rescue.CalculateRescueTarget.RescueTargetCalculator();
         }
     }
 }
