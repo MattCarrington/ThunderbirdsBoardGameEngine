@@ -1,12 +1,12 @@
 ﻿
 namespace ThunderbirdsBoardGameEngine.Rules.Application.Rescue.CalculateRescueTarget
 {
-    public record BonusCalculationResult
+    public record RescueTargetResult
     {
         public required int TargetRoll { get; init; }
 
         public required int TotalBonus { get; init; }
 
-        public IReadOnlyList<RescueContextBonus> AppliedBonuses { get; init; } = Array.Empty<RescueContextBonus>();
+        public IReadOnlyList<RescueBonus> AppliedBonuses { get; init; } = Array.Empty<RescueBonus>();
     }
 }

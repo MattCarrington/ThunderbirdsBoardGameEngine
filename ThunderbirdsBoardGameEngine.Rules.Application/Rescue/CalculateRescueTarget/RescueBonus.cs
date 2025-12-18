@@ -1,4 +1,4 @@
 ﻿namespace ThunderbirdsBoardGameEngine.Rules.Application.Rescue.CalculateRescueTarget
 {
-    public sealed record RescueContextBonus(string Key, int Value);
+    public sealed record RescueBonus(string Key, int Value);
 }

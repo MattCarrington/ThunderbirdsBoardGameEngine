@@ -4,7 +4,7 @@ using ThunderbirdsBoardGameEngine.Rules.Application.Rescue.CalculateRescueTarget
 
 namespace ThunderbirdsBoardGameEngine.Rules.Infrastructure.Providers
 {
-    public sealed class CatalogRescueContextProvider : IRescueContextProvider
+    public sealed class CatalogRescueContextProvider : IRescueProjectionProvider
     {
         private readonly IDisasterCardCatalog _disasterCardCatalog;
 
@@ -13,33 +13,33 @@ namespace ThunderbirdsBoardGameEngine.Rules.Infrastructure.Providers
             _disasterCardCatalog = disasterCardCatalog ?? throw new ArgumentNullException(nameof(disasterCardCatalog));
         }
 
-        public RescueContext GetRescueContext(int disasterCardId)
+        public RescueProjection GetRescueContext(int disasterCardId)
         {
             var disasterCard = _disasterCardCatalog.GetById(disasterCardId);
 
-            return new RescueContext
+            return new RescueProjection
             (
                 DifficultyNumber: disasterCard.DifficultyNumber,
                 Bonuses: disasterCard.BonusConditions.Select(ProjectBonus).ToList()
             );
         }
 
-        private static RescueContextBonus ProjectBonus(BonusCondition condition)
+        private static RescueBonus ProjectBonus(BonusCondition condition)
         {
             return condition switch
             {
                 CharacterBonusCondition c =>
-                    new RescueContextBonus(
+                    new RescueBonus(
                         Key: c.Character.ToString().ToLowerInvariant(),
                         Value: c.BonusValue),
 
                 ThunderbirdBonusCondition t =>
-                    new RescueContextBonus(
+                    new RescueBonus(
                         Key: t.Thunderbird.ToString().ToLowerInvariant(),
                         Value: t.BonusValue),
 
                 PodVehicleBonusCondition p =>
-                    new RescueContextBonus(
+                    new RescueBonus(
                         Key: p.PodVehicle.ToString().ToLowerInvariant(),
                         Value: p.BonusValue),
 

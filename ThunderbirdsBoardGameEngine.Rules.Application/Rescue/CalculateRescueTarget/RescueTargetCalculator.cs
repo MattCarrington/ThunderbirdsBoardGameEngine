@@ -1,8 +1,8 @@
 ﻿namespace ThunderbirdsBoardGameEngine.Rules.Application.Rescue.CalculateRescueTarget
 {
-    public class BonusCalculator
+    public class RescueTargetCalculator
     {
-        public BonusCalculationResult CalculateRescueTarget(IReadOnlyCollection<string> appliedBonusKeys, RescueContext rescueContext)
+        public RescueTargetResult CalculateRescueTarget(IReadOnlyCollection<string> appliedBonusKeys, RescueProjection rescueContext)
         {
             var appliedBonuses = rescueContext.Bonuses
                 .Where(b => appliedBonusKeys.Contains(b.Key))
@@ -10,7 +10,7 @@
 
             var bonus = appliedBonuses.Sum(b => b.Value);
 
-            return new BonusCalculationResult
+            return new RescueTargetResult
             {
                 TargetRoll = rescueContext.DifficultyNumber - bonus,
                 TotalBonus = bonus,
