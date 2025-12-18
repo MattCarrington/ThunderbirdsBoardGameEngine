@@ -56,7 +56,7 @@ jobs:
           docker save "${{ inputs.image_name }}:$SHA_TAG" -o "${{ inputs.image_name }}.tar"
 
       - name: Upload Image Artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: ${{ inputs.image_name }}-image
           path: ${{ inputs.image_name }}.tar
