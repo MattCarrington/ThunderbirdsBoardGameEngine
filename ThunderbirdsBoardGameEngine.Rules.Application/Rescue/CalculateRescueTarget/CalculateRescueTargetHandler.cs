@@ -1,6 +1,4 @@
-﻿using ThunderbirdsBoardGameEngine.Rules.Application.Interfaces;
-
-namespace ThunderbirdsBoardGameEngine.Rules.Application.Rescue.CalculateRescueTarget
+﻿namespace ThunderbirdsBoardGameEngine.Rules.Application.Rescue.CalculateRescueTarget
 {
     public class CalculateRescueTargetHandler
     {
