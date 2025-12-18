@@ -3,7 +3,7 @@ using ThunderbirdsBoardGameEngine.Catalog.Domain.Entities;
 using ThunderbirdsBoardGameEngine.Rules.Application.Interfaces;
 using ThunderbirdsBoardGameEngine.Rules.Application.Rescue.CalculateRescueTarget;
 
-namespace ThunderbirdsBoardGameEngine.Catalog.Application.Providers
+namespace ThunderbirdsBoardGameEngine.Rules.Infrastructure.Providers
 {
     public sealed class CatalogRescueContextProvider : IRescueContextProvider
     {
@@ -49,4 +49,3 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Application.Providers
         }
     }
 }
-

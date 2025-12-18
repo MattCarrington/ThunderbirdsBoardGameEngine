@@ -1,14 +1,13 @@
 ﻿using NSubstitute;
 using ThunderbirdsBoardGameEngine.Catalog.Application.Interfaces;
-using ThunderbirdsBoardGameEngine.Catalog.Application.Providers;
 using ThunderbirdsBoardGameEngine.Catalog.Domain.Entities;
 using ThunderbirdsBoardGameEngine.Catalog.Domain.Enums;
-using ThunderbirdsBoardGameEngine.Rules.Application.Rescue;
 using ThunderbirdsBoardGameEngine.Rules.Application.Rescue.CalculateRescueTarget;
+using ThunderbirdsBoardGameEngine.Rules.Infrastructure.Providers;
 using ThunderbirdsBoardGameEngine.TestUtils.Catalog.Builders;
 using Xunit;
 
-namespace ThunderbirdsBoardGameEngine.Catalog.Application.UnitTests.Providers
+namespace ThunderbirdsBoardGameEngine.Rules.Infrastructure.UnitTests.Providers
 {
     public class CatalogRescueContextProviderTests
     {
@@ -43,14 +42,14 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Application.UnitTests.Providers
             
             var expectedBonuses = new[]
             {
-                new RescueContextBonus("lady-penelope", 2),
-                new RescueContextBonus("thunderbird-2", 1),
-                new RescueContextBonus("transmitter-truck", 3)
+                new RescueContextBonus("ladypenelope", 2),
+                new RescueContextBonus("thunderbird2", 1),
+                new RescueContextBonus("transmittertruck", 3)
             };
 
             Assert.Equal(expectedBonuses.Length, rescueContext.Bonuses.Count);
             Assert.All(expectedBonuses, expected =>
-            Assert.Contains(expected, rescueContext.Bonuses));
+                Assert.Contains(expected, rescueContext.Bonuses));
         }
     }
 }
