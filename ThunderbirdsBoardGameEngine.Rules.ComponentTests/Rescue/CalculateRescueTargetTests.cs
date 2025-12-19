@@ -1,8 +1,11 @@
-﻿using ThunderbirdsBoardGameEngine.Catalog.Domain.Entities;
+﻿using MediatR;
+using Microsoft.Extensions.DependencyInjection;
+using ThunderbirdsBoardGameEngine.Catalog.Application.Interfaces;
+using ThunderbirdsBoardGameEngine.Catalog.Domain.Entities;
 using ThunderbirdsBoardGameEngine.Catalog.Domain.Enums;
 using ThunderbirdsBoardGameEngine.Rules.Application.ComponentTests.Fakes;
 using ThunderbirdsBoardGameEngine.Rules.Application.Rescue.CalculateRescueTarget;
-using ThunderbirdsBoardGameEngine.Rules.Infrastructure.Providers;
+using ThunderbirdsBoardGameEngine.Rules.Infrastructure;
 using Xunit;
 
 namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Rescue
@@ -10,7 +13,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Rescue
     public class CalculateRescueTargetTests
     {
         [Fact]
-        public async Task GivenACalculateRescueTargetTest_WhenSomethingHappens_ThenExpectedResultOccursAsync()
+        public async Task GivenCardAndBonuses_WhenCalculatingRescueTarget_ReturnsExpectedTargetRoll()
         {
             // Arrange
             var sunProbe = new DisasterCard(
@@ -74,18 +77,22 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Rescue
 
             var source = new FakeDisasterCardReferenceSource(sunProbe, pitOfPeril, terrorInNewYorkCity);
 
-            var provider = new CatalogRescueProjectionProvider(source);
-
-            var handler = new CalculateRescueTargetHandler(provider, new RescueTargetCalculator());
-
             var request = new CalculateRescueTargetQuery
             (
                 DisasterCardId: 1,
                 AppliedBonusKeys: ["scott", "transmittertruck"]
             );
 
+            var services = new ServiceCollection();
+            services.AddSingleton<IDisasterCardReferenceSource>(source);
+            services.AddRules();
+
+            using var sp = services.BuildServiceProvider();
+
+            var mediator = sp.GetRequiredService<IMediator>();
+
             // Act
-            var result = await handler.Handle(request, CancellationToken.None);
+            var result = await mediator.Send(request, CancellationToken.None);
 
             // Assert
             Assert.Equal(6, result.TargetNumber);
