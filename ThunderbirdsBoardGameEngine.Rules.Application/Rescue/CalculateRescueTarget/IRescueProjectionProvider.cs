@@ -1,4 +1,6 @@
-﻿namespace ThunderbirdsBoardGameEngine.Rules.Application.Rescue.CalculateRescueTarget
+﻿using ThunderbirdsBoardGameEngine.Rules.Domain.Rescue;
+
+namespace ThunderbirdsBoardGameEngine.Rules.Application.Rescue.CalculateRescueTarget
 {
     public interface IRescueProjectionProvider
     {

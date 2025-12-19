@@ -1,5 +1,4 @@
-﻿
-namespace ThunderbirdsBoardGameEngine.Rules.Application.Rescue.CalculateRescueTarget
+﻿namespace ThunderbirdsBoardGameEngine.Rules.Domain.Rescue
 {
     public record RescueTargetResult
     {

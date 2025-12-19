@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using ThunderbirdsBoardGameEngine.Rules.Domain.Rescue;
 
 namespace ThunderbirdsBoardGameEngine.Rules.Application.Rescue.CalculateRescueTarget
 {
