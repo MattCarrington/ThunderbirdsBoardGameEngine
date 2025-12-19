@@ -30,8 +30,8 @@ namespace ThunderbirdsBoardGameEngine.Api
                 options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
             });
 
-            builder.Services.AddApplication();
-            builder.Services.AddInfrastructure(builder.Configuration);
+            builder.Services.AddCatalogApplication();
+            builder.Services.AddCatalogInfrastructure(builder.Configuration);
             builder.Services.AddApiServices(builder.Configuration);
 
             builder.Services.AddAuthorization();

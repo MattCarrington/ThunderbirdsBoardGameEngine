@@ -59,7 +59,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure
         ///   </item>
         /// </list>
         /// </remarks>
-        public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
+        public static IServiceCollection AddCatalogInfrastructure(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddSingleton<IFileOpener, FileOpener>();
             services.AddSingleton<IFileSystem, FileSystem>();
