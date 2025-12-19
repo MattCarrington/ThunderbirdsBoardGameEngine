@@ -3,13 +3,13 @@ using ThunderbirdsBoardGameEngine.Catalog.Application.Interfaces;
 using ThunderbirdsBoardGameEngine.Catalog.Domain.Entities;
 using ThunderbirdsBoardGameEngine.Catalog.Domain.Enums;
 using ThunderbirdsBoardGameEngine.Rules.Domain.Rescue;
-using ThunderbirdsBoardGameEngine.Rules.Infrastructure.Providers;
+using ThunderbirdsBoardGameEngine.Rules.Infrastructure.Lookups;
 using ThunderbirdsBoardGameEngine.TestUtils.Catalog.Builders;
 using Xunit;
 
-namespace ThunderbirdsBoardGameEngine.Rules.Infrastructure.UnitTests.Providers
+namespace ThunderbirdsBoardGameEngine.Rules.Infrastructure.UnitTests.Lookups
 {
-    public class CatalogRescueProjectionProviderTests
+    public class CatalogDisasterContributionLookupTests
     {
         [Fact]
         public void GetRescueContext_WhenValidDisasterCard_ReturnsRescueContext()
@@ -31,10 +31,10 @@ namespace ThunderbirdsBoardGameEngine.Rules.Infrastructure.UnitTests.Providers
             var catalog = Substitute.For<IDisasterCardReferenceSource>();
             catalog.GetById(disasterCard.Id).Returns(disasterCard);
 
-            var provider = new CatalogRescueProjectionProvider(catalog);
+            var lookup = new CatalogDisasterContributionLookup(catalog);
 
             // Act
-            var rescueContext = provider.GetRescueProjection(disasterCard.Id);
+            var rescueContext = lookup.GetDisasterContribution(disasterCard.Id);
 
             // Assert
             Assert.NotNull(rescueContext);
@@ -42,9 +42,9 @@ namespace ThunderbirdsBoardGameEngine.Rules.Infrastructure.UnitTests.Providers
             
             var expectedBonuses = new[]
             {
-                new RescueBonus("ladypenelope", 2),
-                new RescueBonus("thunderbird2", 1),
-                new RescueBonus("transmittertruck", 3)
+                new DisasterBonus("ladypenelope", 2),
+                new DisasterBonus("thunderbird2", 1),
+                new DisasterBonus("transmittertruck", 3)
             };
 
             Assert.Equal(expectedBonuses.Length, rescueContext.Bonuses.Count);

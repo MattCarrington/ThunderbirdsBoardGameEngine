@@ -3,44 +3,44 @@ using ThunderbirdsBoardGameEngine.Catalog.Domain.Entities;
 using ThunderbirdsBoardGameEngine.Rules.Application.Rescue.CalculateRescueTarget;
 using ThunderbirdsBoardGameEngine.Rules.Domain.Rescue;
 
-namespace ThunderbirdsBoardGameEngine.Rules.Infrastructure.Providers
+namespace ThunderbirdsBoardGameEngine.Rules.Infrastructure.Lookups
 {
-    public sealed class CatalogRescueProjectionProvider : IRescueProjectionProvider
+    public sealed class CatalogDisasterContributionLookup : IDisasterContributionLookup
     {
         private readonly IDisasterCardReferenceSource _disasterCardReferenceSource;
 
-        public CatalogRescueProjectionProvider(IDisasterCardReferenceSource disasterCardReferenceSource)
+        public CatalogDisasterContributionLookup(IDisasterCardReferenceSource disasterCardReferenceSource)
         {
             _disasterCardReferenceSource = disasterCardReferenceSource ?? throw new ArgumentNullException(nameof(disasterCardReferenceSource));
         }
 
-        public RescueProjection GetRescueProjection(int disasterCardId)
+        public DisasterContribution GetDisasterContribution(int disasterCardId)
         {
             var disasterCard = _disasterCardReferenceSource.GetById(disasterCardId);
 
-            return new RescueProjection
+            return new DisasterContribution
             (
                 DifficultyNumber: disasterCard.DifficultyNumber,
                 Bonuses: disasterCard.BonusConditions.Select(ProjectBonus).ToList()
             );
         }
 
-        private static RescueBonus ProjectBonus(BonusCondition condition)
+        private static DisasterBonus ProjectBonus(BonusCondition condition)
         {
             return condition switch
             {
                 CharacterBonusCondition c =>
-                    new RescueBonus(
+                    new DisasterBonus(
                         Key: c.Character.ToString().ToLowerInvariant(),
                         Value: c.BonusValue),
 
                 ThunderbirdBonusCondition t =>
-                    new RescueBonus(
+                    new DisasterBonus(
                         Key: t.Thunderbird.ToString().ToLowerInvariant(),
                         Value: t.BonusValue),
 
                 PodVehicleBonusCondition p =>
-                    new RescueBonus(
+                    new DisasterBonus(
                         Key: p.PodVehicle.ToString().ToLowerInvariant(),
                         Value: p.BonusValue),
 

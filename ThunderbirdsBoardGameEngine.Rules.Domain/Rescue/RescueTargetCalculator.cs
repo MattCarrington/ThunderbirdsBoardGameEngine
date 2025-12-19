@@ -2,9 +2,9 @@
 {
     public class RescueTargetCalculator
     {
-        public RescueTargetResult CalculateRescueTarget(IReadOnlyCollection<string> appliedBonusKeys, RescueProjection rescueContext)
+        public RescueTargetResult CalculateRescueTarget(IReadOnlyCollection<string> appliedBonusKeys, DisasterContribution disasterContribution)
         {
-            var appliedBonuses = rescueContext.Bonuses
+            var appliedBonuses = disasterContribution.Bonuses
                 .Where(b => appliedBonusKeys.Contains(b.Key))
                 .ToList();
 
@@ -12,7 +12,7 @@
 
             return new RescueTargetResult
             {
-                TargetRoll = rescueContext.DifficultyNumber - bonus,
+                TargetRoll = disasterContribution.DifficultyNumber - bonus,
                 TotalBonus = bonus,
                 AppliedBonuses = appliedBonuses
             };
