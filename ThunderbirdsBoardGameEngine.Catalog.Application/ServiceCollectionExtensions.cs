@@ -25,7 +25,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Application
         /// <returns>
         /// The same <see cref="IServiceCollection"/> instance for chaining.
         /// </returns>
-        public static IServiceCollection AddApplication(this IServiceCollection services)
+        public static IServiceCollection AddCatalogApplication(this IServiceCollection services)
         {
             services.AddSingleton<IDisasterCardService, DisasterCardService>();
             return services;

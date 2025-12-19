@@ -36,7 +36,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.ComponentTests.Fixt
             services.AddLogging();
             services.AddSingleton(_serviceProvider.GetRequiredService<IHostEnvironment>());
 
-            services.AddInfrastructure(cfg);
+            services.AddCatalogInfrastructure(cfg);
 
             var sp = services.BuildServiceProvider(new ServiceProviderOptions { ValidateScopes = true });
 
