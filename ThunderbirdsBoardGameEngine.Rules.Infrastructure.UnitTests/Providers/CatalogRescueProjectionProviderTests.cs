@@ -9,7 +9,7 @@ using Xunit;
 
 namespace ThunderbirdsBoardGameEngine.Rules.Infrastructure.UnitTests.Providers
 {
-    public class CatalogRescueContextProviderTests
+    public class CatalogRescueProjectionProviderTests
     {
         [Fact]
         public void GetRescueContext_WhenValidDisasterCard_ReturnsRescueContext()
@@ -31,10 +31,10 @@ namespace ThunderbirdsBoardGameEngine.Rules.Infrastructure.UnitTests.Providers
             var catalog = Substitute.For<IDisasterCardReferenceSource>();
             catalog.GetById(disasterCard.Id).Returns(disasterCard);
 
-            var provider = new CatalogRescueContextProvider(catalog);
+            var provider = new CatalogRescueProjectionProvider(catalog);
 
             // Act
-            var rescueContext = provider.GetRescueContext(disasterCard.Id);
+            var rescueContext = provider.GetRescueProjection(disasterCard.Id);
 
             // Assert
             Assert.NotNull(rescueContext);

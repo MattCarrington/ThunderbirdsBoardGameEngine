@@ -7,17 +7,17 @@ namespace ThunderbirdsBoardGameEngine.Rules.Application.Rescue.CalculateRescueTa
         private readonly IRescueProjectionProvider _rescueContextProvider;
         private readonly RescueTargetCalculator _bonusCalculator;
 
-        public CalculateRescueTargetHandler(IRescueProjectionProvider rescueContextProvider, RescueTargetCalculator bonusCalculator)
+        public CalculateRescueTargetHandler(IRescueProjectionProvider rescueContextProvider, RescueTargetCalculator rescueTargetCalculator)
         {
             _rescueContextProvider = rescueContextProvider;
-            _bonusCalculator = bonusCalculator;
+            _bonusCalculator = rescueTargetCalculator;
         }
 
-        public Task<CalculateRescueTargetResponse> Handle(CalculateRescueTargetQuery request, CancellationToken cancellationToken)
+        public Task<CalculateRescueTargetResponse> Handle(CalculateRescueTargetQuery query, CancellationToken cancellationToken)
         {
-            var context = _rescueContextProvider.GetRescueContext(request.DisasterCardId);
+            var projection = _rescueContextProvider.GetRescueProjection(query.DisasterCardId);
 
-            var calculatedTarget = _bonusCalculator.CalculateRescueTarget(request.AppliedBonusKeys, context);
+            var calculatedTarget = _bonusCalculator.CalculateRescueTarget(query.AppliedBonusKeys, projection);
 
             return Task.FromResult(
                 new CalculateRescueTargetResponse

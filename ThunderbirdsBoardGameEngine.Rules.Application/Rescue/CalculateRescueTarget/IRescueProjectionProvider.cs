@@ -2,6 +2,6 @@
 {
     public interface IRescueProjectionProvider
     {
-        RescueProjection GetRescueContext(int disasterCardId);
+        RescueProjection GetRescueProjection(int disasterCardId);
     }
 }
