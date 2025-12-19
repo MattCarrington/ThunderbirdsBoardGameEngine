@@ -1,9 +1,9 @@
-﻿using ThunderbirdsBoardGameEngine.Rules.Application.Rescue.CalculateRescueTarget;
+﻿using ThunderbirdsBoardGameEngine.Rules.Domain.Rescue;
 using Xunit;
 
-namespace ThunderbirdsBoardGameEngine.Rules.Application.UnitTests.Rescue.CalculateRescueTarget
+namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.Rescue
 {
-    public class RescueTargetCalculator
+    public class RescueTargetCalculatorTests
     {
         private readonly RescueProjection _rescueContext = new(
             DifficultyNumber: 9,
@@ -82,9 +82,9 @@ namespace ThunderbirdsBoardGameEngine.Rules.Application.UnitTests.Rescue.Calcula
             Assert.Empty(result.AppliedBonuses);
         }
 
-        private static Application.Rescue.CalculateRescueTarget.RescueTargetCalculator CreateBonusCalculator()
+        private static RescueTargetCalculator CreateBonusCalculator()
         {
-            return new Application.Rescue.CalculateRescueTarget.RescueTargetCalculator();
+            return new RescueTargetCalculator();
         }
     }
 }
