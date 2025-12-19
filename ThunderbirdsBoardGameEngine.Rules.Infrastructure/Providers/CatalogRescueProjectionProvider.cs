@@ -4,16 +4,16 @@ using ThunderbirdsBoardGameEngine.Rules.Application.Rescue.CalculateRescueTarget
 
 namespace ThunderbirdsBoardGameEngine.Rules.Infrastructure.Providers
 {
-    public sealed class CatalogRescueContextProvider : IRescueProjectionProvider
+    public sealed class CatalogRescueProjectionProvider : IRescueProjectionProvider
     {
         private readonly IDisasterCardReferenceSource _disasterCardReferenceSource;
 
-        public CatalogRescueContextProvider(IDisasterCardReferenceSource disasterCardReferenceSource)
+        public CatalogRescueProjectionProvider(IDisasterCardReferenceSource disasterCardReferenceSource)
         {
             _disasterCardReferenceSource = disasterCardReferenceSource ?? throw new ArgumentNullException(nameof(disasterCardReferenceSource));
         }
 
-        public RescueProjection GetRescueContext(int disasterCardId)
+        public RescueProjection GetRescueProjection(int disasterCardId)
         {
             var disasterCard = _disasterCardReferenceSource.GetById(disasterCardId);
 
