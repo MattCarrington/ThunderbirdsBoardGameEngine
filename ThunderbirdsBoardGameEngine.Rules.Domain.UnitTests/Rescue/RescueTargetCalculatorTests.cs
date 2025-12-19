@@ -5,25 +5,25 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.Rescue
 {
     public class RescueTargetCalculatorTests
     {
-        private readonly RescueProjection _rescueContext = new(
+        private readonly DisasterContribution _contribution = new(
             DifficultyNumber: 9,
-            Bonuses: new List<RescueBonus>
+            Bonuses: new List<DisasterBonus>
             {
-                new RescueBonus("BONUS_1", 2),
-                new RescueBonus("BONUS_2", 3),
-                new RescueBonus("BONUS_X", 5)
+                new DisasterBonus("BONUS_1", 2),
+                new DisasterBonus("BONUS_2", 3),
+                new DisasterBonus("BONUS_X", 5)
             });
 
         [Fact]
         public void CalculateRescueTarget_NoBonusesToApply_ReturnsTargetRollEqualDifficultyNumber()
         {
             // Arrange
-            var bonusCalculator = CreateBonusCalculator();
+            var calculator = CreateResuceTargetCalculator();
 
             var appliedBonusKeys = Array.Empty<string>();
 
             // Act
-            var result = bonusCalculator.CalculateRescueTarget(appliedBonusKeys, _rescueContext);
+            var result = calculator.CalculateRescueTarget(appliedBonusKeys, _contribution);
 
             // Assert
             Assert.Equal(9, result.TargetRoll);
@@ -35,7 +35,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.Rescue
         public void CalculateRescueTarget_WhenBonusesToBeApplied_ReturnsTargetRoll()
         {
             // Arrange
-            var bonusCalculator = CreateBonusCalculator();
+            var calculator = CreateResuceTargetCalculator();
 
             var bonusKeys = new List<string>()
             {
@@ -44,7 +44,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.Rescue
             };
 
             // Act
-            var result = bonusCalculator.CalculateRescueTarget(bonusKeys, _rescueContext);
+            var result = calculator.CalculateRescueTarget(bonusKeys, _contribution);
 
             // Assert
             Assert.Equal(4, result.TargetRoll);
@@ -52,8 +52,8 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.Rescue
 
             var expectedBonuses = new[]
             {
-                new RescueBonus("BONUS_1", 2),
-                new RescueBonus("BONUS_2", 3)
+                new DisasterBonus("BONUS_1", 2),
+                new DisasterBonus("BONUS_2", 3)
             };
 
             Assert.Equal(expectedBonuses.Length, result.AppliedBonuses.Count);
@@ -65,7 +65,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.Rescue
         public void CalculateRescueResult_WhenInvalidBonusKey_ReturnsTargetRoll()
         {
             // Arrange
-            var bonusCalculator = CreateBonusCalculator();
+            var calculator = CreateResuceTargetCalculator();
 
             var bonusKeys = new List<string>()
             {
@@ -74,7 +74,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.Rescue
             };
 
             // Act
-            var result = bonusCalculator.CalculateRescueTarget(bonusKeys, _rescueContext);
+            var result = calculator.CalculateRescueTarget(bonusKeys, _contribution);
 
             // Assert
             Assert.Equal(9, result.TargetRoll);
@@ -82,7 +82,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.Rescue
             Assert.Empty(result.AppliedBonuses);
         }
 
-        private static RescueTargetCalculator CreateBonusCalculator()
+        private static RescueTargetCalculator CreateResuceTargetCalculator()
         {
             return new RescueTargetCalculator();
         }

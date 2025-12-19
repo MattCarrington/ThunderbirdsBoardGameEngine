@@ -2,7 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using ThunderbirdsBoardGameEngine.Rules.Application.Rescue.CalculateRescueTarget;
 using ThunderbirdsBoardGameEngine.Rules.Domain.Rescue;
-using ThunderbirdsBoardGameEngine.Rules.Infrastructure.Providers;
+using ThunderbirdsBoardGameEngine.Rules.Infrastructure.Lookups;
 
 namespace ThunderbirdsBoardGameEngine.Rules.Infrastructure
 {
@@ -13,7 +13,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Infrastructure
             services.AddMediatR(typeof(CalculateRescueTargetHandler).Assembly);
 
             services.AddSingleton<RescueTargetCalculator>();
-            services.AddSingleton<IRescueProjectionProvider, CatalogRescueProjectionProvider>();
+            services.AddSingleton<IDisasterContributionLookup, CatalogDisasterContributionLookup>();
 
             return services;
         }

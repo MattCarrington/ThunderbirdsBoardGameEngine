@@ -5,20 +5,20 @@ namespace ThunderbirdsBoardGameEngine.Rules.Application.Rescue.CalculateRescueTa
 {
     public class CalculateRescueTargetHandler : IRequestHandler<CalculateRescueTargetQuery, CalculateRescueTargetResponse>
     {
-        private readonly IRescueProjectionProvider _rescueContextProvider;
-        private readonly RescueTargetCalculator _bonusCalculator;
+        private readonly IDisasterContributionLookup _disasterContributionLoolup;
+        private readonly RescueTargetCalculator _rescueTargetCalculator;
 
-        public CalculateRescueTargetHandler(IRescueProjectionProvider rescueContextProvider, RescueTargetCalculator rescueTargetCalculator)
+        public CalculateRescueTargetHandler(IDisasterContributionLookup disasterContributionLookup, RescueTargetCalculator rescueTargetCalculator)
         {
-            _rescueContextProvider = rescueContextProvider;
-            _bonusCalculator = rescueTargetCalculator;
+            _disasterContributionLoolup = disasterContributionLookup;
+            _rescueTargetCalculator = rescueTargetCalculator;
         }
 
         public Task<CalculateRescueTargetResponse> Handle(CalculateRescueTargetQuery query, CancellationToken cancellationToken)
         {
-            var projection = _rescueContextProvider.GetRescueProjection(query.DisasterCardId);
+            var projection = _disasterContributionLoolup.GetDisasterContribution(query.DisasterCardId);
 
-            var calculatedTarget = _bonusCalculator.CalculateRescueTarget(query.AppliedBonusKeys, projection);
+            var calculatedTarget = _rescueTargetCalculator.CalculateRescueTarget(query.AppliedBonusKeys, projection);
 
             return Task.FromResult(
                 new CalculateRescueTargetResponse

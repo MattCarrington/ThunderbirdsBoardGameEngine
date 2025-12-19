@@ -2,8 +2,8 @@
 
 namespace ThunderbirdsBoardGameEngine.Rules.Application.Rescue.CalculateRescueTarget
 {
-    public interface IRescueProjectionProvider
+    public interface IDisasterContributionLookup
     {
-        RescueProjection GetRescueProjection(int disasterCardId);
+        DisasterContribution GetDisasterContribution(int disasterCardId);
     }
 }

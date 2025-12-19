@@ -6,6 +6,6 @@
 
         public required int TotalBonus { get; init; }
 
-        public IReadOnlyList<RescueBonus> AppliedBonuses { get; init; } = Array.Empty<RescueBonus>();
+        public IReadOnlyList<DisasterBonus> AppliedBonuses { get; init; } = Array.Empty<DisasterBonus>();
     }
 }
