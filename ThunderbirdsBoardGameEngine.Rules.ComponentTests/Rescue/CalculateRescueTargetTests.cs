@@ -10,7 +10,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Rescue
     public class CalculateRescueTargetTests
     {
         [Fact]
-        public void GivenACalculateRescueTargetTest_WhenSomethingHappens_ThenExpectedResultOccurs()
+        public async Task GivenACalculateRescueTargetTest_WhenSomethingHappens_ThenExpectedResultOccursAsync()
         {
             // Arrange
             var sunProbe = new DisasterCard(
@@ -78,14 +78,14 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Rescue
 
             var handler = new CalculateRescueTargetHandler(provider, new RescueTargetCalculator());
 
-            var request = new CalculateRescueTargetRequest
+            var request = new CalculateRescueTargetQuery
             (
                 DisasterCardId: 1,
                 AppliedBonusKeys: ["scott", "transmittertruck"]
             );
 
             // Act
-            var result = handler.Handle(request);
+            var result = await handler.Handle(request, CancellationToken.None);
 
             // Assert
             Assert.Equal(6, result.TargetNumber);

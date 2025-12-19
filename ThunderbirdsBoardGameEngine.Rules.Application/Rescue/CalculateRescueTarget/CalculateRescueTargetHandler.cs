@@ -1,6 +1,8 @@
-﻿namespace ThunderbirdsBoardGameEngine.Rules.Application.Rescue.CalculateRescueTarget
+﻿using MediatR;
+
+namespace ThunderbirdsBoardGameEngine.Rules.Application.Rescue.CalculateRescueTarget
 {
-    public class CalculateRescueTargetHandler
+    public class CalculateRescueTargetHandler : IRequestHandler<CalculateRescueTargetQuery, CalculateRescueTargetResponse>
     {
         private readonly IRescueProjectionProvider _rescueContextProvider;
         private readonly RescueTargetCalculator _bonusCalculator;
@@ -11,17 +13,19 @@
             _bonusCalculator = bonusCalculator;
         }
 
-        public CalculateRescueTargetResponse Handle(CalculateRescueTargetRequest request)
+        public Task<CalculateRescueTargetResponse> Handle(CalculateRescueTargetQuery request, CancellationToken cancellationToken)
         {
             var context = _rescueContextProvider.GetRescueContext(request.DisasterCardId);
 
             var calculatedTarget = _bonusCalculator.CalculateRescueTarget(request.AppliedBonusKeys, context);
 
-            return new CalculateRescueTargetResponse
-            (
-                TargetNumber: calculatedTarget.TargetRoll,
-                TotalBonus: calculatedTarget.TotalBonus,
-                AppliedBonuses: calculatedTarget.AppliedBonuses                    
+            return Task.FromResult(
+                new CalculateRescueTargetResponse
+                (
+                    TargetNumber: calculatedTarget.TargetRoll,
+                    TotalBonus: calculatedTarget.TotalBonus,
+                    AppliedBonuses: calculatedTarget.AppliedBonuses
+                )
             );
         }
     }
