@@ -15,7 +15,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Application.ComponentTests.Fakes
 
         public FakeDisasterCardReferenceSource(params DisasterCard[] disasterCards)
         {
-             _cards = disasterCards.ToFrozenDictionary(card => card.Id);
+            _cards = disasterCards.ToFrozenDictionary(card => card.Id);
         }
 
         public DisasterCard GetById(int id)

@@ -23,7 +23,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Rescue
                 difficultyNumber: 11,
                 location: BoardLocation.Sun,
                 rescueType: RescueType.Space,
-                bonusConditions:                [
+                bonusConditions: [
                     new CharacterBonusCondition(Character.Scott, 2),
                     new CharacterBonusCondition(Character.Virgil, 2, BoardLocation.Asia),
                     new PodVehicleBonusCondition(PodVehicle.TransmitterTruck, 3, BoardLocation.Asia)

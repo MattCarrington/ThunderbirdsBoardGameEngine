@@ -3,7 +3,7 @@
     public record CalculateRescueTargetRequestDto
     {
         public required int CardId { get; init; }
-        
+
         public required IReadOnlyCollection<string> AppliedBonusKeys { get; init; }
     }
 }

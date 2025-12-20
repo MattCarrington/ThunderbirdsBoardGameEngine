@@ -39,7 +39,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Infrastructure.UnitTests.Lookups
             // Assert
             Assert.NotNull(rescueContext);
             Assert.Equal(7, rescueContext.DifficultyNumber);
-            
+
             var expectedBonuses = new[]
             {
                 new DisasterBonus("ladypenelope", 2),
