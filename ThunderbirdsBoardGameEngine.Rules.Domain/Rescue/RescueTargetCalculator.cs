@@ -16,6 +16,6 @@
                 TotalBonus = bonus,
                 AppliedBonuses = appliedBonuses
             };
-        }            
+        }
     }
 }
