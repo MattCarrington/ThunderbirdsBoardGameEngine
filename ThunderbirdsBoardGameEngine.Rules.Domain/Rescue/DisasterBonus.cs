@@ -1,4 +1,6 @@
-﻿namespace ThunderbirdsBoardGameEngine.Rules.Domain.Rescue
+﻿using ThunderbirdsBoardGameEngine.PublishedLanguage.DisasterBonus;
+
+namespace ThunderbirdsBoardGameEngine.Rules.Domain.Rescue
 {
-    public sealed record DisasterBonus(string Key, int Value);
+    public sealed record DisasterBonus(DisasterBonusKey Key, int Value);
 }

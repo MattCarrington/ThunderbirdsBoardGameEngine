@@ -1,4 +1,5 @@
-﻿using ThunderbirdsBoardGameEngine.Catalog.Application.Interfaces;
+﻿using ThunderbirdsBoardGameEngine.Catalog.Application.Factories;
+using ThunderbirdsBoardGameEngine.Catalog.Application.Interfaces;
 using ThunderbirdsBoardGameEngine.Catalog.Domain.Entities;
 using ThunderbirdsBoardGameEngine.Rules.Application.Rescue.Interfaces;
 using ThunderbirdsBoardGameEngine.Rules.Domain.Rescue;
@@ -31,17 +32,17 @@ namespace ThunderbirdsBoardGameEngine.Rules.Infrastructure.Lookups
             {
                 CharacterBonusCondition c =>
                     new DisasterBonus(
-                        Key: c.Character.ToString().ToLowerInvariant(),
+                        Key: DisasterBonusKeyFactory.ForCharacter(c.Character),
                         Value: c.BonusValue),
 
                 ThunderbirdBonusCondition t =>
                     new DisasterBonus(
-                        Key: t.Thunderbird.ToString().ToLowerInvariant(),
+                        Key: DisasterBonusKeyFactory.ForThunderbird(t.Thunderbird),
                         Value: t.BonusValue),
 
                 PodVehicleBonusCondition p =>
                     new DisasterBonus(
-                        Key: p.PodVehicle.ToString().ToLowerInvariant(),
+                        Key: DisasterBonusKeyFactory.ForPodVehicle(p.PodVehicle),
                         Value: p.BonusValue),
 
                 _ => throw new NotSupportedException($"Unsupported bonus condition {condition.GetType().Name}")

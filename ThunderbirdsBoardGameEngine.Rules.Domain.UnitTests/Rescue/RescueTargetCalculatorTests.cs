@@ -1,4 +1,5 @@
-﻿using ThunderbirdsBoardGameEngine.Rules.Domain.Rescue;
+﻿using ThunderbirdsBoardGameEngine.PublishedLanguage.DisasterBonus;
+using ThunderbirdsBoardGameEngine.Rules.Domain.Rescue;
 using Xunit;
 
 namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.Rescue
@@ -9,9 +10,9 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.Rescue
             DifficultyNumber: 9,
             Bonuses: new List<DisasterBonus>
             {
-                new DisasterBonus("BONUS_1", 2),
-                new DisasterBonus("BONUS_2", 3),
-                new DisasterBonus("BONUS_X", 5)
+                new(new DisasterBonusKey("BONUS_1"), 2),
+                new(new DisasterBonusKey("BONUS_2"), 3),
+                new(new DisasterBonusKey("BONUS_X"), 5)
             });
 
         [Fact]
@@ -20,7 +21,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.Rescue
             // Arrange
             var calculator = CreateResuceTargetCalculator();
 
-            var appliedBonusKeys = Array.Empty<string>();
+            var appliedBonusKeys = Array.Empty<DisasterBonusKey>();
 
             // Act
             var result = calculator.CalculateRescueTarget(appliedBonusKeys, _contribution);
@@ -37,10 +38,10 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.Rescue
             // Arrange
             var calculator = CreateResuceTargetCalculator();
 
-            var bonusKeys = new List<string>()
+            var bonusKeys = new List<DisasterBonusKey>()
             {
-                "BONUS_1",
-                "BONUS_2"
+                new("BONUS_1"),
+                new("BONUS_2")
             };
 
             // Act
@@ -52,8 +53,8 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.Rescue
 
             var expectedBonuses = new[]
             {
-                new DisasterBonus("BONUS_1", 2),
-                new DisasterBonus("BONUS_2", 3)
+                new DisasterBonus(new DisasterBonusKey("BONUS_1"), 2),
+                new DisasterBonus(new DisasterBonusKey("BONUS_2"), 3)
             };
 
             Assert.Equal(expectedBonuses.Length, result.AppliedBonuses.Count);
@@ -67,10 +68,10 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.Rescue
             // Arrange
             var calculator = CreateResuceTargetCalculator();
 
-            var bonusKeys = new List<string>()
+            var bonusKeys = new List<DisasterBonusKey>()
             {
-                "BONUS_3",
-                "BONUS_4"
+                new("BONUS_3"),
+                new("BONUS_4")
             };
 
             // Act
