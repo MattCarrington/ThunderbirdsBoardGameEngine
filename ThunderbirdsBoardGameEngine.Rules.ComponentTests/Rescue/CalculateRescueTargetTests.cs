@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using ThunderbirdsBoardGameEngine.Catalog.Application.Interfaces;
 using ThunderbirdsBoardGameEngine.Catalog.Domain.Entities;
 using ThunderbirdsBoardGameEngine.Catalog.Domain.Enums;
+using ThunderbirdsBoardGameEngine.PublishedLanguage.DisasterBonus;
 using ThunderbirdsBoardGameEngine.Rules.Application.ComponentTests.Fakes;
 using ThunderbirdsBoardGameEngine.Rules.Application.Rescue.CalculateRescueTarget;
 using ThunderbirdsBoardGameEngine.Rules.Infrastructure;
@@ -80,7 +81,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Rescue
             var request = new CalculateRescueTargetQuery
             (
                 DisasterCardId: 1,
-                AppliedBonusKeys: ["scott", "transmittertruck"]
+                AppliedBonusKeys: [new DisasterBonusKey("character:scott"), new DisasterBonusKey("podvehicle:transmittertruck")]
             );
 
             var services = new ServiceCollection();
@@ -98,8 +99,8 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Rescue
             Assert.Equal(6, result.TargetNumber);
             Assert.Equal(5, result.TotalBonus);
             Assert.Equal(2, result.AppliedBonuses.Count);
-            Assert.Contains(result.AppliedBonuses, b => b.Key == "scott" && b.Value == 2);
-            Assert.Contains(result.AppliedBonuses, b => b.Key == "transmittertruck" && b.Value == 3);
+            Assert.Contains(result.AppliedBonuses, b => b.Key == new DisasterBonusKey("character:scott") && b.Value == 2);
+            Assert.Contains(result.AppliedBonuses, b => b.Key == new DisasterBonusKey("podvehicle:transmittertruck") && b.Value == 3);
         }
     }
 }
