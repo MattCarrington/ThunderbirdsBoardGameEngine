@@ -33,7 +33,7 @@ jobs:
     with:
       solution_file: *solution
       image_name: *image_name
-      docker_build: ${{ github.event_name == 'push' }}
+      docker_build: true
     needs:
       - static-analysis
 
