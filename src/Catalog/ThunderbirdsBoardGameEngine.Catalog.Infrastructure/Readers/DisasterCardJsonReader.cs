@@ -6,6 +6,7 @@ using ThunderbirdsBoardGameEngine.Catalog.Application.Exceptions;
 using ThunderbirdsBoardGameEngine.Catalog.Application.Interfaces;
 using ThunderbirdsBoardGameEngine.Catalog.Domain.Entities;
 using ThunderbirdsBoardGameEngine.Catalog.Domain.Exceptions;
+using ThunderbirdsBoardGameEngine.Catalog.Format.Dtos;
 using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Configuration;
 using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Interfaces;
 
@@ -131,7 +132,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Readers
             }
         }
 
-        private void ValidateDisasterCardCatalogDtos(IReadOnlyList<Format.Dtos.DisasterCardCatalogDto>? dtos, int itemCount)
+        private void ValidateDisasterCardCatalogDtos(IReadOnlyList<DisasterCardCatalogDto>? dtos, int itemCount)
         {
             if (dtos is null || dtos.Count == 0)
             {
