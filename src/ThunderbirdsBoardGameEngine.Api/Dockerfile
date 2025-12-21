@@ -14,20 +14,21 @@ ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 
 # --- csproj copies for restore (API + UI + deps) ---
-COPY ["ThunderbirdsBoardGameEngine.Api/ThunderbirdsBoardGameEngine.Api.csproj", "ThunderbirdsBoardGameEngine.Api/"]
-COPY ["ThunderbirdsBoardGameEngine.Catalog.Application/ThunderbirdsBoardGameEngine.Catalog.Application.csproj", "ThunderbirdsBoardGameEngine.Catalog.Application/"]
-COPY ["ThunderbirdsBoardGameEngine.Catalog.Infrastructure/ThunderbirdsBoardGameEngine.Catalog.Infrastructure.csproj", "ThunderbirdsBoardGameEngine.Catalog.Infrastructure/"]
-COPY ["ThunderbirdsBoardGameEngine.Catalog.Contracts/ThunderbirdsBoardGameEngine.Catalog.Contracts.csproj", "ThunderbirdsBoardGameEngine.Catalog.Contracts/"]
-COPY ["ThunderbirdsBoardGameEngine.Catalog.Domain/ThunderbirdsBoardGameEngine.Catalog.Domain.csproj", "ThunderbirdsBoardGameEngine.Catalog.Domain/"]
-COPY ["ThunderbirdsBoardGameEngine.Catalog.Format/ThunderbirdsBoardGameEngine.Catalog.Format.csproj", "ThunderbirdsBoardGameEngine.Catalog.Format/"]
+COPY ["src/ThunderbirdsBoardGameEngine.Api/ThunderbirdsBoardGameEngine.Api.csproj", "ThunderbirdsBoardGameEngine.Api/"]
+COPY ["src/ThunderbirdsBoardGameEngine.PublishedLanguage/ThunderbirdsBoardGameEngine.PublishedLanguage.csproj", "ThunderbirdsBoardGameEngine.PublishedLanguage/"]
+COPY ["src/Catalog/ThunderbirdsBoardGameEngine.Catalog.Application/ThunderbirdsBoardGameEngine.Catalog.Application.csproj", "Catalog/ThunderbirdsBoardGameEngine.Catalog.Application/"]
+COPY ["src/Catalog/ThunderbirdsBoardGameEngine.Catalog.Infrastructure/ThunderbirdsBoardGameEngine.Catalog.Infrastructure.csproj", "Catalog/ThunderbirdsBoardGameEngine.Catalog.Infrastructure/"]
+COPY ["src/Catalog/ThunderbirdsBoardGameEngine.Catalog.Contracts/ThunderbirdsBoardGameEngine.Catalog.Contracts.csproj", "Catalog/ThunderbirdsBoardGameEngine.Catalog.Contracts/"]
+COPY ["src/Catalog/ThunderbirdsBoardGameEngine.Catalog.Domain/ThunderbirdsBoardGameEngine.Catalog.Domain.csproj", "Catalog/ThunderbirdsBoardGameEngine.Catalog.Domain/"]
+COPY ["src/Catalog/ThunderbirdsBoardGameEngine.Catalog.Format/ThunderbirdsBoardGameEngine.Catalog.Format.csproj", "Catalog/ThunderbirdsBoardGameEngine.Catalog.Format/"]
 
-COPY ["ThunderbirdsBoardGameEngine.UI/ThunderbirdsBoardGameEngine.UI.csproj", "ThunderbirdsBoardGameEngine.UI/"]
-COPY ["ThunderbirdsBoardGameEngine.Catalog.Client/ThunderbirdsBoardGameEngine.Catalog.Client.csproj", "ThunderbirdsBoardGameEngine.Catalog.Client/"]
+COPY ["src/ThunderbirdsBoardGameEngine.UI/ThunderbirdsBoardGameEngine.UI.csproj", "ThunderbirdsBoardGameEngine.UI/"]
+COPY ["src/Catalog/ThunderbirdsBoardGameEngine.Catalog.Client/ThunderbirdsBoardGameEngine.Catalog.Client.csproj", "Catalog/ThunderbirdsBoardGameEngine.Catalog.Client/"]
 
 RUN dotnet restore "./ThunderbirdsBoardGameEngine.Api/ThunderbirdsBoardGameEngine.Api.csproj"
 
 # --- copy full source ---
-COPY . .
+COPY src/ .
 
 # Build API (same as before)
 WORKDIR "/src/ThunderbirdsBoardGameEngine.Api"

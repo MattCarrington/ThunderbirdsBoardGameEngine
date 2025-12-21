@@ -19,8 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ThunderbirdsBoardGameEngine.Catalog.Client\ThunderbirdsBoardGameEngine.Catalog.Client.csproj" />
-    <ProjectReference Include="..\ThunderbirdsBoardGameEngine.Catalog.Contracts\ThunderbirdsBoardGameEngine.Catalog.Contracts.csproj" />
+    <ProjectReference Include="..\src\Catalog\ThunderbirdsBoardGameEngine.Catalog.Client\ThunderbirdsBoardGameEngine.Catalog.Client.csproj" />
     <ProjectReference Include="..\ThunderbirdsBoardGameEngine.TestUtils.xUnit\ThunderbirdsBoardGameEngine.TestUtils.xUnit.csproj" />
     <ProjectReference Include="..\ThunderbirdsBoardGameEngine.TestUtils\ThunderbirdsBoardGameEngine.TestUtils.csproj" />
   </ItemGroup>

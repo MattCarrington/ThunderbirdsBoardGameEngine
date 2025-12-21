@@ -18,8 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ThunderbirdsBoardGameEngine.Catalog.Contracts\ThunderbirdsBoardGameEngine.Catalog.Contracts.csproj" />
-    <ProjectReference Include="..\ThunderbirdsBoardGameEngine.UI\ThunderbirdsBoardGameEngine.UI.csproj" />
+    <ProjectReference Include="..\src\ThunderbirdsBoardGameEngine.UI\ThunderbirdsBoardGameEngine.UI.csproj" />
   </ItemGroup>
 
 </Project>

@@ -19,8 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ThunderbirdsBoardGameEngine.Catalog.Application\ThunderbirdsBoardGameEngine.Catalog.Application.csproj" />
-    <ProjectReference Include="..\ThunderbirdsBoardGameEngine.Catalog.Domain\ThunderbirdsBoardGameEngine.Catalog.Domain.csproj" />
+    <ProjectReference Include="..\src\Catalog\ThunderbirdsBoardGameEngine.Catalog.Application\ThunderbirdsBoardGameEngine.Catalog.Application.csproj" />
     <ProjectReference Include="..\ThunderbirdsBoardGameEngine.TestUtils\ThunderbirdsBoardGameEngine.TestUtils.csproj" />
   </ItemGroup>
 

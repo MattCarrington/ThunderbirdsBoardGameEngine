@@ -19,9 +19,8 @@
     </PackageReference>
   </ItemGroup>
 
-  <ItemGroup>
-	<ProjectReference Include="..\ThunderbirdsBoardGameEngine.Api\ThunderbirdsBoardGameEngine.Api.csproj" />
-    <ProjectReference Include="..\ThunderbirdsBoardGameEngine.Catalog.Contracts\ThunderbirdsBoardGameEngine.Catalog.Contracts.csproj" />    
+  <ItemGroup>    
+    <ProjectReference Include="..\src\ThunderbirdsBoardGameEngine.Api\ThunderbirdsBoardGameEngine.Api.csproj" />    
     <ProjectReference Include="..\ThunderbirdsBoardGameEngine.TestUtils\ThunderbirdsBoardGameEngine.TestUtils.csproj" />
   </ItemGroup>
 
