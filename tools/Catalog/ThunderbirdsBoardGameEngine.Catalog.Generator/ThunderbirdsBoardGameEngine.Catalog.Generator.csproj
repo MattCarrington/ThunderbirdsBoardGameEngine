@@ -15,14 +15,14 @@
     <PackageReference Include="ClosedXML" Version="0.105.0" />
   </ItemGroup>
 
-  <ItemGroup>
-	<ProjectReference Include="..\ThunderbirdsBoardGameEngine.Catalog.Format\ThunderbirdsBoardGameEngine.Catalog.Format.csproj" />	  
-  </ItemGroup>
-
 	<ItemGroup>
     <Content Include="Resources\DisasterCards.xlsx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\..\..\src\Catalog\ThunderbirdsBoardGameEngine.Catalog.Format\ThunderbirdsBoardGameEngine.Catalog.Format.csproj" />
+	</ItemGroup>
 
 </Project>
