@@ -20,7 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\ThunderbirdsBoardGameEngine.PublishedLanguage\ThunderbirdsBoardGameEngine.PublishedLanguage.csproj" />
+    <ProjectReference Include="..\..\Common\ThunderbirdsBoardGameEngine.PublishedLanguage\ThunderbirdsBoardGameEngine.PublishedLanguage.csproj" />
     <ProjectReference Include="..\ThunderbirdsBoardGameEngine.Catalog.Domain\ThunderbirdsBoardGameEngine.Catalog.Domain.csproj" />
   </ItemGroup>
 

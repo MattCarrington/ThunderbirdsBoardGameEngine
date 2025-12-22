@@ -27,10 +27,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Catalog\ThunderbirdsBoardGameEngine.Catalog.Application\ThunderbirdsBoardGameEngine.Catalog.Application.csproj" />
-    <ProjectReference Include="..\Catalog\ThunderbirdsBoardGameEngine.Catalog.Contracts\ThunderbirdsBoardGameEngine.Catalog.Contracts.csproj" />
-    <ProjectReference Include="..\Catalog\ThunderbirdsBoardGameEngine.Catalog.Domain\ThunderbirdsBoardGameEngine.Catalog.Domain.csproj" />
-    <ProjectReference Include="..\Catalog\ThunderbirdsBoardGameEngine.Catalog.Infrastructure\ThunderbirdsBoardGameEngine.Catalog.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\Catalog\ThunderbirdsBoardGameEngine.Catalog.Application\ThunderbirdsBoardGameEngine.Catalog.Application.csproj" />
+    <ProjectReference Include="..\..\Catalog\ThunderbirdsBoardGameEngine.Catalog.Contracts\ThunderbirdsBoardGameEngine.Catalog.Contracts.csproj" />
+    <ProjectReference Include="..\..\Catalog\ThunderbirdsBoardGameEngine.Catalog.Domain\ThunderbirdsBoardGameEngine.Catalog.Domain.csproj" />
+    <ProjectReference Include="..\..\Catalog\ThunderbirdsBoardGameEngine.Catalog.Infrastructure\ThunderbirdsBoardGameEngine.Catalog.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

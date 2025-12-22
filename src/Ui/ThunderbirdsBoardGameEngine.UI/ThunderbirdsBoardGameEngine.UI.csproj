@@ -20,7 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Catalog\ThunderbirdsBoardGameEngine.Catalog.Client\ThunderbirdsBoardGameEngine.Catalog.Client.csproj" />
+    <ProjectReference Include="..\..\Catalog\ThunderbirdsBoardGameEngine.Catalog.Client\ThunderbirdsBoardGameEngine.Catalog.Client.csproj" />
   </ItemGroup>
 
 </Project>
