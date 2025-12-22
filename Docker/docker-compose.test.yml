@@ -4,6 +4,6 @@
       ASPNETCORE_ENVIRONMENT: Docker
       Catalog__DisasterCards__Json__FilePath: /app/TestData/Catalog/DisasterCards/Enveloped/disaster-cards.json     
     volumes:
-      - ../TestData:/app/TestData
+      - ../tests/Common/ThunderbirdsBoardGameEngine.TestUtils/TestData:/app/TestData:ro
     ports:
       - "8080:8080"   # publish so the host (runner) can call localhost:8080
