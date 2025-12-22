@@ -6,4 +6,4 @@
     /// Format is implementation detail — do not parse.
     /// </summary>
     public readonly record struct DisasterBonusKey(string Value);
- }
+}
