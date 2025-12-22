@@ -18,7 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\src\ThunderbirdsBoardGameEngine.UI\ThunderbirdsBoardGameEngine.UI.csproj" />
+    <ProjectReference Include="..\..\..\..\src\Ui\ThunderbirdsBoardGameEngine.UI\ThunderbirdsBoardGameEngine.UI.csproj" />
   </ItemGroup>
 
 </Project>
