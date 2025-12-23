@@ -150,7 +150,7 @@ jobs:
 
       - name: Build Playwright test project & install browsers
         if: ${{ inputs.run_playwright }}
-        working-directory: ThunderbirdsBoardGameEngine.PlaywrightTests
+        working-directory: tests/EndToEnd/ThunderbirdsBoardGameEngine.PlaywrightTests
         run: |
           dotnet build --configuration Release
           playwright install
