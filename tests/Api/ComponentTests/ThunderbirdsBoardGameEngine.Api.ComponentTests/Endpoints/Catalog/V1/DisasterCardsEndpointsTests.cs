@@ -9,7 +9,7 @@ using ThunderbirdsBoardGameEngine.TestUtils.Helpers;
 using ThunderbirdsBoardGameEngine.TestUtils.xUnit.Assertions;
 using Xunit;
 
-namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints.V1
+namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints.Catalog.V1
 {
     public class DisasterCardsEndpointsTests : IClassFixture<CustomWebApplicationFactory>
     {
@@ -64,16 +64,7 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints.V1
             using var response = await _client.SendAsync(request);
 
             // Assert
-            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
-            Assert.Equal("application/problem+json", response.Content.Headers.ContentType!.MediaType);
-
-            var problem = await response.Content.ReadFromJsonAsync<ProblemDetails>();
-
-            Assert.NotNull(problem);
-            Assert.Equal(StatusCodes.Status400BadRequest, problem.Status);
-            Assert.Equal("ApiVersionUnspecified", problem.Title);
-            Assert.True(problem.Extensions.ContainsKey("traceId"));
-            Assert.False(string.IsNullOrWhiteSpace(problem.Detail));
+            await ProblemDetailsAssertions.AssertBadRequestAsync(response, "ApiVersionUnspecified");
         }
 
         [Fact]
@@ -87,14 +78,7 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints.V1
             using var response = await _client.SendAsync(request);
 
             // Assert
-            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
-            Assert.Equal("application/problem+json", response.Content.Headers.ContentType!.MediaType);
-
-            var problem = await response.Content.ReadFromJsonAsync<ProblemDetails>();
-            Assert.NotNull(problem);
-            Assert.Equal(StatusCodes.Status400BadRequest, problem!.Status);
-            Assert.Equal("UnsupportedApiVersion", problem.Title);
-            Assert.True(problem.Extensions.ContainsKey("traceId"));
+            await ProblemDetailsAssertions.AssertBadRequestAsync(response, "UnsupportedApiVersion");
 
             // When ReportApiVersions = true, library includes supported versions
             Assert.True(response.Headers.Contains("api-supported-versions"));
@@ -112,15 +96,7 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints.V1
             using var response = await _client.SendAsync(request);
 
             // Assert
-            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
-            Assert.Equal("application/problem+json", response.Content.Headers.ContentType!.MediaType);
-
-            var problem = await response.Content.ReadFromJsonAsync<ProblemDetails>();
-
-            Assert.NotNull(problem);
-            Assert.Equal(StatusCodes.Status400BadRequest, problem!.Status);
-            Assert.Equal("AmbiguousApiVersion", problem.Title);
-            Assert.True(problem.Extensions.ContainsKey("traceId"));
+            await ProblemDetailsAssertions.AssertBadRequestAsync(response, "AmbiguousApiVersion");
         }
     }
 }

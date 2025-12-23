@@ -7,6 +7,7 @@ using ThunderbirdsBoardGameEngine.Api.Routing;
 using ThunderbirdsBoardGameEngine.Api.Swagger;
 using ThunderbirdsBoardGameEngine.Catalog.Application;
 using ThunderbirdsBoardGameEngine.Catalog.Infrastructure;
+using ThunderbirdsBoardGameEngine.Rules.Infrastructure;
 
 namespace ThunderbirdsBoardGameEngine.Api
 {
@@ -32,6 +33,7 @@ namespace ThunderbirdsBoardGameEngine.Api
 
             builder.Services.AddCatalogApplication();
             builder.Services.AddCatalogInfrastructure(builder.Configuration);
+            builder.Services.AddRules();
             builder.Services.AddApiServices(builder.Configuration);
 
             builder.Services.AddAuthorization();

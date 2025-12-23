@@ -33,6 +33,7 @@
     <ProjectReference Include="..\..\Catalog\ThunderbirdsBoardGameEngine.Catalog.Infrastructure\ThunderbirdsBoardGameEngine.Catalog.Infrastructure.csproj" />
     <ProjectReference Include="..\..\Rules\ThunderbirdsBoardGameEngine.Rules.Application\ThunderbirdsBoardGameEngine.Rules.Application.csproj" />
     <ProjectReference Include="..\..\Rules\ThunderbirdsBoardGameEngine.Rules.Contracts\ThunderbirdsBoardGameEngine.Rules.Contracts.csproj" />
+    <ProjectReference Include="..\..\Rules\ThunderbirdsBoardGameEngine.Rules.Infrastructure\ThunderbirdsBoardGameEngine.Rules.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>
