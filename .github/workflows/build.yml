@@ -48,7 +48,7 @@ jobs:
           # Build once, with deterministic SHA tag
           docker build -t "$IMAGE:$SHA_TAG" \
                        -t "$IMAGE:dev" \
-                       -f ThunderbirdsBoardGameEngine.Api/Dockerfile .
+                       -f src/Api/ThunderbirdsBoardGameEngine.Api/Dockerfile .
 
       - name: Save Docker Image
         run: |
