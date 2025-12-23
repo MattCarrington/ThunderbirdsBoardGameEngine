@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using ThunderbirdsBoardGameEngine.Api.Mappers.V1;
+using ThunderbirdsBoardGameEngine.Api.Mappers.Catalog.V1;
 using ThunderbirdsBoardGameEngine.Catalog.Application.Interfaces;
 using ThunderbirdsBoardGameEngine.Catalog.Contracts.Dtos.V1;
 

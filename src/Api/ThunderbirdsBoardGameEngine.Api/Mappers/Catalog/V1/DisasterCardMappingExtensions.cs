@@ -4,7 +4,7 @@ using ThunderbirdsBoardGameEngine.Catalog.Contracts.Dtos.V1;
 using ThunderbirdsBoardGameEngine.Catalog.Domain.Entities;
 using ThunderbirdsBoardGameEngine.Catalog.Domain.Enums;
 
-namespace ThunderbirdsBoardGameEngine.Api.Mappers.V1
+namespace ThunderbirdsBoardGameEngine.Api.Mappers.Catalog.V1
 {
     public static class DisasterCardMappingExtensions
     {

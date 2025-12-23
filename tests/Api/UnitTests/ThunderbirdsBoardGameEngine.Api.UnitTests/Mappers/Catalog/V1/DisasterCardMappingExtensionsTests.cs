@@ -1,4 +1,4 @@
-﻿using ThunderbirdsBoardGameEngine.Api.Mappers.V1;
+﻿using ThunderbirdsBoardGameEngine.Api.Mappers.Catalog.V1;
 using ThunderbirdsBoardGameEngine.Api.Presentation;
 using ThunderbirdsBoardGameEngine.Catalog.Application.Exceptions;
 using ThunderbirdsBoardGameEngine.Catalog.Contracts.Dtos.V1;
@@ -7,7 +7,7 @@ using ThunderbirdsBoardGameEngine.Catalog.Domain.Enums;
 using ThunderbirdsBoardGameEngine.TestUtils.Catalog.Builders;
 using Xunit;
 
-namespace ThunderbirdsBoardGameEngine.GameData.Api.UnitTests.Mappers.V1
+namespace ThunderbirdsBoardGameEngine.Api.UnitTests.Mappers.Catalog.V1
 {
     public class DisasterCardMappingExtensionsTests
     {
