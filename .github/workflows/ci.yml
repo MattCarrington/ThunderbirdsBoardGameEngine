@@ -61,6 +61,7 @@ jobs:
     uses: ./.github/workflows/compute-package-version.yml
     with:
       project_path: *contracts_project_path
+      package_id: "ThunderbirdsBoardGameEngine.Catalog.Contracts"
     needs:
       - tests
       
@@ -69,6 +70,7 @@ jobs:
     uses: ./.github/workflows/compute-package-version.yml
     with:
       project_path: *client_project_path
+      package_id: "ThunderbirdsBoardGameEngine.Catalog.Client"
     needs:
       - tests
 
@@ -77,6 +79,7 @@ jobs:
     uses: ./.github/workflows/compute-package-version.yml
     with:
       project_path: *wiremock_project_path
+      package_id: "ThunderbirdsBoardGameEngine.Catalog.WireMock"
     needs:
       - tests
 

@@ -7,6 +7,10 @@ on:
         description: "Path to the .csproj"
         required: true
         type: string
+      package_id:
+        description: "NuGet package ID"
+        required: false
+        type: string        
     outputs:
       version:
         description: "Computed package version"
