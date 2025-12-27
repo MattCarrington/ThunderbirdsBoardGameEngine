@@ -25,6 +25,15 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Authenticate to GitHub Packages
+        run: |
+          dotnet nuget add source \
+            --username ${{ github.actor }} \
+            --password ${{ secrets.GITHUB_TOKEN }} \
+            --store-password-in-clear-text \
+            --name github \
+            https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json
+
       - name: Compute package version
         id: compute
         run: |
@@ -41,7 +50,7 @@ jobs:
 
           # --- STOP GUARD ---
           if dotnet nuget list package "$PACKAGE_ID" \
-              --source "$FEED" \
+              --source github \
               --all-versions \
               | grep -q " $BASE_VERSION$"; then
             echo "Version $BASE_VERSION already released."
