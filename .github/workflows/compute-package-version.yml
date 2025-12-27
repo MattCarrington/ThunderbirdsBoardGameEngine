@@ -40,10 +40,10 @@ jobs:
           echo "Package ID: $PACKAGE_ID"
 
           # --- STOP GUARD ---
-          if dotnet nuget search "$PACKAGE_ID" \
+          if dotnet nuget list package "$PACKAGE_ID" \
               --source "$FEED" \
-              --exact-match \
-              | grep -q " $BASE_VERSION "; then
+              --all-versions \
+              | grep -q " $BASE_VERSION$"; then
             echo "Version $BASE_VERSION already released."
             echo "Version line is closed. Nothing to publish."
 
