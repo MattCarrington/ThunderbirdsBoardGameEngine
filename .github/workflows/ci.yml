@@ -96,7 +96,7 @@ jobs:
       - compute-version
   
   publish-contracts:
-    if: github.event_name == 'push'
+    if: github.event_name == 'push' && needs.compute-contracts-version.outputs.should_publish == 'true'
     uses: ./.github/workflows/publish-dotnet-package.yml
     with:
       project_path: *contracts_project_path
@@ -105,7 +105,7 @@ jobs:
       - compute-contracts-version
 
   publish-client:
-    if: github.event_name == 'push'
+    if: github.event_name == 'push' && needs.compute-client-version.outputs.should_publish == 'true'
     uses: ./.github/workflows/publish-dotnet-package.yml
     with:
       project_path: *client_project_path
@@ -114,7 +114,7 @@ jobs:
       - compute-client-version
 
   publish-wiremock:
-    if: github.event_name == 'push'
+    if: github.event_name == 'push' && needs.compute-wiremock-version.outputs.should_publish == 'true'
     uses: ./.github/workflows/publish-dotnet-package.yml
     with:
       project_path: *wiremock_project_path
