@@ -41,47 +41,31 @@ jobs:
           # set -e
           set -euo pipefail
 
-          PACKAGE_ID="${{ inputs.package_id }}"
-          FEED="https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json"
-
-          BASE_VERSION=$(dotnet msbuild "${{ inputs.project_path }}" \
-            -getProperty:Version -nologo)
-
+          BASE_VERSION=$(dotnet msbuild "${{ inputs.project_path }}" -getProperty:Version -nologo)
+          
           echo "Base version: $BASE_VERSION"
           echo "Package ID: $PACKAGE_ID"
 
-          # # --- STOP GUARD ---
-          # if dotnet nuget list package "$PACKAGE_ID" \
-          #     --source github \
-          #     --all-versions \
-          #     | grep -q " $BASE_VERSION$"; then
-          #   echo "Version $BASE_VERSION already released."
-          #   echo "Version line is closed. Nothing to publish."
+          echo "Visible versions:"
+          nuget list "$PACKAGE_ID" -Source github -AllVersions || true
 
-          #   echo "version=" >> $GITHUB_OUTPUT
-          #   echo "should_publish=false" >> $GITHUB_OUTPUT
-          #   exit 0
-          # fi
-          # # ------------------
-
-          echo "Listing versions from GitHub feed:"
-          dotnet nuget list package "$PACKAGE_ID" --source github --all-versions || true
-
-          if dotnet nuget list package "$PACKAGE_ID" \
-              --source github \
-              --all-versions \
+          # --- STOP GUARD ---
+          if nuget list "$PACKAGE_ID" -Source github -AllVersions \
               | grep -Eq " ${BASE_VERSION}($| )"; then
-            ...
+            echo "Version $BASE_VERSION already released."
+            echo "Version line is closed. Nothing to publish."
+            echo "version=" >> $GITHUB_OUTPUT
+            echo "should_publish=false" >> $GITHUB_OUTPUT
+            exit 0
           fi
+          # ------------------
 
           echo "should_publish=true" >> $GITHUB_OUTPUT
 
           if [[ "${GITHUB_REF}" == "refs/heads/main" ]]; then
             FINAL_VERSION="$BASE_VERSION"
-            echo "main → closing release $FINAL_VERSION"
           else
             FINAL_VERSION="$BASE_VERSION-beta.${GITHUB_RUN_NUMBER}"
-            echo "branch → prerelease $FINAL_VERSION"
           fi
 
           echo "version=$FINAL_VERSION" >> $GITHUB_OUTPUT
