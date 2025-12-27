@@ -41,8 +41,11 @@ jobs:
           # set -e
           set -euo pipefail
 
+          PACKAGE_ID="${{ inputs.package_id }}"
+          FEED="https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json"
+
           BASE_VERSION=$(dotnet msbuild "${{ inputs.project_path }}" -getProperty:Version -nologo)
-          
+
           echo "Base version: $BASE_VERSION"
           echo "Package ID: $PACKAGE_ID"
 
