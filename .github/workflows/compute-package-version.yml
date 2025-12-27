@@ -27,6 +27,7 @@ jobs:
 
       - name: Authenticate to GitHub Packages
         run: |
+          dotnet nuget remove source github 2>/dev/null || true
           dotnet nuget add source \
             --username ${{ github.actor }} \
             --password ${{ secrets.GITHUB_TOKEN }} \
@@ -37,7 +38,8 @@ jobs:
       - name: Compute package version
         id: compute
         run: |
-          set -e
+          # set -e
+          set -euo pipefail
 
           PACKAGE_ID="${{ inputs.package_id }}"
           FEED="https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json"
@@ -48,19 +50,29 @@ jobs:
           echo "Base version: $BASE_VERSION"
           echo "Package ID: $PACKAGE_ID"
 
-          # --- STOP GUARD ---
+          # # --- STOP GUARD ---
+          # if dotnet nuget list package "$PACKAGE_ID" \
+          #     --source github \
+          #     --all-versions \
+          #     | grep -q " $BASE_VERSION$"; then
+          #   echo "Version $BASE_VERSION already released."
+          #   echo "Version line is closed. Nothing to publish."
+
+          #   echo "version=" >> $GITHUB_OUTPUT
+          #   echo "should_publish=false" >> $GITHUB_OUTPUT
+          #   exit 0
+          # fi
+          # # ------------------
+
+          echo "Listing versions from GitHub feed:"
+          dotnet nuget list package "$PACKAGE_ID" --source github --all-versions || true
+
           if dotnet nuget list package "$PACKAGE_ID" \
               --source github \
               --all-versions \
-              | grep -q " $BASE_VERSION$"; then
-            echo "Version $BASE_VERSION already released."
-            echo "Version line is closed. Nothing to publish."
-
-            echo "version=" >> $GITHUB_OUTPUT
-            echo "should_publish=false" >> $GITHUB_OUTPUT
-            exit 0
+              | grep -Eq " ${BASE_VERSION}($| )"; then
+            ...
           fi
-          # ------------------
 
           echo "should_publish=true" >> $GITHUB_OUTPUT
 
