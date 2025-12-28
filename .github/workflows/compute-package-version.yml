@@ -26,9 +26,10 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Install NuGet CLI
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y nuget
+        run: dotnet tool install --global NuGet.CommandLine
+
+      - name: Add dotnet tools to PATH
+        run: echo "$HOME/.dotnet/tools" >> $GITHUB_PATH
 
       - name: Compute package version
         id: compute
