@@ -38,6 +38,11 @@ jobs:
         run: |
           curl -sSL https://dist.nuget.org/win-x86-commandline/latest/nuget.exe -o nuget.exe
 
+      - name: Install Mono (required for NuGet CLI)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y mono-runtime
+
       - name: Compute package version
         id: compute
         shell: bash
