@@ -25,8 +25,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Authenticate to GitHub Packages
+      - name: Compute package version
+        id: compute
         run: |
+          # set -e
+          set -euo pipefail
+
           dotnet nuget remove source github 2>/dev/null || true
           dotnet nuget add source \
             --username ${{ github.actor }} \
@@ -34,12 +38,6 @@ jobs:
             --store-password-in-clear-text \
             --name github \
             https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json
-
-      - name: Compute package version
-        id: compute
-        run: |
-          # set -e
-          set -euo pipefail
 
           PACKAGE_ID="${{ inputs.package_id }}"
           FEED="https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json"
