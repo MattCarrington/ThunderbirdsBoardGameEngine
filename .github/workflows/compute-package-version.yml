@@ -90,6 +90,8 @@ jobs:
             # --- Case 2: Unexpected error ---
             if [ "$HTTP_STATUS" != "200" ]; then
               echo "Unexpected HTTP status $HTTP_STATUS when querying package versions"
+              echo "Response body from GitHub API:"
+              cat response.json
               exit 1
             fi
 
