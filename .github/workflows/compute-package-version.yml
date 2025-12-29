@@ -66,7 +66,7 @@ jobs:
           # PHASE 1: Read package feed (THIS IS WHERE PAGINATION LIVES)
           # --------------------------------------------------
 
-          FOUND=false
+          STABLE_EXISTS=false
           PAGE=1
           MAX_PAGES=50
 
@@ -83,7 +83,7 @@ jobs:
             # --- Case 1: Package does not exist yet ---
             if [ "$HTTP_STATUS" = "404" ]; then
               echo "Package not found → first publish allowed"
-              FOUND=false
+              STABLE_EXISTS=false
               break
             fi
 
@@ -106,7 +106,7 @@ jobs:
 
             # --- Check for stable version ---
             if echo "$RESPONSE" | jq -e ".[] | select(.name == \"${BASE_VERSION}\")" > /dev/null; then
-              FOUND=true
+              STABLE_EXISTS=true
               break
             fi
 
@@ -123,7 +123,7 @@ jobs:
           # PHASE 2: Decision
           # --------------------------------------------------
 
-          if [ "$FOUND" = true ]; then
+          if [ "$STABLE_EXISTS" = true ]; then
             echo "Stable version $BASE_VERSION already exists."
             echo "Version line is closed. Do not publish."
 
