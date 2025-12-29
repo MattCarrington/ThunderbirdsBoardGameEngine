@@ -67,10 +67,23 @@ jobs:
           while true; do
             echo "Fetching package versions (page $PAGE)..."
 
-            RESPONSE=$(curl -sSf \
+            URL="https://api.github.com/users/${OWNER}/packages/nuget/${PACKAGE_ID}/versions?per_page=100&page=${PAGE}"
+
+            HTTP_STATUS=$(curl -sS -w "%{http_code}" -o response.json \
               -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
               -H "Accept: application/vnd.github+json" \
-              "https://api.github.com/users/${OWNER}/packages/nuget/${PACKAGE_ID}/versions?per_page=100&page=${PAGE}")
+              "$URL")
+
+            if [ "$HTTP_STATUS" = "404" ]; then
+              echo "Package not found → first publish allowed"
+              FOUND=false
+              break
+            elif [ "$HTTP_STATUS" != "200" ]; then
+              echo "Unexpected HTTP status $HTTP_STATUS when querying package versions"
+              exit 1
+            fi
+
+            RESPONSE=$(cat response.json)
 
             COUNT=$(echo "$RESPONSE" | jq 'length')
 
