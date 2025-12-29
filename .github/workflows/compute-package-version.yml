@@ -68,8 +68,9 @@ jobs:
 
           FOUND=false
           PAGE=1
+          MAX_PAGES=50
 
-          while true; do
+          while [ "$PAGE" -le "$MAX_PAGES" ]; do
             echo "Fetching package versions (page $PAGE)..."
 
             URL="https://api.github.com/users/${OWNER}/packages/nuget/${PACKAGE_ID}/versions?per_page=100&page=${PAGE}"
@@ -79,28 +80,31 @@ jobs:
               -H "Accept: application/vnd.github+json" \
               "$URL")
 
+            # --- Case 1: Package does not exist yet ---
             if [ "$HTTP_STATUS" = "404" ]; then
               echo "Package not found → first publish allowed"
               FOUND=false
               break
-            elif [ "$HTTP_STATUS" != "200" ]; then
+            fi
+
+            # --- Case 2: Unexpected error ---
+            if [ "$HTTP_STATUS" != "200" ]; then
               echo "Unexpected HTTP status $HTTP_STATUS when querying package versions"
               exit 1
             fi
 
             RESPONSE=$(cat response.json)
-
             COUNT=$(echo "$RESPONSE" | jq 'length')
 
-            # No more pages
+            # --- No more pages ---
             if [ "$COUNT" -eq 0 ]; then
               break
             fi
 
-            # Print what we saw (useful for debugging)
+            # Debug visibility (optional but useful)
             echo "$RESPONSE" | jq -r '.[].name'
 
-            # Check for exact stable version match
+            # --- Check for stable version ---
             if echo "$RESPONSE" | jq -e ".[] | select(.name == \"${BASE_VERSION}\")" > /dev/null; then
               FOUND=true
               break
@@ -108,6 +112,12 @@ jobs:
 
             PAGE=$((PAGE + 1))
           done
+
+          # --- Safety cap triggered ---
+          if [ "$PAGE" -gt "$MAX_PAGES" ]; then
+            echo "Exceeded maximum pagination limit (${MAX_PAGES}) while scanning package versions"
+            exit 1
+          fi
 
           # --------------------------------------------------
           # PHASE 2: Decision
