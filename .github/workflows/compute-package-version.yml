@@ -1,3 +1,8 @@
+# NOTE:
+# This workflow assumes a user-owned GitHub Packages feed.
+# If the repository is moved to an organization, the API
+# endpoint must switch from /users to /orgs.
+
 name: Compute Package Version
 
 on:
