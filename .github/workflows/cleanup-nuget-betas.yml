@@ -138,7 +138,7 @@ jobs:
           fi
 
           if [[ "$DRY_RUN" != "true" && "${{ inputs.confirm }}" != "DELETE" ]]; then
-            echo "Real deletion mode requires confirmation. Please set the 'confirm' input to 'DELETE' or enable dry_run mode."
+            echo "Real deletion mode requires both dry_run=false and confirm='DELETE'. Currently one or both conditions are not met."
             exit 1
           fi
 
