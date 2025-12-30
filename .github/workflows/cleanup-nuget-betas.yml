@@ -32,9 +32,6 @@ jobs:
       contents: read
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v6
-
       - name: Setup tooling
         run: |
           sudo apt-get update
