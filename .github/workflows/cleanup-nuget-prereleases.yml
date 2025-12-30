@@ -153,10 +153,10 @@ jobs:
                 echo "  DRY RUN: Would delete $name (stable $base exists)"
               else
                 echo "  Deleting $name (stable $base exists)"
-                curl -sS -X DELETE \
+                curl -sSf -X DELETE \
                   -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
                   -H "Accept: application/vnd.github+json" \
-                  "https://api.github.com/users/${OWNER}/packages/nuget/${PACKAGE_ID}/versions/${id}"
+                  "https://api.github.com/users/${OWNER}/packages/nuget/${PACKAGE_ID}/versions/${id}" || { echo "ERROR: Failed to delete $name (id: $id)"; exit 1; }
               fi
             fi
           done
