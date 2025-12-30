@@ -19,7 +19,7 @@ on:
         type: boolean
       confirm:
         description: Type "DELETE" to confirm deletions
-        required: false        
+        required: false
         default: ""
         type: string
 
