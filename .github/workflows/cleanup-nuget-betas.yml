@@ -3,7 +3,7 @@
 # If the repository is moved to an organization, the API
 # endpoint must switch from /users to /orgs.
 
-name: Cleanup NuGet prerelease packages
+name: Cleanup NuGet beta packages
 
 on:
   workflow_dispatch:
