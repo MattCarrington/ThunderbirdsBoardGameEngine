@@ -1,5 +1,6 @@
 ﻿using System.Collections.Frozen;
 using System.Collections.Immutable;
+using ThunderbirdsBoardGameEngine.Catalog.Application.Exceptions;
 using ThunderbirdsBoardGameEngine.Catalog.Application.Interfaces;
 using ThunderbirdsBoardGameEngine.Catalog.Domain.Entities;
 
@@ -35,7 +36,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.ReferenceSources
         {
             if (!_cards.TryGetValue(id, out var card))
             {
-                throw new KeyNotFoundException($"Disaster card with id {id} was not found");
+                throw new DisasterCardNotFoundException(id);
             }
 
             return card;

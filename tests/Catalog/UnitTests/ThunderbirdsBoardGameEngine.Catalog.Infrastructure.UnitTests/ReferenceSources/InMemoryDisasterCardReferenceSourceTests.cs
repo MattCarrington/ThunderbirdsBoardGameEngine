@@ -1,4 +1,5 @@
 ﻿using System.Collections.Immutable;
+using ThunderbirdsBoardGameEngine.Catalog.Application.Exceptions;
 using ThunderbirdsBoardGameEngine.Catalog.Domain.Entities;
 using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.ReferenceSources;
 using ThunderbirdsBoardGameEngine.TestUtils.Catalog.Builders;
@@ -98,7 +99,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Reference
             var source = CreateReferenceSource(_cards);
 
             // Act & Assert
-            Assert.Throws<KeyNotFoundException>(() => source.GetById(999));
+            Assert.Throws<DisasterCardNotFoundException>(() => source.GetById(999));
         }
 
         private static InMemoryDisasterCardReferenceSource CreateReferenceSource(IReadOnlyList<DisasterCard> cards, string version)
