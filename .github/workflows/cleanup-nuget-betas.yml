@@ -56,12 +56,13 @@ jobs:
           API_URL_BASE="https://api.github.com/users/${OWNER}/packages/nuget/${PACKAGE_ID}/versions"
           PER_PAGE=100
           PAGE=1
+          MAX_PAGES=50
 
           ALL_VERSIONS='[]'
 
           echo "Fetching package versions (paged)..."
 
-          while :; do
+          while [ "$PAGE" -le "$MAX_PAGES" ]; do
             PAGE_URL="${API_URL_BASE}?per_page=${PER_PAGE}&page=${PAGE}"
 
             PAGE_JSON=$(curl -sSf \
@@ -88,6 +89,11 @@ jobs:
             ALL_VERSIONS=$(jq -s '.[0] + .[1]' <(echo "$ALL_VERSIONS") <(echo "$PAGE_JSON"))
             PAGE=$((PAGE + 1))
           done
+
+          if [ "$PAGE" -gt "$MAX_PAGES" ]; then
+            echo "ERROR: Exceeded maximum pagination limit (${MAX_PAGES})"
+            exit 1
+          fi
 
           VERSIONS_JSON="$ALL_VERSIONS"
 
