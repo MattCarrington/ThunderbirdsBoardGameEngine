@@ -117,6 +117,13 @@ jobs:
             done
           fi
 
+          if [[ "${#STABLE_VERSIONS[@]}" -eq 0 ]]; then
+            echo
+            echo "ERROR: No stable versions detected."
+            echo "Refusing to delete prerelease packages."
+            exit 1
+          fi
+
           echo
           echo "Eligible prerelease deletions:"
           FOUND=false
