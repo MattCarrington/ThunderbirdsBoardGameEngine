@@ -129,14 +129,14 @@ jobs:
             exit 1
           fi
 
-          echo
-          echo "Eligible prerelease deletions:"
-          FOUND=false
-
           if [[ "$DRY_RUN" != "true" && "${{ inputs.confirm }}" != "DELETE" ]]; then
             echo "Deletion requested but confirmation missing."
             exit 1
           fi
+
+          echo
+          echo "Eligible prerelease deletions:"
+          FOUND=false
 
           for entry in "${BETA_VERSIONS[@]}"; do
             IFS="|" read -r name id base <<< "$entry"
