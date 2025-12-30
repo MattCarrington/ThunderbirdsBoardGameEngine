@@ -12,6 +12,11 @@ on:
         required: false
         default: true
         type: boolean
+      confirm:
+        description: Type "DELETE" to confirm deletions
+        required: false        
+        default: ""
+        type: string
 
 jobs:
   cleanup:
@@ -127,6 +132,11 @@ jobs:
           echo
           echo "Eligible prerelease deletions:"
           FOUND=false
+
+          if [[ "$DRY_RUN" != "true" && "${{ inputs.confirm }}" != "DELETE" ]]; then
+            echo "Deletion requested but confirmation missing."
+            exit 1
+          fi
 
           for entry in "${BETA_VERSIONS[@]}"; do
             IFS="|" read -r name id base <<< "$entry"
