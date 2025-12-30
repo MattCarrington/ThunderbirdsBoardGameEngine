@@ -39,74 +39,11 @@ jobs:
           DRY_RUN="${{ inputs.dry_run }}"
           OWNER="${{ github.repository_owner }}"
 
-          echo "NuGet prerelease cleanup (dry-run)"
-          echo "----------------------------------"
+          echo "NuGet prerelease cleanup"
+          echo "------------------------"
           echo "Package: $PACKAGE_ID"
           echo "Owner:   $OWNER"
           echo "Dry run: $DRY_RUN"
           echo
-
-          API_URL="https://api.github.com/users/${OWNER}/packages/nuget/${PACKAGE_ID}/versions"
-
-          echo "Fetching package versions..."
-
-          VERSIONS_JSON=$(curl -sS \
-            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-            -H "Accept: application/vnd.github+json" \
-            "$API_URL")
-
-          if [ "$(echo "$VERSIONS_JSON" | jq 'length')" -eq 0 ]; then
-            echo "No versions found."
-            exit 0
-          fi
-
-          # --------------------------------------------------
-          # PHASE 1: Classify versions
-          # --------------------------------------------------
-
-          declare -A STABLE_VERSIONS
-          declare -a BETA_VERSIONS
-
-          while read -r name id; do
-            if [[ "$name" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
-              STABLE_VERSIONS["$name"]="$id"
-            elif [[ "$name" =~ ^([0-9]+\.[0-9]+\.[0-9]+)-beta\..+$ ]]; then
-              BASE_VERSION="${BASH_REMATCH[1]}"
-              BETA_VERSIONS+=("$name|$id|$BASE_VERSION")
-            fi
-          done < <(echo "$VERSIONS_JSON" | jq -r '.[] | "\(.name) \(.id)"')
-
-          # --------------------------------------------------
-          # PHASE 2: Determine deletable betas
-          # --------------------------------------------------
-
-          echo
-          echo "Stable versions found:"
-          if [ "${#STABLE_VERSIONS[@]}" -eq 0 ]; then
-            echo "  (none)"
-          else
-            for v in "${!STABLE_VERSIONS[@]}"; do
-              echo "  - $v"
-            done
-          fi
-
-          echo
-          echo "Prerelease versions eligible for deletion:"
-
-          DELETABLE_COUNT=0
-
-          for entry in "${BETA_VERSIONS[@]}"; do
-            IFS="|" read -r name id base <<< "$entry"
-
-            if [[ -n "${STABLE_VERSIONS[$base]:-}" ]]; then
-              echo "  - $name (matches stable $base)"
-              ((DELETABLE_COUNT++))
-            fi
-          done
-
-          if [ "$DELETABLE_COUNT" -eq 0 ]; then
-            echo "  (none)"
-          fi
-
-          echo
-          echo "Dry-run complete. No deletions performed."
+          echo "No cleanup logic implemented yet."
+          echo "This is a skeleton workflow."
