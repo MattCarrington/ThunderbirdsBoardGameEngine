@@ -35,6 +35,8 @@ jobs:
         run: |
           set -euo pipefail
 
+          set -euo pipefail
+
           PACKAGE_ID="${{ inputs.package_id }}"
           DRY_RUN="${{ inputs.dry_run }}"
           OWNER="${{ github.repository_owner }}"
