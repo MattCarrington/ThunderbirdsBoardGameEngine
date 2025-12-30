@@ -46,13 +46,48 @@ jobs:
           echo "Dry run: $DRY_RUN"
           echo
 
-          API_URL="https://api.github.com/users/${OWNER}/packages/nuget/${PACKAGE_ID}/versions"
+          API_URL_BASE="https://api.github.com/users/${OWNER}/packages/nuget/${PACKAGE_ID}/versions"
+          PER_PAGE=100
+          PAGE=1
 
-          echo "Fetching package versions..."
-          VERSIONS_JSON=$(curl -sS \
-            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-            -H "Accept: application/vnd.github+json" \
-            "$API_URL")
+          ALL_VERSIONS='[]'
+
+          echo "Fetching package versions (paged)..."
+
+          while :; do
+            PAGE_URL="${API_URL_BASE}?per_page=${PER_PAGE}&page=${PAGE}"
+
+            PAGE_JSON=$(curl -sS \
+              -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+              -H "Accept: application/vnd.github+json" \
+              -H "X-GitHub-Api-Version: 2022-11-28" \
+              "$PAGE_URL")
+
+            # If GitHub returns an error object, fail fast with a useful message
+            if echo "$PAGE_JSON" | jq -e 'type=="object" and has("message")' >/dev/null; then
+              echo "GitHub API error:"
+              echo "$PAGE_JSON" | jq -r '.message'
+              echo "$PAGE_JSON" | jq -r '.documentation_url // empty'
+              exit 1
+            fi
+
+            COUNT=$(echo "$PAGE_JSON" | jq 'length')
+            echo "  Page ${PAGE}: ${COUNT} versions"
+
+            if [[ "$COUNT" -eq 0 ]]; then
+              break
+            fi
+
+            ALL_VERSIONS=$(jq -s '.[0] + .[1]' <(echo "$ALL_VERSIONS") <(echo "$PAGE_JSON"))
+            PAGE=$((PAGE + 1))
+          done
+
+          VERSIONS_JSON="$ALL_VERSIONS"
+
+          TOTAL=$(echo "$VERSIONS_JSON" | jq 'length')
+          echo "Total versions fetched: $TOTAL"
+          echo "Sample names:"
+          echo "$VERSIONS_JSON" | jq -r '.[0:10] | .[]?.name'
 
           if [[ "$(echo "$VERSIONS_JSON" | jq 'length')" -eq 0 ]]; then
             echo "No versions found."
@@ -61,7 +96,6 @@ jobs:
 
           declare -A STABLE_VERSIONS=()
           declare -a BETA_VERSIONS=()
-
 
           while read -r name id; do
             if [[ "$name" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
