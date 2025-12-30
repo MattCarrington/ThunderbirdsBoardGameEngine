@@ -135,7 +135,7 @@ jobs:
           fi
 
           if [[ "$DRY_RUN" != "true" && "${{ inputs.confirm }}" != "DELETE" ]]; then
-            echo "Deletion requested but confirmation missing."
+            echo "Real deletion mode requires confirmation. Please set the 'confirm' input to 'DELETE' or enable dry_run mode."
             exit 1
           fi
 
