@@ -161,4 +161,8 @@ jobs:
           fi
 
           echo
-          echo "Dry-run complete. No deletions performed."
+          if [[ "$DRY_RUN" == "true" ]]; then
+            echo "Dry-run complete. No deletions performed."
+          else
+            echo "Cleanup complete."
+          fi
