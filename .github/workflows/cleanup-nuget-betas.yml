@@ -46,7 +46,7 @@ jobs:
           DRY_RUN="${{ inputs.dry_run }}"
           OWNER="${{ github.repository_owner }}"
 
-          echo "NuGet prerelease cleanup"
+          echo "NuGet beta cleanup"
           echo "------------------------"
           echo "Package: $PACKAGE_ID"
           echo "Owner:   $OWNER"
@@ -133,7 +133,7 @@ jobs:
           if [[ "${#STABLE_VERSIONS[@]}" -eq 0 ]]; then
             echo
             echo "WARNING: No stable versions detected."
-            echo "Refusing to delete prerelease packages."
+            echo "Refusing to delete beta packages."
             exit 0
           fi
 
@@ -143,7 +143,7 @@ jobs:
           fi
 
           echo
-          echo "Eligible prerelease deletions:"
+          echo "Eligible beta deletions:"
           FOUND=false
 
           for entry in "${BETA_VERSIONS[@]}"; do
