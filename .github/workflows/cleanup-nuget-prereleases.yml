@@ -132,8 +132,17 @@ jobs:
             IFS="|" read -r name id base <<< "$entry"
 
             if [[ -n "${STABLE_VERSIONS[$base]:-}" ]]; then
-              echo "  - $name (stable $base exists)"
               FOUND=true
+
+              if [[ "$DRY_RUN" == "true" ]]; then
+                echo "  DRY RUN: Would delete $name (stable $base exists)"
+              else
+                echo "  Deleting $name (stable $base exists)"
+                curl -sS -X DELETE \
+                  -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+                  -H "Accept: application/vnd.github+json" \
+                  "https://api.github.com/users/${OWNER}/packages/nuget/${PACKAGE_ID}/versions/${id}"
+              fi
             fi
           done
 
