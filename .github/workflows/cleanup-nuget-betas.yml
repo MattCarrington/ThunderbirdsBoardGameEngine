@@ -126,9 +126,9 @@ jobs:
 
           if [[ "${#STABLE_VERSIONS[@]}" -eq 0 ]]; then
             echo
-            echo "ERROR: No stable versions detected."
+            echo "WARNING: No stable versions detected."
             echo "Refusing to delete prerelease packages."
-            exit 1
+            exit 0
           fi
 
           if [[ "$DRY_RUN" != "true" && "${{ inputs.confirm }}" != "DELETE" ]]; then
