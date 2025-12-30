@@ -59,8 +59,9 @@ jobs:
             exit 0
           fi
 
-          declare -A STABLE_VERSIONS
-          declare -a BETA_VERSIONS
+          declare -A STABLE_VERSIONS=()
+          declare -a BETA_VERSIONS=()
+
 
           while read -r name id; do
             if [[ "$name" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
