@@ -1,58 +1,152 @@
+# NOTE:
+# This workflow assumes a user-owned GitHub Packages feed.
+# If the repository is moved to an organization, the API
+# endpoint must switch from /users to /orgs.
+
 name: Compute Package Version
 
 on:
   workflow_call:
     inputs:
       project_path:
-        description: "Path to the .csproj"
+        description: Path to the .csproj
+        required: true
+        type: string
+      package_id:
+        description: NuGet package ID
         required: true
         type: string
     outputs:
       version:
-        description: "Computed package version"
-        value: ${{ jobs.compute-package-version.outputs.version }}
-        
+        description: Computed package version
+        value: ${{ jobs.compute.outputs.version }}
+      should_publish:
+        description: Whether the package should be published
+        value: ${{ jobs.compute.outputs.should_publish }}
 
 jobs:
-  compute-package-version:
+  compute:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: read
+
     outputs:
       version: ${{ steps.compute.outputs.version }}
+      should_publish: ${{ steps.compute.outputs.should_publish }}
 
     steps:
       - uses: actions/checkout@v6
 
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Install jq
+        run: sudo apt-get update && sudo apt-get install -y jq
+
       - name: Compute package version
         id: compute
+        shell: bash
         run: |
-          set -e
+          set -euo pipefail
 
-          BASE_VERSION=$(dotnet msbuild "${{ inputs.project_path }}" \
+          PACKAGE_ID="${{ inputs.package_id }}"
+          PROJECT_PATH="${{ inputs.project_path }}"
+          OWNER="${{ github.repository_owner }}"
+
+          BASE_VERSION=$(dotnet msbuild "$PROJECT_PATH" \
             -getProperty:Version -nologo)
 
           echo "Base version from csproj: $BASE_VERSION"
+          echo "Package ID: $PACKAGE_ID"
 
-          FEED="https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json"
-          PACKAGE_ID="${{ inputs.package_id }}"
+          # --------------------------------------------------
+          # PHASE 1: Read package feed (THIS IS WHERE PAGINATION LIVES)
+          # --------------------------------------------------
 
-          echo "Checking if $PACKAGE_ID $BASE_VERSION already exists..."
+          STABLE_EXISTS=false
+          PAGE=1
+          MAX_PAGES=50
 
-          if dotnet nuget search "$PACKAGE_ID" \
-              --source "$FEED" \
-              --exact-match \
-              | grep -q " $BASE_VERSION "; then
-            echo "Version $BASE_VERSION already released → skipping publish"
-            echo "version=" >> $GITHUB_OUTPUT
+          while [ "$PAGE" -le "$MAX_PAGES" ]; do
+            echo "Fetching package versions (page $PAGE)..."
+
+            URL="https://api.github.com/users/${OWNER}/packages/nuget/${PACKAGE_ID}/versions?per_page=100&page=${PAGE}"
+
+            HTTP_STATUS=$(curl -sS -w "%{http_code}" -o response.json \
+              -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+              -H "Accept: application/vnd.github+json" \
+              "$URL")
+
+            # --- Case 1: Package does not exist yet ---
+            if [ "$HTTP_STATUS" = "404" ]; then
+              echo "Package not found → first publish allowed"
+              STABLE_EXISTS=false
+              break
+            fi
+
+            # --- Case 2: Unexpected error ---
+            if [ "$HTTP_STATUS" != "200" ]; then
+              echo "Unexpected HTTP status $HTTP_STATUS when querying package versions"
+              echo "Response body from GitHub API:"
+              cat response.json
+              exit 1
+            fi
+
+            RESPONSE=$(cat response.json)
+            COUNT=$(echo "$RESPONSE" | jq 'length')
+
+            # --- No more pages ---
+            if [ "$COUNT" -eq 0 ]; then
+              break
+            fi
+
+            # Debug visibility (optional but useful)
+            echo "$RESPONSE" | jq -r '.[].name'
+
+            # --- Check for stable version ---
+            if echo "$RESPONSE" | jq -e ".[] | select(.name == \"${BASE_VERSION}\")" > /dev/null; then
+              STABLE_EXISTS=true
+              break
+            fi
+
+            PAGE=$((PAGE + 1))
+          done
+
+          # --- Safety cap triggered ---
+          if [ "$PAGE" -gt "$MAX_PAGES" ]; then
+            echo "Exceeded maximum pagination limit (${MAX_PAGES}) while scanning package versions"
+            exit 1
+          fi
+
+          # --------------------------------------------------
+          # PHASE 2: Decision
+          # --------------------------------------------------
+
+          if [ "$STABLE_EXISTS" = true ]; then
+            echo "Stable version $BASE_VERSION already exists."
+            echo "Version line is closed. Do not publish."
+
+            echo "version=" >> "$GITHUB_OUTPUT"
+            echo "should_publish=false" >> "$GITHUB_OUTPUT"
             exit 0
           fi
 
+          echo "No stable version found. Publishing allowed."
+          echo "should_publish=true" >> "$GITHUB_OUTPUT"
+
+          # --------------------------------------------------
+          # PHASE 3: Compute the version string
+          # --------------------------------------------------
+
           if [[ "${GITHUB_REF}" == "refs/heads/main" ]]; then
             FINAL_VERSION="$BASE_VERSION"
-            echo "Main branch → stable version $FINAL_VERSION"
+            echo "main branch → stable version $FINAL_VERSION"
           else
             FINAL_VERSION="$BASE_VERSION-beta.${GITHUB_RUN_NUMBER}"
-            echo "Feature branch → prerelease $FINAL_VERSION"
+            echo "branch → prerelease version $FINAL_VERSION"
           fi
 
-          echo "version=$FINAL_VERSION" >> $GITHUB_OUTPUT
-
+          echo "version=$FINAL_VERSION" >> "$GITHUB_OUTPUT"

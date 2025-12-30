@@ -60,6 +60,7 @@ jobs:
     uses: ./.github/workflows/compute-package-version.yml
     with:
       project_path: *contracts_project_path
+      package_id: "ThunderbirdsBoardGameEngine.Catalog.Contracts"
     needs:
       - tests
 
@@ -67,6 +68,7 @@ jobs:
     uses: ./.github/workflows/compute-package-version.yml
     with:
       project_path: *client_project_path
+      package_id: "ThunderbirdsBoardGameEngine.Catalog.Client"
     needs:
       - tests
 
@@ -74,6 +76,7 @@ jobs:
     uses: ./.github/workflows/compute-package-version.yml
     with:
       project_path: *wiremock_project_path
+      package_id: "ThunderbirdsBoardGameEngine.Catalog.WireMock"
     needs:
       - tests
 
@@ -97,7 +100,8 @@ jobs:
       - compute-version      
   
   publish-contracts:
-    uses: ./.github/workflows/publish-dotnet-package.yml
+    if: needs.compute-contracts-version.outputs.should_publish == 'true'
+    uses: ./.github/workflows/publish-dotnet-package.yml    
     with:
       project_path: *contracts_project_path
       package_version: ${{ needs.compute-contracts-version.outputs.version }}
@@ -105,6 +109,7 @@ jobs:
       - compute-contracts-version
 
   publish-client:
+    if: needs.compute-client-version.outputs.should_publish == 'true'
     uses: ./.github/workflows/publish-dotnet-package.yml
     with:
       project_path: *client_project_path
@@ -113,6 +118,7 @@ jobs:
       - compute-client-version
 
   publish-wiremock:
+    if: needs.compute-wiremock-version.outputs.should_publish == 'true'
     uses: ./.github/workflows/publish-dotnet-package.yml
     with:
       project_path: *wiremock_project_path
