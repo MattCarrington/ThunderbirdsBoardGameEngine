@@ -8,9 +8,21 @@
     /// Typically, derived exceptions provide additional context about the missing entity.</remarks>
     public abstract class NotFoundException : Exception
     {
-        protected NotFoundException(string message)
+        /// <summary>
+        /// Gets or sets the type of resource represented by this instance.
+        /// </summary>
+        public string ResourceType { get; set; }
+
+        /// <summary>
+        /// Gets or sets the identifier of the associated resource.
+        /// </summary>
+        public object ResourceId { get; set; }
+
+        protected NotFoundException(string message, string resourceType, object resourceId)
             : base(message)
         {
+            ResourceType = resourceType;
+            ResourceId = resourceId;
         }
     }
 }

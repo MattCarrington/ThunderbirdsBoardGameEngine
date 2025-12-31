@@ -26,13 +26,35 @@ namespace ThunderbirdsBoardGameEngine.TestUtils.xUnit.Assertions
         /// <returns>A task that represents the asynchronous assertion operation.</returns>
         public static async Task<ProblemDetails> AssertBadRequestAsync(HttpResponseMessage response, string expectedTitle)
         {
-            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+            return await ReadProblemDetailsAsync(response, HttpStatusCode.BadRequest, expectedTitle);
+        }
+
+        /// <summary>
+        /// Asserts that the specified HTTP response represents a 404 Not Found with a problem details payload
+        /// matching the expected title.
+        /// </summary>
+        /// <remarks>This method verifies that the response has a status code of 404 Not Found, a
+        /// content type of 'application/problem+json', and a problem details object with the specified title and a
+        /// 'traceId' extension. Intended for use in test scenarios to validate error responses conform to expected API
+        /// error formats.</remarks>
+        /// <param name="response">The HTTP response message to validate. Must not be null.</param>
+        /// <param name="expectedTitle">The expected value of the problem details title. The assertion fails if the actual title does not match this
+        /// value.</param>
+        /// <returns>A task that represents the asynchronous assertion operation.</returns>
+        public static async Task<ProblemDetails> AssertNotFoundAsync(HttpResponseMessage response, string expectedTitle)
+        {
+            return await ReadProblemDetailsAsync(response, HttpStatusCode.NotFound, expectedTitle);
+        }
+
+        private static async Task<ProblemDetails> ReadProblemDetailsAsync(HttpResponseMessage response, HttpStatusCode expectedStatusCode, string expectedTitle)
+        {
+            Assert.Equal(expectedStatusCode, response.StatusCode);
             Assert.Equal("application/problem+json", response.Content.Headers.ContentType!.MediaType);
 
             var problem = await response.Content.ReadFromJsonAsync<ProblemDetails>();
 
             Assert.NotNull(problem);
-            Assert.Equal(StatusCodes.Status400BadRequest, problem!.Status);
+            Assert.Equal((int)expectedStatusCode, problem!.Status);
             Assert.Equal(expectedTitle, problem.Title);
             Assert.True(problem.Extensions.ContainsKey("traceId"));
 

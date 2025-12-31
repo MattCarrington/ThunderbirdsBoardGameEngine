@@ -7,6 +7,7 @@ namespace ThunderbirdsBoardGameEngine.Api.Composition
         public static IServiceCollection AddApiExceptionHandling(this IServiceCollection services)
         {
             // Order: specific → fallback
+            services.AddExceptionHandler<NotFoundExceptionHandler>();
             services.AddExceptionHandler<CatalogDataAccessExceptionHandler>();
             services.AddExceptionHandler<ApplicationValidationExceptionHandler>();
             services.AddExceptionHandler<DisasterCardValidationExceptionHandler>();

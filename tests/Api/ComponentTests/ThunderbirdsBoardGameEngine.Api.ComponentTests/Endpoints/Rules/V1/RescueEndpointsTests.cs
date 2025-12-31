@@ -101,6 +101,27 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints.Rules.V1
         }
 
         [Fact]
+        public async Task CalculateRescueTarget_WhenCardDoesNotExist_ReturnsNotFound()
+        {
+            // Arrange
+            var requestDto = new CalculateRescueTargetRequestDto
+            {
+                CardId = 7777,
+                AppliedBonusKeys = []
+            };
+
+            using var request = new HttpRequestMessage(HttpMethod.Post, Route);
+            request.Headers.Add("X-API-Version", ApiVersion.ToString());
+            request.Content = JsonContent.Create(requestDto);
+
+            // Act
+            using var response = await _client.SendAsync(request);
+
+            // Assert
+            await ProblemDetailsAssertions.AssertNotFoundAsync(response, "Resource not found.");
+        }
+
+        [Fact]
         public async Task CalculateTargetResult_WhenCardIdMissing_ReturnsBadRequest()
         {
             // Arrange

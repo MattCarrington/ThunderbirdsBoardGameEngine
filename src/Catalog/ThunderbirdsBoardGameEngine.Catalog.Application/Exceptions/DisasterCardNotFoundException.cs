@@ -16,7 +16,7 @@
         /// </summary>
         /// <param name="cardId">The unique identifier of the disaster card that could not be found.</param>
         public DisasterCardNotFoundException(int cardId)
-            : base($"Disaster card with ID {cardId} was not found.")
+            : base($"Disaster card with ID {cardId} was not found.", "DisasterCard", cardId)
         {
             CardId = cardId;
         }
