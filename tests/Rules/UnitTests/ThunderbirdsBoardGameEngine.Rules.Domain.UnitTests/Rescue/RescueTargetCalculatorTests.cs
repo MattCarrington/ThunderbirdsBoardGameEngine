@@ -19,7 +19,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.Rescue
         public void CalculateRescueTarget_NoBonusesToApply_ReturnsTargetRollEqualDifficultyNumber()
         {
             // Arrange
-            var calculator = CreateResuceTargetCalculator();
+            var calculator = CreateRescueTargetCalculator();
 
             var appliedBonusKeys = Array.Empty<DisasterBonusKey>();
 
@@ -36,7 +36,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.Rescue
         public void CalculateRescueTarget_WhenBonusesToBeApplied_ReturnsTargetRoll()
         {
             // Arrange
-            var calculator = CreateResuceTargetCalculator();
+            var calculator = CreateRescueTargetCalculator();
 
             var bonusKeys = new List<DisasterBonusKey>()
             {
@@ -63,10 +63,10 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.Rescue
         }
 
         [Fact]
-        public void CalculateRescueResult_WhenInvalidBonusKey_ReturnsTargetRoll()
+        public void CalculateRescueTarget_WhenInvalidBonusKey_ReturnsTargetRoll()
         {
             // Arrange
-            var calculator = CreateResuceTargetCalculator();
+            var calculator = CreateRescueTargetCalculator();
 
             var bonusKeys = new List<DisasterBonusKey>()
             {
@@ -83,7 +83,34 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.Rescue
             Assert.Empty(result.AppliedBonuses);
         }
 
-        private static RescueTargetCalculator CreateResuceTargetCalculator()
+        [Fact]
+        public void CalculateRescueTarget_WhenDuplicateBonusKey_KeyAppliedOnce()
+        {
+            // Arrange
+            var calculator = CreateRescueTargetCalculator();
+
+            var duplicate = new DisasterBonusKey("BONUS_1");
+
+            var bonusKeys = new List<DisasterBonusKey>
+            {
+                duplicate,
+                duplicate
+            };
+
+            // Act
+            var result = calculator.CalculateRescueTarget(bonusKeys, _contribution);
+
+            // Assert
+            Assert.Equal(7, result.TargetRoll);
+            Assert.Equal(2, result.TotalBonus);
+            
+            var bonus = Assert.Single<DisasterBonus>(result.AppliedBonuses);
+            
+            Assert.Equal(duplicate, bonus.Key);
+            Assert.Equal(2, bonus.Value);
+        }
+
+        private static RescueTargetCalculator CreateRescueTargetCalculator()
         {
             return new RescueTargetCalculator();
         }
