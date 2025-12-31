@@ -122,7 +122,7 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints.Rules.V1
         }
 
         [Fact]
-        public async Task CalculateTargetResult_WhenCardIdMissing_ReturnsBadRequest()
+        public async Task CalculateRescueTarget_WhenCardIdMissing_ReturnsBadRequest()
         {
             // Arrange
             var invalidRequestDto = new
@@ -143,7 +143,7 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints.Rules.V1
         }
 
         [Fact]
-        public async Task CalculateTargetResult_WhenAppliedBonusKeysMissing_ReturnsBadRequest()
+        public async Task CalculateRescueTarget_WhenAppliedBonusKeysMissing_ReturnsBadRequest()
         {
             // Arrange
             var invalidRequestDto = new
@@ -178,7 +178,7 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints.Rules.V1
         }
 
         [Fact]
-        public async Task CalculateTargetResult_WhenInvalidVersionHeader_ReturnsBadRequest()
+        public async Task CalculateRescueTarget_WhenInvalidVersionHeader_ReturnsBadRequest()
         {
             // Arrange
             using var request = new HttpRequestMessage(HttpMethod.Post, Route);
@@ -193,7 +193,7 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints.Rules.V1
         }
 
         [Fact]
-        public async Task CalculateTargetResult_MultipleApiVersionHeaders_ReturnsBadRequest()
+        public async Task CalculateRescueTarget_MultipleApiVersionHeaders_ReturnsBadRequest()
         {
             // Arrange
             using var request = new HttpRequestMessage(HttpMethod.Post, Route);
