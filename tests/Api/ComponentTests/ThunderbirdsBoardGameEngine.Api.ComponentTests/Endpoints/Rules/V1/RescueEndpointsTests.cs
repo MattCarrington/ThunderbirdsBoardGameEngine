@@ -14,12 +14,12 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints.Rules.V1
 
         private const int ApiVersion = 1;
         private const int DisasterCardId = 7;
-        
+
         private static readonly string _route = $"/api/rules/rescue/{DisasterCardId}/target";
 
         private static readonly CalculateRescueTargetRequestDto _requestDto = new()
         {
-            PresentBonusKeys =
+            PresentDisasterBonusKeys =
                 [
                     "podvehicle:mobilecrane",
                     "podvehicle:domo"
@@ -79,7 +79,7 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints.Rules.V1
             // Arrange
             var requestDto = new CalculateRescueTargetRequestDto
             {
-                PresentBonusKeys = []
+                PresentDisasterBonusKeys = []
             };
 
             using var request = new HttpRequestMessage(HttpMethod.Post, _route);
@@ -135,7 +135,7 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints.Rules.V1
 
             // Assert
             var problem = await ProblemDetailsAssertions.AssertBadRequestAsync(response, "Request validation failed.");
-            ProblemDetailsAssertions.AssertValidationErrors(problem, nameof(CalculateRescueTargetRequestDto.PresentBonusKeys));
+            ProblemDetailsAssertions.AssertValidationErrors(problem, nameof(CalculateRescueTargetRequestDto.PresentDisasterBonusKeys));
         }
 
         [Fact]

@@ -109,9 +109,9 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.Rescue
             // Assert
             Assert.Equal(7, result.TargetRoll);
             Assert.Equal(2, result.TotalBonus);
-            
+
             var bonus = Assert.Single<DisasterBonus>(result.AppliedBonuses);
-            
+
             Assert.Equal(duplicate, bonus.Key);
             Assert.Equal(2, bonus.Value);
         }

@@ -8,7 +8,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.Rescue
 
         public RescueCalculationInput(IReadOnlyCollection<DisasterBonusKey> presentDisasterBonusKeys)
         {
-             PresentDisasterBonusKeys = presentDisasterBonusKeys;
+            PresentDisasterBonusKeys = presentDisasterBonusKeys;
         }
     }
 }

@@ -12,7 +12,7 @@ namespace ThunderbirdsBoardGameEngine.Api.Mappers.Rules.V1
             return new CalculateRescueTargetQuery
             (
                 DisasterCardId: disasterCardId,
-                RescueCalculationInput: new(request.PresentBonusKeys.Select(k => new DisasterBonusKey(k)).ToList())
+                RescueCalculationInput: new(request.PresentDisasterBonusKeys.Select(k => new DisasterBonusKey(k)).ToList())
             );
         }
 

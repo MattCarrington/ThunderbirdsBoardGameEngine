@@ -2,6 +2,6 @@
 {
     public record CalculateRescueTargetRequestDto
     {
-        public required IReadOnlyCollection<string> PresentBonusKeys { get; init; }
+        public required IReadOnlyCollection<string> PresentDisasterBonusKeys { get; init; }
     }
 }

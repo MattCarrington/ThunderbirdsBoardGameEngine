@@ -45,7 +45,7 @@ namespace ThunderbirdsBoardGameEngine.Api.Handlers
                     ProblemDetails = problemDetails,
                     Exception = exception
                 };
-                
+
                 await _problemDetailsService.WriteAsync(problemDetailsContext);
 
                 return true;

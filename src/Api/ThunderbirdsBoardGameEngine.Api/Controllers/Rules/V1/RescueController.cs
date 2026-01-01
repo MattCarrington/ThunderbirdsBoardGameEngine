@@ -20,7 +20,7 @@ namespace ThunderbirdsBoardGameEngine.Api.Controllers.Rules.V1
         }
 
         [HttpPost("{disasterCardId:int}/target")]
-        public async Task<IActionResult> CalculateRescueTarget([FromRoute]int disasterCardId, CalculateRescueTargetRequestDto request, CancellationToken cancellationToken)
+        public async Task<IActionResult> CalculateRescueTarget([FromRoute] int disasterCardId, CalculateRescueTargetRequestDto request, CancellationToken cancellationToken)
         {
             var query = request.ToQuery(disasterCardId);
 
