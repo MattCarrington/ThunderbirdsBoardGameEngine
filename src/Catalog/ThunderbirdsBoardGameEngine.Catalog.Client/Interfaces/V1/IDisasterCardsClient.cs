@@ -1,4 +1,5 @@
 ﻿using ThunderbirdsBoardGameEngine.Catalog.Contracts.Dtos.V1;
+using ThunderbirdsBoardGameEngine.Client.Infrastructure;
 
 namespace ThunderbirdsBoardGameEngine.Catalog.Client.Interfaces.V1
 {

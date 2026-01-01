@@ -3,8 +3,8 @@ using System.Net;
 using System.Text.Json;
 using ThunderbirdsBoardGameEngine.Catalog.Client.Clients.V1;
 using ThunderbirdsBoardGameEngine.Catalog.Client.Internal.Routing.V1;
-using ThunderbirdsBoardGameEngine.Catalog.Client.Internal.Serialization;
 using ThunderbirdsBoardGameEngine.Catalog.Contracts.Dtos.V1;
+using ThunderbirdsBoardGameEngine.Client.Infrastructure.Serialization;
 using ThunderbirdsBoardGameEngine.TestUtils.Stubs;
 using ThunderbirdsBoardGameEngine.TestUtils.xUnit.Assertions;
 using Xunit;
@@ -26,7 +26,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Client.UnitTests.Clients.V1
         public async Task GetAllAsync_WhenCalled_ShouldCallCorrectEndpoint()
         {
             // Arrange
-            var json = JsonSerializer.Serialize(new List<DisasterCardDto>(), JsonDefaults.CamelCase);
+            var json = SerializeToJson([]);
 
             var stubHandler = new StubHttpMessageHandler(json, HttpStatusCode.OK);
 
@@ -50,7 +50,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Client.UnitTests.Clients.V1
             // Arrange
             var disasterCardDtos = _fixture.CreateMany<DisasterCardDto>(5).ToList();
 
-            var json = JsonSerializer.Serialize(disasterCardDtos, JsonDefaults.CamelCase);
+            var json = SerializeToJson(disasterCardDtos);
 
             var client = CreateDisasterCardClient(HttpStatusCode.OK, json);
 
@@ -72,7 +72,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Client.UnitTests.Clients.V1
         public async Task GetAllAsync_WhenApiReturnsEmptyList_ReturnsEmptyDataList()
         {
             // Arrange
-            var json = JsonSerializer.Serialize(new List<DisasterCardDto>(), JsonDefaults.CamelCase);
+            var json = SerializeToJson([]);
 
             var client = CreateDisasterCardClient(HttpStatusCode.OK, json);
 
@@ -166,6 +166,16 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Client.UnitTests.Clients.V1
             };
 
             return new DisasterCardsClient(httpClient);
+        }
+
+        private static string SerializeToJson(IEnumerable<DisasterCardDto> disasterCardDtos)
+        {
+            var options = new JsonSerializerOptions
+            {
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+            };
+
+            return JsonSerializer.Serialize(disasterCardDtos, options);
         }
     }
 }

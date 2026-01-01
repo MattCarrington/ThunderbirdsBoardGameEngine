@@ -29,6 +29,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Common\ThunderbirdsBoardGameEngine.Client.Infrastructure\ThunderbirdsBoardGameEngine.Client.Infrastructure.csproj" />
     <ProjectReference Include="..\ThunderbirdsBoardGameEngine.Catalog.Contracts\ThunderbirdsBoardGameEngine.Catalog.Contracts.csproj" />
   </ItemGroup>
 

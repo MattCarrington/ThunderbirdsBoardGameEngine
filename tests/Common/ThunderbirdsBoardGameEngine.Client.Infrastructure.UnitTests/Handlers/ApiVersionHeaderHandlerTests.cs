@@ -1,9 +1,10 @@
 ﻿using System.Net;
-using ThunderbirdsBoardGameEngine.Catalog.Client.Handlers;
+using ThunderbirdsBoardGameEngine.Client.Infrastructure.Handlers;
 using ThunderbirdsBoardGameEngine.TestUtils.Stubs;
+using ThunderbirdsBoardGameEngine.TestUtils.xUnit.ClassData;
 using Xunit;
 
-namespace ThunderbirdsBoardGameEngine.Catalog.Client.UnitTests.Handlers
+namespace ThunderbirdsBoardGameEngine.Client.Infrastructure.UnitTests.Handlers
 {
     public class ApiVersionHeaderHandlerTests
     {
@@ -30,9 +31,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Client.UnitTests.Handlers
         }
 
         [Theory]
-        [InlineData(null)]
-        [InlineData("")]
-        [InlineData("   ")]
+        [ClassData(typeof(NullOrWhitespaceStringData))]
         public async Task SendAsync_WhenNoVersionProvided_SetsDefaultVersionHeader(string? version)
         {
             // Arrange

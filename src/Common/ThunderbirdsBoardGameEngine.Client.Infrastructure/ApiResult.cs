@@ -1,6 +1,6 @@
 ﻿using System.Net;
 
-namespace ThunderbirdsBoardGameEngine.Catalog.Client
+namespace ThunderbirdsBoardGameEngine.Client.Infrastructure
 {
     /// <summary>
     /// Represents the result of an API operation, including success state, data, and error details.

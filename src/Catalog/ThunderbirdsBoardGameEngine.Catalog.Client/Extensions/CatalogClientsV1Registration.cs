@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using ThunderbirdsBoardGameEngine.Catalog.Client.Handlers;
 using ThunderbirdsBoardGameEngine.Catalog.Client.Interfaces.V1;
+using ThunderbirdsBoardGameEngine.Client.Infrastructure.Handlers;
 
 namespace ThunderbirdsBoardGameEngine.Catalog.Client.Extensions
 {

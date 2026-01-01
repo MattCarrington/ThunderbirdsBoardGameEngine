@@ -1,6 +1,6 @@
 ﻿using System.Text.Json;
 
-namespace ThunderbirdsBoardGameEngine.Catalog.Client.Internal.Serialization
+namespace ThunderbirdsBoardGameEngine.Client.Infrastructure.Serialization
 {
     internal static class JsonDefaults
     {

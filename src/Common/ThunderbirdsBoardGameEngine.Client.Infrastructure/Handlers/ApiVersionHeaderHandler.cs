@@ -1,4 +1,4 @@
-﻿namespace ThunderbirdsBoardGameEngine.Catalog.Client.Handlers
+﻿namespace ThunderbirdsBoardGameEngine.Client.Infrastructure.Handlers
 {
     /// <summary>
     /// Adds an <c>X-Api-Version</c> request header for all outgoing requests.
@@ -6,7 +6,7 @@
     /// <remarks>
     /// This handler enables API versioning to be applied by pipeline registration rather than client code.
     /// </remarks>
-    internal sealed class ApiVersionHeaderHandler : DelegatingHandler
+    public sealed class ApiVersionHeaderHandler : DelegatingHandler
     {
         private const string HeaderName = "X-Api-Version";
         private readonly string _value;
