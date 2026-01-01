@@ -4,11 +4,11 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.Rescue
 {
     public sealed class RescueCalculationInput
     {
-        public IReadOnlyCollection<DisasterBonusKey> AppliedBonusKeys { get; }
+        public IReadOnlyCollection<DisasterBonusKey> PresentDisasterBonusKeys { get; }
 
-        public RescueCalculationInput(IReadOnlyCollection<DisasterBonusKey> disasterBonusKeys)
+        public RescueCalculationInput(IReadOnlyCollection<DisasterBonusKey> presentDisasterBonusKeys)
         {
-             AppliedBonusKeys = disasterBonusKeys;
+             PresentDisasterBonusKeys = presentDisasterBonusKeys;
         }
     }
 }

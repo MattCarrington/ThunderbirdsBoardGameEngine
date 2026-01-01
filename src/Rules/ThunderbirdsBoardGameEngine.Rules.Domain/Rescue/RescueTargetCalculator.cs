@@ -4,8 +4,8 @@
     {
         public RescueTargetResult CalculateRescueTarget(RescueCalculationInput input, DisasterContribution disasterContribution)
         {
-            var appliedBonuses = disasterContribution.Bonuses
-                .Where(b => input.AppliedBonusKeys.Contains(b.Key))
+            var appliedBonuses = disasterContribution.AvailableBonuses
+                .Where(b => input.PresentDisasterBonusKeys.Contains(b.Key))
                 .ToList();
 
             var bonus = appliedBonuses.Sum(b => b.Value);

@@ -47,9 +47,9 @@ namespace ThunderbirdsBoardGameEngine.Rules.Infrastructure.UnitTests.Lookups
                 new DisasterBonus(new("podvehicle:transmittertruck"), 3)
             };
 
-            Assert.Equal(expectedBonuses.Length, rescueContext.Bonuses.Count);
+            Assert.Equal(expectedBonuses.Length, rescueContext.AvailableBonuses.Count);
             Assert.All(expectedBonuses, expected =>
-                Assert.Contains(expected, rescueContext.Bonuses));
+                Assert.Contains(expected, rescueContext.AvailableBonuses));
         }
     }
 }

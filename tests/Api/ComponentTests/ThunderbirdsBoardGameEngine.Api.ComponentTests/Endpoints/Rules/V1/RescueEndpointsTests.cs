@@ -19,7 +19,7 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints.Rules.V1
 
         private static readonly CalculateRescueTargetRequestDto _requestDto = new()
         {
-            AppliedBonusKeys =
+            PresentBonusKeys =
                 [
                     "podvehicle:mobilecrane",
                     "podvehicle:domo"
@@ -53,19 +53,19 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints.Rules.V1
 
             var expectedBonuses = new[]
             {
-                new AppliedBonusDto
+                new AppliedDisasterBonusDto
                 {
                     BonusKey = "podvehicle:mobilecrane",
                     BonusValue = 2
                 },
-                new AppliedBonusDto
+                new AppliedDisasterBonusDto
                 {
                     BonusKey = "podvehicle:domo",
                     BonusValue = 2
                 }
             };
 
-            Assert.All(target.AppliedBonuses, bonus =>
+            Assert.All(target.AppliedDisasterBonuses, bonus =>
             {
                 Assert.Contains(expectedBonuses, expectedBonus =>
                     expectedBonus.BonusKey == bonus.BonusKey &&
@@ -79,7 +79,7 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints.Rules.V1
             // Arrange
             var requestDto = new CalculateRescueTargetRequestDto
             {
-                AppliedBonusKeys = []
+                PresentBonusKeys = []
             };
 
             using var request = new HttpRequestMessage(HttpMethod.Post, _route);
@@ -97,7 +97,7 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints.Rules.V1
             Assert.NotNull(target);
             Assert.Equal(8, target.TargetNumber);
             Assert.Equal(0, target.TotalBonus);
-            Assert.Empty(target.AppliedBonuses);
+            Assert.Empty(target.AppliedDisasterBonuses);
         }
 
         [Fact]
@@ -135,7 +135,7 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints.Rules.V1
 
             // Assert
             var problem = await ProblemDetailsAssertions.AssertBadRequestAsync(response, "Request validation failed.");
-            ProblemDetailsAssertions.AssertValidationErrors(problem, nameof(CalculateRescueTargetRequestDto.AppliedBonusKeys));
+            ProblemDetailsAssertions.AssertValidationErrors(problem, nameof(CalculateRescueTargetRequestDto.PresentBonusKeys));
         }
 
         [Fact]

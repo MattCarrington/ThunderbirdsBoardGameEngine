@@ -22,7 +22,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Infrastructure.Lookups
             return new DisasterContribution
             (
                 DifficultyNumber: disasterCard.DifficultyNumber,
-                Bonuses: disasterCard.BonusConditions.Select(ProjectBonus).ToList()
+                AvailableBonuses: disasterCard.BonusConditions.Select(ProjectBonus).ToList()
             );
         }
 

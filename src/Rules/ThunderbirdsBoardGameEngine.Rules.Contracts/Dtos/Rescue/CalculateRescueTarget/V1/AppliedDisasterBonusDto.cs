@@ -1,6 +1,6 @@
 ﻿namespace ThunderbirdsBoardGameEngine.Rules.Contracts.Dtos.Rescue.CalculateRescueTarget.V1
 {
-    public record AppliedBonusDto
+    public record AppliedDisasterBonusDto
     {
         public required string BonusKey { get; init; }
 

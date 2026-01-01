@@ -8,7 +8,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.Rescue
     {
         private readonly DisasterContribution _contribution = new(
             DifficultyNumber: 9,
-            Bonuses: new List<DisasterBonus>
+            AvailableBonuses: new List<DisasterBonus>
             {
                 new(new DisasterBonusKey("BONUS_1"), 2),
                 new(new DisasterBonusKey("BONUS_2"), 3),

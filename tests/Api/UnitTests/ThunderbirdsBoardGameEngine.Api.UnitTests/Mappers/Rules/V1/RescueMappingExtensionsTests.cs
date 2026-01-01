@@ -17,7 +17,7 @@ namespace ThunderbirdsBoardGameEngine.Api.UnitTests.Mappers.Rules.V1
 
             var dto = new CalculateRescueTargetRequestDto
             {
-                AppliedBonusKeys = ["character:alan", "thunderbird:thunderbird4", "podvehicle.domo"]
+                PresentBonusKeys = ["character:alan", "thunderbird:thunderbird4", "podvehicle.domo"]
             };
 
             // Act
@@ -25,7 +25,7 @@ namespace ThunderbirdsBoardGameEngine.Api.UnitTests.Mappers.Rules.V1
 
             // Assert
             Assert.Equal(disasterCardId, result.DisasterCardId);
-            Assert.Equal(dto.AppliedBonusKeys.Select(k => new DisasterBonusKey(k)), result.RescueCalculationInput.AppliedBonusKeys);
+            Assert.Equal(dto.PresentBonusKeys.Select(k => new DisasterBonusKey(k)), result.RescueCalculationInput.PresentDisasterBonusKeys);
         }
 
         [Fact]
@@ -49,15 +49,15 @@ namespace ThunderbirdsBoardGameEngine.Api.UnitTests.Mappers.Rules.V1
             // Assert
             Assert.Equal(response.TargetNumber, result.TargetNumber);
             Assert.Equal(response.TotalBonus, result.TotalBonus);
-            Assert.Equal(response.AppliedBonuses.Count, result.AppliedBonuses.Count);
+            Assert.Equal(response.AppliedBonuses.Count, result.AppliedDisasterBonuses.Count);
 
-            var expectedBonus = new List<AppliedBonusDto>
+            var expectedBonus = new List<AppliedDisasterBonusDto>
             {
                 new() { BonusKey = "character:alan", BonusValue = 2 },
                 new() { BonusKey = "thunderbird:thunderbird4", BonusValue = 1 }
             };
 
-            Assert.All(result.AppliedBonuses, expected =>
+            Assert.All(result.AppliedDisasterBonuses, expected =>
                 Assert.Contains(expected, expectedBonus));
         }
     }

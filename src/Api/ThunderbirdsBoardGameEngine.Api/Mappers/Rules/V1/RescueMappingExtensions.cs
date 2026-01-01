@@ -12,7 +12,7 @@ namespace ThunderbirdsBoardGameEngine.Api.Mappers.Rules.V1
             return new CalculateRescueTargetQuery
             (
                 DisasterCardId: disasterCardId,
-                RescueCalculationInput: new(request.AppliedBonusKeys.Select(k => new DisasterBonusKey(k)).ToList())
+                RescueCalculationInput: new(request.PresentBonusKeys.Select(k => new DisasterBonusKey(k)).ToList())
             );
         }
 
@@ -22,13 +22,13 @@ namespace ThunderbirdsBoardGameEngine.Api.Mappers.Rules.V1
             {
                 TargetNumber = response.TargetNumber,
                 TotalBonus = response.TotalBonus,
-                AppliedBonuses = response.AppliedBonuses.Select(b => b.ToDto()).ToList()
+                AppliedDisasterBonuses = response.AppliedBonuses.Select(b => b.ToDto()).ToList()
             };
         }
 
-        private static AppliedBonusDto ToDto(this DisasterBonus bonus)
+        private static AppliedDisasterBonusDto ToDto(this DisasterBonus bonus)
         {
-            return new AppliedBonusDto
+            return new AppliedDisasterBonusDto
             {
                 BonusKey = bonus.Key.Value,
                 BonusValue = bonus.Value

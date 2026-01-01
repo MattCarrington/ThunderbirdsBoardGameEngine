@@ -6,6 +6,6 @@
 
         public required int TotalBonus { get; init; }
 
-        public required IReadOnlyCollection<AppliedBonusDto> AppliedBonuses { get; init; }
+        public required IReadOnlyCollection<AppliedDisasterBonusDto> AppliedDisasterBonuses { get; init; }
     }
 }
