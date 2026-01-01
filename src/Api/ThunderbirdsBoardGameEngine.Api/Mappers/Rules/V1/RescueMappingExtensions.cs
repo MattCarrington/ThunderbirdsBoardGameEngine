@@ -7,11 +7,11 @@ namespace ThunderbirdsBoardGameEngine.Api.Mappers.Rules.V1
 {
     public static class RescueMappingExtensions
     {
-        public static CalculateRescueTargetQuery ToQuery(this CalculateRescueTargetRequestDto request)
+        public static CalculateRescueTargetQuery ToQuery(this CalculateRescueTargetRequestDto request, int disasterCardId)
         {
             return new CalculateRescueTargetQuery
             (
-                DisasterCardId: request.CardId,
+                DisasterCardId: disasterCardId,
                 RescueCalculationInput: new(request.AppliedBonusKeys.Select(k => new DisasterBonusKey(k)).ToList())
             );
         }

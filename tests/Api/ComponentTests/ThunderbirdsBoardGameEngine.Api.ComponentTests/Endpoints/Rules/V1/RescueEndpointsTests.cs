@@ -13,11 +13,12 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints.Rules.V1
         private readonly HttpClient _client;
 
         private const int ApiVersion = 1;
-        private const string Route = "/api/rules/rescue/target";
+        private const int DisasterCardId = 7;
+        
+        private static readonly string _route = $"/api/rules/rescue/{DisasterCardId}/target";
 
         private static readonly CalculateRescueTargetRequestDto _requestDto = new()
         {
-            CardId = 7,
             AppliedBonusKeys =
                 [
                     "podvehicle:mobilecrane",
@@ -34,7 +35,7 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints.Rules.V1
         public async Task CalculateRescueTarget_WhenCalled_ReturnsOk()
         {
             // Arrange
-            using var request = new HttpRequestMessage(HttpMethod.Post, Route);
+            using var request = new HttpRequestMessage(HttpMethod.Post, _route);
             request.Headers.Add("X-API-Version", ApiVersion.ToString());
             request.Content = JsonContent.Create(_requestDto);
 
@@ -78,11 +79,10 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints.Rules.V1
             // Arrange
             var requestDto = new CalculateRescueTargetRequestDto
             {
-                CardId = 7,
                 AppliedBonusKeys = []
             };
 
-            using var request = new HttpRequestMessage(HttpMethod.Post, Route);
+            using var request = new HttpRequestMessage(HttpMethod.Post, _route);
             request.Headers.Add("X-API-Version", ApiVersion.ToString());
             request.Content = JsonContent.Create(requestDto);
 
@@ -104,15 +104,11 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints.Rules.V1
         public async Task CalculateRescueTarget_WhenCardDoesNotExist_ReturnsNotFound()
         {
             // Arrange
-            var requestDto = new CalculateRescueTargetRequestDto
-            {
-                CardId = 7777,
-                AppliedBonusKeys = []
-            };
+            var route = $"/api/rules/rescue/999/target";
 
-            using var request = new HttpRequestMessage(HttpMethod.Post, Route);
+            using var request = new HttpRequestMessage(HttpMethod.Post, route);
             request.Headers.Add("X-API-Version", ApiVersion.ToString());
-            request.Content = JsonContent.Create(requestDto);
+            request.Content = JsonContent.Create(_requestDto);
 
             // Act
             using var response = await _client.SendAsync(request);
@@ -122,36 +118,15 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints.Rules.V1
         }
 
         [Fact]
-        public async Task CalculateRescueTarget_WhenCardIdMissing_ReturnsBadRequest()
-        {
-            // Arrange
-            var invalidRequestDto = new
-            {
-                AppliedBonusKeys = Array.Empty<string>()
-            };
-
-            using var request = new HttpRequestMessage(HttpMethod.Post, Route);
-            request.Headers.Add("X-API-Version", ApiVersion.ToString());
-            request.Content = JsonContent.Create(invalidRequestDto);
-
-            // Act
-            using var response = await _client.SendAsync(request);
-
-            // Assert
-            var problem = await ProblemDetailsAssertions.AssertBadRequestAsync(response, "Request validation failed.");
-            ProblemDetailsAssertions.AssertValidationErrors(problem, nameof(CalculateRescueTargetRequestDto.CardId));
-        }
-
-        [Fact]
         public async Task CalculateRescueTarget_WhenAppliedBonusKeysMissing_ReturnsBadRequest()
         {
             // Arrange
             var invalidRequestDto = new
             {
-                CardId = 1
+                // AppliedBonusKeys intentionally missing
             };
 
-            using var request = new HttpRequestMessage(HttpMethod.Post, Route);
+            using var request = new HttpRequestMessage(HttpMethod.Post, _route);
             request.Headers.Add("X-API-Version", ApiVersion.ToString());
             request.Content = JsonContent.Create(invalidRequestDto);
 
@@ -160,14 +135,14 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints.Rules.V1
 
             // Assert
             var problem = await ProblemDetailsAssertions.AssertBadRequestAsync(response, "Request validation failed.");
-            ProblemDetailsAssertions.AssertValidationErrors(problem, nameof(CalculateRescueTargetRequestDto.CardId));
+            ProblemDetailsAssertions.AssertValidationErrors(problem, nameof(CalculateRescueTargetRequestDto.AppliedBonusKeys));
         }
 
         [Fact]
         public async Task CalculateTargetResult_WhenMissingVersionHeader_ReturnsBadRequest()
         {
             // Arrange
-            using var request = new HttpRequestMessage(HttpMethod.Post, Route);
+            using var request = new HttpRequestMessage(HttpMethod.Post, _route);
             request.Content = JsonContent.Create(_requestDto);
 
             // Act
@@ -181,7 +156,7 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints.Rules.V1
         public async Task CalculateRescueTarget_WhenInvalidVersionHeader_ReturnsBadRequest()
         {
             // Arrange
-            using var request = new HttpRequestMessage(HttpMethod.Post, Route);
+            using var request = new HttpRequestMessage(HttpMethod.Post, _route);
             request.Headers.Add("X-API-Version", "999");
             request.Content = JsonContent.Create(_requestDto);
 
@@ -196,7 +171,7 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints.Rules.V1
         public async Task CalculateRescueTarget_MultipleApiVersionHeaders_ReturnsBadRequest()
         {
             // Arrange
-            using var request = new HttpRequestMessage(HttpMethod.Post, Route);
+            using var request = new HttpRequestMessage(HttpMethod.Post, _route);
             request.Headers.Add("X-API-Version", ApiVersion.ToString());
             request.Headers.Add("X-API-Version", (ApiVersion + 1).ToString());
             request.Content = JsonContent.Create(_requestDto);

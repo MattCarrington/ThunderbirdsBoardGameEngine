@@ -19,10 +19,10 @@ namespace ThunderbirdsBoardGameEngine.Api.Controllers.Rules.V1
             _mediator = mediator;
         }
 
-        [HttpPost("target")]
-        public async Task<IActionResult> CalculateRescueTarget(CalculateRescueTargetRequestDto request, CancellationToken cancellationToken)
+        [HttpPost("{disasterCardId:int}/target")]
+        public async Task<IActionResult> CalculateRescueTarget([FromRoute]int disasterCardId, CalculateRescueTargetRequestDto request, CancellationToken cancellationToken)
         {
-            var query = request.ToQuery();
+            var query = request.ToQuery(disasterCardId);
 
             var response = await _mediator.Send(query, cancellationToken);
 

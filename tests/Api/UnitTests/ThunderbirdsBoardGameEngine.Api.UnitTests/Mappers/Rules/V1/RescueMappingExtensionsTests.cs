@@ -13,17 +13,18 @@ namespace ThunderbirdsBoardGameEngine.Api.UnitTests.Mappers.Rules.V1
         public void ToQuery_ValidDto_ReturnsExpectedQuery()
         {
             // Arrange
+            var disasterCardId = 5;
+
             var dto = new CalculateRescueTargetRequestDto
             {
-                CardId = 5,
                 AppliedBonusKeys = ["character:alan", "thunderbird:thunderbird4", "podvehicle.domo"]
             };
 
             // Act
-            var result = dto.ToQuery();
+            var result = dto.ToQuery(disasterCardId);
 
             // Assert
-            Assert.Equal(dto.CardId, result.DisasterCardId);
+            Assert.Equal(disasterCardId, result.DisasterCardId);
             Assert.Equal(dto.AppliedBonusKeys.Select(k => new DisasterBonusKey(k)), result.RescueCalculationInput.AppliedBonusKeys);
         }
 
