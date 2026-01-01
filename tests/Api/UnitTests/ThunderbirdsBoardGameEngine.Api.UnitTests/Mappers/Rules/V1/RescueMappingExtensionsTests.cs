@@ -24,7 +24,7 @@ namespace ThunderbirdsBoardGameEngine.Api.UnitTests.Mappers.Rules.V1
 
             // Assert
             Assert.Equal(dto.CardId, result.DisasterCardId);
-            Assert.Equal(dto.AppliedBonusKeys.Select(k => new DisasterBonusKey(k)), result.AppliedBonusKeys);
+            Assert.Equal(dto.AppliedBonusKeys.Select(k => new DisasterBonusKey(k)), result.RescueCalculationInput.AppliedBonusKeys);
         }
 
         [Fact]

@@ -21,10 +21,10 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.Rescue
             // Arrange
             var calculator = CreateRescueTargetCalculator();
 
-            var appliedBonusKeys = Array.Empty<DisasterBonusKey>();
+            var input = CreateInput(Array.Empty<DisasterBonusKey>());
 
             // Act
-            var result = calculator.CalculateRescueTarget(appliedBonusKeys, _contribution);
+            var result = calculator.CalculateRescueTarget(input, _contribution);
 
             // Assert
             Assert.Equal(9, result.TargetRoll);
@@ -44,8 +44,10 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.Rescue
                 new("BONUS_2")
             };
 
+            var input = CreateInput(bonusKeys);
+
             // Act
-            var result = calculator.CalculateRescueTarget(bonusKeys, _contribution);
+            var result = calculator.CalculateRescueTarget(input, _contribution);
 
             // Assert
             Assert.Equal(4, result.TargetRoll);
@@ -74,8 +76,10 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.Rescue
                 new("BONUS_4")
             };
 
+            var input = CreateInput(bonusKeys);
+
             // Act
-            var result = calculator.CalculateRescueTarget(bonusKeys, _contribution);
+            var result = calculator.CalculateRescueTarget(input, _contribution);
 
             // Assert
             Assert.Equal(9, result.TargetRoll);
@@ -97,8 +101,10 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.Rescue
                 duplicate
             };
 
+            var input = CreateInput(bonusKeys);
+
             // Act
-            var result = calculator.CalculateRescueTarget(bonusKeys, _contribution);
+            var result = calculator.CalculateRescueTarget(input, _contribution);
 
             // Assert
             Assert.Equal(7, result.TargetRoll);
@@ -113,6 +119,11 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.Rescue
         private static RescueTargetCalculator CreateRescueTargetCalculator()
         {
             return new RescueTargetCalculator();
+        }
+
+        private static RescueCalculationInput CreateInput(IReadOnlyCollection<DisasterBonusKey> bonusKeys)
+        {
+            return new RescueCalculationInput(bonusKeys);
         }
     }
 }

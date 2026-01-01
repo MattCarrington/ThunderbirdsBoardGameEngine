@@ -1,13 +1,11 @@
-﻿using ThunderbirdsBoardGameEngine.PublishedLanguage.DisasterBonus;
-
-namespace ThunderbirdsBoardGameEngine.Rules.Domain.Rescue
+﻿namespace ThunderbirdsBoardGameEngine.Rules.Domain.Rescue
 {
     public class RescueTargetCalculator
     {
-        public RescueTargetResult CalculateRescueTarget(IReadOnlyCollection<DisasterBonusKey> appliedBonusKeys, DisasterContribution disasterContribution)
+        public RescueTargetResult CalculateRescueTarget(RescueCalculationInput input, DisasterContribution disasterContribution)
         {
             var appliedBonuses = disasterContribution.Bonuses
-                .Where(b => appliedBonusKeys.Contains(b.Key))
+                .Where(b => input.AppliedBonusKeys.Contains(b.Key))
                 .ToList();
 
             var bonus = appliedBonuses.Sum(b => b.Value);

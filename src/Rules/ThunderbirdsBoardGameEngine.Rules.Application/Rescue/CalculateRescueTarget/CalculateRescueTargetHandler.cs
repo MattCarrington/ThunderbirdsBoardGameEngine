@@ -19,7 +19,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Application.Rescue.CalculateRescueTa
         {
             var projection = _disasterContributionLookup.GetDisasterContribution(query.DisasterCardId);
 
-            var calculatedTarget = _rescueTargetCalculator.CalculateRescueTarget(query.AppliedBonusKeys, projection);
+            var calculatedTarget = _rescueTargetCalculator.CalculateRescueTarget(query.RescueCalculationInput, projection);
 
             return Task.FromResult(
                 new CalculateRescueTargetResponse
