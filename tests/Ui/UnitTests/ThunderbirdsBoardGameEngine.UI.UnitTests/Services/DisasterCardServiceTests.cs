@@ -1,9 +1,9 @@
 ﻿using AutoFixture;
 using NSubstitute;
 using System.Net;
-using ThunderbirdsBoardGameEngine.Catalog.Client;
 using ThunderbirdsBoardGameEngine.Catalog.Client.Interfaces.V1;
 using ThunderbirdsBoardGameEngine.Catalog.Contracts.Dtos.V1;
+using ThunderbirdsBoardGameEngine.Client.Infrastructure;
 using ThunderbirdsBoardGameEngine.TestUtils.xUnit.Assertions;
 using ThunderbirdsBoardGameEngine.UI.Services;
 using Xunit;
