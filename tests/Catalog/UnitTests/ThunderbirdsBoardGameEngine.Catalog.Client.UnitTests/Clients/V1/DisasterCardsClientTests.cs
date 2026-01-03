@@ -1,10 +1,10 @@
-﻿using AutoFixture;
+﻿using NSubstitute;
 using System.Net;
-using System.Text.Json;
 using ThunderbirdsBoardGameEngine.Catalog.Client.Clients.V1;
 using ThunderbirdsBoardGameEngine.Catalog.Client.Internal.Routing.V1;
 using ThunderbirdsBoardGameEngine.Catalog.Contracts.Dtos.V1;
-using ThunderbirdsBoardGameEngine.Client.Infrastructure.Serialization;
+using ThunderbirdsBoardGameEngine.Client.Infrastructure;
+using ThunderbirdsBoardGameEngine.Client.Infrastructure.Handlers;
 using ThunderbirdsBoardGameEngine.TestUtils.Stubs;
 using ThunderbirdsBoardGameEngine.TestUtils.xUnit.Assertions;
 using Xunit;
@@ -13,29 +13,22 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Client.UnitTests.Clients.V1
 {
     public class DisasterCardsClientTests
     {
-        private readonly Fixture _fixture = new();
-
-        public DisasterCardsClientTests()
-        {
-            _fixture.Customize<DisasterCardDto>(c => c
-                .With(d => d.BonusConditions, [.. _fixture.CreateMany<BonusConditionDto>(2)])
-                .With(d => d.Rewards, [.. _fixture.CreateMany<RewardDto>(2)]));
-        }
-
         [Fact]
         public async Task GetAllAsync_WhenCalled_ShouldCallCorrectEndpoint()
         {
             // Arrange
-            var json = SerializeToJson([]);
-
-            var stubHandler = new StubHttpMessageHandler(json, HttpStatusCode.OK);
+            var stubHandler = new StubHttpMessageHandler("{}", HttpStatusCode.OK);
 
             var httpClient = new HttpClient(stubHandler)
             {
                 BaseAddress = new Uri("http://localhost/")
             };
 
-            var client = new DisasterCardsClient(httpClient);
+            var apiResult = ApiResult<IReadOnlyList<DisasterCardDto>>.SuccessResult([], HttpStatusCode.OK);
+
+            var handler = CreateMockHttpResponseHandler(apiResult);
+
+            var client = new DisasterCardsClient(httpClient, handler);
 
             // Act
             _ = await client.GetAllAsync();
@@ -45,14 +38,53 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Client.UnitTests.Clients.V1
         }
 
         [Fact]
+        public async Task GetAllAsync_WhenCalled_ShouldCallResponseHandler()
+        {
+            // Arrange
+            var stubHandler = new StubHttpMessageHandler("{}", HttpStatusCode.OK);
+
+            var httpClient = new HttpClient(stubHandler)
+            {
+                BaseAddress = new Uri("http://localhost/")
+            };
+
+            var apiResult = ApiResult<IReadOnlyList<DisasterCardDto>>.SuccessResult([], HttpStatusCode.OK);
+
+            var handler = CreateMockHttpResponseHandler(apiResult);
+
+            var client = new DisasterCardsClient(httpClient, handler);
+
+            // Act
+            _ = await client.GetAllAsync();
+
+            // Assert
+            await handler.Received(1).HandleResponseAsync<IReadOnlyList<DisasterCardDto>>(Arg.Any<HttpResponseMessage>(), Arg.Any<CancellationToken>());
+        }
+
+        [Fact]
         public async Task GetAllAsync_WhenApiReturnsSuccess_ReturnsCards()
         {
             // Arrange
-            var disasterCardDtos = _fixture.CreateMany<DisasterCardDto>(5).ToList();
+            var disasterCardDtos = new List<DisasterCardDto>
+            {
+                new()
+                {
+                    Id = 1,
+                    Name = "Card A",
+                    Location = "Earth"
 
-            var json = SerializeToJson(disasterCardDtos);
+                },
+                new()
+                {
+                    Id = 2,
+                    Name = "Card B",
+                    Location = "Space"
+                }
+            };
 
-            var client = CreateDisasterCardClient(HttpStatusCode.OK, json);
+            var apiResult = ApiResult<IReadOnlyList<DisasterCardDto>>.SuccessResult(disasterCardDtos, HttpStatusCode.OK);
+
+            var client = CreateDisasterCardClient(apiResult);
 
             // Act
             var result = await client.GetAllAsync();
@@ -72,9 +104,9 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Client.UnitTests.Clients.V1
         public async Task GetAllAsync_WhenApiReturnsEmptyList_ReturnsEmptyDataList()
         {
             // Arrange
-            var json = SerializeToJson([]);
+            var apiResult = ApiResult<IReadOnlyList<DisasterCardDto>>.SuccessResult([], HttpStatusCode.OK);           
 
-            var client = CreateDisasterCardClient(HttpStatusCode.OK, json);
+            var client = CreateDisasterCardClient(apiResult);
 
             // Act
             var result = await client.GetAllAsync();
@@ -93,7 +125,9 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Client.UnitTests.Clients.V1
         public async Task GetAllAsync_WhenApiReturnsError_ReturnsFailure(HttpStatusCode statusCode, string errorMessage)
         {
             // Arrange
-            var client = CreateDisasterCardClient(statusCode, errorMessage);
+            var apiResult = ApiResult<IReadOnlyList<DisasterCardDto>>.Failure(errorMessage, statusCode);
+
+            var client = CreateDisasterCardClient(apiResult);
 
             // Act
             var result = await client.GetAllAsync();
@@ -106,76 +140,27 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Client.UnitTests.Clients.V1
             Assert.Null(result.Data);
         }
 
-        [Fact]
-        public async Task GetAllAsync_WhenApiReturnsMalformedJson_ReturnsFailure()
+        private static IHttpResponseHandler CreateMockHttpResponseHandler(ApiResult<IReadOnlyList<DisasterCardDto>> apiResult)
         {
-            // Arrange
-            var client = CreateDisasterCardClient(HttpStatusCode.OK, "Invalid JSON");
+            var handler = Substitute.For<IHttpResponseHandler>();
+            handler.HandleResponseAsync<IReadOnlyList<DisasterCardDto>>(Arg.Any<HttpResponseMessage>(), Arg.Any<CancellationToken>())
+                .Returns(apiResult);
 
-            // Act
-            var result = await client.GetAllAsync();
-
-            // Assert
-            Assert.NotNull(result);
-            Assert.False(result.Success);
-            Assert.Equal(HttpStatusCode.OK, result.StatusCode);
-            Assert.Null(result.Data);
-            Assert.NotNull(result.ErrorMessage);
-            Assert.Contains("Deserialization error", result.ErrorMessage, StringComparison.OrdinalIgnoreCase);
+            return handler;
         }
 
-        [Fact]
-        public async Task GetAllAsync_WhenDeserializedContentIsNull_ReturnsFailure()
+        private static DisasterCardsClient CreateDisasterCardClient(ApiResult<IReadOnlyList<DisasterCardDto>> apiResult)
         {
-            // Arrange
-            var client = CreateDisasterCardClient(HttpStatusCode.OK, "null");
-
-            // Act
-            var result = await client.GetAllAsync();
-
-            // Assert
-            Assert.NotNull(result);
-            Assert.False(result.Success);
-            Assert.Equal(HttpStatusCode.OK, result.StatusCode);
-            Assert.Null(result.Data);
-            Assert.NotNull(result.ErrorMessage);
-            Assert.Contains("Deserialized content was null.", result.ErrorMessage, StringComparison.OrdinalIgnoreCase);
-        }
-
-        [Fact]
-        public async Task GetAllAsync_WhenCancelled_ThrowsOperationCanceledExceptionAsync()
-        {
-            // Arrange
-            var client = CreateDisasterCardClient(HttpStatusCode.OK, "[]");
-
-            using var token = new CancellationTokenSource();
-            token.Cancel();
-
-            // Act & Assert
-            await Assert.ThrowsAnyAsync<OperationCanceledException>(
-                () => client.GetAllAsync(token.Token));
-        }
-
-        private static DisasterCardsClient CreateDisasterCardClient(HttpStatusCode statusCode, string responseContent = "")
-        {
-            var stubHandler = new StubHttpMessageHandler(responseContent, statusCode);
+            var stubHandler = new StubHttpMessageHandler("{}", HttpStatusCode.OK);
 
             var httpClient = new HttpClient(stubHandler)
             {
                 BaseAddress = new Uri("http://example.test")
             };
 
-            return new DisasterCardsClient(httpClient);
-        }
+            var handler = CreateMockHttpResponseHandler(apiResult);
 
-        private static string SerializeToJson(IEnumerable<DisasterCardDto> disasterCardDtos)
-        {
-            var options = new JsonSerializerOptions
-            {
-                PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-            };
-
-            return JsonSerializer.Serialize(disasterCardDtos, options);
+            return new DisasterCardsClient(httpClient, handler);
         }
     }
 }

@@ -1,10 +1,10 @@
 ﻿using System.Net;
-using ThunderbirdsBoardGameEngine.Client.Infrastructure.Handlers;
+using ThunderbirdsBoardGameEngine.Client.Infrastructure.DelegatingHandlers;
 using ThunderbirdsBoardGameEngine.TestUtils.Stubs;
 using ThunderbirdsBoardGameEngine.TestUtils.xUnit.ClassData;
 using Xunit;
 
-namespace ThunderbirdsBoardGameEngine.Client.Infrastructure.UnitTests.Handlers
+namespace ThunderbirdsBoardGameEngine.Client.Infrastructure.UnitTests.DelegatingHandlers
 {
     public class ApiVersionHeaderHandlerTests
     {

@@ -1,34 +1,10 @@
 ﻿using System.Text.Json;
 using ThunderbirdsBoardGameEngine.Client.Infrastructure.Serialization;
 
-namespace ThunderbirdsBoardGameEngine.Client.Infrastructure
+namespace ThunderbirdsBoardGameEngine.Client.Infrastructure.Handlers
 {
-    /// <summary>
-    /// Provides a base class for API client implementations that use an underlying HttpClient for making HTTP requests.
-    /// </summary>
-    /// <remarks>This class is intended to be inherited by concrete API client classes that encapsulate HTTP
-    /// communication logic. It manages the lifetime of the provided HttpClient instance and offers common functionality
-    /// for handling HTTP responses. Derived classes should use the protected members to implement specific API
-    /// operations.</remarks>
-    public abstract class ApiClientBase
+    public class DefaultHttpResponseHandler : IHttpResponseHandler
     {
-        /// <summary>
-        /// Provides an HTTP client instance for sending HTTP requests and receiving responses from a resource
-        /// identified by a URI.
-        /// </summary>
-        /// <remarks>Intended for use by derived classes to perform HTTP operations. The lifetime of the
-        /// client should be managed carefully to avoid socket exhaustion.</remarks>
-        protected readonly HttpClient _httpClient;
-
-        /// <summary>
-        /// Initializes a new instance of the ApiClientBase class with the specified HTTP client.
-        /// </summary>
-        /// <param name="httpClient">The HttpClient instance used to send HTTP requests. Cannot be null.</param>
-        protected ApiClientBase(HttpClient httpClient)
-        {
-            _httpClient = httpClient;
-        }
-
         /// <summary>
         /// Processes an HTTP response and returns an ApiResult containing the deserialized content or an error message.
         /// </summary>
@@ -42,7 +18,7 @@ namespace ThunderbirdsBoardGameEngine.Client.Infrastructure
         /// <returns>A task that represents the asynchronous operation. The task result contains an ApiResult with the
         /// deserialized content of type T if the response is successful; otherwise, an ApiResult containing an error
         /// message.</returns>
-        protected static async Task<ApiResult<T>> HandleResponse<T>(HttpResponseMessage response, CancellationToken cancellationToken)
+        public async Task<ApiResult<T>> HandleResponseAsync<T>(HttpResponseMessage response, CancellationToken cancellationToken)
         {
             try
             {

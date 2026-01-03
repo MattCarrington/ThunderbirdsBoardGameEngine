@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using ThunderbirdsBoardGameEngine.Catalog.Client.Internal.Configuration;
+using ThunderbirdsBoardGameEngine.Client.Infrastructure;
 
 namespace ThunderbirdsBoardGameEngine.Catalog.Client.Extensions
 {
@@ -32,13 +33,13 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Client.Extensions
             Action<IServiceProvider, HttpClient> configureBase = (sp, http) =>
             {
                 var opts = sp.GetRequiredService<IOptions<CatalogClientOptions>>().Value;
-                http.BaseAddress = new Uri(opts.BaseAddress);
-                // optional: http.Timeout = TimeSpan.FromSeconds(30);
-                // optional: http.DefaultRequestHeaders.Accept.ParseAdd("application/json");
+                http.BaseAddress = new Uri(opts.BaseAddress);                
             };
 
             // Register the V1 pipeline & clients (can add V2 later without touching this method)
             services.AddCatalogV1Clients(configureBase);
+
+            services.AddClientInfrastructure();
 
             return services;
         }
