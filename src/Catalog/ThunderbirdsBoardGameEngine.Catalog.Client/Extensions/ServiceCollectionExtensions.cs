@@ -33,7 +33,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Client.Extensions
             Action<IServiceProvider, HttpClient> configureBase = (sp, http) =>
             {
                 var opts = sp.GetRequiredService<IOptions<CatalogClientOptions>>().Value;
-                http.BaseAddress = new Uri(opts.BaseAddress);                
+                http.BaseAddress = new Uri(opts.BaseAddress);
             };
 
             // Register the V1 pipeline & clients (can add V2 later without touching this method)

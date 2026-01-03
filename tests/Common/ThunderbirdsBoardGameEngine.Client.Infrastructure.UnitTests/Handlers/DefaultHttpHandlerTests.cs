@@ -11,16 +11,16 @@ namespace ThunderbirdsBoardGameEngine.Client.Infrastructure.UnitTests.Handlers
         {
             // Arrange
             var handler = new DefaultHttpResponseHandler();
-            
+
             using var response = new HttpResponseMessage(HttpStatusCode.OK)
             {
                 Content = new StringContent("[1]")
             };
-            
+
             // Act
-            
+
             var result = await handler.HandleResponseAsync<IReadOnlyList<int>>(response, CancellationToken.None);
-            
+
             // Assert
             Assert.NotNull(result);
             Assert.True(result.Success);

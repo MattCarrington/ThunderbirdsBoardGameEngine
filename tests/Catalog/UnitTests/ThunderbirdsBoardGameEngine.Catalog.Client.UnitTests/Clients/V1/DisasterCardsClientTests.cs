@@ -104,7 +104,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Client.UnitTests.Clients.V1
         public async Task GetAllAsync_WhenApiReturnsEmptyList_ReturnsEmptyDataList()
         {
             // Arrange
-            var apiResult = ApiResult<IReadOnlyList<DisasterCardDto>>.SuccessResult([], HttpStatusCode.OK);           
+            var apiResult = ApiResult<IReadOnlyList<DisasterCardDto>>.SuccessResult([], HttpStatusCode.OK);
 
             var client = CreateDisasterCardClient(apiResult);
 
