@@ -3,12 +3,13 @@ using System.Collections.Immutable;
 using ThunderbirdsBoardGameEngine.Catalog.Application.Exceptions;
 using ThunderbirdsBoardGameEngine.Catalog.Application.Interfaces;
 using ThunderbirdsBoardGameEngine.Catalog.Domain.Entities;
+using ThunderbirdsBoardGameEngine.PublishedLanguage.DisasterBonus;
 
 namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.ReferenceSources
 {
     internal sealed class InMemoryDisasterCardReferenceSource : IDisasterCardReferenceSource, IDisasterCardReferenceSourceProbe
     {
-        FrozenDictionary<int, DisasterCard> _cards;
+        FrozenDictionary<CardCode, DisasterCard> _cards;
 
         public InMemoryDisasterCardReferenceSource(ImmutableArray<DisasterCard> disasterCards, string version)
         {
@@ -23,7 +24,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.ReferenceSources
             Version = version;
             Cards = disasterCards;
 
-            _cards = disasterCards.ToFrozenDictionary(c => c.Id);
+            _cards = disasterCards.ToFrozenDictionary(c => c.Code);
         }
 
         public string Version { get; }
@@ -32,11 +33,11 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.ReferenceSources
 
         public int Count => Cards.Length;
 
-        public DisasterCard GetById(int id)
+        public DisasterCard GetByCode(CardCode code)
         {
-            if (!_cards.TryGetValue(id, out var card))
+            if (!_cards.TryGetValue(code, out var card))
             {
-                throw new DisasterCardNotFoundException(id);
+                throw new DisasterCardNotFoundException(code.ToString());
             }
 
             return card;

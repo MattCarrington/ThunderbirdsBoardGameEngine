@@ -17,7 +17,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Application.Rescue.CalculateRescueTa
 
         public Task<CalculateRescueTargetResponse> Handle(CalculateRescueTargetQuery query, CancellationToken cancellationToken)
         {
-            var projection = _disasterContributionLookup.GetDisasterContribution(query.DisasterCardId);
+            var projection = _disasterContributionLookup.GetDisasterContribution(query.DisasterCardCode);
 
             var calculatedTarget = _rescueTargetCalculator.CalculateRescueTarget(query.RescueCalculationInput, projection);
 

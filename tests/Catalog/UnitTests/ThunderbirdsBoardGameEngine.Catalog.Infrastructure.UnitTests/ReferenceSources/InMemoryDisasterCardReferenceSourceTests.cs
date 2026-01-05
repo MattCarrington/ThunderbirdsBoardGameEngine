@@ -2,6 +2,7 @@
 using ThunderbirdsBoardGameEngine.Catalog.Application.Exceptions;
 using ThunderbirdsBoardGameEngine.Catalog.Domain.Entities;
 using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.ReferenceSources;
+using ThunderbirdsBoardGameEngine.PublishedLanguage.DisasterBonus;
 using ThunderbirdsBoardGameEngine.TestUtils.Catalog.Builders;
 using Xunit;
 
@@ -11,8 +12,8 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Reference
     {
         private readonly ImmutableArray<DisasterCard> _cards =
         [
-            new DisasterCardBuilder().WithId(1).WithName("Test 1").Build(),
-            new DisasterCardBuilder().WithId(2).WithName("Test 2").Build()
+            new DisasterCardBuilder().WithId(1).WithName("Test 1").WithCode("test-1").Build(),
+            new DisasterCardBuilder().WithId(2).WithName("Test 2").WithCode("test-2").Build()
         ];
 
         private const string _version = "1.0";
@@ -84,7 +85,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Reference
             var source = CreateReferenceSource(_cards);
 
             // Act
-            var card = source.GetById(1);
+            var card = source.GetByCode(new CardCode("test-1"));
 
             // Assert
             Assert.NotNull(card);
@@ -99,7 +100,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Reference
             var source = CreateReferenceSource(_cards);
 
             // Act & Assert
-            Assert.Throws<DisasterCardNotFoundException>(() => source.GetById(999));
+            Assert.Throws<DisasterCardNotFoundException>(() => source.GetByCode(new CardCode("non-existant-code")));
         }
 
         private static InMemoryDisasterCardReferenceSource CreateReferenceSource(IReadOnlyList<DisasterCard> cards, string version)

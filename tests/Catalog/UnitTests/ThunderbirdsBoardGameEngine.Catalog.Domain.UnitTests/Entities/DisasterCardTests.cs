@@ -1,5 +1,6 @@
 ﻿using ThunderbirdsBoardGameEngine.Catalog.Domain.Entities;
 using ThunderbirdsBoardGameEngine.Catalog.Domain.Enums;
+using ThunderbirdsBoardGameEngine.PublishedLanguage.DisasterBonus;
 using ThunderbirdsBoardGameEngine.TestUtils.xUnit.ClassData;
 using Xunit;
 
@@ -8,6 +9,8 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Domain.UnitTests.Entities
 
     public class DisasterCardTests
     {
+        private readonly CardCode _validCode = new("valid-slug");
+
         [Theory]
         [ClassData(typeof(WhitespaceStringData))]
         public void Constructor_WhenNameIsInvalid_ThrowsArgumentException(string name)
@@ -15,7 +18,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Domain.UnitTests.Entities
             // Arrange
 
             // Act & Assert
-            Assert.Throws<ArgumentException>(() => new DisasterCard(1, name, "slug", 9, BoardLocation.Europe, RescueType.Air, ValidBonusCondition(), ValidRewardOption()));
+            Assert.Throws<ArgumentException>(() => new DisasterCard(1, name, _validCode, 9, BoardLocation.Europe, RescueType.Air, ValidBonusCondition(), ValidRewardOption()));
         }
 
         [Fact]
@@ -24,7 +27,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Domain.UnitTests.Entities
             // Arrange
 
             // Act & Assert
-            Assert.Throws<ArgumentNullException>(() => new DisasterCard(1, null!, "slug", 9, BoardLocation.Europe, RescueType.Air, ValidBonusCondition(), ValidRewardOption()));
+            Assert.Throws<ArgumentNullException>(() => new DisasterCard(1, null!, _validCode, 9, BoardLocation.Europe, RescueType.Air, ValidBonusCondition(), ValidRewardOption()));
         }
 
         [Theory]
@@ -37,7 +40,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Domain.UnitTests.Entities
             var expectedName = "mission name";
 
             // Act
-            var card = new DisasterCard(1, nameWithWhitespace, "slug", 9, BoardLocation.Europe, RescueType.Air,
+            var card = new DisasterCard(1, nameWithWhitespace, _validCode, 9, BoardLocation.Europe, RescueType.Air,
                 ValidBonusCondition(), ValidRewardOption());
 
             // Assert
@@ -54,7 +57,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Domain.UnitTests.Entities
             // Arrange
 
             // Act
-            var card = new DisasterCard(1, title, "slug", 9, BoardLocation.Europe, RescueType.Air,
+            var card = new DisasterCard(1, title, _validCode, 9, BoardLocation.Europe, RescueType.Air,
                 ValidBonusCondition(), ValidRewardOption());
 
             // Assert
@@ -70,7 +73,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Domain.UnitTests.Entities
             // Arrange
 
             // Act & Assert
-            Assert.Throws<ArgumentException>(() => new DisasterCard(1, name, "slug", 9, BoardLocation.Europe, RescueType.Air, ValidBonusCondition(), ValidRewardOption()));
+            Assert.Throws<ArgumentException>(() => new DisasterCard(1, name, _validCode, 9, BoardLocation.Europe, RescueType.Air, ValidBonusCondition(), ValidRewardOption()));
         }
 
         [Theory]
@@ -83,7 +86,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Domain.UnitTests.Entities
 
             // Act & Assert
             Assert.Throws<ArgumentOutOfRangeException>(() => new DisasterCard(
-                1, "Test", "slug", difficultyNumber, BoardLocation.Europe, RescueType.Air, ValidBonusCondition(), ValidRewardOption()));
+                1, "Test", _validCode, difficultyNumber, BoardLocation.Europe, RescueType.Air, ValidBonusCondition(), ValidRewardOption()));
         }
 
         [Fact]
@@ -92,7 +95,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Domain.UnitTests.Entities
             // Arrange
 
             // Act & Assert
-            Assert.Throws<ArgumentNullException>(() => new DisasterCard(1, "Test", "slug", 9, BoardLocation.Europe, RescueType.Air, null!, ValidRewardOption()));
+            Assert.Throws<ArgumentNullException>(() => new DisasterCard(1, "Test", _validCode, 9, BoardLocation.Europe, RescueType.Air, null!, ValidRewardOption()));
         }
 
         [Fact]
@@ -101,7 +104,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Domain.UnitTests.Entities
             // Arrange
 
             // Act & Assert
-            Assert.Throws<ArgumentNullException>(() => new DisasterCard(1, "Test", "slug", 9, BoardLocation.Europe, RescueType.Air, ValidBonusCondition(), null!));
+            Assert.Throws<ArgumentNullException>(() => new DisasterCard(1, "Test", _validCode, 9, BoardLocation.Europe, RescueType.Air, ValidBonusCondition(), null!));
         }
 
         [Fact]
@@ -110,7 +113,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Domain.UnitTests.Entities
             // Arrange
 
             // Act & Assert
-            Assert.Throws<ArgumentOutOfRangeException>(() => new DisasterCard(1, "Test", "slug", 9, BoardLocation.Europe, RescueType.Air, [], ValidRewardOption()));
+            Assert.Throws<ArgumentOutOfRangeException>(() => new DisasterCard(1, "Test", _validCode, 9, BoardLocation.Europe, RescueType.Air, [], ValidRewardOption()));
         }
 
         [Fact]
@@ -119,7 +122,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Domain.UnitTests.Entities
             // Arrange
 
             // Act & Assert
-            Assert.Throws<ArgumentOutOfRangeException>(() => new DisasterCard(1, "Test", "slug", 9, BoardLocation.Europe, RescueType.Air, ValidBonusCondition(), []));
+            Assert.Throws<ArgumentOutOfRangeException>(() => new DisasterCard(1, "Test", _validCode, 9, BoardLocation.Europe, RescueType.Air, ValidBonusCondition(), []));
         }
 
         [Fact]
@@ -130,7 +133,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Domain.UnitTests.Entities
             conditions.Add(null!);
 
             // Act & Assert
-            Assert.Throws<ArgumentException>(() => new DisasterCard(1, "Test", "slug", 9, BoardLocation.Europe, RescueType.Air, conditions, ValidRewardOption()));
+            Assert.Throws<ArgumentException>(() => new DisasterCard(1, "Test", _validCode, 9, BoardLocation.Europe, RescueType.Air, conditions, ValidRewardOption()));
         }
 
         [Fact]
@@ -141,7 +144,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Domain.UnitTests.Entities
             rewards.Add(null!);
 
             // Act & Assert
-            Assert.Throws<ArgumentException>(() => new DisasterCard(1, "Test", "slug", 9, BoardLocation.Europe, RescueType.Air, ValidBonusCondition(), rewards));
+            Assert.Throws<ArgumentException>(() => new DisasterCard(1, "Test", _validCode, 9, BoardLocation.Europe, RescueType.Air, ValidBonusCondition(), rewards));
         }
 
         [Fact]
@@ -152,7 +155,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Domain.UnitTests.Entities
             conditions.Add(new CharacterBonusCondition(Character.Virgil, 1, BoardLocation.NorthPacific)); // Duplicate character used
 
             // Act & Assert
-            Assert.Throws<ArgumentException>(() => new DisasterCard(1, "Test", "slug", 9, BoardLocation.Europe, RescueType.Air, conditions, ValidRewardOption()));
+            Assert.Throws<ArgumentException>(() => new DisasterCard(1, "Test", _validCode, 9, BoardLocation.Europe, RescueType.Air, conditions, ValidRewardOption()));
         }
 
         [Fact]
@@ -163,7 +166,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Domain.UnitTests.Entities
             conditions.Add(new CharacterBonusCondition(Character.Scott, 1, BoardLocation.NorthPacific)); // Different character used
 
             // Act
-            var card = new DisasterCard(1, "Test", "slug", 9, BoardLocation.Europe, RescueType.Air, conditions, ValidRewardOption());
+            var card = new DisasterCard(1, "Test", _validCode, 9, BoardLocation.Europe, RescueType.Air, conditions, ValidRewardOption());
 
             // Assert
             Assert.NotNull(card);
@@ -180,7 +183,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Domain.UnitTests.Entities
             conditions.Add(new ThunderbirdBonusCondition(ThunderbirdMachine.Thunderbird2, 1, BoardLocation.NorthPacific)); // Duplicate Thunderbird used
 
             // Act & Assert
-            Assert.Throws<ArgumentException>(() => new DisasterCard(1, "Test", "slug", 9, BoardLocation.Europe, RescueType.Air, conditions, ValidRewardOption()));
+            Assert.Throws<ArgumentException>(() => new DisasterCard(1, "Test", _validCode, 9, BoardLocation.Europe, RescueType.Air, conditions, ValidRewardOption()));
         }
 
         [Fact]
@@ -190,7 +193,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Domain.UnitTests.Entities
             var conditions = ValidBonusCondition();
             conditions.Add(new ThunderbirdBonusCondition(ThunderbirdMachine.Thunderbird3, 1, BoardLocation.NorthPacific)); // Different Thunderbird used
             // Act
-            var card = new DisasterCard(1, "Test", "slug", 9, BoardLocation.Europe, RescueType.Air, conditions, ValidRewardOption());
+            var card = new DisasterCard(1, "Test", _validCode, 9, BoardLocation.Europe, RescueType.Air, conditions, ValidRewardOption());
             // Assert
             Assert.NotNull(card);
             Assert.Equal(4, card.BonusConditions.Count);
@@ -205,7 +208,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Domain.UnitTests.Entities
             var conditions = ValidBonusCondition();
             conditions.Add(new PodVehicleBonusCondition(PodVehicle.Firefly, 1)); // Duplicate Pod Vehicle used
             // Act & Assert
-            Assert.Throws<ArgumentException>(() => new DisasterCard(1, "Test", "slug", 9, BoardLocation.Europe, RescueType.Air, conditions, ValidRewardOption()));
+            Assert.Throws<ArgumentException>(() => new DisasterCard(1, "Test", _validCode, 9, BoardLocation.Europe, RescueType.Air, conditions, ValidRewardOption()));
         }
 
         [Fact]
@@ -215,7 +218,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Domain.UnitTests.Entities
             var conditions = ValidBonusCondition();
             conditions.Add(new PodVehicleBonusCondition(PodVehicle.Domo, 1)); // Different Pod Vehicle used
             // Act
-            var card = new DisasterCard(1, "Test", "slug", 9, BoardLocation.Europe, RescueType.Air, conditions, ValidRewardOption());
+            var card = new DisasterCard(1, "Test", _validCode, 9, BoardLocation.Europe, RescueType.Air, conditions, ValidRewardOption());
             // Assert
             Assert.NotNull(card);
             Assert.Equal(4, card.BonusConditions.Count);
@@ -231,7 +234,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Domain.UnitTests.Entities
             conditions.Add(new UnknownBonusCondition(2)); // Unknown bonus condition type
 
             // Act & Assert
-            Assert.Throws<ArgumentException>(() => new DisasterCard(1, "Test", "slug", 9, BoardLocation.Europe, RescueType.Air, conditions, ValidRewardOption()));
+            Assert.Throws<ArgumentException>(() => new DisasterCard(1, "Test", _validCode, 9, BoardLocation.Europe, RescueType.Air, conditions, ValidRewardOption()));
         }
 
         [Theory]
@@ -242,7 +245,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Domain.UnitTests.Entities
             // Arrange
 
             // Act
-            var card = new DisasterCard(1, "Rescue Mission", "slug", difficultyNumber, BoardLocation.NorthAmerica, RescueType.Sea,
+            var card = new DisasterCard(1, "Rescue Mission", _validCode, difficultyNumber, BoardLocation.NorthAmerica, RescueType.Sea,
                 ValidBonusCondition(), ValidRewardOption());
 
             // Assert
@@ -267,22 +270,22 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Domain.UnitTests.Entities
             // Arrange
 
             // Act
-            var card = new DisasterCard(1, "Test", input, 5, BoardLocation.Europe, RescueType.Air,
+            var card = new DisasterCard(1, "Test", new CardCode(input), 5, BoardLocation.Europe, RescueType.Air,
                 ValidBonusCondition(), ValidRewardOption());
 
             // Assert
             Assert.NotNull(card);
-            Assert.Equal(expected, card.Code);
+            Assert.Equal(expected, card.Code.ToString());
         }
 
         [Theory]
         [ClassData(typeof(WhitespaceStringData))]
-        public void Constructor_WhenCodeWhiteSpace_ThrowsArgumentException(string? code)
+        public void Constructor_WhenCodeWhiteSpace_ThrowsArgumentException(string code)
         {
             // Arrange
 
             // Act & Assert
-            var exception = Assert.Throws<ArgumentException>(() => new DisasterCard(1, "Test", code!, 5, BoardLocation.Europe, RescueType.Air,
+            var exception = Assert.Throws<ArgumentException>(() => new DisasterCard(1, "Test", new CardCode(code), 5, BoardLocation.Europe, RescueType.Air,
                 ValidBonusCondition(), ValidRewardOption()));
             Assert.Contains("code", exception.Message, StringComparison.OrdinalIgnoreCase);
         }
@@ -293,7 +296,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Domain.UnitTests.Entities
             // Arrange
 
             // Act & Assert
-            var exception = Assert.Throws<ArgumentNullException>(() => new DisasterCard(1, "Test", null!, 5, BoardLocation.Europe, RescueType.Air,
+            var exception = Assert.Throws<ArgumentNullException>(() => new DisasterCard(1, "Test", new CardCode(null), 5, BoardLocation.Europe, RescueType.Air,
                 ValidBonusCondition(), ValidRewardOption()));
 
             Assert.Contains("code", exception.ParamName!, StringComparison.OrdinalIgnoreCase);
@@ -311,7 +314,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Domain.UnitTests.Entities
             // Arrange
 
             // Act & Assert
-            var exception = Assert.Throws<ArgumentException>(() => new DisasterCard(1, "Test", bad, 5, BoardLocation.Europe, RescueType.Air,
+            var exception = Assert.Throws<ArgumentException>(() => new DisasterCard(1, "Test", new CardCode(bad), 5, BoardLocation.Europe, RescueType.Air,
                 ValidBonusCondition(), ValidRewardOption()));
 
             Assert.Contains("Invalid code format", exception.Message);
@@ -326,7 +329,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Domain.UnitTests.Entities
             // Arrange
 
             // Act & Assert
-            var exception = Assert.Throws<ArgumentException>(() => new DisasterCard(1, "Test", code, 5, BoardLocation.Europe, RescueType.Air,
+            var exception = Assert.Throws<ArgumentException>(() => new DisasterCard(1, "Test", new CardCode(code), 5, BoardLocation.Europe, RescueType.Air,
                 ValidBonusCondition(), ValidRewardOption()));
             Assert.Contains("Invalid code format", exception.Message);
         }

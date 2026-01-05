@@ -1,6 +1,7 @@
 ﻿using ThunderbirdsBoardGameEngine.Catalog.Application.Factories;
 using ThunderbirdsBoardGameEngine.Catalog.Application.Interfaces;
 using ThunderbirdsBoardGameEngine.Catalog.Domain.Entities;
+using ThunderbirdsBoardGameEngine.PublishedLanguage.DisasterBonus;
 using ThunderbirdsBoardGameEngine.Rules.Application.Rescue.Interfaces;
 using ThunderbirdsBoardGameEngine.Rules.Domain.Rescue;
 
@@ -15,9 +16,9 @@ namespace ThunderbirdsBoardGameEngine.Rules.Infrastructure.Lookups
             _disasterCardReferenceSource = disasterCardReferenceSource ?? throw new ArgumentNullException(nameof(disasterCardReferenceSource));
         }
 
-        public DisasterContribution GetDisasterContribution(int disasterCardId)
+        public DisasterContribution GetDisasterContribution(CardCode disasterCode)
         {
-            var disasterCard = _disasterCardReferenceSource.GetById(disasterCardId);
+            var disasterCard = _disasterCardReferenceSource.GetByCode(disasterCode);
 
             return new DisasterContribution
             (

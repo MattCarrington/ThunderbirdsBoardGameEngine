@@ -13,7 +13,7 @@ namespace ThunderbirdsBoardGameEngine.Api.UnitTests.Mappers.Rules.V1
         public void ToQuery_ValidDto_ReturnsExpectedQuery()
         {
             // Arrange
-            var disasterCardId = 5;
+            var disasterCardCode = new CardCode("card-code-123");
 
             var dto = new CalculateRescueTargetRequestDto
             {
@@ -21,10 +21,10 @@ namespace ThunderbirdsBoardGameEngine.Api.UnitTests.Mappers.Rules.V1
             };
 
             // Act
-            var result = dto.ToQuery(disasterCardId);
+            var result = dto.ToQuery(disasterCardCode.ToString());
 
             // Assert
-            Assert.Equal(disasterCardId, result.DisasterCardId);
+            Assert.Equal(disasterCardCode, result.DisasterCardCode);
             Assert.Equal(dto.PresentDisasterBonusKeys.Select(k => new DisasterBonusKey(k)), result.RescueCalculationInput.PresentDisasterBonusKeys);
         }
 

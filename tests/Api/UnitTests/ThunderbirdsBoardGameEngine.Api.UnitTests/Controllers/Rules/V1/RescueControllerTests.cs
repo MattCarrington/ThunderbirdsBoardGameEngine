@@ -14,7 +14,7 @@ namespace ThunderbirdsBoardGameEngine.Api.UnitTests.Controllers.Rules.V1
         public async Task CalculateRescueTarget_WhenCalled_ReturnsOkAsync()
         {
             // Arrange
-            var cardId = 1;
+            var cardCode = "card-code";
 
             var request = new CalculateRescueTargetRequestDto
             {
@@ -28,7 +28,7 @@ namespace ThunderbirdsBoardGameEngine.Api.UnitTests.Controllers.Rules.V1
             var controller = CreateController(mediator);
 
             // Act
-            var result = await controller.CalculateRescueTarget(cardId, request, CancellationToken.None);
+            var result = await controller.CalculateRescueTarget(cardCode, request, CancellationToken.None);
 
             // Assert
             var okResult = Assert.IsType<OkObjectResult>(result);

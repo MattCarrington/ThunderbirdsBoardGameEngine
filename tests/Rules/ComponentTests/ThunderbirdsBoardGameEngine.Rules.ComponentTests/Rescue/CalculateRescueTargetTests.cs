@@ -20,7 +20,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Rescue
             var sunProbe = new DisasterCard(
                 id: 1,
                 name: "Sun Probe",
-                code: "sun-probe",
+                code: new CardCode("sun-probe"),
                 difficultyNumber: 11,
                 location: BoardLocation.Sun,
                 rescueType: RescueType.Space,
@@ -39,7 +39,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Rescue
             var pitOfPeril = new DisasterCard(
                 id: 2,
                 name: "Pit of Peril",
-                code: "pit-of-peril",
+                code: new CardCode("pit-of-peril"),
                 difficultyNumber: 11,
                 location: BoardLocation.Africa,
                 rescueType: RescueType.Land,
@@ -59,7 +59,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Rescue
             var terrorInNewYorkCity = new DisasterCard(
                 id: 3,
                 name: "Terror in New York City",
-                code: "terror-in-new-york-city",
+                code: new CardCode("terror-in-new-york-city"),
                 difficultyNumber: 11,
                 location: BoardLocation.NorthAmerica,
                 rescueType: RescueType.Sea,
@@ -80,7 +80,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Rescue
 
             var request = new CalculateRescueTargetQuery
             (
-                DisasterCardId: 1,
+                DisasterCardCode: new CardCode("sun-probe"),
                 RescueCalculationInput: new([new DisasterBonusKey("character:scott"), new DisasterBonusKey("podvehicle:transmittertruck")])
             );
 

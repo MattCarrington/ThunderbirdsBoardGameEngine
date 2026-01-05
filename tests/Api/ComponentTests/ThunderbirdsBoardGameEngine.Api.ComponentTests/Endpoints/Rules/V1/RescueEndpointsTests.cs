@@ -13,9 +13,9 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints.Rules.V1
         private readonly HttpClient _client;
 
         private const int ApiVersion = 1;
-        private const int DisasterCardId = 7;
+        private const string DisasterCardCode = "they-call-him-mr-x";
 
-        private static readonly string _route = $"/api/rules/rescue/{DisasterCardId}/target";
+        private static readonly string _route = $"/api/rules/rescue/{DisasterCardCode}/target";
 
         private static readonly CalculateRescueTargetRequestDto _requestDto = new()
         {
@@ -104,7 +104,7 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints.Rules.V1
         public async Task CalculateRescueTarget_WhenCardDoesNotExist_ReturnsNotFound()
         {
             // Arrange
-            var route = $"/api/rules/rescue/999/target";
+            var route = $"/api/rules/rescue/card-does-not-exist/target";
 
             using var request = new HttpRequestMessage(HttpMethod.Post, route);
             request.Headers.Add("X-API-Version", ApiVersion.ToString());

@@ -16,7 +16,7 @@ namespace ThunderbirdsBoardGameEngine.Api.UnitTests.Handlers
         public async Task TryHandleAsync_WhenDisasterCardNotFoundException_ReturnsTrueAsync()
         {
             // Arrange
-            var exception = new DisasterCardNotFoundException(88);
+            var exception = new DisasterCardNotFoundException("88");
 
             var service = ExceptionHandlerHelper.CreateProblemsDetailService();
 

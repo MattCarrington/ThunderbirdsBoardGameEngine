@@ -3,6 +3,7 @@ using ThunderbirdsBoardGameEngine.Catalog.Domain.Enums;
 using ThunderbirdsBoardGameEngine.Catalog.Domain.Exceptions;
 using ThunderbirdsBoardGameEngine.Catalog.Format.Dtos;
 using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Interfaces;
+using ThunderbirdsBoardGameEngine.PublishedLanguage.DisasterBonus;
 
 namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Mappers
 {
@@ -23,7 +24,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Mappers
                 return new DisasterCard(
                     dto.Id,
                     dto.Name,
-                    dto.Code,
+                    new CardCode(dto.Code),
                     dto.DifficultyNumber,
                     location,
                     rescueType,

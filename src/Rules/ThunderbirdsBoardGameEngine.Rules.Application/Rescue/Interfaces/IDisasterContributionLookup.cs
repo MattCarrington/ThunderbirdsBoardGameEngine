@@ -1,9 +1,10 @@
-﻿using ThunderbirdsBoardGameEngine.Rules.Domain.Rescue;
+﻿using ThunderbirdsBoardGameEngine.PublishedLanguage.DisasterBonus;
+using ThunderbirdsBoardGameEngine.Rules.Domain.Rescue;
 
 namespace ThunderbirdsBoardGameEngine.Rules.Application.Rescue.Interfaces
 {
     public interface IDisasterContributionLookup
     {
-        DisasterContribution GetDisasterContribution(int disasterCardId);
+        DisasterContribution GetDisasterContribution(CardCode disasterCode);
     }
 }

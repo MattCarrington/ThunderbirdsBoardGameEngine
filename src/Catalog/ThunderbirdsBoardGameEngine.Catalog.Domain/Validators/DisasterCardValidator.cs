@@ -32,9 +32,9 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Domain.Validators
                     throw DisasterCardValidationException.DuplicateName(card.Id, card.Name);
                 }
 
-                if (!codes.Add(card.Code))
+                if (!codes.Add(card.Code.Value))
                 {
-                    throw DisasterCardValidationException.DuplicateCode(card.Id, card.Name, card.Code);
+                    throw DisasterCardValidationException.DuplicateCode(card.Id, card.Name, card.Code.Value);
                 }
             }
         }

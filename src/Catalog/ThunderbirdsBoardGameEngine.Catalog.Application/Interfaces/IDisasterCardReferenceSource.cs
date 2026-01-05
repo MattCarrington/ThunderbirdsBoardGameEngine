@@ -1,5 +1,6 @@
 ﻿using System.Collections.Immutable;
 using ThunderbirdsBoardGameEngine.Catalog.Domain.Entities;
+using ThunderbirdsBoardGameEngine.PublishedLanguage.DisasterBonus;
 
 namespace ThunderbirdsBoardGameEngine.Catalog.Application.Interfaces
 {
@@ -24,6 +25,6 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Application.Interfaces
         /// </summary>
         ImmutableArray<DisasterCard> Cards { get; }
 
-        DisasterCard GetById(int id);
+        DisasterCard GetByCode(CardCode disasterCardCode);
     }
 }

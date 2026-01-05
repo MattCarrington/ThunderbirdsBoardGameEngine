@@ -1,5 +1,6 @@
 ﻿using ThunderbirdsBoardGameEngine.Catalog.Domain.Entities;
 using ThunderbirdsBoardGameEngine.Catalog.Domain.Enums;
+using ThunderbirdsBoardGameEngine.PublishedLanguage.DisasterBonus;
 
 namespace ThunderbirdsBoardGameEngine.TestUtils.Catalog.Builders
 {
@@ -7,7 +8,7 @@ namespace ThunderbirdsBoardGameEngine.TestUtils.Catalog.Builders
     {
         private int _id = 1;
         private string _name = "Test Disaster";
-        private string _code = "test-disaster";
+        private CardCode _code = new CardCode("test-disaster");
         private int _difficultyNumber = 8;
         private BoardLocation _location = BoardLocation.NorthPacific;
         private RescueType _rescueType = RescueType.Sea;
@@ -28,7 +29,7 @@ namespace ThunderbirdsBoardGameEngine.TestUtils.Catalog.Builders
 
         public DisasterCardBuilder WithCode(string code)
         {
-            _code = code;
+            _code = new CardCode(code);
             return this;
         }
 

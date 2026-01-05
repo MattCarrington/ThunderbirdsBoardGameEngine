@@ -2,6 +2,7 @@
 using ThunderbirdsBoardGameEngine.Catalog.Application.Interfaces;
 using ThunderbirdsBoardGameEngine.Catalog.Domain.Entities;
 using ThunderbirdsBoardGameEngine.Catalog.Domain.Enums;
+using ThunderbirdsBoardGameEngine.PublishedLanguage.DisasterBonus;
 using ThunderbirdsBoardGameEngine.Rules.Domain.Rescue;
 using ThunderbirdsBoardGameEngine.Rules.Infrastructure.Lookups;
 using ThunderbirdsBoardGameEngine.TestUtils.Catalog.Builders;
@@ -22,6 +23,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Infrastructure.UnitTests.Lookups
             var disasterCard = new DisasterCardBuilder()
                 .WithId(1)
                 .WithName("Test Disaster Card")
+                .WithCode("test-disaster-card")
                 .WithDifficulty(7)
                 .WithBonusCondition(characterBonus)
                 .WithBonusCondition(thunderbirdBonus)
@@ -29,12 +31,12 @@ namespace ThunderbirdsBoardGameEngine.Rules.Infrastructure.UnitTests.Lookups
                 .Build();
 
             var catalog = Substitute.For<IDisasterCardReferenceSource>();
-            catalog.GetById(disasterCard.Id).Returns(disasterCard);
+            catalog.GetByCode(Arg.Any<CardCode>()).Returns(disasterCard);
 
             var lookup = new CatalogDisasterContributionLookup(catalog);
 
             // Act
-            var rescueContext = lookup.GetDisasterContribution(disasterCard.Id);
+            var rescueContext = lookup.GetDisasterContribution(disasterCard.Code);
 
             // Assert
             Assert.NotNull(rescueContext);

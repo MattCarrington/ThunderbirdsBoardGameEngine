@@ -2,12 +2,13 @@
 using System.Collections.Immutable;
 using ThunderbirdsBoardGameEngine.Catalog.Application.Interfaces;
 using ThunderbirdsBoardGameEngine.Catalog.Domain.Entities;
+using ThunderbirdsBoardGameEngine.PublishedLanguage.DisasterBonus;
 
 namespace ThunderbirdsBoardGameEngine.Rules.Application.ComponentTests.Fakes
 {
     public class FakeDisasterCardReferenceSource : IDisasterCardReferenceSource
     {
-        private readonly FrozenDictionary<int, DisasterCard> _cards;
+        private readonly FrozenDictionary<CardCode, DisasterCard> _cards;
 
         public string Version => "test";
 
@@ -15,12 +16,12 @@ namespace ThunderbirdsBoardGameEngine.Rules.Application.ComponentTests.Fakes
 
         public FakeDisasterCardReferenceSource(params DisasterCard[] disasterCards)
         {
-            _cards = disasterCards.ToFrozenDictionary(card => card.Id);
+            _cards = disasterCards.ToFrozenDictionary(card => card.Code);
         }
 
-        public DisasterCard GetById(int id)
+        public DisasterCard GetByCode(CardCode disasterCardCode)
         {
-            return _cards[id];
+            return _cards[disasterCardCode];
         }
     }
 }
