@@ -31,7 +31,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Client.IntegrationTests.Clients.V1
             Assert.True(response.Success);
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
             Assert.Null(response.ErrorMessage);
-            
+
             var result = Assert.IsType<CalculateRescueTargetResponseDto>(response.Data, exactMatch: false);
             Assert.NotNull(result);
             Assert.Equal(7, result.TargetNumber);
