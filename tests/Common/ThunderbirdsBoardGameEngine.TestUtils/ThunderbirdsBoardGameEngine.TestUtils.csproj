@@ -23,6 +23,7 @@
     <ProjectReference Include="..\..\..\src\Catalog\ThunderbirdsBoardGameEngine.Catalog.Contracts\ThunderbirdsBoardGameEngine.Catalog.Contracts.csproj" />
     <ProjectReference Include="..\..\..\src\Catalog\ThunderbirdsBoardGameEngine.Catalog.Domain\ThunderbirdsBoardGameEngine.Catalog.Domain.csproj" />
     <ProjectReference Include="..\..\..\src\Catalog\ThunderbirdsBoardGameEngine.Catalog.Format\ThunderbirdsBoardGameEngine.Catalog.Format.csproj" />
+    <ProjectReference Include="..\..\..\src\Rules\ThunderbirdsBoardGameEngine.Rules.Client\ThunderbirdsBoardGameEngine.Rules.Client.csproj" />
   </ItemGroup>
 	
 </Project>
