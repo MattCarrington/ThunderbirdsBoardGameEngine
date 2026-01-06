@@ -28,6 +28,8 @@ COPY ["src/Rules/ThunderbirdsBoardGameEngine.Rules.Domain/ThunderbirdsBoardGameE
 
 COPY ["src/Ui/ThunderbirdsBoardGameEngine.UI/ThunderbirdsBoardGameEngine.UI.csproj", "Ui/ThunderbirdsBoardGameEngine.UI/"]
 COPY ["src/Catalog/ThunderbirdsBoardGameEngine.Catalog.Client/ThunderbirdsBoardGameEngine.Catalog.Client.csproj", "Catalog/ThunderbirdsBoardGameEngine.Catalog.Client/"]
+COPY ["src/Rules/ThunderbirdsBoardGameEngine.Rules.Client/ThunderbirdsBoardGameEngine.Rules.Client.csproj", "Rules/ThunderbirdsBoardGameEngine.Rules.Client/"]
+COPY ["src/Common/ThunderbirdsBoardGameEngine.Client.Infrastructure/ThunderbirdsBoardGameEngine.Client.Infrastructure.csproj", "Common/ThunderbirdsBoardGameEngine.Client.Infrastructure/"]
 
 RUN dotnet restore "./Api/ThunderbirdsBoardGameEngine.Api/ThunderbirdsBoardGameEngine.Api.csproj"
 
