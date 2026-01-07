@@ -12,71 +12,80 @@ namespace ThunderbirdsBoardGameEngine.Api.UnitTests.Mappers.Catalog.V1
     public class DisasterCardMappingExtensionsTests
     {
         [Fact]
-        public void MapBonusDto_WhenCharacterBonus_ShouldCorrectlyMapBonusDto()
+        public void ToDto_WhenCharacterBonus_ShouldCorrectlyMapBonusDto()
         {
             // Arrange
             var characterBonusCondition = new CharacterBonusCondition(Character.Virgil, 2);
 
+            var disasterCard = new DisasterCardBuilder()
+                .WithBonusCondition(characterBonusCondition)
+                .Build();
+
             // Act
-            var result = characterBonusCondition.ToDto();
+            var result = disasterCard.ToDto();
 
             // Assert
             var expectedDescription = GetExpectedDescription(EnumDisplayHelper.GetDisplayName(characterBonusCondition.Character), characterBonusCondition.BonusValue);
 
-            Assert.Equal(expectedDescription, result.Description);
+            var bonusDto = Assert.Single(result.BonusConditions);
+            Assert.IsType<BonusConditionDto>(bonusDto);
+            Assert.Equal(expectedDescription, bonusDto.Description);
         }
 
         [Fact]
-        public void MapBonusConditionDto_WhenThunderbirdsBonus_ShouldCorrectlyMapBonusDto()
+        public void ToDto_WhenThunderbirdsBonus_ShouldCorrectlyMapBonusDto()
         {
             // Arrange
             var thunderbirdBonusCondition = new ThunderbirdBonusCondition(ThunderbirdMachine.Thunderbird4, 3);
 
+            var disasterCard = new DisasterCardBuilder()
+                .WithBonusCondition(thunderbirdBonusCondition)
+                .Build();
+
             // Act
-            var result = thunderbirdBonusCondition.ToDto();
+            var result = disasterCard.ToDto();
 
             // Assert
             var expectedDescription = GetExpectedDescription(EnumDisplayHelper.GetDisplayName(thunderbirdBonusCondition.Thunderbird), thunderbirdBonusCondition.BonusValue);
 
-            Assert.Equal(expectedDescription, result.Description);
+            var bonusDto = Assert.Single(result.BonusConditions);
+            Assert.IsType<BonusConditionDto>(bonusDto);
+            Assert.Equal(expectedDescription, bonusDto.Description);
         }
 
         [Fact]
-        public void MapBonusConditionDto_WhenPodVehicleBonus_ShouldCorrectlyMapBonusDto()
+        public void ToDto_WhenPodVehicleBonus_ShouldCorrectlyMapBonusDto()
         {
             // Arrange
             var podVehicleBonusCondition = new PodVehicleBonusCondition(PodVehicle.LaserCutter, 2);
 
+            var disasterCard = new DisasterCardBuilder()
+                .WithBonusCondition(podVehicleBonusCondition)
+                .Build();
+
             // Act
-            var result = podVehicleBonusCondition.ToDto();
+            var result = disasterCard.ToDto();
 
             // Assert
             var expectedDescription = GetExpectedDescription(EnumDisplayHelper.GetDisplayName(podVehicleBonusCondition.PodVehicle), podVehicleBonusCondition.BonusValue);
 
-            Assert.Equal(expectedDescription, result.Description);
+            var bonusDto = Assert.Single(result.BonusConditions);
+            Assert.IsType<BonusConditionDto>(bonusDto);
+            Assert.Equal(expectedDescription, bonusDto.Description);
         }
 
         [Fact]
-        public void MapBonusConditionDto_WhenUnknownBonusCondition_ThrowsInvalidOperationException()
-        {
-            // Arrange
-            var unknownBonusCondition = new UnknownBonusCondition();
-
-            // Act & Assert
-            var ex = Assert.Throws<ApplicationValidationException>(() =>
-                unknownBonusCondition.ToDto());
-
-            Assert.Equal("Unknown bonus condition type", ex.Message);
-        }
-
-        [Fact]
-        public void Map_WhenBonusHasLocation_ShouldCorrectlyMapBonusDto()
+        public void ToDto_WhenBonusHasLocation_ShouldCorrectlyMapBonusDto()
         {
             // Arrange
             var characterBonusCondition = new CharacterBonusCondition(Character.Gordon, 2, BoardLocation.Venus);
 
+            var disasterCard = new DisasterCardBuilder()
+                .WithBonusCondition(characterBonusCondition)
+                .Build();
+
             // Act
-            var result = characterBonusCondition.ToDto();
+            var result = disasterCard.ToDto();
 
             // Assert
             var expectedDescription = GetExpectedDescription(
@@ -84,17 +93,23 @@ namespace ThunderbirdsBoardGameEngine.Api.UnitTests.Mappers.Catalog.V1
                 characterBonusCondition.BonusValue,
                 characterBonusCondition.Location);
 
-            Assert.Equal(expectedDescription, result.Description); // This should include "in Venus" in the description
+            var bonusDto = Assert.Single(result.BonusConditions);
+            Assert.IsType<BonusConditionDto>(bonusDto);
+            Assert.Equal(expectedDescription, bonusDto.Description); // This should include "in Venus" in the description
         }
 
         [Fact]
-        public void Map_WhenBonusHasGeoStationaryOrbitLocation_ShouldCorrectlyMapBonusDto()
+        public void ToDto_WhenBonusHasGeoStationaryOrbitLocation_ShouldCorrectlyMapBonusDto()
         {
             // Arrange
             var characterBonusCondition = new CharacterBonusCondition(Character.LadyPenelope, 3, BoardLocation.GeoStationaryOrbit);
 
+            var disasterCard = new DisasterCardBuilder()
+                .WithBonusCondition(characterBonusCondition)
+                .Build();
+
             // Act
-            var result = characterBonusCondition.ToDto();
+            var result = disasterCard.ToDto();
 
             // Assert
             var expectedDescription = GetExpectedDescription(
@@ -102,39 +117,49 @@ namespace ThunderbirdsBoardGameEngine.Api.UnitTests.Mappers.Catalog.V1
                 characterBonusCondition.BonusValue,
                 characterBonusCondition.Location);
 
-            Assert.Equal(expectedDescription, result.Description); // This should include "on Thunderbird 5" in the description
+            var bonusDto = Assert.Single(result.BonusConditions);
+            Assert.IsType<BonusConditionDto>(bonusDto);
+            Assert.Equal(expectedDescription, bonusDto.Description); // This should include "on Thunderbird 5" in the description
         }
 
         [Fact]
-        public void MapRewardDto_WhenUserChoiceToken_ShouldCorrectlyMapRewardDto()
+        public void ToDto_WhenUserChoiceToken_ShouldCorrectlyMapRewardDto()
         {
             // Arrange
-            var rewardOption = RewardOption.PlayerChoice();
+            var disasterCard = new DisasterCardBuilder()
+                .WithUserChoiceRewardOption()
+                .Build();
 
             // Act
-            var result = rewardOption.ToDto();
+            var result = disasterCard.ToDto();
 
-            // Assert            
-            Assert.Equal("Player Choice", result.DisplayName);
+            // Assert  
+            var reward = Assert.Single(result.Rewards);
+            Assert.IsType < RewardDto>(reward);
+            Assert.Equal("Player Choice", reward.DisplayName);
         }
 
         [Fact]
-        public void MapRewardDto_WhenSpecifiedToken_ShouldCorrectlyMapRewardDto()
+        public void ToDto_WhenSpecifiedToken_ShouldCorrectlyMapRewardDto()
         {
             // Arrange
             var rewardToken = BonusToken.Technology;
 
-            var rewardOption = RewardOption.SpecifiedToken(rewardToken);
+            var disasterCard = new DisasterCardBuilder()
+                .WithSpecifiedReward(rewardToken)
+                .Build();
 
             // Act
-            var result = rewardOption.ToDto();
+            var result = disasterCard.ToDto();
 
             // Assert            
-            Assert.Equal(rewardToken.ToString(), result.DisplayName);
+            var reward = Assert.Single(result.Rewards);
+            Assert.IsType<RewardDto>(reward);
+            Assert.Equal(rewardToken.ToString(), reward.DisplayName);
         }
 
         [Fact]
-        public void MapDisasterCardDto_WhenDisasterCard_ShouldCorrectlyMapDisasterCardDto()
+        public void ToDto_WhenDisasterCard_ShouldCorrectlyMapDisasterCardDto()
         {
             // Arrange
             var disasterCard = new DisasterCardBuilder().Build();
@@ -153,7 +178,7 @@ namespace ThunderbirdsBoardGameEngine.Api.UnitTests.Mappers.Catalog.V1
         }
 
         [Fact]
-        public void MapDisasterCardDto_WhenMultiplePodVehicleBonus_ShouldCorrectlyMapBonusDto()
+        public void ToDto_WhenMultiplePodVehicleBonus_ShouldCorrectlyMapBonusDto()
         {
             // Arrange
             var mobileCraneBonusCondition = new PodVehicleBonusCondition(PodVehicle.MobileCrane, 2);
@@ -192,7 +217,7 @@ namespace ThunderbirdsBoardGameEngine.Api.UnitTests.Mappers.Catalog.V1
         }
 
         [Fact]
-        public void Map_WhenDifferentBonus_ShouldCorrectlyMapBonusDto()
+        public void To_WhenDifferentBonus_ShouldCorrectlyMapBonusDto()
         {
             // Arrange
             var characterBonusCondition = new CharacterBonusCondition(Character.Gordon, 2);
@@ -223,7 +248,7 @@ namespace ThunderbirdsBoardGameEngine.Api.UnitTests.Mappers.Catalog.V1
         }
 
         [Fact]
-        public void Map_WhenSpecifiedAndUserChoiceRewards_ShouldCorrectlyMapRewardDtos()
+        public void ToDto_WhenSpecifiedAndUserChoiceRewards_ShouldCorrectlyMapRewardDtos()
         {
             // Arrange
             var disasterCard = new DisasterCardBuilder()
@@ -241,7 +266,7 @@ namespace ThunderbirdsBoardGameEngine.Api.UnitTests.Mappers.Catalog.V1
         }
 
         [Fact]
-        public void Map_WhenMultipleRewards_ShouldCorrectlyMapRewardDtos()
+        public void ToDto_WhenMultipleRewards_ShouldCorrectlyMapRewardDtos()
         {
             // Arrange
             var disasterCard = new DisasterCardBuilder()
@@ -294,13 +319,6 @@ namespace ThunderbirdsBoardGameEngine.Api.UnitTests.Mappers.Catalog.V1
             }
 
             return description;
-        }
-
-        private class UnknownBonusCondition : BonusCondition
-        {
-            public UnknownBonusCondition() : base(1, null)
-            {
-            }
         }
     }
 }
