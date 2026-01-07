@@ -16,5 +16,10 @@
         /// Examples: <c>"Virgil (+2)"</c>, <c>"Thunderbird 4 (+2) (if in Asia)"</c>.
         /// </summary>
         public string Description { get; init; } = string.Empty;
+
+        /// <summary>
+        /// Gets the unique identifier associated with this instance.
+        /// </summary>
+        public string Key { get; init; } = string.Empty;
     }
 }

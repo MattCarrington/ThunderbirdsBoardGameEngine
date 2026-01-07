@@ -2,6 +2,6 @@
 {
     public static class ApiVersionInfo
     {
-        public const string CatalogVersion = "0.1.0";
+        public const string CatalogVersion = "0.2.0";
     }
 }

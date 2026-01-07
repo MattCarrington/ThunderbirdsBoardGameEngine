@@ -38,7 +38,8 @@ namespace ThunderbirdsBoardGameEngine.TestUtils.Catalog.EqualityComparers
                 && x.Location == y.Location
                 && x.RescueType == y.RescueType
                 && xBonusConditions.SequenceEqual(yBonusConditions, BonusConditionDtoEqualityComparer.Instance)
-                && xRewards.SequenceEqual(yRewards, RewardDtoEqualityComparer.Instance);
+                && xRewards.SequenceEqual(yRewards, RewardDtoEqualityComparer.Instance)
+                && x.Code == y.Code;
         }
 
         /// <inheritdoc />

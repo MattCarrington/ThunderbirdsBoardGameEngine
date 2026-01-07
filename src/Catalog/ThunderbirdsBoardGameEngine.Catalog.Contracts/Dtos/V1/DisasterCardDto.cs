@@ -61,5 +61,10 @@
         /// "Teamwork", "Determination", "Logistics", "Intelligence", "Technology", or "Player Choice".
         /// </remarks>
         public IReadOnlyList<RewardDto> Rewards { get; init; } = [];
+
+        /// <summary>
+        /// Gets the code associated with this instance.
+        /// </summary>
+        public string Code { get; init; } = string.Empty;
     }
 }

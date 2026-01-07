@@ -1,5 +1,6 @@
 ﻿using ThunderbirdsBoardGameEngine.Api.Presentation;
 using ThunderbirdsBoardGameEngine.Catalog.Application.Exceptions;
+using ThunderbirdsBoardGameEngine.Catalog.Application.Factories;
 using ThunderbirdsBoardGameEngine.Catalog.Contracts.Dtos.V1;
 using ThunderbirdsBoardGameEngine.Catalog.Domain.Entities;
 using ThunderbirdsBoardGameEngine.Catalog.Domain.Enums;
@@ -18,7 +19,8 @@ namespace ThunderbirdsBoardGameEngine.Api.Mappers.Catalog.V1
                 Location = EnumDisplayHelper.GetDisplayName(disasterCard.Location),
                 RescueType = disasterCard.RescueType.ToString(),
                 BonusConditions = disasterCard.BonusConditions.Select(ToDto).ToList(),
-                Rewards = disasterCard.RewardOptions.Select(ToDto).ToList()
+                Rewards = disasterCard.RewardOptions.Select(ToDto).ToList(),
+                Code = disasterCard.Code.ToString()
             };
         }
 
@@ -29,12 +31,12 @@ namespace ThunderbirdsBoardGameEngine.Api.Mappers.Catalog.V1
 
         private static BonusConditionDto ToDto(this BonusCondition bonusCondition)
         {
-            var displayName = bonusCondition switch
+            var (displayName, key) = bonusCondition switch
             {
-                CharacterBonusCondition cb => EnumDisplayHelper.GetDisplayName(cb.Character),
-                ThunderbirdBonusCondition tb => EnumDisplayHelper.GetDisplayName(tb.Thunderbird),
-                PodVehicleBonusCondition pvb => EnumDisplayHelper.GetDisplayName(pvb.PodVehicle),
-                
+                CharacterBonusCondition cb => (EnumDisplayHelper.GetDisplayName(cb.Character), DisasterBonusKeyFactory.ForCharacter(cb.Character)),
+                ThunderbirdBonusCondition tb => (EnumDisplayHelper.GetDisplayName(tb.Thunderbird), DisasterBonusKeyFactory.ForThunderbird(tb.Thunderbird)),
+                PodVehicleBonusCondition pvb => (EnumDisplayHelper.GetDisplayName(pvb.PodVehicle), DisasterBonusKeyFactory.ForPodVehicle(pvb.PodVehicle)),
+
                 // Unreachable by design:
                 // DisasterCard enforces that all BonusCondition instances are known and validated
                 // at construction time. This guard exists to fail fast if that invariant is
@@ -61,7 +63,8 @@ namespace ThunderbirdsBoardGameEngine.Api.Mappers.Catalog.V1
 
             return new BonusConditionDto()
             {
-                Description = description
+                Description = description,
+                Key = key.ToString()
             };
         }
 

@@ -30,6 +30,7 @@ namespace ThunderbirdsBoardGameEngine.Api.UnitTests.Mappers.Catalog.V1
             var bonusDto = Assert.Single(result.BonusConditions);
             Assert.IsType<BonusConditionDto>(bonusDto);
             Assert.Equal(expectedDescription, bonusDto.Description);
+            Assert.Equal("character:virgil", bonusDto.Key);
         }
 
         [Fact]
@@ -51,6 +52,7 @@ namespace ThunderbirdsBoardGameEngine.Api.UnitTests.Mappers.Catalog.V1
             var bonusDto = Assert.Single(result.BonusConditions);
             Assert.IsType<BonusConditionDto>(bonusDto);
             Assert.Equal(expectedDescription, bonusDto.Description);
+            Assert.Equal("thunderbird:thunderbird4", bonusDto.Key);
         }
 
         [Fact]
@@ -72,6 +74,7 @@ namespace ThunderbirdsBoardGameEngine.Api.UnitTests.Mappers.Catalog.V1
             var bonusDto = Assert.Single(result.BonusConditions);
             Assert.IsType<BonusConditionDto>(bonusDto);
             Assert.Equal(expectedDescription, bonusDto.Description);
+            Assert.Equal("podvehicle:lasercutter", bonusDto.Key);
         }
 
         [Fact]
@@ -96,6 +99,7 @@ namespace ThunderbirdsBoardGameEngine.Api.UnitTests.Mappers.Catalog.V1
             var bonusDto = Assert.Single(result.BonusConditions);
             Assert.IsType<BonusConditionDto>(bonusDto);
             Assert.Equal(expectedDescription, bonusDto.Description); // This should include "in Venus" in the description
+            Assert.Equal("character:gordon", bonusDto.Key);
         }
 
         [Fact]
@@ -120,6 +124,7 @@ namespace ThunderbirdsBoardGameEngine.Api.UnitTests.Mappers.Catalog.V1
             var bonusDto = Assert.Single(result.BonusConditions);
             Assert.IsType<BonusConditionDto>(bonusDto);
             Assert.Equal(expectedDescription, bonusDto.Description); // This should include "on Thunderbird 5" in the description
+            Assert.Equal("character:ladypenelope", bonusDto.Key);
         }
 
         [Fact]
@@ -175,6 +180,7 @@ namespace ThunderbirdsBoardGameEngine.Api.UnitTests.Mappers.Catalog.V1
             Assert.Equal(EnumDisplayHelper.GetDisplayName(disasterCard.Location), result.Location);
             Assert.Equal(disasterCard.RescueType.ToString(), result.RescueType);
             Assert.Equal(disasterCard.DifficultyNumber, result.DifficultyNumber);
+            Assert.Equal(disasterCard.Code.ToString(), result.Code);
         }
 
         [Fact]

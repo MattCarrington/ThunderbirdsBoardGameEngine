@@ -13,7 +13,18 @@ namespace ThunderbirdsBoardGameEngine.TestUtils.Catalog.EqualityComparers
         /// <inheritdoc />
         public bool Equals(BonusConditionDto? x, BonusConditionDto? y)
         {
-            return string.Equals(x?.Description, y?.Description, StringComparison.Ordinal);
+            if (ReferenceEquals(x, y)) 
+            { 
+                return true; 
+            }
+
+            if (x is null || y is null) 
+            { 
+                return false; 
+            }
+
+            return x.Description == y.Description
+                && x.Key == y.Key;
         }
 
         /// <inheritdoc />
