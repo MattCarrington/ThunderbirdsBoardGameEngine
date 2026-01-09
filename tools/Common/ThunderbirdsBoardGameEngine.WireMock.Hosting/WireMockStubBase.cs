@@ -163,6 +163,6 @@ namespace ThunderbirdsBoardGameEngine.WireMock.Hosting
                 .RespondWith(ProblemJson(
                     $"Unsupported version in header '{VersionHeader}'. Expected '{versionValue}'.",
                     HttpStatusCode.BadRequest));
-    }
+        }
     }
 }

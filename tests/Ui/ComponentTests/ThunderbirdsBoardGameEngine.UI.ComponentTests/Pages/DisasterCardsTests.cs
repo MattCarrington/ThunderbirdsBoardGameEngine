@@ -495,7 +495,7 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Pages
         }
 
         private IRescueService SetupRescueService()
-        { 
+        {
             var dto = new CalculateRescueTargetResponseDto
             {
                 TargetNumber = 5,
@@ -507,7 +507,7 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Pages
         }
 
         private IRescueService SetupRescueService(CalculateRescueTargetResponseDto dto)
-        { 
+        {
             var service = Substitute.For<IRescueService>();
             service.CalculateRescueTargetAsync(Arg.Any<string>(), Arg.Any<IReadOnlyCollection<string>>())
                 .Returns(Task.FromResult<CalculateRescueTargetResponseDto?>(dto));

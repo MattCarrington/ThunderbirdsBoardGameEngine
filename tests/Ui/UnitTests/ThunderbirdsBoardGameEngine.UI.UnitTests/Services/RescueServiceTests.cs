@@ -24,7 +24,7 @@ namespace ThunderbirdsBoardGameEngine.UI.UnitTests.Services
             };
 
             var apiResult = ApiResult<CalculateRescueTargetResponseDto>.SuccessResult(expectedResponse, HttpStatusCode.OK);
-            
+
             var rescueClient = CreateRescueClient(apiResult);
 
             var service = CreateRescueService(rescueClient);
@@ -55,7 +55,7 @@ namespace ThunderbirdsBoardGameEngine.UI.UnitTests.Services
             var (disasterCardCode, presentBonusKeys) = CreateRequestParameters();
 
             var apiResult = ApiResult<CalculateRescueTargetResponseDto>.Failure("Error", HttpStatusCode.BadRequest);
-            
+
             var rescueClient = CreateRescueClient(apiResult);
 
             var service = CreateRescueService(rescueClient);

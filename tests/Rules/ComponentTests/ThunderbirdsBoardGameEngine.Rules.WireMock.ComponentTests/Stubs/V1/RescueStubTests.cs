@@ -50,7 +50,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.WireMock.ComponentTests.Stubs.V1
             var result = await response.Content.ReadFromJsonAsync<CalculateRescueTargetResponseDto>();
 
             Assert.NotNull(result);
-            Assert.Equal(dto.TotalBonus,  result.TotalBonus);
+            Assert.Equal(dto.TotalBonus, result.TotalBonus);
             Assert.Equal(dto.TargetNumber, result.TargetNumber);
             Assert.Equal(dto.AppliedDisasterBonuses.Count, result.AppliedDisasterBonuses.Count);
         }
@@ -198,7 +198,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.WireMock.ComponentTests.Stubs.V1
 
         private static CalculateRescueTargetRequestDto CreateValidRescueTargetRequest()
         {
-            return new CalculateRescueTargetRequestDto { PresentDisasterBonusKeys = Array.Empty<string>() };            
+            return new CalculateRescueTargetRequestDto { PresentDisasterBonusKeys = Array.Empty<string>() };
         }
 
         private static CalculateRescueTargetResponseDto CreateValidRescueTargetResponse()
@@ -207,9 +207,9 @@ namespace ThunderbirdsBoardGameEngine.Rules.WireMock.ComponentTests.Stubs.V1
             {
                 TargetNumber = 10,
                 TotalBonus = 2,
-                AppliedDisasterBonuses = new List<AppliedDisasterBonusDto>() 
+                AppliedDisasterBonuses = new List<AppliedDisasterBonusDto>()
                 {
-                    new() 
+                    new()
                     {
                         BonusKey = "SampleBonusKey",
                         BonusValue = 1

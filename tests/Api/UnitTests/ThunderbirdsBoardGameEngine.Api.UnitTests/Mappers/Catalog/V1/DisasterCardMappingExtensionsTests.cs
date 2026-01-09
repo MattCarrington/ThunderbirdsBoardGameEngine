@@ -140,7 +140,7 @@ namespace ThunderbirdsBoardGameEngine.Api.UnitTests.Mappers.Catalog.V1
 
             // Assert  
             var reward = Assert.Single(result.Rewards);
-            Assert.IsType < RewardDto>(reward);
+            Assert.IsType<RewardDto>(reward);
             Assert.Equal("Player Choice", reward.DisplayName);
         }
 

@@ -39,7 +39,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.WireMock.Stubs.V1
         /// </exception>
         public DisasterCardStub(WireMockServer server)
             : base(server)
-        {            
+        {
         }
 
         /// <summary>
@@ -83,8 +83,8 @@ namespace ThunderbirdsBoardGameEngine.Catalog.WireMock.Stubs.V1
         /// <param name="message">The error message to include in the response body.</param>
         /// <param name="detail">Optional detailed error information.</param>
         public void RegisterGetAllError(
-            HttpStatusCode status = HttpStatusCode.InternalServerError, 
-            string message = "An error occurred", 
+            HttpStatusCode status = HttpStatusCode.InternalServerError,
+            string message = "An error occurred",
             string detail = "An unknown error occurred on the server")
         {
             Server
