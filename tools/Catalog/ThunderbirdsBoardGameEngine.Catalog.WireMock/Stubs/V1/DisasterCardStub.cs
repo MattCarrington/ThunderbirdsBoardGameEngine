@@ -1,9 +1,7 @@
 ﻿using System.Net;
 using ThunderbirdsBoardGameEngine.Catalog.Contracts.Dtos.V1;
+using ThunderbirdsBoardGameEngine.WireMock.Hosting;
 using WireMock.Logging;
-using WireMock.Matchers;
-using WireMock.RequestBuilders;
-using WireMock.ResponseBuilders;
 using WireMock.Server;
 
 namespace ThunderbirdsBoardGameEngine.Catalog.WireMock.Stubs.V1
@@ -18,7 +16,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.WireMock.Stubs.V1
     ///
     /// Intended for use in integration and consumer tests.
     /// </remarks>
-    public sealed class DisasterCardStub
+    public sealed class DisasterCardStub : WireMockStubBase
     {
         /// <summary>
         /// Route for the disaster cards endpoint.
@@ -26,26 +24,9 @@ namespace ThunderbirdsBoardGameEngine.Catalog.WireMock.Stubs.V1
         public const string Route = "/api/catalog/disaster-cards";
 
         /// <summary>
-        /// API version header name.
-        /// </summary>
-        public const string VersionHeader = "X-Api-Version";
-
-        /// <summary>
         /// Supported API version value.
         /// </summary>
         public const string VersionValue = "1.0";
-
-        /// <summary>
-        /// JSON content type used by the endpoint.
-        /// </summary>
-        public const string Json = "application/json; charset=utf-8";
-
-        /// <summary>
-        /// Plain text content type used for malformed responses.
-        /// </summary>
-        public const string Text = "text/plain; charset=utf-8";
-
-        private readonly WireMockServer _server;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DisasterCardStub"/> class.
@@ -57,8 +38,8 @@ namespace ThunderbirdsBoardGameEngine.Catalog.WireMock.Stubs.V1
         /// Thrown when <paramref name="server"/> is <c>null</c>.
         /// </exception>
         public DisasterCardStub(WireMockServer server)
-        {
-            _server = server ?? throw new ArgumentNullException(nameof(server));
+            : base(server)
+        {            
         }
 
         /// <summary>
@@ -67,7 +48,9 @@ namespace ThunderbirdsBoardGameEngine.Catalog.WireMock.Stubs.V1
         /// <param name="dtos">The disaster card DTOs to return.</param>
         public void RegisterGetAllSuccess(IReadOnlyList<DisasterCardDto> dtos)
         {
-            _server.Given(CreateRequest()).RespondWith(CreateJsonResponse(dtos, HttpStatusCode.OK));
+            Server
+                .Given(CreateGet(Route, VersionValue))
+                .RespondWith(CreateJsonResponse(dtos, HttpStatusCode.OK));
         }
 
         /// <summary>
@@ -75,7 +58,9 @@ namespace ThunderbirdsBoardGameEngine.Catalog.WireMock.Stubs.V1
         /// </summary>
         public void RegisterGetAllEmpty()
         {
-            _server.Given(CreateRequest()).RespondWith(CreateJsonResponse(Array.Empty<DisasterCardDto>(), HttpStatusCode.OK));
+            Server
+                .Given(CreateGet(Route, VersionValue))
+                .RespondWith(CreateJsonResponse(Array.Empty<DisasterCardDto>(), HttpStatusCode.OK));
         }
 
         /// <summary>
@@ -86,7 +71,9 @@ namespace ThunderbirdsBoardGameEngine.Catalog.WireMock.Stubs.V1
         /// </remarks>
         public void RegisterGetAllMalformedJson()
         {
-            _server.Given(CreateRequest()).RespondWith(CreateTextResponse("{ malformed json... ", HttpStatusCode.OK));
+            Server
+                .Given(CreateGet(Route, VersionValue))
+                .RespondWith(ProblemJson("{ malformed json... ", HttpStatusCode.OK));
         }
 
         /// <summary>
@@ -94,11 +81,15 @@ namespace ThunderbirdsBoardGameEngine.Catalog.WireMock.Stubs.V1
         /// </summary>
         /// <param name="status">The HTTP status code to return.</param>
         /// <param name="message">The error message to include in the response body.</param>
-        public void RegisterGetAllError(HttpStatusCode status = HttpStatusCode.InternalServerError, string message = "An error occurred")
+        /// <param name="detail">Optional detailed error information.</param>
+        public void RegisterGetAllError(
+            HttpStatusCode status = HttpStatusCode.InternalServerError, 
+            string message = "An error occurred", 
+            string detail = "An unknown error occurred on the server")
         {
-            var body = new { error = message };
-
-            _server.Given(CreateRequest()).RespondWith(CreateJsonResponse(body, status));
+            Server
+                .Given(CreateGet(Route, VersionValue))
+                .RespondWith(ProblemJson(message, status, detail));
         }
 
         /// <summary>
@@ -106,20 +97,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.WireMock.Stubs.V1
         /// </summary>
         public void RegisterMissingHeaderGuard()
         {
-            _server
-                .Given(Request.Create()
-                    .WithPath(new ExactMatcher(true, Route))
-                    .UsingGet()
-                    .WithHeader(headers =>
-                    {
-                        if (!headers.TryGetValue(VersionHeader, out var values) || values == null)
-                        {
-                            return true;
-                        }
-
-                        return values.Length == 0 || values.All(string.IsNullOrWhiteSpace);
-                    }))
-                .RespondWith(CreateJsonResponse(new { error = $"Missing header '{VersionHeader}'." }, HttpStatusCode.BadRequest));
+            RegisterMissingVersionHeaderGuard(Route, "GET");
         }
 
         /// <summary>
@@ -127,22 +105,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.WireMock.Stubs.V1
         /// </summary>
         public void RegisterIncorrectHeaderGuard()
         {
-            _server
-                .Given(Request.Create()
-                    .WithPath(new ExactMatcher(true, Route))
-                    .UsingGet()
-                    .WithHeader(dict =>
-                    {
-                        if (dict == null || !dict.TryGetValue(VersionHeader, out var values) || values == null)
-                        {
-                            return false; // let missing-header guard catch it
-                        }
-
-                        return !values.Any(v => string.Equals(v, VersionValue, StringComparison.Ordinal));
-                    }))
-                .RespondWith(CreateJsonResponse(
-                    new { error = $"Unsupported version in header '{VersionHeader}'. Expected '{VersionValue}'." },
-                    HttpStatusCode.BadRequest));
+            RegisterUnsupportedVersionHeaderGuard(Route, "GET", VersionValue);
         }
 
         /// <summary>
@@ -151,7 +114,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.WireMock.Stubs.V1
         /// <returns>The number of matching requests.</returns>
         public int CountGetAllCalls()
         {
-            return _server.LogEntries.Count(le =>
+            return Server.LogEntries.Count(le =>
                 le.RequestMessage.Method == "GET" &&
                 string.Equals(le.RequestMessage.Path, Route, StringComparison.OrdinalIgnoreCase));
         }
@@ -161,7 +124,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.WireMock.Stubs.V1
         /// </summary>
         public IReadOnlyList<string> GetAllRequestPaths()
         {
-            return _server.LogEntries.Select(le => le.RequestMessage.Path).ToList();
+            return Server.LogEntries.Select(le => le.RequestMessage.Path).ToList();
         }
 
         /// <summary>
@@ -169,32 +132,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.WireMock.Stubs.V1
         /// </summary>
         public ILogEntry? GetLastCall()
         {
-            return _server.LogEntries.LastOrDefault();
-        }
-
-        private static IRequestBuilder CreateRequest()
-        {
-            return Request.Create()
-                .WithPath(Route)
-                .WithHeader(VersionHeader, new ExactMatcher(true, VersionValue))
-                .UsingGet();
-
-        }
-
-        private static IResponseBuilder CreateJsonResponse(object body, HttpStatusCode httpStatusCode)
-        {
-            return Response.Create()
-                .WithStatusCode(httpStatusCode)
-                .WithHeader("Content-Type", Json)
-                .WithBodyAsJson(body);
-        }
-
-        private static IResponseBuilder CreateTextResponse(string body, HttpStatusCode httpStatusCode)
-        {
-            return Response.Create()
-                .WithStatusCode(httpStatusCode)
-                .WithHeader("Content-Type", Text)
-                .WithBody(body);
+            return Server.LogEntries.LastOrDefault();
         }
     }
 }
