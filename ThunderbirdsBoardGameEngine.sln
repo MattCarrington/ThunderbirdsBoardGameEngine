@@ -97,6 +97,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThunderbirdsBoardGameEngine
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThunderbirdsBoardGameEngine.WireMock.Hosting", "tools\Common\ThunderbirdsBoardGameEngine.WireMock.Hosting\ThunderbirdsBoardGameEngine.WireMock.Hosting.csproj", "{68EC52A3-D3E7-4FE6-BEA8-7352036CFBF6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThunderbirdsBoardGameEngine.Rules.WireMock", "tools\Rules\ThunderbirdsBoardGameEngine.Rules.WireMock\ThunderbirdsBoardGameEngine.Rules.WireMock.csproj", "{D06B661C-FD14-43D6-959F-56C7C4EECEDF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThunderbirdsBoardGameEngine.Rules.WireMock.ComponentTests", "tests\Rules\ComponentTests\ThunderbirdsBoardGameEngine.Rules.WireMock.ComponentTests\ThunderbirdsBoardGameEngine.Rules.WireMock.ComponentTests.csproj", "{E510BCD3-BC98-5D33-A536-7EAE9FD02258}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -267,6 +271,14 @@ Global
 		{68EC52A3-D3E7-4FE6-BEA8-7352036CFBF6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{68EC52A3-D3E7-4FE6-BEA8-7352036CFBF6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{68EC52A3-D3E7-4FE6-BEA8-7352036CFBF6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D06B661C-FD14-43D6-959F-56C7C4EECEDF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D06B661C-FD14-43D6-959F-56C7C4EECEDF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D06B661C-FD14-43D6-959F-56C7C4EECEDF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D06B661C-FD14-43D6-959F-56C7C4EECEDF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E510BCD3-BC98-5D33-A536-7EAE9FD02258}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E510BCD3-BC98-5D33-A536-7EAE9FD02258}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E510BCD3-BC98-5D33-A536-7EAE9FD02258}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E510BCD3-BC98-5D33-A536-7EAE9FD02258}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -301,6 +313,8 @@ Global
 		{BE60B49E-88AF-40BD-8953-5B4E5AD9D5AC} = {D8475FB6-8FFD-4252-BF79-1BC0AF31A524}
 		{6530D1BF-D273-4C6D-8038-BEA158C16C71} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 		{68EC52A3-D3E7-4FE6-BEA8-7352036CFBF6} = {FC7280B4-F6FF-4E00-B8C0-6C5F6FA6219C}
+		{D06B661C-FD14-43D6-959F-56C7C4EECEDF} = {FC7280B4-F6FF-4E00-B8C0-6C5F6FA6219C}
+		{E510BCD3-BC98-5D33-A536-7EAE9FD02258} = {987A2C73-51DA-4FCE-AEF0-DFB7C4B23F2E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {92EB50C5-075F-4AF3-8107-0DC9EDBBAB83}

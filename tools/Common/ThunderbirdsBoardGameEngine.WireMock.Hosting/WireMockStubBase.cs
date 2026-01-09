@@ -60,6 +60,14 @@ namespace ThunderbirdsBoardGameEngine.WireMock.Hosting
                 .UsingGet();
         }
 
+        protected static IRequestBuilder CreatePost(string route, string versionValue)
+        {
+            return Request.Create()
+                .WithPath(route)
+                .WithHeader(VersionHeader, new ExactMatcher(true, versionValue))
+                .UsingPost();
+        }
+
         /// <summary>
         /// Creates a response builder that returns the specified object serialized as JSON with the given HTTP status
         /// code.
