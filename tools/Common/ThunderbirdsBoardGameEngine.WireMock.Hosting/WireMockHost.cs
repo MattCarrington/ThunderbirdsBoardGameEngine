@@ -1,5 +1,4 @@
-﻿using ThunderbirdsBoardGameEngine.Catalog.WireMock.Stubs.V1;
-using WireMock.Server;
+﻿using WireMock.Server;
 
 namespace ThunderbirdsBoardGameEngine.Catalog.WireMock
 {
@@ -32,11 +31,6 @@ namespace ThunderbirdsBoardGameEngine.Catalog.WireMock
         public WireMockServer WireMockServer => _wireMockServer;
 
         /// <summary>
-        /// Gets the stub helper for the Catalog V1 disaster cards endpoint.
-        /// </summary>
-        public DisasterCardStub DisasterCardStub { get; }
-
-        /// <summary>
         /// Gets the base URL of the running WireMock server.
         /// </summary>
         /// <remarks>
@@ -54,7 +48,6 @@ namespace ThunderbirdsBoardGameEngine.Catalog.WireMock
         public WireMockHost()
         {
             _wireMockServer = WireMockServer.Start(0);
-            DisasterCardStub = new DisasterCardStub(_wireMockServer);
         }
 
         /// <summary>

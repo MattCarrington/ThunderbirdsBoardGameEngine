@@ -28,6 +28,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\src\Catalog\ThunderbirdsBoardGameEngine.Catalog.Contracts\ThunderbirdsBoardGameEngine.Catalog.Contracts.csproj" />
+    <ProjectReference Include="..\..\Common\ThunderbirdsBoardGameEngine.WireMock.Hosting\ThunderbirdsBoardGameEngine.WireMock.Hosting.csproj" />
   </ItemGroup>
 
 </Project>

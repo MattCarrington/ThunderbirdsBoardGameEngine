@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using ThunderbirdsBoardGameEngine.Catalog.Client.Extensions;
 using ThunderbirdsBoardGameEngine.Catalog.Contracts.Dtos.V1;
 using ThunderbirdsBoardGameEngine.Catalog.WireMock;
+using ThunderbirdsBoardGameEngine.Rules.Client.Extensions;
 using ThunderbirdsBoardGameEngine.TestUtils.Catalog.TestFileCatalogs;
 using ThunderbirdsBoardGameEngine.TestUtils.Helpers;
 using ThunderbirdsBoardGameEngine.TestUtils.xUnit.Fixtures;
@@ -23,18 +24,22 @@ namespace ThunderbirdsBoardGameEngine.UI.IntegrationTests.Pages
         {
             _host = fixture.Host;
             _host.Reset();
-            _host.DisasterCardStub.RegisterMissingHeaderGuard();
-            _host.DisasterCardStub.RegisterIncorrectHeaderGuard();
+            _host.DisasterCardStub().RegisterMissingHeaderGuard();
+            _host.DisasterCardStub().RegisterIncorrectHeaderGuard();
 
             var configuration = new ConfigurationBuilder()
                 .AddInMemoryCollection(new Dictionary<string, string?>
                 {
-                    { "CatalogClient:BaseAddress", _host.Url }
+                    { "CatalogClient:BaseAddress", _host.Url }, 
+                    { "RulesClient:BaseAddress", _host.Url }
                 })
                 .Build();
 
             Services.AddCatalogClients(configuration);
+            Services.AddRulesClients(configuration);
+
             Services.AddSingleton<IDisasterCardService, DisasterCardService>();
+            Services.AddSingleton<IRescueService, RescueService>();
         }
 
         [Fact]
@@ -43,7 +48,7 @@ namespace ThunderbirdsBoardGameEngine.UI.IntegrationTests.Pages
             // Arrange
             var cards = await GetCardDtosAsync();
 
-            _host.DisasterCardStub.RegisterGetAllSuccess(cards);
+            _host.DisasterCardStub().RegisterGetAllSuccess(cards);
 
             // Act
             var cut = RenderComponent<DisasterCards>();
@@ -64,7 +69,7 @@ namespace ThunderbirdsBoardGameEngine.UI.IntegrationTests.Pages
         public void Render_WhenNoCardExist_DisplaysEmptyState()
         {
             // Arrange
-            _host.DisasterCardStub.RegisterGetAllEmpty();
+            _host.DisasterCardStub().RegisterGetAllEmpty();
 
             // Act
             var cut = RenderComponent<DisasterCards>();
@@ -82,7 +87,7 @@ namespace ThunderbirdsBoardGameEngine.UI.IntegrationTests.Pages
         public void Render_WhenErrorOccurs_DisplaysEmptyState()
         {
             // Arrange
-            _host.DisasterCardStub.RegisterGetAllError();
+            _host.DisasterCardStub().RegisterGetAllError();
 
             // Act
             var cut = RenderComponent<DisasterCards>();

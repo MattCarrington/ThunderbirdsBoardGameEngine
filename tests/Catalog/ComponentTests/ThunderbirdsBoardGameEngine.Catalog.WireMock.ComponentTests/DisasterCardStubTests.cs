@@ -27,7 +27,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.WireMock.ComponentTests
             _server = fixture.Host.WireMockServer;
             _server.Reset();
 
-            _stub = fixture.Host.DisasterCardStub;
+            _stub = fixture.Host.DisasterCardStub();
             _stub.RegisterMissingHeaderGuard();
             _stub.RegisterIncorrectHeaderGuard();
         }

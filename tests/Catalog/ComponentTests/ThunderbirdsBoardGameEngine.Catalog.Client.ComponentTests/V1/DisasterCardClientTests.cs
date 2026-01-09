@@ -35,8 +35,8 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Client.ComponentTests.V1
         {
             _host = fixture.Host;
             _host.Reset();
-            _host.DisasterCardStub.RegisterMissingHeaderGuard();
-            _host.DisasterCardStub.RegisterIncorrectHeaderGuard();
+            _host.DisasterCardStub().RegisterMissingHeaderGuard();
+            _host.DisasterCardStub().RegisterIncorrectHeaderGuard();
 
             _sp = CatalogClientProviderFactory.Build(_host.Url!);
             _client = _sp.GetRequiredService<IDisasterCardsClient>();
@@ -48,13 +48,13 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Client.ComponentTests.V1
             // Arrange
             var cards = await GetExpectedCardDtosAsync();
 
-            _host.DisasterCardStub.RegisterGetAllSuccess(cards);
+            _host.DisasterCardStub().RegisterGetAllSuccess(cards);
 
             // Act
             _ = await _client.GetAllAsync();
 
             // Assert
-            var hits = _host.DisasterCardStub.GetAllRequestPaths();
+            var hits = _host.DisasterCardStub().GetAllRequestPaths();
 
             var route = Assert.Single(hits);
             Assert.Equal("/api/catalog/disaster-cards", route);
@@ -66,7 +66,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Client.ComponentTests.V1
             // Arrange
             var cards = await GetExpectedCardDtosAsync();
 
-            _host.DisasterCardStub.RegisterGetAllSuccess(cards);
+            _host.DisasterCardStub().RegisterGetAllSuccess(cards);
 
             // Act
             var response = await _client.GetAllAsync();
@@ -84,7 +84,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Client.ComponentTests.V1
         public async Task GetAllAsync_WhenEmptyList_ReturnsSuccessApiResult()
         {
             // Arrange
-            _host.DisasterCardStub.RegisterGetAllEmpty();
+            _host.DisasterCardStub().RegisterGetAllEmpty();
 
             // Act
             var response = await _client.GetAllAsync();
@@ -101,7 +101,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Client.ComponentTests.V1
         public async Task GetAllAsync_WhenServerError_ReturnsFailureApiResult()
         {
             // Arrange
-            _host.DisasterCardStub.RegisterGetAllError();
+            _host.DisasterCardStub().RegisterGetAllError();
 
             // Act
             var response = await _client.GetAllAsync();
@@ -117,7 +117,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Client.ComponentTests.V1
         public async Task GetAllAsync_WhenInvalidJson_ReturnsFailureApiResult()
         {
             // Arrange
-            _host.DisasterCardStub.RegisterGetAllMalformedJson();
+            _host.DisasterCardStub().RegisterGetAllMalformedJson();
 
             // Act
             var response = await _client.GetAllAsync();
@@ -135,7 +135,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Client.ComponentTests.V1
             // Arrange
             var cards = await GetExpectedCardDtosAsync();
 
-            _host.DisasterCardStub.RegisterGetAllSuccess(cards);
+            _host.DisasterCardStub().RegisterGetAllSuccess(cards);
 
             var tasks = Enumerable.Range(0, ConcurrentRequests)
                 .Select(_ => _client.GetAllAsync())
@@ -156,7 +156,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Client.ComponentTests.V1
                 DisasterCardDtoAssertions.AssertOrderSensitive(cards.ToList(), response.Data.ToList());
             }
 
-            var hits = _host.DisasterCardStub.GetAllRequestPaths();
+            var hits = _host.DisasterCardStub().GetAllRequestPaths();
             Assert.Equal(20, hits.Count);
         }
 
