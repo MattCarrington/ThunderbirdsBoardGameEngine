@@ -1,4 +1,5 @@
 ﻿using Microsoft.Playwright;
+using System;
 using ThunderbirdsBoardGameEngine.PlaywrightTests.Support;
 using Xunit;
 
@@ -35,6 +36,30 @@ namespace ThunderbirdsBoardGameEngine.PlaywrightTests.Pages
             await Dropdown.SelectOptionAsync(new SelectOptionValue { Label = cardName });
         }
 
+        public async Task MarkBonusCheckboxAsync(string bonusName)
+        {
+            var checkbox = Page.GetByLabel(bonusName);
+
+            await checkbox.WaitForAsync();
+
+            if (!await checkbox.IsCheckedAsync())
+            {
+                await checkbox.CheckAsync();
+            }
+        }
+
+        public async Task ClickCalculateButton()
+        {
+            var button = Page.GetByTestId("calculate-button");
+
+            await button.WaitForAsync();
+
+            // Guard against async disable during calculation
+            await Assertions.Expect(button).ToBeEnabledAsync();
+
+            await button.ClickAsync();
+        }
+
         public async Task AssertHasAnyCardsAsync()
         {
             Assert.True(await Dropdown.IsVisibleAsync(),
@@ -54,6 +79,15 @@ namespace ThunderbirdsBoardGameEngine.PlaywrightTests.Pages
             await Assertions.Expect(DetailsContainer.GetByText("Difficulty:")).ToBeVisibleAsync();
             await Assertions.Expect(DetailsContainer.GetByText("Location:")).ToBeVisibleAsync();
             await Assertions.Expect(DetailsContainer.GetByText("Rescue Type:")).ToBeVisibleAsync();
+        }
+
+        public async Task AssertRescueResultDisplayedAsync(int expectedTarget)
+        {
+            var result = Page.GetByTestId("rescue-calculation-result");
+
+            await Assertions.Expect(result).ToBeVisibleAsync();
+            await Assertions.Expect(result)
+                .ToContainTextAsync($"Target Number: {expectedTarget}");
         }
     }
 }

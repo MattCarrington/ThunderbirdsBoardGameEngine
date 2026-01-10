@@ -1,11 +1,11 @@
 ﻿Feature: CalculateRescueBonus
 
-The player can see the minimum required roll needed to resolve a disaster.
+	The rescue target is calculated based on the selected disaster
+	and any applicable rescue bonuses.
 
-@tag1
 Scenario: Calculate Rescue Bonus for a Disaster
-	Given Given the "Sun Probe" disaster is selected
-	And the "Scott" bonus is marked as present
-	And the "Transmitter Truck" bonus is marked as present
+	Given the disaster "Terror in New York City" is selected
+	And the "Virgil" bonus is marked as being present
+	And the "Firefly" bonus is marked as being present
 	When the rescue target is calculated
-	Then the minimum required roll should be "6"
+	Then the minimum required roll should be 6
