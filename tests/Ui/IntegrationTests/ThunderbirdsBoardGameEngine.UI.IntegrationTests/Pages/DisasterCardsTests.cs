@@ -5,6 +5,9 @@ using ThunderbirdsBoardGameEngine.Catalog.Client.Extensions;
 using ThunderbirdsBoardGameEngine.Catalog.Contracts.Dtos.V1;
 using ThunderbirdsBoardGameEngine.Catalog.WireMock;
 using ThunderbirdsBoardGameEngine.Rules.Client.Extensions;
+using ThunderbirdsBoardGameEngine.Rules.Client.Interfaces.V1;
+using ThunderbirdsBoardGameEngine.Rules.Contracts.Dtos.Rescue.CalculateRescueTarget.V1;
+using ThunderbirdsBoardGameEngine.Rules.WireMock;
 using ThunderbirdsBoardGameEngine.TestUtils.Catalog.TestFileCatalogs;
 using ThunderbirdsBoardGameEngine.TestUtils.Helpers;
 using ThunderbirdsBoardGameEngine.TestUtils.xUnit.Fixtures;
@@ -101,7 +104,80 @@ namespace ThunderbirdsBoardGameEngine.UI.IntegrationTests.Pages
             }, timeout: TimeSpan.FromSeconds(5));
         }
 
-        private async Task<IReadOnlyList<DisasterCardDto>> GetCardDtosAsync()
+        [Fact]
+        public async Task Calculate_WhenSuccess_DisplaysResultAsync()
+        {
+            // Arrange
+            var cards = await GetCardDtosAsync();
+
+            var rescueResult = new CalculateRescueTargetResponseDto
+            {
+                TargetNumber = 10,
+                TotalBonus = 5,
+                AppliedDisasterBonuses = Array.Empty<AppliedDisasterBonusDto>()
+            };
+
+            _host.DisasterCardStub().RegisterGetAllSuccess(cards);
+            _host.RescueStub().RegisterCalculateRescueTargetSuccess(rescueResult);
+
+            var cut = RenderComponent<DisasterCards>();
+
+            // Wait for initial load
+            cut.WaitForElement("#disasterSelect");
+
+            // Act
+            cut.Find("#disasterSelect")
+               .Change(cards[0].Id.ToString());
+
+            cut.WaitForState(() => true);
+
+            // Now click
+            cut.Find("[data-testid='calculate-button']").Click();
+
+            // Assert – UI reaction
+            cut.WaitForAssertion(() =>
+            {
+                var result = cut.Find("[data-testid='rescue-calculation-result']");
+
+                Assert.Contains(rescueResult.TargetNumber.ToString(), result.TextContent);
+                Assert.Contains(rescueResult.TotalBonus.ToString(), result.TextContent);
+
+                // Error is NOT visible
+                Assert.Empty(cut.FindAll("[data-testid='rescue-calculation-error']"));
+            });
+        }
+
+        [Fact]
+        public async Task Calculate_WhenError_DisplaysErrorAsync()
+        {
+            // Arrange
+            var cards = await GetCardDtosAsync();
+
+            _host.DisasterCardStub().RegisterGetAllSuccess(cards);
+            _host.RescueStub().RegisterCalculateRescueTargetError();
+
+            var cut = RenderComponent<DisasterCards>();
+
+            // Wait for initial load
+            cut.WaitForElement("#disasterSelect");
+
+            // Act
+            cut.Find("#disasterSelect")
+               .Change(cards[0].Id.ToString());
+
+            cut.WaitForState(() => true);
+
+            // Now click
+            cut.Find("[data-testid='calculate-button']").Click();
+
+            // Assert – UI reaction
+            cut.WaitForAssertion(() =>
+            {
+                cut.Find("[data-testid='rescue-calculation-error']");
+            });
+        }
+
+        private static async Task<IReadOnlyList<DisasterCardDto>> GetCardDtosAsync()
         {
             return await TestDataLoader.LoadJsonFromFileAsync<IReadOnlyList<DisasterCardDto>>(DisasterCardTestFileCatalog.DataOnly("disaster-card-dtos.json"));
         }

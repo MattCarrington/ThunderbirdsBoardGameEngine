@@ -87,7 +87,8 @@ else
 
                 @if (calculationResult is not null)
                 {
-                    <div class="alert alert-info mt-3">
+                    <div class="alert alert-info mt-3"
+                         data-testid="rescue-calculation-result">
                         <p><strong>Target Number:</strong> @calculationResult.TargetNumber</p>
                         <p><strong>Total Bonus:</strong> @calculationResult.TotalBonus</p>
                     </div>
@@ -95,7 +96,8 @@ else
 
                 @if (calculationFailed)
                 {
-                    <div class="alert alert-danger mt-3">
+                    <div class="alert alert-danger mt-3"
+                        data-testid="rescue-calculation-error">
                         Unable to calculate rescue target.
                     </div>
                 }
