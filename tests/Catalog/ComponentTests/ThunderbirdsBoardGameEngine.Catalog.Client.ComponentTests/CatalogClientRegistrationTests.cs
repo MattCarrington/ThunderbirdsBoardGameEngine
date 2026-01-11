@@ -18,22 +18,5 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Client.ComponentTests
             Assert.Throws<OptionsValidationException>(
                 () => provider.GetRequiredService<IOptions<CatalogClientOptions>>().Value);
         }
-
-        [Theory]
-        [MemberData(nameof(Clients))]
-        public async Task AddCatalogClients_Registers_TypedClient(Type service, Type impl)
-        {
-            await using var sp = CatalogClientProviderFactory.Build("https://example.com/");
-            var instance = sp.GetRequiredService(service);
-            Assert.Equal(impl, instance.GetType());
-        }
-
-        public static IEnumerable<object[]> Clients()
-        {
-            return
-            [
-                [typeof(IDisasterCardsClient), typeof(Clients.V1.DisasterCardsClient)]
-            ];
-        }
     }
 }

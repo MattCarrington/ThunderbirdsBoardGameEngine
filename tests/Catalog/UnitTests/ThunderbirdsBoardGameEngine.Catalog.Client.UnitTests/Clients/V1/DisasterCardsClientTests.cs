@@ -4,7 +4,7 @@ using ThunderbirdsBoardGameEngine.Catalog.Client.Clients.V1;
 using ThunderbirdsBoardGameEngine.Catalog.Client.Internal.Routing.V1;
 using ThunderbirdsBoardGameEngine.Catalog.Contracts.Dtos.V1;
 using ThunderbirdsBoardGameEngine.Client.Infrastructure;
-using ThunderbirdsBoardGameEngine.Client.Infrastructure.Handlers;
+using ThunderbirdsBoardGameEngine.Client.Infrastructure.Interfaces;
 using ThunderbirdsBoardGameEngine.TestUtils.Stubs;
 using ThunderbirdsBoardGameEngine.TestUtils.xUnit.Assertions;
 using Xunit;

@@ -2,7 +2,7 @@
 using System.Net;
 using ThunderbirdsBoardGameEngine.Catalog.Contracts.Dtos.V1;
 using ThunderbirdsBoardGameEngine.Client.Infrastructure;
-using ThunderbirdsBoardGameEngine.Client.Infrastructure.Handlers;
+using ThunderbirdsBoardGameEngine.Client.Infrastructure.Interfaces;
 using ThunderbirdsBoardGameEngine.Rules.Client.Clients.V1;
 using ThunderbirdsBoardGameEngine.Rules.Contracts.Dtos.Rescue.CalculateRescueTarget.V1;
 using ThunderbirdsBoardGameEngine.TestUtils.Stubs;

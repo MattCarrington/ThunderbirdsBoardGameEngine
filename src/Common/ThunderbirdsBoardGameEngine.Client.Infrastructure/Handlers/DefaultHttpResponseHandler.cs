@@ -1,4 +1,5 @@
 ﻿using System.Text.Json;
+using ThunderbirdsBoardGameEngine.Client.Infrastructure.Interfaces;
 using ThunderbirdsBoardGameEngine.Client.Infrastructure.Serialization;
 
 namespace ThunderbirdsBoardGameEngine.Client.Infrastructure.Handlers
@@ -7,7 +8,7 @@ namespace ThunderbirdsBoardGameEngine.Client.Infrastructure.Handlers
     /// Provides a default implementation for processing HTTP responses and extracting deserialized content or error
     /// information as an ApiResult.
     /// </summary>
-    public class DefaultHttpResponseHandler : IHttpResponseHandler
+    internal class DefaultHttpResponseHandler : IHttpResponseHandler
     {
         /// <summary>
         /// Processes an HTTP response and returns an ApiResult containing the deserialized content or an error message.

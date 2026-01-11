@@ -2,7 +2,7 @@
 using ThunderbirdsBoardGameEngine.Catalog.Client.Internal.Routing.V1;
 using ThunderbirdsBoardGameEngine.Catalog.Contracts.Dtos.V1;
 using ThunderbirdsBoardGameEngine.Client.Infrastructure;
-using ThunderbirdsBoardGameEngine.Client.Infrastructure.Handlers;
+using ThunderbirdsBoardGameEngine.Client.Infrastructure.Interfaces;
 
 namespace ThunderbirdsBoardGameEngine.Catalog.Client.Clients.V1
 {
@@ -13,7 +13,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Client.Clients.V1
     /// The HTTP pipeline is configured via DI; do not construct directly. 
     /// Versioning is applied by a delegating handler that sets the <c>X-Api-Version</c> header.
     /// </remarks>
-    public sealed class DisasterCardsClient : IDisasterCardsClient
+    internal sealed class DisasterCardsClient : IDisasterCardsClient
     {
         private readonly HttpClient _httpClient;
         private readonly IHttpResponseHandler _httpResponseHandler;

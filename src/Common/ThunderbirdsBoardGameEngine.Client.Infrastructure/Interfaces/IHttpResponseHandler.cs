@@ -1,5 +1,4 @@
-﻿
-namespace ThunderbirdsBoardGameEngine.Client.Infrastructure.Handlers
+﻿namespace ThunderbirdsBoardGameEngine.Client.Infrastructure.Interfaces
 {
     /// <summary>
     /// Defines a contract for handling HTTP responses and converting them into strongly typed API result objects
