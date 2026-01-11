@@ -18,9 +18,9 @@ env:
   SOLUTION_FILE: &solution ThunderbirdsBoardGameEngine.sln
   BASE_URL: &base_url "http://localhost:8080"
   IMAGE_NAME: &image_name "thunderbirds-app"
-  CONTRACTS_PROJECT_PATH: &contracts_project_path "ThunderbirdsBoardGameEngine.Catalog.Contracts/ThunderbirdsBoardGameEngine.Catalog.Contracts.csproj"
-  CLIENT_PROJECT_PATH: &client_project_path "ThunderbirdsBoardGameEngine.Catalog.Client/ThunderbirdsBoardGameEngine.Catalog.Client.csproj"
-  WIREMOCK_PROJECT_PATH: &wiremock_project_path "ThunderbirdsBoardGameEngine.Catalog.WireMock/ThunderbirdsBoardGameEngine.Catalog.WireMock.csproj"
+  CONTRACTS_PROJECT_PATH: &contracts_project_path "src/Catalog/ThunderbirdsBoardGameEngine.Catalog.Contracts/ThunderbirdsBoardGameEngine.Catalog.Contracts.csproj"
+  CLIENT_PROJECT_PATH: &client_project_path "src/Catalog/ThunderbirdsBoardGameEngine.Catalog.Client/ThunderbirdsBoardGameEngine.Catalog.Client.csproj"
+  WIREMOCK_PROJECT_PATH: &wiremock_project_path "tools/Catalog/ThunderbirdsBoardGameEngine.Catalog.WireMock/ThunderbirdsBoardGameEngine.Catalog.WireMock.csproj"
 
 jobs:
   static-analysis:
