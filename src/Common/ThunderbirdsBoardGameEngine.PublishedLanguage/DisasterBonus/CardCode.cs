@@ -3,18 +3,36 @@ using System.Text.RegularExpressions;
 
 namespace ThunderbirdsBoardGameEngine.PublishedLanguage.DisasterBonus
 {
+    /// <summary>
+    /// Represents a normalized, validated code identifier for a card, enforcing a strict ASCII slug format.
+    /// </summary>
+    /// <remarks>A CardCode encapsulates a card's unique code in a canonical, lowercase, hyphen-separated
+    /// format. The value is guaranteed to be non-empty, contain only lowercase ASCII letters, digits, and single
+    /// hyphens as separators, and to have no leading, trailing, or consecutive hyphens. Use CardCode to ensure
+    /// consistent handling and comparison of card codes throughout the application.</remarks>
     public readonly partial record struct CardCode
     {
         private static readonly Regex CodePattern =
             CodeSlugVariable();
 
+        /// <summary>
+        /// Gets the value represented by this instance.
+        /// </summary>
         public string Value { get; }
 
+        /// <summary>
+        /// Initializes a new instance of the CardCode class with the specified code value.
+        /// </summary>
+        /// <param name="code">The card code to assign. Cannot be null or empty.</param>
         public CardCode(string code)
         {
             Value = NormalizeCode(code, nameof(code));
         }
 
+        /// <summary>
+        /// Returns a string that represents the current object.
+        /// </summary>
+        /// <returns>A string representation of the current object.</returns>
         public override string ToString()
         {
             return Value;

@@ -3,6 +3,10 @@ using ThunderbirdsBoardGameEngine.Client.Infrastructure.Serialization;
 
 namespace ThunderbirdsBoardGameEngine.Client.Infrastructure.Handlers
 {
+    /// <summary>
+    /// Provides a default implementation for processing HTTP responses and extracting deserialized content or error
+    /// information as an ApiResult.
+    /// </summary>
     public class DefaultHttpResponseHandler : IHttpResponseHandler
     {
         /// <summary>

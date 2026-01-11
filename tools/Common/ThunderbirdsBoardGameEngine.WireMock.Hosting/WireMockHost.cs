@@ -12,9 +12,7 @@ namespace ThunderbirdsBoardGameEngine.WireMock.Hosting
     /// and consumer testing.
     /// </para>
     /// <para>
-    /// The server is started on a random available port and exposes typed stub
-    /// helpers (for example, <see cref="DisasterCardStub"/>) to register common
-    /// success and error scenarios.
+    /// The server is started on a random available port.
     /// </para>
     /// </remarks>
     public sealed class WireMockHost : IAsyncDisposable

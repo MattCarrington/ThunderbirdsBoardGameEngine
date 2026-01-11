@@ -60,6 +60,13 @@ namespace ThunderbirdsBoardGameEngine.WireMock.Hosting
                 .UsingGet();
         }
 
+        /// <summary>
+        /// Creates a new HTTP POST request builder with the specified route and version header.
+        /// </summary>
+        /// <param name="route">The relative path for the request. Cannot be null or empty.</param>
+        /// <param name="versionValue">The value to set for the version header. Cannot be null.</param>
+        /// <returns>An <see cref="IRequestBuilder"/> configured to send a POST request to the specified route with the given
+        /// version header.</returns>
         protected static IRequestBuilder CreatePost(string route, string versionValue)
         {
             return Request.Create()

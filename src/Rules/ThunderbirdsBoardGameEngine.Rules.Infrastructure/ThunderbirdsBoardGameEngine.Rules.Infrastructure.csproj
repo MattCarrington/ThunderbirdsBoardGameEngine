@@ -6,6 +6,14 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
+  </PropertyGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\..\Catalog\ThunderbirdsBoardGameEngine.Catalog.Application\ThunderbirdsBoardGameEngine.Catalog.Application.csproj" />
     <ProjectReference Include="..\..\Catalog\ThunderbirdsBoardGameEngine.Catalog.Domain\ThunderbirdsBoardGameEngine.Catalog.Domain.csproj" />

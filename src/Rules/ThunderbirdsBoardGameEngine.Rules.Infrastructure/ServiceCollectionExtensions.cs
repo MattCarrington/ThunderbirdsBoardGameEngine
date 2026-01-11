@@ -7,8 +7,19 @@ using ThunderbirdsBoardGameEngine.Rules.Infrastructure.Lookups;
 
 namespace ThunderbirdsBoardGameEngine.Rules.Infrastructure
 {
+    /// <summary>
+    /// Provides extension methods for registering rule-related services with an <see cref="IServiceCollection"/>.
+    /// </summary>
     public static class ServiceCollectionExtensions
     {
+        /// <summary>
+        /// Adds core rescue rules services and dependencies to the specified service collection.
+        /// </summary>
+        /// <remarks>This method registers MediatR handlers and singleton services required for rescue
+        /// rules processing. Call this method during application startup to enable rescue rules
+        /// functionality.</remarks>
+        /// <param name="services">The service collection to which the rescue rules services will be added. Cannot be null.</param>
+        /// <returns>The same <see cref="IServiceCollection"/> instance that was provided, with rescue rules services registered.</returns>
         public static IServiceCollection AddRules(this IServiceCollection services)
         {
             services.AddMediatR(typeof(CalculateRescueTargetHandler).Assembly);
