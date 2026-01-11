@@ -1,11 +1,11 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using System.Net;
-using ThunderbirdsBoardGameEngine.Catalog.WireMock;
 using ThunderbirdsBoardGameEngine.Rules.Client.Interfaces.V1;
 using ThunderbirdsBoardGameEngine.Rules.Contracts.Dtos.Rescue.CalculateRescueTarget.V1;
 using ThunderbirdsBoardGameEngine.Rules.WireMock;
 using ThunderbirdsBoardGameEngine.TestUtils.Rules.Factories;
 using ThunderbirdsBoardGameEngine.TestUtils.xUnit.Fixtures;
+using ThunderbirdsBoardGameEngine.WireMock.Hosting;
 using Xunit;
 
 namespace ThunderbirdsBoardGameEngine.Rules.Client.ComponentTests.Clients.V1

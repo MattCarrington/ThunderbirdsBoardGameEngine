@@ -4,7 +4,7 @@ using ThunderbirdsBoardGameEngine.Catalog.Application.Interfaces;
 using ThunderbirdsBoardGameEngine.Catalog.Domain.Entities;
 using ThunderbirdsBoardGameEngine.PublishedLanguage.DisasterBonus;
 
-namespace ThunderbirdsBoardGameEngine.Rules.Application.ComponentTests.Fakes
+namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Fakes
 {
     public class FakeDisasterCardReferenceSource : IDisasterCardReferenceSource
     {

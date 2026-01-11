@@ -3,7 +3,7 @@ using ThunderbirdsBoardGameEngine.Catalog.Application.Interfaces;
 using ThunderbirdsBoardGameEngine.Catalog.Domain.Entities;
 using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.ReferenceSources;
 
-namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Initialisers
+namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Initializers
 {
     internal class DisasterCardReferenceSourceInitializer
     {

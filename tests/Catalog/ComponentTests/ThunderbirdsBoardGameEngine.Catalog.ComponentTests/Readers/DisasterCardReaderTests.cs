@@ -1,13 +1,13 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using ThunderbirdsBoardGameEngine.Catalog.Application.Exceptions;
 using ThunderbirdsBoardGameEngine.Catalog.Application.Interfaces;
+using ThunderbirdsBoardGameEngine.Catalog.ComponentTests.Fixtures;
 using ThunderbirdsBoardGameEngine.Catalog.Domain.Exceptions;
-using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.ComponentTests.Fixtures;
 using ThunderbirdsBoardGameEngine.TestUtils.Catalog.Helpers;
 using ThunderbirdsBoardGameEngine.TestUtils.Catalog.TestFileCatalogs;
 using Xunit;
 
-namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.ComponentTests.Repositories
+namespace ThunderbirdsBoardGameEngine.Catalog.ComponentTests.Readers
 {
     public class DisasterCardReaderTests : IClassFixture<InfrastructureRegistrationFixture>
     {

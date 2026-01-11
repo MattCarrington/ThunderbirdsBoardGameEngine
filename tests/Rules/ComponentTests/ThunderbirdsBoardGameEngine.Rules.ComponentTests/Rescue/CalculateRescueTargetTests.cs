@@ -4,8 +4,8 @@ using ThunderbirdsBoardGameEngine.Catalog.Application.Interfaces;
 using ThunderbirdsBoardGameEngine.Catalog.Domain.Entities;
 using ThunderbirdsBoardGameEngine.Catalog.Domain.Enums;
 using ThunderbirdsBoardGameEngine.PublishedLanguage.DisasterBonus;
-using ThunderbirdsBoardGameEngine.Rules.Application.ComponentTests.Fakes;
 using ThunderbirdsBoardGameEngine.Rules.Application.Rescue.CalculateRescueTarget;
+using ThunderbirdsBoardGameEngine.Rules.ComponentTests.Fakes;
 using ThunderbirdsBoardGameEngine.Rules.Infrastructure;
 using Xunit;
 

@@ -1,6 +1,6 @@
 ﻿using WireMock.Server;
 
-namespace ThunderbirdsBoardGameEngine.Catalog.WireMock
+namespace ThunderbirdsBoardGameEngine.WireMock.Hosting
 {
     /// <summary>
     /// Hosts a WireMock server instance configured with Catalog API stubs.

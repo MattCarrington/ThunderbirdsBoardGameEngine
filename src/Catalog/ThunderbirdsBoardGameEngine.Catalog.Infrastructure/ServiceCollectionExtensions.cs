@@ -8,7 +8,7 @@ using ThunderbirdsBoardGameEngine.Catalog.Application.Interfaces;
 using ThunderbirdsBoardGameEngine.Catalog.Format.Serialization;
 using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Configuration;
 using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Deserializers;
-using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Initialisers;
+using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Initializers;
 using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Interfaces;
 using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Mappers;
 using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.PostConfigures;

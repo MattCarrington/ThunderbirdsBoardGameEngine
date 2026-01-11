@@ -1,4 +1,4 @@
-﻿using ThunderbirdsBoardGameEngine.Catalog.WireMock;
+﻿using ThunderbirdsBoardGameEngine.WireMock.Hosting;
 using Xunit;
 
 namespace ThunderbirdsBoardGameEngine.TestUtils.xUnit.Fixtures

@@ -2,7 +2,7 @@
 using ThunderbirdsBoardGameEngine.Catalog.Application.Interfaces;
 using ThunderbirdsBoardGameEngine.Catalog.Domain.Entities;
 using ThunderbirdsBoardGameEngine.Catalog.Domain.Enums;
-using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Initialisers;
+using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Initializers;
 using ThunderbirdsBoardGameEngine.TestUtils.Catalog.Builders;
 using Xunit;
 

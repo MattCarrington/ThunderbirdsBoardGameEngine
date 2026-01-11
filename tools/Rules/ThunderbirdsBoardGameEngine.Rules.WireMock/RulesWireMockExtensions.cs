@@ -1,5 +1,5 @@
-﻿using ThunderbirdsBoardGameEngine.Catalog.WireMock;
-using ThunderbirdsBoardGameEngine.Rules.WireMock.Stubs.V1;
+﻿using ThunderbirdsBoardGameEngine.Rules.WireMock.Stubs.V1;
+using ThunderbirdsBoardGameEngine.WireMock.Hosting;
 
 namespace ThunderbirdsBoardGameEngine.Rules.WireMock
 {

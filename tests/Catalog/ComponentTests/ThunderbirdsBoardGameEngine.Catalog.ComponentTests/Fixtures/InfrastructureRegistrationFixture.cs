@@ -2,10 +2,11 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
+using ThunderbirdsBoardGameEngine.Catalog.Infrastructure;
 using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Configuration;
 using ThunderbirdsBoardGameEngine.TestUtils.Stubs;
 
-namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.ComponentTests.Fixtures
+namespace ThunderbirdsBoardGameEngine.Catalog.ComponentTests.Fixtures
 {
     public class InfrastructureRegistrationFixture : IDisposable
     {

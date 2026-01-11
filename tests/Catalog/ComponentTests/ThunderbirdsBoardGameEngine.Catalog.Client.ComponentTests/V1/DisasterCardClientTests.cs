@@ -8,6 +8,7 @@ using ThunderbirdsBoardGameEngine.TestUtils.Catalog.TestFileCatalogs;
 using ThunderbirdsBoardGameEngine.TestUtils.Helpers;
 using ThunderbirdsBoardGameEngine.TestUtils.xUnit.Assertions;
 using ThunderbirdsBoardGameEngine.TestUtils.xUnit.Fixtures;
+using ThunderbirdsBoardGameEngine.WireMock.Hosting;
 using Xunit;
 
 namespace ThunderbirdsBoardGameEngine.Catalog.Client.ComponentTests.V1

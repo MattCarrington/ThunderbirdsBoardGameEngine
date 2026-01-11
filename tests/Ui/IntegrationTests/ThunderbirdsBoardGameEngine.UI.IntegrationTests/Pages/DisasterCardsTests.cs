@@ -14,6 +14,7 @@ using ThunderbirdsBoardGameEngine.TestUtils.xUnit.Fixtures;
 using ThunderbirdsBoardGameEngine.UI.Interfaces;
 using ThunderbirdsBoardGameEngine.UI.Pages;
 using ThunderbirdsBoardGameEngine.UI.Services;
+using ThunderbirdsBoardGameEngine.WireMock.Hosting;
 using Xunit;
 
 namespace ThunderbirdsBoardGameEngine.UI.IntegrationTests.Pages
