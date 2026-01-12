@@ -18,10 +18,7 @@ permissions:
 env:
   SOLUTION_FILE: &solution ThunderbirdsBoardGameEngine.sln
   IMAGE_NAME: &image_name "thunderbirds-app"
-  CONTRACTS_PROJECT_PATH: &contracts_project_path "ThunderbirdsBoardGameEngine.Catalog.Contracts/ThunderbirdsBoardGameEngine.Catalog.Contracts.csproj"
-  CLIENT_PROJECT_PATH: &client_project_path "ThunderbirdsBoardGameEngine.Catalog.Client/ThunderbirdsBoardGameEngine.Catalog.Client.csproj"
-  WIREMOCK_PROJECT_PATH: &wiremock_project_path "ThunderbirdsBoardGameEngine.Catalog.WireMock/ThunderbirdsBoardGameEngine.Catalog.WireMock.csproj"
-
+  
 jobs:
   static-analysis:
     uses: ./.github/workflows/static-analysis.yml
@@ -56,33 +53,6 @@ jobs:
     needs:
       - tests
 
-  compute-contracts-version:
-    if: github.event_name == 'push'
-    uses: ./.github/workflows/compute-package-version.yml
-    with:
-      project_path: *contracts_project_path
-      package_id: "ThunderbirdsBoardGameEngine.Catalog.Contracts"
-    needs:
-      - tests
-      
-  compute-client-version:
-    if: github.event_name == 'push'
-    uses: ./.github/workflows/compute-package-version.yml
-    with:
-      project_path: *client_project_path
-      package_id: "ThunderbirdsBoardGameEngine.Catalog.Client"
-    needs:
-      - tests
-
-  compute-wiremock-version:
-    if: github.event_name == 'push'
-    uses: ./.github/workflows/compute-package-version.yml
-    with:
-      project_path: *wiremock_project_path
-      package_id: "ThunderbirdsBoardGameEngine.Catalog.WireMock"
-    needs:
-      - tests
-
   docker_publish:
     if: github.event_name == 'push'
     uses: ./.github/workflows/publish-docker.yml
@@ -94,30 +64,42 @@ jobs:
       registry_token: ${{ secrets.GITHUB_TOKEN }}
     needs:
       - compute-version
-  
-  publish-contracts:
-    if: github.event_name == 'push' && needs.compute-contracts-version.outputs.should_publish == 'true'
-    uses: ./.github/workflows/publish-dotnet-package.yml
-    with:
-      project_path: *contracts_project_path
-      package_version: ${{ needs.compute-contracts-version.outputs.version }}
-    needs:
-      - compute-contracts-version
 
-  publish-client:
-    if: github.event_name == 'push' && needs.compute-client-version.outputs.should_publish == 'true'
-    uses: ./.github/workflows/publish-dotnet-package.yml
-    with:
-      project_path: *client_project_path
-      package_version: ${{ needs.compute-client-version.outputs.version }}
-    needs:
-      - compute-client-version
+  publish-packages:
+    strategy:
+      matrix:
+        package:
+          - name: Catalog.Contracts
+            project_path: src/Catalog/ThunderbirdsBoardGameEngine.Catalog.Contracts/ThunderbirdsBoardGameEngine.Catalog.Contracts.csproj
+            package_id: ThunderbirdsBoardGameEngine.Catalog.Contracts
 
-  publish-wiremock:
-    if: github.event_name == 'push' && needs.compute-wiremock-version.outputs.should_publish == 'true'
-    uses: ./.github/workflows/publish-dotnet-package.yml
+          - name: Catalog.Client
+            project_path: src/Catalog/ThunderbirdsBoardGameEngine.Catalog.Client/ThunderbirdsBoardGameEngine.Catalog.Client.csproj
+            package_id: ThunderbirdsBoardGameEngine.Catalog.Client
+
+          - name: Catalog.WireMock
+            project_path: tools/Catalog/ThunderbirdsBoardGameEngine.Catalog.WireMock/ThunderbirdsBoardGameEngine.Catalog.WireMock.csproj
+            package_id: ThunderbirdsBoardGameEngine.Catalog.WireMock
+
+          - name: Rules.Contracts
+            project_path: src/Rules/ThunderbirdsBoardGameEngine.Rules.Contracts/ThunderbirdsBoardGameEngine.Rules.Contracts.csproj
+            package_id: ThunderbirdsBoardGameEngine.Rules.Contracts
+
+          - name: Rules.Client
+            project_path: src/Rules/ThunderbirdsBoardGameEngine.Rules.Client/ThunderbirdsBoardGameEngine.Rules.Client.csproj
+            package_id: ThunderbirdsBoardGameEngine.Rules.Client
+
+          - name: Rules.WireMock
+            project_path: tools/Rules/ThunderbirdsBoardGameEngine.Rules.WireMock/ThunderbirdsBoardGameEngine.Rules.WireMock.csproj
+            package_id: ThunderbirdsBoardGameEngine.Rules.WireMock
+
+    name: Package → ${{ matrix.package.name }}
+    if: github.event_name == 'push'
+    needs: 
+      - tests
+      - compute-version
+
+    uses: ./.github/workflows/package-lifecycle.yml
     with:
-      project_path: *wiremock_project_path
-      package_version: ${{ needs.compute-wiremock-version.outputs.version }}
-    needs:
-      - compute-wiremock-version
+      project_path: ${{ matrix.package.project_path }}
+      package_id: ${{ matrix.package.package_id }}
