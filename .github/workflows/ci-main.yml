@@ -18,10 +18,7 @@ env:
   SOLUTION_FILE: &solution ThunderbirdsBoardGameEngine.sln
   BASE_URL: &base_url "http://localhost:8080"
   IMAGE_NAME: &image_name "thunderbirds-app"
-  CONTRACTS_PROJECT_PATH: &contracts_project_path "src/Catalog/ThunderbirdsBoardGameEngine.Catalog.Contracts/ThunderbirdsBoardGameEngine.Catalog.Contracts.csproj"
-  CLIENT_PROJECT_PATH: &client_project_path "src/Catalog/ThunderbirdsBoardGameEngine.Catalog.Client/ThunderbirdsBoardGameEngine.Catalog.Client.csproj"
-  WIREMOCK_PROJECT_PATH: &wiremock_project_path "tools/Catalog/ThunderbirdsBoardGameEngine.Catalog.WireMock/ThunderbirdsBoardGameEngine.Catalog.WireMock.csproj"
-
+  
 jobs:
   static-analysis:
     uses: ./.github/workflows/static-analysis.yml
@@ -54,31 +51,7 @@ jobs:
     with:
       pr_title: ${{ github.event.pull_request.title || github.event.head_commit.message }}
     needs:
-      - tests
-
-  compute-contracts-version:
-    uses: ./.github/workflows/compute-package-version.yml
-    with:
-      project_path: *contracts_project_path
-      package_id: "ThunderbirdsBoardGameEngine.Catalog.Contracts"
-    needs:
-      - tests
-
-  compute-client-version:
-    uses: ./.github/workflows/compute-package-version.yml
-    with:
-      project_path: *client_project_path
-      package_id: "ThunderbirdsBoardGameEngine.Catalog.Client"
-    needs:
-      - tests
-
-  compute-wiremock-version:
-    uses: ./.github/workflows/compute-package-version.yml
-    with:
-      project_path: *wiremock_project_path
-      package_id: "ThunderbirdsBoardGameEngine.Catalog.WireMock"
-    needs:
-      - tests
+      - tests  
 
   tag-repo:
     uses: ./.github/workflows/tag-repo.yml
@@ -97,31 +70,30 @@ jobs:
     secrets:
       registry_token: ${{ secrets.GITHUB_TOKEN }}
     needs:
-      - compute-version      
-  
-  publish-contracts:
-    if: needs.compute-contracts-version.outputs.should_publish == 'true'
-    uses: ./.github/workflows/publish-dotnet-package.yml    
-    with:
-      project_path: *contracts_project_path
-      package_version: ${{ needs.compute-contracts-version.outputs.version }}
-    needs:
-      - compute-contracts-version
+      - compute-version     
 
-  publish-client:
-    if: needs.compute-client-version.outputs.should_publish == 'true'
-    uses: ./.github/workflows/publish-dotnet-package.yml
-    with:
-      project_path: *client_project_path
-      package_version: ${{ needs.compute-client-version.outputs.version }}
-    needs:
-      - compute-client-version
+  publish-packages:
+    strategy:
+      matrix:
+        package:
+          - name: Catalog.Contracts
+            project_path: src/Catalog/ThunderbirdsBoardGameEngine.Catalog.Contracts/ThunderbirdsBoardGameEngine.Catalog.Contracts.csproj
+            package_id: ThunderbirdsBoardGameEngine.Catalog.Contracts
 
-  publish-wiremock:
-    if: needs.compute-wiremock-version.outputs.should_publish == 'true'
-    uses: ./.github/workflows/publish-dotnet-package.yml
+          - name: Catalog.Client
+            project_path: src/Catalog/ThunderbirdsBoardGameEngine.Catalog.Client/ThunderbirdsBoardGameEngine.Catalog.Client.csproj
+            package_id: ThunderbirdsBoardGameEngine.Catalog.Client
+
+          - name: Catalog.WireMock
+            project_path: tools/Catalog/ThunderbirdsBoardGameEngine.Catalog.WireMock/ThunderbirdsBoardGameEngine.Catalog.WireMock.csproj
+            package_id: ThunderbirdsBoardGameEngine.Catalog.WireMock
+
+    name: Package → ${{ matrix.package.name }}
+    needs: 
+      - tests
+      - compute-version
+
+    uses: ./.github/workflows/package-lifecycle.yml
     with:
-      project_path: *wiremock_project_path
-      package_version: ${{ needs.compute-wiremock-version.outputs.version }}
-    needs:
-      - compute-wiremock-version
+      project_path: ${{ matrix.package.project_path }}
+      package_id: ${{ matrix.package.package_id }}

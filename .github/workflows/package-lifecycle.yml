@@ -1,39 +1,23 @@
-# NOTE:
-# This workflow assumes a user-owned GitHub Packages feed.
-# If the repository is moved to an organization, the API
-# endpoint must switch from /users to /orgs.
-
-name: Compute Package Version
+name: Publish .NET Package (resuable)
 
 on:
   workflow_call:
     inputs:
       project_path:
-        description: Path to the .csproj
+        description: "Path to the .csproj"
         required: true
         type: string
       package_id:
         description: NuGet package ID
         required: true
         type: string
-    outputs:
-      version:
-        description: Computed package version
-        value: ${{ jobs.compute.outputs.version }}
-      should_publish:
-        description: Whether the package should be published
-        value: ${{ jobs.compute.outputs.should_publish }}
 
 jobs:
-  compute:
+  package:
     runs-on: ubuntu-latest
     permissions:
       contents: read
-      packages: read
-
-    outputs:
-      version: ${{ steps.compute.outputs.version }}
-      should_publish: ${{ steps.compute.outputs.should_publish }}
+      packages: write
 
     steps:
       - uses: actions/checkout@v6
@@ -150,3 +134,24 @@ jobs:
           fi
 
           echo "version=$FINAL_VERSION" >> "$GITHUB_OUTPUT"
+
+      - name: Pack
+        if: steps.compute.outputs.should_publish == 'true'
+        run: |
+          dotnet pack "${{ inputs.project_path }}" \
+            -c Release \
+            -p:PackageVersion=${{ steps.compute.outputs.version }} \
+            -o ./artifacts
+
+      - name: Publish to GitHub Packages
+        if: steps.compute.outputs.should_publish == 'true'
+        run: |
+          dotnet nuget push "./artifacts/*.nupkg" \
+            --source "https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json" \
+            --api-key "${{ github.token }}" \
+            --skip-duplicate
+
+      - name: Skip publish (stable already exists)
+        if: steps.compute.outputs.should_publish != 'true'
+        run: |
+            echo "Stable version already exists — skipping package publish"
