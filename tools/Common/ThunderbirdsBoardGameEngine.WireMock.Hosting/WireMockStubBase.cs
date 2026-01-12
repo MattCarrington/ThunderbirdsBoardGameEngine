@@ -134,7 +134,7 @@ namespace ThunderbirdsBoardGameEngine.WireMock.Hosting
         {
             Server
                 .Given(Request.Create()
-                    .WithPath(new ExactMatcher(true, route))
+                    .WithPath(route)
                     .UsingMethod(httpMethod)
                     .WithHeader(headers =>
                         !headers.ContainsKey(VersionHeader) ||
