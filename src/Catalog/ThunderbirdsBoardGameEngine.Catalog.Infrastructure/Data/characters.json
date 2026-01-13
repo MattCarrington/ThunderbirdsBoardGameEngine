@@ -1,0 +1,61 @@
+{
+    "meta": {
+        "catalog": "Characters",
+        "schemaVersion": "1.0",
+        "contentVersion": "2025-01-13",
+        "annotations": {
+            "authoring": "handcrafted"
+        }
+    },
+    "data": [
+        {
+            "key": "scott",
+            "rescueBonuses": [
+                {
+                    "rescueType": "air",
+                    "bonusValue": 2
+                }
+            ]
+        },
+        {
+            "key": "virgil",
+            "rescueBonuses": [
+                {
+                    "rescueType": "land",
+                    "bonusValue": 2
+                }
+            ]
+        },
+        {
+            "key": "john",
+            "rescueBonuses": [
+                {
+                    "rescueType": "space",
+                    "bonusValue": 2
+                }
+            ]
+        },
+        {
+            "key": "gordon",
+            "rescueBonuses": [
+                {
+                    "rescueType": "sea",
+                    "bonusValue": 3
+                }
+            ]
+        },
+        {
+            "key": "alan",
+            "rescueBonuses": [
+                {
+                    "rescueType": "space",
+                    "bonusValue": 2
+                }
+            ]
+        },
+        {
+            "key": "ladyPenelope",
+            "rescueBonuses": []
+        }
+    ]
+}
