@@ -12,7 +12,7 @@ namespace ThunderbirdsBoardGameEngine.TestUtils.xUnit.ClassData
         {
             Add(null);
 
-            foreach (var item in new WhitespaceStringData())
+            foreach (var item in new WhiteSpaceStringData())
             {
                 Add(item);
             }

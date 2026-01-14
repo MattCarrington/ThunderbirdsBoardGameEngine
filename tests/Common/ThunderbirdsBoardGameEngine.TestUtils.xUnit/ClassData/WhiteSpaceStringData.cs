@@ -5,10 +5,10 @@ namespace ThunderbirdsBoardGameEngine.TestUtils.xUnit.ClassData
     /// <summary>
     /// Provides a selection of empty and whitespace-only strings for xUnit theories.
     /// </summary>
-    public sealed class WhitespaceStringData : TheoryData<string>
+    public sealed class WhiteSpaceStringData : TheoryData<string>
     {
         /// <inheritdoc />
-        public WhitespaceStringData()
+        public WhiteSpaceStringData()
         {
             Add(string.Empty);          // empty string
             Add(new string(' ', 1));    // single space

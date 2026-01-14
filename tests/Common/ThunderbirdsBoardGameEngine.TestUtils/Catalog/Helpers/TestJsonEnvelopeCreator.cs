@@ -74,6 +74,11 @@ namespace ThunderbirdsBoardGameEngine.TestUtils.Catalog.Helpers
                 {
                     ["algorithm"] = CatalogChecksum.Algorithm, // "sha256"
                     ["value"] = dataChecksum
+                },
+                ["toolInfo"] = new JsonObject
+                {
+                    ["name"] = "ThunderbirdsBoardGameEngine.TestUtils",
+                    ["version"] = "1.0.0-test"
                 }
             };
 

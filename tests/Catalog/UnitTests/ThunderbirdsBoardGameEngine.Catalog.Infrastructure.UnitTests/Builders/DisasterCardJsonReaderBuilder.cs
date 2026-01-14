@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using NSubstitute;
+using System.Text;
 using System.Text.Json;
 using ThunderbirdsBoardGameEngine.Catalog.Format.Dtos;
 using ThunderbirdsBoardGameEngine.Catalog.Format.Manifest;
@@ -20,7 +21,9 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Builders
         private string _jsonContent = "[]";
         private List<DisasterCardCatalogDto> _dtos;
         private IFileOpener? _fileReader;
+        private IJsonStreamValidator? _jsonStreamValidator;
         private IEnvelopeParser? _envelopeParser;
+        private IGeneratedContentValidator? _contentValidator;
         private IDisasterCardDeserializer? _deserializer;
         private IDisasterCardMapper? _mapper;
         private ILogger<DisasterCardJsonReader> _logger = NullLogger<DisasterCardJsonReader>.Instance;
@@ -50,9 +53,21 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Builders
             return this;
         }
 
+        internal DisasterCardJsonReaderBuilder WithJsonStreamValidator(IJsonStreamValidator jsonStreamValidator)
+        {
+            _jsonStreamValidator = jsonStreamValidator ?? throw new ArgumentNullException(nameof(jsonStreamValidator));
+            return this;
+        }
+
         internal DisasterCardJsonReaderBuilder WithEnvelopeParser(IEnvelopeParser envelopeParser)
         {
             _envelopeParser = envelopeParser ?? throw new ArgumentNullException(nameof(envelopeParser));
+            return this;
+        }
+
+        internal DisasterCardJsonReaderBuilder WithContentValidator(IGeneratedContentValidator validator)
+        {
+            _contentValidator = validator ?? throw new ArgumentNullException(nameof(validator));
             return this;
         }
 
@@ -94,18 +109,33 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Builders
                 FilePath = _filePath
             });
 
+            _jsonStreamValidator ??= CreateJsonStreamValidator();
             _envelopeParser ??= CreateEnvelopeParser(_dtos.Count);
+            _contentValidator ??= Substitute.For<IGeneratedContentValidator>();
             _deserializer ??= CreateDeserializer(_dtos);
             _mapper ??= new DisasterCardMapper();
 
-            return new DisasterCardJsonReader(disasterCardJsonOptions, _fileReader, _envelopeParser, _deserializer, _mapper, _logger);
+            return new DisasterCardJsonReader(disasterCardJsonOptions, _fileReader, _jsonStreamValidator, _envelopeParser, _contentValidator, _deserializer, _mapper, _logger);
+        }
+
+        private IJsonStreamValidator CreateJsonStreamValidator()
+        {
+            var content = Encoding.UTF8.GetBytes(_jsonContent);
+
+            var stream = new MemoryStream(content);
+
+            var jsonStreamValidator = Substitute.For<IJsonStreamValidator>();
+            jsonStreamValidator.ValidateStreamAsync(Arg.Any<Stream>(), Arg.Any<string>(), Arg.Any<CancellationToken>())
+                .Returns(stream);
+
+            return jsonStreamValidator;
         }
 
         private IEnvelopeParser CreateEnvelopeParser(int itemCount)
         {
-            var payload = new Payload
+            var payload = new Payload<GeneratedCatalogManifest>
             {
-                Manifest = new CatalogManifest
+                Manifest = new GeneratedCatalogManifest
                 {
                     Catalog = "DisasterCards",
                     SchemaVersion = "1.0",
@@ -116,13 +146,18 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Builders
                     {
                         Algorithm = "SHA256",
                         Value = "dummychecksumvalue"
+                    },
+                    ToolInfo = new ToolInfo
+                    {
+                        Name = "DisasterCardCatalogGenerator",
+                        Version = "1.0.0"
                     }
                 },
                 RawData = JsonDocument.Parse(_jsonContent).RootElement.Clone()
             };
 
             var envelopeParser = Substitute.For<IEnvelopeParser>();
-            envelopeParser.ReadEnvelopeAsync(Arg.Any<Stream>(), Arg.Any<CancellationToken>())
+            envelopeParser.ReadEnvelopeAsync<GeneratedCatalogManifest>(Arg.Any<Stream>(), Arg.Any<CancellationToken>())
                 .Returns(Task.FromResult(payload));
 
             return envelopeParser;

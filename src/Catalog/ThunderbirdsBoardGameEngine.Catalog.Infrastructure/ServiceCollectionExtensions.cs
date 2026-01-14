@@ -64,6 +64,8 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure
             services.AddSingleton<IFileOpener, FileOpener>();
             services.AddSingleton<IFileSystem, FileSystem>();
             services.AddSingleton<IEnvelopeParser, EnvelopeParser>();
+            services.AddSingleton<IGeneratedContentValidator, GeneratedContentValidator>();
+            services.AddSingleton<IJsonStreamValidator, JsonStreamValidator>();
 
             services.AddSingleton<IPostConfigureOptions<DisasterCardJsonOptions>, DisasterCardJsonPostConfigure>();
             services.AddSingleton<IValidateOptions<DisasterCardJsonOptions>, DisasterCardJsonOptionsValidator>();

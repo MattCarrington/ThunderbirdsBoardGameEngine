@@ -3,8 +3,8 @@ using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Utilities;
 
 namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Interfaces
 {
-    internal interface IEnvelopeParser
+    internal interface IGeneratedContentValidator
     {
-        Task<Payload<TManifest>> ReadEnvelopeAsync<TManifest>(Stream stream, CancellationToken cancellationToken) where TManifest : ICatalogManifest;
+        void Validate<TItem>(Payload<GeneratedCatalogManifest> payload);
     }
 }

@@ -13,6 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\src\Catalog\ThunderbirdsBoardGameEngine.Catalog.Application\ThunderbirdsBoardGameEngine.Catalog.Application.csproj" />
     <ProjectReference Include="..\..\..\tools\Common\ThunderbirdsBoardGameEngine.WireMock.Hosting\ThunderbirdsBoardGameEngine.WireMock.Hosting.csproj" />
     <ProjectReference Include="..\ThunderbirdsBoardGameEngine.TestUtils\ThunderbirdsBoardGameEngine.TestUtils.csproj" />
   </ItemGroup>

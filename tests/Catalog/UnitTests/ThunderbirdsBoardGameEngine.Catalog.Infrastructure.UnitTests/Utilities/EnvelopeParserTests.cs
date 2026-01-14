@@ -1,4 +1,5 @@
-﻿using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Builders;
+﻿using ThunderbirdsBoardGameEngine.Catalog.Format.Manifest;
+using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Builders;
 using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Utilities;
 using ThunderbirdsBoardGameEngine.TestUtils.xUnit.ClassData;
 using Xunit;
@@ -18,7 +19,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Utilities
             var parser = CreateParser();
 
             // Act
-            var result = await parser.ReadEnvelopeAsync(stream, CancellationToken.None);
+            var result = await parser.ReadEnvelopeAsync<GeneratedCatalogManifest>(stream, CancellationToken.None);
 
             // Assert
             Assert.NotNull(result.Manifest);
@@ -34,7 +35,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Utilities
             var parser = CreateParser();
 
             // Act & Assert
-            await Assert.ThrowsAsync<InvalidDataException>(() => parser.ReadEnvelopeAsync(stream, CancellationToken.None));
+            await Assert.ThrowsAsync<InvalidDataException>(() => parser.ReadEnvelopeAsync<GeneratedCatalogManifest>(stream, CancellationToken.None));
         }
 
         [Fact]
@@ -57,7 +58,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Utilities
             var parser = new EnvelopeParser();
 
             // Act & Assert
-            await Assert.ThrowsAsync<InvalidDataException>(() => parser.ReadEnvelopeAsync(stream, CancellationToken.None));
+            await Assert.ThrowsAsync<InvalidDataException>(() => parser.ReadEnvelopeAsync<GeneratedCatalogManifest>(stream, CancellationToken.None));
         }
 
         [Fact]
@@ -71,7 +72,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Utilities
             var parser = CreateParser();
 
             // Act & Assert
-            await Assert.ThrowsAsync<InvalidDataException>(() => parser.ReadEnvelopeAsync(stream, CancellationToken.None));
+            await Assert.ThrowsAsync<InvalidDataException>(() => parser.ReadEnvelopeAsync<GeneratedCatalogManifest>(stream, CancellationToken.None));
         }
 
         [Fact]
@@ -88,7 +89,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Utilities
             var parser = CreateParser();
 
             // Act & Assert
-            await Assert.ThrowsAsync<NotSupportedException>(() => parser.ReadEnvelopeAsync(stream, CancellationToken.None));
+            await Assert.ThrowsAsync<NotSupportedException>(() => parser.ReadEnvelopeAsync<GeneratedCatalogManifest>(stream, CancellationToken.None));
         }
 
         [Fact]
@@ -104,75 +105,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Utilities
             var parser = CreateParser();
 
             // Act & Assert
-            await Assert.ThrowsAsync<InvalidDataException>(() => parser.ReadEnvelopeAsync(stream, CancellationToken.None));
-        }
-
-        [Fact]
-        public async Task ReadEnvelopeAsync_WhenItemCountZero_ThrowsInvalidDataException()
-        {
-            // Arrange
-            var data = ValidData();
-
-            using var stream = new EnvelopeStreamBuilder()
-                .WithData(data)
-                .WithItemCountOverride(0)
-                .CreateStream();
-
-            var parser = CreateParser();
-
-            // Act & Assert
-            await Assert.ThrowsAsync<InvalidDataException>(() => parser.ReadEnvelopeAsync(stream, CancellationToken.None));
-        }
-
-        [Fact]
-        public async Task ReadEnvelopeAsync_WhenItemCountDoesNotMatchDataCount_ThrowsInvalidDataException()
-        {
-            // Arrange
-            var data = ValidData();
-
-            using var stream = new EnvelopeStreamBuilder()
-                .WithData(data)
-                .WithItemCountOverride(2)
-                .CreateStream();
-
-            var parser = CreateParser();
-
-            // Act & Assert
-            await Assert.ThrowsAsync<InvalidDataException>(() => parser.ReadEnvelopeAsync(stream, CancellationToken.None));
-        }
-
-        [Fact]
-        public async Task ReadEnvelopeAsync_WhenAlgorithmUnsupported_ThrowsNotSupportedException()
-        {
-            // Arrange
-            var data = ValidData();
-
-            using var stream = new EnvelopeStreamBuilder()
-                .WithData(data)
-                .WithChecksumAlgorithm("md5")
-                .CreateStream();
-
-            var parser = CreateParser();
-
-            // Act & Assert
-            await Assert.ThrowsAsync<NotSupportedException>(() => parser.ReadEnvelopeAsync(stream, CancellationToken.None));
-        }
-
-        [Fact]
-        public async Task ReadEnvelopeAsync_WhenChecksumInvalid_ThrowsInvalidDataException()
-        {
-            // Arrange
-            var data = ValidData();
-
-            using var stream = new EnvelopeStreamBuilder()
-                .WithData(data)
-                .WithChecksumOverride("invalidchecksumvalue")
-                .CreateStream();
-
-            var parser = CreateParser();
-
-            // Act & Assert
-            await Assert.ThrowsAsync<InvalidDataException>(() => parser.ReadEnvelopeAsync(stream, CancellationToken.None));
+            await Assert.ThrowsAsync<InvalidDataException>(() => parser.ReadEnvelopeAsync<GeneratedCatalogManifest>(stream, CancellationToken.None));
         }
 
         [Fact]
@@ -189,31 +122,11 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Utilities
             await token.CancelAsync();
 
             // Act & Assert
-            await Assert.ThrowsAnyAsync<OperationCanceledException>(() => parser.ReadEnvelopeAsync(stream, token.Token));
+            await Assert.ThrowsAnyAsync<OperationCanceledException>(() => parser.ReadEnvelopeAsync<GeneratedCatalogManifest>(stream, token.Token));
         }
 
         [Theory]
-        [InlineData(0)]
-        [InlineData(-1)]
-        [InlineData(int.MinValue)]
-        public async Task ReadEnvelopeAsync_WhenItemCountInvalid_ThrowsInvalidDataException(int invalidItemCount)
-        {
-            // Arrange
-            var data = ValidData();
-
-            using var stream = new EnvelopeStreamBuilder()
-                .WithData(data)
-                .WithItemCountOverride(invalidItemCount)
-                .CreateStream();
-
-            var parser = CreateParser();
-
-            // Act & Assert
-            await Assert.ThrowsAsync<InvalidDataException>(() => parser.ReadEnvelopeAsync(stream, CancellationToken.None));
-        }
-
-        [Theory]
-        [ClassData(typeof(WhitespaceStringData))]
+        [ClassData(typeof(WhiteSpaceStringData))]
         public async Task ReadEnvelopeAsync_WhenSchemaValueIsNullOrWhitespace_ThrowsInvalidDataException(string? invalidSchemaVersion)
         {
             // Arrange
@@ -227,43 +140,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Utilities
             var parser = CreateParser();
 
             // Act & Assert
-            await Assert.ThrowsAsync<InvalidDataException>(() => parser.ReadEnvelopeAsync(stream, CancellationToken.None));
-        }
-
-        [Theory]
-        [ClassData(typeof(WhitespaceStringData))]
-        public async Task ReadEnvelopeAsync_WhenChecksumAlgorithmNullOrWhitespace_ThrowsInvalidDataException(string? invalidAlgorithm)
-        {
-            // Arrange
-            var data = ValidData();
-
-            using var stream = new EnvelopeStreamBuilder()
-                .WithData(data)
-                .WithChecksumAlgorithm(invalidAlgorithm)
-                .CreateStream();
-
-            var parser = CreateParser();
-
-            // Act & Assert
-            await Assert.ThrowsAsync<InvalidDataException>(() => parser.ReadEnvelopeAsync(stream, CancellationToken.None));
-        }
-
-        [Theory]
-        [ClassData(typeof(WhitespaceStringData))]
-        public async Task ReadEnvelopeAsync_WhenChecksumValueIsNullOrWhitespace_ThrowsInvalidDataException(string? invalidChecksumValue)
-        {
-            // Arrange
-            var data = ValidData();
-
-            using var stream = new EnvelopeStreamBuilder()
-                .WithData(data)
-                .WithChecksumOverride(invalidChecksumValue)
-                .CreateStream();
-
-            var parser = CreateParser();
-
-            // Act & Assert
-            await Assert.ThrowsAsync<InvalidDataException>(() => parser.ReadEnvelopeAsync(stream, CancellationToken.None));
+            await Assert.ThrowsAsync<InvalidDataException>(() => parser.ReadEnvelopeAsync<GeneratedCatalogManifest>(stream, CancellationToken.None));
         }
 
         private static string ValidData()

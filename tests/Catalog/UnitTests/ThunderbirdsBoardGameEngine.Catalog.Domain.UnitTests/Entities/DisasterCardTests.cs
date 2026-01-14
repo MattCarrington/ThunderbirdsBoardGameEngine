@@ -12,7 +12,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Domain.UnitTests.Entities
         private readonly CardCode _validCode = new("valid-slug");
 
         [Theory]
-        [ClassData(typeof(WhitespaceStringData))]
+        [ClassData(typeof(WhiteSpaceStringData))]
         public void Constructor_WhenNameIsInvalid_ThrowsArgumentException(string name)
         {
             // Arrange
@@ -279,7 +279,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Domain.UnitTests.Entities
         }
 
         [Theory]
-        [ClassData(typeof(WhitespaceStringData))]
+        [ClassData(typeof(WhiteSpaceStringData))]
         public void Constructor_WhenCodeWhiteSpace_ThrowsArgumentException(string code)
         {
             // Arrange
