@@ -1,19 +1,19 @@
-﻿using NSubstitute;
+﻿using Microsoft.Extensions.Logging.Abstractions;
+using Microsoft.Extensions.Options;
+using NSubstitute;
 using NSubstitute.ExceptionExtensions;
 using System.Security;
 using System.Text.Json;
 using ThunderbirdsBoardGameEngine.Catalog.Application.Exceptions;
-using ThunderbirdsBoardGameEngine.Catalog.Domain.Exceptions;
 using ThunderbirdsBoardGameEngine.Catalog.Format.Dtos;
 using ThunderbirdsBoardGameEngine.Catalog.Format.Manifest;
+using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Configuration;
 using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Interfaces;
+using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Readers;
 using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Builders;
-using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Fakes;
 using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Utilities;
-using ThunderbirdsBoardGameEngine.TestUtils;
 using ThunderbirdsBoardGameEngine.TestUtils.Catalog.Builders;
 using ThunderbirdsBoardGameEngine.TestUtils.xUnit.Assertions;
-using ThunderbirdsBoardGameEngine.TestUtils.xUnit.ClassData;
 using Xunit;
 
 namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Readers
@@ -28,51 +28,22 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Readers
             // Arrange
             var disasterCards = ValidCards();
 
-            var stream = new EnvelopeStreamBuilder()
-                .WithData(SerializeDisasterCardData(disasterCards))
-                .CreateStream();
+            var payload = new GeneratedManifestPayloadBuilder()
+                .WithItemCount(disasterCards.Count)
+                .WithDisasterCards(disasterCards)
+                .Build();
 
-            var file = Substitute.For<IFileOpener>();
-            file.OpenReadAsync(Arg.Is<string>(p => p == TestPath), Arg.Any<CancellationToken>())
-                .Returns(Task.FromResult<Stream>(stream));
-
-            var payload = new Payload<GeneratedCatalogManifest>
-            {
-                Manifest = new GeneratedCatalogManifest
-                {
-                    Catalog = "DisasterCards",
-                    SchemaVersion = "1.0",
-                    ContentVersion = "1.0.0",
-                    GeneratedAtUtc = DateTime.UtcNow,
-                    ItemCount = disasterCards.Count,
-                    Checksum = new Checksum
-                    {
-                        Algorithm = "SHA256",
-                        Value = "dummychecksumvalue"
-                    },
-                    ToolInfo = new ToolInfo
-                    {
-                        Name = "DisasterCardCatalogGenerator",
-                        Version = "1.0.0"
-                    }
-                },
-                RawData = JsonDocument.Parse(SerializeDisasterCardData(disasterCards)).RootElement.Clone()
-            };
-
-            var parser = Substitute.For<IEnvelopeParser>();
-            parser.ReadEnvelopeAsync<GeneratedCatalogManifest>(Arg.Any<Stream>(), Arg.Any<CancellationToken>())
+            var payloadReader = Substitute.For<ICatalogPayloadReader<GeneratedCatalogManifest>>();
+            payloadReader.ReadAsync(Arg.Any<string>(), Arg.Any<CancellationToken>())
                 .Returns(Task.FromResult(payload));
 
             var deserializer = Substitute.For<IDisasterCardDeserializer>();
             deserializer.Deserialize(Arg.Any<JsonElement>())
                 .Returns(disasterCards);
 
-            var reader = new DisasterCardJsonReaderBuilder()
-                .WithFileOpener(file)
-                .WithEnvelopeParser(parser)
-                .WithDeserializer(deserializer)
-                .WithFilePath(TestPath)
-                .Build();
+            var reader = CreateReader(
+                payloadReader: payloadReader, 
+                deserializer: deserializer);
 
             // Act
             var result = await reader.GetAllAsync(CancellationToken.None);
@@ -82,8 +53,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Readers
             Assert.NotEmpty(result);
             Assert.Equal(disasterCards.Count, result.Count);
 
-            await file.Received(1).OpenReadAsync(Arg.Is<string>(p => p == TestPath), Arg.Any<CancellationToken>());
-            await parser.Received(1).ReadEnvelopeAsync<GeneratedCatalogManifest>(Arg.Any<Stream>(), Arg.Any<CancellationToken>());
+            await payloadReader.Received(1).ReadAsync(Arg.Is<string>(p => p == TestPath), Arg.Any<CancellationToken>());
             deserializer.Received(1).Deserialize(Arg.Any<JsonElement>());
         }
 
@@ -91,7 +61,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Readers
         public async Task GetAllAsync_WhenCanceledBeforeCall_ThrowsOperationCanceledException()
         {
             // Arrange
-            var reader = new DisasterCardJsonReaderBuilder().WithFilePath(TestPath).Build();
+            var reader = CreateReader();
 
             using var cts = new CancellationTokenSource();
             await cts.CancelAsync();
@@ -109,7 +79,8 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Readers
             deserializer.Deserialize(Arg.Any<JsonElement>())
                 .Returns([]);
 
-            var reader = new DisasterCardJsonReaderBuilder().WithDeserializer(deserializer).WithFilePath(TestPath).Build();
+            var reader = CreateReader(
+                deserializer: deserializer);
 
             // Act & Assert
             await CatalogDataAccessAssertions.AssertCatalogDataAccessException<InvalidDataException>(
@@ -126,7 +97,8 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Readers
             deserializer.Deserialize(Arg.Any<JsonElement>())
                 .Returns(null as List<DisasterCardCatalogDto>);
 
-            var reader = new DisasterCardJsonReaderBuilder().WithDeserializer(deserializer).WithFilePath(TestPath).Build();
+            var reader = CreateReader(
+                deserializer: deserializer);
 
             // Act & Assert
             await CatalogDataAccessAssertions.AssertCatalogDataAccessException<InvalidDataException>(
@@ -150,7 +122,8 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Readers
             deserializer.Deserialize(Arg.Any<JsonElement>())
                 .Returns(data.ToList());
 
-            var reader = new DisasterCardJsonReaderBuilder().WithDeserializer(deserializer).WithFilePath(TestPath).Build();
+            var reader = CreateReader(
+                deserializer: deserializer);
 
             // Act & Assert
             await CatalogDataAccessAssertions.AssertCatalogDataAccessException<InvalidDataException>(
@@ -167,243 +140,8 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Readers
             deserializer.Deserialize(Arg.Any<JsonElement>())
                 .Returns(ValidCards());
 
-            var reader = new DisasterCardJsonReaderBuilder().WithDeserializer(deserializer).WithFilePath(TestPath).Build();
-
-            // Act & Assert
-            await CatalogDataAccessAssertions.AssertCatalogDataAccessException<InvalidDataException>(
-                () => reader.GetAllAsync(CancellationToken.None),
-                CatalogDataAccessErrorCode.BadJson,
-                TestPath);
-        }
-
-        [Fact]
-        public async Task GetAllAsync_WhenFileMissing_WrapsSourceNotFound()
-        {
-            // Arrange
-            var fileReader = new FakeFileOpener().AddException(TestPath, new FileNotFoundException("File not found", TestPath));
-
-            var reader = new DisasterCardJsonReaderBuilder().WithFileOpener(fileReader).WithFilePath(TestPath).Build();
-
-            // Act & Assert
-            await CatalogDataAccessAssertions.AssertCatalogDataAccessException<FileNotFoundException>(
-                () => reader.GetAllAsync(CancellationToken.None),
-                CatalogDataAccessErrorCode.SourceNotFound,
-                TestPath);
-        }
-
-        [Fact]
-        public async Task GetAllAsync_WhenDirectoryMissing_WrapsSourceNotFound()
-        {
-            // Arrange
-            var fileReader = new FakeFileOpener().AddException(TestPath, new DirectoryNotFoundException("Directory not found"));
-
-            var reader = new DisasterCardJsonReaderBuilder().WithFileOpener(fileReader).WithFilePath(TestPath).Build();
-
-            // Act & Assert
-            await CatalogDataAccessAssertions.AssertCatalogDataAccessException<DirectoryNotFoundException>(
-                () => reader.GetAllAsync(CancellationToken.None),
-                CatalogDataAccessErrorCode.SourceNotFound,
-                TestPath);
-        }
-
-        [Fact]
-        public async Task GetAllAsync_WhenDriveMissing_WrapsSourceNotFound()
-        {
-            // Arrange
-            var fileReader = new FakeFileOpener().AddException(TestPath, new DriveNotFoundException("Drive not found"));
-
-            var reader = new DisasterCardJsonReaderBuilder().WithFileOpener(fileReader).WithFilePath(TestPath).Build();
-
-            // Act & Assert
-            await CatalogDataAccessAssertions.AssertCatalogDataAccessException<DriveNotFoundException>(
-                () => reader.GetAllAsync(CancellationToken.None),
-                CatalogDataAccessErrorCode.SourceNotFound,
-                TestPath);
-        }
-
-        [Fact]
-        public async Task GetAllAsync_WhenAccessDenied_WrapsAccessDenied()
-        {
-            // Arrange
-            var fileReader = new FakeFileOpener().AddException(TestPath, new UnauthorizedAccessException("Access denied"));
-
-            var reader = new DisasterCardJsonReaderBuilder().WithFileOpener(fileReader).WithFilePath(TestPath).Build();
-
-            // Act & Assert
-            await CatalogDataAccessAssertions.AssertCatalogDataAccessException<UnauthorizedAccessException>(
-                () => reader.GetAllAsync(CancellationToken.None),
-                CatalogDataAccessErrorCode.AccessDenied,
-                TestPath);
-        }
-
-        [Fact]
-        public async Task GetAllAsync_WhenSecurityError_WrapsAccessDenied()
-        {
-            // Arrange
-            var fileReader = new FakeFileOpener().AddException(TestPath, new SecurityException("A security issue has occurred"));
-
-            var reader = new DisasterCardJsonReaderBuilder().WithFileOpener(fileReader).WithFilePath(TestPath).Build();
-
-            // Act & Assert
-            await CatalogDataAccessAssertions.AssertCatalogDataAccessException<SecurityException>(
-                () => reader.GetAllAsync(CancellationToken.None),
-                CatalogDataAccessErrorCode.AccessDenied,
-                TestPath);
-        }
-
-        [Fact]
-        public async Task GetAllAsync_WhenAuthenticationException_WrapsAccessDenied()
-        {
-            // Arrange
-            var fileReader = new FakeFileOpener().AddException(TestPath, new AuthenticationException("Authentication failed"));
-
-            var reader = new DisasterCardJsonReaderBuilder().WithFileOpener(fileReader).WithFilePath(TestPath).Build();
-
-            // Act & Assert
-            await CatalogDataAccessAssertions.AssertCatalogDataAccessException<AuthenticationException>(
-                () => reader.GetAllAsync(CancellationToken.None),
-                CatalogDataAccessErrorCode.AccessDenied,
-                TestPath);
-        }
-
-        [Fact]
-        public async Task GetAllAsync_WhenIOError_WrapsSourceUnreadable()
-        {
-            // Arrange
-            var fileReader = new FakeFileOpener().AddException(TestPath, new IOException("IO Error"));
-
-            var reader = new DisasterCardJsonReaderBuilder().WithFileOpener(fileReader).WithFilePath(TestPath).Build();
-
-            // Act & Assert
-            await CatalogDataAccessAssertions.AssertCatalogDataAccessException<IOException>(
-                () => reader.GetAllAsync(CancellationToken.None),
-                CatalogDataAccessErrorCode.SourceUnreadable,
-                TestPath);
-        }
-
-        [Fact]
-        public async Task GetAllAsync_WhenEndOfStreamException_WrapsSourceUnreadable()
-        {
-            // Arrange
-            var fileReader = new FakeFileOpener().AddException(TestPath, new EndOfStreamException("End of stream"));
-
-            var reader = new DisasterCardJsonReaderBuilder().WithFileOpener(fileReader).WithFilePath(TestPath).Build();
-
-            // Act & Assert
-            await CatalogDataAccessAssertions.AssertCatalogDataAccessException<EndOfStreamException>(
-                () => reader.GetAllAsync(CancellationToken.None),
-                CatalogDataAccessErrorCode.SourceUnreadable,
-                TestPath);
-        }
-
-        [Fact]
-        public async Task GetAllAsync_WhenPathTooLong_WrapsSourceUnreadable()
-        {
-            // Arrange
-            var fileReader = new FakeFileOpener().AddException(TestPath, new PathTooLongException("Path too long"));
-
-            var reader = new DisasterCardJsonReaderBuilder().WithFileOpener(fileReader).WithFilePath(TestPath).Build();
-
-            // Act & Assert
-            await CatalogDataAccessAssertions.AssertCatalogDataAccessException<PathTooLongException>(
-                () => reader.GetAllAsync(CancellationToken.None),
-                CatalogDataAccessErrorCode.SourceUnreadable,
-                TestPath);
-        }
-
-        [Fact]
-        public async Task GetAllAsync_WhenSourceDisposed_WrapsSourceUnreadable()
-        {
-            // Arrange
-            var fileReader = new FakeFileOpener().AddException(TestPath, new ObjectDisposedException("Object has been disposed"));
-
-            var reader = new DisasterCardJsonReaderBuilder().WithFileOpener(fileReader).WithFilePath(TestPath).Build();
-
-            // Act & Assert
-            await CatalogDataAccessAssertions.AssertCatalogDataAccessException<ObjectDisposedException>(
-                () => reader.GetAllAsync(CancellationToken.None),
-                CatalogDataAccessErrorCode.SourceUnreadable,
-                TestPath);
-        }
-
-        [Fact]
-        public async Task GetAllAsync_WhenGenericError_WrapsUnknown()
-        {
-            // Arrange
-            var fileReader = new FakeFileOpener().AddException(TestPath, new Exception("Generic error"));
-
-            var reader = new DisasterCardJsonReaderBuilder().WithFileOpener(fileReader).WithFilePath(TestPath).Build();
-
-            // Act & Assert
-            await CatalogDataAccessAssertions.AssertCatalogDataAccessException<Exception>(
-                () => reader.GetAllAsync(CancellationToken.None),
-                CatalogDataAccessErrorCode.Unknown,
-                TestPath);
-        }
-
-        [Fact]
-        public async Task GetAllAsync_WhenException_WrapsUnknown()
-        {
-            // Arrange
-            var fileReader = new FakeFileOpener().AddException(TestPath, new FieldAccessException("Generic error"));    //  Random exception type to assert caught by generic handler
-
-            var reader = new DisasterCardJsonReaderBuilder().WithFileOpener(fileReader).WithFilePath(TestPath).Build();
-
-            // Act & Assert
-            await CatalogDataAccessAssertions.AssertCatalogDataAccessException<FieldAccessException>(
-                () => reader.GetAllAsync(CancellationToken.None),
-                CatalogDataAccessErrorCode.Unknown,
-                TestPath);
-        }
-
-        [Fact]
-        public async Task GetAllAsync_WhenFileReaderCanceled_ThrowsOperationCanceledException()
-        {
-            // Arrange
-            var files = new FakeFileOpener().AddCanceled(TestPath);
-
-            var reader = new DisasterCardJsonReaderBuilder().WithFileOpener(files).WithFilePath(TestPath).Build();
-
-            // Act & Assert
-            await Assert.ThrowsAnyAsync<OperationCanceledException>(
-                () => reader.GetAllAsync(new CancellationToken(canceled: true)));
-        }
-
-        [Fact]
-        public async Task GetAllAsync_WhenOutOfMemory_Bubbles()
-        {
-            // Arrange
-            var files = new FakeFileOpener().AddException(TestPath, new OutOfMemoryException("boom"));
-
-            var reader = new DisasterCardJsonReaderBuilder().WithFileOpener(files).WithFilePath(TestPath).Build();
-
-            // Act & Assert
-            await Assert.ThrowsAsync<OutOfMemoryException>(() => reader.GetAllAsync(CancellationToken.None));
-        }
-
-        [Fact]
-        public async Task GetAllAsync_WhenAccessViolation_Bubbles()
-        {
-            // Arrange
-            var files = new FakeFileOpener().AddException(TestPath, new AccessViolationException("bad"));
-            var reader = new DisasterCardJsonReaderBuilder().WithFileOpener(files).WithFilePath(TestPath).Build();
-
-            // Act & Assert
-            await Assert.ThrowsAsync<AccessViolationException>(() => reader.GetAllAsync(CancellationToken.None));
-        }
-
-        [Fact]
-        public async Task GetAllAsync_WhenParserThrowsInvalidDataException_WrapsBadJsonException()
-        {
-            // Arrange
-            var parser = Substitute.For<IEnvelopeParser>();
-            parser.ReadEnvelopeAsync<GeneratedCatalogManifest>(Arg.Any<Stream>(), Arg.Any<CancellationToken>())
-                .Throws(new InvalidDataException("Malformed envelope data."));
-
-            var reader = new DisasterCardJsonReaderBuilder()
-                .WithEnvelopeParser(parser)
-                .WithFilePath(TestPath)
-                .Build();
+            var reader = CreateReader(
+                deserializer: deserializer);
 
             // Act & Assert
             await CatalogDataAccessAssertions.AssertCatalogDataAccessException<InvalidDataException>(
@@ -420,10 +158,8 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Readers
             deserializer.Deserialize(Arg.Any<JsonElement>())
                 .Throws(new NotSupportedException("Unsupported type configuration for DisasterCard."));
 
-            var reader = new DisasterCardJsonReaderBuilder()
-                .WithDeserializer(deserializer)
-                .WithFilePath(TestPath)
-                .Build();
+            var reader = CreateReader(
+                deserializer: deserializer);
 
             // Act & Assert
             await CatalogDataAccessAssertions.AssertCatalogDataAccessException<NotSupportedException>(
@@ -440,30 +176,14 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Readers
             deserializer.Deserialize(Arg.Any<JsonElement>())
                 .Throws(new JsonException("Malformed JSON data."));
 
-            var reader = new DisasterCardJsonReaderBuilder()
-                .WithDeserializer(deserializer)
-                .WithFilePath(TestPath)
-                .Build();
+            var reader = CreateReader(
+                deserializer: deserializer);
 
             // Act & Assert
             await CatalogDataAccessAssertions.AssertCatalogDataAccessException<JsonException>(
                 () => reader.GetAllAsync(CancellationToken.None),
                 CatalogDataAccessErrorCode.BadJson,
                 TestPath);
-        }
-
-        [Fact]
-        public async Task GetAllAsync_WhenMapperThrowsDisasterCardValidationException()
-        {
-            // Arrange
-            var mapper = Substitute.For<IDisasterCardMapper>();
-            mapper.Map(Arg.Any<DisasterCardCatalogDto>())
-                .Throws(DisasterCardValidationException.Unknown());
-
-            var reader = new DisasterCardJsonReaderBuilder().WithMapper(mapper).WithFilePath(TestPath).Build();
-
-            // Act & Assert
-            await Assert.ThrowsAsync<DisasterCardValidationException>(() => reader.GetAllAsync(CancellationToken.None));
         }
 
         private static List<DisasterCardCatalogDto> ValidCards()
@@ -476,13 +196,27 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Readers
             ];
         }
 
-        private static string SerializeDisasterCardData(IList<DisasterCardCatalogDto> disasterCards)
+        private DisasterCardJsonReader CreateReader(
+            ICatalogPayloadReader<GeneratedCatalogManifest>? payloadReader = null,
+            IDisasterCardDeserializer? deserializer = null,
+            IDisasterCardMapper? mapper = null)
         {
-            return JsonSerializer.Serialize(disasterCards, JsonDefaults.DisasterCards);
+            return new DisasterCardJsonReader(
+                Options.Create(new DisasterCardJsonOptions { FilePath = TestPath }),
+                payloadReader ?? CreateDefaultPayloadReader(),
+                deserializer ?? Substitute.For<IDisasterCardDeserializer>(),
+                mapper ?? Substitute.For<IDisasterCardMapper>(),
+                NullLogger<DisasterCardJsonReader>.Instance);
         }
 
-        private sealed class AuthenticationException(string message) : SecurityException(message)
+        private static ICatalogPayloadReader<GeneratedCatalogManifest> CreateDefaultPayloadReader()
         {
+            var reader = Substitute.For<ICatalogPayloadReader<GeneratedCatalogManifest>>();
+
+            reader.ReadAsync(Arg.Any<string>(), Arg.Any<CancellationToken>())
+                .Returns(new GeneratedManifestPayloadBuilder().Build());
+
+            return reader;
         }
     }
 }

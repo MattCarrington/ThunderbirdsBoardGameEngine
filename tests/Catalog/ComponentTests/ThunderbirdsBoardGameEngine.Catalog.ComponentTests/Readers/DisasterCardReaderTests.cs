@@ -27,7 +27,9 @@ namespace ThunderbirdsBoardGameEngine.Catalog.ComponentTests.Readers
 
             using var provider = _fixture.Build(ConfigKey, filepath);
 
-            var reader = provider.GetRequiredService<IDisasterCardReader>();
+            using var scope = provider.CreateScope();
+
+            var reader = scope.ServiceProvider.GetRequiredService<IDisasterCardReader>();
 
             // Act
             var cards = await reader.GetAllAsync(CancellationToken.None);
@@ -47,7 +49,9 @@ namespace ThunderbirdsBoardGameEngine.Catalog.ComponentTests.Readers
 
             using var provider = _fixture.Build(ConfigKey, filePath);
 
-            var reader = provider.GetRequiredService<IDisasterCardReader>();
+            using var scope = provider.CreateScope();
+
+            var reader = scope.ServiceProvider.GetRequiredService<IDisasterCardReader>();
 
             // Act & Assert
             var ex = await Assert.ThrowsAsync<CatalogDataAccessException>(() => reader.GetAllAsync(CancellationToken.None));
@@ -65,7 +69,9 @@ namespace ThunderbirdsBoardGameEngine.Catalog.ComponentTests.Readers
 
             using var provider = _fixture.Build(ConfigKey, path);
 
-            var reader = provider.GetRequiredService<IDisasterCardReader>();
+            using var scope = provider.CreateScope();
+
+            var reader = scope.ServiceProvider.GetRequiredService<IDisasterCardReader>();
 
             // Act & Assert
             var exception = await Assert.ThrowsAsync<CatalogDataAccessException>(() => reader.GetAllAsync(CancellationToken.None));
@@ -85,7 +91,9 @@ namespace ThunderbirdsBoardGameEngine.Catalog.ComponentTests.Readers
 
             using var provider = _fixture.Build(ConfigKey, path);
 
-            var reader = provider.GetRequiredService<IDisasterCardReader>();
+            using var scope = provider.CreateScope();
+
+            var reader = scope.ServiceProvider.GetRequiredService<IDisasterCardReader>();
 
             // Act & Assert
             var exception = await Assert.ThrowsAsync<CatalogDataAccessException>(() => reader.GetAllAsync(CancellationToken.None));
@@ -102,7 +110,9 @@ namespace ThunderbirdsBoardGameEngine.Catalog.ComponentTests.Readers
 
             using var provider = _fixture.Build(ConfigKey, enveloped);
 
-            var reader = provider.GetRequiredService<IDisasterCardReader>();
+            using var scope = provider.CreateScope();
+
+            var reader = scope.ServiceProvider.GetRequiredService<IDisasterCardReader>();
 
             // Act & Assert
             var exception = await Assert.ThrowsAsync<DisasterCardValidationException>(() => reader.GetAllAsync(CancellationToken.None));
@@ -117,7 +127,9 @@ namespace ThunderbirdsBoardGameEngine.Catalog.ComponentTests.Readers
 
             using var provider = _fixture.Build(ConfigKey, bareFilePath);
 
-            var reader = provider.GetRequiredService<IDisasterCardReader>();
+            using var scope = provider.CreateScope();
+
+            var reader = scope.ServiceProvider.GetRequiredService<IDisasterCardReader>();
 
             // Act & Assert
             var exception = await Assert.ThrowsAsync<CatalogDataAccessException>(() => reader.GetAllAsync(CancellationToken.None));

@@ -9,5 +9,4 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Utilities
 
         public required JsonElement RawData { get; init; }
     }
-
 }

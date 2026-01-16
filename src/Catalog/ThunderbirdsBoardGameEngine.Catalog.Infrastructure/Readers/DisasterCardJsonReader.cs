@@ -1,11 +1,9 @@
 ﻿using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using System.Security;
 using System.Text.Json;
 using ThunderbirdsBoardGameEngine.Catalog.Application.Exceptions;
 using ThunderbirdsBoardGameEngine.Catalog.Application.Interfaces;
 using ThunderbirdsBoardGameEngine.Catalog.Domain.Entities;
-using ThunderbirdsBoardGameEngine.Catalog.Domain.Exceptions;
 using ThunderbirdsBoardGameEngine.Catalog.Format.Dtos;
 using ThunderbirdsBoardGameEngine.Catalog.Format.Manifest;
 using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Configuration;
@@ -16,20 +14,14 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Readers
     internal sealed class DisasterCardJsonReader : IDisasterCardReader
     {
         private readonly string _filePath;
-        private readonly IFileOpener _fileOpener;
-        private readonly IJsonStreamValidator _jsonStreamValidator;
-        private readonly IEnvelopeParser _envelopeParser;
-        private readonly IGeneratedContentValidator _generatedContentValidator;
+        private readonly ICatalogPayloadReader<GeneratedCatalogManifest> _catalogPayloadReader;
         private readonly IDisasterCardDeserializer _disasterCardDeserializer;
         private readonly IDisasterCardMapper _disasterCardMapper;
         private readonly ILogger<DisasterCardJsonReader> _logger;
 
         public DisasterCardJsonReader(
             IOptions<DisasterCardJsonOptions> options,
-            IFileOpener fileOpener,
-            IJsonStreamValidator jsonStreamValidator,
-            IEnvelopeParser envelopeParser,
-            IGeneratedContentValidator generatedContentValidator,
+            ICatalogPayloadReader<GeneratedCatalogManifest> catalogPayloadReader,
             IDisasterCardDeserializer deserializer,
             IDisasterCardMapper mapper,
             ILogger<DisasterCardJsonReader> logger)
@@ -41,10 +33,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Readers
             }
 
             _filePath = options.Value.FilePath;
-            _fileOpener = fileOpener ?? throw new ArgumentNullException(nameof(fileOpener));
-            _jsonStreamValidator = jsonStreamValidator ?? throw new ArgumentNullException(nameof(jsonStreamValidator));
-            _envelopeParser = envelopeParser ?? throw new ArgumentNullException(nameof(envelopeParser));
-            _generatedContentValidator = generatedContentValidator ?? throw new ArgumentNullException(nameof(generatedContentValidator));
+            _catalogPayloadReader = catalogPayloadReader ?? throw new ArgumentNullException(nameof(catalogPayloadReader));
             _disasterCardDeserializer = deserializer ?? throw new ArgumentNullException(nameof(deserializer));
             _disasterCardMapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -55,62 +44,16 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Readers
             cancellationToken.ThrowIfCancellationRequested();
 
             _logger.LogDebug("Loading Disaster Cards from {Path}", _filePath);
+                        
+            var payload = await _catalogPayloadReader.ReadAsync(_filePath, cancellationToken);
+
+            IReadOnlyList<DisasterCardCatalogDto> dtos;
 
             try
             {
-                await using var stream = await _fileOpener.OpenReadAsync(_filePath, cancellationToken);
-
-                using var validatedStream = await _jsonStreamValidator.ValidateStreamAsync(stream, _filePath, cancellationToken);
-
-                var payload = await _envelopeParser.ReadEnvelopeAsync<GeneratedCatalogManifest>(validatedStream, cancellationToken);
-
-                _generatedContentValidator.Validate<GeneratedCatalogManifest>(payload);
-
-                var dtos = _disasterCardDeserializer.Deserialize(payload.RawData);
-
-                ValidateDisasterCardCatalogDtos(dtos, payload.Manifest.ItemCount);
-
-                var cards = dtos.Select(_disasterCardMapper.Map).ToList();
-
-                _logger.LogInformation(
-                    "Successfully loaded Disaster Card catalog. CardCount = {CardCount}, ManifestItemCount = {ManifestItemCount}",
-                    cards.Count,
-                    payload.Manifest.ItemCount);
-
-                return cards;
-            }
-            catch (IOException ex) when (
-                ex is FileNotFoundException ||
-                ex is DirectoryNotFoundException ||
-                ex is DriveNotFoundException)
-            {
-                throw CatalogDataAccessException.SourceNotFound(_filePath, ex);
-            }
-            catch (UnauthorizedAccessException ex)
-            {
-                throw CatalogDataAccessException.AccessDenied(_filePath, ex);
-            }
-            catch (SecurityException ex)
-            {
-                throw CatalogDataAccessException.AccessDenied(_filePath, ex);
-            }
-            catch (IOException ex)
-            {
-                throw CatalogDataAccessException.SourceUnreadable(_filePath, ex);
-            }
-            catch (ObjectDisposedException ex)
-            {
-                throw CatalogDataAccessException.SourceUnreadable(_filePath, ex);
+                dtos = _disasterCardDeserializer.Deserialize(payload.RawData);
             }
             catch (JsonException ex)
-            {
-                throw CatalogDataAccessException.BadJson(_filePath, ex);
-            }
-            catch (InvalidDataException ex)
-            {
-                throw CatalogDataAccessException.BadJson(_filePath, ex);
-            }
-            catch (InvalidOperationException ex)
             {
                 throw CatalogDataAccessException.BadJson(_filePath, ex);
             }
@@ -118,25 +61,17 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Readers
             {
                 throw CatalogDataAccessException.BadJson(_filePath, ex);
             }
-            catch (OperationCanceledException)
-            {
-                throw;
-            }
-            catch (CatalogDataAccessException)
-            {
-                throw;
-            }
-            catch (DisasterCardValidationException)
-            {
-                throw;
-            }
-            catch (Exception ex) when (
-                ex is not OutOfMemoryException &&
-                ex is not AccessViolationException &&
-                ex is not StackOverflowException)   // Added for clarity even though can't be caught anyway
-            {
-                throw CatalogDataAccessException.Unknown(_filePath, ex);
-            }
+
+            ValidateDisasterCardCatalogDtos(dtos, payload.Manifest.ItemCount);
+
+            var cards = dtos.Select(_disasterCardMapper.Map).ToList();
+
+            _logger.LogInformation(
+                "Successfully loaded Disaster Card catalog. CardCount = {CardCount}, ManifestItemCount = {ManifestItemCount}",
+                cards.Count,
+                payload.Manifest.ItemCount);
+
+            return cards;                           
         }
 
         private void ValidateDisasterCardCatalogDtos(IReadOnlyList<DisasterCardCatalogDto>? dtos, int itemCount)

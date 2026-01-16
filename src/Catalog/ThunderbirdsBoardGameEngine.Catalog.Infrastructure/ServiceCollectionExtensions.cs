@@ -5,14 +5,17 @@ using System.IO.Abstractions;
 using System.Text.Json;
 using ThunderbirdsBoardGameEngine.Catalog.Application.Decorators;
 using ThunderbirdsBoardGameEngine.Catalog.Application.Interfaces;
+using ThunderbirdsBoardGameEngine.Catalog.Format.Manifest;
 using ThunderbirdsBoardGameEngine.Catalog.Format.Serialization;
 using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Configuration;
 using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Deserializers;
 using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Initializers;
 using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Interfaces;
 using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Mappers;
+using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.PayloadReaders;
 using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.PostConfigures;
 using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Readers;
+using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.StreamSources;
 using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Utilities;
 using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Validators;
 
@@ -66,16 +69,25 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure
             services.AddSingleton<IEnvelopeParser, EnvelopeParser>();
             services.AddSingleton<IGeneratedContentValidator, GeneratedContentValidator>();
             services.AddSingleton<IJsonStreamValidator, JsonStreamValidator>();
+            services.AddSingleton<ICatalogStreamSource, FileSystemCatalogStreamSource>();
+            services.AddScoped(typeof(ICatalogPayloadReader<>), typeof(JsonCatalogPayloadReader<>)); // One open generic registration
+            services.AddScoped<ICatalogPayloadReader<GeneratedCatalogManifest>, JsonCatalogPayloadReader<GeneratedCatalogManifest>>();
+            services.Decorate<ICatalogPayloadReader<GeneratedCatalogManifest>, GeneratedJsonCatalogPayloadReader>(); // Decorate ONLY the generated-manifest version
+            services.Decorate(typeof(ICatalogPayloadReader<>), typeof(ExceptionMappingCatalogPayloadReader<>)); // Decorate ONLY the generated-manifest version
 
             services.AddSingleton<IPostConfigureOptions<DisasterCardJsonOptions>, DisasterCardJsonPostConfigure>();
             services.AddSingleton<IValidateOptions<DisasterCardJsonOptions>, DisasterCardJsonOptionsValidator>();
             services.AddSingleton<IDisasterCardMapper, DisasterCardMapper>();
             services.AddSingleton<IDisasterCardDeserializer, DisasterCardDeserializer>();
-            services.AddSingleton<IDisasterCardReader, DisasterCardJsonReader>();
+            services.AddScoped<IDisasterCardReader, DisasterCardJsonReader>();
             services.Decorate<IDisasterCardReader, ValidatingDisasterCardReader>();
             services.AddSingleton<IDisasterCardReferenceSource>(sp =>
             {
-                var init = new DisasterCardReferenceSourceInitializer(sp.GetRequiredService<IDisasterCardReader>());
+                var scope = sp.CreateScope();
+
+                var reader = scope.ServiceProvider.GetRequiredService<IDisasterCardReader>();
+
+                var init = new DisasterCardReferenceSourceInitializer(reader);
                 return init.InitializeAsync(CancellationToken.None).GetAwaiter().GetResult();
             });
 

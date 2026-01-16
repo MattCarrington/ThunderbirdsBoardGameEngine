@@ -1,7 +1,10 @@
 ﻿using System.Text.Json;
+using ThunderbirdsBoardGameEngine.Catalog.Domain.Entities;
+using ThunderbirdsBoardGameEngine.Catalog.Format.Dtos;
 using ThunderbirdsBoardGameEngine.Catalog.Format.Hashing;
 using ThunderbirdsBoardGameEngine.Catalog.Format.Manifest;
 using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Utilities;
+using ThunderbirdsBoardGameEngine.TestUtils;
 
 namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Builders
 {
@@ -10,6 +13,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Builders
         private int _itemCount = 2;
         private string _algorithm = CatalogChecksum.Algorithm;
         private string? _checksumOverride = null;
+        private string _rawDataJson = """[ { "id": "card1", "name": "Test Card" }, { "id": "card2", "name": "card-2" } ]""";
 
         public GeneratedManifestPayloadBuilder WithItemCount(int count)
         {
@@ -29,10 +33,16 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Builders
             return this;
         }
 
+        public GeneratedManifestPayloadBuilder WithDisasterCards(IReadOnlyList<DisasterCardCatalogDto> data)
+        {
+            _rawDataJson = JsonSerializer.Serialize(data, JsonDefaults.DisasterCards);
+            _itemCount = data.Count;
+            return this;
+        }
+
         internal Payload<GeneratedCatalogManifest> Build()
         {
-            var rawDataJson = """[ { "id": "card1", "name": "Test Card" }, { "id": "card2", "name": "card-2" } ]""";
-            using var rawDataDoc = JsonDocument.Parse(rawDataJson);
+            using var rawDataDoc = JsonDocument.Parse(_rawDataJson);
 
             var checksum = CatalogChecksum.ComputeForDataElement(rawDataDoc.RootElement);
 
