@@ -1,0 +1,109 @@
+﻿using ThunderbirdsBoardGameEngine.Catalog.Domain.Entities;
+using ThunderbirdsBoardGameEngine.Catalog.Domain.Enums;
+using ThunderbirdsBoardGameEngine.Catalog.Format.Dtos;
+using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Mappers;
+using Xunit;
+
+namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Mappers
+{
+    public class CharacterMapperTests
+    {
+        [Theory]
+        [InlineData("LadyPenelope")]
+        [InlineData("ladypenelope")]
+        [InlineData("LADYPENELOPE")]
+        [InlineData("ladyPenelope")]
+        [InlineData("Ladypenelope")]
+        public void Map_CharacterWithNoRescueBonuses_ShouldMapRequiredProperties(string input)
+        {
+            // Arrange
+            var dto = new CharacterCatalogDto
+            {
+                Key = input,
+                RescueBonuses = []
+            };
+
+            var mapper = CreateMapper();
+
+            // Act
+            CharacterDefinition result = mapper.Map(dto);
+
+            // Assert
+            Assert.Equal(Character.LadyPenelope, result.Key);
+            Assert.Null(result.RescueBonus);
+        }
+
+        [Theory]
+        [InlineData("air")]
+        [InlineData("Air")]
+        [InlineData("AIR")]
+        public void Map_CharacterWithRescueBonus_ShouldMapRescueBonus(string input)
+        {
+            // Arrange
+            var dto = new CharacterCatalogDto
+            {
+                Key = "Scott",
+                RescueBonuses = new List<CharacterRescueBonusCatalogDto>
+                {
+                    new() {
+                        RescueType = input,
+                        BonusValue = 2
+                    }
+                }
+            };
+
+            var mapper = CreateMapper();
+
+            // Act
+            CharacterDefinition result = mapper.Map(dto);
+
+            // Assert
+            Assert.Equal(Character.Scott, result.Key);
+            Assert.NotNull(result.RescueBonus);
+            Assert.Equal(RescueType.Air, result.RescueBonus!.RescueType);
+            Assert.Equal(2, result.RescueBonus.BonusValue);
+        }
+
+        [Fact]
+        public void Map_CharacterWithMultipleRescueBonuses_ShouldThrowArgumentException()
+        {
+            // Arrange
+            var dto = new CharacterCatalogDto
+            {
+                Key = "Virgil",
+                RescueBonuses =
+                [
+                    new() {
+                        RescueType = "Land",
+                        BonusValue = 1
+                    },
+                    new() {
+                        RescueType = "Sea",
+                        BonusValue = 2
+                    }
+                ]
+            };
+
+            var mapper = CreateMapper();
+
+            // Act & Assert
+            var exception = Assert.Throws<ArgumentException>(() => mapper.Map(dto));
+            Assert.Equal("Character 'Virgil' has more than one rescue bonus.", exception.Message);
+        }
+
+        [Fact]
+        public void Map_CharacterDtoNull_ShouldThrowArgumentNullException()
+        {
+            // Arrange
+            var mapper = CreateMapper();
+
+            // Act & Assert
+            Assert.Throws<ArgumentNullException>(() => mapper.Map(null));
+        }
+
+        private static CharacterMapper CreateMapper()
+        {
+            return new CharacterMapper();
+        }
+    }
+}

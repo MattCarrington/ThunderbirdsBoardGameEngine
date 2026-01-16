@@ -2,6 +2,7 @@
 using ThunderbirdsBoardGameEngine.Catalog.Domain.Enums;
 using ThunderbirdsBoardGameEngine.Catalog.Domain.Exceptions;
 using ThunderbirdsBoardGameEngine.Catalog.Format.Dtos;
+using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Helpers;
 using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Interfaces;
 using ThunderbirdsBoardGameEngine.PublishedLanguage.DisasterBonus;
 
@@ -18,8 +19,8 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Mappers
                     throw DisasterCardValidationException.NullEntry();
                 }
 
-                var location = ParseEnum<BoardLocation>(dto.Location);
-                var rescueType = ParseEnum<RescueType>(dto.RescueType);
+                var location = EnumParser.ParseEnum<BoardLocation>(dto.Location);
+                var rescueType = EnumParser.ParseEnum<RescueType>(dto.RescueType);
 
                 return new DisasterCard(
                     dto.Id,
@@ -47,18 +48,18 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Mappers
 
             var location = string.IsNullOrWhiteSpace(dto.Location)
                 ? (BoardLocation?)null
-                : ParseEnum<BoardLocation>(dto.Location);
+                : EnumParser.ParseEnum<BoardLocation>(dto.Location);
 
             switch (dto)
             {
                 case CharacterBonusCatalogDto characterBonus:
-                    var character = ParseEnum<Character>(characterBonus.Character);
+                    var character = EnumParser.ParseEnum<Character>(characterBonus.Character);
                     return new CharacterBonusCondition(character, characterBonus.BonusValue, location);
                 case ThunderbirdBonusCatalogDto thunderbirdBonus:
-                    var thunderbird = ParseEnum<ThunderbirdMachine>(thunderbirdBonus.Thunderbird);
+                    var thunderbird = EnumParser.ParseEnum<ThunderbirdMachine>(thunderbirdBonus.Thunderbird);
                     return new ThunderbirdBonusCondition(thunderbird, thunderbirdBonus.BonusValue, location);
                 case PodVehicleBonusCatalogDto podVehicleBonus:
-                    var podVehicle = ParseEnum<PodVehicle>(podVehicleBonus.PodVehicle);
+                    var podVehicle = EnumParser.ParseEnum<PodVehicle>(podVehicleBonus.PodVehicle);
                     return new PodVehicleBonusCondition(podVehicle, podVehicleBonus.BonusValue, location);
                 default:
                     throw DisasterCardValidationException.UnknownBonusCondition(id, name);
@@ -77,26 +78,11 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Mappers
                 case PlayerChoiceRewardCatalogDto:
                     return RewardOption.PlayerChoice();
                 case TokenRewardCatalogDto specifiedToken:
-                    var token = ParseEnum<BonusToken>(specifiedToken.Token);
+                    var token = EnumParser.ParseEnum<BonusToken>(specifiedToken.Token);
                     return RewardOption.SpecifiedToken(token);
                 default:
                     throw DisasterCardValidationException.UnknownRewardOption(id, name);
             }
-        }
-
-        private static TEnum ParseEnum<TEnum>(string value) where TEnum : struct, Enum
-        {
-            if (string.IsNullOrWhiteSpace(value))
-            {
-                throw new ArgumentException("Enum value cannot be null or empty");
-            }
-
-            if (Enum.TryParse<TEnum>(value, ignoreCase: true, out var result))
-            {
-                return result;
-            }
-
-            throw new ArgumentException($"Invalid enum value: {value}");
         }
     }
 }
