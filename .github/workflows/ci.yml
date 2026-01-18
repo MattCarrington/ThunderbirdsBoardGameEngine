@@ -53,7 +53,7 @@ jobs:
       - tests
 
   tag-repo:
-    if: ${{ github.ref == 'refs/heads/main' }}
+    if: github.ref == 'refs/heads/main' && needs.compute-version.outputs.release_type != 'none'
     uses: ./.github/workflows/tag-repo.yml
     with:
       version: ${{ needs.compute-version.outputs.version }}
@@ -62,7 +62,7 @@ jobs:
       - compute-version
 
   docker_publish:
-    if: github.event_name == 'push'
+    if: github.event_name == 'push' && needs.compute-version.outputs.release_type != 'none'
     uses: ./.github/workflows/publish-docker.yml
     with:
       image_name: *image_name
@@ -102,7 +102,7 @@ jobs:
             package_id: ThunderbirdsBoardGameEngine.Rules.WireMock
 
     name: Package → ${{ matrix.package.name }}
-    if: github.event_name == 'push'
+    if: github.event_name == 'push' && needs.compute-version.outputs.release_type != 'none'
     uses: ./.github/workflows/package-lifecycle.yml
     with:
       project_path: ${{ matrix.package.project_path }}
