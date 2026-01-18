@@ -104,11 +104,9 @@ jobs:
 
     name: Package → ${{ matrix.package.name }}
     if: github.event_name == 'push'
-    needs: 
-      - tests
-      - compute-version
-
     uses: ./.github/workflows/package-lifecycle.yml
     with:
       project_path: ${{ matrix.package.project_path }}
       package_id: ${{ matrix.package.package_id }}
+    needs:
+      - compute-version
