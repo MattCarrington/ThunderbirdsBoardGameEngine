@@ -53,6 +53,15 @@ jobs:
     needs:
       - tests
 
+  tag-repo:
+    if: ${{ github.ref == 'refs/heads/main' }}
+    uses: ./.github/workflows/tag-repo.yml
+    with:
+      version: ${{ needs.compute-version.outputs.version }}
+      tag_prefix: "server/v"
+    needs:
+      - compute-version
+
   docker_publish:
     if: github.event_name == 'push'
     uses: ./.github/workflows/publish-docker.yml
