@@ -1,11 +1,9 @@
-name: CI - PR/Branch
+name: CI
 
 on:
   pull_request:
   push:
-    branches-ignore:
-      - main
-
+    
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
@@ -18,6 +16,7 @@ permissions:
 env:
   SOLUTION_FILE: &solution ThunderbirdsBoardGameEngine.sln
   IMAGE_NAME: &image_name "thunderbirds-app"
+  BASE_URL: &base_url "http://localhost:8080"
   
 jobs:
   static-analysis:
@@ -40,8 +39,9 @@ jobs:
       solution_file: *solution
       image_name: *image_name
       run_component: true
-      run_integration: false
-      run_playwright: false      
+      run_integration: ${{ github.event_name == 'push' }}
+      run_playwright: ${{ github.event_name == 'push' }}
+      base_url: *base_url
     needs:
       - build
 
