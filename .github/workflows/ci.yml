@@ -6,7 +6,7 @@ on:
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
-  
+
 permissions:
   contents: write
   actions: read
@@ -16,7 +16,7 @@ env:
   SOLUTION_FILE: &solution ThunderbirdsBoardGameEngine.sln
   IMAGE_NAME: &image_name "thunderbirds-app"
   BASE_URL: &base_url "http://localhost:8080"
-  
+
 jobs:
   static-analysis:
     uses: ./.github/workflows/static-analysis.yml
