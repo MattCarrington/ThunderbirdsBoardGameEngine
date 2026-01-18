@@ -18,5 +18,9 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Domain.Entities
             Key = key;
             RescueBonus = characterRescueBonus;
         }
+
+        public CharacterDefinition(Character key) : this(key, null)
+        {            
+        }
     }
 }
