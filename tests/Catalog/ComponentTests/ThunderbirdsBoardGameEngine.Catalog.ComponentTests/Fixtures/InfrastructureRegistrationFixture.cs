@@ -2,8 +2,8 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
-using ThunderbirdsBoardGameEngine.Catalog.Infrastructure;
 using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Configuration;
+using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Extensions;
 using ThunderbirdsBoardGameEngine.TestUtils.Stubs;
 
 namespace ThunderbirdsBoardGameEngine.Catalog.ComponentTests.Fixtures
