@@ -2,6 +2,7 @@
 using ThunderbirdsBoardGameEngine.Catalog.Domain.Enums;
 using ThunderbirdsBoardGameEngine.Catalog.Domain.Exceptions;
 using ThunderbirdsBoardGameEngine.Catalog.Domain.Validators;
+using ThunderbirdsBoardGameEngine.TestUtils.Catalog.Helpers;
 using Xunit;
 
 namespace ThunderbirdsBoardGameEngine.Catalog.Domain.UnitTests.Validators
@@ -12,15 +13,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Domain.UnitTests.Validators
         public void ValidateAll_WhenCharacterDefinitionsAreValid_DoesNotThrow()
         {
             // Arrange
-            var characters = new List<CharacterDefinition>
-            {
-                new(Character.Scott, new(RescueType.Air, 2)),
-                new(Character.Virgil, new(RescueType.Land, 2)),
-                new(Character.John, new(RescueType.Space, 2)),
-                new(Character.Gordon, new(RescueType.Sea, 3)),
-                new(Character.Alan, new(RescueType.Space, 2)),
-                new(Character.LadyPenelope)
-            };
+            var characters = TestCharacters.ValidSix;
 
             // Act
             var exception = Record.Exception(() => CharacterDefinitionValidator.ValidateAll(characters));
@@ -35,16 +28,12 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Domain.UnitTests.Validators
             var duplicateCharacter = Character.Scott;
 
             // Arrange
-            var characters = new List<CharacterDefinition>
-            {
-                new(duplicateCharacter),
-                new(duplicateCharacter, new(RescueType.Air, 2)),
-                new(Character.Virgil, new(RescueType.Land, 2)),
-                new(Character.John, new(RescueType.Space, 2)),
-                new(Character.Gordon, new(RescueType.Sea, 3)),
-                new(Character.Alan, new(RescueType.Space, 2)),
-            };
-            
+            var characters = TestCharacters.ValidSix
+                .Where(c => c.Key != Character.LadyPenelope)
+                .ToList();
+
+            characters.Add(new CharacterDefinition(duplicateCharacter));
+
             // Act & Assert
             var exception = Assert.Throws<CharacterDefinitionValidationException>(() => CharacterDefinitionValidator.ValidateAll(characters));
             Assert.Contains($"A character definition with the key '{duplicateCharacter}' already exists.", exception.Message);
@@ -56,36 +45,19 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Domain.UnitTests.Validators
         public void ValidateAll_WhenCharacterDefiinitionsLessThanSix_ThrowsValidationException()
         {
             // Arrange
-            var characters = new List<CharacterDefinition>
-            {
-                new(Character.Scott, new(RescueType.Air, 2)),
-                new(Character.Virgil, new(RescueType.Land, 2)),
-                new(Character.John, new(RescueType.Space, 2)),
-                new(Character.Gordon, new(RescueType.Sea, 3)),
-                new(Character.Alan, new(RescueType.Space, 2))
-            };
+            var characters = TestCharacters.ValidSix.Take(5).ToList();
 
             // Act & Assert
             var exception = Assert.Throws<CharacterDefinitionValidationException>(() => CharacterDefinitionValidator.ValidateAll(characters));
             Assert.Contains("The number of character definitions must be exactly six.", exception.Message);
         }
 
-
-
         [Fact]
         public void ValidateAll_WhenCharacterDefiinitionsGreaterThanSix_ThrowsValidationException()
         {
             // Arrange
-            var characters = new List<CharacterDefinition>
-            {
-                new(Character.Scott, new(RescueType.Air, 2)),
-                new(Character.Virgil, new(RescueType.Land, 2)),
-                new(Character.John, new(RescueType.Space, 2)),
-                new(Character.Gordon, new(RescueType.Sea, 3)),
-                new(Character.Alan, new(RescueType.Space, 2)),
-                new(Character.LadyPenelope),
-                new(Character.LadyPenelope),
-            };
+            var characters = TestCharacters.ValidSix.ToList();
+            characters.Add(new CharacterDefinition(Character.LadyPenelope));
 
             // Act & Assert
             var exception = Assert.Throws<CharacterDefinitionValidationException>(() => CharacterDefinitionValidator.ValidateAll(characters));

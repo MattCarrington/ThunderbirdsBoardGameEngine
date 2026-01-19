@@ -46,7 +46,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Domain.Exceptions
         public static CharacterDefinitionValidationException InvalidCount()
         {
             return new CharacterDefinitionValidationException(
-                CharacterDefinitionErrorCode.InvalidCount,
+                CharacterDefinitionErrorCode.InvalidCharacterCount,
                 $"The number of character definitions must be exactly six.");
         }
 
@@ -64,7 +64,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Domain.Exceptions
         Unknown = 0,
         NullEntry,
         DuplicateKey,
-        InvalidCount,
+        InvalidCharacterCount,
         InvalidRescueBonusCount
     }
 }
