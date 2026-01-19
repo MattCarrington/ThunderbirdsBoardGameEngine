@@ -1,5 +1,6 @@
 ﻿using ThunderbirdsBoardGameEngine.Catalog.Domain.Entities;
 using ThunderbirdsBoardGameEngine.Catalog.Domain.Enums;
+using ThunderbirdsBoardGameEngine.Catalog.Domain.Exceptions;
 using ThunderbirdsBoardGameEngine.Catalog.Format.Dtos;
 using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Mappers;
 using Xunit;
@@ -87,7 +88,8 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Mappers
             var mapper = CreateMapper();
 
             // Act & Assert
-            var exception = Assert.Throws<ArgumentException>(() => mapper.Map(dto));
+            var exception = Assert.Throws<CharacterDefinitionValidationException>(() => mapper.Map(dto));
+            Assert.Equal(CharacterDefinitionErrorCode.InvalidRescueBonusCount, exception.ErrorCode);
             Assert.Equal("Character 'Virgil' has more than one rescue bonus.", exception.Message);
         }
 
@@ -98,7 +100,29 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Mappers
             var mapper = CreateMapper();
 
             // Act & Assert
-            Assert.Throws<ArgumentNullException>(() => mapper.Map(null));
+            var exception = Assert.Throws<CharacterDefinitionValidationException>(() => mapper.Map(null));
+            Assert.Equal(CharacterDefinitionErrorCode.NullEntry, exception.ErrorCode);
+        }
+
+        [Fact]
+        public void Map_CharacterDtoInvalid_WrapsUnknownException()
+        {
+            // Arrange
+            var invalidCharacter = "brains";
+
+            var dto = new CharacterCatalogDto
+            {
+                Key = invalidCharacter,
+                RescueBonuses = []
+            };
+
+            var mapper = CreateMapper();
+
+            // Act
+            var exception = Assert.Throws<CharacterDefinitionValidationException>(() => mapper.Map(dto));
+            Assert.Equal(CharacterDefinitionErrorCode.Unknown, exception.ErrorCode);
+            var inner = Assert.IsType<ArgumentException>(exception.InnerException);
+            Assert.Contains($"Invalid enum value: {invalidCharacter}", inner.Message);
         }
 
         private static CharacterMapper CreateMapper()

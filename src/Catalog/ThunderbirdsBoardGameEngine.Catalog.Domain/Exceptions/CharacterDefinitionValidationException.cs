@@ -19,11 +19,13 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Domain.Exceptions
             Character = character;
         }
 
-        public static CharacterDefinitionValidationException Unknown()
+        public static CharacterDefinitionValidationException Unknown(Character? character = null, Exception? innerException = null)
         {
             return new CharacterDefinitionValidationException(
                 CharacterDefinitionErrorCode.Unknown,
-                "An unknown character definition validation error has occurred.");
+                "An unknown character definition validation error has occurred.",
+                character,
+                innerException);
         }
 
         public static CharacterDefinitionValidationException NullEntry()
@@ -47,6 +49,14 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Domain.Exceptions
                 CharacterDefinitionErrorCode.InvalidCount,
                 $"The number of character definitions must be exactly six.");
         }
+
+        public static CharacterDefinitionValidationException InvalidRescueBonusCount(Character character)
+        {
+            return new CharacterDefinitionValidationException(
+                CharacterDefinitionErrorCode.InvalidRescueBonusCount,
+                $"Character '{character}' has more than one rescue bonus.",
+                character);
+        }
     }
 
     public enum CharacterDefinitionErrorCode
@@ -54,6 +64,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Domain.Exceptions
         Unknown = 0,
         NullEntry,
         DuplicateKey,
-        InvalidCount
+        InvalidCount,
+        InvalidRescueBonusCount
     }
 }

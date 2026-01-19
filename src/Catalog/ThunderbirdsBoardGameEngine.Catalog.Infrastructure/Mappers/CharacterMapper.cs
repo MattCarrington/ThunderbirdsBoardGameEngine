@@ -1,5 +1,6 @@
 ﻿using ThunderbirdsBoardGameEngine.Catalog.Domain.Entities;
 using ThunderbirdsBoardGameEngine.Catalog.Domain.Enums;
+using ThunderbirdsBoardGameEngine.Catalog.Domain.Exceptions;
 using ThunderbirdsBoardGameEngine.Catalog.Format.Dtos;
 using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Helpers;
 using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Interfaces;
@@ -10,25 +11,34 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Mappers
     {
         public CharacterDefinition Map(CharacterCatalogDto dto)
         {
-            ArgumentNullException.ThrowIfNull(dto);
-
-            var character = EnumParser.ParseEnum<Character>(dto.Key);
-
-            // Enforce cardinality at the mapping boundary
-            if (dto.RescueBonuses is { Count: > 1 })
+            try
             {
-                throw new ArgumentException(
-                    $"Character '{dto.Key}' has more than one rescue bonus.");
+                if (dto is null)
+                {
+                    throw CharacterDefinitionValidationException.NullEntry();
+                }
+
+                var character = EnumParser.ParseEnum<Character>(dto.Key);
+
+                // Enforce cardinality at the mapping boundary
+                if (dto.RescueBonuses is { Count: > 1 })
+                {
+                    throw CharacterDefinitionValidationException.InvalidRescueBonusCount(character);
+                }
+
+                CharacterRescueBonus? rescueBonus = null;
+
+                if (dto.RescueBonuses?.Count == 1)
+                {
+                    rescueBonus = MapRescueBonus(dto.RescueBonuses[0]);
+                }
+
+                return new CharacterDefinition(character, rescueBonus);
             }
-
-            CharacterRescueBonus? rescueBonus = null;
-
-            if (dto.RescueBonuses?.Count == 1)
+            catch (ArgumentException ex)
             {
-                rescueBonus = MapRescueBonus(dto.RescueBonuses[0]);
+                throw CharacterDefinitionValidationException.Unknown(innerException: ex);
             }
-
-            return new CharacterDefinition(character, rescueBonus);
         }
 
         private static CharacterRescueBonus MapRescueBonus(CharacterRescueBonusCatalogDto dto)
