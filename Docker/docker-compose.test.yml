@@ -2,7 +2,8 @@
   api:
     environment:
       ASPNETCORE_ENVIRONMENT: Docker
-      Catalog__DisasterCards__Json__FilePath: /app/TestData/Catalog/DisasterCards/Enveloped/disaster-cards.json     
+      Catalog__DisasterCards__Json__FilePath: /app/TestData/Catalog/DisasterCards/Enveloped/disaster-cards.json
+      Catalog__Characters__Json__FilePath: /app/TestData/Catalog/Characters/characters.json
     volumes:
       - ../tests/Common/ThunderbirdsBoardGameEngine.TestUtils/TestData:/app/TestData:ro
     ports:
