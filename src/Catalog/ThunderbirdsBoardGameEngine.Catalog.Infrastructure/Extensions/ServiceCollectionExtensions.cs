@@ -117,13 +117,14 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Extensions
 
         private static void AddCharacters(IServiceCollection services, IConfiguration configuration)
         {
-            //TODO: Enable when character json options are created
-            //services.AddSingleton<IPostConfigureOptions<DisasterCardJsonOptions>, DisasterCardJsonPostConfigure>();
-            //services.AddSingleton<IValidateOptions<DisasterCardJsonOptions>, DisasterCardJsonOptionsValidator>();
+            services.AddSingleton<IPostConfigureOptions<CharacterJsonOptions>, CharacterDefinitionJsonPostConfigure>();
+            services.AddSingleton<IValidateOptions<CharacterJsonOptions>, CharacterDefinitionJsonOptionsValidator>();
             services.AddSingleton<ICharacterDeserializer, CharacterDeserializer>();
             services.AddSingleton<ICharacterMapper, CharacterMapper>();
             services.AddScoped<ICharacterReader, CharacterJsonReader>();
             services.Decorate<ICharacterReader, ValidatingCharacterDefinitionReader>();
+
+            //TODO: Add initializer
             //services.AddSingleton<IDisasterCardReferenceSource>(sp =>
             //{
             //    var scope = sp.CreateScope();
@@ -140,9 +141,6 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Extensions
             services.AddOptions<CharacterJsonOptions>()
                 .Bind(configuration.GetSection("Catalog:Characters:Json"))
                 .ValidateOnStart(); // ← run all validators during startup
-
-            //services.AddOptions<JsonSerializerOptions>(CatalogJson.Name)
-            //    .Configure(CatalogJson.Configure);
         }
     }
 }
