@@ -11,7 +11,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.PayloadReaders
 
         public GeneratedJsonCatalogPayloadReader(ICatalogPayloadReader<GeneratedCatalogManifest> inner, IGeneratedContentValidator generatedContentValidator)
         {
-             _inner = inner ?? throw new ArgumentNullException(nameof(inner));
+            _inner = inner ?? throw new ArgumentNullException(nameof(inner));
             _generatedContentValidator = generatedContentValidator ?? throw new ArgumentNullException(nameof(generatedContentValidator));
         }
 

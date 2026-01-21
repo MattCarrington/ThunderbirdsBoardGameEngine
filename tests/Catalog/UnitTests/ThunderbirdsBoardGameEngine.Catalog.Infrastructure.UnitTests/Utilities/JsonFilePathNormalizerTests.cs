@@ -25,7 +25,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Utilities
             public void Normalize_WhenFilePathContainsAdditionalWhitespace_ShouldTrim(string input)
             {
                 // Arrange
-                
+
                 // Act
                 var result = JsonFilePathNormalizer.Normalize(input, ContentRootPath);
 
@@ -79,7 +79,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Utilities
             {
                 // Arrange
                 var input = "/var/data/../data/disaster.json"; // collapses to /var/data/disaster.json
-                
+
                 // Act
                 var result = JsonFilePathNormalizer.Normalize(input, ContentRootPath);
 
@@ -134,7 +134,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Utilities
             {
                 // Arrange
                 using var scope = new EnvironmentVariableScope("DISASTER_JSON_PATH", envValue);
-                
+
                 // Act
                 var result = JsonFilePathNormalizer.Normalize(input, ContentRootPath);
 
@@ -147,7 +147,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Utilities
             {
                 // Arrange
                 using var scope = new EnvironmentVariableScope("DISASTER_JSON_PATH", null);
-                
+
                 var input = "%DISASTER_JSON_PATH%/disaster.json";
 
                 // Act
@@ -163,7 +163,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Utilities
             {
                 // Arrange
                 using var scope = new EnvironmentVariableScope("DISASTER_JSON_PATH", "/var/data/../data/disaster.json");
-                
+
                 var input = "%DISASTER_JSON_PATH%";
 
                 // Act
@@ -178,7 +178,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Utilities
             {
                 // Arrange
                 using var scope = new EnvironmentVariableScope("DISASTER_JSON_PATH", "");
-                
+
                 var input = "%DISASTER_JSON_PATH%/disaster.json";
 
                 // Act

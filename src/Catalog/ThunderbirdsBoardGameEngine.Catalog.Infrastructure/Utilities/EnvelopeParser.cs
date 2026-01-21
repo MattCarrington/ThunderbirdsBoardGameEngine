@@ -48,7 +48,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Utilities
             if (dataElement.ValueKind != JsonValueKind.Array)
             {
                 throw new InvalidDataException("'data' property is not an array.");
-            }            
+            }
 
             return new Payload<TManifest>
             {

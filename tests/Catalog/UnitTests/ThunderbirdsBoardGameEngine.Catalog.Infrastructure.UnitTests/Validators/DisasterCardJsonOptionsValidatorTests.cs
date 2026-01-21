@@ -63,7 +63,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Validator
             // Assert
             Assert.False(result.Succeeded);
             Assert.NotNull(result.Failures);
-            
+
             var failureMessage = Assert.Single(result.Failures);
             Assert.Contains("Catalog:DisasterCards:Json:FilePath", failureMessage);
         }

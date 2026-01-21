@@ -44,7 +44,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Readers
             cancellationToken.ThrowIfCancellationRequested();
 
             _logger.LogDebug("Loading Disaster Cards from {Path}", _filePath);
-                        
+
             var payload = await _catalogPayloadReader.ReadAsync(_filePath, cancellationToken);
 
             IReadOnlyList<DisasterCardCatalogDto> dtos;
@@ -71,7 +71,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Readers
                 cards.Count,
                 payload.Manifest.ItemCount);
 
-            return cards;                           
+            return cards;
         }
 
         private void ValidateDisasterCardCatalogDtos(IReadOnlyList<DisasterCardCatalogDto>? dtos, int itemCount)

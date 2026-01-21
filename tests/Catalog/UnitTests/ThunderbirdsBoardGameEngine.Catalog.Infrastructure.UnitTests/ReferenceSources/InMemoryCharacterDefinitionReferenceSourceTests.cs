@@ -27,7 +27,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Reference
 
         [Fact]
         public void Constructor_WithEmptyCharacters_ThrowsArgumentException()
-        {             
+        {
             // Arrange
             var emptyCharacters = ImmutableArray<CharacterDefinition>.Empty;
             var version = "1.0";

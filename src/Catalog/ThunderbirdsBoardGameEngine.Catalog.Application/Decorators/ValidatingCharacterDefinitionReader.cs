@@ -15,8 +15,8 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Application.UnitTests.Decorators
 
         public async Task<IReadOnlyList<CharacterDefinition>> GetAllAsync(CancellationToken cancellationToken)
         {
-            var characters = await _inner.GetAllAsync(cancellationToken);     
-            
+            var characters = await _inner.GetAllAsync(cancellationToken);
+
             CharacterDefinitionValidator.ValidateAll(characters);
 
             return characters;

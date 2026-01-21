@@ -42,7 +42,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Readers
                 .Returns(disasterCards);
 
             var reader = CreateReader(
-                payloadReader: payloadReader, 
+                payloadReader: payloadReader,
                 deserializer: deserializer);
 
             // Act

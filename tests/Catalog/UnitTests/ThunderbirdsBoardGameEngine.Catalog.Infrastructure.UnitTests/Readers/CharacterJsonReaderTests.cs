@@ -54,7 +54,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Readers
             mapper.Map(dtos[0]).Returns(characters[0]);
             mapper.Map(dtos[1]).Returns(characters[1]);
 
-            var reader = CreateReader(payloadReader, deserializer,  mapper);
+            var reader = CreateReader(payloadReader, deserializer, mapper);
 
             // Act
             var result = await reader.GetAllAsync(CancellationToken.None);
@@ -151,7 +151,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Readers
         public async Task GetAllAsync_WhenDeserializerThrowsNotSupportedException_WrapsBadJsonException()
         {
             // Arrange
-            var deserializer = Substitute.For<ICharacterDeserializer    >();
+            var deserializer = Substitute.For<ICharacterDeserializer>();
             deserializer.Deserialize(Arg.Any<JsonElement>())
                 .Throws(new NotSupportedException("Unsupported type configuration for DisasterCard."));
 

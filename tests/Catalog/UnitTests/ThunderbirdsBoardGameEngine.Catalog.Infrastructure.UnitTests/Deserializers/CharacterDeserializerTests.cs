@@ -4,7 +4,7 @@ using Xunit;
 
 namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Deserializers
 {
-    internal class CharacterDeserializerTests
+    public class CharacterDeserializerTests
     {
         [Fact]
         public void Deserialize_WhenValidJson_ReturnsCharacterDtos()

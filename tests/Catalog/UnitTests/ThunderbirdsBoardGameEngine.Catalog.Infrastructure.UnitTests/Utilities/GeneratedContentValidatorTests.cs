@@ -69,7 +69,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Utilities
         }
 
         [Theory]
-        [ClassData(typeof(WhiteSpaceStringData))]        
+        [ClassData(typeof(WhiteSpaceStringData))]
         public void Validate_WhenChecksumValueMissing_ThrowsInvalidDataException(string checksum)
         {
             // Arrange

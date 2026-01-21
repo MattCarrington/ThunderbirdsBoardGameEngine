@@ -8,7 +8,7 @@ namespace ThunderbirdsBoardGameEngine.TestUtils.Catalog.Helpers
     /// </summary>
     public static class TestCharacters
     {
-        
+
         public static IReadOnlyList<CharacterDefinition> ValidSix =>
         [
             new(Character.Scott, new(RescueType.Air, 2)),

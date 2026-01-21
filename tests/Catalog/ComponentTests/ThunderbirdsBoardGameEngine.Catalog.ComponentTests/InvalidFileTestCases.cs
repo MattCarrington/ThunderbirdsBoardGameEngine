@@ -11,6 +11,6 @@ namespace ThunderbirdsBoardGameEngine.Catalog.ComponentTests
                 { "invalid-json.json", CatalogDataAccessErrorCode.BadJson },
                 { "empty.json", CatalogDataAccessErrorCode.DataMissing }
             };
-        
+
     }
 }

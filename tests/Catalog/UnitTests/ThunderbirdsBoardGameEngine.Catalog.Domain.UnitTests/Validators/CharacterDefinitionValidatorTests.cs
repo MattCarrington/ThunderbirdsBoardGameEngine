@@ -68,7 +68,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Domain.UnitTests.Validators
         public void ValidateAll_WhenCharacterDefinitionsAreNull_ThrowsArgumentNullException()
         {
             // Arrange
-            
+
             // Act & Assert
             var exception = Assert.Throws<ArgumentNullException>(() => CharacterDefinitionValidator.ValidateAll(null!));
             Assert.Contains("Value cannot be null.", exception.Message);

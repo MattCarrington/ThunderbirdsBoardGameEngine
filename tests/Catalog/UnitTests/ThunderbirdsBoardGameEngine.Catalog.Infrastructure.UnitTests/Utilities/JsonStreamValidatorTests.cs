@@ -114,7 +114,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Utilities
         [Theory]
         [ClassData(typeof(BomOnlyData))]
         public async Task ValidateStreamAsync_WhenWhiteSpaceOnlyWithLeadingBomCharacters_ThrowsInvalidDataException(string bomData)
-        { 
+        {
             // Arrange
             var validator = CreateValidator();
 
@@ -164,7 +164,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Utilities
         }
 
         private async Task AssertValidStream(byte[] content)
-        { 
+        {
             var validator = CreateValidator();
 
             using var stream = new MemoryStream(content);

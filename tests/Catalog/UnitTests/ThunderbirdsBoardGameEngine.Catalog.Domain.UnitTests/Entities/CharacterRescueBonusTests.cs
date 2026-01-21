@@ -28,7 +28,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Domain.UnitTests.Entities
         public void Constructor_WhenBonusValueInvalid_ThrowsArgumentOutOfRangeException(int invalidBonusValue)
         {
             // Arrange
-            
+
             // Act & Assert
             Assert.Throws<ArgumentOutOfRangeException>(() => new CharacterRescueBonus(RescueType.Air, invalidBonusValue));
         }

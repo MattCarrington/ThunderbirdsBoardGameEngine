@@ -11,7 +11,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Domain.UnitTests.Entities
         {
             // Arrange
             var rescueBonus = new CharacterRescueBonus(RescueType.Land, 2);
-            
+
             // Act
             var result = new CharacterDefinition(Character.Gordon, rescueBonus);
 

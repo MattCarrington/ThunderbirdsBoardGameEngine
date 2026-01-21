@@ -11,7 +11,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Domain.Entities
         public CharacterRescueBonus(RescueType rescueType, int bonusValue)
         {
             ArgumentOutOfRangeException.ThrowIfNegativeOrZero(bonusValue);
-            
+
             RescueType = rescueType;
             BonusValue = bonusValue;
         }

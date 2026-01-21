@@ -20,7 +20,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Domain.Entities
         }
 
         public CharacterDefinition(Character key) : this(key, null)
-        {            
+        {
         }
     }
 }

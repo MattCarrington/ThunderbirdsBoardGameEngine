@@ -58,7 +58,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Utilities
         public void Validate_WhenNullOrWhitespaceFilePath_ReturnsFailure(string? path)
         {
             // Arrange
-            
+
             // Act
             var result = JsonFilePathValidator.ValidateJsonFilePath(Key, path, new MockFileSystem());
 

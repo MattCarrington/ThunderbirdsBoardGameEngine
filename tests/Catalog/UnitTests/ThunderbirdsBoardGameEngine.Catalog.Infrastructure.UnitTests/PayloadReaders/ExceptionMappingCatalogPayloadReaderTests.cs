@@ -129,8 +129,8 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.PayloadRe
         }
 
         [Fact]
-        public async Task ReadAsync_InnerThrowsJsonException_WrapsBadJsonException() 
-        {             
+        public async Task ReadAsync_InnerThrowsJsonException_WrapsBadJsonException()
+        {
             // Arrange
             var reader = CreateReader(new JsonException("Bad JSON"));
 
