@@ -3,7 +3,7 @@
     /// <summary>
     /// Represents configuration options for accessing a character JSON file.
     /// </summary>
-    public sealed class CharacterJsonOptions
+    public sealed class CharacterDefinitionJsonOptions
     {
         /// <summary>
         /// Gets or sets the file system path to the character JSON file.

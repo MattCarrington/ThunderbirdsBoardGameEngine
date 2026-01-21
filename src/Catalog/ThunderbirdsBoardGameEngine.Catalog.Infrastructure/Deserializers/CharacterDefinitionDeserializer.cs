@@ -6,11 +6,11 @@ using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Interfaces;
 
 namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Deserializers
 {
-    internal class CharacterDeserializer : ICharacterDeserializer
+    internal class CharacterDefinitionDeserializer : ICharacterDefinitionDeserializer
     {
         private readonly JsonSerializerOptions _jsonOptions;
 
-        public CharacterDeserializer(IOptionsMonitor<JsonSerializerOptions> jsonOptions)
+        public CharacterDefinitionDeserializer(IOptionsMonitor<JsonSerializerOptions> jsonOptions)
         {
             _jsonOptions = jsonOptions.Get(CatalogJson.Name) ?? throw new ArgumentNullException(nameof(jsonOptions));
         }

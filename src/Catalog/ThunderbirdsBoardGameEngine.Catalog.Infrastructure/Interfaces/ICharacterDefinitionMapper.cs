@@ -3,7 +3,7 @@ using ThunderbirdsBoardGameEngine.Catalog.Format.Dtos;
 
 namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Interfaces
 {
-    internal interface ICharacterMapper
+    internal interface ICharacterDefinitionMapper
     {
         CharacterDefinition Map(CharacterCatalogDto dto);
     }

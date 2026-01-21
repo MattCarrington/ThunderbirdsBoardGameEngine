@@ -17,7 +17,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Application.UnitTests.Decorators
             // Arrange
             var characters = TestCharacters.ValidSix;
 
-            var inner = Substitute.For<ICharacterReader>();
+            var inner = Substitute.For<ICharacterDefinitionReader>();
             inner.GetAllAsync(Arg.Any<CancellationToken>()).Returns(characters);
 
             var validator = CreateValidator(inner);
@@ -35,7 +35,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Application.UnitTests.Decorators
         public async Task GetAllAsync_WithCancellationToken_Forwarded()
         {
             // Arrange
-            var inner = Substitute.For<ICharacterReader>();
+            var inner = Substitute.For<ICharacterDefinitionReader>();
             inner.GetAllAsync(Arg.Any<CancellationToken>())
                  .Returns(TestCharacters.ValidSix);
 
@@ -60,7 +60,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Application.UnitTests.Decorators
                 new(Character.Virgil)
             };
 
-            var inner = Substitute.For<ICharacterReader>();
+            var inner = Substitute.For<ICharacterDefinitionReader>();
             inner.GetAllAsync(Arg.Any<CancellationToken>())
                 .Returns(characters);
 
@@ -99,14 +99,14 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Application.UnitTests.Decorators
 
         private static ValidatingCharacterDefinitionReader CreateValidator(Exception ex)
         {
-            var inner = Substitute.For<ICharacterReader>();
+            var inner = Substitute.For<ICharacterDefinitionReader>();
             inner.GetAllAsync(Arg.Any<CancellationToken>())
                  .Returns<Task<IReadOnlyList<CharacterDefinition>>>(_ => throw ex);
 
             return CreateValidator(inner);
         }
 
-        private static ValidatingCharacterDefinitionReader CreateValidator(ICharacterReader inner)
+        private static ValidatingCharacterDefinitionReader CreateValidator(ICharacterDefinitionReader inner)
         {
             return new ValidatingCharacterDefinitionReader(inner);
         }

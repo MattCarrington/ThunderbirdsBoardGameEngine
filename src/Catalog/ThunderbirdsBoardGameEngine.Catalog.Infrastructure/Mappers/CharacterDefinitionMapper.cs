@@ -7,7 +7,7 @@ using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Interfaces;
 
 namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Mappers
 {
-    internal sealed class CharacterMapper : ICharacterMapper
+    internal sealed class CharacterDefinitionMapper : ICharacterDefinitionMapper
     {
         public CharacterDefinition Map(CharacterCatalogDto dto)
         {

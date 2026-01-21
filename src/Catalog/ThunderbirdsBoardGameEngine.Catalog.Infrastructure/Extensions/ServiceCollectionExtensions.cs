@@ -67,7 +67,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Extensions
         {
             AddCatalogCore(services);
             AddDisasterCards(services, configuration);
-            AddCharacters(services, configuration);
+            AddCharacterDefinitions(services, configuration);
 
             services.AddOptions<JsonSerializerOptions>(CatalogJson.Name)
                 .Configure(CatalogJson.Configure);
@@ -124,20 +124,20 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Extensions
                 .ValidateOnStart(); // ← run all validators during startup            
         }
 
-        private static void AddCharacters(IServiceCollection services, IConfiguration configuration)
+        private static void AddCharacterDefinitions(IServiceCollection services, IConfiguration configuration)
         {
-            services.AddSingleton<IPostConfigureOptions<CharacterJsonOptions>, CharacterDefinitionJsonPostConfigure>();
-            services.AddSingleton<IValidateOptions<CharacterJsonOptions>, CharacterDefinitionJsonOptionsValidator>();
-            services.AddSingleton<ICharacterDeserializer, CharacterDeserializer>();
-            services.AddSingleton<ICharacterMapper, CharacterMapper>();
-            services.AddScoped<ICharacterReader, CharacterJsonReader>();
-            services.Decorate<ICharacterReader, ValidatingCharacterDefinitionReader>();
+            services.AddSingleton<IPostConfigureOptions<CharacterDefinitionJsonOptions>, CharacterDefinitionJsonPostConfigure>();
+            services.AddSingleton<IValidateOptions<CharacterDefinitionJsonOptions>, CharacterDefinitionJsonOptionsValidator>();
+            services.AddSingleton<ICharacterDefinitionDeserializer, CharacterDefinitionDeserializer>();
+            services.AddSingleton<ICharacterDefinitionMapper, CharacterDefinitionMapper>();
+            services.AddScoped<ICharacterDefinitionReader, CharacterDefinitionJsonReader>();
+            services.Decorate<ICharacterDefinitionReader, ValidatingCharacterDefinitionReader>();
 
-            services.AddSingleton<ICharacterReferenceSource>(sp =>
+            services.AddSingleton<ICharacterDefinitionReferenceSource>(sp =>
             {
                 var scope = sp.CreateScope();
 
-                var reader = scope.ServiceProvider.GetRequiredService<ICharacterReader>();
+                var reader = scope.ServiceProvider.GetRequiredService<ICharacterDefinitionReader>();
 
                 var init = new CharacterDefinitionReferenceSourceInitializer(reader);
                 return init.InitializeAsync(CancellationToken.None).GetAwaiter().GetResult();
@@ -146,7 +146,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Extensions
             //services.AddSingleton(sp =>
             //    (IDisasterCardReferenceSourceProbe)sp.GetRequiredService<IDisasterCardReferenceSource>());
 
-            services.AddOptions<CharacterJsonOptions>()
+            services.AddOptions<CharacterDefinitionJsonOptions>()
                 .Bind(configuration.GetSection("Catalog:Characters:Json"))
                 .ValidateOnStart(); // ← run all validators during startup
         }

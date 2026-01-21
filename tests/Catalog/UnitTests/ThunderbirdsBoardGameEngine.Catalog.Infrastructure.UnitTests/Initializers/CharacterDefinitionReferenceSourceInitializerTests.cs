@@ -15,7 +15,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Initializ
             // Arrange
             var characters = TestCharacters.ValidSix;
 
-            var reader = Substitute.For<ICharacterReader>();
+            var reader = Substitute.For<ICharacterDefinitionReader>();
             reader.GetAllAsync(Arg.Any<CancellationToken>()).Returns(characters);
 
             var initializer = CreateInitializer(reader);
@@ -34,7 +34,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Initializ
             // Arrange
             var characters = Array.Empty<CharacterDefinition>();
 
-            var reader = Substitute.For<ICharacterReader>();
+            var reader = Substitute.For<ICharacterDefinitionReader>();
             reader.GetAllAsync(Arg.Any<CancellationToken>()).Returns(characters);
 
             var initializer = CreateInitializer(reader);
@@ -47,7 +47,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Initializ
         public async Task InitializeAsync_WithNullCharacters_ThrowsArgumentNullException()
         {
             // Arrange
-            var reader = Substitute.For<ICharacterReader>();
+            var reader = Substitute.For<ICharacterDefinitionReader>();
             reader.GetAllAsync(Arg.Any<CancellationToken>()).Returns(Task.FromResult<IReadOnlyList<CharacterDefinition>>(null));
 
             var initializer = CreateInitializer(reader);
@@ -56,7 +56,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Initializ
             await Assert.ThrowsAsync<ArgumentNullException>(() => initializer.InitializeAsync(CancellationToken.None));
         }
 
-        private static CharacterDefinitionReferenceSourceInitializer CreateInitializer(ICharacterReader reader)
+        private static CharacterDefinitionReferenceSourceInitializer CreateInitializer(ICharacterDefinitionReader reader)
         {
             return new CharacterDefinitionReferenceSourceInitializer(reader);
         }

@@ -20,7 +20,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Validator
             var fileSystem = new MockFileSystem();
             fileSystem.AddFile(path, new MockFileData("{}"));
 
-            var options = new CharacterJsonOptions
+            var options = new CharacterDefinitionJsonOptions
             {
                 FilePath = path
             };
@@ -53,7 +53,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Validator
         public void Validate_WhenFilePathMissing_UsesDisasterCardsConfigKey()
         {
             // Arrange
-            var options = new CharacterJsonOptions { FilePath = "" };
+            var options = new CharacterDefinitionJsonOptions { FilePath = "" };
 
             var validator = CreateValidator();
 

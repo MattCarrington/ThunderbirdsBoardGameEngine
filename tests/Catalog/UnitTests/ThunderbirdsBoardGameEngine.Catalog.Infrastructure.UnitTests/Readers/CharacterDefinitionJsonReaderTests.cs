@@ -17,7 +17,7 @@ using Xunit;
 
 namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Readers
 {
-    public class CharacterJsonReaderTests
+    public class CharacterDefinitionJsonReaderTests
     {
         private const string TestPath = "/characters.json";
 
@@ -47,10 +47,10 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Readers
             payloadReader.ReadAsync(Arg.Any<string>(), Arg.Any<CancellationToken>())
                 .Returns(payload);
 
-            var deserializer = Substitute.For<ICharacterDeserializer>();
+            var deserializer = Substitute.For<ICharacterDefinitionDeserializer>();
             deserializer.Deserialize(payload.RawData).Returns(dtos);
 
-            var mapper = Substitute.For<ICharacterMapper>();
+            var mapper = Substitute.For<ICharacterDefinitionMapper>();
             mapper.Map(dtos[0]).Returns(characters[0]);
             mapper.Map(dtos[1]).Returns(characters[1]);
 
@@ -90,7 +90,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Readers
         public async Task GetAllAsync_WhenDeserializerReturnsNoData_ThowsDataMissingException()
         {
             // Arrange
-            var deserializer = Substitute.For<ICharacterDeserializer>();
+            var deserializer = Substitute.For<ICharacterDefinitionDeserializer>();
             deserializer.Deserialize(Arg.Any<JsonElement>())
                 .Returns([]);
 
@@ -108,7 +108,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Readers
         public async Task GetAllAsync_WhenDeserializerReturnsNull_ThrowsDataMissingException()
         {
             // Arrange
-            var deserializer = Substitute.For<ICharacterDeserializer>();
+            var deserializer = Substitute.For<ICharacterDefinitionDeserializer>();
             deserializer.Deserialize(Arg.Any<JsonElement>())
                 .Returns(null as List<CharacterCatalogDto>);
 
@@ -133,7 +133,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Readers
 
             data.AddRange(ValidCharacters());
 
-            var deserializer = Substitute.For<ICharacterDeserializer>();
+            var deserializer = Substitute.For<ICharacterDefinitionDeserializer>();
             deserializer.Deserialize(Arg.Any<JsonElement>())
                 .Returns(data.ToList());
 
@@ -151,7 +151,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Readers
         public async Task GetAllAsync_WhenDeserializerThrowsNotSupportedException_WrapsBadJsonException()
         {
             // Arrange
-            var deserializer = Substitute.For<ICharacterDeserializer>();
+            var deserializer = Substitute.For<ICharacterDefinitionDeserializer>();
             deserializer.Deserialize(Arg.Any<JsonElement>())
                 .Throws(new NotSupportedException("Unsupported type configuration for DisasterCard."));
 
@@ -169,7 +169,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Readers
         public async Task GetAllAsync_WhenDeserializerThrowsJsonException_WrapsBadJsonException()
         {
             // Arrange
-            var deserializer = Substitute.For<ICharacterDeserializer>();
+            var deserializer = Substitute.For<ICharacterDefinitionDeserializer>();
             deserializer.Deserialize(Arg.Any<JsonElement>())
                 .Throws(new JsonException("Malformed JSON data."));
 
@@ -183,17 +183,17 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Readers
                 TestPath);
         }
 
-        private CharacterJsonReader CreateReader(
+        private CharacterDefinitionJsonReader CreateReader(
             ICatalogPayloadReader<SimpleCatalogManifest>? payloadReader = null,
-            ICharacterDeserializer? deserializer = null,
-            ICharacterMapper? mapper = null)
+            ICharacterDefinitionDeserializer? deserializer = null,
+            ICharacterDefinitionMapper? mapper = null)
         {
-            return new CharacterJsonReader(
-                Options.Create(new CharacterJsonOptions { FilePath = TestPath }),
+            return new CharacterDefinitionJsonReader(
+                Options.Create(new CharacterDefinitionJsonOptions { FilePath = TestPath }),
                 payloadReader ?? CreateDefaultPayloadReader(),
-                deserializer ?? Substitute.For<ICharacterDeserializer>(),
-                mapper ?? Substitute.For<ICharacterMapper>(),
-                NullLogger<CharacterJsonReader>.Instance);
+                deserializer ?? Substitute.For<ICharacterDefinitionDeserializer>(),
+                mapper ?? Substitute.For<ICharacterDefinitionMapper>(),
+                NullLogger<CharacterDefinitionJsonReader>.Instance);
         }
 
         private static ICatalogPayloadReader<SimpleCatalogManifest> CreateDefaultPayloadReader()

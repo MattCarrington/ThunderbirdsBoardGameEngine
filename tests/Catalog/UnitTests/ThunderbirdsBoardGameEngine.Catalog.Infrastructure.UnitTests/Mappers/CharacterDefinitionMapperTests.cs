@@ -7,7 +7,7 @@ using Xunit;
 
 namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Mappers
 {
-    public class CharacterMapperTests
+    public class CharacterDefinitionMapperTests
     {
         [Theory]
         [InlineData("LadyPenelope")]
@@ -125,9 +125,9 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Mappers
             Assert.Contains($"Invalid enum value: {invalidCharacter}", inner.Message);
         }
 
-        private static CharacterMapper CreateMapper()
+        private static CharacterDefinitionMapper CreateMapper()
         {
-            return new CharacterMapper();
+            return new CharacterDefinitionMapper();
         }
     }
 }

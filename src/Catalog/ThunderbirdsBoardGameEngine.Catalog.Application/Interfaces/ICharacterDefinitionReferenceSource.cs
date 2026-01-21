@@ -3,7 +3,7 @@ using ThunderbirdsBoardGameEngine.Catalog.Domain.Entities;
 
 namespace ThunderbirdsBoardGameEngine.Catalog.Application.Interfaces
 {
-    public interface ICharacterReferenceSource
+    public interface ICharacterDefinitionReferenceSource
     {
         string Version { get; }
 

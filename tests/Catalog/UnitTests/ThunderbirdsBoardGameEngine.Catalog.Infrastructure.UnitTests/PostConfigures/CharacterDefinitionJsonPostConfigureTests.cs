@@ -15,7 +15,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.PostConfi
         public void PostConfigure_WhenFilePathNullOrWhitespace_ShouldReturnEarly(string? input)
         {
             // Arrange
-            var options = new CharacterJsonOptions
+            var options = new CharacterDefinitionJsonOptions
             {
                 FilePath = input
             };
@@ -33,7 +33,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.PostConfi
         public void PostConfigure_WhenValidPath_DelegatesToNormalizer()
         {
             // Arrange
-            var options = new CharacterJsonOptions
+            var options = new CharacterDefinitionJsonOptions
             {
                 FilePath = "content/disaster.json"
             };

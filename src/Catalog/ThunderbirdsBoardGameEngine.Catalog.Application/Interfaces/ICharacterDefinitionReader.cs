@@ -2,7 +2,7 @@
 
 namespace ThunderbirdsBoardGameEngine.Catalog.Application.Interfaces
 {
-    public interface ICharacterReader
+    public interface ICharacterDefinitionReader
     {
         Task<IReadOnlyList<CharacterDefinition>> GetAllAsync(CancellationToken cancellationToken);
     }

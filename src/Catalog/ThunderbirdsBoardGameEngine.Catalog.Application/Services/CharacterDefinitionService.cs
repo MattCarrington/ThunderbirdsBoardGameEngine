@@ -6,9 +6,9 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Application.Services
 {
     internal class CharacterDefinitionService : ICharacterDefinitionService
     {
-        private readonly ICharacterReferenceSource _characterReferenceSource;
+        private readonly ICharacterDefinitionReferenceSource _characterReferenceSource;
 
-        public CharacterDefinitionService(ICharacterReferenceSource characterReferenceSource)
+        public CharacterDefinitionService(ICharacterDefinitionReferenceSource characterReferenceSource)
         {
             _characterReferenceSource = characterReferenceSource ?? throw new ArgumentNullException(nameof(characterReferenceSource));
         }

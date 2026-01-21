@@ -5,7 +5,7 @@ using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Utilities;
 
 namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Validators
 {
-    internal sealed class CharacterDefinitionJsonOptionsValidator : IValidateOptions<CharacterJsonOptions>
+    internal sealed class CharacterDefinitionJsonOptionsValidator : IValidateOptions<CharacterDefinitionJsonOptions>
     {
         private readonly IFileSystem _fileSystem;
 
@@ -16,7 +16,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Validators
             _fileSystem = fileSystem;
         }
 
-        public ValidateOptionsResult Validate(string? name, CharacterJsonOptions options)
+        public ValidateOptionsResult Validate(string? name, CharacterDefinitionJsonOptions options)
         {
             if (options is null)
             {

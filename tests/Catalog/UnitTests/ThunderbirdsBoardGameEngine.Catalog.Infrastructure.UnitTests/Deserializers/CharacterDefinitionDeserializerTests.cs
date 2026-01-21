@@ -4,7 +4,7 @@ using Xunit;
 
 namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Deserializers
 {
-    public class CharacterDeserializerTests
+    public class CharacterDefinitionDeserializerTests
     {
         [Fact]
         public void Deserialize_WhenValidJson_ReturnsCharacterDtos()
@@ -76,11 +76,11 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Deseriali
             Assert.Empty(result);
         }
 
-        private static CharacterDeserializer CreateDeserializer()
+        private static CharacterDefinitionDeserializer CreateDeserializer()
         {
             var options = JsonOptionsStub.CatalogOptionsMonitor();
 
-            return new CharacterDeserializer(options);
+            return new CharacterDefinitionDeserializer(options);
         }
     }
 }

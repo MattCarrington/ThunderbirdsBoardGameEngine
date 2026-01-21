@@ -11,24 +11,24 @@ using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Interfaces;
 
 namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Readers
 {
-    internal sealed class CharacterJsonReader : ICharacterReader
+    internal sealed class CharacterDefinitionJsonReader : ICharacterDefinitionReader
     {
         private readonly string _filePath;
         private readonly ICatalogPayloadReader<SimpleCatalogManifest> _catlogPayloadReader;
-        private readonly ICharacterDeserializer _characterDeserializer;
-        private readonly ICharacterMapper _characterMapper;
-        private readonly ILogger<CharacterJsonReader> _logger;
+        private readonly ICharacterDefinitionDeserializer _characterDeserializer;
+        private readonly ICharacterDefinitionMapper _characterMapper;
+        private readonly ILogger<CharacterDefinitionJsonReader> _logger;
 
-        public CharacterJsonReader(
-            IOptions<CharacterJsonOptions> options,
+        public CharacterDefinitionJsonReader(
+            IOptions<CharacterDefinitionJsonOptions> options,
             ICatalogPayloadReader<SimpleCatalogManifest> catalogPayloadReader,
-            ICharacterDeserializer characterDeserializer,
-            ICharacterMapper characterMapper,
-            ILogger<CharacterJsonReader> logger)
+            ICharacterDefinitionDeserializer characterDeserializer,
+            ICharacterDefinitionMapper characterMapper,
+            ILogger<CharacterDefinitionJsonReader> logger)
         {
             if (options is null || string.IsNullOrWhiteSpace(options.Value.FilePath))
             {
-                throw new ArgumentException("CharacterJsonOptions or its FilePath is invalid", nameof(options));
+                throw new ArgumentException("CharacterDefinitionJsonOptions or its FilePath is invalid", nameof(options));
             }
 
             _filePath = options.Value.FilePath;

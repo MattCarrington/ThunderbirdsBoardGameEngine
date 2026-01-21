@@ -4,11 +4,11 @@ using ThunderbirdsBoardGameEngine.Catalog.Domain.Validators;
 
 namespace ThunderbirdsBoardGameEngine.Catalog.Application.UnitTests.Decorators
 {
-    public class ValidatingCharacterDefinitionReader : ICharacterReader
+    public class ValidatingCharacterDefinitionReader : ICharacterDefinitionReader
     {
-        private readonly ICharacterReader _inner;
+        private readonly ICharacterDefinitionReader _inner;
 
-        public ValidatingCharacterDefinitionReader(ICharacterReader inner)
+        public ValidatingCharacterDefinitionReader(ICharacterDefinitionReader inner)
         {
             _inner = inner ?? throw new ArgumentNullException(nameof(inner));
         }

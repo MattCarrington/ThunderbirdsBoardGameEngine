@@ -5,7 +5,7 @@ using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Utilities;
 
 namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.PostConfigures
 {
-    internal sealed class CharacterDefinitionJsonPostConfigure : IPostConfigureOptions<CharacterJsonOptions>
+    internal sealed class CharacterDefinitionJsonPostConfigure : IPostConfigureOptions<CharacterDefinitionJsonOptions>
     {
         private readonly IHostEnvironment _env;
 
@@ -14,7 +14,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.PostConfigures
             _env = env;
         }
 
-        public void PostConfigure(string? name, CharacterJsonOptions options)
+        public void PostConfigure(string? name, CharacterDefinitionJsonOptions options)
         {
             if (string.IsNullOrWhiteSpace(options.FilePath))
             {

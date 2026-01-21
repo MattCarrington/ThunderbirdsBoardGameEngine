@@ -4,7 +4,7 @@ using ThunderbirdsBoardGameEngine.Catalog.Domain.Entities;
 
 namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.ReferenceSources
 {
-    internal sealed class InMemoryCharacterDefinitionReferenceSource : ICharacterReferenceSource
+    internal sealed class InMemoryCharacterDefinitionReferenceSource : ICharacterDefinitionReferenceSource
     {
         public string Version { get; }
 

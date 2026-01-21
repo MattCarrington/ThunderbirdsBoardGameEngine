@@ -62,7 +62,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.ComponentTests
 
             // Act + Assert: accessing .Value triggers Bind + PostConfigure + Validate
             var ex = Assert.Throws<OptionsValidationException>(
-                () => sp.GetRequiredService<IOptions<CharacterJsonOptions>>().Value);
+                () => sp.GetRequiredService<IOptions<CharacterDefinitionJsonOptions>>().Value);
 
             Assert.Contains("Catalog:Characters:Json:FilePath", ex.Message, StringComparison.OrdinalIgnoreCase);
         }

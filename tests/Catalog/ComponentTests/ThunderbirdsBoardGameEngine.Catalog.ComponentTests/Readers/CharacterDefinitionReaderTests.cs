@@ -9,13 +9,13 @@ using Xunit;
 
 namespace ThunderbirdsBoardGameEngine.Catalog.ComponentTests.Readers
 {
-    public class CharacterReaderTests : IClassFixture<InfrastructureRegistrationFixture>
+    public class CharacterDefinitionReaderTests : IClassFixture<InfrastructureRegistrationFixture>
     {
         private readonly InfrastructureRegistrationFixture _fixture;
 
         private const string ConfigKey = "Catalog:Characters:Json:FilePath";
 
-        public CharacterReaderTests(InfrastructureRegistrationFixture fixture)
+        public CharacterDefinitionReaderTests(InfrastructureRegistrationFixture fixture)
         {
             _fixture = fixture;
         }
@@ -26,10 +26,10 @@ namespace ThunderbirdsBoardGameEngine.Catalog.ComponentTests.Readers
             // Arrange
             var filePath = CharacterDefinitionTestFileCatalog.Data("characters.json");
 
-            using var provider = _fixture.Build<CharacterJsonOptions>(ConfigKey, filePath);
+            using var provider = _fixture.Build<CharacterDefinitionJsonOptions>(ConfigKey, filePath);
             using var scope = provider.CreateScope();
 
-            var reader = scope.ServiceProvider.GetRequiredService<ICharacterReader>();
+            var reader = scope.ServiceProvider.GetRequiredService<ICharacterDefinitionReader>();
 
             // Act
             var characters = await reader.GetAllAsync(CancellationToken.None);
@@ -46,10 +46,10 @@ namespace ThunderbirdsBoardGameEngine.Catalog.ComponentTests.Readers
             // Arrange
             var filePath = CharacterDefinitionTestFileCatalog.Data("invalid-characters.json");
 
-            using var provider = _fixture.Build<CharacterJsonOptions>(ConfigKey, filePath);
+            using var provider = _fixture.Build<CharacterDefinitionJsonOptions>(ConfigKey, filePath);
             using var scope = provider.CreateScope();
 
-            var reader = scope.ServiceProvider.GetRequiredService<ICharacterReader>();
+            var reader = scope.ServiceProvider.GetRequiredService<ICharacterDefinitionReader>();
 
             // Act & Assert
             await Assert.ThrowsAsync<CharacterDefinitionValidationException>(() => reader.GetAllAsync(CancellationToken.None));
@@ -63,10 +63,10 @@ namespace ThunderbirdsBoardGameEngine.Catalog.ComponentTests.Readers
             // Arrange
             var filePath = SharedTestFileCatalog.Invalid(filename);
 
-            using var provider = _fixture.Build<CharacterJsonOptions>(ConfigKey, filePath);
+            using var provider = _fixture.Build<CharacterDefinitionJsonOptions>(ConfigKey, filePath);
             using var scope = provider.CreateScope();
 
-            var reader = scope.ServiceProvider.GetRequiredService<ICharacterReader>();
+            var reader = scope.ServiceProvider.GetRequiredService<ICharacterDefinitionReader>();
 
             // Act & Assert
             var ex = await Assert.ThrowsAsync<CatalogDataAccessException>(() => reader.GetAllAsync(CancellationToken.None));
@@ -84,10 +84,10 @@ namespace ThunderbirdsBoardGameEngine.Catalog.ComponentTests.Readers
 
             using var _ = new FileStream(path, FileMode.Open, FileAccess.ReadWrite, FileShare.None);
 
-            using var provider = _fixture.Build<CharacterJsonOptions>(ConfigKey, path);
+            using var provider = _fixture.Build<CharacterDefinitionJsonOptions>(ConfigKey, path);
             using var scope = provider.CreateScope();
 
-            var reader = scope.ServiceProvider.GetRequiredService<ICharacterReader>();
+            var reader = scope.ServiceProvider.GetRequiredService<ICharacterDefinitionReader>();
 
             // Act & Assert
             var exception = await Assert.ThrowsAsync<CatalogDataAccessException>(() => reader.GetAllAsync(CancellationToken.None));

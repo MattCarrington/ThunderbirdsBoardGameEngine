@@ -8,9 +8,9 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Initializers
 {
     internal class CharacterDefinitionReferenceSourceInitializer : ICharacterDefinitionReferenceSourceInitializer
     {
-        private readonly ICharacterReader _characterReader;
+        private readonly ICharacterDefinitionReader _characterReader;
 
-        public CharacterDefinitionReferenceSourceInitializer(ICharacterReader characterReader)
+        public CharacterDefinitionReferenceSourceInitializer(ICharacterDefinitionReader characterReader)
         {
             _characterReader = characterReader ?? throw new ArgumentNullException(nameof(characterReader));
         }
