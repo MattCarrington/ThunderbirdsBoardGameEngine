@@ -80,13 +80,22 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Extensions
             services.AddSingleton<IFileOpener, FileOpener>();
             services.AddSingleton<IFileSystem, FileSystem>();
             services.AddSingleton<IEnvelopeParser, EnvelopeParser>();
-            services.AddSingleton<IGeneratedContentValidator, GeneratedContentValidator>();
             services.AddSingleton<IJsonStreamValidator, JsonStreamValidator>();
             services.AddSingleton<ICatalogStreamSource, FileSystemCatalogStreamSource>();
-            services.AddScoped(typeof(ICatalogPayloadReader<>), typeof(JsonCatalogPayloadReader<>)); // One open generic registration
+
+            // Generated-catalog support
+            services.AddSingleton<IGeneratedContentValidator, GeneratedContentValidator>();
+
+            // Register both manifest types explicitly (needed for Scrutor decoration)
+            services.AddScoped<ICatalogPayloadReader<SimpleCatalogManifest>, JsonCatalogPayloadReader<SimpleCatalogManifest>>();
             services.AddScoped<ICatalogPayloadReader<GeneratedCatalogManifest>, JsonCatalogPayloadReader<GeneratedCatalogManifest>>();
-            services.Decorate<ICatalogPayloadReader<GeneratedCatalogManifest>, GeneratedJsonCatalogPayloadReader>(); // Decorate ONLY the generated-manifest version
-            services.Decorate(typeof(ICatalogPayloadReader<>), typeof(ExceptionMappingCatalogPayloadReader<>)); // Decorate ONLY the generated-manifest version
+
+            // Generated catalogs get extra validation layer (between Json and ExceptionMapping)
+            services.Decorate<ICatalogPayloadReader<GeneratedCatalogManifest>, GeneratedJsonCatalogPayloadReader>();
+
+            // ALL catalogs get exception mapping (outermost boundary)
+            services.Decorate<ICatalogPayloadReader<SimpleCatalogManifest>, ExceptionMappingCatalogPayloadReader<SimpleCatalogManifest>>();
+            services.Decorate<ICatalogPayloadReader<GeneratedCatalogManifest>, ExceptionMappingCatalogPayloadReader<GeneratedCatalogManifest>>();
         }
 
         private static void AddDisasterCards(IServiceCollection services, IConfiguration configuration)

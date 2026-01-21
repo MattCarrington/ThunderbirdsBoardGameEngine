@@ -13,5 +13,9 @@
         public const string EnvelopedFolder = "Enveloped";
 
         public const string InvalidFolder = "Invalid";
+
+        public const string CharacterDefinitionFolder = "Characters";
+
+        public const string SharedFolder = "Shared";
     }
 }

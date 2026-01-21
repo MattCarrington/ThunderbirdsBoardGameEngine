@@ -3,6 +3,7 @@ using ThunderbirdsBoardGameEngine.Catalog.Application.Exceptions;
 using ThunderbirdsBoardGameEngine.Catalog.Application.Interfaces;
 using ThunderbirdsBoardGameEngine.Catalog.ComponentTests.Fixtures;
 using ThunderbirdsBoardGameEngine.Catalog.Domain.Exceptions;
+using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Configuration;
 using ThunderbirdsBoardGameEngine.TestUtils.Catalog.Helpers;
 using ThunderbirdsBoardGameEngine.TestUtils.Catalog.TestFileCatalogs;
 using Xunit;
@@ -25,7 +26,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.ComponentTests.Readers
             // Arrange
             var filepath = EnvelopArray("disaster-cards-test.json"); // syntactically valid
 
-            using var provider = _fixture.Build(ConfigKey, filepath);
+            using var provider = _fixture.Build<DisasterCardJsonOptions>(ConfigKey, filepath);
 
             using var scope = provider.CreateScope();
 
@@ -41,13 +42,14 @@ namespace ThunderbirdsBoardGameEngine.Catalog.ComponentTests.Readers
         }
 
         [Theory]
-        [MemberData(nameof(InvalidFileCases))]
+        [MemberData(nameof(InvalidFileTestCases.InvalidFileCases),
+            MemberType = typeof(InvalidFileTestCases))]
         public async Task GetAllAsync_WithInvalidFiles_ThrowsCatalogDataAccessException(string filename, CatalogDataAccessErrorCode expectedErrorCode)
         {
             // Arrange
-            var filePath = DisasterCardTestFileCatalog.Invalid(filename); // non-empty valid JSON
+            var filePath = SharedTestFileCatalog.Invalid(filename); // non-empty valid JSON
 
-            using var provider = _fixture.Build(ConfigKey, filePath);
+            using var provider = _fixture.Build<DisasterCardJsonOptions>(ConfigKey, filePath);
 
             using var scope = provider.CreateScope();
 
@@ -67,7 +69,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.ComponentTests.Readers
 
             await File.WriteAllTextAsync(path, new string(' ', 25 * 1024 * 1024));
 
-            using var provider = _fixture.Build(ConfigKey, path);
+            using var provider = _fixture.Build<DisasterCardJsonOptions>(ConfigKey, path);
 
             using var scope = provider.CreateScope();
 
@@ -89,7 +91,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.ComponentTests.Readers
 
             using var _ = new FileStream(path, FileMode.Open, FileAccess.ReadWrite, FileShare.None);
 
-            using var provider = _fixture.Build(ConfigKey, path);
+            using var provider = _fixture.Build<DisasterCardJsonOptions>(ConfigKey, path);
 
             using var scope = provider.CreateScope();
 
@@ -108,7 +110,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.ComponentTests.Readers
             var bare = DisasterCardTestFileCatalog.Invalid("invalid-disaster-cards.json");
             var enveloped = TestJsonEnvelopeCreator.EnvelopArrayFile(bare);
 
-            using var provider = _fixture.Build(ConfigKey, enveloped);
+            using var provider = _fixture.Build<DisasterCardJsonOptions>(ConfigKey, enveloped);
 
             using var scope = provider.CreateScope();
 
@@ -125,7 +127,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.ComponentTests.Readers
             // Arrange
             var bareFilePath = DisasterCardTestFileCatalog.DataOnly("disaster-cards-test.json");    // Don't add the envelope
 
-            using var provider = _fixture.Build(ConfigKey, bareFilePath);
+            using var provider = _fixture.Build<DisasterCardJsonOptions>(ConfigKey, bareFilePath);
 
             using var scope = provider.CreateScope();
 
@@ -134,15 +136,6 @@ namespace ThunderbirdsBoardGameEngine.Catalog.ComponentTests.Readers
             // Act & Assert
             var exception = await Assert.ThrowsAsync<CatalogDataAccessException>(() => reader.GetAllAsync(CancellationToken.None));
             Assert.Equal(CatalogDataAccessErrorCode.BadJson, exception.ErrorCode);
-        }
-
-        public static TheoryData<string, CatalogDataAccessErrorCode> InvalidFileCases()
-        {
-            return new TheoryData<string, CatalogDataAccessErrorCode>
-            {
-                { "invalid-json.json", CatalogDataAccessErrorCode.BadJson },
-                { "empty.json", CatalogDataAccessErrorCode.DataMissing }
-            };
         }
 
         private static string EnvelopArray(string filepath)
