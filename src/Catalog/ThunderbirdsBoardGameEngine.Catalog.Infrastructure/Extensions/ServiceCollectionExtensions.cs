@@ -133,16 +133,15 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Extensions
             services.AddScoped<ICharacterReader, CharacterJsonReader>();
             services.Decorate<ICharacterReader, ValidatingCharacterDefinitionReader>();
 
-            //TODO: Add initializer
-            //services.AddSingleton<IDisasterCardReferenceSource>(sp =>
-            //{
-            //    var scope = sp.CreateScope();
+            services.AddSingleton<ICharacterReferenceSource>(sp =>
+            {
+                var scope = sp.CreateScope();
 
-            //    var reader = scope.ServiceProvider.GetRequiredService<IDisasterCardReader>();
+                var reader = scope.ServiceProvider.GetRequiredService<ICharacterReader>();
 
-            //    var init = new DisasterCardReferenceSourceInitializer(reader);
-            //    return init.InitializeAsync(CancellationToken.None).GetAwaiter().GetResult();
-            //});
+                var init = new CharacterDefinitionReferenceSourceInitializer(reader);
+                return init.InitializeAsync(CancellationToken.None).GetAwaiter().GetResult();
+            });
 
             //services.AddSingleton(sp =>
             //    (IDisasterCardReferenceSourceProbe)sp.GetRequiredService<IDisasterCardReferenceSource>());
