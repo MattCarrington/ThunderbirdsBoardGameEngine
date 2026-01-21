@@ -16,6 +16,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Data\characters.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Data\characters.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Data\disaster-cards.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
