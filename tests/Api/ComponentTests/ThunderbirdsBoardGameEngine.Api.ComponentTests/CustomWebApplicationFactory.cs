@@ -9,13 +9,15 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests
     {
         protected override void ConfigureWebHost(IWebHostBuilder builder)
         {
-            var filepath = DisasterCardTestFileCatalog.Enveloped("disaster-cards.json");
+            var disasterCardsFilePath = DisasterCardTestFileCatalog.Enveloped("disaster-cards.json");
+            var charactersFilePath = CharacterDefinitionTestFileCatalog.Data("characters.json");
 
             builder.ConfigureAppConfiguration((context, configBuilder) =>
             {
                 configBuilder.AddInMemoryCollection(new Dictionary<string, string?>
                 {
-                    { "Catalog:DisasterCards:Json:FilePath", filepath }
+                    { "Catalog:DisasterCards:Json:FilePath", disasterCardsFilePath },
+                    {  "Catalog:Characters:Json:FilePath", charactersFilePath   }
                 });
             });
         }
