@@ -7,13 +7,17 @@ using ThunderbirdsBoardGameEngine.Catalog.Domain.Enums;
 
 namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.ReferenceSources
 {
-    internal sealed class InMemoryCharacterDefinitionReferenceSource : ICharacterDefinitionReferenceSource
+    internal sealed class InMemoryCharacterDefinitionReferenceSource : ICharacterDefinitionReferenceSource, ICharacterDefinitionReferenceSourceProbe
     {
         private readonly FrozenDictionary<Character, CharacterDefinition> _characters;
+
+        private readonly IReadOnlyCollection<Character> _keys;
 
         public string Version { get; }
 
         public ImmutableArray<CharacterDefinition> Characters { get; }
+
+        public IReadOnlyCollection<Character> Keys => _keys;
 
         public InMemoryCharacterDefinitionReferenceSource(ImmutableArray<CharacterDefinition> characters, string version)
         {
@@ -28,6 +32,8 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.ReferenceSources
             Version = version;
 
             _characters = characters.ToFrozenDictionary(c => c.Key);
+
+            _keys = characters.Select(c => c.Key).ToImmutableArray();
         }
 
         public CharacterDefinition GetCharacterDefinition(Character character)
