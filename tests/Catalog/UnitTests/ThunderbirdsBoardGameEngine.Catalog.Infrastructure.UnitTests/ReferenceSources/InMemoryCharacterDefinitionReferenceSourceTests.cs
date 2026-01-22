@@ -1,4 +1,5 @@
 ﻿using System.Collections.Immutable;
+using ThunderbirdsBoardGameEngine.Catalog.Application.Exceptions;
 using ThunderbirdsBoardGameEngine.Catalog.Domain.Entities;
 using ThunderbirdsBoardGameEngine.Catalog.Domain.Enums;
 using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.ReferenceSources;
@@ -10,18 +11,20 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Reference
 {
     public class InMemoryCharacterDefinitionReferenceSourceTests
     {
+        private const string _version = "1.0";
+
         [Fact]
         public void Constructor_WithValidParameters_SetsProperties()
         {
             // Arrange
             var characters = TestCharacters.ValidSix.ToImmutableArray();
-            var version = "1.0";
+
 
             // Act
-            var source = new InMemoryCharacterDefinitionReferenceSource(characters, version);
+            var source = new InMemoryCharacterDefinitionReferenceSource(characters, _version);
 
             // Assert
-            Assert.Equal(version, source.Version);
+            Assert.Equal(_version, source.Version);
             Assert.Equal(characters, source.Characters);
         }
 
@@ -30,20 +33,18 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Reference
         {
             // Arrange
             var emptyCharacters = ImmutableArray<CharacterDefinition>.Empty;
-            var version = "1.0";
-
+            
             // Act & Assert
-            Assert.Throws<ArgumentException>(() => new InMemoryCharacterDefinitionReferenceSource(emptyCharacters, version));
+            Assert.Throws<ArgumentException>(() => new InMemoryCharacterDefinitionReferenceSource(emptyCharacters, _version));
         }
 
         [Fact]
         public void Constructor_WithDefaultCharacters_ThrowsArgumentException()
         {
             // Arrange
-            var version = "1.0";
-
+            
             // Act & Assert
-            Assert.Throws<ArgumentException>(() => new InMemoryCharacterDefinitionReferenceSource(default, version));
+            Assert.Throws<ArgumentException>(() => new InMemoryCharacterDefinitionReferenceSource(default, _version));
         }
 
         [Fact]
@@ -65,6 +66,49 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Reference
 
             // Act & Assert
             Assert.Throws<ArgumentException>(() => new InMemoryCharacterDefinitionReferenceSource(characters, version));
+        }
+
+        [Fact]
+        public void GetCharacterDefinition_WithValidCharacter_ReturnsDefinition()
+        {
+            // Arrange
+            var source = CreateReferenceSource();
+
+            // Act
+            var result = source.GetCharacterDefinition(Character.Virgil);
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.Equal(Character.Virgil, result.Key);
+            Assert.NotNull(result.RescueBonus);
+            Assert.Equal(RescueType.Land, result.RescueBonus.RescueType);
+            Assert.Equal(2, result.RescueBonus.BonusValue);
+        }
+
+        [Fact]
+        public void GetCharacterDefinition_WithMissingCharacter_ThrowsCharacterDefinitionNotFoundException()
+        {
+            // Arrange
+            var excludedCharacter = Character.LadyPenelope;
+
+            var characters = TestCharacters.ValidSix.Where(c => c.Key != excludedCharacter).ToImmutableArray();
+
+            var source = CreateReferenceSource(characters);
+
+            // Act & Assert
+            Assert.Throws<CharacterDefinitionNotFoundException>(() => source.GetCharacterDefinition(excludedCharacter));
+        }
+
+        private static InMemoryCharacterDefinitionReferenceSource CreateReferenceSource()
+        {
+            var characters = TestCharacters.ValidSix.ToImmutableArray();
+
+            return CreateReferenceSource(characters);
+        }
+
+        private static InMemoryCharacterDefinitionReferenceSource CreateReferenceSource(ImmutableArray<CharacterDefinition> characters)
+        {
+            return new InMemoryCharacterDefinitionReferenceSource(characters, _version);
         }
     }
 }
