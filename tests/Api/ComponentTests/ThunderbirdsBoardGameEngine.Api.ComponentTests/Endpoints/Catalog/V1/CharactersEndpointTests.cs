@@ -37,12 +37,12 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints.Catalog.V1
 
             var expected = new List<CharacterDto>
             {
-                new() { Key = "Scott", DisplayName = "Scott" },
-                new() { Key = "Virgil", DisplayName = "Virgil" },
-                new() { Key = "John", DisplayName = "John" },
-                new() { Key = "Gordon", DisplayName = "Gordon" },
-                new() { Key = "Alan", DisplayName = "Alan" },
-                new() { Key = "LadyPenelope", DisplayName = "Lady Penelope" }
+                new() { Key = "scott", DisplayName = "Scott" },
+                new() { Key = "virgil", DisplayName = "Virgil" },
+                new() { Key = "john", DisplayName = "John" },
+                new() { Key = "gordon", DisplayName = "Gordon" },
+                new() { Key = "alan", DisplayName = "Alan" },
+                new() { Key = "lady-penelope", DisplayName = "Lady Penelope" }
             };
 
             Assert.Equal(expected.OrderBy(x => x.Key), actual.OrderBy(x => x.Key));

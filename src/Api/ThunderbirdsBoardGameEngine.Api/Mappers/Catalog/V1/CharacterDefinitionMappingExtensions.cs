@@ -1,4 +1,5 @@
 ﻿using ThunderbirdsBoardGameEngine.Api.Presentation;
+using ThunderbirdsBoardGameEngine.Catalog.Application.Mappers;
 using ThunderbirdsBoardGameEngine.Catalog.Contracts.Dtos.V1;
 using ThunderbirdsBoardGameEngine.Catalog.Domain.Entities;
 
@@ -8,9 +9,11 @@ namespace ThunderbirdsBoardGameEngine.Api.Mappers.Catalog.V1
     {
         public static CharacterDto ToDto(this CharacterDefinition characterDefinition)
         {
+            var code = CharacterCodeMapper.ToPublished(characterDefinition.Key);
+
             return new CharacterDto
             {
-                Key = characterDefinition.Key.ToString(),
+                Key = code.Value.ToString(),
                 DisplayName = EnumDisplayHelper.GetDisplayName(characterDefinition.Key)
             };
         }

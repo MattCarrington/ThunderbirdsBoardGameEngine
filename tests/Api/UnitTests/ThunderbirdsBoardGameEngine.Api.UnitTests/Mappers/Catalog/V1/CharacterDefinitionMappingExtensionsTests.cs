@@ -19,7 +19,7 @@ namespace ThunderbirdsBoardGameEngine.Api.UnitTests.Mappers.Catalog.V1
 
             // Assert
             Assert.NotNull(result);
-            Assert.Equal("LadyPenelope", result.Key);
+            Assert.Equal("lady-penelope", result.Key);
             Assert.Equal("Lady Penelope", result.DisplayName);
         }
 
