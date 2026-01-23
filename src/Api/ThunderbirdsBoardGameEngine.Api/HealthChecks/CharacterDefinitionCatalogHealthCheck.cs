@@ -6,11 +6,11 @@ namespace ThunderbirdsBoardGameEngine.Api.HealthChecks
 {
     public class CharacterDefinitionCatalogHealthCheck : IHealthCheck
     {
-        private readonly ICharacterDefinitionReferenceSourceProbe _characterDefinitionProbe;        
+        private readonly ICharacterDefinitionReferenceSourceProbe _characterDefinitionProbe;
 
         public CharacterDefinitionCatalogHealthCheck(ICharacterDefinitionReferenceSourceProbe characterDefinitionProbe)
         {
-             _characterDefinitionProbe = characterDefinitionProbe ?? throw new ArgumentNullException(nameof(characterDefinitionProbe));
+            _characterDefinitionProbe = characterDefinitionProbe ?? throw new ArgumentNullException(nameof(characterDefinitionProbe));
         }
 
         public Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)

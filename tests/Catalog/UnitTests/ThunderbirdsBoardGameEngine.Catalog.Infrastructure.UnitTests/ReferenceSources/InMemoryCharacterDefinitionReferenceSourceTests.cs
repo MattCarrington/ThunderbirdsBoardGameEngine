@@ -33,7 +33,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Reference
         {
             // Arrange
             var emptyCharacters = ImmutableArray<CharacterDefinition>.Empty;
-            
+
             // Act & Assert
             Assert.Throws<ArgumentException>(() => new InMemoryCharacterDefinitionReferenceSource(emptyCharacters, _version));
         }
@@ -42,7 +42,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Reference
         public void Constructor_WithDefaultCharacters_ThrowsArgumentException()
         {
             // Arrange
-            
+
             // Act & Assert
             Assert.Throws<ArgumentException>(() => new InMemoryCharacterDefinitionReferenceSource(default, _version));
         }

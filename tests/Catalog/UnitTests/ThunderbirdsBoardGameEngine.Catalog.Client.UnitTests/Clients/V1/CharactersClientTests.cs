@@ -48,7 +48,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Client.UnitTests.Clients.V1
                 BaseAddress = new Uri("http://localhost/")
             };
 
-            var apiResult = ApiResult<IReadOnlyList<CharacterDto    >>.SuccessResult([], HttpStatusCode.OK);
+            var apiResult = ApiResult<IReadOnlyList<CharacterDto>>.SuccessResult([], HttpStatusCode.OK);
 
             var handler = CreateMockHttpResponseHandler(apiResult);
 
