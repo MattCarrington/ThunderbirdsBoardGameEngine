@@ -21,6 +21,9 @@ namespace ThunderbirdsBoardGameEngine.Api.Controllers.Catalog.V1
 
         [HttpGet]
         [ProducesResponseType(typeof(IEnumerable<CharacterDto>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status503ServiceUnavailable)]
         public IActionResult Get()
         {
             var characters = _service.GetAll();
