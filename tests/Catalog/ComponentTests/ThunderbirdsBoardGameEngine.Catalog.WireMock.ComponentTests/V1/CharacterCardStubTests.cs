@@ -10,7 +10,7 @@ using Xunit;
 namespace ThunderbirdsBoardGameEngine.Catalog.WireMock.ComponentTests.V1
 {
     [Collection("WireMock")]
-    internal class CharacterCardStubTests
+    public class CharacterCardStubTests
     {
         private readonly WireMockServer _server;
         private readonly CharactersStub _stub;
