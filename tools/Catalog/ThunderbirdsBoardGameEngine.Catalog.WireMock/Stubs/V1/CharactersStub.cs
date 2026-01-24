@@ -130,5 +130,13 @@ namespace ThunderbirdsBoardGameEngine.Catalog.WireMock.Stubs.V1
         {
             RegisterUnsupportedVersionHeaderGuard(Route, "GET", VersionValue);
         }
+
+        /// <summary>
+        /// Returns the request paths for all recorded calls.
+        /// </summary>
+        public IReadOnlyList<string> GetAllRequestPaths()
+        {
+            return Server.LogEntries.Select(le => le.RequestMessage.Path).ToList();
+        }
     }
 }

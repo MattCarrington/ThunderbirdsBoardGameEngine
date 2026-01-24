@@ -47,7 +47,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Client.ComponentTests.V1
             _ = await _client.GetAllAsync();
 
             // Assert
-            var hits = _host.DisasterCardStub().GetAllRequestPaths();
+            var hits = _host.CharactersStub().GetAllRequestPaths();
 
             var route = Assert.Single(hits);
             Assert.Equal("/api/catalog/characters", route);
