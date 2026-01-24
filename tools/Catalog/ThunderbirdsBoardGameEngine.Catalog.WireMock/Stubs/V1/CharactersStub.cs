@@ -35,7 +35,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.WireMock.Stubs.V1
         /// </exception>
         public CharactersStub(WireMockServer server)
             : base(server)
-        {            
+        {
         }
 
         /// <summary>

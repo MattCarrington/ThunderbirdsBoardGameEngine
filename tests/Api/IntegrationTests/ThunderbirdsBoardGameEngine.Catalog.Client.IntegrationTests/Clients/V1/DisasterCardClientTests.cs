@@ -25,7 +25,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Client.IntegrationTests.Clients.V1
             // Assert
             Assert.NotNull(result);
             Assert.True(result.Success);
-            Assert.Equal(HttpStatusCode.OK, result.StatusCode);            
+            Assert.Equal(HttpStatusCode.OK, result.StatusCode);
             Assert.Null(result.ErrorMessage);
 
             var disasterCards = Assert.IsType<IReadOnlyList<DisasterCardDto>>(result.Data, exactMatch: false);
