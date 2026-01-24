@@ -2,12 +2,12 @@
   "meta": {
     "catalog": "DisasterCards",
     "schemaVersion": "1.0",
-    "contentVersion": "2025-12-14",
-    "generatedAtUtc": "2025-12-14T12:52:10.4066775Z",
+    "contentVersion": "2026-01-24",
+    "generatedAtUtc": "2026-01-24T13:57:11.114772Z",
     "itemCount": 34,
     "checksum": {
       "algorithm": "sha256",
-      "value": "c4e64cb329ee5e080be2a74ab9d337de03eb10e781f3c2eef7a7fdfca4ae4114"
+      "value": "1ec4a4778e7efecb2e2f4f8bdc34789c0d207672c7927081a178e874bdfa90de"
     },
     "annotations": {
       "idStrategy": "orderBy slug(name)|rescueType|location \u2192 0..N-1",
@@ -81,7 +81,7 @@
       "code": "the-moon-mine-menace",
       "rescueType": "space",
       "difficultyNumber": 8,
-      "location": "theMoon",
+      "location": "moon",
       "bonusConditions": [
         {
           "type": "characterBonus",
@@ -277,7 +277,7 @@
       "code": "sun-probe",
       "rescueType": "space",
       "difficultyNumber": 11,
-      "location": "theSun",
+      "location": "sun",
       "bonusConditions": [
         {
           "type": "characterBonus",
