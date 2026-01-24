@@ -2,7 +2,7 @@
 using ThunderbirdsBoardGameEngine.Catalog.Domain.Entities;
 using ThunderbirdsBoardGameEngine.Catalog.Domain.Validators;
 
-namespace ThunderbirdsBoardGameEngine.Catalog.Application.UnitTests.Decorators
+namespace ThunderbirdsBoardGameEngine.Catalog.Application.Decorators
 {
     public class ValidatingCharacterDefinitionReader : ICharacterDefinitionReader
     {
