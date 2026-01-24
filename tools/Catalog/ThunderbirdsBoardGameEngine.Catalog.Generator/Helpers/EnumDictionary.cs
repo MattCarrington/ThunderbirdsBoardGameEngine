@@ -66,11 +66,11 @@
             ["South America"] = "southAmerica",
             ["Indian Ocean"] = "indianOcean",
             ["Australia"] = "australia",
-            ["The Sun"] = "theSun",
+            ["The Sun"] = "sun",
             ["Mercury"] = "mercury",
             ["Venus"] = "venus",
             ["Mars"] = "mars",
-            ["The Moon"] = "theMoon",
+            ["The Moon"] = "moon",
             ["Asteroid Belt"] = "asteroidBelt",
             ["Geo-Stationary Orbit"] = "geoStationaryOrbit"
         };
