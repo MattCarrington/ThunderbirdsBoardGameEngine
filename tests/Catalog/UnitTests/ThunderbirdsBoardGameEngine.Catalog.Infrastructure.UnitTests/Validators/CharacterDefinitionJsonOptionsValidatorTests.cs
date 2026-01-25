@@ -46,7 +46,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Validator
             // Assert
             Assert.False(result.Succeeded);
             Assert.NotNull(result.Failures);
-            Assert.Contains("CharacterDefintionJsonOptions is required.", result.Failures);
+            Assert.Contains("CharacterDefinitionJsonOptions is required.", result.Failures);
         }
 
         [Fact]
