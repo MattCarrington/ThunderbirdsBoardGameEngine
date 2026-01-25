@@ -142,8 +142,8 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Extensions
                 return init.InitializeAsync(CancellationToken.None).GetAwaiter().GetResult();
             });
 
-            //services.AddSingleton(sp =>
-            //    (IDisasterCardReferenceSourceProbe)sp.GetRequiredService<IDisasterCardReferenceSource>());
+            services.AddSingleton(sp =>
+                (ICharacterDefinitionReferenceSourceProbe)sp.GetRequiredService<ICharacterDefinitionReferenceSource>());
 
             services.AddOptions<CharacterDefinitionJsonOptions>()
                 .Bind(configuration.GetSection("Catalog:Characters:Json"))
