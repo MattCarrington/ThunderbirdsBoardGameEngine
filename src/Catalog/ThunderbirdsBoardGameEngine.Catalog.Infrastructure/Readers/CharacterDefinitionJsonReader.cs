@@ -14,7 +14,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Readers
     internal sealed class CharacterDefinitionJsonReader : ICharacterDefinitionReader
     {
         private readonly string _filePath;
-        private readonly ICatalogPayloadReader<SimpleCatalogManifest> _catlogPayloadReader;
+        private readonly ICatalogPayloadReader<SimpleCatalogManifest> _catalogPayloadReader;
         private readonly ICharacterDefinitionDeserializer _characterDeserializer;
         private readonly ICharacterDefinitionMapper _characterMapper;
         private readonly ILogger<CharacterDefinitionJsonReader> _logger;
@@ -32,7 +32,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Readers
             }
 
             _filePath = options.Value.FilePath;
-            _catlogPayloadReader = catalogPayloadReader ?? throw new ArgumentNullException(nameof(catalogPayloadReader));
+            _catalogPayloadReader = catalogPayloadReader ?? throw new ArgumentNullException(nameof(catalogPayloadReader));
             _characterDeserializer = characterDeserializer ?? throw new ArgumentNullException(nameof(characterDeserializer));
             _characterMapper = characterMapper ?? throw new ArgumentNullException(nameof(characterMapper));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -44,7 +44,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Readers
 
             _logger.LogDebug("Loading Characters from {Path}", _filePath);
 
-            var payload = await _catlogPayloadReader.ReadAsync(_filePath, cancellationToken);
+            var payload = await _catalogPayloadReader.ReadAsync(_filePath, cancellationToken);
 
             IReadOnlyList<CharacterCatalogDto> dtos;
 

@@ -20,7 +20,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Validators
         {
             if (options is null)
             {
-                return ValidateOptionsResult.Fail("CharacterDefintionJsonOptions is required.");
+                return ValidateOptionsResult.Fail("CharacterDefinitionJsonOptions is required.");
             }
 
             var path = options.FilePath;

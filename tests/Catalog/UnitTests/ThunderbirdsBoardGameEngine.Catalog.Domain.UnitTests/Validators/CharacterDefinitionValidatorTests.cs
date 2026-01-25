@@ -42,7 +42,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Domain.UnitTests.Validators
         }
 
         [Fact]
-        public void ValidateAll_WhenCharacterDefiinitionsLessThanSix_ThrowsValidationException()
+        public void ValidateAll_WhenCharacterDefinitionsLessThanSix_ThrowsValidationException()
         {
             // Arrange
             var characters = TestCharacters.ValidSix.Take(5).ToList();
@@ -53,7 +53,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Domain.UnitTests.Validators
         }
 
         [Fact]
-        public void ValidateAll_WhenCharacterDefiinitionsGreaterThanSix_ThrowsValidationException()
+        public void ValidateAll_WhenCharacterDefinitionsGreaterThanSix_ThrowsValidationException()
         {
             // Arrange
             var characters = TestCharacters.ValidSix.ToList();
