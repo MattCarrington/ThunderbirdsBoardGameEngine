@@ -5,18 +5,21 @@ using System.IO.Abstractions;
 using System.Text.Json;
 using ThunderbirdsBoardGameEngine.Catalog.Application.Decorators;
 using ThunderbirdsBoardGameEngine.Catalog.Application.Interfaces;
+using ThunderbirdsBoardGameEngine.Catalog.Format.Manifest;
 using ThunderbirdsBoardGameEngine.Catalog.Format.Serialization;
 using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Configuration;
 using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Deserializers;
 using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Initializers;
 using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Interfaces;
 using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Mappers;
+using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.PayloadReaders;
 using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.PostConfigures;
 using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Readers;
+using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.StreamSources;
 using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Utilities;
 using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Validators;
 
-namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure
+namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Extensions
 {
     /// <summary>
     /// Extension methods for registering catalog infrastructure services.
@@ -61,19 +64,54 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure
         /// </remarks>
         public static IServiceCollection AddCatalogInfrastructure(this IServiceCollection services, IConfiguration configuration)
         {
+            AddCatalogCore(services);
+            AddDisasterCards(services, configuration);
+            AddCharacterDefinitions(services, configuration);
+
+            services.AddOptions<JsonSerializerOptions>(CatalogJson.Name)
+                .Configure(CatalogJson.Configure);
+
+            return services;
+        }
+
+        private static void AddCatalogCore(IServiceCollection services)
+        {
             services.AddSingleton<IFileOpener, FileOpener>();
             services.AddSingleton<IFileSystem, FileSystem>();
             services.AddSingleton<IEnvelopeParser, EnvelopeParser>();
+            services.AddSingleton<IJsonStreamValidator, JsonStreamValidator>();
+            services.AddSingleton<ICatalogStreamSource, FileSystemCatalogStreamSource>();
 
+            // Generated-catalog support
+            services.AddSingleton<IGeneratedContentValidator, GeneratedContentValidator>();
+
+            // Register both manifest types explicitly (needed for Scrutor decoration)
+            services.AddScoped<ICatalogPayloadReader<SimpleCatalogManifest>, JsonCatalogPayloadReader<SimpleCatalogManifest>>();
+            services.AddScoped<ICatalogPayloadReader<GeneratedCatalogManifest>, JsonCatalogPayloadReader<GeneratedCatalogManifest>>();
+
+            // Generated catalogs get extra validation layer (between Json and ExceptionMapping)
+            services.Decorate<ICatalogPayloadReader<GeneratedCatalogManifest>, GeneratedJsonCatalogPayloadReader>();
+
+            // ALL catalogs get exception mapping (outermost boundary)
+            services.Decorate<ICatalogPayloadReader<SimpleCatalogManifest>, ExceptionMappingCatalogPayloadReader<SimpleCatalogManifest>>();
+            services.Decorate<ICatalogPayloadReader<GeneratedCatalogManifest>, ExceptionMappingCatalogPayloadReader<GeneratedCatalogManifest>>();
+        }
+
+        private static void AddDisasterCards(IServiceCollection services, IConfiguration configuration)
+        {
             services.AddSingleton<IPostConfigureOptions<DisasterCardJsonOptions>, DisasterCardJsonPostConfigure>();
             services.AddSingleton<IValidateOptions<DisasterCardJsonOptions>, DisasterCardJsonOptionsValidator>();
             services.AddSingleton<IDisasterCardMapper, DisasterCardMapper>();
             services.AddSingleton<IDisasterCardDeserializer, DisasterCardDeserializer>();
-            services.AddSingleton<IDisasterCardReader, DisasterCardJsonReader>();
+            services.AddScoped<IDisasterCardReader, DisasterCardJsonReader>();
             services.Decorate<IDisasterCardReader, ValidatingDisasterCardReader>();
             services.AddSingleton<IDisasterCardReferenceSource>(sp =>
             {
-                var init = new DisasterCardReferenceSourceInitializer(sp.GetRequiredService<IDisasterCardReader>());
+                var scope = sp.CreateScope();
+
+                var reader = scope.ServiceProvider.GetRequiredService<IDisasterCardReader>();
+
+                var init = new DisasterCardReferenceSourceInitializer(reader);
                 return init.InitializeAsync(CancellationToken.None).GetAwaiter().GetResult();
             });
 
@@ -82,12 +120,34 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure
 
             services.AddOptions<DisasterCardJsonOptions>()
                 .Bind(configuration.GetSection("Catalog:DisasterCards:Json"))
+                .ValidateOnStart(); // ← run all validators during startup            
+        }
+
+        private static void AddCharacterDefinitions(IServiceCollection services, IConfiguration configuration)
+        {
+            services.AddSingleton<IPostConfigureOptions<CharacterDefinitionJsonOptions>, CharacterDefinitionJsonPostConfigure>();
+            services.AddSingleton<IValidateOptions<CharacterDefinitionJsonOptions>, CharacterDefinitionJsonOptionsValidator>();
+            services.AddSingleton<ICharacterDefinitionDeserializer, CharacterDefinitionDeserializer>();
+            services.AddSingleton<ICharacterDefinitionMapper, CharacterDefinitionMapper>();
+            services.AddScoped<ICharacterDefinitionReader, CharacterDefinitionJsonReader>();
+            services.Decorate<ICharacterDefinitionReader, ValidatingCharacterDefinitionReader>();
+
+            services.AddSingleton<ICharacterDefinitionReferenceSource>(sp =>
+            {
+                var scope = sp.CreateScope();
+
+                var reader = scope.ServiceProvider.GetRequiredService<ICharacterDefinitionReader>();
+
+                var init = new CharacterDefinitionReferenceSourceInitializer(reader);
+                return init.InitializeAsync(CancellationToken.None).GetAwaiter().GetResult();
+            });
+
+            services.AddSingleton(sp =>
+                (ICharacterDefinitionReferenceSourceProbe)sp.GetRequiredService<ICharacterDefinitionReferenceSource>());
+
+            services.AddOptions<CharacterDefinitionJsonOptions>()
+                .Bind(configuration.GetSection("Catalog:Characters:Json"))
                 .ValidateOnStart(); // ← run all validators during startup
-
-            services.AddOptions<JsonSerializerOptions>(CatalogJson.Name)
-                .Configure(CatalogJson.Configure);
-
-            return services;
         }
     }
 }

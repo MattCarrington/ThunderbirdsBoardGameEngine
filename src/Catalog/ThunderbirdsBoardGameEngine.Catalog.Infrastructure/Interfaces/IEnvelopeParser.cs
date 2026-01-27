@@ -1,9 +1,10 @@
-﻿using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Utilities;
+﻿using ThunderbirdsBoardGameEngine.Catalog.Format.Manifest;
+using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Utilities;
 
 namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Interfaces
 {
     internal interface IEnvelopeParser
     {
-        Task<Payload> ReadEnvelopeAsync(Stream stream, CancellationToken cancellationToken);
+        Task<Payload<TManifest>> ReadEnvelopeAsync<TManifest>(Stream stream, CancellationToken cancellationToken) where TManifest : ICatalogManifest;
     }
 }

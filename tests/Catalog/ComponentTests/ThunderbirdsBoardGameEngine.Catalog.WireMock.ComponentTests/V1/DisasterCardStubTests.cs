@@ -10,7 +10,7 @@ using ThunderbirdsBoardGameEngine.TestUtils.xUnit.Fixtures;
 using WireMock.Server;
 using Xunit;
 
-namespace ThunderbirdsBoardGameEngine.Catalog.WireMock.ComponentTests
+namespace ThunderbirdsBoardGameEngine.Catalog.WireMock.ComponentTests.V1
 {
     [Collection("WireMock")]
     public class DisasterCardStubTests

@@ -5,16 +5,16 @@ using ThunderbirdsBoardGameEngine.Catalog.Domain.Exceptions;
 
 namespace ThunderbirdsBoardGameEngine.Api.Handlers
 {
-    public sealed class DisasterCardValidationExceptionHandler : IExceptionHandler
+    public sealed class DomainValidationExceptionHandler : IExceptionHandler
     {
         private readonly ProblemDetailsFactory _problemDetailsFactory;
         private readonly IProblemDetailsService _problemDetailsService;
-        private readonly ILogger<DisasterCardValidationExceptionHandler> _logger;
+        private readonly ILogger<DomainValidationExceptionHandler> _logger;
 
-        public DisasterCardValidationExceptionHandler(
+        public DomainValidationExceptionHandler(
             ProblemDetailsFactory problemDetailsFactory,
             IProblemDetailsService problemDetailsService,
-            ILogger<DisasterCardValidationExceptionHandler> logger)
+            ILogger<DomainValidationExceptionHandler> logger)
         {
             _problemDetailsFactory = problemDetailsFactory ?? throw new ArgumentNullException(nameof(problemDetailsFactory));
             _problemDetailsService = problemDetailsService ?? throw new ArgumentNullException(nameof(problemDetailsService));
@@ -23,11 +23,11 @@ namespace ThunderbirdsBoardGameEngine.Api.Handlers
 
         public async ValueTask<bool> TryHandleAsync(HttpContext httpContext, Exception exception, CancellationToken cancellationToken)
         {
-            if (exception is DisasterCardValidationException)
+            if (exception is DomainValidationException)
             {
                 _logger.LogError(
                     exception,
-                    "Disaster card validation failed for request {Method} {Path}. TraceId = {TraceId}",
+                    "Catalog validation failed for request {Method} {Path}. TraceId = {TraceId}",
                     httpContext.Request.Method,
                     httpContext.Request.Path.Value,
                     httpContext.TraceIdentifier);
@@ -35,9 +35,9 @@ namespace ThunderbirdsBoardGameEngine.Api.Handlers
                 var problemDetails = _problemDetailsFactory.CreateProblemDetails(
                     httpContext,
                     StatusCodes.Status500InternalServerError,
-                    "Disaster catalog configuration error",
+                    "Catalog configuration error",
                     ProblemTypes.Validation,
-                    "The disaster card catalog contains invalid configuration. Please contact the system administrator.");
+                    "The catalog contains invalid configuration. Please contact the system administrator.");
 
                 httpContext.Response.StatusCode = problemDetails.Status ?? StatusCodes.Status500InternalServerError;
 

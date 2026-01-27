@@ -6,7 +6,7 @@ using ThunderbirdsBoardGameEngine.Api.Composition;
 using ThunderbirdsBoardGameEngine.Api.Routing;
 using ThunderbirdsBoardGameEngine.Api.Swagger;
 using ThunderbirdsBoardGameEngine.Catalog.Application;
-using ThunderbirdsBoardGameEngine.Catalog.Infrastructure;
+using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Extensions;
 using ThunderbirdsBoardGameEngine.Rules.Infrastructure;
 
 namespace ThunderbirdsBoardGameEngine.Api

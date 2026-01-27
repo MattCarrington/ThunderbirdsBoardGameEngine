@@ -12,7 +12,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Utilities
             PropertyNameCaseInsensitive = true
         };
 
-        public async Task<Payload> ReadEnvelopeAsync(Stream stream, CancellationToken cancellationToken)
+        public async Task<Payload<TManifest>> ReadEnvelopeAsync<TManifest>(Stream stream, CancellationToken cancellationToken) where TManifest : ICatalogManifest
         {
             using var document = await JsonDocument.ParseAsync(stream, new JsonDocumentOptions
             {
@@ -32,7 +32,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Utilities
                 throw new InvalidDataException("Envelope is missing 'data' property.");
             }
 
-            var manifest = JsonSerializer.Deserialize<CatalogManifest>(manifestElement, ManifestReadOptions)
+            var manifest = JsonSerializer.Deserialize<TManifest>(manifestElement, ManifestReadOptions)
                 ?? throw new InvalidDataException("Failed to deserialize 'manifest'.");
 
             if (string.IsNullOrWhiteSpace(manifest.SchemaVersion))
@@ -50,39 +50,11 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Utilities
                 throw new InvalidDataException("'data' property is not an array.");
             }
 
-            if (manifest.ItemCount <= 0)
+            return new Payload<TManifest>
             {
-                throw new InvalidDataException("Manifest must specify a positive item count");
-            }
-
-            if (dataElement.GetArrayLength() != manifest.ItemCount)
-            {
-                throw new InvalidDataException($"Item count mismatch: manifest specifies {manifest.ItemCount}, but 'data' contains {dataElement.GetArrayLength()} items.");
-            }
-
-            if (string.IsNullOrWhiteSpace(manifest.Checksum.Algorithm))
-            {
-                throw new InvalidDataException("Checksum algorithm is missing or empty.");
-            }
-
-            if (!string.Equals(CatalogChecksum.Algorithm, manifest.Checksum.Algorithm, StringComparison.OrdinalIgnoreCase))
-            {
-                throw new NotSupportedException($"Unsupported checksum algorithm: {manifest.Checksum.Algorithm}");
-            }
-
-            if (string.IsNullOrWhiteSpace(manifest.Checksum.Value))
-            {
-                throw new InvalidDataException("Checksum value is missing or empty.");
-            }
-
-            var computedChecksum = CatalogChecksum.ComputeForDataElement(dataElement);
-
-            if (!string.Equals(computedChecksum, manifest.Checksum.Value, StringComparison.OrdinalIgnoreCase))
-            {
-                throw new InvalidDataException("Data checksum does not match manifest.");
-            }
-
-            return new Payload(manifest, dataElement.Clone());
+                Manifest = manifest,
+                RawData = dataElement.Clone()
+            };
         }
     }
 }

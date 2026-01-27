@@ -2,8 +2,8 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
-using ThunderbirdsBoardGameEngine.Catalog.Infrastructure;
 using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Configuration;
+using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Extensions;
 using ThunderbirdsBoardGameEngine.TestUtils.Stubs;
 
 namespace ThunderbirdsBoardGameEngine.Catalog.ComponentTests.Fixtures
@@ -24,7 +24,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.ComponentTests.Fixtures
             _serviceProvider = services.BuildServiceProvider();
         }
 
-        public ServiceProvider Build(string configurationKey, string absolutePath)
+        public ServiceProvider Build<TOptions>(string configurationKey, string absolutePath) where TOptions : class
         {
             var cfg = new ConfigurationBuilder()
                 .AddInMemoryCollection(new Dictionary<string, string?>
@@ -41,7 +41,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.ComponentTests.Fixtures
 
             var sp = services.BuildServiceProvider(new ServiceProviderOptions { ValidateScopes = true });
 
-            _ = sp.GetRequiredService<IOptions<DisasterCardJsonOptions>>().Value;
+            _ = sp.GetRequiredService<IOptions<TOptions>>().Value;
 
             return sp;
         }

@@ -2,8 +2,8 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
-using ThunderbirdsBoardGameEngine.Catalog.Infrastructure;
 using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Configuration;
+using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Extensions;
 using ThunderbirdsBoardGameEngine.TestUtils.Stubs;
 using Xunit;
 
@@ -12,7 +12,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.ComponentTests
     public class CatalogInfrastructureRegistrationTests
     {
         [Fact]
-        public void AddInfrastructure_WhenBadFilePath_FailsFast()
+        public void AddInfrastructure_WhenBadDisasterCardFilePath_FailsFast()
         {
             // Arrange: obviously invalid path so validator will fail
             var cfg = new ConfigurationBuilder()
@@ -37,6 +37,34 @@ namespace ThunderbirdsBoardGameEngine.Catalog.ComponentTests
                 () => sp.GetRequiredService<IOptions<DisasterCardJsonOptions>>().Value);
 
             Assert.Contains("Catalog:DisasterCards:Json:FilePath", ex.Message, StringComparison.OrdinalIgnoreCase);
+        }
+
+        [Fact]
+        public void AddInfrastructure_WhenBadCharacterFilePath_FailsFast()
+        {
+            // Arrange: obviously invalid path so validator will fail
+            var cfg = new ConfigurationBuilder()
+                .AddInMemoryCollection(new Dictionary<string, string?>
+                {
+                    ["Catalog:Characters:Json:FilePath"] = string.Empty
+                })
+                .Build();
+
+            var services = new ServiceCollection();
+            services.AddLogging();
+            services.AddSingleton<IHostEnvironment>(
+                StubHostEnvironment.WithNullProvider(Directory.GetCurrentDirectory()));
+
+            services.AddCatalogInfrastructure(cfg);
+
+            using var sp = services.BuildServiceProvider(
+                new ServiceProviderOptions { ValidateScopes = true });
+
+            // Act + Assert: accessing .Value triggers Bind + PostConfigure + Validate
+            var ex = Assert.Throws<OptionsValidationException>(
+                () => sp.GetRequiredService<IOptions<CharacterDefinitionJsonOptions>>().Value);
+
+            Assert.Contains("Catalog:Characters:Json:FilePath", ex.Message, StringComparison.OrdinalIgnoreCase);
         }
     }
 }

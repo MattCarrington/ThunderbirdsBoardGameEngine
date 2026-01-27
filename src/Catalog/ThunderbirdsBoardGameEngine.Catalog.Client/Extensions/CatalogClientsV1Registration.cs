@@ -21,6 +21,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Client.Extensions
 
             // Register ALL your V1 typed clients here
             AddV1<IDisasterCardsClient, Clients.V1.DisasterCardsClient>();
+            AddV1<ICharactersClient, Clients.V1.CharactersClient>();
 
             return services;
         }

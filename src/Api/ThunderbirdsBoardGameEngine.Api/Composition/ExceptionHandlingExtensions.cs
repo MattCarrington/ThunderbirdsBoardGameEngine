@@ -10,7 +10,7 @@ namespace ThunderbirdsBoardGameEngine.Api.Composition
             services.AddExceptionHandler<NotFoundExceptionHandler>();
             services.AddExceptionHandler<CatalogDataAccessExceptionHandler>();
             services.AddExceptionHandler<ApplicationValidationExceptionHandler>();
-            services.AddExceptionHandler<DisasterCardValidationExceptionHandler>();
+            services.AddExceptionHandler<DomainValidationExceptionHandler>();
             services.AddExceptionHandler<UnhandledExceptionHandler>();
 
             return services;

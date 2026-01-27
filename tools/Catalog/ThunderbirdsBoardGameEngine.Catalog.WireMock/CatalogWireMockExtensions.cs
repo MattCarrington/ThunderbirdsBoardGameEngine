@@ -17,5 +17,17 @@ namespace ThunderbirdsBoardGameEngine.Catalog.WireMock
         {
             return new DisasterCardStub(host.WireMockServer);
         }
+
+        /// <summary>
+        /// Creates a new instance of the CharactersStub API for configuring character-related HTTP stubs on the
+        /// specified WireMock host.
+        /// </summary>
+        /// <param name="host">The WireMock host to which the character stubs will be attached. Cannot be null.</param>
+        /// <returns>A CharactersStub instance that enables setup and management of character-related HTTP stubs for the given
+        /// WireMock host.</returns>
+        public static CharactersStub CharactersStub(this WireMockHost host)
+        {
+            return new CharactersStub(host.WireMockServer);
+        }
     }
 }

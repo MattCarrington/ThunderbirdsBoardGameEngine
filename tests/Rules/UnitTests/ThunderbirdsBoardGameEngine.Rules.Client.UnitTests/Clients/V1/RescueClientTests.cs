@@ -137,7 +137,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Client.UnitTests.Clients.V1
         }
 
         [Theory]
-        [ClassData(typeof(WhitespaceStringData))]
+        [ClassData(typeof(WhiteSpaceStringData))]
         public async Task CalculateRescueTargetAsync_WhenDisasterCardCodeWhiteSpace_ThrowsArgumentException(string input)
         {
             // Arrange

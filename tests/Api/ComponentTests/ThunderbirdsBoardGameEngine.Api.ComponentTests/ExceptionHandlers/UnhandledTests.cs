@@ -59,7 +59,7 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.ExceptionHandlers
         {
             return new TheoryData<Exception, HttpStatusCode, string>
             {
-                { DisasterCardValidationException.Unknown(), HttpStatusCode.InternalServerError, "Disaster catalog configuration error" },
+                { DisasterCardValidationException.Unknown(), HttpStatusCode.InternalServerError, "Catalog configuration error" },
                 { CatalogDataAccessException.SourceUnreadable("file error"), HttpStatusCode.ServiceUnavailable, "The catalog data source could not be read" },
                 { new ApplicationValidationException("Invalid request"), HttpStatusCode.InternalServerError, "Application validation failed" }
             };

@@ -28,6 +28,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Application
         public static IServiceCollection AddCatalogApplication(this IServiceCollection services)
         {
             services.AddSingleton<IDisasterCardService, DisasterCardService>();
+            services.AddSingleton<ICharacterDefinitionService, CharacterDefinitionService>();
             return services;
         }
     }

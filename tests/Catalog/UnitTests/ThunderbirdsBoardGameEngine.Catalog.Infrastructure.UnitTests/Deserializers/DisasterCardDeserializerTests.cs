@@ -67,7 +67,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Deseriali
             ]
             """;
 
-            var element = ParseElement(json);
+            var element = JsonParser.ParseElement(json);
 
             var deserializer = CreateDeserializer();
 
@@ -86,7 +86,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Deseriali
             // Arrange
             var json = "[]";
 
-            var element = ParseElement(json);
+            var element = JsonParser.ParseElement(json);
 
             var deserializer = CreateDeserializer();
 
@@ -102,7 +102,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Deseriali
         public void Deserialize_WhenNullJson_ReturnsEmptyList()
         {
             // Arrange
-            var element = ParseElement($"null");
+            var element = JsonParser.ParseElement($"null");
 
             var deserializer = CreateDeserializer();
 
@@ -112,13 +112,6 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.UnitTests.Deseriali
             // Assert
             Assert.NotNull(result);
             Assert.Empty(result);
-        }
-
-        private static JsonElement ParseElement(string json)
-        {
-            using var doc = JsonDocument.Parse(json);
-
-            return doc.RootElement.Clone(); // important: clone for lifetime
         }
 
         private static DisasterCardDeserializer CreateDeserializer()

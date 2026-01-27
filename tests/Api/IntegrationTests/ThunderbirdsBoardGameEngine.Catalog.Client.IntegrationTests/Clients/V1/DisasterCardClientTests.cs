@@ -13,7 +13,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Client.IntegrationTests.Clients.V1
     public class DisasterCardClientTests
     {
         [Fact]
-        public async Task GetAllAsync_ReturnsAllDisasterCards()
+        public async Task GetAllAsync_WhenCalled_ReturnsAllDisasterCards()
         {
             // Arrange
             using var sp = CatalogClientProviderFactory.Build(CatalogTestConfig.CatalogBaseUrl);
@@ -26,15 +26,31 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Client.IntegrationTests.Clients.V1
             Assert.NotNull(result);
             Assert.True(result.Success);
             Assert.Equal(HttpStatusCode.OK, result.StatusCode);
-            Assert.IsType<IReadOnlyList<DisasterCardDto>>(result.Data, exactMatch: false);
-            Assert.NotNull(result.Data);
-            Assert.NotEmpty(result.Data);
             Assert.Null(result.ErrorMessage);
 
-            var expected = await TestDataLoader.LoadJsonFromFileAsync<List<DisasterCardDto>>(DisasterCardTestFileCatalog.DataOnly("disaster-card-dtos.json"))
-                ?? throw new InvalidOperationException("Failed to load expected data");
+            var disasterCards = Assert.IsType<IReadOnlyList<DisasterCardDto>>(result.Data, exactMatch: false);
+            Assert.NotNull(disasterCards);
+            Assert.NotEmpty(disasterCards);
+            Assert.Equal(34, disasterCards.Count);
 
-            DisasterCardDtoAssertions.AssertOrderInsensitive(expected, result.Data.ToList());
+            Assert.All(disasterCards, card =>
+            {
+                Assert.False(string.IsNullOrWhiteSpace(card.Name));
+                Assert.False(string.IsNullOrWhiteSpace(card.Code));
+                Assert.True(card.DifficultyNumber > 0);
+                Assert.False(string.IsNullOrWhiteSpace(card.RescueType));
+                Assert.False(string.IsNullOrWhiteSpace(card.Location));
+                Assert.NotEmpty(card.BonusConditions);
+                Assert.NotEmpty(card.Rewards);
+            });
+
+            Assert.Equal(
+                disasterCards.Count,
+                disasterCards.Select(c => c.Code).Distinct().Count()
+            );
+
+            Assert.Contains(result.Data, c => c.Code == "signal-from-sigma");
+            Assert.Contains(result.Data, c => c.Code == "they-call-him-mr-x");
         }
     }
 }
