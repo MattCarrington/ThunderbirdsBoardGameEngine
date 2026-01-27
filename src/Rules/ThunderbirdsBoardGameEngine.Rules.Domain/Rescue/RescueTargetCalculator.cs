@@ -1,12 +1,12 @@
-﻿namespace ThunderbirdsBoardGameEngine.Rules.Domain.Rescue
+﻿using ThunderbirdsBoardGameEngine.PublishedLanguage.DisasterBonus;
+
+namespace ThunderbirdsBoardGameEngine.Rules.Domain.Rescue
 {
     public class RescueTargetCalculator
     {
         public RescueTargetResult CalculateRescueTarget(RescueCalculationInput input, DisasterContribution disasterContribution)
         {
-            var appliedBonuses = disasterContribution.AvailableBonuses
-                .Where(b => input.PresentDisasterBonusKeys.Contains(b.Key))
-                .ToList();
+            var appliedBonuses = ApplyDisasterBonuses(input.PresentDisasterBonusKeys, disasterContribution.AvailableBonuses);
 
             var bonus = appliedBonuses.Sum(b => b.Value);
 
@@ -14,8 +14,23 @@
             {
                 TargetRoll = disasterContribution.DifficultyNumber - bonus,
                 TotalBonus = bonus,
-                AppliedBonuses = appliedBonuses
+                AppliedBonuses = appliedBonuses.ToList()
             };
+        }
+
+        private static IReadOnlyCollection<AppliedRescueModifier> ApplyDisasterBonuses(
+            IReadOnlyCollection<DisasterBonusKey> presentDisasterBonusKeys,
+            IReadOnlyCollection<DisasterBonus> availableBonuses)
+        {
+            return availableBonuses
+                .Where(b => presentDisasterBonusKeys.Contains(b.Key))
+                .Select(b => new AppliedRescueModifier
+                {
+                    SourceType = "disaster-card",
+                    Key = b.Key.Value,
+                    Value = b.Value
+                })
+                .ToList();
         }
     }
 }

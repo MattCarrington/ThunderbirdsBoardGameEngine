@@ -39,8 +39,18 @@ namespace ThunderbirdsBoardGameEngine.Api.UnitTests.Mappers.Rules.V1
                 TotalBonus: 3,
                 AppliedBonuses:
                 [
-                    new DisasterBonus(new DisasterBonusKey("character:alan"), 2),
-                    new DisasterBonus(new DisasterBonusKey("thunderbird:thunderbird4"), 1)
+                    new AppliedRescueModifier
+                    {
+                        Key = "character:alan",
+                        Value = 2,
+                        SourceType = "disaster-card"
+                    },
+                    new AppliedRescueModifier
+                    {
+                        Key = "thunderbird:thunderbird4",
+                        Value = 1,
+                        SourceType = "disaster-card"
+                    }
                 ]
             );
 

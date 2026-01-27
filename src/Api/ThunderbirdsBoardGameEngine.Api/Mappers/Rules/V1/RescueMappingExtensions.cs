@@ -26,11 +26,11 @@ namespace ThunderbirdsBoardGameEngine.Api.Mappers.Rules.V1
             };
         }
 
-        private static AppliedDisasterBonusDto ToDto(this DisasterBonus bonus)
+        private static AppliedDisasterBonusDto ToDto(this AppliedRescueModifier bonus)
         {
             return new AppliedDisasterBonusDto
             {
-                BonusKey = bonus.Key.Value,
+                BonusKey = bonus.Key,
                 BonusValue = bonus.Value,
                 SourceType = "disaster-card"    // TODO: Currently, all bonuses come from disaster cards
             };

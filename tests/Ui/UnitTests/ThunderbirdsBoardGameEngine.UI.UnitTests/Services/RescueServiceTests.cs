@@ -74,7 +74,7 @@ namespace ThunderbirdsBoardGameEngine.UI.UnitTests.Services
 
             var presentBonusKeys = new[] { "BONUS_001", "BONUS_002" };
 
-            var performingCharacterKey = "CHARACTER_001";
+            var performingCharacterKey = string.Empty;
 
             return (disasterCardCode, presentBonusKeys, performingCharacterKey);
         }

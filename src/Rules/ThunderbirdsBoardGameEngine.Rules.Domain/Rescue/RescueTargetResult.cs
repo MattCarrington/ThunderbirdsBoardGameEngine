@@ -6,6 +6,15 @@
 
         public required int TotalBonus { get; init; }
 
-        public IReadOnlyList<DisasterBonus> AppliedBonuses { get; init; } = Array.Empty<DisasterBonus>();
+        public IReadOnlyList<AppliedRescueModifier> AppliedBonuses { get; init; } = Array.Empty<AppliedRescueModifier>();
+    }
+
+    public record AppliedRescueModifier
+    {
+        public required string Key { get; init; }
+
+        public required int Value { get; init; }
+
+        public required string SourceType { get; init; } = "disaster-card"; // TODO: Currently, all bonuses come from disaster cards
     }
 }

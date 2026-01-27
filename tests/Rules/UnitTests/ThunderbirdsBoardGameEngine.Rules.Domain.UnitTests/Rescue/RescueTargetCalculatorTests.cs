@@ -53,13 +53,21 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.Rescue
             Assert.Equal(4, result.TargetRoll);
             Assert.Equal(5, result.TotalBonus);
 
-            var expectedBonuses = new[]
+            var expectedBonuses = new List<AppliedRescueModifier>
             {
-                new DisasterBonus(new DisasterBonusKey("BONUS_1"), 2),
-                new DisasterBonus(new DisasterBonusKey("BONUS_2"), 3)
+                new() {
+                    Key = "BONUS_1",
+                    Value = 2,
+                    SourceType = "disaster-card"
+                },
+                new() {
+                    Key = "BONUS_2",
+                    Value = 3,
+                    SourceType = "disaster-card"
+                }
             };
 
-            Assert.Equal(expectedBonuses.Length, result.AppliedBonuses.Count);
+            Assert.Equal(expectedBonuses.Count, result.AppliedBonuses.Count);
             Assert.All(expectedBonuses, expected =>
                 Assert.Contains(expected, result.AppliedBonuses));
         }
@@ -110,9 +118,9 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.Rescue
             Assert.Equal(7, result.TargetRoll);
             Assert.Equal(2, result.TotalBonus);
 
-            var bonus = Assert.Single<DisasterBonus>(result.AppliedBonuses);
+            var bonus = Assert.Single<AppliedRescueModifier>(result.AppliedBonuses);
 
-            Assert.Equal(duplicate, bonus.Key);
+            Assert.Equal(duplicate.ToString(), bonus.Key);
             Assert.Equal(2, bonus.Value);
         }
 

@@ -99,8 +99,8 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Rescue
             Assert.Equal(6, result.TargetNumber);
             Assert.Equal(5, result.TotalBonus);
             Assert.Equal(2, result.AppliedBonuses.Count);
-            Assert.Contains(result.AppliedBonuses, b => b.Key == new DisasterBonusKey("character:scott") && b.Value == 2);
-            Assert.Contains(result.AppliedBonuses, b => b.Key == new DisasterBonusKey("podvehicle:transmittertruck") && b.Value == 3);
+            Assert.Contains(result.AppliedBonuses, b => b.Key == "character:scott" && b.Value == 2);
+            Assert.Contains(result.AppliedBonuses, b => b.Key == "podvehicle:transmittertruck" && b.Value == 3);
         }
     }
 }
