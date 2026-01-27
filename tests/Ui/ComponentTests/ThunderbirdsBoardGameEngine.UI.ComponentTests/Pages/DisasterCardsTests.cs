@@ -318,7 +318,7 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Pages
                 TargetNumber = 6,
                 TotalBonus = 2,
                 AppliedDisasterBonuses = [
-                    new AppliedDisasterBonusDto(){ BonusKey = "character:virgil", BonusValue = 2 }
+                    new AppliedDisasterBonusDto(){ BonusKey = "character:virgil", BonusValue = 2, SourceType = "disaster-card" }
                 ]
             };
 

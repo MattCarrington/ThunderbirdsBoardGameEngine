@@ -14,5 +14,10 @@
         /// Gets the bonus value associated with this instance.
         /// </summary>
         public required int BonusValue { get; init; }
+
+        /// <summary>
+        /// Gets the type of the source that produced the bonus.
+        /// </summary>
+        public required string SourceType { get; init; }
     }
 }

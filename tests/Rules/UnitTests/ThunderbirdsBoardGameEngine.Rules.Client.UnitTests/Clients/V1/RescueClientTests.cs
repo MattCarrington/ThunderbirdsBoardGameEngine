@@ -124,7 +124,8 @@ namespace ThunderbirdsBoardGameEngine.Rules.Client.UnitTests.Clients.V1
 
             var request = new CalculateRescueTargetRequestDto
             {
-                PresentDisasterBonusKeys = []
+                PresentDisasterBonusKeys = [],
+                PerformingCharacterKey = "john"
             };
 
             // Act
@@ -147,7 +148,8 @@ namespace ThunderbirdsBoardGameEngine.Rules.Client.UnitTests.Clients.V1
 
             var request = new CalculateRescueTargetRequestDto
             {
-                PresentDisasterBonusKeys = []
+                PresentDisasterBonusKeys = [],
+                PerformingCharacterKey = "john"
             };
 
             // Act & Assert
@@ -164,7 +166,8 @@ namespace ThunderbirdsBoardGameEngine.Rules.Client.UnitTests.Clients.V1
 
             var request = new CalculateRescueTargetRequestDto
             {
-                PresentDisasterBonusKeys = []
+                PresentDisasterBonusKeys = [],
+                PerformingCharacterKey = "lady-penelope"
             };
 
             // Act & Assert
@@ -189,7 +192,8 @@ namespace ThunderbirdsBoardGameEngine.Rules.Client.UnitTests.Clients.V1
         {
             var request = new CalculateRescueTargetRequestDto
             {
-                PresentDisasterBonusKeys = Array.Empty<string>()
+                PresentDisasterBonusKeys = Array.Empty<string>(),
+                PerformingCharacterKey = "john"
             };
 
             var cardCode = "DC001";

@@ -17,7 +17,8 @@ namespace ThunderbirdsBoardGameEngine.Api.UnitTests.Mappers.Rules.V1
 
             var dto = new CalculateRescueTargetRequestDto
             {
-                PresentDisasterBonusKeys = ["character:alan", "thunderbird:thunderbird4", "podvehicle.domo"]
+                PresentDisasterBonusKeys = ["character:alan", "thunderbird:thunderbird4", "podvehicle.domo"],
+                PerformingCharacterKey = "alan"
             };
 
             // Act
@@ -53,8 +54,8 @@ namespace ThunderbirdsBoardGameEngine.Api.UnitTests.Mappers.Rules.V1
 
             var expectedBonus = new List<AppliedDisasterBonusDto>
             {
-                new() { BonusKey = "character:alan", BonusValue = 2 },
-                new() { BonusKey = "thunderbird:thunderbird4", BonusValue = 1 }
+                new() { BonusKey = "character:alan", BonusValue = 2, SourceType = "disaster-card" },
+                new() { BonusKey = "thunderbird:thunderbird4", BonusValue = 1, SourceType = "disaster-card" }
             };
 
             Assert.All(result.AppliedDisasterBonuses, expected =>

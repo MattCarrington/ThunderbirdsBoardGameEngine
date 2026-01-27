@@ -18,7 +18,8 @@ namespace ThunderbirdsBoardGameEngine.Rules.Client.IntegrationTests.Clients.V1
 
             var request = new CalculateRescueTargetRequestDto
             {
-                PresentDisasterBonusKeys = ["character:virgil", "thunderbird:thunderbird4"]
+                PresentDisasterBonusKeys = ["character:virgil", "thunderbird:thunderbird4"],
+                PerformingCharacterKey = "virgil"
             };
 
             var code = "terror-in-new-york-city";

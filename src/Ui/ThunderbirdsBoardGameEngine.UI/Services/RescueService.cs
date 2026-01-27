@@ -17,7 +17,8 @@ namespace ThunderbirdsBoardGameEngine.UI.Services
         {
             var request = new CalculateRescueTargetRequestDto
             {
-                PresentDisasterBonusKeys = presentBonusKeys
+                PresentDisasterBonusKeys = presentBonusKeys,
+                PerformingCharacterKey = string.Empty   // TODO: Update when character selection is implemented
             };
 
             var result = await _rescueClient.CalculateRescueTargetAsync(disasterCardCode, request);

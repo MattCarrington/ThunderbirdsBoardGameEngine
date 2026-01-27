@@ -198,7 +198,11 @@ namespace ThunderbirdsBoardGameEngine.Rules.WireMock.ComponentTests.Stubs.V1
 
         private static CalculateRescueTargetRequestDto CreateValidRescueTargetRequest()
         {
-            return new CalculateRescueTargetRequestDto { PresentDisasterBonusKeys = Array.Empty<string>() };
+            return new CalculateRescueTargetRequestDto
+            {
+                PresentDisasterBonusKeys = [],
+                PerformingCharacterKey = "scott"
+            };
         }
 
         private static CalculateRescueTargetResponseDto CreateValidRescueTargetResponse()
@@ -207,20 +211,21 @@ namespace ThunderbirdsBoardGameEngine.Rules.WireMock.ComponentTests.Stubs.V1
             {
                 TargetNumber = 10,
                 TotalBonus = 2,
-                AppliedDisasterBonuses = new List<AppliedDisasterBonusDto>()
-                {
+                AppliedDisasterBonuses =
+                [
                     new()
                     {
                         BonusKey = "SampleBonusKey",
-                        BonusValue = 1
+                        BonusValue = 1,
+                        SourceType = "disaster-card"
                     },
                     new()
                     {
                         BonusKey = "AnotherSampleBonusKey",
-                        BonusValue = 1
-
+                        BonusValue = 1,
+                        SourceType = "disaster-card"
                     }
-                }
+                ]
             };
         }
     }

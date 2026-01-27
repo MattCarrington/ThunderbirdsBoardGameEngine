@@ -31,7 +31,8 @@ namespace ThunderbirdsBoardGameEngine.Api.Mappers.Rules.V1
             return new AppliedDisasterBonusDto
             {
                 BonusKey = bonus.Key.Value,
-                BonusValue = bonus.Value
+                BonusValue = bonus.Value,
+                SourceType = "disaster-card"    // TODO: Currently, all bonuses come from disaster cards
             };
         }
     }

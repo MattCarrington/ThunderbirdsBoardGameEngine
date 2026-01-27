@@ -127,7 +127,8 @@ namespace ThunderbirdsBoardGameEngine.Rules.Client.ComponentTests.Clients.V1
         {
             var request = new CalculateRescueTargetRequestDto()
             {
-                PresentDisasterBonusKeys = ["character:john", "character:gordon"]
+                PresentDisasterBonusKeys = ["character:john", "character:gordon"],
+                PerformingCharacterKey = "virgil"
             };
 
             var cardCode = "tower-of-terror";

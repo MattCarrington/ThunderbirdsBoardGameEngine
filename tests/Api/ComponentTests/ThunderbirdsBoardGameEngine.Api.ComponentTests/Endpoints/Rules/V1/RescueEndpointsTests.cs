@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using System.Net.Http.Json;
+using ThunderbirdsBoardGameEngine.PublishedLanguage.Characters;
 using ThunderbirdsBoardGameEngine.Rules.Contracts.Dtos.Rescue.CalculateRescueTarget.V1;
 using ThunderbirdsBoardGameEngine.TestUtils.xUnit.Assertions;
 using Xunit;
@@ -23,7 +24,8 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints.Rules.V1
                 [
                     "podvehicle:mobilecrane",
                     "podvehicle:domo"
-                ]
+                ],
+            PerformingCharacterKey = "gordon"
         };
 
         public RescueEndpointsTests(CustomWebApplicationFactory factory)
@@ -56,12 +58,14 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints.Rules.V1
                 new AppliedDisasterBonusDto
                 {
                     BonusKey = "podvehicle:mobilecrane",
-                    BonusValue = 2
+                    BonusValue = 2,
+                    SourceType = "disaster-card"
                 },
                 new AppliedDisasterBonusDto
                 {
                     BonusKey = "podvehicle:domo",
-                    BonusValue = 2
+                    BonusValue = 2,
+                    SourceType = "disaster-card"
                 }
             };
 
@@ -79,7 +83,8 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints.Rules.V1
             // Arrange
             var requestDto = new CalculateRescueTargetRequestDto
             {
-                PresentDisasterBonusKeys = []
+                PresentDisasterBonusKeys = [],
+                PerformingCharacterKey = "virgil"
             };
 
             using var request = new HttpRequestMessage(HttpMethod.Post, _route);
