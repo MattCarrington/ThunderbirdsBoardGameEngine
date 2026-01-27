@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using ThunderbirdsBoardGameEngine.Catalog.Application.Interfaces;
 using ThunderbirdsBoardGameEngine.Catalog.Domain.Entities;
 using ThunderbirdsBoardGameEngine.Catalog.Domain.Enums;
+using ThunderbirdsBoardGameEngine.PublishedLanguage.Characters;
 using ThunderbirdsBoardGameEngine.PublishedLanguage.DisasterBonus;
 using ThunderbirdsBoardGameEngine.PublishedLanguage.Enums;
 using ThunderbirdsBoardGameEngine.Rules.Application.Rescue.CalculateRescueTarget;
@@ -82,7 +83,8 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Rescue
             var request = new CalculateRescueTargetQuery
             (
                 DisasterCardCode: new CardCode("sun-probe"),
-                RescueCalculationInput: new([new DisasterBonusKey("character:scott"), new DisasterBonusKey("podvehicle:transmittertruck")])
+                RescueCalculationInput: new([new DisasterBonusKey("character:scott"), new DisasterBonusKey("podvehicle:transmittertruck")]),
+                PerformingCharacter: CharacterCode.Scott
             );
 
             var services = new ServiceCollection();

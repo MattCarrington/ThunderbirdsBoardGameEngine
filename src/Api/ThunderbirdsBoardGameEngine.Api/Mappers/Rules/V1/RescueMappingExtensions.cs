@@ -1,4 +1,6 @@
-﻿using ThunderbirdsBoardGameEngine.PublishedLanguage.DisasterBonus;
+﻿using ThunderbirdsBoardGameEngine.Api.Exceptions;
+using ThunderbirdsBoardGameEngine.PublishedLanguage.Characters;
+using ThunderbirdsBoardGameEngine.PublishedLanguage.DisasterBonus;
 using ThunderbirdsBoardGameEngine.Rules.Application.Rescue.CalculateRescueTarget;
 using ThunderbirdsBoardGameEngine.Rules.Contracts.Dtos.Rescue.CalculateRescueTarget.V1;
 using ThunderbirdsBoardGameEngine.Rules.Domain.Rescue;
@@ -9,10 +11,16 @@ namespace ThunderbirdsBoardGameEngine.Api.Mappers.Rules.V1
     {
         public static CalculateRescueTargetQuery ToQuery(this CalculateRescueTargetRequestDto request, string disasterCardCode)
         {
+            if (!CharacterCode.TryParse(request.PerformingCharacterKey, out var character))
+            {
+                throw new BadRequestException($"Invalid character code: {request.PerformingCharacterKey}");
+            }
+
             return new CalculateRescueTargetQuery
             (
                 DisasterCardCode: new CardCode(disasterCardCode),
-                RescueCalculationInput: new(request.PresentDisasterBonusKeys.Select(k => new DisasterBonusKey(k)).ToList())
+                RescueCalculationInput: new(request.PresentDisasterBonusKeys.Select(k => new DisasterBonusKey(k)).ToList()),
+                PerformingCharacter: character
             );
         }
 
