@@ -1,4 +1,4 @@
-﻿using ThunderbirdsBoardGameEngine.Catalog.Domain.Enums;
+﻿using ThunderbirdsBoardGameEngine.PublishedLanguage.Enums;
 
 namespace ThunderbirdsBoardGameEngine.Catalog.Domain.Entities
 {

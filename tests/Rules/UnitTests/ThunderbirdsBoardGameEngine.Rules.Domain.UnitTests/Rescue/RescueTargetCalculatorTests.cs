@@ -1,4 +1,5 @@
 ﻿using ThunderbirdsBoardGameEngine.PublishedLanguage.DisasterBonus;
+using ThunderbirdsBoardGameEngine.PublishedLanguage.Enums;
 using ThunderbirdsBoardGameEngine.Rules.Domain.Rescue;
 using Xunit;
 
@@ -13,7 +14,8 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.Rescue
                 new(new DisasterBonusKey("BONUS_1"), 2),
                 new(new DisasterBonusKey("BONUS_2"), 3),
                 new(new DisasterBonusKey("BONUS_X"), 5)
-            });
+            },
+            RescueType: RescueType.Land);
 
         [Fact]
         public void CalculateRescueTarget_NoBonusesToApply_ReturnsTargetRollEqualDifficultyNumber()
