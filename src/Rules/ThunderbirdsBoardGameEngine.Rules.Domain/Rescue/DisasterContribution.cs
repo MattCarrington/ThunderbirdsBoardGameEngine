@@ -1,4 +1,5 @@
-﻿using ThunderbirdsBoardGameEngine.PublishedLanguage.Enums;
+﻿using System;
+using ThunderbirdsBoardGameEngine.PublishedLanguage.Enums;
 
 namespace ThunderbirdsBoardGameEngine.Rules.Domain.Rescue
 {
@@ -20,15 +21,18 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.Rescue
 
         public IEnumerable<AppliedRescueModifier> ApplyRescueModifier(RescueCalculationInput input)
         {
-            return AvailableBonuses
-                .Where(b => input.PresentDisasterBonusKeys.Contains(b.Key))
-                .Select(b => new AppliedRescueModifier
+            foreach (var bonus in AvailableBonuses)
+            {
+                if (input.PresentDisasterBonusKeys.Contains(bonus.Key))
                 {
-                    SourceType = "disaster-card",
-                    Key = b.Key.Value,
-                    Value = b.Value
-                })
-                .ToList();
+                    yield return new AppliedRescueModifier
+                    {
+                        SourceType = "disaster-card",
+                        Key = bonus.Key.Value,
+                        Value = bonus.Value
+                    };
+                }
+            }
         }
     }
 }
