@@ -19,7 +19,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Application.Rescue.CalculateRescueTa
         {
             var disaster = _disasterContributionLookup.GetDisasterContribution(query.DisasterCardCode);
 
-            var input = new RescueCalculationInput(query.PresentDisasterBonusKeys);
+            var input = new RescueCalculationInput(query.PresentDisasterBonusKeys, disaster.RescueType);
 
             var sources = new List<IBonusModifierSource> { disaster };
 

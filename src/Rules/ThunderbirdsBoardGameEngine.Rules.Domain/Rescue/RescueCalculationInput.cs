@@ -1,4 +1,5 @@
 ﻿using ThunderbirdsBoardGameEngine.PublishedLanguage.DisasterBonus;
+using ThunderbirdsBoardGameEngine.PublishedLanguage.Enums;
 
 namespace ThunderbirdsBoardGameEngine.Rules.Domain.Rescue
 {
@@ -6,9 +7,12 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.Rescue
     {
         public IReadOnlyCollection<DisasterBonusKey> PresentDisasterBonusKeys { get; }
 
-        public RescueCalculationInput(IReadOnlyCollection<DisasterBonusKey> presentDisasterBonusKeys)
+        public RescueType RescueType { get; }
+
+        public RescueCalculationInput(IReadOnlyCollection<DisasterBonusKey> presentDisasterBonusKeys, RescueType rescueType)
         {
             PresentDisasterBonusKeys = presentDisasterBonusKeys;
+            RescueType = rescueType;
         }
     }
 }

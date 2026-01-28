@@ -122,7 +122,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.Rescue
 
         private static RescueCalculationInput CreateInput(IReadOnlyCollection<DisasterBonusKey> bonusKeys)
         {
-            return new RescueCalculationInput(bonusKeys);
+            return new RescueCalculationInput(bonusKeys, RescueType.Sea);
         }
     }
 }

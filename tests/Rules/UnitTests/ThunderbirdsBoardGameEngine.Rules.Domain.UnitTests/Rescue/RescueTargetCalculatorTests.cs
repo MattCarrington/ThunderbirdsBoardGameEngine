@@ -83,7 +83,8 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.Rescue
         private static RescueCalculationInput CreateInput()
         {
             return new RescueCalculationInput(
-                presentDisasterBonusKeys: []
+                presentDisasterBonusKeys: [],
+                RescueType.Space
             );
         }
 
