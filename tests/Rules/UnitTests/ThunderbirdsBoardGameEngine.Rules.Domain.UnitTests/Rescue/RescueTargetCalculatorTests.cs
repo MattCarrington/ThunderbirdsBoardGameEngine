@@ -8,14 +8,14 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.Rescue
     public class RescueTargetCalculatorTests
     {
         private readonly DisasterContribution _contribution = new(
-            DifficultyNumber: 9,
-            AvailableBonuses: new List<DisasterBonus>
+            difficultyNumber: 9,
+            availableBonuses: new List<DisasterBonus>
             {
                 new(new DisasterBonusKey("BONUS_1"), 2),
                 new(new DisasterBonusKey("BONUS_2"), 3),
                 new(new DisasterBonusKey("BONUS_X"), 5)
             },
-            RescueType: RescueType.Land);
+            rescueType: RescueType.Land);
 
         [Fact]
         public void CalculateRescueTarget_NoBonusesToApply_ReturnsTargetRollEqualDifficultyNumber()
