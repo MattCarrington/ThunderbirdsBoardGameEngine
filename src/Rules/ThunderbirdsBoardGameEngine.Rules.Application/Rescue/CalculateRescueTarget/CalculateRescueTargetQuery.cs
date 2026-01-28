@@ -5,6 +5,6 @@ using ThunderbirdsBoardGameEngine.Rules.Domain.Rescue;
 
 namespace ThunderbirdsBoardGameEngine.Rules.Application.Rescue.CalculateRescueTarget
 {
-    public record CalculateRescueTargetQuery(CardCode DisasterCardCode, RescueCalculationInput RescueCalculationInput, CharacterCode PerformingCharacter)
+    public record CalculateRescueTargetQuery(CardCode DisasterCardCode, CharacterCode PerformingCharacter, IReadOnlyCollection<DisasterBonusKey> PresentDisasterBonusKeys)
         : IRequest<CalculateRescueTargetResponse>;
 }

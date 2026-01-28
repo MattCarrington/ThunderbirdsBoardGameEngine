@@ -83,8 +83,12 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Rescue
             var request = new CalculateRescueTargetQuery
             (
                 DisasterCardCode: new CardCode("sun-probe"),
-                RescueCalculationInput: new([new DisasterBonusKey("character:scott"), new DisasterBonusKey("podvehicle:transmittertruck")]),
-                PerformingCharacter: CharacterCode.Scott
+                PerformingCharacter: CharacterCode.Scott,
+                PresentDisasterBonusKeys:
+                [
+                    new DisasterBonusKey("character:scott"),
+                    new DisasterBonusKey("podvehicle:transmittertruck")
+                ]
             );
 
             var services = new ServiceCollection();
