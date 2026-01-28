@@ -14,12 +14,8 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.Rescue
             var characterContribution = new CharacterContribution
             {
                 Key = CharacterCode.Gordon,
-                RescueBonusContribution = new CharacterRescueBonusContribution
-                {
-                    RescueType = RescueType.Sea,
-                    BonusValue = 3
-                }
-            };            
+                RescueBonusContribution = new CharacterRescueBonusContribution(RescueType.Sea, 3)
+            };
 
             var input = new RescueCalculationInput(
                 presentDisasterBonusKeys: [],
@@ -40,11 +36,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.Rescue
             var characterContribution = new CharacterContribution
             {
                 Key = CharacterCode.Virgil,
-                RescueBonusContribution = new CharacterRescueBonusContribution
-                {
-                    RescueType = RescueType.Land,
-                    BonusValue = 2
-                }
+                RescueBonusContribution = new CharacterRescueBonusContribution(RescueType.Land, 2)
             };
 
             var input = new RescueCalculationInput(
@@ -59,6 +51,28 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.Rescue
             Assert.Equal(CharacterCode.Virgil.ToString(), bonus.Key);
             Assert.Equal(2, bonus.Value);
             Assert.Equal("character", bonus.SourceType);
+        }
+
+        [Fact]
+        public void ApplyRescueModifier_WhenNoRescueBonusContribution_ReturnsEmptyCollection()
+        {
+            // Arrange
+            var characterContribution = new CharacterContribution
+            {
+                Key = CharacterCode.LadyPenelope,
+                RescueBonusContribution = null
+            };
+
+            var input = new RescueCalculationInput(
+                presentDisasterBonusKeys: [],
+                rescueType: RescueType.Air
+            );
+
+            // Act
+            var result = characterContribution.ApplyRescueModifier(input);
+
+            // Assert
+            Assert.Empty(result);
         }
     }
 }

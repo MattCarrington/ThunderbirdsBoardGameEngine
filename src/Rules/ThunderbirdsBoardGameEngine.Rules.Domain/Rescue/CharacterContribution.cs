@@ -1,5 +1,4 @@
 ﻿using ThunderbirdsBoardGameEngine.PublishedLanguage.Characters;
-using ThunderbirdsBoardGameEngine.PublishedLanguage.Enums;
 
 namespace ThunderbirdsBoardGameEngine.Rules.Domain.Rescue
 {
@@ -26,12 +25,5 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.Rescue
                 };
             }
         }
-    }
-
-    public class CharacterRescueBonusContribution
-    {
-        public RescueType RescueType { get; set; }
-
-        public int BonusValue { get; set; }
     }
 }
