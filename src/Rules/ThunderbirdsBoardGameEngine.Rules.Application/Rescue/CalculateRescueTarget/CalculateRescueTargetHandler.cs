@@ -17,11 +17,13 @@ namespace ThunderbirdsBoardGameEngine.Rules.Application.Rescue.CalculateRescueTa
 
         public Task<CalculateRescueTargetResponse> Handle(CalculateRescueTargetQuery query, CancellationToken cancellationToken)
         {
-            var projection = _disasterContributionLookup.GetDisasterContribution(query.DisasterCardCode);
+            var disaster = _disasterContributionLookup.GetDisasterContribution(query.DisasterCardCode);
 
             var input = new RescueCalculationInput(query.PresentDisasterBonusKeys);
 
-            var calculatedTarget = _rescueTargetCalculator.CalculateRescueTarget(input, projection);
+            var sources = new List<IBonusModifierSource> { disaster };
+
+            var calculatedTarget = _rescueTargetCalculator.CalculateRescueTarget(disaster.DifficultyNumber, input, sources);
 
             return Task.FromResult(
                 new CalculateRescueTargetResponse

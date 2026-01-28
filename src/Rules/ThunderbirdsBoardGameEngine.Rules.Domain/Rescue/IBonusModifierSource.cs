@@ -1,6 +1,6 @@
 ﻿namespace ThunderbirdsBoardGameEngine.Rules.Domain.Rescue
 {
-    internal interface IBonusModifierSource
+    public interface IBonusModifierSource
     {
         IEnumerable<AppliedRescueModifier> ApplyRescueModifier(RescueCalculationInput input);
     }
