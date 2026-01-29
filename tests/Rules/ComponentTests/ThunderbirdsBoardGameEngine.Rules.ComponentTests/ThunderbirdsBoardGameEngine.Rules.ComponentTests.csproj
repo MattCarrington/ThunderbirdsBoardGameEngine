@@ -18,6 +18,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\src\Rules\ThunderbirdsBoardGameEngine.Rules.Infrastructure\ThunderbirdsBoardGameEngine.Rules.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\..\Common\ThunderbirdsBoardGameEngine.TestUtils\ThunderbirdsBoardGameEngine.TestUtils.csproj" />
   </ItemGroup>
 
 </Project>

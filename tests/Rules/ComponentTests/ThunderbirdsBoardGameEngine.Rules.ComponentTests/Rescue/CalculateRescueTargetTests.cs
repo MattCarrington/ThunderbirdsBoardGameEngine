@@ -79,6 +79,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Rescue
             );
 
             var source = new FakeDisasterCardReferenceSource(sunProbe, pitOfPeril, terrorInNewYorkCity);
+            var characters = new FakeCharacterDefinitionReferenceSource();
 
             var request = new CalculateRescueTargetQuery
             (
@@ -93,6 +94,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Rescue
 
             var services = new ServiceCollection();
             services.AddSingleton<IDisasterCardReferenceSource>(source);
+            services.AddSingleton<ICharacterDefinitionReferenceSource>(characters);
             services.AddRules();
 
             using var sp = services.BuildServiceProvider();
