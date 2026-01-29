@@ -26,6 +26,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Infrastructure
 
             services.AddSingleton<RescueTargetCalculator>();
             services.AddSingleton<IDisasterContributionLookup, CatalogDisasterContributionLookup>();
+            services.AddSingleton<ICharacterContributionLookup, CatalogCharacterContributionLookup>();
 
             return services;
         }
