@@ -19,7 +19,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.Rescue
             {
                 yield return new AppliedRescueModifier
                 {
-                    SourceType = "character",
+                    SourceType = SourceType.CharacterAbility,
                     Key = Key.ToString(),
                     Value = RescueBonusContribution.BonusValue
                 };

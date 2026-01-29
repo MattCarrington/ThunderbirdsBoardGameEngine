@@ -27,7 +27,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.Rescue
                 {
                     yield return new AppliedRescueModifier
                     {
-                        SourceType = "disaster-card",
+                        SourceType = SourceType.DisasterCard,
                         Key = bonus.Key.Value,
                         Value = bonus.Value
                     };

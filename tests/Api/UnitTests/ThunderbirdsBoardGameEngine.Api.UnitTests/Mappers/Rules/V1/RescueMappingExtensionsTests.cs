@@ -63,13 +63,13 @@ namespace ThunderbirdsBoardGameEngine.Api.UnitTests.Mappers.Rules.V1
                     {
                         Key = "character:alan",
                         Value = 2,
-                        SourceType = "disaster-card"
+                        SourceType = SourceType.DisasterCard
                     },
                     new AppliedRescueModifier
                     {
                         Key = "thunderbird:thunderbird4",
                         Value = 1,
-                        SourceType = "disaster-card"
+                        SourceType = SourceType.DisasterCard
                     }
                 ]
             );

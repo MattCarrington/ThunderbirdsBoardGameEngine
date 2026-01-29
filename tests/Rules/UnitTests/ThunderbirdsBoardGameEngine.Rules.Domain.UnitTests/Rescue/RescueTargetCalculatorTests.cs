@@ -97,7 +97,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.Rescue
                 _modifiers = values.Select(v => new AppliedRescueModifier
                 {
                     Value = v,
-                    SourceType = "fake-source",
+                    SourceType = SourceType.DisasterCard,
                     Key = $"FAKE_BONUS_{v}"
                 });
             }

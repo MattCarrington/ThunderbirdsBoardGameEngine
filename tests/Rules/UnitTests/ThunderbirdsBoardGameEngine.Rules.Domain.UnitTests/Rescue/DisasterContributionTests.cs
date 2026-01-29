@@ -45,12 +45,12 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.Rescue
                 new() {
                     Key = "BONUS_1",
                     Value = 2,
-                    SourceType = "disaster-card"
+                    SourceType = SourceType.DisasterCard
                 },
                 new() {
                     Key = "BONUS_2",
                     Value = 3,
-                    SourceType = "disaster-card"
+                    SourceType = SourceType.DisasterCard
                 }
             };
 
@@ -104,7 +104,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.Rescue
 
             Assert.Equal(duplicate.ToString(), bonus.Key);
             Assert.Equal(2, bonus.Value);
-            Assert.Equal("disaster-card", bonus.SourceType);
+            Assert.Equal(SourceType.DisasterCard, bonus.SourceType);
         }
 
         private static DisasterContribution CreateDisasterContribution()

@@ -50,7 +50,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.Rescue
             var bonus = Assert.Single<AppliedRescueModifier>(result);
             Assert.Equal(CharacterCode.Virgil.ToString(), bonus.Key);
             Assert.Equal(2, bonus.Value);
-            Assert.Equal("character", bonus.SourceType);
+            Assert.Equal(SourceType.CharacterAbility, bonus.SourceType);
         }
 
         [Fact]
