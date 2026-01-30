@@ -4,6 +4,17 @@ using ThunderbirdsBoardGameEngine.Rules.Domain.Rescue;
 
 namespace ThunderbirdsBoardGameEngine.Rules.Application.Rescue.CalculateRescueTarget
 {
+    /// <summary>
+    /// Handles rescue target calculation requests by orchestrating rule evaluation.
+    /// </summary>
+    /// <remarks>
+    /// This handler is responsible for:
+    /// - Constructing the set of applicable bonus modifier sources (including the diaster and character contributions)
+    /// - Delegating bonus evaluation to the rules engine
+    ///
+    /// The handler enforces core invariants (valid disaster and character) but does not
+    /// validate board state, action legality, or bonus key relevance.
+    /// </remarks>
     public class CalculateRescueTargetHandler : IRequestHandler<CalculateRescueTargetQuery, CalculateRescueTargetResponse>
     {
         private readonly IDisasterContributionLookup _disasterContributionLookup;
