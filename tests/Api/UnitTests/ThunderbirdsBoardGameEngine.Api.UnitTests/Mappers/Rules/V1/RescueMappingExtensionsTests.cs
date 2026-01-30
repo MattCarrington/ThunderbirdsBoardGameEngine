@@ -50,7 +50,7 @@ namespace ThunderbirdsBoardGameEngine.Api.UnitTests.Mappers.Rules.V1
         }
 
         [Fact]
-        public void ToDto_ValidResponse_ReturnsExpectedDto()
+        public void ToDto_DisasterCardAppliedBonuses_ReturnsExpectedDto()
         {
             // Arrange
             var response = new CalculateRescueTargetResponse
@@ -90,6 +90,38 @@ namespace ThunderbirdsBoardGameEngine.Api.UnitTests.Mappers.Rules.V1
 
             Assert.All(result.AppliedDisasterBonuses, expected =>
                 Assert.Contains(expected, expectedBonus));
+        }
+
+        [Fact]
+        public void ToDto_CharacterAbilityAppliedBonus_ReturnsExpectedDto()
+        {
+            // Arrange
+            var response = new CalculateRescueTargetResponse
+            (
+                TargetNumber: 12,
+                TotalBonus: 3,
+                AppliedBonuses:
+                [
+                    new AppliedRescueModifier
+                    {
+                        Key = "alan",
+                        Value = 2,
+                        SourceType = SourceType.CharacterAbility
+                    }
+                ]
+            );
+
+            // Act
+            var result = response.ToDto();
+
+            // Assert
+            Assert.Equal(response.TargetNumber, result.TargetNumber);
+            Assert.Equal(response.TotalBonus, result.TotalBonus);
+
+            var bonus = Assert.Single(result.AppliedDisasterBonuses);
+            Assert.Equal("alan", bonus.BonusKey);
+            Assert.Equal(2, bonus.BonusValue);
+            Assert.Equal("character-ability", bonus.SourceType);
         }
     }
 }

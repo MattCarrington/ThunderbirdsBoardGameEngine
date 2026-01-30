@@ -40,7 +40,17 @@ namespace ThunderbirdsBoardGameEngine.Api.Mappers.Rules.V1
             {
                 BonusKey = bonus.Key,
                 BonusValue = bonus.Value,
-                SourceType = "disaster-card"    // TODO: Currently, all bonuses come from disaster cards
+                SourceType = GetSourceType(bonus.SourceType)
+            };
+        }
+
+        private static string GetSourceType(SourceType sourceType)
+        {
+            return sourceType switch
+            {
+                SourceType.DisasterCard => "disaster-card",
+                SourceType.CharacterAbility => "character-ability",
+                _ => throw new InvalidOperationException($"Unhandled SourceType '{sourceType}'")
             };
         }
     }
