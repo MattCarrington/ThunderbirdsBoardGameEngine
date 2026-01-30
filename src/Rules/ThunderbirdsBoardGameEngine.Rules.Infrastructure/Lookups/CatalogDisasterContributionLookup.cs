@@ -7,7 +7,7 @@ using ThunderbirdsBoardGameEngine.Rules.Domain.Rescue;
 
 namespace ThunderbirdsBoardGameEngine.Rules.Infrastructure.Lookups
 {
-    public sealed class CatalogDisasterContributionLookup : IDisasterContributionLookup
+    internal sealed class CatalogDisasterContributionLookup : IDisasterContributionLookup
     {
         private readonly IDisasterCardReferenceSource _disasterCardReferenceSource;
 

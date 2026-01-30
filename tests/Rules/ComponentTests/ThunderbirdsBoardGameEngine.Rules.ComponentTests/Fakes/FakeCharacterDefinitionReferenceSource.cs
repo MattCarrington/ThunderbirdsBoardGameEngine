@@ -13,7 +13,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Fakes
 
         public string Version => "test";
 
-        public ImmutableArray<CharacterDefinition> Characters => _definitions.Values.ToImmutableArray();
+        public ImmutableArray<CharacterDefinition> Characters => _definitions.Values;
 
         public FakeCharacterDefinitionReferenceSource()
         {

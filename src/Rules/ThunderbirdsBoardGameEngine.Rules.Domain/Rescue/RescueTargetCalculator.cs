@@ -13,7 +13,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.Rescue
             {
                 TargetRoll = difficultyNumber - bonus,
                 TotalBonus = bonus,
-                AppliedBonuses = appliedBonuses.ToList()
+                AppliedBonuses = appliedBonuses
             };
         }
     }
