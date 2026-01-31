@@ -60,7 +60,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.Rescue
         }
 
         [Fact]
-        public void ApplyRescueModifier_WhenInvalidBonusKey_ReturnsEmpty()
+        public void ApplyRescueModifier_WhenBonusKeyDonNotExistOnCard_ReturnsEmpty()
         {
             // Arrange
             var contribution = CreateDisasterContribution();
