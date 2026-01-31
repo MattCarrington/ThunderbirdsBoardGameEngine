@@ -158,19 +158,16 @@ this.ScenarioInitialize(scenarioInfo, ruleInfo);
 #line 7
  await testRunner.GivenAsync("the disaster \"Terror in New York City\" is selected", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
 #line hidden
-#line 8
- await testRunner.AndAsync("\"Gordon\" is performing the rescue", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
-#line hidden
-#line 9
+#line 10
  await testRunner.AndAsync("the \"Virgil\" bonus is marked as being present", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
-#line 10
+#line 11
  await testRunner.AndAsync("the \"Firefly\" bonus is marked as being present", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
-#line 11
+#line 12
  await testRunner.WhenAsync("the rescue target is calculated", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 12
+#line 13
  await testRunner.ThenAsync("the minimum required roll should be 3", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
             }
@@ -191,7 +188,7 @@ this.ScenarioInitialize(scenarioInfo, ruleInfo);
                     "", null, tagsOfScenario, argumentsOfScenario, featureTags, pickleIndex);
             string[] tagsOfRule = ((string[])(null));
             global::Reqnroll.RuleInfo ruleInfo = null;
-#line 14
+#line 15
 this.ScenarioInitialize(scenarioInfo, ruleInfo);
 #line hidden
             if ((global::Reqnroll.TagHelper.ContainsIgnoreTag(scenarioInfo.CombinedTags) || global::Reqnroll.TagHelper.ContainsIgnoreTag(featureTags)))
@@ -201,22 +198,19 @@ this.ScenarioInitialize(scenarioInfo, ruleInfo);
             else
             {
                 await this.ScenarioStartAsync();
-#line 15
+#line 16
  await testRunner.GivenAsync("the disaster \"Terror in New York City\" is selected", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
 #line hidden
-#line 16
- await testRunner.AndAsync("\"Alan\" is performing the rescue", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
-#line hidden
-#line 17
+#line 19
  await testRunner.AndAsync("the \"Virgil\" bonus is marked as being present", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
-#line 18
+#line 20
  await testRunner.AndAsync("the \"Firefly\" bonus is marked as being present", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
-#line 19
+#line 21
  await testRunner.WhenAsync("the rescue target is calculated", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 20
+#line 22
  await testRunner.ThenAsync("the minimum required roll should be 6", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
             }

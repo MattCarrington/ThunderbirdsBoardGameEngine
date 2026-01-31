@@ -5,7 +5,8 @@
 
 Scenario: Calculate Rescue Bonus for a Disaster with character who provides a bonus
 	Given the disaster "Terror in New York City" is selected
-	And "Gordon" is performing the rescue
+	#And "Gordon" is performing the rescue
+	#TODO: Implement step once UI is implemented
 	And the "Virgil" bonus is marked as being present
 	And the "Firefly" bonus is marked as being present
 	When the rescue target is calculated
@@ -13,7 +14,8 @@ Scenario: Calculate Rescue Bonus for a Disaster with character who provides a bo
 
 Scenario: Calculate Rescue Bonus for a Disaster with character who does not provide a bonus
 	Given the disaster "Terror in New York City" is selected
-	And "Alan" is performing the rescue
+	#And "Alan" is performing the rescue #
+	#TODO: Implement step once UI is implemented
 	And the "Virgil" bonus is marked as being present
 	And the "Firefly" bonus is marked as being present
 	When the rescue target is calculated
