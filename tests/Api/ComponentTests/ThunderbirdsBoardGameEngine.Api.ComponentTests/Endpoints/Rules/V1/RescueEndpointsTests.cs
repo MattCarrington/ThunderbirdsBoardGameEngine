@@ -128,7 +128,32 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints.Rules.V1
             // Arrange
             var invalidRequestDto = new
             {
-                // AppliedBonusKeys intentionally missing
+                PerformingCharacterKey = "gordon"
+            };
+
+            using var request = new HttpRequestMessage(HttpMethod.Post, _route);
+            request.Headers.Add("X-API-Version", ApiVersion.ToString());
+            request.Content = JsonContent.Create(invalidRequestDto);
+
+            // Act
+            using var response = await _client.SendAsync(request);
+
+            // Assert
+            var problem = await ProblemDetailsAssertions.AssertBadRequestAsync(response, "Request validation failed.");
+            ProblemDetailsAssertions.AssertValidationErrors(problem, nameof(CalculateRescueTargetRequestDto.PresentDisasterBonusKeys));
+        }
+
+        [Fact]
+        public async Task CalculateRescueTarget_WhenPerformingCharacterMissing_ReturnsBadRequest()
+        {
+            // Arrange
+            var invalidRequestDto = new
+            {
+                PresentDisasterBonusKeys = new[]
+                {
+                    "podvehicle:mobilecrane",
+                    "podvehicle:domo"
+                }
             };
 
             using var request = new HttpRequestMessage(HttpMethod.Post, _route);
