@@ -12,6 +12,7 @@
     public enum SourceType
     {
         DisasterCard,
-        CharacterAbility
+        CharacterAbility,
+        FabCard
     }
 }
