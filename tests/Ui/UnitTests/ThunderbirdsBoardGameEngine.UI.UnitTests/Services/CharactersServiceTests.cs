@@ -14,7 +14,7 @@ namespace ThunderbirdsBoardGameEngine.UI.UnitTests.Services
         public async Task GetAllAsync_WhenResponseIsSuccessful_ReturnsListOfCharactersAsync()
         {
             // Arrange
-            var dto = new List<CharacterDto> 
+            var dto = new List<CharacterDto>
             {
                 new() { Key = "scott", DisplayName = "Scott" },
                 new() { Key = "lady-penelope", DisplayName = "Lady Penelope" }
@@ -68,7 +68,7 @@ namespace ThunderbirdsBoardGameEngine.UI.UnitTests.Services
         {
             var client = Substitute.For<ICharactersClient>();
             client.GetAllAsync().Returns(response);
-            
+
             return new CharactersService(client);
         }
     }
