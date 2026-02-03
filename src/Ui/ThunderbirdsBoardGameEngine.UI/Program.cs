@@ -20,6 +20,7 @@ namespace ThunderbirdsBoardGameEngine.UI
 
             // Register service layer
             builder.Services.AddScoped<IDisasterCardService, DisasterCardService>();
+            builder.Services.AddScoped<ICharactersService, CharactersService>();
             builder.Services.AddScoped<IRescueService, RescueService>();
 
             await builder.Build().RunAsync();

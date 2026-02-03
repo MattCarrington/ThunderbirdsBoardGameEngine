@@ -30,7 +30,7 @@ namespace ThunderbirdsBoardGameEngine.UI.UnitTests.Services
             var service = CreateRescueService(rescueClient);
 
             // Act
-            var result = await service.CalculateRescueTargetAsync(disasterCardCode, presentBonusKeys);
+            var result = await service.CalculateRescueTargetAsync(disasterCardCode, presentBonusKeys, performingCharacterKey);
 
             // Assert
             Assert.NotNull(result);
@@ -53,7 +53,7 @@ namespace ThunderbirdsBoardGameEngine.UI.UnitTests.Services
         public async Task CalculateRescueTargetAsync_WhenResponseIsNotSuccessful_ReturnsNull()
         {
             // Arrange
-            var (disasterCardCode, presentBonusKeys, _) = CreateRequestParameters();
+            var (disasterCardCode, presentBonusKeys, performingCharacterKey) = CreateRequestParameters();
 
             var apiResult = ApiResult<CalculateRescueTargetResponseDto>.Failure("Error", HttpStatusCode.BadRequest);
 
@@ -62,7 +62,7 @@ namespace ThunderbirdsBoardGameEngine.UI.UnitTests.Services
             var service = CreateRescueService(rescueClient);
 
             // Act
-            var result = await service.CalculateRescueTargetAsync(disasterCardCode, presentBonusKeys);
+            var result = await service.CalculateRescueTargetAsync(disasterCardCode, presentBonusKeys, performingCharacterKey);
 
             // Assert
             Assert.Null(result);
@@ -74,7 +74,7 @@ namespace ThunderbirdsBoardGameEngine.UI.UnitTests.Services
 
             var presentBonusKeys = new[] { "BONUS_001", "BONUS_002" };
 
-            var performingCharacterKey = string.Empty;
+            var performingCharacterKey = "CHARACTER_001";
 
             return (disasterCardCode, presentBonusKeys, performingCharacterKey);
         }

@@ -13,12 +13,15 @@ namespace ThunderbirdsBoardGameEngine.UI.Services
             _rescueClient = rescueClient;
         }
 
-        public async Task<CalculateRescueTargetResponseDto?> CalculateRescueTargetAsync(string disasterCardCode, IReadOnlyCollection<string> presentBonusKeys)
+        public async Task<CalculateRescueTargetResponseDto?> CalculateRescueTargetAsync(
+            string disasterCardCode,
+            IReadOnlyCollection<string> presentBonusKeys,
+            string performingCharacterKey)
         {
             var request = new CalculateRescueTargetRequestDto
             {
                 PresentDisasterBonusKeys = presentBonusKeys,
-                PerformingCharacterKey = string.Empty   // TODO: Update when character selection is implemented
+                PerformingCharacterKey = performingCharacterKey
             };
 
             var result = await _rescueClient.CalculateRescueTargetAsync(disasterCardCode, request);
