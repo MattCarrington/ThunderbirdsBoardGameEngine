@@ -5,7 +5,6 @@ using ThunderbirdsBoardGameEngine.Catalog.Client.Extensions;
 using ThunderbirdsBoardGameEngine.Catalog.Contracts.Dtos.V1;
 using ThunderbirdsBoardGameEngine.Catalog.WireMock;
 using ThunderbirdsBoardGameEngine.Rules.Client.Extensions;
-using ThunderbirdsBoardGameEngine.Rules.Client.Interfaces.V1;
 using ThunderbirdsBoardGameEngine.Rules.Contracts.Dtos.Rescue.CalculateRescueTarget.V1;
 using ThunderbirdsBoardGameEngine.Rules.WireMock;
 using ThunderbirdsBoardGameEngine.TestUtils.Catalog.TestFileCatalogs;
@@ -42,6 +41,7 @@ namespace ThunderbirdsBoardGameEngine.UI.IntegrationTests.Pages
             Services.AddCatalogClients(configuration);
             Services.AddRulesClients(configuration);
 
+            Services.AddSingleton<ICharactersService, CharactersService>();
             Services.AddSingleton<IDisasterCardService, DisasterCardService>();
             Services.AddSingleton<IRescueService, RescueService>();
         }
@@ -119,6 +119,7 @@ namespace ThunderbirdsBoardGameEngine.UI.IntegrationTests.Pages
             };
 
             _host.DisasterCardStub().RegisterGetAllSuccess(cards);
+            _host.CharactersStub().RegisterGetAllSuccess();
             _host.RescueStub().RegisterCalculateRescueTargetSuccess(rescueResult);
 
             var cut = RenderComponent<DisasterCards>();
@@ -131,6 +132,10 @@ namespace ThunderbirdsBoardGameEngine.UI.IntegrationTests.Pages
                .Change(cards[0].Id.ToString());
 
             cut.WaitForState(() => true);
+
+            cut.WaitForElement("#characterSelect");
+
+            cut.Find("#characterSelect").Change("gordon");
 
             // Now click
             cut.Find("[data-testid='calculate-button']").Click();
@@ -155,6 +160,7 @@ namespace ThunderbirdsBoardGameEngine.UI.IntegrationTests.Pages
             var cards = await GetCardDtosAsync();
 
             _host.DisasterCardStub().RegisterGetAllSuccess(cards);
+            _host.CharactersStub().RegisterGetAllSuccess();
             _host.RescueStub().RegisterCalculateRescueTargetError();
 
             var cut = RenderComponent<DisasterCards>();
@@ -167,6 +173,10 @@ namespace ThunderbirdsBoardGameEngine.UI.IntegrationTests.Pages
                .Change(cards[0].Id.ToString());
 
             cut.WaitForState(() => true);
+
+            cut.WaitForElement("#characterSelect");
+
+            cut.Find("#characterSelect").Change("gordon");
 
             // Now click
             cut.Find("[data-testid='calculate-button']").Click();

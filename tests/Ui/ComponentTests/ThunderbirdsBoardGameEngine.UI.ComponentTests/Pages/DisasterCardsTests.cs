@@ -40,6 +40,7 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Pages
         {
             // Arrange
             var service = SetupDisasterCardService(Cards);
+            _ = SetupCharactersService();
             _ = SetupRescueService();
 
             // Act
@@ -47,6 +48,25 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Pages
 
             // Assert
             cut.WaitForElement("#disasterSelect option[value='1']"); // waits for card to render
+
+            service.Received(1).GetAllAsync();
+        }
+
+        [Fact]
+        public void OnInitializedAsync_WhenCharactersExist_LoadsCharacters()
+        {
+            // Arrange
+            _ = SetupDisasterCardService(Cards);
+            var service = SetupCharactersService();
+            _ = SetupRescueService();
+
+            // Act
+            var cut = RenderComponent<DisasterCards>();
+            cut.Find("#disasterSelect").Change("1");
+
+            // Assert
+            cut.WaitForElement("#disasterSelect option[value='1']"); // waits for card to render
+            cut.WaitForElement("#characterSelect option[value='scott']"); // waits for characters to render
 
             service.Received(1).GetAllAsync();
         }
@@ -63,6 +83,7 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Pages
             };
 
             _ = SetupDisasterCardService(cards);
+            _ = SetupCharactersService();
             _ = SetupRescueService();
 
             // Act
@@ -92,6 +113,7 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Pages
         {
             // Arrange
             var service = SetupDisasterCardService([]);
+            _ = SetupCharactersService();
             _ = SetupRescueService();
 
             // Act
@@ -118,6 +140,7 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Pages
 
             Services.AddSingleton(service);
 
+            _ = SetupCharactersService();
             _ = SetupRescueService();
 
             // Act
@@ -142,6 +165,7 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Pages
 
             Services.AddSingleton(service);
 
+            _ = SetupCharactersService();
             _ = SetupRescueService();
 
             // Act
@@ -160,6 +184,7 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Pages
         {
             // Arrange
             _ = SetupDisasterCardService(Cards);
+            _ = SetupCharactersService();
             _ = SetupRescueService();
 
             // Act
@@ -187,6 +212,7 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Pages
         {
             // Arrange
             _ = SetupDisasterCardService(Cards);
+            _ = SetupCharactersService();
             _ = SetupRescueService();
 
             // Act
@@ -209,6 +235,7 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Pages
         {
             // Arrange
             _ = SetupDisasterCardService(Cards);
+            _ = SetupCharactersService();
             _ = SetupRescueService();
 
             // Act
@@ -230,6 +257,7 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Pages
         {
             // Arrange
             var service = SetupDisasterCardService(Cards);
+            _ = SetupCharactersService();
             _ = SetupRescueService();
 
             var cut = RenderComponent<DisasterCards>();
@@ -249,6 +277,7 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Pages
         {
             // Arrange
             _ = SetupDisasterCardService(Cards);
+            _ = SetupCharactersService();
             _ = SetupRescueService();
 
             var cut = RenderComponent<DisasterCards>();
@@ -280,6 +309,7 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Pages
             };
 
             _ = SetupDisasterCardService(withNulls);
+            _ = SetupCharactersService();
             _ = SetupRescueService();
 
             var cut = RenderComponent<DisasterCards>();
@@ -323,6 +353,7 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Pages
             };
 
             _ = SetupDisasterCardService(cards);
+            _ = SetupCharactersService();
 
             var rescueService = SetupRescueService(response);
 
@@ -330,6 +361,9 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Pages
 
             // Select card
             cut.WaitForElement("#disasterSelect").Change("1");
+
+            // Select character
+            cut.Find("#characterSelect").Change("scott");
 
             // Check first checkbox
             var checkboxes = cut.FindAll("[data-testid='bonus-checkbox']");
@@ -342,7 +376,8 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Pages
             rescueService.Received(1).CalculateRescueTargetAsync(
                 "test-card",
                 Arg.Is<IReadOnlyCollection<string>>(keys =>
-                    keys.Count == 1 && keys.Contains("character:virgil")));
+                    keys.Count == 1 && keys.Contains("character:virgil")),
+                "scott");
         }
 
         [Fact]
@@ -358,6 +393,7 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Pages
             };
 
             _ = SetupDisasterCardService(Cards);
+            _ = SetupCharactersService();
             var rescueService = SetupRescueService(response);
 
             Services.AddSingleton(rescueService);
@@ -365,6 +401,8 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Pages
             var cut = RenderComponent<DisasterCards>();
 
             cut.WaitForElement("#disasterSelect").Change("1");
+
+            cut.WaitForElement("#characterSelect").Change("scott");
 
             // Act
             cut.Find("[data-testid='calculate-button']").Click();
@@ -408,6 +446,7 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Pages
             };
 
             _ = SetupDisasterCardService(cards);
+            _ = SetupCharactersService();
             _ = SetupRescueService();
 
             var cut = RenderComponent<DisasterCards>();
@@ -460,7 +499,7 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Pages
             };
 
             _ = SetupDisasterCardService(cards);
-
+            _ = SetupCharactersService();
             _ = SetupRescueService();
 
             var cut = RenderComponent<DisasterCards>();
@@ -468,6 +507,8 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Pages
             // Select first card
             var select = cut.WaitForElement("#disasterSelect");
             select.Change("1");
+
+            cut.WaitForElement("#characterSelect").Change("scott");
 
             // Trigger calculation
             cut.Find("[data-testid='calculate-button']").Click();
@@ -484,6 +525,106 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Pages
                 Assert.DoesNotContain("Target Number", cut.Markup));
         }
 
+        [Fact]
+        public void WhenNoCharactersExist_CharacterSelectHidden_AndCalculateDisabled()
+        {
+            _ = SetupDisasterCardService(Cards);
+            _ = SetupRescueService();
+
+            // Characters service returns empty
+            var service = SetupCharactersService(Array.Empty<CharacterDto>());
+            var cut = RenderComponent<DisasterCards>();
+
+            cut.WaitForElement("#disasterSelect").Change("1");
+
+            cut.WaitForAssertion(() =>
+            {
+                Assert.Empty(cut.FindAll("#characterSelect"));
+                Assert.True(cut.Find("[data-testid='calculate-button']").HasAttribute("disabled"));
+            });
+        }
+
+        [Fact]
+        public void DeselectingCharacter_DisablesCalculate()
+        {
+            _ = SetupDisasterCardService(Cards);
+            _ = SetupCharactersService();
+            _ = SetupRescueService();
+
+            var cut = RenderComponent<DisasterCards>();
+
+            cut.WaitForElement("#disasterSelect").Change("1");
+
+            var characterSelect = cut.WaitForElement("#characterSelect");
+            characterSelect.Change("scott");
+
+            Assert.False(cut.Find("[data-testid='calculate-button']").HasAttribute("disabled"));
+
+            // Deselect (placeholder)
+            characterSelect.Change(string.Empty);
+
+            Assert.True(cut.Find("[data-testid='calculate-button']").HasAttribute("disabled"));
+        }
+
+        [Fact]
+        public void SelectingCharacter_DoesNotClearSelectedBonuses()
+        {
+            var cards = new[]
+            {
+                new DisasterCardDto
+                {
+                    Id = 1,
+                    Name = "Test",
+                    BonusConditions =
+                    [
+                        new BonusConditionDto { Key = "bonus1", Description = "Bonus 1" }
+                    ]
+                }
+            };
+
+            _ = SetupDisasterCardService(cards);
+            _ = SetupCharactersService();
+            _ = SetupRescueService();
+
+            var cut = RenderComponent<DisasterCards>();
+
+            cut.WaitForElement("#disasterSelect").Change("1");
+
+            var bonus = cut.Find("[data-testid='bonus-checkbox']");
+            bonus.Change(true);
+
+            cut.Find("#characterSelect").Change("scott");
+
+            Assert.True(bonus.HasAttribute("checked"));
+        }
+
+        [Fact]
+        public void ChangingCharacter_DoesNotClearCalculatedResult()
+        {
+            _ = SetupDisasterCardService(Cards);
+            _ = SetupCharactersService();
+            _ = SetupRescueService(new CalculateRescueTargetResponseDto
+            {
+                TargetNumber = 5,
+                TotalBonus = 1,
+                AppliedDisasterBonuses = []
+            });
+
+            var cut = RenderComponent<DisasterCards>();
+
+            cut.WaitForElement("#disasterSelect").Change("1");
+            cut.Find("#characterSelect").Change("scott");
+            cut.Find("[data-testid='calculate-button']").Click();
+
+            cut.WaitForAssertion(() =>
+                Assert.Contains("Target Number", cut.Markup));
+
+            // Change character
+            cut.Find("#characterSelect").Change("virgil");
+
+            Assert.Contains("Target Number", cut.Markup);
+        }
+
         private IDisasterCardService SetupDisasterCardService(IReadOnlyList<DisasterCardDto> cards)
         {
             var service = Substitute.For<IDisasterCardService>();
@@ -493,6 +634,29 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Pages
 
             return service;
         }
+
+        private ICharactersService SetupCharactersService()
+        {
+            var characters = new List<CharacterDto>
+            {
+                new() { DisplayName = "Scott", Key = "scott" },
+                new() { DisplayName = "Virgil", Key = "virgil" }
+            };
+
+            return SetupCharactersService(characters);
+        }
+
+        private ICharactersService SetupCharactersService(IReadOnlyList<CharacterDto> characters)
+        {
+            var service = Substitute.For<ICharactersService>();
+            service.GetAllAsync().Returns(Task.FromResult(characters));
+
+            Services.AddSingleton(service);
+
+            return service;
+        }
+
+
 
         private IRescueService SetupRescueService()
         {
@@ -509,7 +673,7 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Pages
         private IRescueService SetupRescueService(CalculateRescueTargetResponseDto dto)
         {
             var service = Substitute.For<IRescueService>();
-            service.CalculateRescueTargetAsync(Arg.Any<string>(), Arg.Any<IReadOnlyCollection<string>>())
+            service.CalculateRescueTargetAsync(Arg.Any<string>(), Arg.Any<IReadOnlyCollection<string>>(), Arg.Any<string>())
                 .Returns(Task.FromResult<CalculateRescueTargetResponseDto?>(dto));
 
             Services.AddSingleton(service);
