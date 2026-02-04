@@ -14,7 +14,7 @@
         /// <summary>
         /// Gets the unique key identifying the character performing the rescue action.
         /// </summary>
-        /// /// <remarks>
+        /// <remarks>
         /// This property was added to V1 to enforce a core domain invariant.
         /// While technically a breaking change, the contract is still evolving
         /// and has not yet been declared stable.

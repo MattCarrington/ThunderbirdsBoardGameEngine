@@ -9,7 +9,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Application.Rescue.CalculateRescueTa
     /// </summary>
     /// <remarks>
     /// This handler is responsible for:
-    /// - Constructing the set of applicable bonus modifier sources (including the diaster and character contributions)
+    /// - Constructing the set of applicable bonus modifier sources (including the disaster and character contributions)
     /// - Delegating bonus evaluation to the rules engine
     ///
     /// The handler enforces core invariants (valid disaster and character) but does not
