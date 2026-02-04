@@ -11,11 +11,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.Rescue
         public void ApplyRescueModifier_WhenCharacterRescueTypeDoesNotMatchInput_ReturnsEmptyCollection()
         {
             // Arrange
-            var characterContribution = new CharacterContribution
-            {
-                Key = CharacterCode.Gordon,
-                RescueBonusContribution = new CharacterRescueBonusContribution(RescueType.Sea, 3)
-            };
+            var characterContribution = new CharacterContribution(CharacterCode.Gordon, new CharacterRescueBonusContribution(RescueType.Sea, 3));
 
             var input = new RescueCalculationInput(
                 presentDisasterBonusKeys: [],
@@ -33,11 +29,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.Rescue
         public void ApplyRescueModifier_WhenCharacterRescueTypeMatchesInput_ReturnsBonusModifier()
         {
             // Arrange
-            var characterContribution = new CharacterContribution
-            {
-                Key = CharacterCode.Virgil,
-                RescueBonusContribution = new CharacterRescueBonusContribution(RescueType.Land, 2)
-            };
+            var characterContribution = new CharacterContribution(CharacterCode.Virgil, new CharacterRescueBonusContribution(RescueType.Land, 2));
 
             var input = new RescueCalculationInput(
                 presentDisasterBonusKeys: [],
@@ -57,11 +49,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.Rescue
         public void ApplyRescueModifier_WhenNoRescueBonusContribution_ReturnsEmptyCollection()
         {
             // Arrange
-            var characterContribution = new CharacterContribution
-            {
-                Key = CharacterCode.LadyPenelope,
-                RescueBonusContribution = null
-            };
+            var characterContribution = new CharacterContribution(CharacterCode.LadyPenelope, null);
 
             var input = new RescueCalculationInput(
                 presentDisasterBonusKeys: [],

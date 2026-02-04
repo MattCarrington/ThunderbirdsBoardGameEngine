@@ -21,13 +21,11 @@ namespace ThunderbirdsBoardGameEngine.Rules.Infrastructure.Lookups
 
             var definition = _characterDefinitionReferenceSource.GetCharacterDefinition(character);
 
-            return new CharacterContribution
-            {
-                Key = characterCode,
-                RescueBonusContribution = definition.RescueBonus is null
+            var rescueBonusContribution = definition.RescueBonus is null
                     ? null
-                    : new CharacterRescueBonusContribution(definition.RescueBonus.RescueType, definition.RescueBonus.BonusValue)
-            };
+                    : new CharacterRescueBonusContribution(definition.RescueBonus.RescueType, definition.RescueBonus.BonusValue);
+
+            return new CharacterContribution(characterCode, rescueBonusContribution);
         }
     }
 }
