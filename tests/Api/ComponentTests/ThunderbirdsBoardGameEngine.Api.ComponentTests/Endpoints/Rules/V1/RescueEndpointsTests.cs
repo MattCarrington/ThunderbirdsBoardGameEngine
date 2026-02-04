@@ -165,7 +165,7 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints.Rules.V1
 
             // Assert
             var problem = await ProblemDetailsAssertions.AssertBadRequestAsync(response, "Request validation failed.");
-            ProblemDetailsAssertions.AssertValidationErrors(problem, nameof(CalculateRescueTargetRequestDto.PresentDisasterBonusKeys));
+            ProblemDetailsAssertions.AssertValidationErrors(problem, nameof(CalculateRescueTargetRequestDto.PerformingCharacterKey));
         }
 
         [Fact]
