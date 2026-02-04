@@ -22,6 +22,12 @@ namespace ThunderbirdsBoardGameEngine.PlaywrightTests.StepDefinitions
             await _page.SelectCardAsync(cardName);
         }
 
+        [Given("{string} is selected as performing the rescue")]
+        public async Task GivenIsSelectedAsPerformingTheRescue(string character)
+        {
+            await _page.SelectCharacterAsync(character);
+        }
+
         [Given("the {string} bonus is marked as being present")]
         public async Task GivenTheBonusIsMarkedAsBeingPresent(string bonusName)
         {
@@ -38,6 +44,12 @@ namespace ThunderbirdsBoardGameEngine.PlaywrightTests.StepDefinitions
         public async Task ThenTheMinimumRequiredRollShouldBe(int targetRoll)
         {
             await _page.AssertRescueResultDisplayedAsync(targetRoll);
+        }
+
+        [Then("the rescue tarrget should be displayed")]
+        public async Task ThenTheRescueTarrgetShouldBeDisplayed()
+        {
+            await _page.AssertRescueResultDisplayedAsync();
         }
     }
 }
