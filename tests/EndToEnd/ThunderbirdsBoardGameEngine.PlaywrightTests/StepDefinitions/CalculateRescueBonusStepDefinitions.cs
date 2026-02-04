@@ -22,13 +22,13 @@ namespace ThunderbirdsBoardGameEngine.PlaywrightTests.StepDefinitions
             await _page.SelectCardAsync(cardName);
         }
 
-        [Given("{string} is selected as performing the rescue")]
+        [Given("the player selects the character {string}")]
         public async Task GivenIsSelectedAsPerformingTheRescue(string character)
         {
             await _page.SelectCharacterAsync(character);
         }
 
-        [Given("the {string} bonus is marked as being present")]
+        [Given("the player marks {string} as being present")]
         public async Task GivenTheBonusIsMarkedAsBeingPresent(string bonusName)
         {
             await _page.MarkBonusCheckboxAsync(bonusName);
