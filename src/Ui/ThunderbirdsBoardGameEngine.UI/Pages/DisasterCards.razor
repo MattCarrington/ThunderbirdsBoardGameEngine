@@ -83,6 +83,7 @@ else
                 {
                     <label for="characterSelect" class="form-label">Character</label>
                     <select id="characterSelect" class="form-select"
+                            @key="selectedCharacterCode"
                             @bind-Value="selectedCharacterCode"
                             @bind-Value:event="onchange" required>
                         <option value="">-- Select a character --</option>
