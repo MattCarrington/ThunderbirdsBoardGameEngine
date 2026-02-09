@@ -169,6 +169,31 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints.Rules.V1
         }
 
         [Fact]
+        public async Task CalculateRescueTarget_WhenPerformingCharacterInvalid_ReturnsBadRequest()
+        {
+            // Arrange
+            var invalidRequestDto = new CalculateRescueTargetRequestDto
+            {
+                PresentDisasterBonusKeys = new[]
+                {
+                    "podvehicle:mobilecrane",
+                    "podvehicle:domo"
+                },
+                PerformingCharacterKey = "invalid-character"
+            };
+
+            using var request = new HttpRequestMessage(HttpMethod.Post, _route);
+            request.Headers.Add("X-API-Version", ApiVersion.ToString());
+            request.Content = JsonContent.Create(invalidRequestDto);
+
+            // Act
+            using var response = await _client.SendAsync(request);
+
+            // Assert
+            await ProblemDetailsAssertions.AssertBadRequestAsync(response, "Bad request.");
+        }
+
+        [Fact]
         public async Task CalculateTargetResult_WhenMissingVersionHeader_ReturnsBadRequest()
         {
             // Arrange

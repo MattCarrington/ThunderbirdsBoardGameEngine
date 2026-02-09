@@ -10,6 +10,7 @@
         public const string DataAccess = "https://errors.example.com/catalog-data";
         public const string ServerError = "https://errors.example.com/server-error";
         public const string Unavailable = "https://errors.example.com/unavailable";
+        public const string BadRequest = "https://errors.example.com/bad-request";
     }
 
 }
