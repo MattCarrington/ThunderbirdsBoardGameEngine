@@ -9,4 +9,4 @@ Scenario: Player can calculate a rescue target
 	And the player marks "Virgil" as being present
 	And the player marks "Firefly" as being present
 	When the rescue target is calculated
-	Then the rescue tarrget should be displayed
+	Then the rescue target should be displayed

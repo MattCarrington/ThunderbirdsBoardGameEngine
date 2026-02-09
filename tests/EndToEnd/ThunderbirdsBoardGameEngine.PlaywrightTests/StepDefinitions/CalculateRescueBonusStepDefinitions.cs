@@ -46,7 +46,7 @@ namespace ThunderbirdsBoardGameEngine.PlaywrightTests.StepDefinitions
             await _page.AssertRescueResultDisplayedAsync(targetRoll);
         }
 
-        [Then("the rescue tarrget should be displayed")]
+        [Then("the rescue target should be displayed")]
         public async Task ThenTheRescueTarrgetShouldBeDisplayed()
         {
             await _page.AssertRescueResultDisplayedAsync();
