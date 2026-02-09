@@ -9,7 +9,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.Rescue
     /// The character contribution represents the bonus granted by the performing character,
     /// if they have a rescue ability applicable to the current rescue type.    
     /// </remarks>
-    public class CharacterContribution : IBonusModifierSource
+    public sealed class CharacterContribution : IBonusModifierSource
     {
         public CharacterCode Key { get; }
 
