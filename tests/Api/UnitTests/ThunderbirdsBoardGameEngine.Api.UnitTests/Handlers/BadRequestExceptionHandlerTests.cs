@@ -13,7 +13,7 @@ namespace ThunderbirdsBoardGameEngine.Api.UnitTests.Handlers
     public class BadRequestExceptionHandlerTests
     {
         [Fact]
-        public async Task TryHandleAsync_WhenDisasterCardNotFoundException_ReturnsTrueAsync()
+        public async Task TryHandleAsync_WhenBadRequestException_ReturnsTrueAsync()
         {
             // Arrange
             var exception = new BadRequestException("Invalid performing character key");
