@@ -83,7 +83,6 @@ else
                 {
                     <label for="characterSelect" class="form-label">Character</label>
                     <select id="characterSelect" class="form-select"
-                            @key="selectedCharacterCode"
                             @bind-Value="selectedCharacterCode"
                             @bind-Value:event="onchange" required>
                         <option value="">-- Select a character --</option>
@@ -176,7 +175,6 @@ else
 
             selectedBonusKeys.Clear();
             calculationResult = null;
-            selectedCharacterCode = null;
 
             selectedCard = (value is int id && cardsDictionary?.TryGetValue(id, out var card) == true)
                 ? card

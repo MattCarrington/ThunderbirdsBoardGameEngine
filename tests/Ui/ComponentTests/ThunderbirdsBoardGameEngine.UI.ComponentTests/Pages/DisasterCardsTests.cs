@@ -526,37 +526,6 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Pages
         }
 
         [Fact]
-        public void SelectingNewCard_ClearsPreviouslySelectedCharacter()
-        {
-            // Arrange
-            _ = SetupDisasterCardService(Cards);
-            _ = SetupCharactersService();
-            _ = SetupRescueService();
-
-            var cut = RenderComponent<DisasterCards>();
-
-            // Select first card
-            var select = cut.WaitForElement("#disasterSelect");
-            select.Change("1");
-
-            cut.WaitForElement("#characterSelect").Change("scott");
-
-            // Trigger calculation
-            cut.Find("[data-testid='calculate-button']").Click();
-
-            // Assert result is shown
-            cut.WaitForAssertion(() =>
-                Assert.Contains("Target Number", cut.Markup));
-
-            // Act — select a different card
-            select.Change("2");
-
-            // Assert — result is cleared
-            var characterSelect = cut.Find("#characterSelect");
-            Assert.Null(characterSelect.GetAttribute("value"));
-        }
-
-        [Fact]
         public void WhenNoCharactersExist_CharacterSelectHidden_AndCalculateDisabled()
         {
             _ = SetupDisasterCardService(Cards);
