@@ -1,4 +1,4 @@
-﻿using ThunderbirdsBoardGameEngine.PublishedLanguage.DisasterBonus;
+﻿using ThunderbirdsBoardGameEngine.PublishedLanguage.Enums;
 using ThunderbirdsBoardGameEngine.Rules.Domain.Rescue;
 using Xunit;
 
@@ -6,124 +6,107 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.Rescue
 {
     public class RescueTargetCalculatorTests
     {
-        private readonly DisasterContribution _contribution = new(
-            DifficultyNumber: 9,
-            AvailableBonuses: new List<DisasterBonus>
-            {
-                new(new DisasterBonusKey("BONUS_1"), 2),
-                new(new DisasterBonusKey("BONUS_2"), 3),
-                new(new DisasterBonusKey("BONUS_X"), 5)
-            });
-
         [Fact]
-        public void CalculateRescueTarget_NoBonusesToApply_ReturnsTargetRollEqualDifficultyNumber()
+        public void CalculateRescueTarget_NoBonusSources_ReturnsBaseDifficultyAsTarget()
         {
             // Arrange
-            var calculator = CreateRescueTargetCalculator();
+            var calculator = new RescueTargetCalculator();
 
-            var input = CreateInput(Array.Empty<DisasterBonusKey>());
+            var difficultyNumber = 7;
+
+            var input = CreateInput();
+
+            var bonusSources = Array.Empty<IBonusModifierSource>();
 
             // Act
-            var result = calculator.CalculateRescueTarget(input, _contribution);
+            var result = calculator.CalculateRescueTarget(difficultyNumber, input, bonusSources);
 
             // Assert
-            Assert.Equal(9, result.TargetRoll);
+            Assert.Equal(difficultyNumber, result.TargetRoll);
             Assert.Equal(0, result.TotalBonus);
             Assert.Empty(result.AppliedBonuses);
         }
 
         [Fact]
-        public void CalculateRescueTarget_WhenBonusesToBeApplied_ReturnsTargetRoll()
+        public void CalculateRescueTarget_WithBonusSources_ReturnsModifiedTarget()
         {
             // Arrange
-            var calculator = CreateRescueTargetCalculator();
+            var calculator = new RescueTargetCalculator();
 
-            var bonusKeys = new List<DisasterBonusKey>()
+            var difficultyNumber = 10;
+
+            var input = CreateInput();
+
+            var bonusSources = new IBonusModifierSource[]
             {
-                new("BONUS_1"),
-                new("BONUS_2")
+                new FakeSource(2, 3),
+                new FakeSource(1)
             };
-
-            var input = CreateInput(bonusKeys);
 
             // Act
-            var result = calculator.CalculateRescueTarget(input, _contribution);
+            var result = calculator.CalculateRescueTarget(difficultyNumber, input, bonusSources);
 
             // Assert
-            Assert.Equal(4, result.TargetRoll);
-            Assert.Equal(5, result.TotalBonus);
+            var expectedTotalBonus = 6;
+            var expectedTarget = difficultyNumber - expectedTotalBonus;
 
-            var expectedBonuses = new[]
-            {
-                new DisasterBonus(new DisasterBonusKey("BONUS_1"), 2),
-                new DisasterBonus(new DisasterBonusKey("BONUS_2"), 3)
-            };
-
-            Assert.Equal(expectedBonuses.Length, result.AppliedBonuses.Count);
-            Assert.All(expectedBonuses, expected =>
-                Assert.Contains(expected, result.AppliedBonuses));
+            Assert.Equal(expectedTarget, result.TargetRoll);
+            Assert.Equal(expectedTotalBonus, result.TotalBonus);
+            Assert.Equal(3, result.AppliedBonuses.Count);
+            Assert.Contains(result.AppliedBonuses, b => b.Key == "FAKE_BONUS_2" && b.Value == 2);
+            Assert.Contains(result.AppliedBonuses, b => b.Key == "FAKE_BONUS_3" && b.Value == 3);
+            Assert.Contains(result.AppliedBonuses, b => b.Key == "FAKE_BONUS_1" && b.Value == 1);
         }
 
         [Fact]
-        public void CalculateRescueTarget_WhenInvalidBonusKey_ReturnsTargetRoll()
+        public void CalculateRescueTarget_WhenSourcesEmitNothing_ReturnsBaseDifficulty()
         {
             // Arrange
-            var calculator = CreateRescueTargetCalculator();
+            var calculator = new RescueTargetCalculator();
 
-            var bonusKeys = new List<DisasterBonusKey>()
+            var sources = new[]
             {
-                new("BONUS_3"),
-                new("BONUS_4")
+                new FakeSource() // emits empty
             };
-
-            var input = CreateInput(bonusKeys);
+            RescueCalculationInput input = CreateInput();
 
             // Act
-            var result = calculator.CalculateRescueTarget(input, _contribution);
+            var result = calculator.CalculateRescueTarget(
+                difficultyNumber: 10,
+                input: input,
+                sources: sources);
 
-            // Assert
-            Assert.Equal(9, result.TargetRoll);
+            Assert.Equal(10, result.TargetRoll);
             Assert.Equal(0, result.TotalBonus);
-            Assert.Empty(result.AppliedBonuses);
         }
 
-        [Fact]
-        public void CalculateRescueTarget_WhenDuplicateBonusKey_KeyAppliedOnce()
+        private static RescueCalculationInput CreateInput()
         {
-            // Arrange
-            var calculator = CreateRescueTargetCalculator();
+            return new RescueCalculationInput(
+                presentDisasterBonusKeys: [],
+                RescueType.Space
+            );
+        }
 
-            var duplicate = new DisasterBonusKey("BONUS_1");
+        private sealed class FakeSource : IBonusModifierSource
+        {
+            private readonly IEnumerable<AppliedRescueModifier> _modifiers;
 
-            var bonusKeys = new List<DisasterBonusKey>
+            public FakeSource(params int[] values)
             {
-                duplicate,
-                duplicate
-            };
+                _modifiers = values.Select(v => new AppliedRescueModifier
+                {
+                    Value = v,
+                    SourceType = SourceType.DisasterCard,
+                    Key = $"FAKE_BONUS_{v}"
+                });
+            }
 
-            var input = CreateInput(bonusKeys);
-
-            // Act
-            var result = calculator.CalculateRescueTarget(input, _contribution);
-
-            // Assert
-            Assert.Equal(7, result.TargetRoll);
-            Assert.Equal(2, result.TotalBonus);
-
-            var bonus = Assert.Single<DisasterBonus>(result.AppliedBonuses);
-
-            Assert.Equal(duplicate, bonus.Key);
-            Assert.Equal(2, bonus.Value);
+            public IEnumerable<AppliedRescueModifier> ApplyRescueModifier(RescueCalculationInput input)
+            {
+                return _modifiers;
+            }
         }
 
-        private static RescueTargetCalculator CreateRescueTargetCalculator()
-        {
-            return new RescueTargetCalculator();
-        }
-
-        private static RescueCalculationInput CreateInput(IReadOnlyCollection<DisasterBonusKey> bonusKeys)
-        {
-            return new RescueCalculationInput(bonusKeys);
-        }
     }
 }

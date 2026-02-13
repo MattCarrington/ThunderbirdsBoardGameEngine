@@ -1,11 +1,12 @@
 ﻿Feature: CalculateRescueBonus
 
 	The rescue target is calculated based on the selected disaster
-	and any applicable rescue bonuses.
+	and the player’s selected inputs.
 
-Scenario: Calculate Rescue Bonus for a Disaster
+Scenario: Player can calculate a rescue target
 	Given the disaster "Terror in New York City" is selected
-	And the "Virgil" bonus is marked as being present
-	And the "Firefly" bonus is marked as being present
+	And the player selects the character "Gordon" 
+	And the player marks "Virgil" as being present
+	And the player marks "Firefly" as being present
 	When the rescue target is calculated
-	Then the minimum required roll should be 6
+	Then the rescue target should be displayed

@@ -2,5 +2,5 @@
 
 namespace ThunderbirdsBoardGameEngine.Rules.Application.Rescue.CalculateRescueTarget
 {
-    public record CalculateRescueTargetResponse(int TargetNumber, int TotalBonus, IReadOnlyCollection<DisasterBonus> AppliedBonuses);
+    public record CalculateRescueTargetResponse(int TargetNumber, int TotalBonus, IReadOnlyCollection<AppliedRescueModifier> AppliedBonuses);
 }

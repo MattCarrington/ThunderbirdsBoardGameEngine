@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using System.Net.Http.Json;
+using ThunderbirdsBoardGameEngine.PublishedLanguage.Characters;
 using ThunderbirdsBoardGameEngine.Rules.Contracts.Dtos.Rescue.CalculateRescueTarget.V1;
 using ThunderbirdsBoardGameEngine.TestUtils.xUnit.Assertions;
 using Xunit;
@@ -23,7 +24,8 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints.Rules.V1
                 [
                     "podvehicle:mobilecrane",
                     "podvehicle:domo"
-                ]
+                ],
+            PerformingCharacterKey = "gordon"
         };
 
         public RescueEndpointsTests(CustomWebApplicationFactory factory)
@@ -56,12 +58,14 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints.Rules.V1
                 new AppliedDisasterBonusDto
                 {
                     BonusKey = "podvehicle:mobilecrane",
-                    BonusValue = 2
+                    BonusValue = 2,
+                    SourceType = "disaster-card"
                 },
                 new AppliedDisasterBonusDto
                 {
                     BonusKey = "podvehicle:domo",
-                    BonusValue = 2
+                    BonusValue = 2,
+                    SourceType = "disaster-card"
                 }
             };
 
@@ -79,7 +83,8 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints.Rules.V1
             // Arrange
             var requestDto = new CalculateRescueTargetRequestDto
             {
-                PresentDisasterBonusKeys = []
+                PresentDisasterBonusKeys = [],
+                PerformingCharacterKey = "virgil"
             };
 
             using var request = new HttpRequestMessage(HttpMethod.Post, _route);
@@ -123,7 +128,7 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints.Rules.V1
             // Arrange
             var invalidRequestDto = new
             {
-                // AppliedBonusKeys intentionally missing
+                PerformingCharacterKey = "gordon"
             };
 
             using var request = new HttpRequestMessage(HttpMethod.Post, _route);
@@ -136,6 +141,56 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints.Rules.V1
             // Assert
             var problem = await ProblemDetailsAssertions.AssertBadRequestAsync(response, "Request validation failed.");
             ProblemDetailsAssertions.AssertValidationErrors(problem, nameof(CalculateRescueTargetRequestDto.PresentDisasterBonusKeys));
+        }
+
+        [Fact]
+        public async Task CalculateRescueTarget_WhenPerformingCharacterMissing_ReturnsBadRequest()
+        {
+            // Arrange
+            var invalidRequestDto = new
+            {
+                PresentDisasterBonusKeys = new[]
+                {
+                    "podvehicle:mobilecrane",
+                    "podvehicle:domo"
+                }
+            };
+
+            using var request = new HttpRequestMessage(HttpMethod.Post, _route);
+            request.Headers.Add("X-API-Version", ApiVersion.ToString());
+            request.Content = JsonContent.Create(invalidRequestDto);
+
+            // Act
+            using var response = await _client.SendAsync(request);
+
+            // Assert
+            var problem = await ProblemDetailsAssertions.AssertBadRequestAsync(response, "Request validation failed.");
+            ProblemDetailsAssertions.AssertValidationErrors(problem, nameof(CalculateRescueTargetRequestDto.PerformingCharacterKey));
+        }
+
+        [Fact]
+        public async Task CalculateRescueTarget_WhenPerformingCharacterInvalid_ReturnsBadRequest()
+        {
+            // Arrange
+            var invalidRequestDto = new CalculateRescueTargetRequestDto
+            {
+                PresentDisasterBonusKeys = new[]
+                {
+                    "podvehicle:mobilecrane",
+                    "podvehicle:domo"
+                },
+                PerformingCharacterKey = "invalid-character"
+            };
+
+            using var request = new HttpRequestMessage(HttpMethod.Post, _route);
+            request.Headers.Add("X-API-Version", ApiVersion.ToString());
+            request.Content = JsonContent.Create(invalidRequestDto);
+
+            // Act
+            using var response = await _client.SendAsync(request);
+
+            // Assert
+            await ProblemDetailsAssertions.AssertBadRequestAsync(response, "Bad request.");
         }
 
         [Fact]

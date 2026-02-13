@@ -18,7 +18,8 @@ namespace ThunderbirdsBoardGameEngine.Api.UnitTests.Controllers.Rules.V1
 
             var request = new CalculateRescueTargetRequestDto
             {
-                PresentDisasterBonusKeys = []
+                PresentDisasterBonusKeys = [],
+                PerformingCharacterKey = "lady-penelope"
             };
 
             var mediator = Substitute.For<IMediator>();

@@ -14,7 +14,7 @@ namespace ThunderbirdsBoardGameEngine.UI.UnitTests.Services
         public async Task CalculateRescueTargetAsync_WhenResponseIsSuccessful_ReturnsCalculateRescueTargetResponseDto()
         {
             // Arrange
-            var (disasterCardCode, presentBonusKeys) = CreateRequestParameters();
+            var (disasterCardCode, presentBonusKeys, performingCharacterKey) = CreateRequestParameters();
 
             var expectedResponse = new CalculateRescueTargetResponseDto
             {
@@ -30,7 +30,7 @@ namespace ThunderbirdsBoardGameEngine.UI.UnitTests.Services
             var service = CreateRescueService(rescueClient);
 
             // Act
-            var result = await service.CalculateRescueTargetAsync(disasterCardCode, presentBonusKeys);
+            var result = await service.CalculateRescueTargetAsync(disasterCardCode, presentBonusKeys, performingCharacterKey);
 
             // Assert
             Assert.NotNull(result);
@@ -38,7 +38,8 @@ namespace ThunderbirdsBoardGameEngine.UI.UnitTests.Services
 
             var expectedRequest = new CalculateRescueTargetRequestDto
             {
-                PresentDisasterBonusKeys = presentBonusKeys
+                PresentDisasterBonusKeys = presentBonusKeys,
+                PerformingCharacterKey = performingCharacterKey
             };
 
             await rescueClient.Received(1)
@@ -52,7 +53,7 @@ namespace ThunderbirdsBoardGameEngine.UI.UnitTests.Services
         public async Task CalculateRescueTargetAsync_WhenResponseIsNotSuccessful_ReturnsNull()
         {
             // Arrange
-            var (disasterCardCode, presentBonusKeys) = CreateRequestParameters();
+            var (disasterCardCode, presentBonusKeys, performingCharacterKey) = CreateRequestParameters();
 
             var apiResult = ApiResult<CalculateRescueTargetResponseDto>.Failure("Error", HttpStatusCode.BadRequest);
 
@@ -61,19 +62,21 @@ namespace ThunderbirdsBoardGameEngine.UI.UnitTests.Services
             var service = CreateRescueService(rescueClient);
 
             // Act
-            var result = await service.CalculateRescueTargetAsync(disasterCardCode, presentBonusKeys);
+            var result = await service.CalculateRescueTargetAsync(disasterCardCode, presentBonusKeys, performingCharacterKey);
 
             // Assert
             Assert.Null(result);
         }
 
-        private static (string, IReadOnlyCollection<string>) CreateRequestParameters()
+        private static (string, IReadOnlyCollection<string>, string) CreateRequestParameters()
         {
             var disasterCardCode = "DISASTER_001";
 
             var presentBonusKeys = new[] { "BONUS_001", "BONUS_002" };
 
-            return (disasterCardCode, presentBonusKeys);
+            var performingCharacterKey = "CHARACTER_001";
+
+            return (disasterCardCode, presentBonusKeys, performingCharacterKey);
         }
 
         private static IRescueClient CreateRescueClient(ApiResult<CalculateRescueTargetResponseDto> apiResult)

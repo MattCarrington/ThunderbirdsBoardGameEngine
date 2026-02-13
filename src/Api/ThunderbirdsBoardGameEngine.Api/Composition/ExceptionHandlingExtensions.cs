@@ -8,6 +8,7 @@ namespace ThunderbirdsBoardGameEngine.Api.Composition
         {
             // Order: specific → fallback
             services.AddExceptionHandler<NotFoundExceptionHandler>();
+            services.AddExceptionHandler<BadRequestExceptionHandler>();
             services.AddExceptionHandler<CatalogDataAccessExceptionHandler>();
             services.AddExceptionHandler<ApplicationValidationExceptionHandler>();
             services.AddExceptionHandler<DomainValidationExceptionHandler>();

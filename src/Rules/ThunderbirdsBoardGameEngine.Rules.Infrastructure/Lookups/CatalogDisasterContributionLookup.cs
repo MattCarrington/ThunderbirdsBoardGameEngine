@@ -7,7 +7,7 @@ using ThunderbirdsBoardGameEngine.Rules.Domain.Rescue;
 
 namespace ThunderbirdsBoardGameEngine.Rules.Infrastructure.Lookups
 {
-    public sealed class CatalogDisasterContributionLookup : IDisasterContributionLookup
+    internal sealed class CatalogDisasterContributionLookup : IDisasterContributionLookup
     {
         private readonly IDisasterCardReferenceSource _disasterCardReferenceSource;
 
@@ -22,8 +22,9 @@ namespace ThunderbirdsBoardGameEngine.Rules.Infrastructure.Lookups
 
             return new DisasterContribution
             (
-                DifficultyNumber: disasterCard.DifficultyNumber,
-                AvailableBonuses: disasterCard.BonusConditions.Select(ProjectBonus).ToList()
+                difficultyNumber: disasterCard.DifficultyNumber,
+                availableBonuses: disasterCard.BonusConditions.Select(ProjectBonus).ToList(),
+                rescueType: disasterCard.RescueType
             );
         }
 

@@ -1,6 +1,7 @@
 ﻿using ThunderbirdsBoardGameEngine.Catalog.Domain.Entities;
 using ThunderbirdsBoardGameEngine.Catalog.Domain.Enums;
 using ThunderbirdsBoardGameEngine.PublishedLanguage.DisasterBonus;
+using ThunderbirdsBoardGameEngine.PublishedLanguage.Enums;
 using ThunderbirdsBoardGameEngine.TestUtils.xUnit.ClassData;
 using Xunit;
 

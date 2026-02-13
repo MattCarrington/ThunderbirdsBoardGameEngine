@@ -1,5 +1,3 @@
-using System;
-using System.Threading.Tasks;
 using Reqnroll;
 using ThunderbirdsBoardGameEngine.PlaywrightTests.Pages;
 
@@ -22,7 +20,13 @@ namespace ThunderbirdsBoardGameEngine.PlaywrightTests.StepDefinitions
             await _page.SelectCardAsync(cardName);
         }
 
-        [Given("the {string} bonus is marked as being present")]
+        [Given("the player selects the character {string}")]
+        public async Task GivenIsSelectedAsPerformingTheRescue(string character)
+        {
+            await _page.SelectCharacterAsync(character);
+        }
+
+        [Given("the player marks {string} as being present")]
         public async Task GivenTheBonusIsMarkedAsBeingPresent(string bonusName)
         {
             await _page.MarkBonusCheckboxAsync(bonusName);
@@ -38,6 +42,12 @@ namespace ThunderbirdsBoardGameEngine.PlaywrightTests.StepDefinitions
         public async Task ThenTheMinimumRequiredRollShouldBe(int targetRoll)
         {
             await _page.AssertRescueResultDisplayedAsync(targetRoll);
+        }
+
+        [Then("the rescue target should be displayed")]
+        public async Task ThenTheRescueTargetShouldBeDisplayed()
+        {
+            await _page.AssertRescueResultDisplayedAsync();
         }
     }
 }

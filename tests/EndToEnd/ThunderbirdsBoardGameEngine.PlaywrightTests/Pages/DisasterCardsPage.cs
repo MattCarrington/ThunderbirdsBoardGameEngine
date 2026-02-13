@@ -12,7 +12,7 @@ namespace ThunderbirdsBoardGameEngine.PlaywrightTests.Pages
 
         private IPage Page => _ui.Page;
 
-        private ILocator Dropdown => Page.Locator("#disasterSelect");
+        private ILocator DisasterCardDropdown => Page.Locator("#disasterSelect");
 
         private ILocator DetailsContainer => Page.GetByTestId("details");
 
@@ -33,7 +33,13 @@ namespace ThunderbirdsBoardGameEngine.PlaywrightTests.Pages
 
         public async Task SelectCardAsync(string cardName)
         {
-            await Dropdown.SelectOptionAsync(new SelectOptionValue { Label = cardName });
+            await DisasterCardDropdown.SelectOptionAsync(new SelectOptionValue { Label = cardName });
+        }
+
+        public async Task SelectCharacterAsync(string characterName)
+        {
+            var dropdown = Page.Locator("#characterSelect");
+            await dropdown.SelectOptionAsync(new SelectOptionValue { Label = characterName });
         }
 
         public async Task MarkBonusCheckboxAsync(string bonusName)
@@ -62,10 +68,10 @@ namespace ThunderbirdsBoardGameEngine.PlaywrightTests.Pages
 
         public async Task AssertHasAnyCardsAsync()
         {
-            Assert.True(await Dropdown.IsVisibleAsync(),
+            Assert.True(await DisasterCardDropdown.IsVisibleAsync(),
                 "Expected the card dropdown to be visible.");
 
-            var optionTexts = await Dropdown.Locator("option").AllInnerTextsAsync();
+            var optionTexts = await DisasterCardDropdown.Locator("option").AllInnerTextsAsync();
             var realCards = optionTexts.Where(t => !t.StartsWith("--")).ToList();
 
             Assert.NotEmpty(realCards);
@@ -88,6 +94,17 @@ namespace ThunderbirdsBoardGameEngine.PlaywrightTests.Pages
             await Assertions.Expect(result).ToBeVisibleAsync();
             await Assertions.Expect(result)
                 .ToContainTextAsync($"Target Number: {expectedTarget}");
+        }
+
+        public async Task AssertRescueResultDisplayedAsync()
+        {
+            var result = Page.GetByTestId("rescue-calculation-result");
+
+            await Assertions.Expect(result).ToBeVisibleAsync();
+            await Assertions.Expect(result)
+                .ToContainTextAsync($"Target Number:");
+            await Assertions.Expect(result)
+                .ToContainTextAsync($"Total Bonus:");
         }
     }
 }

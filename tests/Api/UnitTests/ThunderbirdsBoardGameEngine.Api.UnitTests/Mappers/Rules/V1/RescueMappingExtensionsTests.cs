@@ -1,4 +1,6 @@
-﻿using ThunderbirdsBoardGameEngine.Api.Mappers.Rules.V1;
+﻿using ThunderbirdsBoardGameEngine.Api.Exceptions;
+using ThunderbirdsBoardGameEngine.Api.Mappers.Rules.V1;
+using ThunderbirdsBoardGameEngine.PublishedLanguage.Characters;
 using ThunderbirdsBoardGameEngine.PublishedLanguage.DisasterBonus;
 using ThunderbirdsBoardGameEngine.Rules.Application.Rescue.CalculateRescueTarget;
 using ThunderbirdsBoardGameEngine.Rules.Contracts.Dtos.Rescue.CalculateRescueTarget.V1;
@@ -17,7 +19,8 @@ namespace ThunderbirdsBoardGameEngine.Api.UnitTests.Mappers.Rules.V1
 
             var dto = new CalculateRescueTargetRequestDto
             {
-                PresentDisasterBonusKeys = ["character:alan", "thunderbird:thunderbird4", "podvehicle.domo"]
+                PresentDisasterBonusKeys = ["character:alan", "thunderbird:thunderbird4", "podvehicle.domo"],
+                PerformingCharacterKey = "alan"
             };
 
             // Act
@@ -25,11 +28,29 @@ namespace ThunderbirdsBoardGameEngine.Api.UnitTests.Mappers.Rules.V1
 
             // Assert
             Assert.Equal(disasterCardCode, result.DisasterCardCode);
-            Assert.Equal(dto.PresentDisasterBonusKeys.Select(k => new DisasterBonusKey(k)), result.RescueCalculationInput.PresentDisasterBonusKeys);
+            Assert.Equal(dto.PresentDisasterBonusKeys.Select(k => new DisasterBonusKey(k)), result.PresentDisasterBonusKeys);
+            Assert.Equal(CharacterCode.Alan, result.PerformingCharacter);
         }
 
         [Fact]
-        public void ToDto_ValidResponse_ReturnsExpectedDto()
+        public void ToQuery_InvalidCharacterKey_ThrowsBadRequestException()
+        {
+            // Arrange
+            var disasterCardCode = new CardCode("card-code-123");
+
+            var dto = new CalculateRescueTargetRequestDto
+            {
+                PresentDisasterBonusKeys = ["character:alan", "thunderbird:thunderbird4", "podvehicle.domo"],
+                PerformingCharacterKey = "invalid-character"
+            };
+
+            // Act & Assert
+            var exception = Assert.Throws<BadRequestException>(() => dto.ToQuery(disasterCardCode.ToString()));
+            Assert.Equal("Invalid character code: invalid-character", exception.Message);
+        }
+
+        [Fact]
+        public void ToDto_DisasterCardAppliedBonuses_ReturnsExpectedDto()
         {
             // Arrange
             var response = new CalculateRescueTargetResponse
@@ -38,8 +59,18 @@ namespace ThunderbirdsBoardGameEngine.Api.UnitTests.Mappers.Rules.V1
                 TotalBonus: 3,
                 AppliedBonuses:
                 [
-                    new DisasterBonus(new DisasterBonusKey("character:alan"), 2),
-                    new DisasterBonus(new DisasterBonusKey("thunderbird:thunderbird4"), 1)
+                    new AppliedRescueModifier
+                    {
+                        Key = "character:alan",
+                        Value = 2,
+                        SourceType = SourceType.DisasterCard
+                    },
+                    new AppliedRescueModifier
+                    {
+                        Key = "thunderbird:thunderbird4",
+                        Value = 1,
+                        SourceType = SourceType.DisasterCard
+                    }
                 ]
             );
 
@@ -53,12 +84,44 @@ namespace ThunderbirdsBoardGameEngine.Api.UnitTests.Mappers.Rules.V1
 
             var expectedBonus = new List<AppliedDisasterBonusDto>
             {
-                new() { BonusKey = "character:alan", BonusValue = 2 },
-                new() { BonusKey = "thunderbird:thunderbird4", BonusValue = 1 }
+                new() { BonusKey = "character:alan", BonusValue = 2, SourceType = "disaster-card" },
+                new() { BonusKey = "thunderbird:thunderbird4", BonusValue = 1, SourceType = "disaster-card" }
             };
 
             Assert.All(result.AppliedDisasterBonuses, expected =>
                 Assert.Contains(expected, expectedBonus));
+        }
+
+        [Fact]
+        public void ToDto_CharacterAbilityAppliedBonus_ReturnsExpectedDto()
+        {
+            // Arrange
+            var response = new CalculateRescueTargetResponse
+            (
+                TargetNumber: 12,
+                TotalBonus: 3,
+                AppliedBonuses:
+                [
+                    new AppliedRescueModifier
+                    {
+                        Key = "alan",
+                        Value = 2,
+                        SourceType = SourceType.CharacterAbility
+                    }
+                ]
+            );
+
+            // Act
+            var result = response.ToDto();
+
+            // Assert
+            Assert.Equal(response.TargetNumber, result.TargetNumber);
+            Assert.Equal(response.TotalBonus, result.TotalBonus);
+
+            var bonus = Assert.Single(result.AppliedDisasterBonuses);
+            Assert.Equal("alan", bonus.BonusKey);
+            Assert.Equal(2, bonus.BonusValue);
+            Assert.Equal("character-ability", bonus.SourceType);
         }
     }
 }

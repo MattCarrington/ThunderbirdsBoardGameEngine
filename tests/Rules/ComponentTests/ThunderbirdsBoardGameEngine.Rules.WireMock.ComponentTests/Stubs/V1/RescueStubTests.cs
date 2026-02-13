@@ -2,16 +2,11 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using System.Net.Http.Json;
-using System.Reflection;
-using System.Reflection.PortableExecutable;
 using ThunderbirdsBoardGameEngine.Rules.Contracts.Dtos.Rescue.CalculateRescueTarget.V1;
 using ThunderbirdsBoardGameEngine.Rules.WireMock.Stubs.V1;
 using ThunderbirdsBoardGameEngine.TestUtils.xUnit.Fixtures;
 using WireMock.Server;
 using Xunit;
-using Xunit.Abstractions;
-using Xunit.Sdk;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace ThunderbirdsBoardGameEngine.Rules.WireMock.ComponentTests.Stubs.V1
 {
@@ -198,7 +193,11 @@ namespace ThunderbirdsBoardGameEngine.Rules.WireMock.ComponentTests.Stubs.V1
 
         private static CalculateRescueTargetRequestDto CreateValidRescueTargetRequest()
         {
-            return new CalculateRescueTargetRequestDto { PresentDisasterBonusKeys = Array.Empty<string>() };
+            return new CalculateRescueTargetRequestDto
+            {
+                PresentDisasterBonusKeys = [],
+                PerformingCharacterKey = "scott"
+            };
         }
 
         private static CalculateRescueTargetResponseDto CreateValidRescueTargetResponse()
@@ -207,20 +206,21 @@ namespace ThunderbirdsBoardGameEngine.Rules.WireMock.ComponentTests.Stubs.V1
             {
                 TargetNumber = 10,
                 TotalBonus = 2,
-                AppliedDisasterBonuses = new List<AppliedDisasterBonusDto>()
-                {
+                AppliedDisasterBonuses =
+                [
                     new()
                     {
                         BonusKey = "SampleBonusKey",
-                        BonusValue = 1
+                        BonusValue = 1,
+                        SourceType = "disaster-card"
                     },
                     new()
                     {
                         BonusKey = "AnotherSampleBonusKey",
-                        BonusValue = 1
-
+                        BonusValue = 1,
+                        SourceType = "disaster-card"
                     }
-                }
+                ]
             };
         }
     }

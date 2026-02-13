@@ -24,8 +24,8 @@ namespace ThunderbirdsBoardGameEngine.PlaywrightTests.Features
         
         private static string[] featureTags = ((string[])(null));
         
-        private static global::Reqnroll.FeatureInfo featureInfo = new global::Reqnroll.FeatureInfo(new global::System.Globalization.CultureInfo("en-US"), "Features", "CalculateRescueBonus", "\tThe rescue target is calculated based on the selected disaster\r\n\tand any applica" +
-                "ble rescue bonuses.", global::Reqnroll.ProgrammingLanguage.CSharp, featureTags, InitializeCucumberMessages());
+        private static global::Reqnroll.FeatureInfo featureInfo = new global::Reqnroll.FeatureInfo(new global::System.Globalization.CultureInfo("en-US"), "Features", "CalculateRescueBonus", "\tThe rescue target is calculated based on the selected disaster\r\n\tand the player’" +
+                "s selected inputs.", global::Reqnroll.ProgrammingLanguage.CSharp, featureTags, InitializeCucumberMessages());
         
         private global::Xunit.Abstractions.ITestOutputHelper _testOutputHelper;
         
@@ -134,15 +134,15 @@ namespace ThunderbirdsBoardGameEngine.PlaywrightTests.Features
             await this.TestTearDownAsync();
         }
         
-        [global::Xunit.SkippableFactAttribute(DisplayName="Calculate Rescue Bonus for a Disaster")]
+        [global::Xunit.SkippableFactAttribute(DisplayName="Player can calculate a rescue target")]
         [global::Xunit.TraitAttribute("FeatureTitle", "CalculateRescueBonus")]
-        [global::Xunit.TraitAttribute("Description", "Calculate Rescue Bonus for a Disaster")]
-        public async global::System.Threading.Tasks.Task CalculateRescueBonusForADisaster()
+        [global::Xunit.TraitAttribute("Description", "Player can calculate a rescue target")]
+        public async global::System.Threading.Tasks.Task PlayerCanCalculateARescueTarget()
         {
             string[] tagsOfScenario = ((string[])(null));
             global::System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new global::System.Collections.Specialized.OrderedDictionary();
             string pickleIndex = "0";
-            global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("Calculate Rescue Bonus for a Disaster", null, tagsOfScenario, argumentsOfScenario, featureTags, pickleIndex);
+            global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("Player can calculate a rescue target", null, tagsOfScenario, argumentsOfScenario, featureTags, pickleIndex);
             string[] tagsOfRule = ((string[])(null));
             global::Reqnroll.RuleInfo ruleInfo = null;
 #line 6
@@ -159,16 +159,19 @@ this.ScenarioInitialize(scenarioInfo, ruleInfo);
  await testRunner.GivenAsync("the disaster \"Terror in New York City\" is selected", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
 #line hidden
 #line 8
- await testRunner.AndAsync("the \"Virgil\" bonus is marked as being present", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
+ await testRunner.AndAsync("the player selects the character \"Gordon\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
 #line 9
- await testRunner.AndAsync("the \"Firefly\" bonus is marked as being present", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
+ await testRunner.AndAsync("the player marks \"Virgil\" as being present", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
 #line 10
- await testRunner.WhenAsync("the rescue target is calculated", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+ await testRunner.AndAsync("the player marks \"Firefly\" as being present", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
 #line 11
- await testRunner.ThenAsync("the minimum required roll should be 6", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+ await testRunner.WhenAsync("the rescue target is calculated", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+#line hidden
+#line 12
+ await testRunner.ThenAsync("the rescue target should be displayed", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
             }
             await this.ScenarioCleanupAsync();

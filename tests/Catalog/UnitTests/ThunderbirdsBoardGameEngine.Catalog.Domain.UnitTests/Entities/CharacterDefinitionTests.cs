@@ -1,5 +1,6 @@
 ﻿using ThunderbirdsBoardGameEngine.Catalog.Domain.Entities;
 using ThunderbirdsBoardGameEngine.Catalog.Domain.Enums;
+using ThunderbirdsBoardGameEngine.PublishedLanguage.Enums;
 using Xunit;
 
 namespace ThunderbirdsBoardGameEngine.Catalog.Domain.UnitTests.Entities

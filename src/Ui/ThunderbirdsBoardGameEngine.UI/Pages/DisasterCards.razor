@@ -2,6 +2,7 @@
 @using ThunderbirdsBoardGameEngine.Catalog.Contracts.Dtos.V1
 @using ThunderbirdsBoardGameEngine.Rules.Contracts.Dtos.Rescue.CalculateRescueTarget.V1
 @using ThunderbirdsBoardGameEngine.UI.Interfaces
+@inject ICharactersService CharactersService
 @inject IDisasterCardService DisasterCardService
 @inject IRescueService RescueService
 
@@ -78,9 +79,24 @@ else
                     </ul>
                 }
 
+                @if (characters is not null && characters.Count > 0)
+                {
+                    <label for="characterSelect" class="form-label">Character</label>
+                    <select id="characterSelect" class="form-select"
+                            @bind-Value="selectedCharacterCode"
+                            @bind-Value:event="onchange" required>
+                        <option value="">-- Select a character --</option>
+
+                        @foreach (var c in characters)
+                        {
+                            <option value="@c.Key">@c.DisplayName</option> @* users see display; value is key *@ 
+                                }
+                    </select>
+                }
+
                 <button class="btn btn-primary mt-3"
                         data-testid="calculate-button"
-                        disabled="@isCalculating"
+                        disabled="@IsCalculateDisabled"
                         @onclick="CalculateRescueTarget">
                     Calculate Rescue Target
                 </button>
@@ -109,15 +125,22 @@ else
 @code {
     private IReadOnlyList<DisasterCardDto>? cards;
     private IReadOnlyDictionary<int, DisasterCardDto>? cardsDictionary;
+    private IReadOnlyList<CharacterDto>? characters;
 
     private int? selectedCardId;
     private DisasterCardDto? selectedCard;
+    private string? selectedCharacterCode;
 
     private readonly HashSet<string> selectedBonusKeys = new();
 
     private CalculateRescueTargetResponseDto? calculationResult;
     private bool calculationFailed;
     private bool isCalculating;
+
+    private bool IsCalculateDisabled =>
+        isCalculating
+        || selectedCard is null
+        || string.IsNullOrWhiteSpace(selectedCharacterCode);
 
     protected override async Task OnInitializedAsync()
     {
@@ -132,6 +155,8 @@ else
             dict.TryAdd(c.Id, c);
 
         cardsDictionary = dict;
+
+        characters = await CharactersService.GetAllAsync();
     }
 
     private int? SelectedCardId
@@ -176,6 +201,11 @@ else
             return;
         }
 
+        if (string.IsNullOrWhiteSpace(selectedCharacterCode))
+        {
+            return;
+        }
+
         isCalculating = true;
         calculationFailed = false;
         calculationResult = null;
@@ -185,7 +215,8 @@ else
             calculationResult =
                 await RescueService.CalculateRescueTargetAsync(
                     selectedCard.Code,
-                    selectedBonusKeys);
+                    selectedBonusKeys,
+                    selectedCharacterCode);
 
             calculationFailed = calculationResult is null;
         }

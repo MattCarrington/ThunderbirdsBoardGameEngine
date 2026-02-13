@@ -4,6 +4,7 @@ using ThunderbirdsBoardGameEngine.Catalog.Domain.Exceptions;
 using ThunderbirdsBoardGameEngine.Catalog.Format.Dtos;
 using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Helpers;
 using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Interfaces;
+using ThunderbirdsBoardGameEngine.PublishedLanguage.Enums;
 
 namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Mappers
 {
