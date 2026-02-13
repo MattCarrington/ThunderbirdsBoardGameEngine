@@ -1,5 +1,3 @@
-using System;
-using System.Threading.Tasks;
 using Reqnroll;
 using ThunderbirdsBoardGameEngine.PlaywrightTests.Pages;
 
@@ -47,7 +45,7 @@ namespace ThunderbirdsBoardGameEngine.PlaywrightTests.StepDefinitions
         }
 
         [Then("the rescue target should be displayed")]
-        public async Task ThenTheRescueTarrgetShouldBeDisplayed()
+        public async Task ThenTheRescueTargetShouldBeDisplayed()
         {
             await _page.AssertRescueResultDisplayedAsync();
         }
