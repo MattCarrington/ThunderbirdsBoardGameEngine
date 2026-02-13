@@ -29,6 +29,10 @@ namespace ThunderbirdsBoardGameEngine.UI.IntegrationTests.Pages
             _host.Reset();
             _host.DisasterCardStub().RegisterMissingHeaderGuard();
             _host.DisasterCardStub().RegisterIncorrectHeaderGuard();
+            _host.CharactersStub().RegisterMissingHeaderGuard();
+            _host.CharactersStub().RegisterIncorrectHeaderGuard();
+            _host.RescueStub().RegisterMissingHeaderGuard();
+            _host.RescueStub().RegisterIncorrectHeaderGuard();
 
             var configuration = new ConfigurationBuilder()
                 .AddInMemoryCollection(new Dictionary<string, string?>
