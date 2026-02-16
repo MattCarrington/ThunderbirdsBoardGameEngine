@@ -42,7 +42,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Domain.Entities
             string name,
             CardCode code,
             int difficultyNumber,
-            BoardLocation location,
+            Enums.BoardLocation location,
             RescueType rescueType,
             IEnumerable<BonusCondition> bonusConditions,
             IEnumerable<RewardOption> rewardOptions)

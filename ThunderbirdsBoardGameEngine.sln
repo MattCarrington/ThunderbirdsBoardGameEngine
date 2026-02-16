@@ -103,6 +103,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThunderbirdsBoardGameEngine
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThunderbirdsBoardGameEngine.Rules.Client.ComponentTests", "tests\Rules\ComponentTests\ThunderbirdsBoardGameEngine.Rules.Client.ComponentTests\ThunderbirdsBoardGameEngine.Rules.Client.ComponentTests.csproj", "{4483F3C7-8186-4E09-94CA-B90B720455C1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThunderbirdsBoardGameEngine.ReferenceData", "src\ReferenceData\ThunderbirdsBoardGameEngine.ReferenceData\ThunderbirdsBoardGameEngine.ReferenceData.csproj", "{0F5BF05C-D523-4E7A-A5ED-1B0C911B7D7A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -285,6 +287,10 @@ Global
 		{4483F3C7-8186-4E09-94CA-B90B720455C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4483F3C7-8186-4E09-94CA-B90B720455C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4483F3C7-8186-4E09-94CA-B90B720455C1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0F5BF05C-D523-4E7A-A5ED-1B0C911B7D7A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0F5BF05C-D523-4E7A-A5ED-1B0C911B7D7A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0F5BF05C-D523-4E7A-A5ED-1B0C911B7D7A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0F5BF05C-D523-4E7A-A5ED-1B0C911B7D7A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
