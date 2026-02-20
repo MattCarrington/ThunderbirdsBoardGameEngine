@@ -2,5 +2,12 @@
 
 namespace ThunderbirdsBoardGameEngine.ReferenceData.Model
 {
-    public sealed record ReferenceDisasterReward(BonusToken? Token);
+    public abstract record ReferenceDisasterReward
+    {
+        private ReferenceDisasterReward() { }
+
+        public sealed record SpecificToken(BonusToken Token) : ReferenceDisasterReward;
+
+        public sealed record PlayerChoice : ReferenceDisasterReward;
+    }
 }
