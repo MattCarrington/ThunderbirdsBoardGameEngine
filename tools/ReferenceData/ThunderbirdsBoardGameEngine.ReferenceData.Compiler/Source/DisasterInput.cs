@@ -1,0 +1,10 @@
+﻿namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Source
+{
+    public sealed record DisasterInput(
+        string Name,
+        int DifficultyNumber,
+        string Location,
+        string RescueType,
+        IReadOnlyList<BonusInput> Bonuses,
+        IReadOnlyList<string> Rewards);
+}

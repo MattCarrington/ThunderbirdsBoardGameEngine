@@ -1,0 +1,1188 @@
+{
+  "schemaVersion": 1,
+  "contentVersion": "1.0.0",
+  "characterDefinitions": [],
+  "disasterDefinitions": [
+    {
+      "code": {
+        "value": "signal-from-sigma"
+      },
+      "title": "Signal From Sigma",
+      "difficultyNumber": 8,
+      "location": {
+        "value": "asteroid-belt"
+      },
+      "rescueType": "space",
+      "bonuses": [
+        {
+          "key": {
+            "value": "john"
+          },
+          "value": 1
+        },
+        {
+          "key": {
+            "value": "transmitter-truck"
+          },
+          "value": 3,
+          "location": {
+            "value": "south-america"
+          }
+        }
+      ],
+      "rewards": [
+        {
+          "rewardType": "playerChoice"
+        }
+      ]
+    },
+    {
+      "code": {
+        "value": "the-mighty-atom"
+      },
+      "title": "The Mighty Atom",
+      "difficultyNumber": 10,
+      "location": {
+        "value": "africa"
+      },
+      "rescueType": "land",
+      "bonuses": [
+        {
+          "key": {
+            "value": "thunderbird-4"
+          },
+          "value": 3
+        },
+        {
+          "key": {
+            "value": "lady-penelope"
+          },
+          "value": 2
+        }
+      ],
+      "rewards": [
+        {
+          "rewardType": "specificToken",
+          "token": "technology"
+        },
+        {
+          "rewardType": "playerChoice"
+        }
+      ]
+    },
+    {
+      "code": {
+        "value": "the-moon-mine-menace"
+      },
+      "title": "The Moon Mine Menace",
+      "difficultyNumber": 8,
+      "location": {
+        "value": "the-moon"
+      },
+      "rescueType": "space",
+      "bonuses": [
+        {
+          "key": {
+            "value": "gordon"
+          },
+          "value": 2
+        },
+        {
+          "key": {
+            "value": "john"
+          },
+          "value": 2
+        }
+      ],
+      "rewards": [
+        {
+          "rewardType": "playerChoice"
+        }
+      ]
+    },
+    {
+      "code": {
+        "value": "the-perils-of-penelope"
+      },
+      "title": "The Perils of Penelope",
+      "difficultyNumber": 7,
+      "location": {
+        "value": "europe"
+      },
+      "rescueType": "land",
+      "bonuses": [
+        {
+          "key": {
+            "value": "lady-penelope"
+          },
+          "value": 2
+        },
+        {
+          "key": {
+            "value": "fab-1"
+          },
+          "value": 1
+        }
+      ],
+      "rewards": [
+        {
+          "rewardType": "specificToken",
+          "token": "determination"
+        }
+      ]
+    },
+    {
+      "code": {
+        "value": "towering-ocean"
+      },
+      "title": "Towering Ocean",
+      "difficultyNumber": 8,
+      "location": {
+        "value": "south-pacific"
+      },
+      "rescueType": "sea",
+      "bonuses": [
+        {
+          "key": {
+            "value": "thunderbird-3"
+          },
+          "value": 2
+        },
+        {
+          "key": {
+            "value": "thunderbird-4"
+          },
+          "value": 2
+        }
+      ],
+      "rewards": [
+        {
+          "rewardType": "playerChoice"
+        }
+      ]
+    },
+    {
+      "code": {
+        "value": "30-minutes-after-noon"
+      },
+      "title": "30 Minutes After Noon",
+      "difficultyNumber": 8,
+      "location": {
+        "value": "north-america"
+      },
+      "rescueType": "land",
+      "bonuses": [
+        {
+          "key": {
+            "value": "thunderbird-1"
+          },
+          "value": 2
+        },
+        {
+          "key": {
+            "value": "laser-cutter"
+          },
+          "value": 3,
+          "location": {
+            "value": "europe"
+          }
+        }
+      ],
+      "rewards": [
+        {
+          "rewardType": "playerChoice"
+        }
+      ]
+    },
+    {
+      "code": {
+        "value": "city-of-fire"
+      },
+      "title": "City of Fire",
+      "difficultyNumber": 8,
+      "location": {
+        "value": "north-america"
+      },
+      "rescueType": "land",
+      "bonuses": [
+        {
+          "key": {
+            "value": "firefly"
+          },
+          "value": 3
+        },
+        {
+          "key": {
+            "value": "mole"
+          },
+          "value": 2
+        }
+      ],
+      "rewards": [
+        {
+          "rewardType": "playerChoice"
+        }
+      ]
+    },
+    {
+      "code": {
+        "value": "rockquake"
+      },
+      "title": "Rockquake",
+      "difficultyNumber": 10,
+      "location": {
+        "value": "australia"
+      },
+      "rescueType": "air",
+      "bonuses": [
+        {
+          "key": {
+            "value": "recovery-vehicles"
+          },
+          "value": 2
+        },
+        {
+          "key": {
+            "value": "excavator"
+          },
+          "value": 2
+        },
+        {
+          "key": {
+            "value": "virgil"
+          },
+          "value": 2
+        }
+      ],
+      "rewards": [
+        {
+          "rewardType": "specificToken",
+          "token": "intelligence"
+        },
+        {
+          "rewardType": "playerChoice"
+        }
+      ]
+    },
+    {
+      "code": {
+        "value": "flight-path-to-fear"
+      },
+      "title": "Flight Path to Fear",
+      "difficultyNumber": 9,
+      "location": {
+        "value": "asia"
+      },
+      "rescueType": "air",
+      "bonuses": [
+        {
+          "key": {
+            "value": "laser-cutter"
+          },
+          "value": 2
+        },
+        {
+          "key": {
+            "value": "elevator-cars"
+          },
+          "value": 2
+        },
+        {
+          "key": {
+            "value": "john"
+          },
+          "value": 2
+        }
+      ],
+      "rewards": [
+        {
+          "rewardType": "specificToken",
+          "token": "technology"
+        },
+        {
+          "rewardType": "specificToken",
+          "token": "logistics"
+        }
+      ]
+    },
+    {
+      "code": {
+        "value": "sun-probe"
+      },
+      "title": "Sun Probe",
+      "difficultyNumber": 11,
+      "location": {
+        "value": "the-sun"
+      },
+      "rescueType": "space",
+      "bonuses": [
+        {
+          "key": {
+            "value": "scott"
+          },
+          "value": 2
+        },
+        {
+          "key": {
+            "value": "virgil"
+          },
+          "value": 2,
+          "location": {
+            "value": "asia"
+          }
+        },
+        {
+          "key": {
+            "value": "transmitter-truck"
+          },
+          "value": 3,
+          "location": {
+            "value": "asia"
+          }
+        }
+      ],
+      "rewards": [
+        {
+          "rewardType": "specificToken",
+          "token": "logistics"
+        },
+        {
+          "rewardType": "playerChoice"
+        }
+      ]
+    },
+    {
+      "code": {
+        "value": "the-uninvited"
+      },
+      "title": "The Uninvited",
+      "difficultyNumber": 8,
+      "location": {
+        "value": "africa"
+      },
+      "rescueType": "land",
+      "bonuses": [
+        {
+          "key": {
+            "value": "scott"
+          },
+          "value": 2
+        },
+        {
+          "key": {
+            "value": "gordon"
+          },
+          "value": 2
+        }
+      ],
+      "rewards": [
+        {
+          "rewardType": "playerChoice"
+        }
+      ]
+    },
+    {
+      "code": {
+        "value": "the-cham-cham"
+      },
+      "title": "The Cham-Cham",
+      "difficultyNumber": 7,
+      "location": {
+        "value": "europe"
+      },
+      "rescueType": "air",
+      "bonuses": [
+        {
+          "key": {
+            "value": "lady-penelope"
+          },
+          "value": 2
+        },
+        {
+          "key": {
+            "value": "thunderbird-1"
+          },
+          "value": 2,
+          "location": {
+            "value": "north-america"
+          }
+        }
+      ],
+      "rewards": [
+        {
+          "rewardType": "specificToken",
+          "token": "intelligence"
+        }
+      ]
+    },
+    {
+      "code": {
+        "value": "trapped-in-the-sky"
+      },
+      "title": "Trapped in the Sky",
+      "difficultyNumber": 11,
+      "location": {
+        "value": "europe"
+      },
+      "rescueType": "air",
+      "bonuses": [
+        {
+          "key": {
+            "value": "elevator-cars"
+          },
+          "value": 3
+        },
+        {
+          "key": {
+            "value": "fab-1"
+          },
+          "value": 2
+        },
+        {
+          "key": {
+            "value": "thunderbird-1"
+          },
+          "value": 2
+        }
+      ],
+      "rewards": [
+        {
+          "rewardType": "specificToken",
+          "token": "intelligence"
+        },
+        {
+          "rewardType": "playerChoice"
+        }
+      ]
+    },
+    {
+      "code": {
+        "value": "terror-in-new-york-city"
+      },
+      "title": "Terror in New York City",
+      "difficultyNumber": 11,
+      "location": {
+        "value": "north-america"
+      },
+      "rescueType": "sea",
+      "bonuses": [
+        {
+          "key": {
+            "value": "firefly"
+          },
+          "value": 3
+        },
+        {
+          "key": {
+            "value": "virgil"
+          },
+          "value": 2
+        },
+        {
+          "key": {
+            "value": "thunderbird-4"
+          },
+          "value": 2
+        }
+      ],
+      "rewards": [
+        {
+          "rewardType": "specificToken",
+          "token": "teamwork"
+        },
+        {
+          "rewardType": "playerChoice"
+        }
+      ]
+    },
+    {
+      "code": {
+        "value": "end-of-the-road"
+      },
+      "title": "End of the Road",
+      "difficultyNumber": 9,
+      "location": {
+        "value": "asia"
+      },
+      "rescueType": "land",
+      "bonuses": [
+        {
+          "key": {
+            "value": "alan"
+          },
+          "value": 2
+        },
+        {
+          "key": {
+            "value": "thunderbird-1"
+          },
+          "value": 2
+        }
+      ],
+      "rewards": [
+        {
+          "rewardType": "specificToken",
+          "token": "intelligence"
+        },
+        {
+          "rewardType": "specificToken",
+          "token": "teamwork"
+        }
+      ]
+    },
+    {
+      "code": {
+        "value": "attack-of-the-alligators"
+      },
+      "title": "Attack of the Alligators",
+      "difficultyNumber": 10,
+      "location": {
+        "value": "south-america"
+      },
+      "rescueType": "sea",
+      "bonuses": [
+        {
+          "key": {
+            "value": "thunderbird-4"
+          },
+          "value": 3
+        },
+        {
+          "key": {
+            "value": "virgil"
+          },
+          "value": 2
+        }
+      ],
+      "rewards": [
+        {
+          "rewardType": "specificToken",
+          "token": "teamwork"
+        },
+        {
+          "rewardType": "playerChoice"
+        }
+      ]
+    },
+    {
+      "code": {
+        "value": "atlantic-inferno"
+      },
+      "title": "Atlantic Inferno",
+      "difficultyNumber": 8,
+      "location": {
+        "value": "south-atlantic"
+      },
+      "rescueType": "sea",
+      "bonuses": [
+        {
+          "key": {
+            "value": "thunderbird-4"
+          },
+          "value": 2
+        },
+        {
+          "key": {
+            "value": "scott"
+          },
+          "value": 3,
+          "location": {
+            "value": "south-pacific"
+          }
+        }
+      ],
+      "rewards": [
+        {
+          "rewardType": "playerChoice"
+        }
+      ]
+    },
+    {
+      "code": {
+        "value": "the-duchess-assignment"
+      },
+      "title": "The Duchess Assignment",
+      "difficultyNumber": 8,
+      "location": {
+        "value": "north-america"
+      },
+      "rescueType": "land",
+      "bonuses": [
+        {
+          "key": {
+            "value": "domo"
+          },
+          "value": 3
+        },
+        {
+          "key": {
+            "value": "mole"
+          },
+          "value": 2
+        }
+      ],
+      "rewards": [
+        {
+          "rewardType": "playerChoice"
+        }
+      ]
+    },
+    {
+      "code": {
+        "value": "pit-of-peril"
+      },
+      "title": "Pit of Peril",
+      "difficultyNumber": 11,
+      "location": {
+        "value": "africa"
+      },
+      "rescueType": "land",
+      "bonuses": [
+        {
+          "key": {
+            "value": "recovery-vehicles"
+          },
+          "value": 3
+        },
+        {
+          "key": {
+            "value": "mole"
+          },
+          "value": 2
+        },
+        {
+          "key": {
+            "value": "scott"
+          },
+          "value": 2
+        }
+      ],
+      "rewards": [
+        {
+          "rewardType": "specificToken",
+          "token": "determination"
+        },
+        {
+          "rewardType": "playerChoice"
+        }
+      ]
+    },
+    {
+      "code": {
+        "value": "sunrise-on-mars"
+      },
+      "title": "Sunrise on Mars",
+      "difficultyNumber": 10,
+      "location": {
+        "value": "mars"
+      },
+      "rescueType": "space",
+      "bonuses": [
+        {
+          "key": {
+            "value": "lady-penelope"
+          },
+          "value": 2
+        },
+        {
+          "key": {
+            "value": "gordon"
+          },
+          "value": 2
+        },
+        {
+          "key": {
+            "value": "john"
+          },
+          "value": 2,
+          "location": {
+            "value": "geo-stationary-orbit"
+          }
+        }
+      ],
+      "rewards": [
+        {
+          "rewardType": "specificToken",
+          "token": "technology"
+        },
+        {
+          "rewardType": "playerChoice"
+        }
+      ]
+    },
+    {
+      "code": {
+        "value": "ricochet"
+      },
+      "title": "Ricochet",
+      "difficultyNumber": 9,
+      "location": {
+        "value": "geo-stationary-orbit"
+      },
+      "rescueType": "space",
+      "bonuses": [
+        {
+          "key": {
+            "value": "scott"
+          },
+          "value": 2
+        },
+        {
+          "key": {
+            "value": "alan"
+          },
+          "value": 2
+        }
+      ],
+      "rewards": [
+        {
+          "rewardType": "specificToken",
+          "token": "teamwork"
+        },
+        {
+          "rewardType": "specificToken",
+          "token": "technology"
+        }
+      ]
+    },
+    {
+      "code": {
+        "value": "bound-for-venus"
+      },
+      "title": "Bound for Venus",
+      "difficultyNumber": 8,
+      "location": {
+        "value": "venus"
+      },
+      "rescueType": "space",
+      "bonuses": [
+        {
+          "key": {
+            "value": "john"
+          },
+          "value": 2
+        },
+        {
+          "key": {
+            "value": "alan"
+          },
+          "value": 2
+        }
+      ],
+      "rewards": [
+        {
+          "rewardType": "playerChoice"
+        }
+      ]
+    },
+    {
+      "code": {
+        "value": "the-imposters"
+      },
+      "title": "The Imposters",
+      "difficultyNumber": 9,
+      "location": {
+        "value": "geo-stationary-orbit"
+      },
+      "rescueType": "space",
+      "bonuses": [
+        {
+          "key": {
+            "value": "scott"
+          },
+          "value": 2
+        },
+        {
+          "key": {
+            "value": "fab-1"
+          },
+          "value": 3,
+          "location": {
+            "value": "north-america"
+          }
+        }
+      ],
+      "rewards": [
+        {
+          "rewardType": "specificToken",
+          "token": "logistics"
+        },
+        {
+          "rewardType": "specificToken",
+          "token": "determination"
+        }
+      ]
+    },
+    {
+      "code": {
+        "value": "desperate-intruder"
+      },
+      "title": "Desperate Intruder",
+      "difficultyNumber": 8,
+      "location": {
+        "value": "africa"
+      },
+      "rescueType": "sea",
+      "bonuses": [
+        {
+          "key": {
+            "value": "thunderbird-1"
+          },
+          "value": 2
+        },
+        {
+          "key": {
+            "value": "thunderbird-4"
+          },
+          "value": 2
+        }
+      ],
+      "rewards": [
+        {
+          "rewardType": "playerChoice"
+        }
+      ]
+    },
+    {
+      "code": {
+        "value": "edge-of-impact"
+      },
+      "title": "Edge of Impact",
+      "difficultyNumber": 8,
+      "location": {
+        "value": "europe"
+      },
+      "rescueType": "air",
+      "bonuses": [
+        {
+          "key": {
+            "value": "thunderizer"
+          },
+          "value": 3
+        },
+        {
+          "key": {
+            "value": "alan"
+          },
+          "value": 2
+        }
+      ],
+      "rewards": [
+        {
+          "rewardType": "playerChoice"
+        }
+      ]
+    },
+    {
+      "code": {
+        "value": "operation-crash-dive"
+      },
+      "title": "Operation Crash Dive",
+      "difficultyNumber": 9,
+      "location": {
+        "value": "north-atlantic"
+      },
+      "rescueType": "sea",
+      "bonuses": [
+        {
+          "key": {
+            "value": "thunderbird-1"
+          },
+          "value": 2
+        },
+        {
+          "key": {
+            "value": "alan"
+          },
+          "value": 2,
+          "location": {
+            "value": "geo-stationary-orbit"
+          }
+        }
+      ],
+      "rewards": [
+        {
+          "rewardType": "specificToken",
+          "token": "technology"
+        },
+        {
+          "rewardType": "specificToken",
+          "token": "logistics"
+        }
+      ]
+    },
+    {
+      "code": {
+        "value": "path-of-destruction"
+      },
+      "title": "Path of Destruction",
+      "difficultyNumber": 9,
+      "location": {
+        "value": "south-america"
+      },
+      "rescueType": "land",
+      "bonuses": [
+        {
+          "key": {
+            "value": "mobile-crane"
+          },
+          "value": 3
+        },
+        {
+          "key": {
+            "value": "lady-penelope"
+          },
+          "value": 3,
+          "location": {
+            "value": "europe"
+          }
+        }
+      ],
+      "rewards": [
+        {
+          "rewardType": "specificToken",
+          "token": "logistics"
+        },
+        {
+          "rewardType": "specificToken",
+          "token": "determination"
+        }
+      ]
+    },
+    {
+      "code": {
+        "value": "target-tiger-one"
+      },
+      "title": "Target: Tiger One",
+      "difficultyNumber": 9,
+      "location": {
+        "value": "north-pacific"
+      },
+      "rescueType": "air",
+      "bonuses": [
+        {
+          "key": {
+            "value": "alan"
+          },
+          "value": 2
+        },
+        {
+          "key": {
+            "value": "fab-1"
+          },
+          "value": 3,
+          "location": {
+            "value": "asia"
+          }
+        }
+      ],
+      "rewards": [
+        {
+          "rewardType": "specificToken",
+          "token": "determination"
+        },
+        {
+          "rewardType": "specificToken",
+          "token": "intelligence"
+        }
+      ]
+    },
+    {
+      "code": {
+        "value": "bolt-from-the-blue"
+      },
+      "title": "Bolt from the Blue",
+      "difficultyNumber": 8,
+      "location": {
+        "value": "indian-ocean"
+      },
+      "rescueType": "air",
+      "bonuses": [
+        {
+          "key": {
+            "value": "john"
+          },
+          "value": 2
+        },
+        {
+          "key": {
+            "value": "gordon"
+          },
+          "value": 2,
+          "location": {
+            "value": "australia"
+          }
+        }
+      ],
+      "rewards": [
+        {
+          "rewardType": "playerChoice"
+        }
+      ]
+    },
+    {
+      "code": {
+        "value": "danger-at-ocean-deep"
+      },
+      "title": "Danger at Ocean Deep",
+      "difficultyNumber": 7,
+      "location": {
+        "value": "europe"
+      },
+      "rescueType": "sea",
+      "bonuses": [
+        {
+          "key": {
+            "value": "john"
+          },
+          "value": 2
+        },
+        {
+          "key": {
+            "value": "thunderbird-1"
+          },
+          "value": 2,
+          "location": {
+            "value": "north-pacific"
+          }
+        }
+      ],
+      "rewards": [
+        {
+          "rewardType": "specificToken",
+          "token": "technology"
+        }
+      ]
+    },
+    {
+      "code": {
+        "value": "the-longest-day"
+      },
+      "title": "The Longest Day",
+      "difficultyNumber": 7,
+      "location": {
+        "value": "mercury"
+      },
+      "rescueType": "space",
+      "bonuses": [
+        {
+          "key": {
+            "value": "gordon"
+          },
+          "value": 2
+        },
+        {
+          "key": {
+            "value": "lady-penelope"
+          },
+          "value": 1
+        }
+      ],
+      "rewards": [
+        {
+          "rewardType": "specificToken",
+          "token": "logistics"
+        }
+      ]
+    },
+    {
+      "code": {
+        "value": "martian-invasion"
+      },
+      "title": "Martian Invasion",
+      "difficultyNumber": 7,
+      "location": {
+        "value": "north-america"
+      },
+      "rescueType": "land",
+      "bonuses": [
+        {
+          "key": {
+            "value": "excavator"
+          },
+          "value": 3
+        }
+      ],
+      "rewards": [
+        {
+          "rewardType": "specificToken",
+          "token": "teamwork"
+        }
+      ]
+    },
+    {
+      "code": {
+        "value": "day-of-disaster"
+      },
+      "title": "Day of Disaster",
+      "difficultyNumber": 9,
+      "location": {
+        "value": "europe"
+      },
+      "rescueType": "sea",
+      "bonuses": [
+        {
+          "key": {
+            "value": "thunderbird-4"
+          },
+          "value": 3
+        },
+        {
+          "key": {
+            "value": "fab-1"
+          },
+          "value": 2
+        }
+      ],
+      "rewards": [
+        {
+          "rewardType": "specificToken",
+          "token": "determination"
+        },
+        {
+          "rewardType": "specificToken",
+          "token": "teamwork"
+        }
+      ]
+    },
+    {
+      "code": {
+        "value": "they-call-him-mr-x"
+      },
+      "title": "They Call Him Mr. X",
+      "difficultyNumber": 8,
+      "location": {
+        "value": "asia"
+      },
+      "rescueType": "air",
+      "bonuses": [
+        {
+          "key": {
+            "value": "mobile-crane"
+          },
+          "value": 2
+        },
+        {
+          "key": {
+            "value": "thunderizer"
+          },
+          "value": 2
+        },
+        {
+          "key": {
+            "value": "domo"
+          },
+          "value": 2
+        }
+      ],
+      "rewards": [
+        {
+          "rewardType": "playerChoice"
+        }
+      ]
+    }
+  ],
+  "locationDefinitions": [],
+  "podVehicleDefinitions": [],
+  "thunderbirdDefinitions": []
+}
