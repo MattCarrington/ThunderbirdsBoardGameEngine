@@ -30,7 +30,7 @@
 
             foreach (var row in rows)
             {
-                var name = row.Cell(columnMap["Name"]).GetString();
+                var name = row.Cell(columnMap["DisplayName"]).GetString();
                 var difficulty = row.Cell(columnMap["Difficulty Number"]).GetValue<int>();
                 var location = row.Cell(columnMap["Location"]).GetString();
                 var rescueType = row.Cell(columnMap["Rescue Type"]).GetString();

@@ -6,11 +6,11 @@ var source = new ExcelReferenceDataSource("DisasterCards.xlsx");
 
 var context = source.Load();
 
-var validator = new SnapshotValidator();
-validator.Validate(context);
-
 var builder = new SnapshotBuilder();
 var snapshot = builder.Build(context);
+
+var validator = new SnapshotValidator();
+validator.Validate(snapshot);
 
 JsonSnapshotWriter.Write(snapshot);
 

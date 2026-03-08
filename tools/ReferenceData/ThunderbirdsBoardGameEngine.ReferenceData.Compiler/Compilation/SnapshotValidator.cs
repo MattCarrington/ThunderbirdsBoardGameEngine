@@ -1,46 +1,40 @@
-﻿namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Compilation
+﻿using ThunderbirdsBoardGameEngine.ReferenceData.Model;
+
+namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Compilation
 {
     public sealed class SnapshotValidator
     {
-        public void Validate(CompilationContext context)
+        public void Validate(ReferenceDataSnapshot snapshot)
         {
-            foreach (var disaster in context.Disasters)
-            {
-                if (string.IsNullOrWhiteSpace(disaster.Name))
-                {
-                    throw new Exception("Disaster name cannot be empty.");
-                }
-
-                if (disaster.DifficultyNumber <= 0)
-                {
-                    throw new Exception($"Invalid difficulty for {disaster.Name}");
-                }
-
-                if (!disaster.Bonuses.Any())
-                {
-                    throw new Exception($"{disaster.Name} must have at least one bonus.");
-                }
-
-                if (!disaster.Rewards.Any())
-                {
-                    throw new Exception($"{disaster.Name} must have at least one reward.");
-                }
-            }
-
-            EnsureUniqueDisasterNames(context);
+            EnsureUniqueDisasterCodes(snapshot);
+            EnsureUniqueDisasterNames(snapshot);
         }
 
-        private static void EnsureUniqueDisasterNames(CompilationContext context)
+        private static void EnsureUniqueDisasterCodes(ReferenceDataSnapshot snapshot)
         {
-            var duplicates = context.Disasters
-                .GroupBy(d => d.Name)
+            var duplicates = snapshot.DisasterDefinitions
+                .GroupBy(d => d.Code.Value)
                 .Where(g => g.Count() > 1)
                 .Select(g => g.Key)
                 .ToList();
 
-            if (duplicates.Any())
+            if (duplicates.Count != 0)
             {
-                throw new Exception($"Duplicate disasters found: {string.Join(", ", duplicates)}");
+                throw new ReferenceDataCompilationException($"Duplicate disaster codes found: {string.Join(", ", duplicates)}");
+            }
+        }
+
+        private static void EnsureUniqueDisasterNames(ReferenceDataSnapshot snapshot)
+        {
+            var duplicates = snapshot.DisasterDefinitions
+                .GroupBy(d => d.DisplayName)
+                .Where(g => g.Count() > 1)
+                .Select(g => g.Key)
+                .ToList();
+
+            if (duplicates.Count != 0)
+            {
+                throw new ReferenceDataCompilationException($"Duplicate disaster names found: {string.Join(", ", duplicates)}");
             }
         }
     }
