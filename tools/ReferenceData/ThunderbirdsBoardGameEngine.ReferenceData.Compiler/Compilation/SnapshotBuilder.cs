@@ -23,6 +23,13 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Compilation
                 )
             ).ToList();
 
+            var locations = context.Locations.Select(l =>
+                new ReferenceLocationDefinition(
+                    new LocationCode(StringHelpers.Slugify(l.Name)),
+                    StringHelpers.NormalizeWhitespace(l.Name, nameof(l.Name))
+                )
+            ).ToList();
+
             return new ReferenceDataSnapshot(
                 SchemaVersion: 1,
                 ContentVersion: "1.0.0",
@@ -30,7 +37,7 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Compilation
                 CharacterDefinitions: new List<ReferenceCharacterDefinition>(),
                 ThunderbirdDefinitions: new List<ReferenceThunderbirdDefinition>(),
                 PodVehicleDefinitions: new List<ReferencePodVehicleDefinition>(),
-                LocationDefinitions: new List<ReferenceLocationDefinition>()
+                LocationDefinitions: locations
             );
         }
 

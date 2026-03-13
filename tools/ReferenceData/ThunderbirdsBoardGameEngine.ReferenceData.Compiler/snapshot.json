@@ -1182,7 +1182,116 @@
       ]
     }
   ],
-  "locationDefinitions": [],
+  "locationDefinitions": [
+    {
+      "code": {
+        "value": "europe"
+      },
+      "displayName": "Europe"
+    },
+    {
+      "code": {
+        "value": "asia"
+      },
+      "displayName": "Asia"
+    },
+    {
+      "code": {
+        "value": "africa"
+      },
+      "displayName": "Africa"
+    },
+    {
+      "code": {
+        "value": "north-america"
+      },
+      "displayName": "North America"
+    },
+    {
+      "code": {
+        "value": "south-america"
+      },
+      "displayName": "South America"
+    },
+    {
+      "code": {
+        "value": "north-pacific"
+      },
+      "displayName": "North Pacific"
+    },
+    {
+      "code": {
+        "value": "south-pacific"
+      },
+      "displayName": "South Pacific"
+    },
+    {
+      "code": {
+        "value": "north-atlantic"
+      },
+      "displayName": "North Atlantic"
+    },
+    {
+      "code": {
+        "value": "south-atlantic"
+      },
+      "displayName": "South Atlantic"
+    },
+    {
+      "code": {
+        "value": "indian-ocean"
+      },
+      "displayName": "Indian Ocean"
+    },
+    {
+      "code": {
+        "value": "australia"
+      },
+      "displayName": "Australia"
+    },
+    {
+      "code": {
+        "value": "geo-stationary-orbit"
+      },
+      "displayName": "Geo-Stationary Orbit"
+    },
+    {
+      "code": {
+        "value": "venus"
+      },
+      "displayName": "Venus"
+    },
+    {
+      "code": {
+        "value": "mercury"
+      },
+      "displayName": "Mercury"
+    },
+    {
+      "code": {
+        "value": "the-sun"
+      },
+      "displayName": "The Sun"
+    },
+    {
+      "code": {
+        "value": "the-moon"
+      },
+      "displayName": "The Moon"
+    },
+    {
+      "code": {
+        "value": "mars"
+      },
+      "displayName": "Mars"
+    },
+    {
+      "code": {
+        "value": "asteroid-belt"
+      },
+      "displayName": "Asteroid Belt"
+    }
+  ],
   "podVehicleDefinitions": [],
   "thunderbirdDefinitions": []
 }

@@ -2,7 +2,7 @@
 using ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Output;
 using ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Source;
 
-var source = new ExcelReferenceDataSource("DisasterCards.xlsx");
+var source = new ExcelReferenceDataSource("ReferenceData.xlsx");
 
 var context = source.Load();
 

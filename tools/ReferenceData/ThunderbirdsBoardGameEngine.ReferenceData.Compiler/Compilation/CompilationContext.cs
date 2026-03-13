@@ -4,6 +4,8 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Compilation
 {
     public sealed class CompilationContext
     {
-        public IReadOnlyList<DisasterInput> Disasters { get; init; } = [];
+        public List<DisasterInput> Disasters { get; init; } = new();
+
+        public List<LocationInput> Locations { get; init; } = new();
     }
 }

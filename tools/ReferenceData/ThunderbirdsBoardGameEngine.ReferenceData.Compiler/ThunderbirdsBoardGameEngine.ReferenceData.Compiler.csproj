@@ -8,11 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="DisasterCards.xlsx" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Include="DisasterCards.xlsx">
+    <Content Include="ReferenceData.xlsx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
