@@ -1,14 +1,15 @@
-﻿namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Source
-{
-    using ClosedXML.Excel;
-    using ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Compilation;
-    using ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Source.Readers;
+﻿using ClosedXML.Excel;
+using ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Compilation;
+using ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Source.Readers;
 
+namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Source
+{
     public sealed class ExcelReferenceDataSource : IReferenceDataSource
     {
         private readonly string _path;
         private readonly ExcelDisasterCardReader _disasterReader = new();
         private readonly ExcelLocationReader _locationReader = new();
+        private readonly ExcelCharacterReader _characterReader = new();
 
         public ExcelReferenceDataSource(string path)
         {
@@ -21,11 +22,13 @@
 
             var disasters = _disasterReader.ReadFrom(workbook.Worksheet("Disaster Cards"));
             var locations = _locationReader.ReadFrom(workbook.Worksheet("Locations"));
+            var characters = _characterReader.ReadFrom(workbook.Worksheet("Characters"));
 
             return new CompilationContext
             {
                 Disasters = disasters,
-                Locations = locations
+                Locations = locations,
+                Characters = characters
             };
         }
     }

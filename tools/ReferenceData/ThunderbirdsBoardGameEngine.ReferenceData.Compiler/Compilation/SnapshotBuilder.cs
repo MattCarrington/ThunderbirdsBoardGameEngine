@@ -30,14 +30,16 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Compilation
                 )
             ).ToList();
 
+            var characterDefinitions = BuildCharacterDefinitions(context.Characters);
+
             return new ReferenceDataSnapshot(
                 SchemaVersion: 1,
                 ContentVersion: "1.0.0",
                 DisasterDefinitions: disasters,
-                CharacterDefinitions: new List<ReferenceCharacterDefinition>(),
+                LocationDefinitions: locations,
+                CharacterDefinitions: characterDefinitions,
                 ThunderbirdDefinitions: new List<ReferenceThunderbirdDefinition>(),
-                PodVehicleDefinitions: new List<ReferencePodVehicleDefinition>(),
-                LocationDefinitions: locations
+                PodVehicleDefinitions: new List<ReferencePodVehicleDefinition>()
             );
         }
 
@@ -60,6 +62,30 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Compilation
                     : new ReferenceDisasterReward.SpecificToken(
                         Enum.Parse<BonusToken>(r, true))
             ).ToList();
+        }
+
+        private static List<ReferenceCharacterDefinition> BuildCharacterDefinitions(
+            List<CharacterInput> characterInputs)
+        {
+            return characterInputs
+                .Select(input =>
+                {
+                    var code = new CharacterCode(StringHelpers.Slugify(input.Name));
+
+                    // Build optional rescue bonus (null for Lady Penelope)
+                    ReferenceCharacterRescueBonus? rescueBonus = null;
+                    if (!string.IsNullOrWhiteSpace(input.RescueType) && input.BonusValue.HasValue)
+                    {
+                        var rescueType = Enum.Parse<RescueType>(input.RescueType, ignoreCase: true);
+                        rescueBonus = new ReferenceCharacterRescueBonus(rescueType, input.BonusValue.Value);
+                    }
+
+                    return new ReferenceCharacterDefinition(
+                        code,
+                        input.Name,
+                        rescueBonus);
+                })
+                .ToList();
         }
     }
 }

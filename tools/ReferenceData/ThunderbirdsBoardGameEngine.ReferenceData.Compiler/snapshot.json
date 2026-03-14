@@ -1,7 +1,64 @@
 {
   "schemaVersion": 1,
   "contentVersion": "1.0.0",
-  "characterDefinitions": [],
+  "characterDefinitions": [
+    {
+      "code": {
+        "value": "scott"
+      },
+      "displayName": "Scott",
+      "rescueBonus": {
+        "rescueType": "air",
+        "value": 2
+      }
+    },
+    {
+      "code": {
+        "value": "virgil"
+      },
+      "displayName": "Virgil",
+      "rescueBonus": {
+        "rescueType": "land",
+        "value": 2
+      }
+    },
+    {
+      "code": {
+        "value": "john"
+      },
+      "displayName": "John",
+      "rescueBonus": {
+        "rescueType": "space",
+        "value": 2
+      }
+    },
+    {
+      "code": {
+        "value": "gordon"
+      },
+      "displayName": "Gordon",
+      "rescueBonus": {
+        "rescueType": "sea",
+        "value": 3
+      }
+    },
+    {
+      "code": {
+        "value": "alan"
+      },
+      "displayName": "Alan",
+      "rescueBonus": {
+        "rescueType": "space",
+        "value": 2
+      }
+    },
+    {
+      "code": {
+        "value": "lady-penelope"
+      },
+      "displayName": "Lady Penelope"
+    }
+  ],
   "disasterDefinitions": [
     {
       "code": {

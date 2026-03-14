@@ -8,6 +8,7 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Compilation
         public void Validate(ReferenceDataSnapshot snapshot)
         {
             EnsureLocationDefinitionsValid(snapshot);
+            EnsureCharacterDefinitionsValid(snapshot);
             EnsureDisasterDefinitionsValid(snapshot);
         }
 
@@ -15,6 +16,12 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Compilation
         {
             EnsureUniqueValues(snapshot.LocationDefinitions, l => l.Code.Value, "location codes");
             EnsureUniqueValues(snapshot.LocationDefinitions, l => l.DisplayName, "location names");
+        }
+
+        private static void EnsureCharacterDefinitionsValid(ReferenceDataSnapshot snapshot)
+        {
+            EnsureUniqueValues(snapshot.CharacterDefinitions, c => c.Code.Value, "character codes");
+            EnsureUniqueValues(snapshot.CharacterDefinitions, c => c.DisplayName, "character names");
         }
 
         private static void EnsureDisasterDefinitionsValid(ReferenceDataSnapshot snapshot)
@@ -40,8 +47,7 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Compilation
 
             if (duplicates.Count != 0)
             {
-                throw new ReferenceDataCompilationException(
-                    $"Duplicate {entityDescription} found: {string.Join(", ", duplicates)}");
+                throw new ReferenceDataCompilationException($"Duplicate {entityDescription} found: {string.Join(", ", duplicates)}");
             }
         }
 
@@ -63,19 +69,16 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Compilation
             {
                 foreach (var bonus in disaster.Bonuses)
                 {
-                    if (bonus.Location is LocationCode bonusLocation &&
-                        !validLocationCodes.Contains(bonusLocation))  // ← Added NOT operator
+                    if (bonus.Location is LocationCode bonusLocation && !validLocationCodes.Contains(bonusLocation))
                     {
-                        invalidBonuses.Add(
-                            $"{disaster.DisplayName} - Bonus '{bonus.Key.Value}' (location: {bonusLocation.Value})");
+                        invalidBonuses.Add($"{disaster.DisplayName} - Bonus '{bonus.Key.Value}' (location: {bonusLocation.Value})");
                     }
                 }
             }
 
             if (invalidBonuses.Count != 0)
             {
-                throw new ReferenceDataCompilationException(
-                    $"Bonuses reference non-existent locations: {string.Join(", ", invalidBonuses)}");
+                throw new ReferenceDataCompilationException($"Bonuses reference non-existent locations: {string.Join(", ", invalidBonuses)}");
             }
         }
 
@@ -89,8 +92,7 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Compilation
 
             if (invalidLocationCodes.Count != 0)
             {
-                throw new ReferenceDataCompilationException(
-                    $"Invalid location codes found in disaster definitions: {string.Join(", ", invalidLocationCodes)}");
+                throw new ReferenceDataCompilationException($"Invalid location codes found in disaster definitions: {string.Join(", ", invalidLocationCodes)}");
             }
         }
     }

@@ -7,5 +7,7 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Compilation
         public List<DisasterInput> Disasters { get; init; } = new();
 
         public List<LocationInput> Locations { get; init; } = new();
+
+        public List<CharacterInput> Characters { get; init; } = new();
     }
 }
