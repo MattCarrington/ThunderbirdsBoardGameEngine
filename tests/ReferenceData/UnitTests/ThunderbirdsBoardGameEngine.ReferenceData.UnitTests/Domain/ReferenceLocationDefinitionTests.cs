@@ -19,7 +19,7 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.UnitTests.Domain
             // Act
             var result = new ReferenceLocationDefinition(
                 code: ValidLocationCode,
-                displayName: ValidDisplayName                
+                displayName: ValidDisplayName
             );
 
             // Assert
