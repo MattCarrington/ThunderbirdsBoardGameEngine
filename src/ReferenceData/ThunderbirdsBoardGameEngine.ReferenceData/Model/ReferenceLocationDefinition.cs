@@ -1,9 +1,19 @@
-﻿using ThunderbirdsBoardGameEngine.PublishedLanguage.Identities;
-using ThunderbirdsBoardGameEngine.ReferenceData.Identities;
+﻿using ThunderbirdsBoardGameEngine.ReferenceData.Identities;
 
 namespace ThunderbirdsBoardGameEngine.ReferenceData.Model
 {
-    public sealed record ReferenceLocationDefinition(
-        LocationCode Code,
-        string DisplayName);
+    public sealed record ReferenceLocationDefinition
+    {
+        public LocationCode Code { get; }
+
+        public string DisplayName { get; }
+
+        public ReferenceLocationDefinition(LocationCode code, string displayName)
+        {
+            ArgumentNullException.ThrowIfNullOrWhiteSpace(displayName);
+
+            Code = code;
+            DisplayName = displayName;
+        }
+    }
 }
