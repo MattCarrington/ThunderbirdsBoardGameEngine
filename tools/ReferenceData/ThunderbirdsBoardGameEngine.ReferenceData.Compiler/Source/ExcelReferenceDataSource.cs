@@ -10,6 +10,7 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Source
         private readonly ExcelDisasterCardReader _disasterReader = new();
         private readonly ExcelLocationReader _locationReader = new();
         private readonly ExcelCharacterReader _characterReader = new();
+        private readonly ExcelThunderbirdReader _thunderbirdReader = new();
 
         public ExcelReferenceDataSource(string path)
         {
@@ -23,12 +24,14 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Source
             var disasters = _disasterReader.ReadFrom(workbook.Worksheet("Disaster Cards"));
             var locations = _locationReader.ReadFrom(workbook.Worksheet("Locations"));
             var characters = _characterReader.ReadFrom(workbook.Worksheet("Characters"));
+            var thunderbirds = _thunderbirdReader.ReadFrom(workbook.Worksheet("Thunderbirds"));
 
             return new CompilationContext
             {
                 Disasters = disasters,
                 Locations = locations,
-                Characters = characters
+                Characters = characters,
+                Thunderbirds = thunderbirds
             };
         }
     }

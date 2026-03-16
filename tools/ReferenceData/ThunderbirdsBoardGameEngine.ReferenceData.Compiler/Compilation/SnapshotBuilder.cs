@@ -32,13 +32,15 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Compilation
 
             var characterDefinitions = BuildCharacterDefinitions(context.Characters);
 
+            var thunderbirdDefinitions = BuildThunderbirdDefinitions(context.Thunderbirds);
+
             return new ReferenceDataSnapshot(
                 SchemaVersion: 1,
                 ContentVersion: "1.0.0",
                 DisasterDefinitions: disasters,
                 LocationDefinitions: locations,
                 CharacterDefinitions: characterDefinitions,
-                ThunderbirdDefinitions: new List<ReferenceThunderbirdDefinition>(),
+                ThunderbirdDefinitions: thunderbirdDefinitions,
                 PodVehicleDefinitions: new List<ReferencePodVehicleDefinition>()
             );
         }
@@ -85,6 +87,16 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Compilation
                         input.Name,
                         rescueBonus);
                 })
+                .ToList();
+        }
+
+        private static List<ReferenceThunderbirdDefinition> BuildThunderbirdDefinitions(
+            List<ThunderbirdInput> thunderbirdInputs)
+        {
+            return thunderbirdInputs
+                .Select(input => new ReferenceThunderbirdDefinition(
+                    new ThunderbirdCode(StringHelpers.Slugify(input.Name)),
+                    StringHelpers.NormalizeWhitespace(input.Name, nameof(input.Name))))
                 .ToList();
         }
     }

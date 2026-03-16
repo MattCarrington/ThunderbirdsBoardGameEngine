@@ -10,6 +10,7 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Compilation
             EnsureLocationDefinitionsValid(snapshot);
             EnsureCharacterDefinitionsValid(snapshot);
             EnsureDisasterDefinitionsValid(snapshot);
+            EnsureThunderbirdDefinitionsValid(snapshot);
         }
 
         private static void EnsureLocationDefinitionsValid(ReferenceDataSnapshot snapshot)
@@ -32,6 +33,12 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Compilation
             var locations = new HashSet<LocationCode>(snapshot.LocationDefinitions.Select(l => l.Code));
 
             EnsureDisasterDefinitionLocationsValid(snapshot.DisasterDefinitions, locations);
+        }
+
+        private static void EnsureThunderbirdDefinitionsValid(ReferenceDataSnapshot snapshot)
+        {
+            EnsureUniqueValues(snapshot.ThunderbirdDefinitions, t => t.Code.Value, "thunderbird codes");
+            EnsureUniqueValues(snapshot.ThunderbirdDefinitions, t => t.DisplayName, "thunderbird names");
         }
 
         private static void EnsureUniqueValues<T>(

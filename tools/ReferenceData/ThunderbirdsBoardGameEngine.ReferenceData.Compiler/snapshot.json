@@ -1350,5 +1350,42 @@
     }
   ],
   "podVehicleDefinitions": [],
-  "thunderbirdDefinitions": []
+  "thunderbirdDefinitions": [
+    {
+      "code": {
+        "value": "thunderbird-1"
+      },
+      "displayName": "Thunderbird 1"
+    },
+    {
+      "code": {
+        "value": "thunderbird-2"
+      },
+      "displayName": "Thunderbird 2"
+    },
+    {
+      "code": {
+        "value": "thunderbird-3"
+      },
+      "displayName": "Thunderbird 3"
+    },
+    {
+      "code": {
+        "value": "thunderbird-4"
+      },
+      "displayName": "Thunderbird 4"
+    },
+    {
+      "code": {
+        "value": "thunderbird-5"
+      },
+      "displayName": "Thunderbird 5"
+    },
+    {
+      "code": {
+        "value": "fab-1"
+      },
+      "displayName": "FAB 1"
+    }
+  ]
 }
