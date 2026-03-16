@@ -9,8 +9,9 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Compilation
         {
             EnsureLocationDefinitionsValid(snapshot);
             EnsureCharacterDefinitionsValid(snapshot);
-            EnsureDisasterDefinitionsValid(snapshot);
             EnsureThunderbirdDefinitionsValid(snapshot);
+            EnsurePodVehicleDefinitionsValid(snapshot);
+            EnsureDisasterDefinitionsValid(snapshot);
         }
 
         private static void EnsureLocationDefinitionsValid(ReferenceDataSnapshot snapshot)
@@ -39,6 +40,12 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Compilation
         {
             EnsureUniqueValues(snapshot.ThunderbirdDefinitions, t => t.Code.Value, "thunderbird codes");
             EnsureUniqueValues(snapshot.ThunderbirdDefinitions, t => t.DisplayName, "thunderbird names");
+        }
+
+        private static void EnsurePodVehicleDefinitionsValid(ReferenceDataSnapshot snapshot)
+        {
+            EnsureUniqueValues(snapshot.PodVehicleDefinitions, v => v.Code.Value, "pod vehicle codes");
+            EnsureUniqueValues(snapshot.PodVehicleDefinitions, v => v.DisplayName, "pod vehicle names");
         }
 
         private static void EnsureUniqueValues<T>(

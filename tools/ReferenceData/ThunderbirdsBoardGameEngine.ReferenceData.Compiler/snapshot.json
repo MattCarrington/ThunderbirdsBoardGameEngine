@@ -1349,7 +1349,68 @@
       "displayName": "Asteroid Belt"
     }
   ],
-  "podVehicleDefinitions": [],
+  "podVehicleDefinitions": [
+    {
+      "code": {
+        "value": "mole"
+      },
+      "displayName": "Mole"
+    },
+    {
+      "code": {
+        "value": "firefly"
+      },
+      "displayName": "Firefly"
+    },
+    {
+      "code": {
+        "value": "laser-cutter"
+      },
+      "displayName": "Laser Cutter"
+    },
+    {
+      "code": {
+        "value": "recovery-vehicles"
+      },
+      "displayName": "Recovery Vehicles"
+    },
+    {
+      "code": {
+        "value": "domo"
+      },
+      "displayName": "DOMO"
+    },
+    {
+      "code": {
+        "value": "elevator-cars"
+      },
+      "displayName": "Elevator Cars"
+    },
+    {
+      "code": {
+        "value": "excavator"
+      },
+      "displayName": "Excavator"
+    },
+    {
+      "code": {
+        "value": "thunderizer"
+      },
+      "displayName": "Thunderizer"
+    },
+    {
+      "code": {
+        "value": "transmitter-truck"
+      },
+      "displayName": "Transmitter Truck"
+    },
+    {
+      "code": {
+        "value": "mobile-crane"
+      },
+      "displayName": "Mobile Crane"
+    }
+  ],
   "thunderbirdDefinitions": [
     {
       "code": {

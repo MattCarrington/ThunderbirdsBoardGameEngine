@@ -34,6 +34,8 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Compilation
 
             var thunderbirdDefinitions = BuildThunderbirdDefinitions(context.Thunderbirds);
 
+            var podVehicleDefinitions = BuildPodVehicleDefinitions(context.PodVehicles);
+
             return new ReferenceDataSnapshot(
                 SchemaVersion: 1,
                 ContentVersion: "1.0.0",
@@ -41,7 +43,7 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Compilation
                 LocationDefinitions: locations,
                 CharacterDefinitions: characterDefinitions,
                 ThunderbirdDefinitions: thunderbirdDefinitions,
-                PodVehicleDefinitions: new List<ReferencePodVehicleDefinition>()
+                PodVehicleDefinitions: podVehicleDefinitions
             );
         }
 
@@ -96,6 +98,16 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Compilation
             return thunderbirdInputs
                 .Select(input => new ReferenceThunderbirdDefinition(
                     new ThunderbirdCode(StringHelpers.Slugify(input.Name)),
+                    StringHelpers.NormalizeWhitespace(input.Name, nameof(input.Name))))
+                .ToList();
+        }
+
+        private static List<ReferencePodVehicleDefinition> BuildPodVehicleDefinitions(
+            List<PodVehicleInput> podVehicleInputs)
+        {
+            return podVehicleInputs
+                .Select(input => new ReferencePodVehicleDefinition(
+                    new PodVehicleCode(StringHelpers.Slugify(input.Name)),
                     StringHelpers.NormalizeWhitespace(input.Name, nameof(input.Name))))
                 .ToList();
         }
