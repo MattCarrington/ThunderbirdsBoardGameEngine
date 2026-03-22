@@ -15,31 +15,14 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.UnitTests.Compilati
             {
                 // Arrange
                 var validator = new SnapshotValidator();
-                var snapshot = new ReferenceDataSnapshot(
-                    SchemaVersion: 1,
-                    ContentVersion: "1.0.0",
-                    DisasterDefinitions: new List<ReferenceDisasterDefinition>
-                    {
-                        CreateDisaster("disaster-1", "Disaster 1", "location-1"),
-                        CreateDisaster("disaster-2", "Disaster 2", "location-1"),
-                        CreateDisaster("disaster-3", "Disaster 3", "location-2")
-                    },
-                    LocationDefinitions: new List<ReferenceLocationDefinition>
-                    {
-                        CreateLocation("location-1", "Location 1"),
-                        CreateLocation("location-2", "Location 2")
-                    },
-                    CharacterDefinitions: new List<ReferenceCharacterDefinition>(),
-                    ThunderbirdDefinitions: new List<ReferenceThunderbirdDefinition>(),
-                    PodVehicleDefinitions: new List<ReferencePodVehicleDefinition>()
-                );
+                var snapshot = CreateValidSnapshot();
 
                 // Act & Assert
                 validator.Validate(snapshot);
             }
 
             [Fact]
-            public void Validate_WhenDuplicateDisasterCodes_ThrowsReferenceDataCompilationException()
+            public void Validate_WhenDuplicateDisasterCodes_Throws()
             {
                 // Arrange
                 var validator = new SnapshotValidator();
@@ -48,26 +31,29 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.UnitTests.Compilati
                     ContentVersion: "1.0.0",
                     DisasterDefinitions: new List<ReferenceDisasterDefinition>
                     {
-                        CreateDisaster("duplicate-code", "Disaster 1", "location-1"),
-                        CreateDisaster("duplicate-code", "Disaster 2", "location-1")
+                        CreateDisaster("duplicate-code", "Disaster 1", "location-1", "character-1"),
+                        CreateDisaster("duplicate-code", "Disaster 2", "location-1", "character-1")
                     },
                     LocationDefinitions: new List<ReferenceLocationDefinition>
                     {
                         CreateLocation("location-1", "Location 1")
                     },
-                    CharacterDefinitions: new List<ReferenceCharacterDefinition>(),
+                    CharacterDefinitions: new List<ReferenceCharacterDefinition>
+                    {
+                        CreateCharacter("character-1", "Character 1")
+                    },
                     ThunderbirdDefinitions: new List<ReferenceThunderbirdDefinition>(),
                     PodVehicleDefinitions: new List<ReferencePodVehicleDefinition>()
                 );
 
                 // Act & Assert
-                var exception = Assert.Throws<ReferenceDataCompilationException>(() => validator.Validate(snapshot));
-                Assert.Contains("duplicate-code", exception.Message);
-                Assert.Contains("disaster codes", exception.Message);
+                var ex = Assert.Throws<ReferenceDataCompilationException>(() => validator.Validate(snapshot));
+                Assert.Contains("duplicate-code", ex.Message);
+                Assert.Contains("disaster codes", ex.Message);
             }
 
             [Fact]
-            public void Validate_WhenDuplicateDisasterNames_ThrowsReferenceDataCompilationException()
+            public void Validate_WhenDuplicateDisasterNames_Throws()
             {
                 // Arrange
                 var validator = new SnapshotValidator();
@@ -76,26 +62,29 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.UnitTests.Compilati
                     ContentVersion: "1.0.0",
                     DisasterDefinitions: new List<ReferenceDisasterDefinition>
                     {
-                        CreateDisaster("disaster-1", "Duplicate Name", "location-1"),
-                        CreateDisaster("disaster-2", "Duplicate Name", "location-1")
+                        CreateDisaster("disaster-1", "Duplicate Name", "location-1", "character-1"),
+                        CreateDisaster("disaster-2", "Duplicate Name", "location-1", "character-1")
                     },
                     LocationDefinitions: new List<ReferenceLocationDefinition>
                     {
                         CreateLocation("location-1", "Location 1")
                     },
-                    CharacterDefinitions: new List<ReferenceCharacterDefinition>(),
+                    CharacterDefinitions: new List<ReferenceCharacterDefinition>
+                    {
+                        CreateCharacter("character-1", "Character 1")
+                    },
                     ThunderbirdDefinitions: new List<ReferenceThunderbirdDefinition>(),
                     PodVehicleDefinitions: new List<ReferencePodVehicleDefinition>()
                 );
 
                 // Act & Assert
-                var exception = Assert.Throws<ReferenceDataCompilationException>(() => validator.Validate(snapshot));
-                Assert.Contains("Duplicate Name", exception.Message);
-                Assert.Contains("disaster names", exception.Message);
+                var ex = Assert.Throws<ReferenceDataCompilationException>(() => validator.Validate(snapshot));
+                Assert.Contains("Duplicate Name", ex.Message);
+                Assert.Contains("disaster names", ex.Message);
             }
 
             [Fact]
-            public void Validate_WhenDuplicateLocationCodes_ThrowsReferenceDataCompilationException()
+            public void Validate_WhenDuplicateLocationCodes_Throws()
             {
                 // Arrange
                 var validator = new SnapshotValidator();
@@ -114,13 +103,13 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.UnitTests.Compilati
                 );
 
                 // Act & Assert
-                var exception = Assert.Throws<ReferenceDataCompilationException>(() => validator.Validate(snapshot));
-                Assert.Contains("duplicate-location", exception.Message);
-                Assert.Contains("location codes", exception.Message);
+                var ex = Assert.Throws<ReferenceDataCompilationException>(() => validator.Validate(snapshot));
+                Assert.Contains("duplicate-location", ex.Message);
+                Assert.Contains("location codes", ex.Message);
             }
 
             [Fact]
-            public void Validate_WhenDuplicateLocationNames_ThrowsReferenceDataCompilationException()
+            public void Validate_WhenDuplicateLocationNames_Throws()
             {
                 // Arrange
                 var validator = new SnapshotValidator();
@@ -139,9 +128,9 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.UnitTests.Compilati
                 );
 
                 // Act & Assert
-                var exception = Assert.Throws<ReferenceDataCompilationException>(() => validator.Validate(snapshot));
-                Assert.Contains("Duplicate Location", exception.Message);
-                Assert.Contains("location names", exception.Message);
+                var ex = Assert.Throws<ReferenceDataCompilationException>(() => validator.Validate(snapshot));
+                Assert.Contains("Duplicate Location", ex.Message);
+                Assert.Contains("location names", ex.Message);
             }
 
             [Fact]
@@ -154,10 +143,10 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.UnitTests.Compilati
                     ContentVersion: "1.0.0",
                     DisasterDefinitions: new List<ReferenceDisasterDefinition>
                     {
-                        CreateDisaster("duplicate-1", "Disaster 1", "location-1"),
-                        CreateDisaster("duplicate-1", "Disaster 2", "location-1"),
-                        CreateDisaster("duplicate-2", "Disaster 3", "location-1"),
-                        CreateDisaster("duplicate-2", "Disaster 4", "location-1")
+                        CreateDisaster("duplicate-1", "Disaster 1", "location-1", "character-1"),
+                        CreateDisaster("duplicate-1", "Disaster 2", "location-1", "character-1"),
+                        CreateDisaster("duplicate-2", "Disaster 3", "location-1", "character-1"),
+                        CreateDisaster("duplicate-2", "Disaster 4", "location-1", "character-1")
                     },
                     LocationDefinitions: new List<ReferenceLocationDefinition>
                     {
@@ -173,6 +162,156 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.UnitTests.Compilati
                 Assert.Contains("duplicate-1", exception.Message);
                 Assert.Contains("duplicate-2", exception.Message);
             }
+
+            [Fact]
+            public void Validate_WhenDuplicateCharacterCodes_Throws()
+            {
+                // Arrange
+                var validator = new SnapshotValidator();
+                var snapshot = new ReferenceDataSnapshot(
+                    SchemaVersion: 1,
+                    ContentVersion: "1.0.0",
+                    DisasterDefinitions: new List<ReferenceDisasterDefinition>(),
+                    LocationDefinitions: new List<ReferenceLocationDefinition>(),
+                    CharacterDefinitions: new List<ReferenceCharacterDefinition>
+                    {
+                        CreateCharacter("duplicate-code", "Character 1"),
+                        CreateCharacter("duplicate-code", "Character 2")
+                    },
+                    ThunderbirdDefinitions: new List<ReferenceThunderbirdDefinition>(),
+                    PodVehicleDefinitions: new List<ReferencePodVehicleDefinition>()
+                );
+
+                // Act & Assert
+                var ex = Assert.Throws<ReferenceDataCompilationException>(() => validator.Validate(snapshot));
+                Assert.Contains("duplicate-code", ex.Message);
+                Assert.Contains("character codes", ex.Message);
+            }
+
+            [Fact]
+            public void Validate_WhenDuplicateCharacterNames_Throws()
+            {
+                // Arrange
+                var validator = new SnapshotValidator();
+                var snapshot = new ReferenceDataSnapshot(
+                    SchemaVersion: 1,
+                    ContentVersion: "1.0.0",
+                    DisasterDefinitions: new List<ReferenceDisasterDefinition>(),
+                    LocationDefinitions: new List<ReferenceLocationDefinition>(),
+                    CharacterDefinitions: new List<ReferenceCharacterDefinition>
+                    {
+                        CreateCharacter("character-1", "Duplicate Name"),
+                        CreateCharacter("character-2", "Duplicate Name")
+                    },
+                    ThunderbirdDefinitions: new List<ReferenceThunderbirdDefinition>(),
+                    PodVehicleDefinitions: new List<ReferencePodVehicleDefinition>()
+                );
+
+                // Act & Assert
+                var ex = Assert.Throws<ReferenceDataCompilationException>(() => validator.Validate(snapshot));
+                Assert.Contains("Duplicate Name", ex.Message);
+                Assert.Contains("character names", ex.Message);
+            }
+
+            [Fact]
+            public void Validate_WhenDuplicateThunderbirdCodes_Throws()
+            {
+                // Arrange
+                var validator = new SnapshotValidator();
+                var snapshot = new ReferenceDataSnapshot(
+                    SchemaVersion: 1,
+                    ContentVersion: "1.0.0",
+                    DisasterDefinitions: new List<ReferenceDisasterDefinition>(),
+                    LocationDefinitions: new List<ReferenceLocationDefinition>(),
+                    CharacterDefinitions: new List<ReferenceCharacterDefinition>(),
+                    ThunderbirdDefinitions: new List<ReferenceThunderbirdDefinition>
+                    {
+                        CreateThunderbird("duplicate-code", "Thunderbird 1"),
+                        CreateThunderbird("duplicate-code", "Thunderbird 2")
+                    },
+                    PodVehicleDefinitions: new List<ReferencePodVehicleDefinition>()
+                );
+
+                // Act & Assert
+                var ex = Assert.Throws<ReferenceDataCompilationException>(() => validator.Validate(snapshot));
+                Assert.Contains("duplicate-code", ex.Message);
+                Assert.Contains("thunderbird codes", ex.Message);
+            }
+
+            [Fact]
+            public void Validate_WhenDuplicateThunderbirdNames_Throws()
+            {
+                // Arrange
+                var validator = new SnapshotValidator();
+                var snapshot = new ReferenceDataSnapshot(
+                    SchemaVersion: 1,
+                    ContentVersion: "1.0.0",
+                    DisasterDefinitions: new List<ReferenceDisasterDefinition>(),
+                    LocationDefinitions: new List<ReferenceLocationDefinition>(),
+                    CharacterDefinitions: new List<ReferenceCharacterDefinition>(),
+                    ThunderbirdDefinitions: new List<ReferenceThunderbirdDefinition>
+                    {
+                        CreateThunderbird("thunderbird-1", "Duplicate Name"),
+                        CreateThunderbird("thunderbird-2", "Duplicate Name")
+                    },
+                    PodVehicleDefinitions: new List<ReferencePodVehicleDefinition>()
+                );
+
+                // Act & Assert
+                var ex = Assert.Throws<ReferenceDataCompilationException>(() => validator.Validate(snapshot));
+                Assert.Contains("Duplicate Name", ex.Message);
+                Assert.Contains("thunderbird names", ex.Message);
+            }
+
+            [Fact]
+            public void Validate_WhenDuplicatePodVehicleCodes_Throws()
+            {
+                // Arrange
+                var validator = new SnapshotValidator();
+                var snapshot = new ReferenceDataSnapshot(
+                    SchemaVersion: 1,
+                    ContentVersion: "1.0.0",
+                    DisasterDefinitions: new List<ReferenceDisasterDefinition>(),
+                    LocationDefinitions: new List<ReferenceLocationDefinition>(),
+                    CharacterDefinitions: new List<ReferenceCharacterDefinition>(),
+                    ThunderbirdDefinitions: new List<ReferenceThunderbirdDefinition>(),
+                    PodVehicleDefinitions: new List<ReferencePodVehicleDefinition>
+                    {
+                        CreatePodVehicle("duplicate-code", "Pod Vehicle 1"),
+                        CreatePodVehicle("duplicate-code", "Pod Vehicle 2")
+                    }
+                );
+
+                // Act & Assert
+                var ex = Assert.Throws<ReferenceDataCompilationException>(() => validator.Validate(snapshot));
+                Assert.Contains("duplicate-code", ex.Message);
+                Assert.Contains("pod vehicle codes", ex.Message);
+            }
+
+            [Fact]
+            public void Validate_WhenDuplicatePodVehicleNames_Throws()
+            {
+                // Arrange
+                var validator = new SnapshotValidator();
+                var snapshot = new ReferenceDataSnapshot(
+                    SchemaVersion: 1,
+                    ContentVersion: "1.0.0",
+                    DisasterDefinitions: new List<ReferenceDisasterDefinition>(),
+                    LocationDefinitions: new List<ReferenceLocationDefinition>(),
+                    CharacterDefinitions: new List<ReferenceCharacterDefinition>(),
+                    ThunderbirdDefinitions: new List<ReferenceThunderbirdDefinition>(),
+                    PodVehicleDefinitions: new List<ReferencePodVehicleDefinition>
+                    {
+                        CreatePodVehicle("pod-1", "Duplicate Name"),
+                        CreatePodVehicle("pod-2", "Duplicate Name")
+                    }
+                );
+
+                // Act & Assert
+                var ex = Assert.Throws<ReferenceDataCompilationException>(() => validator.Validate(snapshot));
+                Assert.Contains("Duplicate Name", ex.Message);
+                Assert.Contains("pod vehicle names", ex.Message);
+            }
         }
 
         public class ReferentialIntegrityTests
@@ -187,18 +326,22 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.UnitTests.Compilati
                     ContentVersion: "1.0.0",
                     DisasterDefinitions: new List<ReferenceDisasterDefinition>
                     {
-                        CreateDisaster("disaster-1", "Disaster 1", "valid-location")
+                        // Use CreateDisaster with a valid bonus key
+                        CreateDisaster("disaster-1", "Disaster 1", "valid-location", "character-1")
                     },
                     LocationDefinitions: new List<ReferenceLocationDefinition>
                     {
                         CreateLocation("valid-location", "Valid Location")
                     },
-                    CharacterDefinitions: new List<ReferenceCharacterDefinition>(),
+                    CharacterDefinitions: new List<ReferenceCharacterDefinition>
+                    {
+                        CreateCharacter("character-1", "Character 1")
+                    },
                     ThunderbirdDefinitions: new List<ReferenceThunderbirdDefinition>(),
                     PodVehicleDefinitions: new List<ReferencePodVehicleDefinition>()
                 );
 
-                // Act & Assert (should not throw)
+                // Act & Assert
                 validator.Validate(snapshot);
             }
 
@@ -212,7 +355,7 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.UnitTests.Compilati
                     ContentVersion: "1.0.0",
                     DisasterDefinitions: new List<ReferenceDisasterDefinition>
                     {
-                        CreateDisaster("disaster-1", "Test Disaster", "invalid-location")
+                        CreateDisaster("disaster-1", "Disaster 1", "invalid-location", "bonus-key-1")
                     },
                     LocationDefinitions: new List<ReferenceLocationDefinition>
                     {
@@ -243,7 +386,6 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.UnitTests.Compilati
                     rescueType: RescueType.Air,
                     bonuses: new List<ReferenceDisasterBonus>
                     {
-                        // Bonus with NO location (null)
                         new ReferenceDisasterBonus(
                             key: new DisasterBonusKey("john"),
                             value: 2,
@@ -263,12 +405,15 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.UnitTests.Compilati
                     {
                         CreateLocation("valid-location", "Valid Location")
                     },
-                    CharacterDefinitions: new List<ReferenceCharacterDefinition>(),
+                    CharacterDefinitions: new List<ReferenceCharacterDefinition>
+                    {
+                        CreateCharacter("john", "John")  // ← Add the referenced character!
+                    },
                     ThunderbirdDefinitions: new List<ReferenceThunderbirdDefinition>(),
                     PodVehicleDefinitions: new List<ReferencePodVehicleDefinition>()
                 );
 
-                // Act & Assert (should not throw - null locations are valid)
+                // Act & Assert
                 validator.Validate(snapshot);
             }
 
@@ -285,7 +430,6 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.UnitTests.Compilati
                     rescueType: RescueType.Air,
                     bonuses: new List<ReferenceDisasterBonus>
                     {
-                        // Bonus WITH valid location
                         new ReferenceDisasterBonus(
                             key: new DisasterBonusKey("john"),
                             value: 2,
@@ -306,7 +450,10 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.UnitTests.Compilati
                         CreateLocation("disaster-location", "Disaster Location"),
                         CreateLocation("bonus-location", "Bonus Location")
                     },
-                    CharacterDefinitions: new List<ReferenceCharacterDefinition>(),
+                    CharacterDefinitions: new List<ReferenceCharacterDefinition>
+                    {
+                        CreateCharacter("john", "John")  // ← Add the referenced character!
+                    },
                     ThunderbirdDefinitions: new List<ReferenceThunderbirdDefinition>(),
                     PodVehicleDefinitions: new List<ReferencePodVehicleDefinition>()
                 );
@@ -362,9 +509,253 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.UnitTests.Compilati
                 Assert.Contains("invalid-1", exception.Message);
                 Assert.Contains("invalid-2", exception.Message);
             }
+
+            [Fact]
+            public void Validate_WhenBonusKeyReferencesValidCharacter_DoesNotThrow()
+            {
+                // Arrange
+                var validator = new SnapshotValidator();
+                var disaster = new ReferenceDisasterDefinition(
+                    code: new CardCode("disaster-1"),
+                    displayName: "Test Disaster",
+                    difficultyNumber: 1,
+                    location: new LocationCode("location-1"),
+                    rescueType: RescueType.Air,
+                    bonuses: new List<ReferenceDisasterBonus>
+                    {
+                        new ReferenceDisasterBonus(
+                            key: new DisasterBonusKey("scott"), // ← References character
+                            value: 2,
+                            location: null)
+                    },
+                    rewards: new List<ReferenceDisasterReward>
+                    {
+                        new ReferenceDisasterReward.PlayerChoice()
+                    }
+                );
+
+                var snapshot = new ReferenceDataSnapshot(
+                    SchemaVersion: 1,
+                    ContentVersion: "1.0.0",
+                    DisasterDefinitions: new List<ReferenceDisasterDefinition> { disaster },
+                    LocationDefinitions: new List<ReferenceLocationDefinition>
+                    {
+                        CreateLocation("location-1", "Location 1")
+                    },
+                    CharacterDefinitions: new List<ReferenceCharacterDefinition>
+                    {
+                        CreateCharacter("scott", "Scott")
+                    },
+                    ThunderbirdDefinitions: new List<ReferenceThunderbirdDefinition>(),
+                    PodVehicleDefinitions: new List<ReferencePodVehicleDefinition>()
+                );
+
+                // Act & Assert
+                validator.Validate(snapshot);
+            }
+
+            [Fact]
+            public void Validate_WhenBonusKeyReferencesValidThunderbird_DoesNotThrow()
+            {
+                // Arrange
+                var validator = new SnapshotValidator();
+                var disaster = new ReferenceDisasterDefinition(
+                    code: new CardCode("disaster-1"),
+                    displayName: "Test Disaster",
+                    difficultyNumber: 1,
+                    location: new LocationCode("location-1"),
+                    rescueType: RescueType.Air,
+                    bonuses: new List<ReferenceDisasterBonus>
+                    {
+                        new ReferenceDisasterBonus(
+                            key: new DisasterBonusKey("thunderbird-1"), // ← References thunderbird
+                            value: 2,
+                            location: null)
+                    },
+                    rewards: new List<ReferenceDisasterReward>
+                    {
+                        new ReferenceDisasterReward.PlayerChoice()
+                    }
+                );
+
+                var snapshot = new ReferenceDataSnapshot(
+                    SchemaVersion: 1,
+                    ContentVersion: "1.0.0",
+                    DisasterDefinitions: new List<ReferenceDisasterDefinition> { disaster },
+                    LocationDefinitions: new List<ReferenceLocationDefinition>
+                    {
+                        CreateLocation("location-1", "Location 1")
+                    },
+                    CharacterDefinitions: new List<ReferenceCharacterDefinition>(),
+                    ThunderbirdDefinitions: new List<ReferenceThunderbirdDefinition>
+                    {
+                        CreateThunderbird("thunderbird-1", "Thunderbird 1")
+                    },
+                    PodVehicleDefinitions: new List<ReferencePodVehicleDefinition>()
+                );
+
+                // Act & Assert
+                validator.Validate(snapshot);
+            }
+
+            [Fact]
+            public void Validate_WhenBonusKeyReferencesValidPodVehicle_DoesNotThrow()
+            {
+                // Arrange
+                var validator = new SnapshotValidator();
+                var disaster = new ReferenceDisasterDefinition(
+                    code: new CardCode("disaster-1"),
+                    displayName: "Test Disaster",
+                    difficultyNumber: 1,
+                    location: new LocationCode("location-1"),
+                    rescueType: RescueType.Air,
+                    bonuses: new List<ReferenceDisasterBonus>
+                    {
+                        new ReferenceDisasterBonus(
+                            key: new DisasterBonusKey("mole"), // ← References pod vehicle
+                            value: 2,
+                            location: null)
+                    },
+                    rewards: new List<ReferenceDisasterReward>
+                    {
+                        new ReferenceDisasterReward.PlayerChoice()
+                    }
+                );
+
+                var snapshot = new ReferenceDataSnapshot(
+                    SchemaVersion: 1,
+                    ContentVersion: "1.0.0",
+                    DisasterDefinitions: new List<ReferenceDisasterDefinition> { disaster },
+                    LocationDefinitions: new List<ReferenceLocationDefinition>
+                    {
+                        CreateLocation("location-1", "Location 1")
+                    },
+                    CharacterDefinitions: new List<ReferenceCharacterDefinition>(),
+                    ThunderbirdDefinitions: new List<ReferenceThunderbirdDefinition>(),
+                    PodVehicleDefinitions: new List<ReferencePodVehicleDefinition>
+                    {
+                        CreatePodVehicle("mole", "The Mole")
+                    }
+                );
+
+                // Act & Assert
+                validator.Validate(snapshot);
+            }
+
+            [Fact]
+            public void Validate_WhenBonusKeyReferencesInvalidEntity_Throws()
+            {
+                // Arrange
+                var validator = new SnapshotValidator();
+                var disaster = new ReferenceDisasterDefinition(
+                    code: new CardCode("disaster-1"),
+                    displayName: "Test Disaster",
+                    difficultyNumber: 1,
+                    location: new LocationCode("location-1"),
+                    rescueType: RescueType.Air,
+                    bonuses: new List<ReferenceDisasterBonus>
+                    {
+                        new ReferenceDisasterBonus(
+                            key: new DisasterBonusKey("invalid-entity"), // ← Not in any list!
+                            value: 2,
+                            location: null)
+                    },
+                    rewards: new List<ReferenceDisasterReward>
+                    {
+                        new ReferenceDisasterReward.PlayerChoice()
+                    }
+                );
+
+                var snapshot = new ReferenceDataSnapshot(
+                    SchemaVersion: 1,
+                    ContentVersion: "1.0.0",
+                    DisasterDefinitions: new List<ReferenceDisasterDefinition> { disaster },
+                    LocationDefinitions: new List<ReferenceLocationDefinition>
+                    {
+                        CreateLocation("location-1", "Location 1")
+                    },
+                    CharacterDefinitions: new List<ReferenceCharacterDefinition>
+                    {
+                        CreateCharacter("scott", "Scott")
+                    },
+                    ThunderbirdDefinitions: new List<ReferenceThunderbirdDefinition>(),
+                    PodVehicleDefinitions: new List<ReferencePodVehicleDefinition>()
+                );
+
+                // Act & Assert
+                var ex = Assert.Throws<ReferenceDataCompilationException>(() => validator.Validate(snapshot));
+                Assert.Contains("invalid-entity", ex.Message);
+                Assert.Contains("non-existent entities", ex.Message);
+            }
         }
 
-        private static ReferenceDisasterDefinition CreateDisaster(string code, string name, string locationCode)
+        public class CrossEntityUniquenessTests
+        {
+            [Fact]
+            public void Validate_WhenEntityCodeDuplicatedAcrossTypes_Throws()
+            {
+                // Arrange
+                var validator = new SnapshotValidator();
+                var snapshot = new ReferenceDataSnapshot(
+                    SchemaVersion: 1,
+                    ContentVersion: "1.0.0",
+                    DisasterDefinitions: new List<ReferenceDisasterDefinition>(),
+                    LocationDefinitions: new List<ReferenceLocationDefinition>(),
+                    CharacterDefinitions: new List<ReferenceCharacterDefinition>
+                    {
+                        CreateCharacter("duplicate-code", "Character")
+                    },
+                    ThunderbirdDefinitions: new List<ReferenceThunderbirdDefinition>
+                    {
+                        CreateThunderbird("duplicate-code", "Thunderbird") // ← Same code!
+                    },
+                    PodVehicleDefinitions: new List<ReferencePodVehicleDefinition>()
+                );
+
+                // Act & Assert
+                var ex = Assert.Throws<ReferenceDataCompilationException>(() => validator.Validate(snapshot));
+                Assert.Contains("duplicate-code", ex.Message);
+                Assert.Contains("unique across all types", ex.Message);
+            }
+        }
+
+        // ============================================
+        // Helper Methods
+        // ============================================
+
+        private static ReferenceDataSnapshot CreateValidSnapshot()
+        {
+            return new ReferenceDataSnapshot(
+                SchemaVersion: 1,
+                ContentVersion: "1.0.0",
+                DisasterDefinitions: new List<ReferenceDisasterDefinition>
+                {
+                    CreateDisaster("disaster-1", "Disaster 1", "location-1", "character-1")
+                },
+                LocationDefinitions: new List<ReferenceLocationDefinition>
+                {
+                    CreateLocation("location-1", "Location 1")
+                },
+                CharacterDefinitions: new List<ReferenceCharacterDefinition>
+                {
+                    CreateCharacter("character-1", "Character 1")
+                },
+                ThunderbirdDefinitions: new List<ReferenceThunderbirdDefinition>
+                {
+                    CreateThunderbird("thunderbird-1", "Thunderbird 1")
+                },
+                PodVehicleDefinitions: new List<ReferencePodVehicleDefinition>
+                {
+                    CreatePodVehicle("pod-1", "Pod 1")
+                }
+            );
+        }
+
+        private static ReferenceDisasterDefinition CreateDisaster(
+            string code,
+            string name,
+            string locationCode,
+            string bonusKeyCode)
         {
             return new ReferenceDisasterDefinition(
                 code: new CardCode(code),
@@ -374,7 +765,7 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.UnitTests.Compilati
                 rescueType: RescueType.Air,
                 bonuses: new List<ReferenceDisasterBonus>
                 {
-                    new ReferenceDisasterBonus(new DisasterBonusKey("bonus"), 1, null)
+                    new ReferenceDisasterBonus(new DisasterBonusKey(bonusKeyCode), 1, null)
                 },
                 rewards: new List<ReferenceDisasterReward>
                 {
@@ -387,6 +778,31 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.UnitTests.Compilati
         {
             return new ReferenceLocationDefinition(
                 code: new LocationCode(code),
+                displayName: displayName
+            );
+        }
+
+        private static ReferenceCharacterDefinition CreateCharacter(string code, string displayName)
+        {
+            return new ReferenceCharacterDefinition(
+                code: new CharacterCode(code),
+                displayName: displayName,
+                rescueBonus: null
+            );
+        }
+
+        private static ReferenceThunderbirdDefinition CreateThunderbird(string code, string displayName)
+        {
+            return new ReferenceThunderbirdDefinition(
+                code: new ThunderbirdCode(code),
+                displayName: displayName
+            );
+        }
+
+        private static ReferencePodVehicleDefinition CreatePodVehicle(string code, string displayName)
+        {
+            return new ReferencePodVehicleDefinition(
+                code: new PodVehicleCode(code),
                 displayName: displayName
             );
         }

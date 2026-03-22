@@ -1,5 +1,6 @@
 ﻿using ThunderbirdsBoardGameEngine.ReferenceData.Identities;
 using ThunderbirdsBoardGameEngine.ReferenceData.Model;
+using System.Linq;
 
 namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Compilation
 {
@@ -12,6 +13,12 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Compilation
             EnsureThunderbirdDefinitionsValid(snapshot);
             EnsurePodVehicleDefinitionsValid(snapshot);
             EnsureDisasterDefinitionsValid(snapshot);
+
+            var locations = new HashSet<LocationCode>(snapshot.LocationDefinitions.Select(l => l.Code));
+            EnsureDisasterDefinitionLocationsValid(snapshot.DisasterDefinitions, locations);
+
+            var validDisasterBonusKeys = EnsureEntityCodesUniqueAcrossTypes(snapshot);
+            EnsureBonusKeysValid(snapshot.DisasterDefinitions, validDisasterBonusKeys);
         }
 
         private static void EnsureLocationDefinitionsValid(ReferenceDataSnapshot snapshot)
@@ -99,14 +106,80 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Compilation
         private static void EnsureDisasterDefinitionsHaveValidLocations(IReadOnlyList<ReferenceDisasterDefinition> disasterDefinitions, HashSet<LocationCode> validLocationCodes)
         {
             var invalidLocationCodes = disasterDefinitions
-                            .Select(d => d.Location)
-                            .Where(l => !validLocationCodes.Contains(l))
-                            .Select(l => l.Value)
-                            .ToList();
+                .Select(d => d.Location)
+                .Where(l => !validLocationCodes.Contains(l))
+                .Select(l => l.Value)
+                .ToList();
 
             if (invalidLocationCodes.Count != 0)
             {
                 throw new ReferenceDataCompilationException($"Invalid location codes found in disaster definitions: {string.Join(", ", invalidLocationCodes)}");
+            }
+        }
+
+        private static HashSet<string> EnsureEntityCodesUniqueAcrossTypes(ReferenceDataSnapshot snapshot)
+        {
+            var seenCodes = new HashSet<string>();
+            var duplicates = new List<(string Code, string Type)>();
+
+            // Check characters
+            foreach (var character in snapshot.CharacterDefinitions)
+            {
+                if (!seenCodes.Add(character.Code.Value))
+                {
+                    duplicates.Add((character.Code.Value, "Character"));
+                }
+            }
+
+            // Check thunderbirds
+            foreach (var thunderbird in snapshot.ThunderbirdDefinitions)
+            {
+                if (!seenCodes.Add(thunderbird.Code.Value))
+                {
+                    duplicates.Add((thunderbird.Code.Value, "Thunderbird"));
+                }
+            }
+
+            // Check pod vehicles
+            foreach (var podVehicle in snapshot.PodVehicleDefinitions)
+            {
+                if (!seenCodes.Add(podVehicle.Code.Value))
+                {
+                    duplicates.Add((podVehicle.Code.Value, "Pod Vehicle"));
+                }
+            }
+
+            if (duplicates.Count != 0)
+            {
+                var duplicateMessages = duplicates
+                    .Select(d => $"'{d.Code}' ({d.Type})")
+                    .ToList();
+
+                throw new ReferenceDataCompilationException(
+                    $"Entity codes must be unique across all types. Duplicates: {string.Join(", ", duplicateMessages)}");
+            }
+
+            return seenCodes;
+        }
+
+        private static void EnsureBonusKeysValid(
+            IReadOnlyList<ReferenceDisasterDefinition> disasterDefinitions,
+            HashSet<string> validEntityCodes)
+        {
+            var invalidBonuses = new List<string>();
+
+            foreach (var disaster in disasterDefinitions)
+            {
+                invalidBonuses.AddRange(disaster.Bonuses
+                    .Where(bonus => !validEntityCodes
+                    .Contains(bonus.Key.Value))
+                    .Select(bonus => $"{disaster.DisplayName} - Unknown bonus key '{bonus.Key.Value}'"));
+            }
+
+            if (invalidBonuses.Count != 0)
+            {
+                throw new ReferenceDataCompilationException(
+                    $"Bonuses reference non-existent entities: {string.Join(", ", invalidBonuses)}");
             }
         }
     }
