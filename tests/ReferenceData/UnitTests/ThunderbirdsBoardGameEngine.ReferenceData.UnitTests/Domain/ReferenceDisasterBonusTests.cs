@@ -15,7 +15,9 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.UnitTests.Domain
         [Fact]
         public void Constructor_WhenAllInputsValid_CreatesInstance()
         {
-            // Arrange & Act
+            // Arrange
+
+            // Act
             var result = new ReferenceDisasterBonus(
                 key: ValidKey,
                 value: ValidValue,
@@ -31,7 +33,9 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.UnitTests.Domain
         [Fact]
         public void Constructor_WhenLocationNull_CreatesInstance()
         {
-            // Arrange & Act
+            // Arrange
+
+            // Act
             var result = new ReferenceDisasterBonus(
                 key: ValidKey,
                 value: ValidValue,
@@ -50,6 +54,8 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.UnitTests.Domain
         [InlineData(int.MinValue)]
         public void Constructor_WhenValueNotPositive_ThrowsArgumentOutOfRangeException(int value)
         {
+            // Arrange
+
             // Act & Assert
             Assert.Throws<ArgumentOutOfRangeException>(() => new ReferenceDisasterBonus(
                 key: ValidKey,

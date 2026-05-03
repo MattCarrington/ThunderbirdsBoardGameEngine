@@ -5,11 +5,11 @@ using Xunit;
 
 namespace ThunderbirdsBoardGameEngine.ReferenceData.UnitTests.Domain
 {
-    public class ReferenceLocationDefinitionTests
+    public class ReferencePodVehicleDefinitionTests
     {
-        private static LocationCode ValidLocationCode => new("location");
+        private static PodVehicleCode ValidPodVehicleCode => new("podVehicle");
 
-        private static string ValidDisplayName => "Display Name";
+        private static string ValidDisplayName => "Pod Vehicle";
 
         [Fact]
         public void Constructor_WhenAllInputsValid_CreatesInstance()
@@ -17,13 +17,13 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.UnitTests.Domain
             // Arrange
 
             // Act
-            var result = new ReferenceLocationDefinition(
-                code: ValidLocationCode,
+            var result = new ReferencePodVehicleDefinition(
+                code: ValidPodVehicleCode,
                 displayName: ValidDisplayName
             );
 
             // Assert
-            Assert.Equal(ValidLocationCode, result.Code);
+            Assert.Equal(ValidPodVehicleCode, result.Code);
             Assert.Equal(ValidDisplayName, result.DisplayName);
         }
 
@@ -34,8 +34,8 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.UnitTests.Domain
             // Arrange
 
             // Act & Assert
-            Assert.ThrowsAny<ArgumentException>(() => new ReferenceLocationDefinition(
-                code: ValidLocationCode,
+            Assert.ThrowsAny<ArgumentException>(() => new ReferencePodVehicleDefinition(
+                code: ValidPodVehicleCode,
                 displayName: displayName
             ));
         }

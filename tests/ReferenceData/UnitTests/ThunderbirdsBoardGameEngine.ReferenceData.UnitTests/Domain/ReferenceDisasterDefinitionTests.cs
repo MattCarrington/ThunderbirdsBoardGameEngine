@@ -71,6 +71,8 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.UnitTests.Domain
         [ClassData(typeof(NullOrWhitespaceStringData))]
         public void Constructor_WhenDisplayNameInvalid_ThrowsArgumentException(string displayName)
         {
+            // Arrange
+
             // Act & Assert
             Assert.ThrowsAny<ArgumentException>(() => new ReferenceDisasterDefinition(
                 code: ValidCardCode,
@@ -89,6 +91,8 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.UnitTests.Domain
         [InlineData(int.MinValue)]
         public void Constructor_WhenDifficultyNumberNotPositive_ThrowsArgumentOutOfRangeException(int difficultyNumber)
         {
+            // Arrange
+
             // Act & Assert
             Assert.Throws<ArgumentOutOfRangeException>(() => new ReferenceDisasterDefinition(
                 code: ValidCardCode,
@@ -104,6 +108,8 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.UnitTests.Domain
         [Fact]
         public void Constructor_WhenBonusesNull_ThrowsArgumentNullException()
         {
+            // Arrange
+
             // Act & Assert
             Assert.Throws<ArgumentNullException>(() => new ReferenceDisasterDefinition(
                 code: ValidCardCode,
@@ -119,6 +125,8 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.UnitTests.Domain
         [Fact]
         public void Constructor_WhenBonusesEmpty_ThrowsArgumentOutOfRangeException()
         {
+            // Arrange
+
             // Act & Assert
             Assert.Throws<ArgumentOutOfRangeException>(() => new ReferenceDisasterDefinition(
                 code: ValidCardCode,
