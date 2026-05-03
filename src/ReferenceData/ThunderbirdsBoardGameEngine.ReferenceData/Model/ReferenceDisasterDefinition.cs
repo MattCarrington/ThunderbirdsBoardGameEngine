@@ -28,7 +28,7 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Model
             IReadOnlyList<ReferenceDisasterBonus> bonuses,
             IReadOnlyList<ReferenceDisasterReward> rewards)
         {
-            ArgumentNullException.ThrowIfNullOrWhiteSpace(displayName);
+            ArgumentException.ThrowIfNullOrWhiteSpace(displayName);
             ArgumentOutOfRangeException.ThrowIfNegativeOrZero(difficultyNumber);
             ArgumentNullException.ThrowIfNull(bonuses);
             ArgumentNullException.ThrowIfNull(rewards);

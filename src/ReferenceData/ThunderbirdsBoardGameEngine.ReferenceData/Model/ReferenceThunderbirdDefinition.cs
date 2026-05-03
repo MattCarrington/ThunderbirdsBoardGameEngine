@@ -10,7 +10,7 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Model
 
         public ReferenceThunderbirdDefinition(ThunderbirdCode code, string displayName)
         {
-            ArgumentNullException.ThrowIfNullOrWhiteSpace(displayName);
+            ArgumentException.ThrowIfNullOrWhiteSpace(displayName);
 
             Code = code;
             DisplayName = displayName;

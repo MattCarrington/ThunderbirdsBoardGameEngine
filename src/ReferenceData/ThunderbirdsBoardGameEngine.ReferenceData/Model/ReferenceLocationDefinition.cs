@@ -10,7 +10,7 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Model
 
         public ReferenceLocationDefinition(LocationCode code, string displayName)
         {
-            ArgumentNullException.ThrowIfNullOrWhiteSpace(displayName);
+            ArgumentException.ThrowIfNullOrWhiteSpace(displayName);
 
             Code = code;
             DisplayName = displayName;

@@ -16,7 +16,7 @@
         /// <param name="value">The card code value to assign. Cannot be null or empty.</param>
         public CardCode(string value)
         {
-            ArgumentNullException.ThrowIfNullOrWhiteSpace(value);
+            ArgumentException.ThrowIfNullOrWhiteSpace(value);
             Value = value;
         }
 

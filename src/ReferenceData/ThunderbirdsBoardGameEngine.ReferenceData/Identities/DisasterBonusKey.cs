@@ -16,7 +16,7 @@
         /// <param name="value">The string value that uniquely identifies the disaster bonus. Cannot be null or whitespace.</param>
         public DisasterBonusKey(string value)
         {
-            ArgumentNullException.ThrowIfNullOrWhiteSpace(value);
+            ArgumentException.ThrowIfNullOrWhiteSpace(value);
             Value = value;
         }
 

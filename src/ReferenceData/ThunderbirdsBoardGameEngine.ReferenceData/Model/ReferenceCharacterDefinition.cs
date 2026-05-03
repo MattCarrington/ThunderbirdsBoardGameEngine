@@ -15,7 +15,7 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Model
             string displayName,
             ReferenceCharacterRescueBonus? rescueBonus)
         {
-            ArgumentNullException.ThrowIfNullOrWhiteSpace(displayName);
+            ArgumentException.ThrowIfNullOrWhiteSpace(displayName);
 
             Code = code;
             DisplayName = displayName;
