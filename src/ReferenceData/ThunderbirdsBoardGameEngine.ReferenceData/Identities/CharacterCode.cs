@@ -4,7 +4,7 @@
     /// Represents a character code as an immutable value object.
     /// </summary>
     /// <param name="Value">The string value that identifies the character code.</param>
-    public sealed record CharacterCode
+    public readonly record struct CharacterCode
     {
         /// <summary>
         /// Gets the string value that identifies the character code.

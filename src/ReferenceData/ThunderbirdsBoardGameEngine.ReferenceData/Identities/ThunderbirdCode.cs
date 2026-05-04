@@ -1,6 +1,6 @@
 ﻿namespace ThunderbirdsBoardGameEngine.ReferenceData.Identities
 {
-    public sealed record ThunderbirdCode
+    public readonly record struct ThunderbirdCode
     {
         public string Value { get; }
 

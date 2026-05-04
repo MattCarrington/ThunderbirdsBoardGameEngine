@@ -3,7 +3,7 @@
     /// <summary>
     /// Represents a location code as an immutable value object.
     /// </summary>
-    public sealed record LocationCode
+    public readonly record struct LocationCode
     {
         /// <summary>
         /// Gets the string value that identifies the location code.
