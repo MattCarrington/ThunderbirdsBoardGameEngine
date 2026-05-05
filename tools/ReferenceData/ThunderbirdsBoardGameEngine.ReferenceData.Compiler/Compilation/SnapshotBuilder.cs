@@ -38,6 +38,8 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Compilation
             return new ReferenceDataSnapshot(
                 SchemaVersion: 1,
                 ContentVersion: "1.0.0",
+                GeneratedAt: DateTime.UtcNow,
+                GeneratorVersion: "1.0.0",
                 DisasterDefinitions: disasters,
                 LocationDefinitions: locations,
                 CharacterDefinitions: characterDefinitions,

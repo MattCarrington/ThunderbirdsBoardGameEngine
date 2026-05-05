@@ -82,7 +82,9 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.UnitTests.Compilati
         {
             return new ReferenceDataSnapshot(
                 SchemaVersion: 1,
-                ContentVersion: "1.0.0",
+                ContentVersion: "1.0.0-test",
+                GeneratedAt: DateTime.UtcNow,
+                GeneratorVersion: "1.0.0-test",
                 DisasterDefinitions: _disasters,
                 LocationDefinitions: _locations,
                 CharacterDefinitions: _characters,
