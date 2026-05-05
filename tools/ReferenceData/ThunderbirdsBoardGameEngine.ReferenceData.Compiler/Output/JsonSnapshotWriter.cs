@@ -1,5 +1,4 @@
 ﻿using System.Text.Json;
-using System.Text.Json.Serialization;
 using ThunderbirdsBoardGameEngine.ReferenceData.Model;
 
 namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Output
@@ -8,13 +7,7 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Output
     {
         public static void Write(ReferenceDataSnapshot snapshot)
         {
-            var json = JsonSerializer.Serialize(snapshot, new JsonSerializerOptions
-            {
-                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-                WriteIndented = true,
-                DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
-                Converters = { new JsonStringEnumConverter(JsonNamingPolicy.CamelCase) }
-            });
+            var json = JsonSerializer.Serialize(snapshot, SnapshotJsonOptions.Default);
 
             File.WriteAllText("snapshot.json", json);
         }
