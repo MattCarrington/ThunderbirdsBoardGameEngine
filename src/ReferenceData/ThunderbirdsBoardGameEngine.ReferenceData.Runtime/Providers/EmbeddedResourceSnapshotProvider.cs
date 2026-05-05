@@ -5,13 +5,26 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Runtime.Providers
 {
     public class EmbeddedResourceSnapshotProvider : ISnapshotProvider
     {
+        private readonly Assembly _assembly;
+        private readonly string _resourceName;
+
+        public EmbeddedResourceSnapshotProvider()
+            : this(
+                Assembly.GetExecutingAssembly(),
+                $"{Assembly.GetExecutingAssembly().GetName().Name}.snapshot.json")
+        {
+        }
+
+        internal EmbeddedResourceSnapshotProvider(Assembly assembly, string resourceName)
+        {
+            _assembly = assembly;
+            _resourceName = resourceName;
+        }
+
         public Task<Stream> GetSnapshotStreamAsync()
         {
-            var assembly = Assembly.GetExecutingAssembly();
-            var resourceName = $"{assembly.GetName().Name}.snapshot.json";
-
-            var stream = assembly.GetManifestResourceStream(resourceName)
-                ?? throw new InvalidOperationException($"Embedded resource '{resourceName}' not found.");
+            var stream = _assembly.GetManifestResourceStream(_resourceName)
+                ?? throw new InvalidOperationException($"Embedded resource '{_resourceName}' not found.");
 
             return Task.FromResult(stream);
         }
