@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using System.Text.Encodings.Web;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 using ThunderbirdsBoardGameEngine.ReferenceData.Serialization;
 
@@ -14,9 +15,11 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData
             {
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
                 WriteIndented = true,
-                DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
+                DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
+                Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping
             };
 
+            options.Converters.Add(new DateTimeOffsetJsonConverter());
             options.Converters.Add(new CardCodeJsonConverter());
             options.Converters.Add(new DisasterBonusKeyJsonConverter());
             options.Converters.Add(new PodVehicleCodeJsonConverter());

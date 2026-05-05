@@ -1,5 +1,6 @@
 ﻿using ThunderbirdsBoardGameEngine.Catalog.Generator.Helpers;
 using ThunderbirdsBoardGameEngine.PublishedLanguage.Enums;
+using ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Interfaces;
 using ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Source;
 using ThunderbirdsBoardGameEngine.ReferenceData.Identities;
 using ThunderbirdsBoardGameEngine.ReferenceData.Model;
@@ -8,6 +9,13 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Compilation
 {
     public sealed class SnapshotBuilder
     {
+        private readonly IClock _clock;
+
+        public SnapshotBuilder(IClock clock)
+        {
+            _clock = clock;
+        }
+
         public ReferenceDataSnapshot Build(CompilationContext context)
         {
             var disasters = context.Disasters.Select(d =>
@@ -36,10 +44,10 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Compilation
             var podVehicleDefinitions = BuildPodVehicleDefinitions(context.PodVehicles);
 
             return new ReferenceDataSnapshot(
-                SchemaVersion: 1,
-                ContentVersion: "1.0.0",
-                GeneratedAt: DateTime.UtcNow,
-                GeneratorVersion: "1.0.0",
+                SchemaVersion: SnapshotVersions.SchemaVersion,
+                ContentVersion: SnapshotVersions.ContentVersion,
+                GeneratedAt: _clock.UtcNow,
+                GeneratorVersion: SnapshotVersions.GeneratorVersion,
                 DisasterDefinitions: disasters,
                 LocationDefinitions: locations,
                 CharacterDefinitions: characterDefinitions,

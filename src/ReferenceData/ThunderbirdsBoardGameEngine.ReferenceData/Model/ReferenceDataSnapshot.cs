@@ -3,7 +3,7 @@
     public sealed record ReferenceDataSnapshot(
         int SchemaVersion,
         string ContentVersion,
-        DateTime GeneratedAt,
+        DateTimeOffset GeneratedAt,
         string GeneratorVersion,
         IReadOnlyList<ReferenceCharacterDefinition> CharacterDefinitions,
         IReadOnlyList<ReferenceDisasterDefinition> DisasterDefinitions,
