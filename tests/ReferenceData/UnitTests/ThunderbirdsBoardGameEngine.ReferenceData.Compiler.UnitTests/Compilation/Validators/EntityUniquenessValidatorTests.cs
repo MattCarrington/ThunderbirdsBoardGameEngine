@@ -1,6 +1,6 @@
 using ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Compilation;
 using ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Compilation.Validators;
-using ThunderbirdsBoardGameEngine.ReferenceData.Compiler.UnitTests.Compilation.TestHelpers;
+using ThunderbirdsBoardGameEngine.TestUtils.ReferenceData.Builders;
 using Xunit;
 
 namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.UnitTests.Compilation.Validators
@@ -12,7 +12,7 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.UnitTests.Compilati
         {
             // Arrange
             var validator = new EntityUniquenessValidator();
-            var snapshot = new SnapshotTestBuilder()
+            var snapshot = new ReferenceDataSnapshotBuilder()
                 .WithLocation("location-1", "Location 1")
                 .WithCharacter("character-1", "Character 1")
                 .WithThunderbird("thunderbird-1", "Thunderbird 1")
@@ -28,7 +28,7 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.UnitTests.Compilati
         {
             // Arrange
             var validator = new EntityUniquenessValidator();
-            var snapshot = new SnapshotTestBuilder()
+            var snapshot = new ReferenceDataSnapshotBuilder()
                 .WithLocation("duplicate-code", "Location 1")
                 .WithLocation("duplicate-code", "Location 2")
                 .Build();
@@ -45,7 +45,7 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.UnitTests.Compilati
         {
             // Arrange
             var validator = new EntityUniquenessValidator();
-            var snapshot = new SnapshotTestBuilder()
+            var snapshot = new ReferenceDataSnapshotBuilder()
                 .WithLocation("location-1", "Duplicate Name")
                 .WithLocation("location-2", "Duplicate Name")
                 .Build();
@@ -62,7 +62,7 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.UnitTests.Compilati
         {
             // Arrange
             var validator = new EntityUniquenessValidator();
-            var snapshot = new SnapshotTestBuilder()
+            var snapshot = new ReferenceDataSnapshotBuilder()
                 .WithCharacter("duplicate-code", "Character 1")
                 .WithCharacter("duplicate-code", "Character 2")
                 .Build();
@@ -79,7 +79,7 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.UnitTests.Compilati
         {
             // Arrange
             var validator = new EntityUniquenessValidator();
-            var snapshot = new SnapshotTestBuilder()
+            var snapshot = new ReferenceDataSnapshotBuilder()
                 .WithCharacter("char-1", "Duplicate Name")
                 .WithCharacter("char-2", "Duplicate Name")
                 .Build();
@@ -96,7 +96,7 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.UnitTests.Compilati
         {
             // Arrange
             var validator = new EntityUniquenessValidator();
-            var snapshot = new SnapshotTestBuilder()
+            var snapshot = new ReferenceDataSnapshotBuilder()
                 .WithThunderbird("duplicate-code", "Thunderbird 1")
                 .WithThunderbird("duplicate-code", "Thunderbird 2")
                 .Build();
@@ -113,7 +113,7 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.UnitTests.Compilati
         {
             // Arrange
             var validator = new EntityUniquenessValidator();
-            var snapshot = new SnapshotTestBuilder()
+            var snapshot = new ReferenceDataSnapshotBuilder()
                 .WithThunderbird("tb-1", "Duplicate Name")
                 .WithThunderbird("tb-2", "Duplicate Name")
                 .Build();
@@ -130,7 +130,7 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.UnitTests.Compilati
         {
             // Arrange
             var validator = new EntityUniquenessValidator();
-            var snapshot = new SnapshotTestBuilder()
+            var snapshot = new ReferenceDataSnapshotBuilder()
                 .WithPodVehicle("duplicate-code", "Pod 1")
                 .WithPodVehicle("duplicate-code", "Pod 2")
                 .Build();
@@ -147,7 +147,7 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.UnitTests.Compilati
         {
             // Arrange
             var validator = new EntityUniquenessValidator();
-            var snapshot = new SnapshotTestBuilder()
+            var snapshot = new ReferenceDataSnapshotBuilder()
                 .WithPodVehicle("pod-1", "Duplicate Name")
                 .WithPodVehicle("pod-2", "Duplicate Name")
                 .Build();
@@ -164,7 +164,7 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.UnitTests.Compilati
         {
             // Arrange
             var validator = new EntityUniquenessValidator();
-            var snapshot = new SnapshotTestBuilder()
+            var snapshot = new ReferenceDataSnapshotBuilder()
                 .WithLocation("location-1", "Location 1")
                 .WithCharacter("character-1", "Character 1")
                 .WithDisaster("duplicate-code", "Disaster 1", "location-1", ("character-1", 1, null))
@@ -183,7 +183,7 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.UnitTests.Compilati
         {
             // Arrange
             var validator = new EntityUniquenessValidator();
-            var snapshot = new SnapshotTestBuilder()
+            var snapshot = new ReferenceDataSnapshotBuilder()
                 .WithLocation("location-1", "Location 1")
                 .WithCharacter("character-1", "Character 1")
                 .WithDisaster("disaster-1", "Duplicate Name", "location-1", ("character-1", 1, null))

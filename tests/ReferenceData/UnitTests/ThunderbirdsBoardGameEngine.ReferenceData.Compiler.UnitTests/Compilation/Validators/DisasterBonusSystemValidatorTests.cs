@@ -1,6 +1,6 @@
 using ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Compilation;
 using ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Compilation.Validators;
-using ThunderbirdsBoardGameEngine.ReferenceData.Compiler.UnitTests.Compilation.TestHelpers;
+using ThunderbirdsBoardGameEngine.TestUtils.ReferenceData.Builders;
 using Xunit;
 
 namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.UnitTests.Compilation.Validators
@@ -12,7 +12,8 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.UnitTests.Compilati
         {
             // Arrange
             var validator = new DisasterBonusSystemValidator();
-            var snapshot = new SnapshotTestBuilder()
+
+            var snapshot = new ReferenceDataSnapshotBuilder()
                 .WithLocation("location-1", "Location 1")
                 .WithCharacter("scott", "Scott")
                 .WithThunderbird("thunderbird-1", "Thunderbird 1")
@@ -29,7 +30,8 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.UnitTests.Compilati
         {
             // Arrange
             var validator = new DisasterBonusSystemValidator();
-            var snapshot = new SnapshotTestBuilder()
+
+            var snapshot = new ReferenceDataSnapshotBuilder()
                 .WithCharacter("duplicate-code", "Character")
                 .WithThunderbird("duplicate-code", "Thunderbird")
                 .Build();
@@ -46,7 +48,8 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.UnitTests.Compilati
         {
             // Arrange
             var validator = new DisasterBonusSystemValidator();
-            var snapshot = new SnapshotTestBuilder()
+
+            var snapshot = new ReferenceDataSnapshotBuilder()
                 .WithLocation("location-1", "Location 1")
                 .WithCharacter("scott", "Scott")
                 .WithDisaster("disaster-1", "Disaster 1", "location-1", ("scott", 2, null))
@@ -61,7 +64,8 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.UnitTests.Compilati
         {
             // Arrange
             var validator = new DisasterBonusSystemValidator();
-            var snapshot = new SnapshotTestBuilder()
+
+            var snapshot = new ReferenceDataSnapshotBuilder()
                 .WithLocation("location-1", "Location 1")
                 .WithThunderbird("thunderbird-1", "Thunderbird 1")
                 .WithDisaster("disaster-1", "Disaster 1", "location-1", ("thunderbird-1", 2, null))
@@ -76,7 +80,8 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.UnitTests.Compilati
         {
             // Arrange
             var validator = new DisasterBonusSystemValidator();
-            var snapshot = new SnapshotTestBuilder()
+
+            var snapshot = new ReferenceDataSnapshotBuilder()
                 .WithLocation("location-1", "Location 1")
                 .WithPodVehicle("mole", "The Mole")
                 .WithDisaster("disaster-1", "Disaster 1", "location-1", ("mole", 2, null))
@@ -91,7 +96,8 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.UnitTests.Compilati
         {
             // Arrange
             var validator = new DisasterBonusSystemValidator();
-            var snapshot = new SnapshotTestBuilder()
+
+            var snapshot = new ReferenceDataSnapshotBuilder()
                 .WithLocation("location-1", "Location 1")
                 .WithCharacter("scott", "Scott")
                 .WithDisaster("disaster-1", "Disaster 1", "location-1", ("invalid-entity", 2, null))
@@ -109,7 +115,8 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.UnitTests.Compilati
         {
             // Arrange
             var validator = new DisasterBonusSystemValidator();
-            var snapshot = new SnapshotTestBuilder()
+
+            var snapshot = new ReferenceDataSnapshotBuilder()
                 .WithLocation("location-1", "Location 1")
                 .WithCharacter("scott", "Scott")
                 .WithThunderbird("thunderbird-1", "Thunderbird 1")

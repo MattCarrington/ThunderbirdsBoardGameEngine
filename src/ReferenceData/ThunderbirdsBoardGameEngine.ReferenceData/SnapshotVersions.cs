@@ -1,4 +1,4 @@
-﻿namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler
+﻿namespace ThunderbirdsBoardGameEngine.ReferenceData
 {
     public static class SnapshotVersions
     {

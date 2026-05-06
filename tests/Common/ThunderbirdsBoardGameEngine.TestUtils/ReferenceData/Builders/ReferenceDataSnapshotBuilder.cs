@@ -1,21 +1,37 @@
 using ThunderbirdsBoardGameEngine.PublishedLanguage.Enums;
+using ThunderbirdsBoardGameEngine.ReferenceData;
 using ThunderbirdsBoardGameEngine.ReferenceData.Identities;
 using ThunderbirdsBoardGameEngine.ReferenceData.Model;
 
-namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.UnitTests.Compilation.TestHelpers
+namespace ThunderbirdsBoardGameEngine.TestUtils.ReferenceData.Builders
 {
     /// <summary>
     /// Fluent builder for creating test snapshots with minimal boilerplate.
     /// </summary>
-    internal sealed class SnapshotTestBuilder
+    public sealed class ReferenceDataSnapshotBuilder
     {
+        private int? _schemaVersion;
+        private string? _contentVersion;
+
         private readonly List<ReferenceDisasterDefinition> _disasters = new();
         private readonly List<ReferenceLocationDefinition> _locations = new();
         private readonly List<ReferenceCharacterDefinition> _characters = new();
         private readonly List<ReferenceThunderbirdDefinition> _thunderbirds = new();
         private readonly List<ReferencePodVehicleDefinition> _podVehicles = new();
 
-        public SnapshotTestBuilder WithLocation(string code, string displayName)
+        public ReferenceDataSnapshotBuilder WithSchemaVersion(int version)
+        {
+            _schemaVersion = version;
+            return this;
+        }
+
+        public ReferenceDataSnapshotBuilder WithContentVersion(string version)
+        {
+            _contentVersion = version;
+            return this;
+        }
+
+        public ReferenceDataSnapshotBuilder WithLocation(string code, string displayName)
         {
             _locations.Add(new ReferenceLocationDefinition(
                 new LocationCode(code),
@@ -23,7 +39,7 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.UnitTests.Compilati
             return this;
         }
 
-        public SnapshotTestBuilder WithCharacter(
+        public ReferenceDataSnapshotBuilder WithCharacter(
             string code,
             string displayName,
             ReferenceCharacterRescueBonus? rescueBonus = null)
@@ -35,7 +51,7 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.UnitTests.Compilati
             return this;
         }
 
-        public SnapshotTestBuilder WithThunderbird(string code, string displayName)
+        public ReferenceDataSnapshotBuilder WithThunderbird(string code, string displayName)
         {
             _thunderbirds.Add(new ReferenceThunderbirdDefinition(
                 new ThunderbirdCode(code),
@@ -43,7 +59,7 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.UnitTests.Compilati
             return this;
         }
 
-        public SnapshotTestBuilder WithPodVehicle(string code, string displayName)
+        public ReferenceDataSnapshotBuilder WithPodVehicle(string code, string displayName)
         {
             _podVehicles.Add(new ReferencePodVehicleDefinition(
                 new PodVehicleCode(code),
@@ -51,7 +67,7 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.UnitTests.Compilati
             return this;
         }
 
-        public SnapshotTestBuilder WithDisaster(
+        public ReferenceDataSnapshotBuilder WithDisaster(
             string code,
             string displayName,
             string locationCode,
@@ -81,10 +97,10 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.UnitTests.Compilati
         public ReferenceDataSnapshot Build()
         {
             return new ReferenceDataSnapshot(
-                SchemaVersion: 1,
-                ContentVersion: "1.0.0-test",
-                GeneratedAt: DateTime.UtcNow,
-                GeneratorVersion: "1.0.0-test",
+                SchemaVersion: _schemaVersion ?? SnapshotVersions.SchemaVersion,
+                ContentVersion: _contentVersion ?? SnapshotVersions.ContentVersion,
+                GeneratedAt: new DateTimeOffset(2026, 1, 1, 0, 0, 0, TimeSpan.Zero),
+                GeneratorVersion: SnapshotVersions.GeneratorVersion,
                 DisasterDefinitions: _disasters,
                 LocationDefinitions: _locations,
                 CharacterDefinitions: _characters,

@@ -1,6 +1,6 @@
 using ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Compilation;
 using ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Compilation.Validators;
-using ThunderbirdsBoardGameEngine.ReferenceData.Compiler.UnitTests.Compilation.TestHelpers;
+using ThunderbirdsBoardGameEngine.TestUtils.ReferenceData.Builders;
 using Xunit;
 
 namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.UnitTests.Compilation.Validators
@@ -12,7 +12,7 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.UnitTests.Compilati
         {
             // Arrange
             var validator = new LocationReferenceValidator();
-            var snapshot = new SnapshotTestBuilder()
+            var snapshot = new ReferenceDataSnapshotBuilder()
                 .WithLocation("valid-location", "Valid Location")
                 .WithCharacter("character-1", "Character 1")
                 .WithDisaster("disaster-1", "Disaster 1", "valid-location", ("character-1", 1, null))
@@ -27,7 +27,7 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.UnitTests.Compilati
         {
             // Arrange
             var validator = new LocationReferenceValidator();
-            var snapshot = new SnapshotTestBuilder()
+            var snapshot = new ReferenceDataSnapshotBuilder()
                 .WithLocation("valid-location", "Valid Location")
                 .WithCharacter("character-1", "Character 1")
                 .WithDisaster("disaster-1", "Disaster 1", "invalid-location", ("character-1", 1, null))
@@ -45,7 +45,7 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.UnitTests.Compilati
         {
             // Arrange
             var validator = new LocationReferenceValidator();
-            var snapshot = new SnapshotTestBuilder()
+            var snapshot = new ReferenceDataSnapshotBuilder()
                 .WithLocation("disaster-location", "Disaster Location")
                 .WithLocation("bonus-location", "Bonus Location")
                 .WithCharacter("character-1", "Character 1")
@@ -62,7 +62,7 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.UnitTests.Compilati
         {
             // Arrange
             var validator = new LocationReferenceValidator();
-            var snapshot = new SnapshotTestBuilder()
+            var snapshot = new ReferenceDataSnapshotBuilder()
                 .WithLocation("valid-location", "Valid Location")
                 .WithCharacter("character-1", "Character 1")
                 .WithDisaster("disaster-1", "Disaster 1", "valid-location",
@@ -81,7 +81,7 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.UnitTests.Compilati
         {
             // Arrange
             var validator = new LocationReferenceValidator();
-            var snapshot = new SnapshotTestBuilder()
+            var snapshot = new ReferenceDataSnapshotBuilder()
                 .WithLocation("location-1", "Location 1")
                 .WithCharacter("character-1", "Character 1")
                 .WithDisaster("disaster-1", "Disaster 1", "location-1",

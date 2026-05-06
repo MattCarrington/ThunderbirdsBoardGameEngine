@@ -1,5 +1,4 @@
-﻿using ThunderbirdsBoardGameEngine.ReferenceData.Compiler;
-using ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Compilation;
+﻿using ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Compilation;
 using ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Output;
 using ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Source;
 using ThunderbirdsBoardGameEngine.ReferenceData.ComponentTests.Helpers;
