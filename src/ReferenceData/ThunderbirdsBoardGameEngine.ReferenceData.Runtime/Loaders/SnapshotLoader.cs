@@ -38,16 +38,6 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Runtime.Loaders
             {
                 throw new InvalidOperationException("Reference data content version is missing.");
             }
-
-            if (snapshot.DisasterDefinitions.Count == 0)
-            {
-                throw new InvalidOperationException("Reference data snapshot contains no disasters.");
-            }
-
-            if (snapshot.CharacterDefinitions.Count == 0)
-            {
-                throw new InvalidOperationException("Reference data snapshot contains no characters.");
-            }
         }
     }
 }

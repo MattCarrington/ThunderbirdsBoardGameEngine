@@ -87,36 +87,6 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Runtime.UnitTests.Loaders
         }
 
         [Fact]
-        public async Task LoadAsync_WhenSnapshotContainsNoDisasters_ThrowsInvalidOperationExceptionAsync()
-        {
-            // Arrange
-            var snapshot = new ReferenceDataSnapshotBuilder()
-                .WithLocation("location-1", "Location 1")
-                .WithCharacter("character-1", "Character 1")
-                .Build();
-
-            var loader = CreateLoader(snapshot);
-
-            // Act & Assert
-            await Assert.ThrowsAsync<InvalidOperationException>(() => loader.LoadAsync());
-        }
-
-        [Fact]
-        public async Task LoadAsync_WhenSnapshotContainsNoCharacters_ThrowsInvalidOperationExceptionAsync()
-        {
-            // Arrange
-            var snapshot = new ReferenceDataSnapshotBuilder()
-                .WithLocation("location-1", "Location 1")
-                .WithDisaster("disaster-1", "Disaster 1", "location-1", ("character-1", 1, null))
-                .Build();
-
-            var loader = CreateLoader(snapshot);
-
-            // Act & Assert
-            await Assert.ThrowsAsync<InvalidOperationException>(() => loader.LoadAsync());
-        }
-
-        [Fact]
         public async Task LoadAsync_WhenSnapshotContentVersionNull_ThrowsInvalidOperationExceptionAsync()
         {
             // Arrange

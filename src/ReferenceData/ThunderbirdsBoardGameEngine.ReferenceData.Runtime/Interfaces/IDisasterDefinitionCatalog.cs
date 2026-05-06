@@ -7,6 +7,7 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Runtime.Interfaces
     public interface IDisasterDefinitionCatalog
     {
         ImmutableArray<ReferenceDisasterDefinition> GetAll();
+
         ReferenceDisasterDefinition GetByCode(CardCode code);
     }
 }
