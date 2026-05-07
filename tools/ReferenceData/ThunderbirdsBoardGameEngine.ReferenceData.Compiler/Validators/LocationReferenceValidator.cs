@@ -1,7 +1,9 @@
+using ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Compilation;
+using ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Interfaces;
 using ThunderbirdsBoardGameEngine.ReferenceData.Identities;
 using ThunderbirdsBoardGameEngine.ReferenceData.Model;
 
-namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Compilation.Validators
+namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Validators
 {
     /// <summary>
     /// Validates that location references point to valid location definitions.

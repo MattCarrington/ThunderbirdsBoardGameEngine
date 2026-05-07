@@ -1,7 +1,7 @@
-﻿using ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Compilation.Validators;
+﻿using ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Interfaces;
 using ThunderbirdsBoardGameEngine.ReferenceData.Model;
 
-namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Compilation
+namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Validators
 {
     /// <summary>
     /// Orchestrates snapshot validation by delegating to specialized validators.

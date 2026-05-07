@@ -1,6 +1,6 @@
 using ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Compilation;
 
-namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Source
+namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Interfaces
 {
     /// <summary>
     /// Provides reference data from a source for compilation.

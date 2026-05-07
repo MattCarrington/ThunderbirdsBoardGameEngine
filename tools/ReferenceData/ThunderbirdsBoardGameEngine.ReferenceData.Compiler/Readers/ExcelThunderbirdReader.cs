@@ -1,16 +1,17 @@
 using ClosedXML.Excel;
 using ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Helpers;
+using ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Inputs;
 
-namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Source.Readers
+namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Readers
 {
-    internal sealed class ExcelLocationReader
+    internal sealed class ExcelThunderbirdReader
     {
-        public List<LocationInput> ReadFrom(IXLWorksheet worksheet)
+        public List<ThunderbirdInput> ReadFrom(IXLWorksheet worksheet)
         {
             var headerRow = worksheet.FirstRowUsed();
             var columnMap = new ExcelMappingHelper(headerRow);
 
-            var locations = new List<LocationInput>();
+            var thunderbirds = new List<ThunderbirdInput>();
 
             var firstDataRow = headerRow.RowNumber() + 1;
             var lastRow = worksheet.LastRowUsed().RowNumber();
@@ -26,10 +27,10 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Source.Readers
                     continue;
                 }
 
-                locations.Add(new LocationInput(name));
+                thunderbirds.Add(new ThunderbirdInput(name));
             }
 
-            return locations;
+            return thunderbirds;
         }
     }
 }

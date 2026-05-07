@@ -1,7 +1,8 @@
 using ClosedXML.Excel;
 using ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Helpers;
+using ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Inputs;
 
-namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Source.Readers
+namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Readers
 {
     internal sealed class ExcelDisasterCardReader
     {

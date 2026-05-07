@@ -1,4 +1,4 @@
-﻿using ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Source;
+﻿using ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Inputs;
 
 namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Compilation
 {

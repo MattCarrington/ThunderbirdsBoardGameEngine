@@ -1,6 +1,7 @@
 ﻿using ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Compilation;
-using ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Output;
 using ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Source;
+using ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Validators;
+using ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Writers;
 using ThunderbirdsBoardGameEngine.ReferenceData.ComponentTests.Helpers;
 using Xunit;
 
@@ -14,20 +15,14 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.ComponentTests.Compilation
             // Arrange
             var dateTimeOffset = new DateTimeOffset(2026, 6, 1, 12, 0, 0, TimeSpan.Zero);
 
-            var source = new ExcelReferenceDataSource("ReferenceData.xlsx");
-
-            var context = source.Load();
-
-            var clock = new FakeClock(dateTimeOffset);
-
-            var builder = new SnapshotBuilder(clock);
-            var snapshot = builder.Build(context);
-
-            var validator = new SnapshotValidator();
-            validator.Validate(snapshot);
+            var compiler = new ReferenceDataCompiler(
+                new ExcelReferenceDataSource("ReferenceData.xlsx"),
+                new SnapshotBuilder(new FakeClock(dateTimeOffset)),
+                new SnapshotValidator(),
+                new JsonSnapshotWriter());
 
             // Act
-            JsonSnapshotWriter.Write(snapshot);
+            compiler.Compile();
 
             // Assert
             var json = File.ReadAllText("snapshot.json");

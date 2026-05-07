@@ -1,20 +1,17 @@
 ﻿using ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Compilation;
 using ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Helpers;
-using ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Output;
 using ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Source;
+using ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Validators;
+using ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Writers;
 
-var source = new ExcelReferenceDataSource("ReferenceData.xlsx");
+var compiler = new ReferenceDataCompiler(
+    new ExcelReferenceDataSource("ReferenceData.xlsx"),
+    new SnapshotBuilder(new SystemClock()),
+    new SnapshotValidator(),
+    new JsonSnapshotWriter());
 
-var context = source.Load();
+compiler.Compile();
 
-var clock = new SystemClock();
-
-var builder = new SnapshotBuilder(clock);
-var snapshot = builder.Build(context);
-
-var validator = new SnapshotValidator();
-validator.Validate(snapshot);
-
-JsonSnapshotWriter.Write(snapshot);
+Console.WriteLine("Snapshot generated successfully.");
 
 Console.WriteLine("Snapshot generated successfully.");

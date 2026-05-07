@@ -1,7 +1,7 @@
 ﻿using ThunderbirdsBoardGameEngine.Catalog.Generator.Helpers;
 using ThunderbirdsBoardGameEngine.PublishedLanguage.Enums;
+using ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Inputs;
 using ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Interfaces;
-using ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Source;
 using ThunderbirdsBoardGameEngine.ReferenceData.Identities;
 using ThunderbirdsBoardGameEngine.ReferenceData.Model;
 

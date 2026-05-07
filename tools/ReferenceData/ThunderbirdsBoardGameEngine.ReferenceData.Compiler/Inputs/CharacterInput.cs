@@ -1,4 +1,4 @@
-namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Source
+namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Inputs
 {
     public sealed record CharacterInput(
         string Name,

@@ -1,11 +1,12 @@
 ﻿using System.Text.Json;
+using ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Interfaces;
 using ThunderbirdsBoardGameEngine.ReferenceData.Model;
 
-namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Output
+namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Writers
 {
-    public static class JsonSnapshotWriter
+    public class JsonSnapshotWriter : ISnapshotWriter
     {
-        public static void Write(ReferenceDataSnapshot snapshot)
+        public void Write(ReferenceDataSnapshot snapshot)
         {
             var json = JsonSerializer.Serialize(snapshot, SnapshotJsonOptions.Default);
 

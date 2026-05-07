@@ -1,6 +1,8 @@
+using ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Compilation;
+using ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Interfaces;
 using ThunderbirdsBoardGameEngine.ReferenceData.Model;
 
-namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Compilation.Validators
+namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Validators
 {
     /// <summary>
     /// Validates the disaster bonus system's polymorphic asset references.

@@ -1,6 +1,6 @@
 using ThunderbirdsBoardGameEngine.ReferenceData.Model;
 
-namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Compilation.Validators
+namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Interfaces
 {
     public interface ISnapshotValidator
     {

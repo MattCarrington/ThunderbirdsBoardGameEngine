@@ -1,6 +1,7 @@
 ﻿using ClosedXML.Excel;
 using ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Compilation;
-using ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Source.Readers;
+using ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Interfaces;
+using ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Readers;
 
 namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Source
 {
