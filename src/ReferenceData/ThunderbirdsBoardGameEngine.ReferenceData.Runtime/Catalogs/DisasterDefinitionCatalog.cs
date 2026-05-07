@@ -6,7 +6,7 @@ using ThunderbirdsBoardGameEngine.ReferenceData.Runtime.Interfaces;
 
 namespace ThunderbirdsBoardGameEngine.ReferenceData.Runtime.Catalogs
 {
-    public class DisasterDefinitionCatalog : IDisasterDefinitionCatalog
+    internal class DisasterDefinitionCatalog : IDisasterDefinitionCatalog
     {
         private readonly FrozenDictionary<CardCode, ReferenceDisasterDefinition> _byCode;
 

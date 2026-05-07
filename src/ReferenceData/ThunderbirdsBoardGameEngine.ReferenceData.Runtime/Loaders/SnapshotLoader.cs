@@ -3,7 +3,7 @@ using ThunderbirdsBoardGameEngine.ReferenceData.Runtime.Interfaces;
 
 namespace ThunderbirdsBoardGameEngine.ReferenceData.Runtime.Loaders
 {
-    public sealed class SnapshotLoader
+    internal sealed class SnapshotLoader
     {
         private readonly ISnapshotProvider _provider;
         private readonly ISnapshotDeserializer _deserializer;

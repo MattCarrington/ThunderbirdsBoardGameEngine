@@ -6,7 +6,7 @@ using ThunderbirdsBoardGameEngine.ReferenceData.Runtime.Interfaces;
 
 namespace ThunderbirdsBoardGameEngine.ReferenceData.Runtime.Catalogs
 {
-    public class CharacterDefinitionCatalog : ICharacterDefinitionCatalog
+    internal class CharacterDefinitionCatalog : ICharacterDefinitionCatalog
     {
         private readonly FrozenDictionary<CharacterCode, ReferenceCharacterDefinition> _byCode;
 

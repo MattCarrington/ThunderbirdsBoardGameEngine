@@ -4,7 +4,7 @@ using ThunderbirdsBoardGameEngine.ReferenceData.Runtime.Interfaces;
 
 namespace ThunderbirdsBoardGameEngine.ReferenceData.Runtime.Deserializers
 {
-    public class JsonSnapshotDeserializer : ISnapshotDeserializer
+    internal class JsonSnapshotDeserializer : ISnapshotDeserializer
     {
         public ReferenceDataSnapshot Deserialize(Stream stream)
         {

@@ -3,7 +3,7 @@ using ThunderbirdsBoardGameEngine.ReferenceData.Runtime.Interfaces;
 
 namespace ThunderbirdsBoardGameEngine.ReferenceData.Runtime.Providers
 {
-    public class EmbeddedResourceSnapshotProvider : ISnapshotProvider
+    internal class EmbeddedResourceSnapshotProvider : ISnapshotProvider
     {
         private readonly Assembly _assembly;
         private readonly string _resourceName;
