@@ -1,5 +1,5 @@
-﻿using ThunderbirdsBoardGameEngine.PublishedLanguage.Characters;
-using ThunderbirdsBoardGameEngine.PublishedLanguage.Enums;
+﻿using ThunderbirdsBoardGameEngine.PublishedLanguage.Enums;
+using ThunderbirdsBoardGameEngine.ReferenceData.Identities;
 using ThunderbirdsBoardGameEngine.Rules.Domain.Rescue;
 using Xunit;
 
@@ -11,7 +11,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.Rescue
         public void ApplyRescueModifier_WhenCharacterRescueTypeDoesNotMatchInput_ReturnsEmptyCollection()
         {
             // Arrange
-            var characterContribution = new CharacterContribution(CharacterCode.Gordon, new CharacterRescueBonusContribution(RescueType.Sea, 3));
+            var characterContribution = new CharacterContribution(new CharacterCode("Gordon"), new CharacterRescueBonusContribution(RescueType.Sea, 3));
 
             var input = new RescueCalculationInput(
                 presentDisasterBonusKeys: [],
@@ -29,7 +29,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.Rescue
         public void ApplyRescueModifier_WhenCharacterRescueTypeMatchesInput_ReturnsBonusModifier()
         {
             // Arrange
-            var characterContribution = new CharacterContribution(CharacterCode.Virgil, new CharacterRescueBonusContribution(RescueType.Land, 2));
+            var characterContribution = new CharacterContribution(new CharacterCode("Virgil"), new CharacterRescueBonusContribution(RescueType.Land, 2));
 
             var input = new RescueCalculationInput(
                 presentDisasterBonusKeys: [],
@@ -39,8 +39,8 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.Rescue
             var result = characterContribution.ApplyRescueModifier(input);
 
             // Assert
-            var bonus = Assert.Single<AppliedRescueModifier>(result);
-            Assert.Equal(CharacterCode.Virgil.ToString(), bonus.Key);
+            var bonus = Assert.Single(result);
+            Assert.Equal("Virgil", bonus.Key);
             Assert.Equal(2, bonus.Value);
             Assert.Equal(SourceType.CharacterAbility, bonus.SourceType);
         }
@@ -49,7 +49,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.Rescue
         public void ApplyRescueModifier_WhenNoRescueBonusContribution_ReturnsEmptyCollection()
         {
             // Arrange
-            var characterContribution = new CharacterContribution(CharacterCode.LadyPenelope, null);
+            var characterContribution = new CharacterContribution(new CharacterCode("LadyPenelope"), null);
 
             var input = new RescueCalculationInput(
                 presentDisasterBonusKeys: [],

@@ -1,4 +1,6 @@
-﻿using ThunderbirdsBoardGameEngine.PublishedLanguage.Characters;
+﻿
+
+using ThunderbirdsBoardGameEngine.ReferenceData.Identities;
 
 namespace ThunderbirdsBoardGameEngine.Rules.Domain.Rescue
 {

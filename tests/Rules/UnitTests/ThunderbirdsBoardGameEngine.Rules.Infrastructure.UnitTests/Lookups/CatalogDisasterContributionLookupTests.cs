@@ -1,11 +1,12 @@
 ﻿using NSubstitute;
-using ThunderbirdsBoardGameEngine.Catalog.Application.Interfaces;
-using ThunderbirdsBoardGameEngine.Catalog.Domain.Entities;
-using ThunderbirdsBoardGameEngine.Catalog.Domain.Enums;
-using ThunderbirdsBoardGameEngine.PublishedLanguage.DisasterBonus;
+using NSubstitute.ExceptionExtensions;
+using ThunderbirdsBoardGameEngine.PublishedLanguage.Enums;
+using ThunderbirdsBoardGameEngine.ReferenceData.Identities;
+using ThunderbirdsBoardGameEngine.ReferenceData.Model;
+using ThunderbirdsBoardGameEngine.ReferenceData.Runtime.Interfaces;
+using ThunderbirdsBoardGameEngine.Rules.Application.Rescue.Exceptions;
 using ThunderbirdsBoardGameEngine.Rules.Domain.Rescue;
 using ThunderbirdsBoardGameEngine.Rules.Infrastructure.Lookups;
-using ThunderbirdsBoardGameEngine.TestUtils.Catalog.Builders;
 using Xunit;
 
 namespace ThunderbirdsBoardGameEngine.Rules.Infrastructure.UnitTests.Lookups
@@ -16,42 +17,67 @@ namespace ThunderbirdsBoardGameEngine.Rules.Infrastructure.UnitTests.Lookups
         public void GetRescueContext_WhenValidDisasterCard_ReturnsRescueContext()
         {
             // Arrange
-            var characterBonus = new CharacterBonusCondition(Character.LadyPenelope, 2);
-            var thunderbirdBonus = new ThunderbirdBonusCondition(ThunderbirdMachine.Thunderbird2, 1);
-            var podVehicleBonus = new PodVehicleBonusCondition(PodVehicle.TransmitterTruck, 3);
+            var code = new CardCode("test-disaster-card");
 
-            var disasterCard = new DisasterCardBuilder()
-                .WithId(1)
-                .WithName("Test Disaster Card")
-                .WithCode("test-disaster-card")
-                .WithDifficulty(7)
-                .WithBonusCondition(characterBonus)
-                .WithBonusCondition(thunderbirdBonus)
-                .WithBonusCondition(podVehicleBonus)
-                .Build();
+            var disaster = new ReferenceDisasterDefinition(
+                code: code,
+                displayName: "Test Disaster Card",
+                difficultyNumber: 7,
+                location: new LocationCode("test-location"),
+                rescueType: RescueType.Air,
+                bonuses:
+                [
+                    new ReferenceDisasterBonus(new DisasterBonusKey("character-1"), 1, null),
+                    new ReferenceDisasterBonus(new DisasterBonusKey("thunderbird-1"), 2, null),
+                    new ReferenceDisasterBonus(new DisasterBonusKey("pod-vehicle-1"), 3, null)
+                ],
+                rewards:
+                [
+                    new ReferenceDisasterReward.PlayerChoice(),
+                    new ReferenceDisasterReward.SpecificToken(BonusToken.Technology)
+                ]
+            );
 
-            var catalog = Substitute.For<IDisasterCardReferenceSource>();
-            catalog.GetByCode(Arg.Any<CardCode>()).Returns(disasterCard);
+            var catalog = Substitute.For<IDisasterDefinitionCatalog>();
+            catalog.GetByCode(Arg.Any<CardCode>()).Returns(disaster);
 
-            var lookup = new CatalogDisasterContributionLookup(catalog);
+            var lookup = new ReferenceDataDisasterContributionLookup(catalog);
 
             // Act
-            var rescueContext = lookup.GetDisasterContribution(disasterCard.Code);
+            var result = lookup.GetDisasterContribution(code);
 
             // Assert
-            Assert.NotNull(rescueContext);
-            Assert.Equal(7, rescueContext.DifficultyNumber);
+            Assert.NotNull(result);
+            Assert.Equal(disaster.RescueType, result.RescueType);
+            Assert.Equal(disaster.DifficultyNumber, result.DifficultyNumber);
 
             var expectedBonuses = new[]
             {
-                new DisasterBonus(new("character:ladypenelope"), 2),
-                new DisasterBonus(new("thunderbird:thunderbird2"), 1),
-                new DisasterBonus(new("podvehicle:transmittertruck"), 3)
+                new DisasterBonus(new("character-1"), 1),
+                new DisasterBonus(new("thunderbird-1"), 2),
+                new DisasterBonus(new("pod-vehicle-1"), 3)
             };
 
-            Assert.Equal(expectedBonuses.Length, rescueContext.AvailableBonuses.Count);
+            Assert.Equal(expectedBonuses.Length, result.AvailableBonuses.Count);
             Assert.All(expectedBonuses, expected =>
-                Assert.Contains(expected, rescueContext.AvailableBonuses));
+                Assert.Contains(expected, result.AvailableBonuses));
+        }
+
+        [Fact]
+        public void GetRescueContext_WhenDisasterCardNotFound_ThrowsReferenceDataNotFoundException()
+        {
+            // Arrange
+            var code = new CardCode("non-existent-disaster-card");
+
+            var catalog = Substitute.For<IDisasterDefinitionCatalog>();
+            catalog.GetByCode(Arg.Any<CardCode>()).Throws(new KeyNotFoundException());
+
+            var lookup = new ReferenceDataDisasterContributionLookup(catalog);
+
+            // Act & Assert
+            var ex = Assert.Throws<ReferenceDataNotFoundException>(() => lookup.GetDisasterContribution(code));
+            Assert.Equal("Disaster", ex.ResourceType);
+            Assert.Equal(code.ToString(), ex.Code);
         }
     }
 }

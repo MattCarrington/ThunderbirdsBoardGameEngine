@@ -1,7 +1,6 @@
 ﻿using ThunderbirdsBoardGameEngine.Api.Exceptions;
 using ThunderbirdsBoardGameEngine.Api.Mappers.Rules.V1;
-using ThunderbirdsBoardGameEngine.PublishedLanguage.Characters;
-using ThunderbirdsBoardGameEngine.PublishedLanguage.DisasterBonus;
+using ThunderbirdsBoardGameEngine.ReferenceData.Identities;
 using ThunderbirdsBoardGameEngine.Rules.Application.Rescue.CalculateRescueTarget;
 using ThunderbirdsBoardGameEngine.Rules.Contracts.Dtos.Rescue.CalculateRescueTarget.V1;
 using ThunderbirdsBoardGameEngine.Rules.Domain.Rescue;
@@ -29,24 +28,7 @@ namespace ThunderbirdsBoardGameEngine.Api.UnitTests.Mappers.Rules.V1
             // Assert
             Assert.Equal(disasterCardCode, result.DisasterCardCode);
             Assert.Equal(dto.PresentDisasterBonusKeys.Select(k => new DisasterBonusKey(k)), result.PresentDisasterBonusKeys);
-            Assert.Equal(CharacterCode.Alan, result.PerformingCharacter);
-        }
-
-        [Fact]
-        public void ToQuery_InvalidCharacterKey_ThrowsBadRequestException()
-        {
-            // Arrange
-            var disasterCardCode = new CardCode("card-code-123");
-
-            var dto = new CalculateRescueTargetRequestDto
-            {
-                PresentDisasterBonusKeys = ["character:alan", "thunderbird:thunderbird4", "podvehicle.domo"],
-                PerformingCharacterKey = "invalid-character"
-            };
-
-            // Act & Assert
-            var exception = Assert.Throws<BadRequestException>(() => dto.ToQuery(disasterCardCode.ToString()));
-            Assert.Equal("Invalid character code: invalid-character", exception.Message);
+            Assert.Equal(new CharacterCode("alan"), result.PerformingCharacter);
         }
 
         [Fact]
