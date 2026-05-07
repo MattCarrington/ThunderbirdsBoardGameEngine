@@ -8,7 +8,7 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Writers
     {
         public void Write(ReferenceDataSnapshot snapshot)
         {
-            var json = JsonSerializer.Serialize(snapshot, SnapshotJsonOptions.Default);
+            var json = JsonSerializer.Serialize(snapshot, SnapshotJsonOptions.Create());
 
             File.WriteAllText("snapshot.json", json);
         }

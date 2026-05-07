@@ -8,7 +8,7 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Runtime.Deserializers
     {
         public ReferenceDataSnapshot Deserialize(Stream stream)
         {
-            return JsonSerializer.Deserialize<ReferenceDataSnapshot>(stream, SnapshotJsonOptions.Default)
+            return JsonSerializer.Deserialize<ReferenceDataSnapshot>(stream, SnapshotJsonOptions.Create())
                 ?? throw new InvalidOperationException("Failed to deserialize snapshot.");
         }
     }
