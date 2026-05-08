@@ -31,7 +31,6 @@ namespace ThunderbirdsBoardGameEngine.UI.IntegrationTests.Pages
             var configuration = new ConfigurationBuilder()
                 .AddInMemoryCollection(new Dictionary<string, string?>
                 {
-                    { "CatalogClient:BaseAddress", _host.Url },
                     { "RulesClient:BaseAddress", _host.Url }
                 })
                 .Build();

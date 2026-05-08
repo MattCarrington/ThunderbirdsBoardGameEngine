@@ -1,6 +1,4 @@
-﻿using ThunderbirdsBoardGameEngine.Catalog.Application.Interfaces;
-using ThunderbirdsBoardGameEngine.Catalog.Application.Mappers;
-using ThunderbirdsBoardGameEngine.ReferenceData.Identities;
+﻿using ThunderbirdsBoardGameEngine.ReferenceData.Identities;
 using ThunderbirdsBoardGameEngine.ReferenceData.Runtime.Interfaces;
 using ThunderbirdsBoardGameEngine.Rules.Application.Rescue.Exceptions;
 using ThunderbirdsBoardGameEngine.Rules.Application.Rescue.Interfaces;

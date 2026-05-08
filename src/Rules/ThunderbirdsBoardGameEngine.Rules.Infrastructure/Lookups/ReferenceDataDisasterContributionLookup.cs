@@ -1,7 +1,4 @@
-﻿using ThunderbirdsBoardGameEngine.Catalog.Application.Factories;
-using ThunderbirdsBoardGameEngine.Catalog.Application.Interfaces;
-using ThunderbirdsBoardGameEngine.Catalog.Domain.Entities;
-using ThunderbirdsBoardGameEngine.ReferenceData.Identities;
+﻿using ThunderbirdsBoardGameEngine.ReferenceData.Identities;
 using ThunderbirdsBoardGameEngine.ReferenceData.Model;
 using ThunderbirdsBoardGameEngine.ReferenceData.Runtime.Interfaces;
 using ThunderbirdsBoardGameEngine.Rules.Application.Rescue.Exceptions;

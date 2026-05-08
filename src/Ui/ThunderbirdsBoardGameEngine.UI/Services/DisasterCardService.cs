@@ -1,6 +1,4 @@
-﻿using ThunderbirdsBoardGameEngine.Catalog.Client.Interfaces.V1;
-using ThunderbirdsBoardGameEngine.Catalog.Contracts.Dtos.V1;
-using ThunderbirdsBoardGameEngine.ReferenceData.Identities;
+﻿using ThunderbirdsBoardGameEngine.ReferenceData.Identities;
 using ThunderbirdsBoardGameEngine.ReferenceData.Runtime.Interfaces;
 using ThunderbirdsBoardGameEngine.UI.Interfaces;
 using ThunderbirdsBoardGameEngine.UI.Mappers;

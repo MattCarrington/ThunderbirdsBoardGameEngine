@@ -15,8 +15,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Catalog\ThunderbirdsBoardGameEngine.Catalog.Application\ThunderbirdsBoardGameEngine.Catalog.Application.csproj" />
-    <ProjectReference Include="..\..\Catalog\ThunderbirdsBoardGameEngine.Catalog.Domain\ThunderbirdsBoardGameEngine.Catalog.Domain.csproj" />
     <ProjectReference Include="..\..\ReferenceData\ThunderbirdsBoardGameEngine.ReferenceData.Runtime\ThunderbirdsBoardGameEngine.ReferenceData.Runtime.csproj" />
     <ProjectReference Include="..\ThunderbirdsBoardGameEngine.Rules.Application\ThunderbirdsBoardGameEngine.Rules.Application.csproj" />
     <ProjectReference Include="..\ThunderbirdsBoardGameEngine.Rules.Domain\ThunderbirdsBoardGameEngine.Rules.Domain.csproj" />
