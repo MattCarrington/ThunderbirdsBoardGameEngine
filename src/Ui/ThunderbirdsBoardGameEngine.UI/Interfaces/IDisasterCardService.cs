@@ -1,9 +1,11 @@
-﻿using ThunderbirdsBoardGameEngine.Catalog.Contracts.Dtos.V1;
+﻿using ThunderbirdsBoardGameEngine.UI.ViewModels;
 
 namespace ThunderbirdsBoardGameEngine.UI.Interfaces
 {
     public interface IDisasterCardService
     {
-        Task<IReadOnlyList<DisasterCardDto>> GetAllAsync();
+        IReadOnlyList<DisasterCardViewModel> GetAll();
+
+        DisasterCardViewModel GetByCode(string code);
     }
 }

@@ -2,13 +2,11 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using ThunderbirdsBoardGameEngine.Catalog.Client.Extensions;
-using ThunderbirdsBoardGameEngine.Catalog.Contracts.Dtos.V1;
 using ThunderbirdsBoardGameEngine.Catalog.WireMock;
+using ThunderbirdsBoardGameEngine.ReferenceData.Runtime;
 using ThunderbirdsBoardGameEngine.Rules.Client.Extensions;
 using ThunderbirdsBoardGameEngine.Rules.Contracts.Dtos.Rescue.CalculateRescueTarget.V1;
 using ThunderbirdsBoardGameEngine.Rules.WireMock;
-using ThunderbirdsBoardGameEngine.TestUtils.Catalog.TestFileCatalogs;
-using ThunderbirdsBoardGameEngine.TestUtils.Helpers;
 using ThunderbirdsBoardGameEngine.TestUtils.xUnit.Fixtures;
 using ThunderbirdsBoardGameEngine.UI.Interfaces;
 using ThunderbirdsBoardGameEngine.UI.Pages;
@@ -27,8 +25,6 @@ namespace ThunderbirdsBoardGameEngine.UI.IntegrationTests.Pages
         {
             _host = fixture.Host;
             _host.Reset();
-            _host.DisasterCardStub().RegisterMissingHeaderGuard();
-            _host.DisasterCardStub().RegisterIncorrectHeaderGuard();
             _host.CharactersStub().RegisterMissingHeaderGuard();
             _host.CharactersStub().RegisterIncorrectHeaderGuard();
             _host.RescueStub().RegisterMissingHeaderGuard();
@@ -42,6 +38,7 @@ namespace ThunderbirdsBoardGameEngine.UI.IntegrationTests.Pages
                 })
                 .Build();
 
+            Services.AddReferenceData();
             Services.AddCatalogClients(configuration);
             Services.AddRulesClients(configuration);
 
@@ -54,9 +51,6 @@ namespace ThunderbirdsBoardGameEngine.UI.IntegrationTests.Pages
         public async Task Render_WhenCardsExist_CardsExist()
         {
             // Arrange
-            var cards = await GetCardDtosAsync();
-
-            _host.DisasterCardStub().RegisterGetAllSuccess(cards);
 
             // Act
             var cut = RenderComponent<DisasterCards>();
@@ -70,51 +64,13 @@ namespace ThunderbirdsBoardGameEngine.UI.IntegrationTests.Pages
                 .Select(o => o.TextContent.Trim())
                 .ToList();
 
-            Assert.Equal(cards.Count + 1, result.Count);
-        }
-
-        [Fact]
-        public void Render_WhenNoCardExist_DisplaysEmptyState()
-        {
-            // Arrange
-            _host.DisasterCardStub().RegisterGetAllEmpty();
-
-            // Act
-            var cut = RenderComponent<DisasterCards>();
-
-            // Await & Assert
-            cut.WaitForAssertion(() =>
-            {
-                cut.Find("[data-testid='empty-state']");
-                Assert.Empty(cut.FindAll("#disasterSelect"));
-                Assert.DoesNotContain("Disaster Card Details", cut.Markup);
-            }, timeout: TimeSpan.FromSeconds(5));
-        }
-
-        [Fact]
-        public void Render_WhenErrorOccurs_DisplaysEmptyState()
-        {
-            // Arrange
-            _host.DisasterCardStub().RegisterGetAllError();
-
-            // Act
-            var cut = RenderComponent<DisasterCards>();
-
-            // Await & Assert
-            cut.WaitForAssertion(() =>
-            {
-                cut.Find("[data-testid='empty-state']");
-                Assert.Empty(cut.FindAll("#disasterSelect"));
-                Assert.DoesNotContain("Disaster Card Details", cut.Markup);
-            }, timeout: TimeSpan.FromSeconds(5));
+            Assert.Equal(35, result.Count);
         }
 
         [Fact]
         public async Task Calculate_WhenSuccess_DisplaysResultAsync()
         {
             // Arrange
-            var cards = await GetCardDtosAsync();
-
             var rescueResult = new CalculateRescueTargetResponseDto
             {
                 TargetNumber = 10,
@@ -122,7 +78,6 @@ namespace ThunderbirdsBoardGameEngine.UI.IntegrationTests.Pages
                 AppliedDisasterBonuses = Array.Empty<AppliedDisasterBonusDto>()
             };
 
-            _host.DisasterCardStub().RegisterGetAllSuccess(cards);
             _host.CharactersStub().RegisterGetAllSuccess();
             _host.RescueStub().RegisterCalculateRescueTargetSuccess(rescueResult);
 
@@ -133,7 +88,7 @@ namespace ThunderbirdsBoardGameEngine.UI.IntegrationTests.Pages
 
             // Act
             cut.Find("#disasterSelect")
-               .Change(cards[0].Id.ToString());
+               .Change("end-of-the-road");
 
             cut.WaitForState(() => true);
 
@@ -161,9 +116,6 @@ namespace ThunderbirdsBoardGameEngine.UI.IntegrationTests.Pages
         public async Task Calculate_WhenError_DisplaysErrorAsync()
         {
             // Arrange
-            var cards = await GetCardDtosAsync();
-
-            _host.DisasterCardStub().RegisterGetAllSuccess(cards);
             _host.CharactersStub().RegisterGetAllSuccess();
             _host.RescueStub().RegisterCalculateRescueTargetError();
 
@@ -172,29 +124,25 @@ namespace ThunderbirdsBoardGameEngine.UI.IntegrationTests.Pages
             // Wait for initial load
             cut.WaitForElement("#disasterSelect");
 
-            // Act
-            cut.Find("#disasterSelect")
-               .Change(cards[0].Id.ToString());
+            // Act - select disaster card
+            cut.Find("#disasterSelect").Change("end-of-the-road");
 
-            cut.WaitForState(() => true);
+            // Wait for the card details to render (this ensures selectedCard is set)
+            cut.WaitForAssertion(() =>
+                Assert.Contains("Disaster Card Details", cut.Markup));
 
-            cut.WaitForElement("#characterSelect");
+            // Now wait for character select (which only shows when selectedCard is not null)
+            var characterSelect = cut.WaitForElement("#characterSelect");
+            characterSelect.Change("gordon");
 
-            cut.Find("#characterSelect").Change("gordon");
-
-            // Now click
+            // Click calculate
             cut.Find("[data-testid='calculate-button']").Click();
 
-            // Assert – UI reaction
+            // Assert – error appears
             cut.WaitForAssertion(() =>
             {
                 cut.Find("[data-testid='rescue-calculation-error']");
             });
-        }
-
-        private static async Task<IReadOnlyList<DisasterCardDto>> GetCardDtosAsync()
-        {
-            return await TestDataLoader.LoadJsonFromFileAsync<IReadOnlyList<DisasterCardDto>>(DisasterCardTestFileCatalog.DataOnly("disaster-card-dtos.json"));
         }
     }
 }
