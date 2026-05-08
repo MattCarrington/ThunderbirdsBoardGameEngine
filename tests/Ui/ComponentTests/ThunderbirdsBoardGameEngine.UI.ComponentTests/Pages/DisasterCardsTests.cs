@@ -1,7 +1,6 @@
 ﻿using Bunit;
 using Microsoft.Extensions.DependencyInjection;
 using NSubstitute;
-using ThunderbirdsBoardGameEngine.Catalog.Contracts.Dtos.V1;
 using ThunderbirdsBoardGameEngine.Rules.Contracts.Dtos.Rescue.CalculateRescueTarget.V1;
 using ThunderbirdsBoardGameEngine.UI.Interfaces;
 using ThunderbirdsBoardGameEngine.UI.Pages;
@@ -74,7 +73,7 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Pages
             cut.WaitForElement("#disasterSelect option[value='volcano']"); // waits for card to render
             cut.WaitForElement("#characterSelect option[value='scott']"); // waits for characters to render
 
-            service.Received(1).GetAllAsync();
+            service.Received(1).GetAll();
         }
 
         [Fact]
@@ -542,7 +541,7 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Pages
             _ = SetupRescueService();
 
             // Characters service returns empty
-            _ = SetupCharactersService(Array.Empty<CharacterDto>());
+            _ = SetupCharactersService(Array.Empty<CharacterViewModel>());
             var cut = RenderComponent<DisasterCards>();
 
             cut.WaitForElement("#disasterSelect").Change("volcano");
@@ -657,21 +656,21 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Pages
             return service;
         }
 
-        private ICharactersService SetupCharactersService()
+        private ICharacterService SetupCharactersService()
         {
-            var characters = new List<CharacterDto>
+            var characters = new List<CharacterViewModel>
             {
-                new() { DisplayName = "Scott", Key = "scott" },
-                new() { DisplayName = "Virgil", Key = "virgil" }
+                new(Key: "scott", DisplayName: "Scott"),
+                new(Key: "virgil", DisplayName: "Virgil"),
             };
 
             return SetupCharactersService(characters);
         }
 
-        private ICharactersService SetupCharactersService(IReadOnlyList<CharacterDto> characters)
+        private ICharacterService SetupCharactersService(IReadOnlyList<CharacterViewModel> characters)
         {
-            var service = Substitute.For<ICharactersService>();
-            service.GetAllAsync().Returns(Task.FromResult(characters));
+            var service = Substitute.For<ICharacterService>();
+            service.GetAll().Returns(characters);
 
             Services.AddSingleton(service);
 

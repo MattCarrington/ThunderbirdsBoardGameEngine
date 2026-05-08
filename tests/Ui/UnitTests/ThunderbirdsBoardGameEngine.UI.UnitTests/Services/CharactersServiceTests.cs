@@ -1,8 +1,8 @@
 ﻿using NSubstitute;
-using System.Net;
-using ThunderbirdsBoardGameEngine.Catalog.Client.Interfaces.V1;
-using ThunderbirdsBoardGameEngine.Catalog.Contracts.Dtos.V1;
-using ThunderbirdsBoardGameEngine.Client.Infrastructure;
+using System.Collections.Immutable;
+using ThunderbirdsBoardGameEngine.ReferenceData.Identities;
+using ThunderbirdsBoardGameEngine.ReferenceData.Model;
+using ThunderbirdsBoardGameEngine.ReferenceData.Runtime.Interfaces;
 using ThunderbirdsBoardGameEngine.UI.Services;
 using Xunit;
 
@@ -11,65 +11,68 @@ namespace ThunderbirdsBoardGameEngine.UI.UnitTests.Services
     public class CharactersServiceTests
     {
         [Fact]
-        public async Task GetAllAsync_WhenResponseIsSuccessful_ReturnsListOfCharactersAsync()
+        public void GetAll_WhenCalled_CallsCatalog()
         {
             // Arrange
-            var dto = new List<CharacterDto>
-            {
-                new() { Key = "scott", DisplayName = "Scott" },
-                new() { Key = "lady-penelope", DisplayName = "Lady Penelope" }
-            };
+            var catalog = Substitute.For<ICharacterDefinitionCatalog>();
+            catalog.GetAll().Returns(ImmutableArray<ReferenceCharacterDefinition>.Empty);
 
-            var response = ApiResult<IReadOnlyList<CharacterDto>>.SuccessResult(dto, HttpStatusCode.OK);
-
-            var service = CreateService(response);
+            var service = new CharacterService(catalog);
 
             // Act
-            var result = await service.GetAllAsync();
+            service.GetAll();
+
+            // Assert
+            catalog.Received(1).GetAll();
+        }
+
+        [Fact]
+        public void GetAll_WhenCatalogReturnsMultipleItems_ReturnsCorrectCount()
+        {
+            // Arrange
+            var character1 = new ReferenceCharacterDefinition(
+                code: new CharacterCode("CH001"),
+                displayName: "Character 1",
+                rescueBonus: null
+            );
+            var character2 = new ReferenceCharacterDefinition(
+                code: new CharacterCode("CH002"),
+                displayName: "Character 2",
+                rescueBonus: null
+            );
+            var character3 = new ReferenceCharacterDefinition(
+                code: new CharacterCode("CH003"),
+                displayName: "Character 3",
+                rescueBonus: null
+            );
+
+            var catalog = Substitute.For<ICharacterDefinitionCatalog>();
+            catalog.GetAll().Returns(new[] { character1, character2, character3 }.ToImmutableArray());
+
+            var service = new CharacterService(catalog);
+
+            // Act
+            var result = service.GetAll();
+
+            // Assert
+            Assert.Equal(3, result.Count);
+        }
+
+        [Fact]
+        public void GetAll_WhenCatalogIsEmpty_ReturnsEmptyList()
+        {
+            // Arrange
+            var catalog = Substitute.For<ICharacterDefinitionCatalog>();
+            catalog.GetAll().Returns(ImmutableArray<ReferenceCharacterDefinition>.Empty);
+
+            var service = new CharacterService(catalog);
+
+            // Act
+            var result = service.GetAll();
 
             // Assert
             Assert.NotNull(result);
-
-            var characters = Assert.IsType<List<CharacterDto>>(result);
-            Assert.Same(dto, characters);
-        }
-
-        [Fact]
-        public async Task GetAllAsync_WhenClientReturnsNullData_ReturnsEmptyList()
-        {
-            // Arrange
-            var response = ApiResult<IReadOnlyList<CharacterDto>>.SuccessResult(null, HttpStatusCode.OK);
-
-            var service = CreateService(response);
-
-            // Act
-            var result = await service.GetAllAsync();
-
-            // Assert
             Assert.Empty(result);
-        }
-
-        [Fact]
-        public async Task GetAllAsync_WhenResponseIsFailure_ReturnsEmptyList()
-        {
-            // Arrange
-            var response = ApiResult<IReadOnlyList<CharacterDto>>.Failure("Error occurred", HttpStatusCode.InternalServerError);
-
-            var service = CreateService(response);
-
-            // Act
-            var result = await service.GetAllAsync();
-
-            // Assert
-            Assert.Empty(result);
-        }
-
-        private static CharactersService CreateService(ApiResult<IReadOnlyList<CharacterDto>> response)
-        {
-            var client = Substitute.For<ICharactersClient>();
-            client.GetAllAsync().Returns(response);
-
-            return new CharactersService(client);
         }
     }
 }

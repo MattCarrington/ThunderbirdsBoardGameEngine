@@ -2,8 +2,7 @@
 @using ThunderbirdsBoardGameEngine.Rules.Contracts.Dtos.Rescue.CalculateRescueTarget.V1
 @using ThunderbirdsBoardGameEngine.UI.Interfaces
 @using ThunderbirdsBoardGameEngine.UI.ViewModels
-@using ThunderbirdsBoardGameEngine.Catalog.Contracts.Dtos.V1
-@inject ICharactersService CharactersService
+@inject ICharacterService CharacterService
 @inject IDisasterCardService DisasterCardService
 @inject IRescueService RescueService
 
@@ -27,7 +26,7 @@ else
         <option value="">-- Select a card --</option>
         @foreach (var c in cards)
         {
-            <option value="@c.Code">@c.DisplayName</option>  @* users see title; value is Code *@
+            <option value="@c.Code">@c.DisplayName</option>
         }
     </select>
 
@@ -90,8 +89,8 @@ else
 
                         @foreach (var c in characters)
                         {
-                            <option value="@c.Key">@c.DisplayName</option> @* users see display; value is key *@ 
-                                }
+                            <option value="@c.Key">@c.DisplayName</option>
+                        }
                     </select>
                 }
 
@@ -125,7 +124,7 @@ else
 
 @code {
     private IReadOnlyList<DisasterCardViewModel>? cards;
-    private IReadOnlyList<CharacterDto>? characters;
+    private IReadOnlyList<CharacterViewModel>? characters;
 
     private string? selectedCardId;
     private DisasterCardViewModel? selectedCard;
@@ -142,14 +141,13 @@ else
         || selectedCard is null
         || string.IsNullOrWhiteSpace(selectedCharacterCode);
 
-    protected override async Task OnInitializedAsync()
+    protected override void OnInitialized()
     {
-        // Load once (disaster cards only)
-        var all = DisasterCardService.GetAll();
-
-        cards = all.OrderBy(c => c.DisplayName ?? string.Empty, StringComparer.OrdinalIgnoreCase).ToList();
+        var allCards = DisasterCardService.GetAll();
+        cards = allCards.OrderBy(c => c.DisplayName ?? string.Empty, StringComparer.OrdinalIgnoreCase).ToList();
         
-        characters = await CharactersService.GetAllAsync();
+        var allCharacters = CharacterService.GetAll();
+        characters = allCharacters.OrderBy(c => c.DisplayName ?? string.Empty, StringComparer.OrdinalIgnoreCase).ToList();
     }
 
     private string? SelectedCardId
@@ -163,7 +161,6 @@ else
             }
 
             selectedCardId = value;
-
             selectedBonusKeys.Clear();
             calculationResult = null;
 
@@ -189,12 +186,7 @@ else
 
     private async Task CalculateRescueTarget()
     {
-        if (selectedCard is null)
-        {
-            return;
-        }
-
-        if (string.IsNullOrWhiteSpace(selectedCharacterCode))
+        if (selectedCard is null || string.IsNullOrWhiteSpace(selectedCharacterCode))
         {
             return;
         }
@@ -212,6 +204,11 @@ else
                     selectedCharacterCode);
 
             calculationFailed = calculationResult is null;
+        }
+        catch
+        {
+            // HTTP error or other exception occurred
+            calculationFailed = true;
         }
         finally
         {

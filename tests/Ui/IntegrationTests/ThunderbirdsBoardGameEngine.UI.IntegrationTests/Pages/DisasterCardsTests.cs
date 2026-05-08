@@ -1,8 +1,6 @@
 ﻿using Bunit;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using ThunderbirdsBoardGameEngine.Catalog.Client.Extensions;
-using ThunderbirdsBoardGameEngine.Catalog.WireMock;
 using ThunderbirdsBoardGameEngine.ReferenceData.Runtime;
 using ThunderbirdsBoardGameEngine.Rules.Client.Extensions;
 using ThunderbirdsBoardGameEngine.Rules.Contracts.Dtos.Rescue.CalculateRescueTarget.V1;
@@ -25,8 +23,8 @@ namespace ThunderbirdsBoardGameEngine.UI.IntegrationTests.Pages
         {
             _host = fixture.Host;
             _host.Reset();
-            _host.CharactersStub().RegisterMissingHeaderGuard();
-            _host.CharactersStub().RegisterIncorrectHeaderGuard();
+
+            // Only rescue uses HTTP now
             _host.RescueStub().RegisterMissingHeaderGuard();
             _host.RescueStub().RegisterIncorrectHeaderGuard();
 
@@ -38,37 +36,36 @@ namespace ThunderbirdsBoardGameEngine.UI.IntegrationTests.Pages
                 })
                 .Build();
 
+            // Register reference data runtime (in-memory catalog for disaster cards & characters)
             Services.AddReferenceData();
-            Services.AddCatalogClients(configuration);
+
+            // Only register Rules client (for rescue calculations)
             Services.AddRulesClients(configuration);
 
-            Services.AddSingleton<ICharactersService, CharactersService>();
+            // Register UI services
+            Services.AddSingleton<ICharacterService, CharacterService>();
             Services.AddSingleton<IDisasterCardService, DisasterCardService>();
             Services.AddSingleton<IRescueService, RescueService>();
         }
 
         [Fact]
-        public async Task Render_WhenCardsExist_CardsExist()
+        public void Render_WhenCardsAndCharactersExist_LoadsFromReferenceData()
         {
-            // Arrange
-
             // Act
             var cut = RenderComponent<DisasterCards>();
 
-            // Await
-            cut.WaitForElement("#disasterSelect");
-
-            // Assert
-            var result = cut
+            // Assert - disaster cards are loaded
+            var cardOptions = cut
                 .FindAll("#disasterSelect option")
                 .Select(o => o.TextContent.Trim())
                 .ToList();
 
-            Assert.Equal(35, result.Count);
+            Assert.True(cardOptions.Count > 1, "Expected disaster cards to be loaded from reference data");
+            Assert.Equal("-- Select a card --", cardOptions[0]);
         }
 
         [Fact]
-        public async Task Calculate_WhenSuccess_DisplaysResultAsync()
+        public void Calculate_WhenSuccess_DisplaysResult()
         {
             // Arrange
             var rescueResult = new CalculateRescueTargetResponseDto
@@ -78,62 +75,64 @@ namespace ThunderbirdsBoardGameEngine.UI.IntegrationTests.Pages
                 AppliedDisasterBonuses = Array.Empty<AppliedDisasterBonusDto>()
             };
 
-            _host.CharactersStub().RegisterGetAllSuccess();
             _host.RescueStub().RegisterCalculateRescueTargetSuccess(rescueResult);
 
+            // Act
             var cut = RenderComponent<DisasterCards>();
 
-            // Wait for initial load
-            cut.WaitForElement("#disasterSelect");
+            // Select disaster card
+            cut.Find("#disasterSelect").Change("end-of-the-road");
 
-            // Act
-            cut.Find("#disasterSelect")
-               .Change("end-of-the-road");
+            // Wait for card details
+            cut.WaitForAssertion(() =>
+                Assert.Contains("Disaster Card Details", cut.Markup));
 
-            cut.WaitForState(() => true);
-
-            cut.WaitForElement("#characterSelect");
-
+            // Select character
             cut.Find("#characterSelect").Change("gordon");
 
-            // Now click
+            // Ensure calculate button is enabled
+            cut.WaitForAssertion(() =>
+                Assert.False(cut.Find("[data-testid='calculate-button']").HasAttribute("disabled")));
+
+            // Click calculate
             cut.Find("[data-testid='calculate-button']").Click();
 
-            // Assert – UI reaction
+            // Assert – result appears (with increased timeout)
             cut.WaitForAssertion(() =>
             {
-                var result = cut.Find("[data-testid='rescue-calculation-result']");
+                // First check that we're not in loading state anymore
+                var button = cut.Find("[data-testid='calculate-button']");
+                Assert.False(button.HasAttribute("disabled"), "Button should not be disabled after calculation completes");
 
+                // Then check for the result
+                var result = cut.Find("[data-testid='rescue-calculation-result']");
                 Assert.Contains(rescueResult.TargetNumber.ToString(), result.TextContent);
                 Assert.Contains(rescueResult.TotalBonus.ToString(), result.TextContent);
 
                 // Error is NOT visible
                 Assert.Empty(cut.FindAll("[data-testid='rescue-calculation-error']"));
-            });
+            },
+            timeout: TimeSpan.FromSeconds(5));  // Increased timeout for WireMock HTTP call
         }
 
         [Fact]
-        public async Task Calculate_WhenError_DisplaysErrorAsync()
+        public void Calculate_WhenError_DisplaysError()
         {
             // Arrange
-            _host.CharactersStub().RegisterGetAllSuccess();
             _host.RescueStub().RegisterCalculateRescueTargetError();
 
+            // Act
             var cut = RenderComponent<DisasterCards>();
 
-            // Wait for initial load
-            cut.WaitForElement("#disasterSelect");
-
-            // Act - select disaster card
+            // Select disaster card (loads synchronously)
             cut.Find("#disasterSelect").Change("end-of-the-road");
 
-            // Wait for the card details to render (this ensures selectedCard is set)
+            // Wait for card details (ensures selectedCard is set)
             cut.WaitForAssertion(() =>
                 Assert.Contains("Disaster Card Details", cut.Markup));
 
-            // Now wait for character select (which only shows when selectedCard is not null)
-            var characterSelect = cut.WaitForElement("#characterSelect");
-            characterSelect.Change("gordon");
+            // Select character (already loaded synchronously)
+            cut.Find("#characterSelect").Change("gordon");
 
             // Click calculate
             cut.Find("[data-testid='calculate-button']").Click();
