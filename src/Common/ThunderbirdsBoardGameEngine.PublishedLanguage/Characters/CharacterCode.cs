@@ -4,6 +4,7 @@
     /// Published identifier for a playable character.
     /// Represents a closed set of known values at system boundaries.
     /// </summary>
+    [Obsolete("Published language is deprecated. Use Reference Data instead")]
     public readonly record struct CharacterCode
     {
         private CharacterCode(string value)

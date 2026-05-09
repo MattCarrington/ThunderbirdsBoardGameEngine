@@ -3,6 +3,7 @@
     /// <summary>
     /// Represents a data transfer object that contains basic information about a character.
     /// </summary>
+    [Obsolete("Catalog API is deprecated. Use Reference Data instead")]
     public record CharacterDto
     {
         /// <summary>

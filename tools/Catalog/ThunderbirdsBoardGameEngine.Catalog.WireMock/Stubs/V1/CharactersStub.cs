@@ -12,6 +12,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.WireMock.Stubs.V1
     /// <remarks>Use this class to configure the WireMock server with predefined responses for the characters
     /// endpoint, including successful, empty, malformed, and error cases. This is intended to facilitate client
     /// integration and error handling tests against the /api/catalog/characters route.</remarks>
+    [Obsolete("Catalog API is deprecated. Use Reference Data instead")]
     public class CharactersStub : WireMockStubBase
     {
         /// <summary>

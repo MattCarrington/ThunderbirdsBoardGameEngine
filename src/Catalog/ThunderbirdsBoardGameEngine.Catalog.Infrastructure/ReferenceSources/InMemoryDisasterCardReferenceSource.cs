@@ -7,6 +7,7 @@ using ThunderbirdsBoardGameEngine.PublishedLanguage.DisasterBonus;
 
 namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.ReferenceSources
 {
+    [Obsolete("Catalog API is deprecated. Use Reference Data instead")]
     internal sealed class InMemoryDisasterCardReferenceSource : IDisasterCardReferenceSource, IDisasterCardReferenceSourceProbe
     {
         FrozenDictionary<CardCode, DisasterCard> _cards;

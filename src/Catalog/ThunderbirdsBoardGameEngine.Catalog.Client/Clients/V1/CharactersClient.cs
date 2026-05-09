@@ -6,6 +6,7 @@ using ThunderbirdsBoardGameEngine.Client.Infrastructure.Interfaces;
 
 namespace ThunderbirdsBoardGameEngine.Catalog.Client.Clients.V1
 {
+    [Obsolete("Catalog API is deprecated. Use Reference Data instead")]
     internal class CharactersClient : ICharactersClient
     {
         private readonly HttpClient _httpClient;

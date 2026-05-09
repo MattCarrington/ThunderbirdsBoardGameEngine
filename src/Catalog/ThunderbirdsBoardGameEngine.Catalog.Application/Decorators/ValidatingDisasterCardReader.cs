@@ -4,6 +4,7 @@ using ThunderbirdsBoardGameEngine.Catalog.Domain.Validators;
 
 namespace ThunderbirdsBoardGameEngine.Catalog.Application.Decorators
 {
+    [Obsolete("Catalog API is deprecated. Use Reference Data instead")]
     public sealed class ValidatingDisasterCardReader : IDisasterCardReader
     {
         private readonly IDisasterCardReader _inner;

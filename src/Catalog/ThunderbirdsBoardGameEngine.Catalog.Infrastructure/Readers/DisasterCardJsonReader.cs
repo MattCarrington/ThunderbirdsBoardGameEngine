@@ -11,6 +11,7 @@ using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Interfaces;
 
 namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Readers
 {
+    [Obsolete("Catalog API is deprecated. Use Reference Data instead")]
     internal sealed class DisasterCardJsonReader : IDisasterCardReader
     {
         private readonly string _filePath;

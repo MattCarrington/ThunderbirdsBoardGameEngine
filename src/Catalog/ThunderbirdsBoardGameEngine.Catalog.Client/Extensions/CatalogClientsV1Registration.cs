@@ -4,6 +4,7 @@ using ThunderbirdsBoardGameEngine.Client.Infrastructure.DelegatingHandlers;
 
 namespace ThunderbirdsBoardGameEngine.Catalog.Client.Extensions
 {
+    [Obsolete("Catalog API is deprecated. Use Reference Data instead")]
     internal static class CatalogClientsV1Registration
     {
         private const string Version = "1.0";

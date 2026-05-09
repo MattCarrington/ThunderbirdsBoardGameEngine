@@ -10,6 +10,7 @@ namespace ThunderbirdsBoardGameEngine.Api.Controllers.Catalog.V1
     [ApiController]
     [ApiVersion("1.0")]
     [AllowAnonymous]
+    [Obsolete("Catalog API is deprecated. Use Reference Data instead")]
     public class CharactersController : ControllerBase
     {
         private readonly ICharacterDefinitionService _service;

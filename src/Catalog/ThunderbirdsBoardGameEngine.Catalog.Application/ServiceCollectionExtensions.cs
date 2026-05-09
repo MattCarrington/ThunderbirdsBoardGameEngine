@@ -14,6 +14,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Application
     /// It does not register infrastructure concerns such as persistence or
     /// external integrations.
     /// </remarks>
+    [Obsolete("Catalog API is deprecated. Use Reference Data instead")]
     public static class ServiceCollectionExtensions
     {
         /// <summary>

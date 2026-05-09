@@ -12,6 +12,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Application.Interfaces
     /// and enforces application and domain invariants.
     /// </para>
     /// </remarks>
+    [Obsolete("Catalog API is deprecated. Use Reference Data instead")]
     public interface IDisasterCardService
     {
         /// <summary>

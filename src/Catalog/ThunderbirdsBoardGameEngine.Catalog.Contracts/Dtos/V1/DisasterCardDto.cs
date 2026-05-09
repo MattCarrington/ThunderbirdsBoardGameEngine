@@ -7,6 +7,7 @@
     /// All string and collection properties are non-null and preformatted for UI display.
     /// Consumers must not parse or modify these values.
     /// </remarks>
+    [Obsolete("Catalog API is deprecated. Use Reference Data instead")]
     public record DisasterCardDto
     {
         /// <summary>

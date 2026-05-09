@@ -3,6 +3,7 @@ using ThunderbirdsBoardGameEngine.PublishedLanguage.DisasterBonus;
 
 namespace ThunderbirdsBoardGameEngine.Catalog.Application.Factories
 {
+    [Obsolete("Catalog API is deprecated. Use Reference Data instead")]
     public static class DisasterBonusKeyFactory
     {
         public static DisasterBonusKey ForCharacter(Character name)

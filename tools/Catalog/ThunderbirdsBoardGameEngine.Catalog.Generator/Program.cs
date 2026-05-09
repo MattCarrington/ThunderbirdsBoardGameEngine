@@ -5,6 +5,7 @@ using ThunderbirdsBoardGameEngine.Catalog.Generator.Output;
 
 namespace ThunderbirdsBoardGameEngine.Catalog.Generator
 {
+    [Obsolete("Catalog API is deprecated. Use Reference Data instead")]
     public static class Program
     {
         static int Main(string[] args)

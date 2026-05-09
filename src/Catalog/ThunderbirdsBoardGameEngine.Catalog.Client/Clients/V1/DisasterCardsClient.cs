@@ -13,6 +13,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Client.Clients.V1
     /// The HTTP pipeline is configured via DI; do not construct directly. 
     /// Versioning is applied by a delegating handler that sets the <c>X-Api-Version</c> header.
     /// </remarks>
+    [Obsolete("Catalog API is deprecated. Use Reference Data instead")]
     internal sealed class DisasterCardsClient : IDisasterCardsClient
     {
         private readonly HttpClient _httpClient;
