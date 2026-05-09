@@ -7,6 +7,7 @@ using ThunderbirdsBoardGameEngine.Rules.Contracts.Dtos.Rescue.CalculateRescueTar
 using ThunderbirdsBoardGameEngine.Rules.WireMock;
 using ThunderbirdsBoardGameEngine.TestUtils.xUnit.Fixtures;
 using ThunderbirdsBoardGameEngine.UI.Interfaces;
+using ThunderbirdsBoardGameEngine.UI.Mappers;
 using ThunderbirdsBoardGameEngine.UI.Pages;
 using ThunderbirdsBoardGameEngine.UI.Services;
 using ThunderbirdsBoardGameEngine.WireMock.Hosting;
@@ -45,6 +46,8 @@ namespace ThunderbirdsBoardGameEngine.UI.IntegrationTests.Pages
             Services.AddSingleton<ICharacterService, CharacterService>();
             Services.AddSingleton<IDisasterCardService, DisasterCardService>();
             Services.AddSingleton<IRescueService, RescueService>();
+
+            Services.AddSingleton<DisasterCardMapper>();
         }
 
         [Fact]

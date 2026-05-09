@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using ThunderbirdsBoardGameEngine.ReferenceData.Runtime;
 using ThunderbirdsBoardGameEngine.Rules.Client.Extensions;
 using ThunderbirdsBoardGameEngine.UI.Interfaces;
+using ThunderbirdsBoardGameEngine.UI.Mappers;
 using ThunderbirdsBoardGameEngine.UI.Services;
 
 namespace ThunderbirdsBoardGameEngine.UI
@@ -22,6 +23,8 @@ namespace ThunderbirdsBoardGameEngine.UI
             builder.Services.AddScoped<IDisasterCardService, DisasterCardService>();
             builder.Services.AddScoped<ICharacterService, CharacterService>();
             builder.Services.AddScoped<IRescueService, RescueService>();
+
+            builder.Services.AddSingleton<DisasterCardMapper>();
 
             await builder.Build().RunAsync();
         }

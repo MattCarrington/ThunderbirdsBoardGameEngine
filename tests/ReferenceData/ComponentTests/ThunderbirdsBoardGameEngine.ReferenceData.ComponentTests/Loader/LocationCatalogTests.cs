@@ -6,22 +6,22 @@ using Xunit;
 
 namespace ThunderbirdsBoardGameEngine.ReferenceData.ComponentTests.Loader
 {
-    public class DisasterCatalogTests
+    public class LocationCatalogTests
     {
         [Fact]
-        public void CanLoadDisasterDefinitions()
+        public void CanLoadLocationDefinitions()
         {
             // Arrange
             using var provider = ReferenceDataTestHost.BuildServiceProvider();
 
-            var catalog = provider.GetRequiredService<IDisasterDefinitionCatalog>();
+            var catalog = provider.GetRequiredService<ILocationDefinitionCatalog>();
 
             // Act            
             var result = catalog.GetAll();
 
             // Assert
             Assert.NotEmpty(result);
-            Assert.Equal(34, result.Length);
+            Assert.Equal(18, result.Length);
         }
 
         [Fact]
@@ -30,15 +30,15 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.ComponentTests.Loader
             // Arrange
             using var provider = ReferenceDataTestHost.BuildServiceProvider();
 
-            var catalog = provider.GetRequiredService<IDisasterDefinitionCatalog>();
+            var catalog = provider.GetRequiredService<ILocationDefinitionCatalog>();
 
             // Act            
-            var result = catalog.GetByCode(new CardCode("terror-in-new-york-city"));
+            var result = catalog.GetByCode(new LocationCode("north-america"));
 
             // Assert
             Assert.NotNull(result);
-            Assert.Equal("terror-in-new-york-city", result.Code.ToString());
-            Assert.Equal("Terror in New York City", result.DisplayName);
+            Assert.Equal("north-america", result.Code.ToString());
+            Assert.Equal("North America", result.DisplayName);
         }
     }
 }

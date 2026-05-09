@@ -17,11 +17,11 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.ComponentTests.Loader
             var catalog = provider.GetRequiredService<ICharacterDefinitionCatalog>();
             // Act
 
-            var characterDefinitions = catalog.GetAll();
+            var result = catalog.GetAll();
 
             // Assert
-            Assert.NotEmpty(characterDefinitions);
-            Assert.Equal(6, characterDefinitions.Length);
+            Assert.NotEmpty(result);
+            Assert.Equal(6, result.Length);
         }
 
         [Fact]
@@ -33,12 +33,12 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.ComponentTests.Loader
             var catalog = provider.GetRequiredService<ICharacterDefinitionCatalog>();
 
             // Act            
-            var characterDefinition = catalog.GetByCode(new CharacterCode("gordon"));
+            var result = catalog.GetByCode(new CharacterCode("gordon"));
 
             // Assert
-            Assert.NotNull(characterDefinition);
-            Assert.Equal("gordon", characterDefinition.Code.ToString());
-            Assert.Equal("Gordon", characterDefinition.DisplayName);
+            Assert.NotNull(result);
+            Assert.Equal("gordon", result.Code.ToString());
+            Assert.Equal("Gordon", result.DisplayName);
         }
     }
 }

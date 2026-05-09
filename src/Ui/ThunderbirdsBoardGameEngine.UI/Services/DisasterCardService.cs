@@ -9,20 +9,24 @@ namespace ThunderbirdsBoardGameEngine.UI.Services
     public class DisasterCardService : IDisasterCardService
     {
         private readonly IDisasterDefinitionCatalog _catalog;
+        private readonly DisasterCardMapper _mapper;
 
-        public DisasterCardService(IDisasterDefinitionCatalog catalog)
+        public DisasterCardService(IDisasterDefinitionCatalog catalog, DisasterCardMapper mapper)
         {
             _catalog = catalog;
+            _mapper = mapper;
         }
 
         public DisasterCardViewModel GetByCode(string code)
         {
-            return _catalog.GetByCode(new CardCode(code)).ToViewModel();
+            var disaster = _catalog.GetByCode(new CardCode(code));
+
+            return _mapper.Map(disaster);
         }
 
         public IReadOnlyList<DisasterCardViewModel> GetAll()
         {
-            return _catalog.GetAll().Select(d => d.ToViewModel()).ToList();
+            return _catalog.GetAll().Select(_mapper.Map).ToList();
         }
     }
 }

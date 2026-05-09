@@ -4,6 +4,7 @@ using ThunderbirdsBoardGameEngine.PublishedLanguage.Enums;
 using ThunderbirdsBoardGameEngine.ReferenceData.Identities;
 using ThunderbirdsBoardGameEngine.ReferenceData.Model;
 using ThunderbirdsBoardGameEngine.ReferenceData.Runtime.Interfaces;
+using ThunderbirdsBoardGameEngine.UI.Mappers;
 using ThunderbirdsBoardGameEngine.UI.Services;
 using Xunit;
 
@@ -15,16 +16,20 @@ namespace ThunderbirdsBoardGameEngine.UI.UnitTests.Services
         public void GetAll_WhenCalled_CallsCatalog()
         {
             // Arrange
-            var catalog = Substitute.For<IDisasterDefinitionCatalog>();
-            catalog.GetAll().Returns(ImmutableArray<ReferenceDisasterDefinition>.Empty);
+            var disaster = CreateMinimalDisaster("DC001");
+            var disasterCatalog = Substitute.For<IDisasterDefinitionCatalog>();
+            disasterCatalog.GetAll().Returns(new[] { disaster }.ToImmutableArray());
 
-            var service = new DisasterCardService(catalog);
+            var mapper = CreateMapper();
+
+            var service = new DisasterCardService(disasterCatalog, mapper);
 
             // Act
-            service.GetAll();
+            var result = service.GetAll();
 
             // Assert
-            catalog.Received(1).GetAll();
+            Assert.Single(result);
+            disasterCatalog.Received(1).GetAll();
         }
 
         [Fact]
@@ -38,7 +43,9 @@ namespace ThunderbirdsBoardGameEngine.UI.UnitTests.Services
             var catalog = Substitute.For<IDisasterDefinitionCatalog>();
             catalog.GetAll().Returns(new[] { disaster1, disaster2, disaster3 }.ToImmutableArray());
 
-            var service = new DisasterCardService(catalog);
+            var mapper = CreateMapper();
+
+            var service = new DisasterCardService(catalog, mapper);
 
             // Act
             var result = service.GetAll();
@@ -54,7 +61,9 @@ namespace ThunderbirdsBoardGameEngine.UI.UnitTests.Services
             var catalog = Substitute.For<IDisasterDefinitionCatalog>();
             catalog.GetAll().Returns(ImmutableArray<ReferenceDisasterDefinition>.Empty);
 
-            var service = new DisasterCardService(catalog);
+            var mapper = CreateMapper();
+
+            var service = new DisasterCardService(catalog, mapper);
 
             // Act
             var result = service.GetAll();
@@ -72,7 +81,9 @@ namespace ThunderbirdsBoardGameEngine.UI.UnitTests.Services
             var catalog = Substitute.For<IDisasterDefinitionCatalog>();
             catalog.GetByCode(Arg.Any<CardCode>()).Returns(disaster);
 
-            var service = new DisasterCardService(catalog);
+            var mapper = CreateMapper();
+
+            var service = new DisasterCardService(catalog, mapper);
 
             // Act
             service.GetByCode("DC123");
@@ -89,7 +100,9 @@ namespace ThunderbirdsBoardGameEngine.UI.UnitTests.Services
             var catalog = Substitute.For<IDisasterDefinitionCatalog>();
             catalog.GetByCode(new CardCode("DC001")).Returns(disaster);
 
-            var service = new DisasterCardService(catalog);
+            var mapper = CreateMapper();
+
+            var service = new DisasterCardService(catalog, mapper);
 
             // Act
             var result = service.GetByCode("DC001");
@@ -106,7 +119,9 @@ namespace ThunderbirdsBoardGameEngine.UI.UnitTests.Services
             var catalog = Substitute.For<IDisasterDefinitionCatalog>();
             catalog.GetByCode(Arg.Any<CardCode>()).Returns(disaster);
 
-            var service = new DisasterCardService(catalog);
+            var mapper = CreateMapper();
+
+            var service = new DisasterCardService(catalog, mapper);
 
             // Act
             var result = service.GetByCode("DC456");
@@ -136,6 +151,15 @@ namespace ThunderbirdsBoardGameEngine.UI.UnitTests.Services
                 bonuses: new[] { bonus },
                 rewards: new[] { reward }
             );
+        }
+
+        private DisasterCardMapper CreateMapper()
+        {
+            var locationCatalog = Substitute.For<ILocationDefinitionCatalog>();
+            locationCatalog.GetByCode(Arg.Any<LocationCode>())
+                .Returns(new ReferenceLocationDefinition(new LocationCode("london"), "London"));
+
+            return new DisasterCardMapper(locationCatalog);
         }
     }
 }
