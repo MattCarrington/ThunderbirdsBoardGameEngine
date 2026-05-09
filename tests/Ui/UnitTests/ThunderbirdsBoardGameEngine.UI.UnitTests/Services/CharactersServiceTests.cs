@@ -3,6 +3,7 @@ using System.Collections.Immutable;
 using ThunderbirdsBoardGameEngine.ReferenceData.Identities;
 using ThunderbirdsBoardGameEngine.ReferenceData.Model;
 using ThunderbirdsBoardGameEngine.ReferenceData.Runtime.Interfaces;
+using ThunderbirdsBoardGameEngine.UI.Mappers;
 using ThunderbirdsBoardGameEngine.UI.Services;
 using Xunit;
 
@@ -17,7 +18,9 @@ namespace ThunderbirdsBoardGameEngine.UI.UnitTests.Services
             var catalog = Substitute.For<ICharacterDefinitionCatalog>();
             catalog.GetAll().Returns(ImmutableArray<ReferenceCharacterDefinition>.Empty);
 
-            var service = new CharacterService(catalog);
+            var mapper = new CharacterMapper();
+
+            var service = new CharacterService(catalog, mapper);
 
             // Act
             service.GetAll();
@@ -49,7 +52,9 @@ namespace ThunderbirdsBoardGameEngine.UI.UnitTests.Services
             var catalog = Substitute.For<ICharacterDefinitionCatalog>();
             catalog.GetAll().Returns(new[] { character1, character2, character3 }.ToImmutableArray());
 
-            var service = new CharacterService(catalog);
+            var mapper = new CharacterMapper();
+
+            var service = new CharacterService(catalog, mapper);
 
             // Act
             var result = service.GetAll();
@@ -65,7 +70,9 @@ namespace ThunderbirdsBoardGameEngine.UI.UnitTests.Services
             var catalog = Substitute.For<ICharacterDefinitionCatalog>();
             catalog.GetAll().Returns(ImmutableArray<ReferenceCharacterDefinition>.Empty);
 
-            var service = new CharacterService(catalog);
+            var mapper = new CharacterMapper();
+
+            var service = new CharacterService(catalog, mapper);
 
             // Act
             var result = service.GetAll();

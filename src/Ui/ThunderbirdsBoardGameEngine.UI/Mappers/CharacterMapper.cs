@@ -3,9 +3,9 @@ using ThunderbirdsBoardGameEngine.UI.ViewModels;
 
 namespace ThunderbirdsBoardGameEngine.UI.Mappers
 {
-    public static class CharacterMappingExtensions
+    public class CharacterMapper
     {
-        public static CharacterViewModel ToViewModel(this ReferenceCharacterDefinition character)
+        public CharacterViewModel ToViewModel(ReferenceCharacterDefinition character)
         {
             return new CharacterViewModel(
                 Key: character.Code.ToString(),

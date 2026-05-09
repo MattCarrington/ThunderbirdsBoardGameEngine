@@ -25,6 +25,7 @@ namespace ThunderbirdsBoardGameEngine.UI
             builder.Services.AddScoped<IRescueService, RescueService>();
 
             builder.Services.AddSingleton<DisasterCardMapper>();
+            builder.Services.AddSingleton<CharacterMapper>();
 
             await builder.Build().RunAsync();
         }
