@@ -24,6 +24,7 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Runtime
             services.AddSingleton<IDisasterDefinitionCatalog, DisasterDefinitionCatalog>();
             services.AddSingleton<ICharacterDefinitionCatalog, CharacterDefinitionCatalog>();
             services.AddSingleton<ILocationDefinitionCatalog, LocationDefinitionCatalog>();
+            services.AddSingleton<IDisasterBonusKeyDefintionCatalog, DisasterBonusKeyDefinitionCatalog>();
 
             return services;
         }

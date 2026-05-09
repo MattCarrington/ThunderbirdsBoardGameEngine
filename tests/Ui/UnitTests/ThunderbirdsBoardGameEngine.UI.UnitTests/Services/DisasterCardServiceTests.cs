@@ -4,6 +4,7 @@ using ThunderbirdsBoardGameEngine.PublishedLanguage.Enums;
 using ThunderbirdsBoardGameEngine.ReferenceData.Identities;
 using ThunderbirdsBoardGameEngine.ReferenceData.Model;
 using ThunderbirdsBoardGameEngine.ReferenceData.Runtime.Interfaces;
+using ThunderbirdsBoardGameEngine.ReferenceData.Runtime.Models;
 using ThunderbirdsBoardGameEngine.UI.Mappers;
 using ThunderbirdsBoardGameEngine.UI.Services;
 using Xunit;
@@ -159,7 +160,11 @@ namespace ThunderbirdsBoardGameEngine.UI.UnitTests.Services
             locationCatalog.GetByCode(Arg.Any<LocationCode>())
                 .Returns(new ReferenceLocationDefinition(new LocationCode("london"), "London"));
 
-            return new DisasterCardMapper(locationCatalog);
+            var disasterBonusKeyCatalog = Substitute.For<IDisasterBonusKeyDefintionCatalog>();
+            disasterBonusKeyCatalog.GetByCode(Arg.Any<DisasterBonusKey>())
+                .Returns(new DisasterBonusKeyDefinition(new DisasterBonusKey("test"), "Test Bonus"));
+
+            return new DisasterCardMapper(locationCatalog, disasterBonusKeyCatalog);
         }
     }
 }

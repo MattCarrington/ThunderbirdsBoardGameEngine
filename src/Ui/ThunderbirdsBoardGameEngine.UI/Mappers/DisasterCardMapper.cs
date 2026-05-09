@@ -8,10 +8,12 @@ namespace ThunderbirdsBoardGameEngine.UI.Mappers
     public sealed class DisasterCardMapper
     {
         private readonly ILocationDefinitionCatalog _locationDefinitionCatalog;
+        private readonly IDisasterBonusKeyDefintionCatalog _disasterBonusKeyDefintionCatalog;
 
-        public DisasterCardMapper(ILocationDefinitionCatalog locationDefinitionCatalog)
+        public DisasterCardMapper(ILocationDefinitionCatalog locationDefinitionCatalog, IDisasterBonusKeyDefintionCatalog disasterBonusKeyDefintionCatalog)
         {
             _locationDefinitionCatalog = locationDefinitionCatalog;
+            _disasterBonusKeyDefintionCatalog = disasterBonusKeyDefintionCatalog;
         }
 
         public DisasterCardViewModel Map(ReferenceDisasterDefinition disaster)
@@ -38,9 +40,11 @@ namespace ThunderbirdsBoardGameEngine.UI.Mappers
                     : $"in {_locationDefinitionCatalog.GetByCode(bonusCondition.Location.Value).DisplayName}";
             }
 
+            var disasterBonusKeyDefinition = _disasterBonusKeyDefintionCatalog.GetByCode(bonusCondition.Key);
+
             var description = bonusCondition.Location.HasValue
-                ? $"{bonusCondition.Key.Value} (+{bonusCondition.Value}) (if {locationText})"
-                : $"{bonusCondition.Key.Value} (+{bonusCondition.Value})";
+                ? $"{disasterBonusKeyDefinition.DisplayName} (+{bonusCondition.Value}) (if {locationText})"
+                : $"{disasterBonusKeyDefinition.DisplayName} (+{bonusCondition.Value})";
 
             return new BonusConditionViewModel(
                 Key: bonusCondition.Key.ToString(),
