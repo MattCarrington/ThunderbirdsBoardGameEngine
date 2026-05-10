@@ -13,11 +13,7 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Runtime.Catalogs
         public DisasterBonusKeyDefinitionCatalog(ReferenceDataSnapshot snapshot)
         {
             ArgumentNullException.ThrowIfNull(snapshot);
-
-            _keys = snapshot.CharacterDefinitions.Select(c => new DisasterBonusKeyDefinition(new DisasterBonusKey(c.Code.Value), c.DisplayName))
-                .Concat(snapshot.ThunderbirdDefinitions.Select(t => new DisasterBonusKeyDefinition(new DisasterBonusKey(t.Code.Value), t.DisplayName)))
-                .Concat(snapshot.PodVehicleDefinitions.Select(v => new DisasterBonusKeyDefinition(new DisasterBonusKey(v.Code.Value), v.DisplayName)))
-                .ToFrozenDictionary(k => k.Key);
+            _keys = BuildBonusKeyDictionary(snapshot);
         }
 
         public DisasterBonusKeyDefinition GetByCode(DisasterBonusKey key)
@@ -28,6 +24,26 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Runtime.Catalogs
             }
 
             return definition;
+        }
+
+        private static FrozenDictionary<DisasterBonusKey, DisasterBonusKeyDefinition> BuildBonusKeyDictionary(
+            ReferenceDataSnapshot snapshot)
+        {
+            var keys = new List<DisasterBonusKeyDefinition>();
+
+            // Characters
+            keys.AddRange(snapshot.CharacterDefinitions.Select(c =>
+                new DisasterBonusKeyDefinition(new DisasterBonusKey(c.Code.Value), c.DisplayName)));
+
+            // Thunderbirds
+            keys.AddRange(snapshot.ThunderbirdDefinitions.Select(t =>
+                new DisasterBonusKeyDefinition(new DisasterBonusKey(t.Code.Value), t.DisplayName)));
+
+            // Pod Vehicles
+            keys.AddRange(snapshot.PodVehicleDefinitions.Select(v =>
+                new DisasterBonusKeyDefinition(new DisasterBonusKey(v.Code.Value), v.DisplayName)));
+
+            return keys.ToFrozenDictionary(k => k.Key);
         }
     }
 }
