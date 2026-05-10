@@ -18,6 +18,7 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Runtime
             services.AddSingleton(sp =>
                 sp.GetRequiredService<SnapshotLoader>()
                     .LoadAsync()
+                    .ConfigureAwait(false)
                     .GetAwaiter()
                     .GetResult());
 
