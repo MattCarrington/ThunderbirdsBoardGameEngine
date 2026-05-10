@@ -4,6 +4,7 @@ using ThunderbirdsBoardGameEngine.Catalog.Domain.Enums;
 
 namespace ThunderbirdsBoardGameEngine.Api.HealthChecks
 {
+    [Obsolete("Catalog runtime API is deprecated. Static game data is now provided by ReferenceData snapshots.")]
     public class CharacterDefinitionCatalogHealthCheck : IHealthCheck
     {
         private readonly ICharacterDefinitionReferenceSourceProbe _characterDefinitionProbe;

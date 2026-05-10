@@ -3,7 +3,7 @@
     /// <summary>
     /// Represents a data transfer object that contains basic information about a character.
     /// </summary>
-    [Obsolete("Catalog API is deprecated. Use Reference Data instead")]
+    [Obsolete("Catalog runtime API is deprecated. Static game data is now provided by ReferenceData snapshots.")]
     public record CharacterDto
     {
         /// <summary>

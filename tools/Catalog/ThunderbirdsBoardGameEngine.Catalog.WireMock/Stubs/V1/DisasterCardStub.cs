@@ -16,7 +16,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.WireMock.Stubs.V1
     ///
     /// Intended for use in integration and consumer tests.
     /// </remarks>
-    [Obsolete("Catalog API is deprecated. Use Reference Data instead")]
+    [Obsolete("Catalog runtime API is deprecated. Static game data is now provided by ReferenceData snapshots.")]
     public sealed class DisasterCardStub : WireMockStubBase
     {
         /// <summary>

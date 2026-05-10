@@ -10,7 +10,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Client.Interfaces.V1
     /// This client is versioned via the HTTP pipeline and sends an <c>X-Api-Version</c> header.
     /// Register with <see cref="Extensions.ServiceCollectionExtensions.AddCatalogClients"/>. 
     /// </remarks>
-    [Obsolete("Catalog API is deprecated. Use Reference Data instead")]
+    [Obsolete("Catalog runtime API is deprecated. Static game data is now provided by ReferenceData snapshots.")]
     public interface ICharactersClient
     {
         /// <summary>

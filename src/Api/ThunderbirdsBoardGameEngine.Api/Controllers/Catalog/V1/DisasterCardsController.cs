@@ -10,7 +10,7 @@ namespace ThunderbirdsBoardGameEngine.Api.Controllers.Catalog.V1
     [ApiController]
     [ApiVersion("1.0")]
     [AllowAnonymous]
-    [Obsolete("Catalog API is deprecated. Use Reference Data instead")]
+    [Obsolete("Catalog runtime API is deprecated. Static game data is now provided by ReferenceData snapshots.")]
     public class DisasterCardsController : ControllerBase
     {
         private readonly IDisasterCardService _service;
