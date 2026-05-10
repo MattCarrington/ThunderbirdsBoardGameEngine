@@ -20,6 +20,7 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Validators
 
             // Disaster bonus keys must reference valid assets
             EnsureBonusKeysReferenceValidAssets(snapshot.DisasterDefinitions, validAssetCodes);
+            EnsureBonusLocationDifferentToDisaster(snapshot);
         }
 
         private static HashSet<string> EnsureAssetCodesUniqueAcrossTypes(ReferenceDataSnapshot snapshot)
@@ -84,6 +85,21 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Validators
             {
                 throw new ReferenceDataCompilationException(
                     $"Bonuses reference non-existent assets: {string.Join(", ", invalidBonuses)}");
+            }
+        }
+
+        private static void EnsureBonusLocationDifferentToDisaster(ReferenceDataSnapshot snapshot)
+        {
+            foreach (var disaster in snapshot.DisasterDefinitions)
+            {
+                foreach (var bonus in disaster.Bonuses)
+                {
+                    if (bonus.Location.HasValue && bonus.Location.Value == disaster.Location)
+                    {
+                        throw new ReferenceDataCompilationException(
+                            $"Bonus '{bonus.Key.Value}' in disaster '{disaster.DisplayName}' cannot have the same location as the disaster itself.");
+                    }
+                }
             }
         }
     }

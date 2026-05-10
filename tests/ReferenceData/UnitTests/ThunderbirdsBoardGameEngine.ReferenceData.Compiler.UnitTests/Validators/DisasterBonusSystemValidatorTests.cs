@@ -3,7 +3,7 @@ using ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Validators;
 using ThunderbirdsBoardGameEngine.TestUtils.ReferenceData.Builders;
 using Xunit;
 
-namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.UnitTests.Compilation.Validators
+namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.UnitTests.Validators
 {
     public class DisasterBonusSystemValidatorTests
     {
@@ -108,6 +108,24 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.UnitTests.Compilati
                 validator.Validate(snapshot));
             Assert.Contains("invalid-entity", ex.Message);
             Assert.Contains("non-existent assets", ex.Message);
+        }
+
+        [Fact]
+        public void Validate_WhenBonusReferencesLocationWithSameCodeAsDisasterLocation_Throws()
+        {
+            // Arrange
+            var validator = new DisasterBonusSystemValidator();
+
+            var snapshot = new ReferenceDataSnapshotBuilder()
+                .WithLocation("location-1", "Location 1")
+                .WithCharacter("character-1", "Character 1")
+                .WithDisaster("disaster-1", "Disaster 1", "location-1", ("character-1", 2, "location-1"))
+                .Build();
+
+            // Act & Assert
+            var ex = Assert.Throws<ReferenceDataCompilationException>(() =>
+                validator.Validate(snapshot));
+            Assert.Contains("cannot have the same location as the disaster itsel", ex.Message);
         }
 
         [Fact]

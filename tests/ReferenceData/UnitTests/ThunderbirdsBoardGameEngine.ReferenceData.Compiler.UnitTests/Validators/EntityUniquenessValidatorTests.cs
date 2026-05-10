@@ -3,7 +3,7 @@ using ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Validators;
 using ThunderbirdsBoardGameEngine.TestUtils.ReferenceData.Builders;
 using Xunit;
 
-namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.UnitTests.Compilation.Validators
+namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.UnitTests.Validators
 {
     public class EntityUniquenessValidatorTests
     {
