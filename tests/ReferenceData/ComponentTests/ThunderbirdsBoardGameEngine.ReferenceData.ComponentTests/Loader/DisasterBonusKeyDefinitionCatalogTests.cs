@@ -13,7 +13,7 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.ComponentTests.Loader
         {
             // Arrange
             using var provider = ReferenceDataTestHost.BuildServiceProvider();
-            var catalog = provider.GetRequiredService<IDisasterBonusKeyDefintionCatalog>();
+            var catalog = provider.GetRequiredService<IDisasterBonusKeyDefinitionCatalog>();
 
             // Act
             var result = catalog.GetByCode(new DisasterBonusKey("gordon"));
@@ -29,7 +29,7 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.ComponentTests.Loader
         {
             // Arrange
             using var provider = ReferenceDataTestHost.BuildServiceProvider();
-            var catalog = provider.GetRequiredService<IDisasterBonusKeyDefintionCatalog>();
+            var catalog = provider.GetRequiredService<IDisasterBonusKeyDefinitionCatalog>();
 
             // Act
             var result = catalog.GetByCode(new DisasterBonusKey("thunderbird-1"));
@@ -45,7 +45,7 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.ComponentTests.Loader
         {
             // Arrange
             using var provider = ReferenceDataTestHost.BuildServiceProvider();
-            var catalog = provider.GetRequiredService<IDisasterBonusKeyDefintionCatalog>();
+            var catalog = provider.GetRequiredService<IDisasterBonusKeyDefinitionCatalog>();
 
             // Act
             var result = catalog.GetByCode(new DisasterBonusKey("domo"));

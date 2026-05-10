@@ -6,7 +6,7 @@ using ThunderbirdsBoardGameEngine.ReferenceData.Runtime.Models;
 
 namespace ThunderbirdsBoardGameEngine.ReferenceData.Runtime.Catalogs
 {
-    internal class DisasterBonusKeyDefinitionCatalog : IDisasterBonusKeyDefintionCatalog
+    internal class DisasterBonusKeyDefinitionCatalog : IDisasterBonusKeyDefinitionCatalog
     {
         private readonly FrozenDictionary<DisasterBonusKey, DisasterBonusKeyDefinition> _keys;
 

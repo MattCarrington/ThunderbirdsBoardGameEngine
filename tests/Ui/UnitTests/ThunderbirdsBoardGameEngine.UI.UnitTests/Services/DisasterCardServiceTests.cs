@@ -160,7 +160,7 @@ namespace ThunderbirdsBoardGameEngine.UI.UnitTests.Services
             locationCatalog.GetByCode(Arg.Any<LocationCode>())
                 .Returns(new ReferenceLocationDefinition(new LocationCode("london"), "London"));
 
-            var disasterBonusKeyCatalog = Substitute.For<IDisasterBonusKeyDefintionCatalog>();
+            var disasterBonusKeyCatalog = Substitute.For<IDisasterBonusKeyDefinitionCatalog>();
             disasterBonusKeyCatalog.GetByCode(Arg.Any<DisasterBonusKey>())
                 .Returns(new DisasterBonusKeyDefinition(new DisasterBonusKey("test"), "Test Bonus"));
 

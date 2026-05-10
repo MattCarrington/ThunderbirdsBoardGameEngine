@@ -8,11 +8,11 @@ namespace ThunderbirdsBoardGameEngine.UI.Mappers
     public sealed class DisasterCardMapper
     {
         private readonly ILocationDefinitionCatalog _locationDefinitionCatalog;
-        private readonly IDisasterBonusKeyDefintionCatalog _disasterBonusKeyDefintionCatalog;
+        private readonly IDisasterBonusKeyDefinitionCatalog _disasterBonusKeyDefintionCatalog;
 
         private static readonly LocationCode GeoStationaryOrbit = new("geo-stationary-orbit");
 
-        public DisasterCardMapper(ILocationDefinitionCatalog locationDefinitionCatalog, IDisasterBonusKeyDefintionCatalog disasterBonusKeyDefintionCatalog)
+        public DisasterCardMapper(ILocationDefinitionCatalog locationDefinitionCatalog, IDisasterBonusKeyDefinitionCatalog disasterBonusKeyDefintionCatalog)
         {
             _locationDefinitionCatalog = locationDefinitionCatalog;
             _disasterBonusKeyDefintionCatalog = disasterBonusKeyDefintionCatalog;

@@ -212,7 +212,7 @@ namespace ThunderbirdsBoardGameEngine.UI.UnitTests.Mappers
             var locationCatalog = Substitute.For<ILocationDefinitionCatalog>();
             locationCatalog.GetByCode(Arg.Is(geoStationaryOrbit.Code)).Returns(geoStationaryOrbit);
 
-            var disasterBonusKeyCatalog = Substitute.For<IDisasterBonusKeyDefintionCatalog>();
+            var disasterBonusKeyCatalog = Substitute.For<IDisasterBonusKeyDefinitionCatalog>();
             disasterBonusKeyCatalog.GetByCode(Arg.Any<DisasterBonusKey>()).Returns(new DisasterBonusKeyDefinition(
                 Key: new DisasterBonusKey("bonus1"),
                 DisplayName: "Bonus 1"
@@ -248,7 +248,7 @@ namespace ThunderbirdsBoardGameEngine.UI.UnitTests.Mappers
                 displayName: "Test Location"
             ));
 
-            var disasterBonusKeyCatalog = Substitute.For<IDisasterBonusKeyDefintionCatalog>();
+            var disasterBonusKeyCatalog = Substitute.For<IDisasterBonusKeyDefinitionCatalog>();
             disasterBonusKeyCatalog.GetByCode(Arg.Any<DisasterBonusKey>()).Returns(new DisasterBonusKeyDefinition(
                 Key: new DisasterBonusKey("bonus1"),
                 DisplayName: "Bonus 1"

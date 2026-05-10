@@ -3,7 +3,7 @@ using ThunderbirdsBoardGameEngine.ReferenceData.Runtime.Models;
 
 namespace ThunderbirdsBoardGameEngine.ReferenceData.Runtime.Interfaces
 {
-    public interface IDisasterBonusKeyDefintionCatalog
+    public interface IDisasterBonusKeyDefinitionCatalog
     {
         DisasterBonusKeyDefinition GetByCode(DisasterBonusKey key);
     }
