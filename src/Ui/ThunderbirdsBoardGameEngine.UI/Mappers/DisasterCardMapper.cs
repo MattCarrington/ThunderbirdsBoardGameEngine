@@ -10,6 +10,8 @@ namespace ThunderbirdsBoardGameEngine.UI.Mappers
         private readonly ILocationDefinitionCatalog _locationDefinitionCatalog;
         private readonly IDisasterBonusKeyDefintionCatalog _disasterBonusKeyDefintionCatalog;
 
+        private static readonly LocationCode GeoStationaryOrbit = new("geo-stationary-orbit");
+
         public DisasterCardMapper(ILocationDefinitionCatalog locationDefinitionCatalog, IDisasterBonusKeyDefintionCatalog disasterBonusKeyDefintionCatalog)
         {
             _locationDefinitionCatalog = locationDefinitionCatalog;
@@ -35,7 +37,7 @@ namespace ThunderbirdsBoardGameEngine.UI.Mappers
 
             if (bonusCondition.Location.HasValue)
             {
-                locationText = bonusCondition.Location.Value == new LocationCode("geo-stationary-orbit")
+                locationText = bonusCondition.Location.Value == GeoStationaryOrbit
                     ? "on Thunderbird 5"
                     : $"in {_locationDefinitionCatalog.GetByCode(bonusCondition.Location.Value).DisplayName}";
             }
