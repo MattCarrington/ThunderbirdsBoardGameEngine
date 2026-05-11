@@ -13,5 +13,3 @@ var compiler = new ReferenceDataCompiler(
 compiler.Compile();
 
 Console.WriteLine("Snapshot generated successfully.");
-
-Console.WriteLine("Snapshot generated successfully.");
