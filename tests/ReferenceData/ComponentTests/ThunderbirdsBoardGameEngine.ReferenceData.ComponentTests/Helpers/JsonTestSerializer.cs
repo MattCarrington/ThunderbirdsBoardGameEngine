@@ -1,6 +1,6 @@
 ﻿using System.Text.Json;
 
-namespace ThunderbirdsBoardGameEngine.ReferenceData.ComponentTests
+namespace ThunderbirdsBoardGameEngine.ReferenceData.ComponentTests.Helpers
 {
     public static class JsonTestSerializer
     {
