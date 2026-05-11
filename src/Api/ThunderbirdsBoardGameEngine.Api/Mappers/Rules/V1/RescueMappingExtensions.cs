@@ -10,6 +10,16 @@ namespace ThunderbirdsBoardGameEngine.Api.Mappers.Rules.V1
     {
         public static CalculateRescueTargetQuery ToQuery(this CalculateRescueTargetRequestDto request, string disasterCardCode)
         {
+            if (string.IsNullOrWhiteSpace(request.PerformingCharacterKey))
+            {
+                throw new BadRequestException("Performing character key must be provided.");
+            }
+
+            if (request.PresentDisasterBonusKeys.Any(string.IsNullOrWhiteSpace))
+            {
+                throw new BadRequestException("Present disaster bonus keys cannot contain null or whitespace values.");
+            }
+
             return new CalculateRescueTargetQuery
             (
                 DisasterCardCode: new CardCode(disasterCardCode),
