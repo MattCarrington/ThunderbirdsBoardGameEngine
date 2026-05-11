@@ -49,7 +49,7 @@ The following catalogs are publicly exposed to consumers:
 - `IDisasterDefinitionCatalog`
 - `ICharacterDefinitionCatalog`
 - `ILocationDefinitionCatalog`
-- `IBonusTargetCatalog`
+- `IDisasterBonusKeyDefinitionCatalog`
 
 Catalogs provide:
 

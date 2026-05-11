@@ -25,7 +25,7 @@ The compiler is responsible for:
 Run the compiler with:
 
 ```bash
-dotnet run --project src/ReferenceData.Compiler
+dotnet run --project tools/ReferenceData/ThunderbirdsBoardGameEngine.ReferenceData.Compiler
 ```
 
 The generated snapshot is written to the configured output location.
