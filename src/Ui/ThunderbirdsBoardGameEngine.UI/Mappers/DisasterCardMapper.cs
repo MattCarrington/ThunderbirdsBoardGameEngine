@@ -8,14 +8,14 @@ namespace ThunderbirdsBoardGameEngine.UI.Mappers
     public sealed class DisasterCardMapper
     {
         private readonly ILocationDefinitionCatalog _locationDefinitionCatalog;
-        private readonly IDisasterBonusKeyDefinitionCatalog _disasterBonusKeyDefintionCatalog;
+        private readonly IDisasterBonusKeyDefinitionCatalog _disasterBonusKeyDefinitionCatalog;
 
         private static readonly LocationCode GeoStationaryOrbit = new("geo-stationary-orbit");
 
-        public DisasterCardMapper(ILocationDefinitionCatalog locationDefinitionCatalog, IDisasterBonusKeyDefinitionCatalog disasterBonusKeyDefintionCatalog)
+        public DisasterCardMapper(ILocationDefinitionCatalog locationDefinitionCatalog, IDisasterBonusKeyDefinitionCatalog disasterBonusKeyDefinitionCatalog)
         {
             _locationDefinitionCatalog = locationDefinitionCatalog;
-            _disasterBonusKeyDefintionCatalog = disasterBonusKeyDefintionCatalog;
+            _disasterBonusKeyDefinitionCatalog = disasterBonusKeyDefinitionCatalog;
         }
 
         public DisasterCardViewModel Map(ReferenceDisasterDefinition disaster)
@@ -42,7 +42,7 @@ namespace ThunderbirdsBoardGameEngine.UI.Mappers
                     : $"in {_locationDefinitionCatalog.GetByCode(bonusCondition.Location.Value).DisplayName}";
             }
 
-            var disasterBonusKeyDefinition = _disasterBonusKeyDefintionCatalog.GetByCode(bonusCondition.Key);
+            var disasterBonusKeyDefinition = _disasterBonusKeyDefinitionCatalog.GetByCode(bonusCondition.Key);
 
             var description = bonusCondition.Location.HasValue
                 ? $"{disasterBonusKeyDefinition.DisplayName} (+{bonusCondition.Value}) (if {locationText})"
