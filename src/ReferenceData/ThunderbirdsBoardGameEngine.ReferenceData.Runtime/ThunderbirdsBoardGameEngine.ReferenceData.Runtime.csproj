@@ -5,6 +5,15 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
+    <PackageId>ThunderbirdsBoardGameEngine.ReferenceData.Runtime</PackageId>
+    <Version>1.0.0</Version>
+    <Authors>Matthew Carrington</Authors>
+    <Description>Static runtime reference data for the Thunderbirds Board Game Engine</Description>
+    <PackageReadmeFile>Readme.md</PackageReadmeFile>
+    <RepositoryUrl>https://github.com/MattCarrington/ThunderbirdsBoardGameEngine</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageLicenseExpression>UNLICENSED</PackageLicenseExpression>
+    <Title>ThunderbirdsBoardGameEngine.ReferenceData</Title>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -23,6 +32,13 @@
     <EmbeddedResource Include="snapshot.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\Readme.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
   </ItemGroup>
 
   <ItemGroup>
