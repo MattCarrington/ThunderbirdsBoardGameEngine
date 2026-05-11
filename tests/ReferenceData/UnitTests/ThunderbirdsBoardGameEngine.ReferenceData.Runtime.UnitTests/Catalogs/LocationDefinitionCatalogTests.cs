@@ -8,7 +8,7 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Runtime.UnitTests.Catalogs
     public class LocationDefinitionCatalogTests
     {
         [Fact]
-        public void GetAll_WithValidSnapshot_ReturnsAllDisasters()
+        public void GetAll_WithValidSnapshot_ReturnsAllLocations()
         {
             // Arrange
             var catalog = CreateCatalog();
@@ -23,7 +23,7 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Runtime.UnitTests.Catalogs
         }
 
         [Fact]
-        public void GetByCode_WithValidCode_ReturnsDisaster()
+        public void GetByCode_WithValidCode_ReturnsLocation()
         {
             // Arrange
             var catalog = CreateCatalog();

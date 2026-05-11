@@ -25,7 +25,7 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.ComponentTests.Loader
         }
 
         [Fact]
-        public void CanLoadKnownDisasterDefinition()
+        public void CanLoadKnownLocationDefinition()
         {
             // Arrange
             using var provider = ReferenceDataTestHost.BuildServiceProvider();
