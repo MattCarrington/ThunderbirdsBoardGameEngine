@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace ThunderbirdsBoardGameEngine.Catalog.Generator.Helpers
+namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Helpers
 {
     public static class StringHelpers
     {
