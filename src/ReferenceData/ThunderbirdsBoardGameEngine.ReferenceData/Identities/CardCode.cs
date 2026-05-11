@@ -1,22 +1,24 @@
 ﻿namespace ThunderbirdsBoardGameEngine.ReferenceData.Identities
 {
     /// <summary>
-    /// Represents an immutable card code value object.
+    /// Represents a card code as an immutable value object.
     /// </summary>
     public readonly record struct CardCode
     {
         /// <summary>
-        /// Gets the string value represented by this instance.
+        /// Gets the string value that identifies the card code.
         /// </summary>
         public string Value { get; }
 
         /// <summary>
-        /// Initializes a new instance of the CardCode class with the specified card code value.
+        /// Initializes a new instance of the <see cref="CardCode"/> record.
         /// </summary>
-        /// <param name="value">The card code value to assign. Cannot be null or empty.</param>
+        /// <param name="value">The string value that identifies the card code.</param>
+        /// <exception cref="ArgumentException">Thrown when the value is null or whitespace.</exception>
         public CardCode(string value)
         {
             ArgumentException.ThrowIfNullOrWhiteSpace(value);
+
             Value = value;
         }
 

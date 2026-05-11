@@ -8,8 +8,16 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Runtime.Interfaces
     /// </summary>
     public interface IReferenceDataService
     {
+        /// <summary>
+        /// 
+        /// </summary>
         ReferenceDataSnapshot Snapshot { get; }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="code"></param>
+        /// <returns></returns>
         ReferenceDisasterDefinition? GetDisaster(CardCode code);
     }
 }
