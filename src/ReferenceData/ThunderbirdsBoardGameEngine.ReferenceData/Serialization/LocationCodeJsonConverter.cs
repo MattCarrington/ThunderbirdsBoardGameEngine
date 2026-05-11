@@ -4,7 +4,7 @@ using ThunderbirdsBoardGameEngine.ReferenceData.Identities;
 
 namespace ThunderbirdsBoardGameEngine.ReferenceData.Serialization
 {
-    public class LocationCodeJsonConverter : JsonConverter<LocationCode>
+    internal sealed class LocationCodeJsonConverter : JsonConverter<LocationCode>
     {
         public override LocationCode Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {

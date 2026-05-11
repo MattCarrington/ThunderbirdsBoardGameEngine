@@ -4,7 +4,7 @@ using ThunderbirdsBoardGameEngine.ReferenceData.Identities;
 
 namespace ThunderbirdsBoardGameEngine.ReferenceData.Serialization
 {
-    public class PodVehicleCodeJsonConverter : JsonConverter<PodVehicleCode>
+    internal sealed class PodVehicleCodeJsonConverter : JsonConverter<PodVehicleCode>
     {
         public override PodVehicleCode Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {

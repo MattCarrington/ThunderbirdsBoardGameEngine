@@ -4,7 +4,7 @@ using ThunderbirdsBoardGameEngine.ReferenceData.Identities;
 
 namespace ThunderbirdsBoardGameEngine.ReferenceData.Serialization
 {
-    public class DisasterBonusKeyJsonConverter : JsonConverter<DisasterBonusKey>
+    internal sealed class DisasterBonusKeyJsonConverter : JsonConverter<DisasterBonusKey>
     {
         public override DisasterBonusKey Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {

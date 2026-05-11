@@ -1,9 +1,9 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace ThunderbirdsBoardGameEngine.ReferenceData
+namespace ThunderbirdsBoardGameEngine.ReferenceData.Serialization
 {
-    public class DateTimeOffsetJsonConverter : JsonConverter<DateTimeOffset>
+    internal sealed class DateTimeOffsetJsonConverter : JsonConverter<DateTimeOffset>
     {
         public override DateTimeOffset Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {

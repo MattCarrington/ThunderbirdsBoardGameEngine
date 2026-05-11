@@ -4,7 +4,7 @@ using ThunderbirdsBoardGameEngine.ReferenceData.Identities;
 
 namespace ThunderbirdsBoardGameEngine.ReferenceData.Serialization
 {
-    public class ThunderbirdCodeJsonConverter : JsonConverter<ThunderbirdCode>
+    internal sealed class ThunderbirdCodeJsonConverter : JsonConverter<ThunderbirdCode>
     {
         public override ThunderbirdCode Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
