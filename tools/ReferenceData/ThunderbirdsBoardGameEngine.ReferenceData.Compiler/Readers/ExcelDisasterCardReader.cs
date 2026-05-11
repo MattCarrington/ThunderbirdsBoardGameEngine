@@ -21,6 +21,12 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Readers
             foreach (var row in rows)
             {
                 var name = row.Cell(columnMap["Name"]).GetString();
+
+                if (string.IsNullOrWhiteSpace(name))
+                {
+                    continue;
+                }
+
                 var difficulty = row.Cell(columnMap["Difficulty Number"]).GetValue<int>();
                 var location = row.Cell(columnMap["Location"]).GetString();
                 var rescueType = row.Cell(columnMap["Rescue Type"]).GetString();
