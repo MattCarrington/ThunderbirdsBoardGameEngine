@@ -38,6 +38,22 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Runtime.Loaders
             {
                 throw new InvalidOperationException("Reference data content version is missing.");
             }
+
+            // Add these basic checks
+            if (snapshot.DisasterDefinitions.Count == 0)
+            {
+                throw new InvalidOperationException("No disaster definitions loaded.");
+            }
+
+            if (snapshot.CharacterDefinitions.Count == 0)
+            {
+                throw new InvalidOperationException("No character definitions loaded.");
+            }
+
+            if (snapshot.LocationDefinitions.Count == 0)
+            {
+                throw new InvalidOperationException("No location definitions loaded.");
+            }
         }
     }
 }

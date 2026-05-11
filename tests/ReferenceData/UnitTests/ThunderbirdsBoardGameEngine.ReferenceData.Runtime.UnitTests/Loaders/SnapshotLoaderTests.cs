@@ -25,7 +25,7 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Runtime.UnitTests.Loaders
 
             // Assert
             Assert.NotNull(result);
-            Assert.Same(result, snapshot);
+            Assert.Same(snapshot, result);
         }
 
         [Fact]
@@ -54,13 +54,7 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Runtime.UnitTests.Loaders
         public async Task LoadAsync_WhenSchemaVersionIsUnsupported_ThrowsInvalidOperationExceptionAsync()
         {
             // Arrange
-            var snapshot = new ReferenceDataSnapshotBuilder()
-                .WithSchemaVersion(999) // Unsupported version
-                .WithContentVersion("1.0")
-                .WithLocation("location-1", "Location 1")
-                .WithCharacter("character-1", "Character 1")
-                .WithDisaster("disaster-1", "Disaster 1", "location-1", ("character-1", 1, null))
-                .Build();
+            var snapshot = ReferenceDataSnapshotBuilder.Valid().WithSchemaVersion(999).Build();
 
             var loader = CreateLoader(snapshot);
 
@@ -73,12 +67,7 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Runtime.UnitTests.Loaders
         public async Task LoadAsync_WhenContentVersionIsMissing_ThrowsInvalidOperationException(string contentVersion)
         {
             // Arrange
-            var snapshot = new ReferenceDataSnapshotBuilder()
-                .WithContentVersion(contentVersion)
-                .WithLocation("location-1", "Location 1")
-                .WithCharacter("character-1", "Character 1")
-                .WithDisaster("disaster-1", "Disaster 1", "location-1", ("character-1", 1, null))
-                .Build();
+            var snapshot = ReferenceDataSnapshotBuilder.Valid().WithContentVersion(contentVersion).Build();
 
             var loader = CreateLoader(snapshot);
 
@@ -87,24 +76,39 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Runtime.UnitTests.Loaders
         }
 
         [Fact]
-        public async Task LoadAsync_WhenSnapshotContentVersionNull_ThrowsInvalidOperationExceptionAsync()
+        public async Task LoadAsync_WhenSnapshotDisasterDefinitionsEmpty_ThrowsInvalidOperationException()
         {
             // Arrange
-            var snapshot = new ReferenceDataSnapshot(
-                SchemaVersion: SnapshotVersions.SchemaVersion,
-                ContentVersion: null,
-                GeneratedAt: DateTimeOffset.UtcNow,
-                GeneratorVersion: SnapshotVersions.GeneratorVersion,
-                DisasterDefinitions: new List<ReferenceDisasterDefinition>(),
-                LocationDefinitions: new List<ReferenceLocationDefinition>(),
-                CharacterDefinitions: new List<ReferenceCharacterDefinition>(),
-                ThunderbirdDefinitions: new List<ReferenceThunderbirdDefinition>(),
-                PodVehicleDefinitions: new List<ReferencePodVehicleDefinition>());
+            var snapshot = ReferenceDataSnapshotBuilder.Valid().WithoutCharacters().Build();
 
             var loader = CreateLoader(snapshot);
 
             // Act & Assert
-            await Assert.ThrowsAsync<InvalidOperationException>(() => loader.LoadAsync());
+            await Assert.ThrowsAsync<InvalidOperationException>(loader.LoadAsync);
+        }
+
+        [Fact]
+        public async Task LoadAsync_WhenSnapshotCharacterDefinitionsEmpty_ThrowsInvalidOperationException()
+        {
+            // Arrange
+            var snapshot = ReferenceDataSnapshotBuilder.Valid().WithoutCharacters().Build();
+
+            var loader = CreateLoader(snapshot);
+
+            // Act & Assert
+            await Assert.ThrowsAsync<InvalidOperationException>(loader.LoadAsync);
+        }
+
+        [Fact]
+        public async Task LoadAsync_WhenSnapshotLocationDefinitionsEmpty_ThrowsInvalidOperationException()
+        {
+            // Arrange
+            var snapshot = ReferenceDataSnapshotBuilder.Valid().WithoutLocations().Build();
+
+            var loader = CreateLoader(snapshot);
+
+            // Act & Assert
+            await Assert.ThrowsAsync<InvalidOperationException>(loader.LoadAsync);
         }
 
         private static ReferenceDataSnapshot ValidSnapshot()
