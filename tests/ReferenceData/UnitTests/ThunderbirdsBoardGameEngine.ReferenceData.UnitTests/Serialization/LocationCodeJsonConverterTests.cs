@@ -69,7 +69,7 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.UnitTests.Serialization
             {
                 var reader = new Utf8JsonReader(bytes);
                 reader.Read();
-                _converter.Read(ref reader, typeof(CardCode), _options);
+                _converter.Read(ref reader, typeof(LocationCode), _options);
             });
         }
     }
