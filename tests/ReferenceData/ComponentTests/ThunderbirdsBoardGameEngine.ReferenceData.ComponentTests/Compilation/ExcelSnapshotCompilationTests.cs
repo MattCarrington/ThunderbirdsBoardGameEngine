@@ -34,7 +34,7 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.ComponentTests.Compilation
                 compiler.Compile();
 
                 // Assert
-                var json = File.ReadAllText("snapshot.json");
+                var json = File.ReadAllText(outputPath);
                 Assert.NotNull(json);
                 Assert.NotEmpty(json);
 
