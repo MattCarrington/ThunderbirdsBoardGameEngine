@@ -1,14 +1,14 @@
 {
   "schemaVersion": 1,
   "contentVersion": "1.0.0",
-  "generatedAt": "2026-05-11T18:06:28.4604347+00:00",
+  "generatedAt": "2026-05-12T10:44:11.3228019+00:00",
   "generatorVersion": "1.0.0",
   "characterDefinitions": [
     {
       "code": "scott",
       "displayName": "Scott",
       "rescueBonus": {
-        "rescueType": 0,
+        "rescueType": "air",
         "value": 2
       }
     },
@@ -16,7 +16,7 @@
       "code": "virgil",
       "displayName": "Virgil",
       "rescueBonus": {
-        "rescueType": 1,
+        "rescueType": "land",
         "value": 2
       }
     },
@@ -24,7 +24,7 @@
       "code": "john",
       "displayName": "John",
       "rescueBonus": {
-        "rescueType": 3,
+        "rescueType": "space",
         "value": 2
       }
     },
@@ -32,7 +32,7 @@
       "code": "gordon",
       "displayName": "Gordon",
       "rescueBonus": {
-        "rescueType": 2,
+        "rescueType": "sea",
         "value": 3
       }
     },
@@ -40,7 +40,7 @@
       "code": "alan",
       "displayName": "Alan",
       "rescueBonus": {
-        "rescueType": 3,
+        "rescueType": "space",
         "value": 2
       }
     },
@@ -55,7 +55,7 @@
       "displayName": "Signal From Sigma",
       "difficultyNumber": 8,
       "location": "asteroid-belt",
-      "rescueType": 3,
+      "rescueType": "space",
       "bonuses": [
         {
           "key": "john",
@@ -78,7 +78,7 @@
       "displayName": "The Mighty Atom",
       "difficultyNumber": 10,
       "location": "africa",
-      "rescueType": 1,
+      "rescueType": "land",
       "bonuses": [
         {
           "key": "thunderbird-4",
@@ -92,7 +92,7 @@
       "rewards": [
         {
           "rewardType": "specificToken",
-          "token": 4
+          "token": "technology"
         },
         {
           "rewardType": "playerChoice"
@@ -104,7 +104,7 @@
       "displayName": "The Moon Mine Menace",
       "difficultyNumber": 8,
       "location": "the-moon",
-      "rescueType": 3,
+      "rescueType": "space",
       "bonuses": [
         {
           "key": "gordon",
@@ -126,7 +126,7 @@
       "displayName": "The Perils of Penelope",
       "difficultyNumber": 7,
       "location": "europe",
-      "rescueType": 1,
+      "rescueType": "land",
       "bonuses": [
         {
           "key": "lady-penelope",
@@ -140,7 +140,7 @@
       "rewards": [
         {
           "rewardType": "specificToken",
-          "token": 2
+          "token": "determination"
         }
       ]
     },
@@ -149,7 +149,7 @@
       "displayName": "Towering Ocean",
       "difficultyNumber": 8,
       "location": "south-pacific",
-      "rescueType": 2,
+      "rescueType": "sea",
       "bonuses": [
         {
           "key": "thunderbird-3",
@@ -171,7 +171,7 @@
       "displayName": "30 Minutes After Noon",
       "difficultyNumber": 8,
       "location": "north-america",
-      "rescueType": 1,
+      "rescueType": "land",
       "bonuses": [
         {
           "key": "thunderbird-1",
@@ -194,7 +194,7 @@
       "displayName": "City of Fire",
       "difficultyNumber": 8,
       "location": "north-america",
-      "rescueType": 1,
+      "rescueType": "land",
       "bonuses": [
         {
           "key": "firefly",
@@ -216,7 +216,7 @@
       "displayName": "Rockquake",
       "difficultyNumber": 10,
       "location": "australia",
-      "rescueType": 0,
+      "rescueType": "air",
       "bonuses": [
         {
           "key": "recovery-vehicles",
@@ -234,7 +234,7 @@
       "rewards": [
         {
           "rewardType": "specificToken",
-          "token": 1
+          "token": "intelligence"
         },
         {
           "rewardType": "playerChoice"
@@ -246,7 +246,7 @@
       "displayName": "Flight Path to Fear",
       "difficultyNumber": 9,
       "location": "asia",
-      "rescueType": 0,
+      "rescueType": "air",
       "bonuses": [
         {
           "key": "laser-cutter",
@@ -264,11 +264,11 @@
       "rewards": [
         {
           "rewardType": "specificToken",
-          "token": 4
+          "token": "technology"
         },
         {
           "rewardType": "specificToken",
-          "token": 3
+          "token": "logistics"
         }
       ]
     },
@@ -277,7 +277,7 @@
       "displayName": "Sun Probe",
       "difficultyNumber": 11,
       "location": "the-sun",
-      "rescueType": 3,
+      "rescueType": "space",
       "bonuses": [
         {
           "key": "scott",
@@ -297,7 +297,7 @@
       "rewards": [
         {
           "rewardType": "specificToken",
-          "token": 3
+          "token": "logistics"
         },
         {
           "rewardType": "playerChoice"
@@ -309,7 +309,7 @@
       "displayName": "The Uninvited",
       "difficultyNumber": 8,
       "location": "africa",
-      "rescueType": 1,
+      "rescueType": "land",
       "bonuses": [
         {
           "key": "scott",
@@ -331,7 +331,7 @@
       "displayName": "The Cham-Cham",
       "difficultyNumber": 7,
       "location": "europe",
-      "rescueType": 0,
+      "rescueType": "air",
       "bonuses": [
         {
           "key": "lady-penelope",
@@ -346,7 +346,7 @@
       "rewards": [
         {
           "rewardType": "specificToken",
-          "token": 1
+          "token": "intelligence"
         }
       ]
     },
@@ -355,7 +355,7 @@
       "displayName": "Trapped in the Sky",
       "difficultyNumber": 11,
       "location": "europe",
-      "rescueType": 0,
+      "rescueType": "air",
       "bonuses": [
         {
           "key": "elevator-cars",
@@ -373,7 +373,7 @@
       "rewards": [
         {
           "rewardType": "specificToken",
-          "token": 1
+          "token": "intelligence"
         },
         {
           "rewardType": "playerChoice"
@@ -385,7 +385,7 @@
       "displayName": "Terror in New York City",
       "difficultyNumber": 11,
       "location": "north-america",
-      "rescueType": 2,
+      "rescueType": "sea",
       "bonuses": [
         {
           "key": "firefly",
@@ -403,7 +403,7 @@
       "rewards": [
         {
           "rewardType": "specificToken",
-          "token": 0
+          "token": "teamwork"
         },
         {
           "rewardType": "playerChoice"
@@ -415,7 +415,7 @@
       "displayName": "End of the Road",
       "difficultyNumber": 9,
       "location": "asia",
-      "rescueType": 1,
+      "rescueType": "land",
       "bonuses": [
         {
           "key": "alan",
@@ -429,11 +429,11 @@
       "rewards": [
         {
           "rewardType": "specificToken",
-          "token": 1
+          "token": "intelligence"
         },
         {
           "rewardType": "specificToken",
-          "token": 0
+          "token": "teamwork"
         }
       ]
     },
@@ -442,7 +442,7 @@
       "displayName": "Attack of the Alligators",
       "difficultyNumber": 10,
       "location": "south-america",
-      "rescueType": 2,
+      "rescueType": "sea",
       "bonuses": [
         {
           "key": "thunderbird-4",
@@ -456,7 +456,7 @@
       "rewards": [
         {
           "rewardType": "specificToken",
-          "token": 0
+          "token": "teamwork"
         },
         {
           "rewardType": "playerChoice"
@@ -468,7 +468,7 @@
       "displayName": "Atlantic Inferno",
       "difficultyNumber": 8,
       "location": "south-atlantic",
-      "rescueType": 2,
+      "rescueType": "sea",
       "bonuses": [
         {
           "key": "thunderbird-4",
@@ -491,7 +491,7 @@
       "displayName": "The Duchess Assignment",
       "difficultyNumber": 8,
       "location": "north-america",
-      "rescueType": 1,
+      "rescueType": "land",
       "bonuses": [
         {
           "key": "domo",
@@ -513,7 +513,7 @@
       "displayName": "Pit of Peril",
       "difficultyNumber": 11,
       "location": "africa",
-      "rescueType": 1,
+      "rescueType": "land",
       "bonuses": [
         {
           "key": "recovery-vehicles",
@@ -531,7 +531,7 @@
       "rewards": [
         {
           "rewardType": "specificToken",
-          "token": 2
+          "token": "determination"
         },
         {
           "rewardType": "playerChoice"
@@ -543,7 +543,7 @@
       "displayName": "Sunrise on Mars",
       "difficultyNumber": 10,
       "location": "mars",
-      "rescueType": 3,
+      "rescueType": "space",
       "bonuses": [
         {
           "key": "lady-penelope",
@@ -562,7 +562,7 @@
       "rewards": [
         {
           "rewardType": "specificToken",
-          "token": 4
+          "token": "technology"
         },
         {
           "rewardType": "playerChoice"
@@ -574,7 +574,7 @@
       "displayName": "Ricochet",
       "difficultyNumber": 9,
       "location": "geo-stationary-orbit",
-      "rescueType": 3,
+      "rescueType": "space",
       "bonuses": [
         {
           "key": "scott",
@@ -588,11 +588,11 @@
       "rewards": [
         {
           "rewardType": "specificToken",
-          "token": 0
+          "token": "teamwork"
         },
         {
           "rewardType": "specificToken",
-          "token": 4
+          "token": "technology"
         }
       ]
     },
@@ -601,7 +601,7 @@
       "displayName": "Bound for Venus",
       "difficultyNumber": 8,
       "location": "venus",
-      "rescueType": 3,
+      "rescueType": "space",
       "bonuses": [
         {
           "key": "john",
@@ -623,7 +623,7 @@
       "displayName": "The Imposters",
       "difficultyNumber": 9,
       "location": "geo-stationary-orbit",
-      "rescueType": 3,
+      "rescueType": "space",
       "bonuses": [
         {
           "key": "scott",
@@ -638,11 +638,11 @@
       "rewards": [
         {
           "rewardType": "specificToken",
-          "token": 3
+          "token": "logistics"
         },
         {
           "rewardType": "specificToken",
-          "token": 2
+          "token": "determination"
         }
       ]
     },
@@ -651,7 +651,7 @@
       "displayName": "Desperate Intruder",
       "difficultyNumber": 8,
       "location": "africa",
-      "rescueType": 2,
+      "rescueType": "sea",
       "bonuses": [
         {
           "key": "thunderbird-1",
@@ -673,7 +673,7 @@
       "displayName": "Edge of Impact",
       "difficultyNumber": 8,
       "location": "europe",
-      "rescueType": 0,
+      "rescueType": "air",
       "bonuses": [
         {
           "key": "thunderizer",
@@ -695,7 +695,7 @@
       "displayName": "Operation Crash Dive",
       "difficultyNumber": 9,
       "location": "north-atlantic",
-      "rescueType": 2,
+      "rescueType": "sea",
       "bonuses": [
         {
           "key": "thunderbird-1",
@@ -710,11 +710,11 @@
       "rewards": [
         {
           "rewardType": "specificToken",
-          "token": 4
+          "token": "technology"
         },
         {
           "rewardType": "specificToken",
-          "token": 3
+          "token": "logistics"
         }
       ]
     },
@@ -723,7 +723,7 @@
       "displayName": "Path of Destruction",
       "difficultyNumber": 9,
       "location": "south-america",
-      "rescueType": 1,
+      "rescueType": "land",
       "bonuses": [
         {
           "key": "mobile-crane",
@@ -738,11 +738,11 @@
       "rewards": [
         {
           "rewardType": "specificToken",
-          "token": 3
+          "token": "logistics"
         },
         {
           "rewardType": "specificToken",
-          "token": 2
+          "token": "determination"
         }
       ]
     },
@@ -751,7 +751,7 @@
       "displayName": "Target: Tiger One",
       "difficultyNumber": 9,
       "location": "north-pacific",
-      "rescueType": 0,
+      "rescueType": "air",
       "bonuses": [
         {
           "key": "alan",
@@ -766,11 +766,11 @@
       "rewards": [
         {
           "rewardType": "specificToken",
-          "token": 2
+          "token": "determination"
         },
         {
           "rewardType": "specificToken",
-          "token": 1
+          "token": "intelligence"
         }
       ]
     },
@@ -779,7 +779,7 @@
       "displayName": "Bolt from the Blue",
       "difficultyNumber": 8,
       "location": "indian-ocean",
-      "rescueType": 0,
+      "rescueType": "air",
       "bonuses": [
         {
           "key": "john",
@@ -802,7 +802,7 @@
       "displayName": "Danger at Ocean Deep",
       "difficultyNumber": 7,
       "location": "europe",
-      "rescueType": 2,
+      "rescueType": "sea",
       "bonuses": [
         {
           "key": "john",
@@ -817,7 +817,7 @@
       "rewards": [
         {
           "rewardType": "specificToken",
-          "token": 4
+          "token": "technology"
         }
       ]
     },
@@ -826,7 +826,7 @@
       "displayName": "The Longest Day",
       "difficultyNumber": 7,
       "location": "mercury",
-      "rescueType": 3,
+      "rescueType": "space",
       "bonuses": [
         {
           "key": "gordon",
@@ -840,7 +840,7 @@
       "rewards": [
         {
           "rewardType": "specificToken",
-          "token": 3
+          "token": "logistics"
         }
       ]
     },
@@ -849,7 +849,7 @@
       "displayName": "Martian Invasion",
       "difficultyNumber": 7,
       "location": "north-america",
-      "rescueType": 1,
+      "rescueType": "land",
       "bonuses": [
         {
           "key": "excavator",
@@ -859,7 +859,7 @@
       "rewards": [
         {
           "rewardType": "specificToken",
-          "token": 0
+          "token": "teamwork"
         }
       ]
     },
@@ -868,7 +868,7 @@
       "displayName": "Day of Disaster",
       "difficultyNumber": 9,
       "location": "europe",
-      "rescueType": 2,
+      "rescueType": "sea",
       "bonuses": [
         {
           "key": "thunderbird-4",
@@ -882,11 +882,11 @@
       "rewards": [
         {
           "rewardType": "specificToken",
-          "token": 2
+          "token": "determination"
         },
         {
           "rewardType": "specificToken",
-          "token": 0
+          "token": "teamwork"
         }
       ]
     },
@@ -895,7 +895,7 @@
       "displayName": "They Call Him Mr. X",
       "difficultyNumber": 8,
       "location": "asia",
-      "rescueType": 0,
+      "rescueType": "air",
       "bonuses": [
         {
           "key": "mobile-crane",
