@@ -10,7 +10,7 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Writers
 
         public JsonSnapshotWriter(string outputPath)
         {
-             _outputPath = outputPath;
+            _outputPath = outputPath;
         }
 
         public void Write(ReferenceDataSnapshot snapshot)
