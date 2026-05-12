@@ -1,4 +1,4 @@
-﻿namespace ThunderbirdsBoardGameEngine.PublishedLanguage.Enums
+﻿namespace ThunderbirdsBoardGameEngine.ReferenceData.Enums
 {
     /// <summary>
     /// Represents a bonus token that is used in the game.

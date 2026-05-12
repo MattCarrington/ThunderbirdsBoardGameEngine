@@ -1,6 +1,4 @@
 ﻿using NSubstitute;
-using ThunderbirdsBoardGameEngine.PublishedLanguage.Enums;
-using ThunderbirdsBoardGameEngine.ReferenceData.Identities;
 using ThunderbirdsBoardGameEngine.ReferenceData.Model;
 using ThunderbirdsBoardGameEngine.ReferenceData.Runtime.Interfaces;
 using ThunderbirdsBoardGameEngine.ReferenceData.Runtime.Loaders;

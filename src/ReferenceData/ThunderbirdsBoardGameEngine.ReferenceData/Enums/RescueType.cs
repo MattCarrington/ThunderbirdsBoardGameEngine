@@ -1,4 +1,4 @@
-﻿namespace ThunderbirdsBoardGameEngine.PublishedLanguage.Enums
+﻿namespace ThunderbirdsBoardGameEngine.ReferenceData.Enums
 {
     /// <summary>
     /// Defines the type of rescue required to resolve a disaster.

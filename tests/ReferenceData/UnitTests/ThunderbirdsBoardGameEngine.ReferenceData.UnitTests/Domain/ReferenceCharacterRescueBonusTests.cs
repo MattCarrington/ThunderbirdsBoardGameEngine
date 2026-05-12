@@ -1,4 +1,4 @@
-﻿using ThunderbirdsBoardGameEngine.PublishedLanguage.Enums;
+﻿using ThunderbirdsBoardGameEngine.ReferenceData.Enums;
 using ThunderbirdsBoardGameEngine.ReferenceData.Model;
 using Xunit;
 
