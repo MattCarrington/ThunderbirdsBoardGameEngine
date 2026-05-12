@@ -6,11 +6,18 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Writers
 {
     public class JsonSnapshotWriter : ISnapshotWriter
     {
+        private readonly string _outputPath;
+
+        public JsonSnapshotWriter(string outputPath)
+        {
+             _outputPath = outputPath;
+        }
+
         public void Write(ReferenceDataSnapshot snapshot)
         {
             var json = JsonSerializer.Serialize(snapshot, SnapshotJsonOptions.Create());
 
-            File.WriteAllText("snapshot.json", json);
+            File.WriteAllText(_outputPath, json);
         }
     }
 }

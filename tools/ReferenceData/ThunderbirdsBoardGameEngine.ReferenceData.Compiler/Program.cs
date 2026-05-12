@@ -8,7 +8,7 @@ var compiler = new ReferenceDataCompiler(
     new ExcelReferenceDataSource("ReferenceData.xlsx"),
     new SnapshotBuilder(new SystemClock()),
     new SnapshotValidator(),
-    new JsonSnapshotWriter());
+    new JsonSnapshotWriter("snapshot.json"));
 
 compiler.Compile();
 

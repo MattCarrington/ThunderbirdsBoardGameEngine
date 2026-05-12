@@ -15,35 +15,50 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.ComponentTests.Compilation
         public void EmbeddedExcelCompilesToSnapshot()
         {
             // Arrange
-            var dateTimeOffset = new DateTimeOffset(2026, 6, 1, 12, 0, 0, TimeSpan.Zero);
+            var tempDirectory = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString("N"));
+            Directory.CreateDirectory(tempDirectory);
 
-            var compiler = new ReferenceDataCompiler(
-                new ExcelReferenceDataSource("ReferenceData.xlsx"),
-                new SnapshotBuilder(new FakeClock(dateTimeOffset)),
-                new SnapshotValidator(),
-                new JsonSnapshotWriter());
+            var outputPath = Path.Combine(tempDirectory, "snapshot.json");
 
-            // Act
-            compiler.Compile();
+            try
+            {
+                var dateTimeOffset = new DateTimeOffset(2026, 6, 1, 12, 0, 0, TimeSpan.Zero);
 
-            // Assert
-            var json = File.ReadAllText("snapshot.json");
-            Assert.NotNull(json);
-            Assert.NotEmpty(json);
+                var compiler = new ReferenceDataCompiler(
+                    new ExcelReferenceDataSource("ReferenceData.xlsx"),
+                    new SnapshotBuilder(new FakeClock(dateTimeOffset)),
+                    new SnapshotValidator(),
+                    new JsonSnapshotWriter(outputPath));
 
-            var snapshot = JsonSerializer.Deserialize<ReferenceDataSnapshot>(json, SnapshotJsonOptions.Default);
-            Assert.NotNull(snapshot);
+                // Act
+                compiler.Compile();
 
-            Assert.Equal(SnapshotVersions.SchemaVersion, snapshot.SchemaVersion);
-            Assert.Equal(SnapshotVersions.ContentVersion, snapshot.ContentVersion);
-            Assert.Equal(dateTimeOffset, snapshot.GeneratedAt);
-            Assert.Equal(SnapshotVersions.GeneratorVersion, snapshot.GeneratorVersion);
+                // Assert
+                var json = File.ReadAllText("snapshot.json");
+                Assert.NotNull(json);
+                Assert.NotEmpty(json);
 
-            Assert.NotEmpty(snapshot.CharacterDefinitions);
-            Assert.NotEmpty(snapshot.DisasterDefinitions);
-            Assert.NotEmpty(snapshot.LocationDefinitions);
-            Assert.NotEmpty(snapshot.ThunderbirdDefinitions);
-            Assert.NotEmpty(snapshot.PodVehicleDefinitions);
+                var snapshot = JsonSerializer.Deserialize<ReferenceDataSnapshot>(json, SnapshotJsonOptions.Default);
+                Assert.NotNull(snapshot);
+
+                Assert.Equal(SnapshotVersions.SchemaVersion, snapshot.SchemaVersion);
+                Assert.Equal(SnapshotVersions.ContentVersion, snapshot.ContentVersion);
+                Assert.Equal(dateTimeOffset, snapshot.GeneratedAt);
+                Assert.Equal(SnapshotVersions.GeneratorVersion, snapshot.GeneratorVersion);
+
+                Assert.NotEmpty(snapshot.CharacterDefinitions);
+                Assert.NotEmpty(snapshot.DisasterDefinitions);
+                Assert.NotEmpty(snapshot.LocationDefinitions);
+                Assert.NotEmpty(snapshot.ThunderbirdDefinitions);
+                Assert.NotEmpty(snapshot.PodVehicleDefinitions);
+            }
+            finally
+            {
+                if (Directory.Exists(tempDirectory))
+                {
+                    Directory.Delete(tempDirectory, recursive: true);
+                }
+            }
         }
     }
 }
