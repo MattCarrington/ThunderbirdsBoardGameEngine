@@ -1,5 +1,5 @@
 ﻿using System.Text.Json.Serialization;
-using ThunderbirdsBoardGameEngine.PublishedLanguage.Enums;
+using ThunderbirdsBoardGameEngine.ReferenceData.Enums;
 
 namespace ThunderbirdsBoardGameEngine.ReferenceData.Model
 {

@@ -1,6 +1,6 @@
 # ThunderbirdsBoardGameEngine
 
-This repository contains an experimental ASP.NET–based application built
+This repository contains an experimental ASP.NETï¿½based application built
 around the *Thunderbirds* board game domain, with a strong emphasis on
 **testability, contract-driven design, and automation**.
 
@@ -27,7 +27,7 @@ simplicity and repeatability.
 
 ## Current focus
 
-The current vertical slice focuses on the **Catalog bounded context**.
+The current vertical slice focuses on the **Rules bounded context**.
 
 This slice exists to demonstrate:
 
@@ -43,20 +43,7 @@ integration and end-to-end testing scenarios.
 
 ---
 
-## What’s included
-
-- **Catalog.Contracts**  
-  Public request/response contracts for the Catalog bounded context.
-
-- **Catalog.Client**  
-  Typed HTTP client for consuming the Catalog API.
-
-- **Catalog.WireMock**  
-  WireMock.NET stubs for consumer and integration testing.
-
-- **Catalog data generation & projections**  
-  Tooling to generate catalog data and project internal models into
-  UI-facing DTOs.
+## Whatï¿½s included
 
 - **CI & versioning discipline**  
   - manual version bumps
@@ -66,7 +53,7 @@ integration and end-to-end testing scenarios.
 
 ---
 
-## What’s intentionally out of scope (for now)
+## Whatï¿½s intentionally out of scope (for now)
 
 - Complete game rules engine
 - Sophisticated UI/UX

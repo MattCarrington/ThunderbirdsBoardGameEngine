@@ -1,19 +1,12 @@
 ﻿using Microsoft.AspNetCore.Diagnostics.HealthChecks;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
-using ThunderbirdsBoardGameEngine.Api.HealthChecks;
 
 namespace ThunderbirdsBoardGameEngine.Api.Composition
 {
     public static class HealthCheckExtensions
     {
-        [Obsolete("Catalog runtime API is deprecated. Static game data is now provided by ReferenceData snapshots.")]
-        public static IServiceCollection AddCatalogHealthChecks(this IServiceCollection services)
+        public static IServiceCollection AddApiHealthChecks(this IServiceCollection services)
         {
-            services.AddHealthChecks()
-                .AddCheck<DisasterCardCatalogHealthCheck>(
-                    name: "catalog_readiness",
-                    failureStatus: HealthStatus.Unhealthy,
-                    tags: new[] { "readiness" });
+            services.AddHealthChecks();
 
             return services;
         }

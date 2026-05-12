@@ -81,18 +81,6 @@ jobs:
             project_path: src/ReferenceData/ThunderbirdsBoardGameEngine.ReferenceData.Runtime/ThunderbirdsBoardGameEngine.ReferenceData.Runtime.csproj
             package_id: ThunderbirdsBoardGameEngine.ReferenceData.Runtime
 
-          - name: Catalog.Contracts
-            project_path: src/Catalog/ThunderbirdsBoardGameEngine.Catalog.Contracts/ThunderbirdsBoardGameEngine.Catalog.Contracts.csproj
-            package_id: ThunderbirdsBoardGameEngine.Catalog.Contracts
-
-          - name: Catalog.Client
-            project_path: src/Catalog/ThunderbirdsBoardGameEngine.Catalog.Client/ThunderbirdsBoardGameEngine.Catalog.Client.csproj
-            package_id: ThunderbirdsBoardGameEngine.Catalog.Client
-
-          - name: Catalog.WireMock
-            project_path: tools/Catalog/ThunderbirdsBoardGameEngine.Catalog.WireMock/ThunderbirdsBoardGameEngine.Catalog.WireMock.csproj
-            package_id: ThunderbirdsBoardGameEngine.Catalog.WireMock
-
           - name: Rules.Contracts
             project_path: src/Rules/ThunderbirdsBoardGameEngine.Rules.Contracts/ThunderbirdsBoardGameEngine.Rules.Contracts.csproj
             package_id: ThunderbirdsBoardGameEngine.Rules.Contracts
