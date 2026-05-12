@@ -1,8 +1,0 @@
-{
-  "profiles": {
-    "ThunderbirdsBoardGameEngine.Catalog.Generator": {
-      "commandName": "Project",
-      "commandLineArgs": "--input Resources/DisasterCards.xlsx --out Output/DisasterCards.json"
-    }
-  }
-}

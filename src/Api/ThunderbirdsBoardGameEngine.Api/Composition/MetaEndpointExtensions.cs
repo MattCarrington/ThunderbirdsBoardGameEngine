@@ -12,7 +12,6 @@
                     var response = new
                     {
                         serverVersion = "dev-0.0.0",    // TODO: Placeholder until CI wiring
-                        catalogVersion = ApiVersionInfo.CatalogVersion,
                         rulesVersion = ApiVersionInfo.RulesVersion,
                         name = "Thunderbirds Board Game Engine API"
                     };
