@@ -7,7 +7,7 @@
             services.AddHeaderApiVersioning();
             services.AddApiProblemDetails();
             services.AddApiExceptionHandling();
-            services.AddHealthChecks();
+            services.AddApiHealthChecks();
             services.AddApiCors(configuration);
             return services;
         }

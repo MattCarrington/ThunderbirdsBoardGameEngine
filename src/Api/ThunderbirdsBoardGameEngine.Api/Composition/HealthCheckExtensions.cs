@@ -4,7 +4,7 @@ namespace ThunderbirdsBoardGameEngine.Api.Composition
 {
     public static class HealthCheckExtensions
     {
-        public static IServiceCollection AddHealthChecks(this IServiceCollection services)
+        public static IServiceCollection AddApiHealthChecks(this IServiceCollection services)
         {
             services.AddHealthChecks();
 
