@@ -1,8 +1,10 @@
-﻿using ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Compilation;
+﻿using System.Text.Json;
+using ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Compilation;
 using ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Source;
 using ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Validators;
 using ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Writers;
 using ThunderbirdsBoardGameEngine.ReferenceData.ComponentTests.Helpers;
+using ThunderbirdsBoardGameEngine.ReferenceData.Model;
 using Xunit;
 
 namespace ThunderbirdsBoardGameEngine.ReferenceData.ComponentTests.Compilation
@@ -29,16 +31,19 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.ComponentTests.Compilation
             Assert.NotNull(json);
             Assert.NotEmpty(json);
 
-            Assert.Contains($"\"schemaVersion\": {SnapshotVersions.SchemaVersion}", json);
-            Assert.Contains($"\"contentVersion\": \"{SnapshotVersions.ContentVersion}\"", json);
-            Assert.Contains($"\"generatedAt\": \"{dateTimeOffset:O}\"", json);
-            Assert.Contains($"\"generatorVersion\": \"{SnapshotVersions.GeneratorVersion}\"", json);
+            var snapshot = JsonSerializer.Deserialize<ReferenceDataSnapshot>(json, SnapshotJsonOptions.Default);
+            Assert.NotNull(snapshot);
 
-            Assert.Contains("\"characterDefinitions\"", json);
-            Assert.Contains("\"disasterDefinitions\"", json);
-            Assert.Contains("\"locationDefinitions\"", json);
-            Assert.Contains("\"thunderbirdDefinitions\"", json);
-            Assert.Contains("\"podVehicleDefinitions\"", json);
+            Assert.Equal(SnapshotVersions.SchemaVersion, snapshot.SchemaVersion);
+            Assert.Equal(SnapshotVersions.ContentVersion, snapshot.ContentVersion);
+            Assert.Equal(dateTimeOffset, snapshot.GeneratedAt);
+            Assert.Equal(SnapshotVersions.GeneratorVersion, snapshot.GeneratorVersion);
+
+            Assert.NotEmpty(snapshot.CharacterDefinitions);
+            Assert.NotEmpty(snapshot.DisasterDefinitions);
+            Assert.NotEmpty(snapshot.LocationDefinitions);
+            Assert.NotEmpty(snapshot.ThunderbirdDefinitions);
+            Assert.NotEmpty(snapshot.PodVehicleDefinitions);
         }
     }
 }
