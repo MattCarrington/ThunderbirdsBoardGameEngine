@@ -18,7 +18,6 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData
     /// <item>camelCase property naming</item>
     /// <item>Indented formatting for readability</item>
     /// <item>Null value omission</item>
-    /// <item>Relaxed JSON escaping for special characters</item>
     /// </list>
     /// </para>
     /// </remarks>
