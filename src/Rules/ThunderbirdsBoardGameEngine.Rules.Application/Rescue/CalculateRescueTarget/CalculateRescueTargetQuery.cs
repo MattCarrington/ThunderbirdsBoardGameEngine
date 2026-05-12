@@ -1,6 +1,5 @@
 ﻿using MediatR;
-using ThunderbirdsBoardGameEngine.PublishedLanguage.Characters;
-using ThunderbirdsBoardGameEngine.PublishedLanguage.DisasterBonus;
+using ThunderbirdsBoardGameEngine.ReferenceData.Identities;
 using ThunderbirdsBoardGameEngine.Rules.Domain.Rescue;
 
 namespace ThunderbirdsBoardGameEngine.Rules.Application.Rescue.CalculateRescueTarget

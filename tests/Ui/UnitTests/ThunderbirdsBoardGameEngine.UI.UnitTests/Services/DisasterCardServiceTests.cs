@@ -1,10 +1,11 @@
-﻿using AutoFixture;
-using NSubstitute;
-using System.Net;
-using ThunderbirdsBoardGameEngine.Catalog.Client.Interfaces.V1;
-using ThunderbirdsBoardGameEngine.Catalog.Contracts.Dtos.V1;
-using ThunderbirdsBoardGameEngine.Client.Infrastructure;
-using ThunderbirdsBoardGameEngine.TestUtils.xUnit.Assertions;
+﻿using NSubstitute;
+using System.Collections.Immutable;
+using ThunderbirdsBoardGameEngine.PublishedLanguage.Enums;
+using ThunderbirdsBoardGameEngine.ReferenceData.Identities;
+using ThunderbirdsBoardGameEngine.ReferenceData.Model;
+using ThunderbirdsBoardGameEngine.ReferenceData.Runtime.Interfaces;
+using ThunderbirdsBoardGameEngine.ReferenceData.Runtime.Models;
+using ThunderbirdsBoardGameEngine.UI.Mappers;
 using ThunderbirdsBoardGameEngine.UI.Services;
 using Xunit;
 
@@ -13,64 +14,157 @@ namespace ThunderbirdsBoardGameEngine.UI.UnitTests.Services
     public class DisasterCardServiceTests
     {
         [Fact]
-        public async Task GetAllAsync_WhenResponseIsSuccessful_ReturnsListOfDisasterCards()
+        public void GetAll_WhenCalled_CallsCatalog()
         {
             // Arrange
-            var fixture = new Fixture();
+            var disaster = CreateMinimalDisaster("DC001");
+            var disasterCatalog = Substitute.For<IDisasterDefinitionCatalog>();
+            disasterCatalog.GetAll().Returns(new[] { disaster }.ToImmutableArray());
 
-            var disasterCards = fixture.Create<IReadOnlyList<DisasterCardDto>>();
+            var mapper = CreateMapper();
 
-            var response = ApiResult<IReadOnlyList<DisasterCardDto>>.SuccessResult(disasterCards, HttpStatusCode.OK);
-
-            var service = CreateService(response);
+            var service = new DisasterCardService(disasterCatalog, mapper);
 
             // Act
-            var result = await service.GetAllAsync();
+            var result = service.GetAll();
+
+            // Assert
+            Assert.Single(result);
+            disasterCatalog.Received(1).GetAll();
+        }
+
+        [Fact]
+        public void GetAll_WhenCatalogReturnsMultipleItems_ReturnsCorrectCount()
+        {
+            // Arrange
+            var disaster1 = CreateMinimalDisaster("DC001");
+            var disaster2 = CreateMinimalDisaster("DC002");
+            var disaster3 = CreateMinimalDisaster("DC003");
+
+            var catalog = Substitute.For<IDisasterDefinitionCatalog>();
+            catalog.GetAll().Returns(new[] { disaster1, disaster2, disaster3 }.ToImmutableArray());
+
+            var mapper = CreateMapper();
+
+            var service = new DisasterCardService(catalog, mapper);
+
+            // Act
+            var result = service.GetAll();
+
+            // Assert
+            Assert.Equal(3, result.Count);
+        }
+
+        [Fact]
+        public void GetAll_WhenCatalogIsEmpty_ReturnsEmptyList()
+        {
+            // Arrange
+            var catalog = Substitute.For<IDisasterDefinitionCatalog>();
+            catalog.GetAll().Returns(ImmutableArray<ReferenceDisasterDefinition>.Empty);
+
+            var mapper = CreateMapper();
+
+            var service = new DisasterCardService(catalog, mapper);
+
+            // Act
+            var result = service.GetAll();
 
             // Assert
             Assert.NotNull(result);
-            DisasterCardDtoAssertions.AssertOrderSensitive(disasterCards.ToList(), result.ToList());
-        }
-
-        [Fact]
-        public async Task GetAllAsync_WhenResponseIsNotSuccessful_ReturnsEmptyList()
-        {
-            // Arrange
-            var fixture = new Fixture();
-            var errorMessage = fixture.Create<string>();
-
-            var response = ApiResult<IReadOnlyList<DisasterCardDto>>.Failure(errorMessage, HttpStatusCode.BadRequest);
-
-            var service = CreateService(response);
-
-            // Act
-            var result = await service.GetAllAsync();
-
-            // Assert
             Assert.Empty(result);
         }
 
         [Fact]
-        public async Task GetAllAsync_WhenClientReturnsNullData_ReturnsEmptyList()
+        public void GetByCode_WhenDisasterExists_CallsCatalogWithCorrectCode()
         {
             // Arrange
-            var response = ApiResult<IReadOnlyList<DisasterCardDto>>.SuccessResult(null, HttpStatusCode.OK);
+            var disaster = CreateMinimalDisaster("DC123");
+            var catalog = Substitute.For<IDisasterDefinitionCatalog>();
+            catalog.GetByCode(Arg.Any<CardCode>()).Returns(disaster);
 
-            var service = CreateService(response);
+            var mapper = CreateMapper();
+
+            var service = new DisasterCardService(catalog, mapper);
 
             // Act
-            var result = await service.GetAllAsync();
+            service.GetByCode("DC123");
 
             // Assert
-            Assert.Empty(result);
+            catalog.Received(1).GetByCode(Arg.Is<CardCode>(code => code.ToString() == "DC123"));
         }
 
-        private static DisasterCardService CreateService(ApiResult<IReadOnlyList<DisasterCardDto>> apiResult)
+        [Fact]
+        public void GetByCode_WhenCodeExists_ReturnsNonNull()
         {
-            var client = Substitute.For<IDisasterCardsClient>();
-            client.GetAllAsync().Returns(Task.FromResult(apiResult));
+            // Arrange
+            var disaster = CreateMinimalDisaster("DC001");
+            var catalog = Substitute.For<IDisasterDefinitionCatalog>();
+            catalog.GetByCode(new CardCode("DC001")).Returns(disaster);
 
-            return new DisasterCardService(client);
+            var mapper = CreateMapper();
+
+            var service = new DisasterCardService(catalog, mapper);
+
+            // Act
+            var result = service.GetByCode("DC001");
+
+            // Assert
+            Assert.NotNull(result);
+        }
+
+        [Fact]
+        public void GetByCode_WhenCalledPreservesCodeValue()
+        {
+            // Arrange
+            var disaster = CreateMinimalDisaster("DC456");
+            var catalog = Substitute.For<IDisasterDefinitionCatalog>();
+            catalog.GetByCode(Arg.Any<CardCode>()).Returns(disaster);
+
+            var mapper = CreateMapper();
+
+            var service = new DisasterCardService(catalog, mapper);
+
+            // Act
+            var result = service.GetByCode("DC456");
+
+            // Assert
+            Assert.Equal("DC456", result.Code);
+        }
+
+        private static ReferenceDisasterDefinition CreateMinimalDisaster(string code)
+        {
+            var bonus = new ReferenceDisasterBonus(
+                new DisasterBonusKey("test"),
+                value: 1,
+                location: null
+            );
+
+            var reward = new ReferenceDisasterReward.SpecificToken(
+                BonusToken.Teamwork
+            );
+
+            return new ReferenceDisasterDefinition(
+                code: new CardCode(code),
+                displayName: "Test Disaster",
+                difficultyNumber: 5,
+                location: new LocationCode("london"),
+                rescueType: RescueType.Air,
+                bonuses: new[] { bonus },
+                rewards: new[] { reward }
+            );
+        }
+
+        private DisasterCardMapper CreateMapper()
+        {
+            var locationCatalog = Substitute.For<ILocationDefinitionCatalog>();
+            locationCatalog.GetByCode(Arg.Any<LocationCode>())
+                .Returns(new ReferenceLocationDefinition(new LocationCode("london"), "London"));
+
+            var disasterBonusKeyCatalog = Substitute.For<IDisasterBonusKeyDefinitionCatalog>();
+            disasterBonusKeyCatalog.GetByCode(Arg.Any<DisasterBonusKey>())
+                .Returns(new DisasterBonusKeyDefinition(new DisasterBonusKey("test"), "Test Bonus"));
+
+            return new DisasterCardMapper(locationCatalog, disasterBonusKeyCatalog);
         }
     }
 }

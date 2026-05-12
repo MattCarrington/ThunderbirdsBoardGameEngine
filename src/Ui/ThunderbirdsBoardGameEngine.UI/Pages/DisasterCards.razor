@@ -1,8 +1,8 @@
 ﻿@page "/disasterCards"
-@using ThunderbirdsBoardGameEngine.Catalog.Contracts.Dtos.V1
 @using ThunderbirdsBoardGameEngine.Rules.Contracts.Dtos.Rescue.CalculateRescueTarget.V1
 @using ThunderbirdsBoardGameEngine.UI.Interfaces
-@inject ICharactersService CharactersService
+@using ThunderbirdsBoardGameEngine.UI.ViewModels
+@inject ICharacterService CharacterService
 @inject IDisasterCardService DisasterCardService
 @inject IRescueService RescueService
 
@@ -26,7 +26,7 @@ else
         <option value="">-- Select a card --</option>
         @foreach (var c in cards)
         {
-            <option value="@c.Id">@c.Name</option>  @* users see title; value is ID *@
+            <option value="@c.Code">@c.DisplayName</option>
         }
     </select>
 
@@ -35,7 +35,7 @@ else
         <div class="mt-4" data-testid="details">
             <h3>Disaster Card Details</h3>
             <div class="card shadow-sm p-3">
-                <h4>@selectedCard.Name</h4>
+                <h4>@selectedCard.DisplayName</h4>
                 <p><strong>Difficulty:</strong> @selectedCard.DifficultyNumber</p>
                 <p><strong>Location:</strong> @selectedCard.Location</p>
                 <p><strong>Rescue Type:</strong> @selectedCard.RescueType</p>
@@ -74,7 +74,7 @@ else
                     <ul>
                         @foreach (var reward in selectedCard.Rewards)
                         {
-                            <li>@reward.DisplayName</li>
+                            <li>@reward.Description</li>
                         }
                     </ul>
                 }
@@ -89,8 +89,8 @@ else
 
                         @foreach (var c in characters)
                         {
-                            <option value="@c.Key">@c.DisplayName</option> @* users see display; value is key *@ 
-                                }
+                            <option value="@c.Key">@c.DisplayName</option>
+                        }
                     </select>
                 }
 
@@ -123,12 +123,11 @@ else
 }
 
 @code {
-    private IReadOnlyList<DisasterCardDto>? cards;
-    private IReadOnlyDictionary<int, DisasterCardDto>? cardsDictionary;
-    private IReadOnlyList<CharacterDto>? characters;
+    private IReadOnlyList<DisasterCardViewModel>? cards;
+    private IReadOnlyList<CharacterViewModel>? characters;
 
-    private int? selectedCardId;
-    private DisasterCardDto? selectedCard;
+    private string? selectedCardId;
+    private DisasterCardViewModel? selectedCard;
     private string? selectedCharacterCode;
 
     private readonly HashSet<string> selectedBonusKeys = new();
@@ -142,24 +141,16 @@ else
         || selectedCard is null
         || string.IsNullOrWhiteSpace(selectedCharacterCode);
 
-    protected override async Task OnInitializedAsync()
+    protected override void OnInitialized()
     {
-        // Load once (disaster cards only)
-        var all = await DisasterCardService.GetAllAsync();
-
-        cards = all.OrderBy(c => c.Name ?? string.Empty, StringComparer.OrdinalIgnoreCase).ToList();
-
-        // Build an ID -> DTO index (handles duplicates by keeping the first)
-        var dict = new Dictionary<int, DisasterCardDto>(cards.Count);
-        foreach (var c in cards)
-            dict.TryAdd(c.Id, c);
-
-        cardsDictionary = dict;
-
-        characters = await CharactersService.GetAllAsync();
+        var allCards = DisasterCardService.GetAll();
+        cards = allCards.OrderBy(c => c.DisplayName ?? string.Empty, StringComparer.OrdinalIgnoreCase).ToList();
+        
+        var allCharacters = CharacterService.GetAll();
+        characters = allCharacters.OrderBy(c => c.DisplayName ?? string.Empty, StringComparer.OrdinalIgnoreCase).ToList();
     }
 
-    private int? SelectedCardId
+    private string? SelectedCardId
     {
         get => selectedCardId;
         set
@@ -170,12 +161,11 @@ else
             }
 
             selectedCardId = value;
-
             selectedBonusKeys.Clear();
             calculationResult = null;
 
-            selectedCard = (value is int id && cardsDictionary?.TryGetValue(id, out var card) == true)
-                ? card
+            selectedCard = !string.IsNullOrWhiteSpace(value)
+                ? DisasterCardService.GetByCode(value)
                 : null;
         }
     }
@@ -196,12 +186,7 @@ else
 
     private async Task CalculateRescueTarget()
     {
-        if (selectedCard is null)
-        {
-            return;
-        }
-
-        if (string.IsNullOrWhiteSpace(selectedCharacterCode))
+        if (selectedCard is null || string.IsNullOrWhiteSpace(selectedCharacterCode))
         {
             return;
         }
@@ -219,6 +204,11 @@ else
                     selectedCharacterCode);
 
             calculationFailed = calculationResult is null;
+        }
+        catch
+        {
+            // HTTP error or other exception occurred
+            calculationFailed = true;
         }
         finally
         {

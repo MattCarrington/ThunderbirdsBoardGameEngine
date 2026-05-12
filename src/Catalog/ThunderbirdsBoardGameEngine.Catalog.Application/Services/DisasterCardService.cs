@@ -4,6 +4,7 @@ using ThunderbirdsBoardGameEngine.Catalog.Domain.Entities;
 
 namespace ThunderbirdsBoardGameEngine.Catalog.Application.Services
 {
+    [Obsolete("Catalog API is deprecated. Use Reference Data instead")]
     public class DisasterCardService : IDisasterCardService
     {
         private readonly IDisasterCardReferenceSource _disasterCardReferenceSource;

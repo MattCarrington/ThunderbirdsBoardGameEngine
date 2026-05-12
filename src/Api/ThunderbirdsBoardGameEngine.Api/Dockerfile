@@ -15,6 +15,8 @@ WORKDIR /src
 
 # --- csproj copies for restore (API + UI + deps) ---
 COPY ["src/Api/ThunderbirdsBoardGameEngine.Api/ThunderbirdsBoardGameEngine.Api.csproj", "Api/ThunderbirdsBoardGameEngine.Api/"]
+COPY ["src/ReferenceData/ThunderbirdsBoardGameEngine.ReferenceData/ThunderbirdsBoardGameEngine.ReferenceData.csproj", "ReferenceData/ThunderbirdsBoardGameEngine.ReferenceData/"]
+COPY ["src/ReferenceData/ThunderbirdsBoardGameEngine.ReferenceData.Runtime/ThunderbirdsBoardGameEngine.ReferenceData.Runtime.csproj", "ReferenceData/ThunderbirdsBoardGameEngine.ReferenceData.Runtime/"]
 COPY ["src/Common/ThunderbirdsBoardGameEngine.PublishedLanguage/ThunderbirdsBoardGameEngine.PublishedLanguage.csproj", "Common/ThunderbirdsBoardGameEngine.PublishedLanguage/"]
 COPY ["src/Catalog/ThunderbirdsBoardGameEngine.Catalog.Application/ThunderbirdsBoardGameEngine.Catalog.Application.csproj", "Catalog/ThunderbirdsBoardGameEngine.Catalog.Application/"]
 COPY ["src/Catalog/ThunderbirdsBoardGameEngine.Catalog.Infrastructure/ThunderbirdsBoardGameEngine.Catalog.Infrastructure.csproj", "Catalog/ThunderbirdsBoardGameEngine.Catalog.Infrastructure/"]

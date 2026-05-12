@@ -15,6 +15,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Application.Interfaces
     /// by infrastructure components.
     /// </para>
     /// </remarks>
+    [Obsolete("Catalog API is deprecated. Use Reference Data instead")]
     public interface IDisasterCardReader
     {
         /// <summary>

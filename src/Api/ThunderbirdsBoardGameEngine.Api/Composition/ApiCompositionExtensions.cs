@@ -7,7 +7,11 @@
             services.AddHeaderApiVersioning();
             services.AddApiProblemDetails();
             services.AddApiExceptionHandling();
+
+#pragma warning disable CS0618 // Type or member is obsolete
             services.AddCatalogHealthChecks();
+#pragma warning restore CS0618
+
             services.AddApiCors(configuration);
             return services;
         }

@@ -1,28 +1,32 @@
-﻿using ThunderbirdsBoardGameEngine.Catalog.Client.Interfaces.V1;
-using ThunderbirdsBoardGameEngine.Catalog.Contracts.Dtos.V1;
+﻿using ThunderbirdsBoardGameEngine.ReferenceData.Identities;
+using ThunderbirdsBoardGameEngine.ReferenceData.Runtime.Interfaces;
 using ThunderbirdsBoardGameEngine.UI.Interfaces;
+using ThunderbirdsBoardGameEngine.UI.Mappers;
+using ThunderbirdsBoardGameEngine.UI.ViewModels;
 
 namespace ThunderbirdsBoardGameEngine.UI.Services
 {
     public class DisasterCardService : IDisasterCardService
     {
-        private readonly IDisasterCardsClient _client;
+        private readonly IDisasterDefinitionCatalog _catalog;
+        private readonly DisasterCardMapper _mapper;
 
-        public DisasterCardService(IDisasterCardsClient client)
+        public DisasterCardService(IDisasterDefinitionCatalog catalog, DisasterCardMapper mapper)
         {
-            _client = client;
+            _catalog = catalog;
+            _mapper = mapper;
         }
 
-        public async Task<IReadOnlyList<DisasterCardDto>> GetAllAsync()
+        public DisasterCardViewModel GetByCode(string code)
         {
-            var result = await _client.GetAllAsync();
+            var disaster = _catalog.GetByCode(new CardCode(code));
 
-            if (result.Success && result.Data is not null)
-            {
-                return result.Data;
-            }
+            return _mapper.Map(disaster);
+        }
 
-            return []; // Return an empty list if the request fails
+        public IReadOnlyList<DisasterCardViewModel> GetAll()
+        {
+            return _catalog.GetAll().Select(_mapper.Map).ToList();
         }
     }
 }

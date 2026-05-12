@@ -6,6 +6,7 @@ namespace ThunderbirdsBoardGameEngine.Api.Composition
 {
     public static class HealthCheckExtensions
     {
+        [Obsolete("Catalog runtime API is deprecated. Static game data is now provided by ReferenceData snapshots.")]
         public static IServiceCollection AddCatalogHealthChecks(this IServiceCollection services)
         {
             services.AddHealthChecks()

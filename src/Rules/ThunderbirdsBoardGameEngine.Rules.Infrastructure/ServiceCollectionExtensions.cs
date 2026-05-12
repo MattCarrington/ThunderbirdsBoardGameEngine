@@ -25,8 +25,8 @@ namespace ThunderbirdsBoardGameEngine.Rules.Infrastructure
             services.AddMediatR(typeof(CalculateRescueTargetHandler).Assembly);
 
             services.AddSingleton<RescueTargetCalculator>();
-            services.AddSingleton<IDisasterContributionLookup, CatalogDisasterContributionLookup>();
-            services.AddSingleton<ICharacterContributionLookup, CatalogCharacterContributionLookup>();
+            services.AddSingleton<IDisasterContributionLookup, ReferenceDataDisasterContributionLookup>();
+            services.AddSingleton<ICharacterContributionLookup, ReferenceCharacterContributionLookup>();
 
             return services;
         }

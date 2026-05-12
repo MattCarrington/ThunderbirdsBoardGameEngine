@@ -18,8 +18,8 @@ namespace ThunderbirdsBoardGameEngine.Rules.Client.IntegrationTests.Clients.V1
 
             var request = new CalculateRescueTargetRequestDto
             {
-                PresentDisasterBonusKeys = ["character:virgil", "thunderbird:thunderbird4"],
-                PerformingCharacterKey = "virgil"
+                PresentDisasterBonusKeys = ["virgil", "thunderbird-4"],
+                PerformingCharacterKey = "john"
             };
 
             var code = "terror-in-new-york-city";
@@ -40,10 +40,10 @@ namespace ThunderbirdsBoardGameEngine.Rules.Client.IntegrationTests.Clients.V1
 
             Assert.IsType<IReadOnlyCollection<AppliedDisasterBonusDto>>(result.AppliedDisasterBonuses, exactMatch: false);
             Assert.Equal(2, result.AppliedDisasterBonuses.Count);
-            Assert.Contains(result.AppliedDisasterBonuses, b => b.BonusKey == "character:virgil" && b.BonusValue == 2 && b.SourceType == "disaster-card");
-            Assert.Contains(result.AppliedDisasterBonuses, b => b.BonusKey == "thunderbird:thunderbird4" && b.BonusValue == 2 && b.SourceType == "disaster-card");
-            Assert.DoesNotContain(result.AppliedDisasterBonuses, b => b.BonusKey == "podvehicle:firefly");
-            Assert.DoesNotContain(result.AppliedDisasterBonuses, b => b.BonusKey == "virgil");
+            Assert.Contains(result.AppliedDisasterBonuses, b => b.BonusKey == "virgil" && b.BonusValue == 2 && b.SourceType == "disaster-card");
+            Assert.Contains(result.AppliedDisasterBonuses, b => b.BonusKey == "thunderbird-4" && b.BonusValue == 2 && b.SourceType == "disaster-card");
+            Assert.DoesNotContain(result.AppliedDisasterBonuses, b => b.BonusKey == "firefly");
+            Assert.DoesNotContain(result.AppliedDisasterBonuses, b => b.BonusKey == "john");
             Assert.DoesNotContain(result.AppliedDisasterBonuses, b => b.SourceType == "character-ability");
         }
     }

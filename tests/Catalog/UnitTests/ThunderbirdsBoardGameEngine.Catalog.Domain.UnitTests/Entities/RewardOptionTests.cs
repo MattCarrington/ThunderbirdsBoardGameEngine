@@ -1,4 +1,5 @@
 ﻿using ThunderbirdsBoardGameEngine.Catalog.Domain.Entities;
+using ThunderbirdsBoardGameEngine.PublishedLanguage.Enums;
 using Xunit;
 
 namespace ThunderbirdsBoardGameEngine.Catalog.Domain.UnitTests.Entities
@@ -9,7 +10,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Domain.UnitTests.Entities
         public void SpecifiedToken_WhenCalledWithValidToken_CreatesInstance()
         {
             // Arrange
-            var token = Enums.BonusToken.Intelligence;
+            var token = BonusToken.Intelligence;
 
             // Act
             var rewardOption = RewardOption.SpecifiedToken(token);

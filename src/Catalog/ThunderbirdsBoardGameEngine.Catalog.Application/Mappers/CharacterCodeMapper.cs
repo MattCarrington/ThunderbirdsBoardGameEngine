@@ -10,6 +10,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Application.Mappers
     /// corresponding domain model representations. It is intended for use when translating data between external
     /// sources and the application's internal character model. All methods are static and the class cannot be
     /// instantiated.</remarks>
+    [Obsolete("Catalog API is deprecated. Use Reference Data instead")]
     public static class CharacterCodeMapper
     {
         /// <summary>

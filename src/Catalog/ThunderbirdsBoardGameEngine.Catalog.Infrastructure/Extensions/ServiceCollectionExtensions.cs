@@ -24,6 +24,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Extensions
     /// <summary>
     /// Extension methods for registering catalog infrastructure services.
     /// </summary>
+    [Obsolete("Catalog API is deprecated. Use Reference Data instead")]
     public static class ServiceCollectionExtensions
     {
         /// <summary>

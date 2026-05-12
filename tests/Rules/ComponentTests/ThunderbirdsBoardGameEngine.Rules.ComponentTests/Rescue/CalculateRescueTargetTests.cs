@@ -1,11 +1,9 @@
 ﻿using MediatR;
 using Microsoft.Extensions.DependencyInjection;
-using ThunderbirdsBoardGameEngine.Catalog.Application.Interfaces;
-using ThunderbirdsBoardGameEngine.Catalog.Domain.Entities;
-using ThunderbirdsBoardGameEngine.Catalog.Domain.Enums;
-using ThunderbirdsBoardGameEngine.PublishedLanguage.Characters;
-using ThunderbirdsBoardGameEngine.PublishedLanguage.DisasterBonus;
 using ThunderbirdsBoardGameEngine.PublishedLanguage.Enums;
+using ThunderbirdsBoardGameEngine.ReferenceData.Identities;
+using ThunderbirdsBoardGameEngine.ReferenceData.Model;
+using ThunderbirdsBoardGameEngine.ReferenceData.Runtime.Interfaces;
 using ThunderbirdsBoardGameEngine.Rules.Application.Rescue.CalculateRescueTarget;
 using ThunderbirdsBoardGameEngine.Rules.ComponentTests.Fakes;
 using ThunderbirdsBoardGameEngine.Rules.Infrastructure;
@@ -22,7 +20,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Rescue
             var request = new CalculateRescueTargetQuery
             (
                 DisasterCardCode: new CardCode("pit-of-peril"),
-                PerformingCharacter: CharacterCode.Scott,
+                PerformingCharacter: new CharacterCode("scott"),
                 PresentDisasterBonusKeys: []
             );
 
@@ -44,11 +42,11 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Rescue
             var request = new CalculateRescueTargetQuery
             (
                 DisasterCardCode: new CardCode("sun-probe"),
-                PerformingCharacter: CharacterCode.Scott,
+                PerformingCharacter: new CharacterCode("scott"),
                 PresentDisasterBonusKeys:
                 [
-                    new DisasterBonusKey("character:scott"),
-                    new DisasterBonusKey("podvehicle:transmittertruck")
+                    new DisasterBonusKey("scott"),
+                    new DisasterBonusKey("transmitter-truck")
                 ]
             );
 
@@ -61,8 +59,8 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Rescue
             Assert.Equal(6, result.TargetNumber);
             Assert.Equal(5, result.TotalBonus);
             Assert.Equal(2, result.AppliedBonuses.Count);
-            Assert.Contains(result.AppliedBonuses, b => b.Key == "character:scott" && b.Value == 2);
-            Assert.Contains(result.AppliedBonuses, b => b.Key == "podvehicle:transmittertruck" && b.Value == 3);
+            Assert.Contains(result.AppliedBonuses, b => b.Key == "scott" && b.Value == 2);
+            Assert.Contains(result.AppliedBonuses, b => b.Key == "transmitter-truck" && b.Value == 3);
         }
 
         [Fact]
@@ -72,10 +70,10 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Rescue
             var request = new CalculateRescueTargetQuery
             (
                 DisasterCardCode: new CardCode("pit-of-peril"),
-                PerformingCharacter: CharacterCode.Virgil,
+                PerformingCharacter: new CharacterCode("virgil"),
                 PresentDisasterBonusKeys:
                 [
-                    new DisasterBonusKey("character:gordon")
+                    new DisasterBonusKey("gordon")
                 ]
             );
 
@@ -97,12 +95,12 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Rescue
             var request = new CalculateRescueTargetQuery
             (
                 DisasterCardCode: new CardCode("terror-in-new-york-city"),
-                PerformingCharacter: CharacterCode.Gordon,
+                PerformingCharacter: new CharacterCode("gordon"),
                 PresentDisasterBonusKeys:
                 [
-                    new DisasterBonusKey("thunderbird:thunderbird4"),
-                    new DisasterBonusKey("character:virgil"),
-                    new DisasterBonusKey("podvehicle:firefly")
+                    new DisasterBonusKey("thunderbird-4"),
+                    new DisasterBonusKey("virgil"),
+                    new DisasterBonusKey("firefly")
                 ]
             );
 
@@ -115,89 +113,114 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Rescue
             Assert.Equal(1, result.TargetNumber);
             Assert.Equal(10, result.TotalBonus);
             Assert.Equal(4, result.AppliedBonuses.Count);
-            Assert.Contains(result.AppliedBonuses, b => b.Key == "thunderbird:thunderbird4" && b.Value == 2);
-            Assert.Contains(result.AppliedBonuses, b => b.Key == "character:virgil" && b.Value == 2);
-            Assert.Contains(result.AppliedBonuses, b => b.Key == "podvehicle:firefly" && b.Value == 3);
+            Assert.Contains(result.AppliedBonuses, b => b.Key == "thunderbird-4" && b.Value == 2);
+            Assert.Contains(result.AppliedBonuses, b => b.Key == "virgil" && b.Value == 2);
+            Assert.Contains(result.AppliedBonuses, b => b.Key == "firefly" && b.Value == 3);
             Assert.Contains(result.AppliedBonuses, b => b.Key == "gordon" && b.Value == 3);
         }
 
         private static IMediator CreateMediator()
         {
-            var source = CreateDisasterReferenceSource();
-            var characters = new FakeCharacterDefinitionReferenceSource();
+            var source = CreateDisasterCatalog();
+            var characters = CreateCharacterCatalog();
 
             var services = new ServiceCollection();
-            services.AddSingleton<IDisasterCardReferenceSource>(source);
-            services.AddSingleton<ICharacterDefinitionReferenceSource>(characters);
+            services.AddSingleton<IDisasterDefinitionCatalog>(source);
+            services.AddSingleton<ICharacterDefinitionCatalog>(characters);
             services.AddRules();
 
             var sp = services.BuildServiceProvider();
             return sp.GetRequiredService<IMediator>();
         }
 
-        private static FakeDisasterCardReferenceSource CreateDisasterReferenceSource()
+        private static FakeDisasterDefinitionCatalog CreateDisasterCatalog()
         {
-            var sunProbe = new DisasterCard(
-                            id: 1,
-                            name: "Sun Probe",
-                            code: new CardCode("sun-probe"),
-                            difficultyNumber: 11,
-                            location: BoardLocation.Sun,
-                            rescueType: RescueType.Space,
-                            bonusConditions: [
-                                new CharacterBonusCondition(Character.Scott, 2),
-                    new CharacterBonusCondition(Character.Virgil, 2, BoardLocation.Asia),
-                    new PodVehicleBonusCondition(PodVehicle.TransmitterTruck, 3, BoardLocation.Asia)
-                            ],
-                            rewardOptions:
-                            [
-                                RewardOption.PlayerChoice(),
-                    RewardOption.SpecifiedToken(BonusToken.Logistics)
-                            ]
-                        );
-
-            var pitOfPeril = new DisasterCard(
-                id: 2,
-                name: "Pit of Peril",
+            var sunProbe = new ReferenceDisasterDefinition(
+                code: new CardCode("sun-probe"),
+                displayName: "Sun Probe",
+                difficultyNumber: 11,
+                rescueType: RescueType.Space,
+                location: new LocationCode("the-sun"),
+                bonuses: [
+                    new ReferenceDisasterBonus(new DisasterBonusKey("scott"), 2, null),
+                    new ReferenceDisasterBonus(new DisasterBonusKey("virgil"), 2, new LocationCode("asia")),
+                    new ReferenceDisasterBonus(new DisasterBonusKey("transmitter-truck"), 3, new LocationCode("asia"))
+                ],
+                rewards:
+                [
+                    new ReferenceDisasterReward.PlayerChoice(),
+                    new ReferenceDisasterReward.SpecificToken(BonusToken.Logistics)
+                ]
+            );
+            var pitOfPeril = new ReferenceDisasterDefinition(
                 code: new CardCode("pit-of-peril"),
+                displayName: "Pit of Peril",
                 difficultyNumber: 11,
-                location: BoardLocation.Africa,
+                location: new LocationCode("africa"),
                 rescueType: RescueType.Land,
-                bonusConditions:
+                bonuses:
                 [
-                    new CharacterBonusCondition(Character.Scott, 2),
-                    new PodVehicleBonusCondition(PodVehicle.Mole, 3),
-                    new PodVehicleBonusCondition(PodVehicle.RecoveryVehicles, 2)
+                    new ReferenceDisasterBonus(new DisasterBonusKey("scott"), 2, null),
+                    new ReferenceDisasterBonus(new DisasterBonusKey("mole"), 3, null),
+                    new ReferenceDisasterBonus(new DisasterBonusKey("recovery-vehicles"), 2, null)
                 ],
-                rewardOptions:
+                rewards:
                 [
-                    RewardOption.PlayerChoice(),
-                    RewardOption.SpecifiedToken(BonusToken.Determination)
+                    new ReferenceDisasterReward.PlayerChoice(),
+                    new ReferenceDisasterReward.SpecificToken(BonusToken.Determination)
                 ]
             );
 
-            var terrorInNewYorkCity = new DisasterCard(
-                id: 3,
-                name: "Terror in New York City",
+            var terrorInNewYorkCity = new ReferenceDisasterDefinition(
                 code: new CardCode("terror-in-new-york-city"),
+                displayName: "Terror in New York City",
                 difficultyNumber: 11,
-                location: BoardLocation.NorthAmerica,
+                location: new LocationCode("north-america"),
                 rescueType: RescueType.Sea,
-                bonusConditions:
+                bonuses:
                 [
-                    new ThunderbirdBonusCondition(ThunderbirdMachine.Thunderbird4, 2),
-                    new CharacterBonusCondition(Character.Virgil, 2),
-                    new PodVehicleBonusCondition(PodVehicle.Firefly, 3)
+                    new ReferenceDisasterBonus(new DisasterBonusKey("thunderbird-4"), 2, null),
+                    new ReferenceDisasterBonus(new DisasterBonusKey("virgil"), 2, null),
+                    new ReferenceDisasterBonus(new DisasterBonusKey("firefly"), 3, null)
                 ],
-                rewardOptions:
+                rewards:
                 [
-                    RewardOption.PlayerChoice(),
-                    RewardOption.SpecifiedToken(BonusToken.Teamwork)
+                    new ReferenceDisasterReward.PlayerChoice(),
+                    new ReferenceDisasterReward.SpecificToken(BonusToken.Teamwork)
                 ]
             );
 
-            var source = new FakeDisasterCardReferenceSource(sunProbe, pitOfPeril, terrorInNewYorkCity);
-            return source;
+            return new FakeDisasterDefinitionCatalog(sunProbe, pitOfPeril, terrorInNewYorkCity);
+        }
+
+        private static FakeCharacterDefinitionCatalog CreateCharacterCatalog()
+        {
+            var scott = new ReferenceCharacterDefinition(
+                code: new CharacterCode("scott"),
+                displayName: "Scott",
+                rescueBonus: new ReferenceCharacterRescueBonus(
+                   rescueType: RescueType.Air,
+                   value: 2
+                )
+            );
+            var virgil = new ReferenceCharacterDefinition(
+                code: new CharacterCode("virgil"),
+                displayName: "Virgil",
+                rescueBonus: new ReferenceCharacterRescueBonus(
+                   rescueType: RescueType.Land,
+                   value: 2
+                )
+            );
+            var gordon = new ReferenceCharacterDefinition(
+                code: new CharacterCode("gordon"),
+                displayName: "Gordon",
+                rescueBonus: new ReferenceCharacterRescueBonus(
+                   rescueType: RescueType.Sea,
+                   value: 3
+                )
+            );
+
+            return new FakeCharacterDefinitionCatalog(scott, virgil, gordon);
         }
     }
 }

@@ -1,5 +1,5 @@
-﻿using ThunderbirdsBoardGameEngine.PublishedLanguage.DisasterBonus;
-using ThunderbirdsBoardGameEngine.PublishedLanguage.Enums;
+﻿using ThunderbirdsBoardGameEngine.PublishedLanguage.Enums;
+using ThunderbirdsBoardGameEngine.ReferenceData.Identities;
 using ThunderbirdsBoardGameEngine.Rules.Domain.Rescue;
 using Xunit;
 

@@ -5,6 +5,7 @@ using ThunderbirdsBoardGameEngine.Catalog.Domain.Entities;
 
 namespace ThunderbirdsBoardGameEngine.Api.Mappers.Catalog.V1
 {
+    [Obsolete("Catalog API is deprecated. Use Reference Data instead")]
     public static class CharacterDefinitionMappingExtensions
     {
         public static CharacterDto ToDto(this CharacterDefinition characterDefinition)

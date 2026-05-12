@@ -6,6 +6,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.WireMock
     /// <summary>
     /// Provides extension methods for configuring catalog-related stubs on a WireMock host for testing purposes.
     /// </summary>
+    [Obsolete("Catalog API is deprecated. Use Reference Data instead")]
     public static class CatalogWireMockExtensions
     {
         /// <summary>

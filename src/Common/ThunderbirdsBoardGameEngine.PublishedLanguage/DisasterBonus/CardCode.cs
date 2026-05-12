@@ -10,6 +10,7 @@ namespace ThunderbirdsBoardGameEngine.PublishedLanguage.DisasterBonus
     /// format. The value is guaranteed to be non-empty, contain only lowercase ASCII letters, digits, and single
     /// hyphens as separators, and to have no leading, trailing, or consecutive hyphens. Use CardCode to ensure
     /// consistent handling and comparison of card codes throughout the application.</remarks>
+    [Obsolete("Published language is deprecated. Use Reference Data instead")]
     public readonly partial record struct CardCode
     {
         private static readonly Regex CodePattern =

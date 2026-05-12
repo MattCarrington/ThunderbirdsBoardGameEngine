@@ -1,10 +1,10 @@
 ﻿using ThunderbirdsBoardGameEngine.Api.Exceptions;
 using ThunderbirdsBoardGameEngine.Api.Mappers.Rules.V1;
-using ThunderbirdsBoardGameEngine.PublishedLanguage.Characters;
-using ThunderbirdsBoardGameEngine.PublishedLanguage.DisasterBonus;
+using ThunderbirdsBoardGameEngine.ReferenceData.Identities;
 using ThunderbirdsBoardGameEngine.Rules.Application.Rescue.CalculateRescueTarget;
 using ThunderbirdsBoardGameEngine.Rules.Contracts.Dtos.Rescue.CalculateRescueTarget.V1;
 using ThunderbirdsBoardGameEngine.Rules.Domain.Rescue;
+using ThunderbirdsBoardGameEngine.TestUtils.xUnit.ClassData;
 using Xunit;
 
 namespace ThunderbirdsBoardGameEngine.Api.UnitTests.Mappers.Rules.V1
@@ -29,11 +29,12 @@ namespace ThunderbirdsBoardGameEngine.Api.UnitTests.Mappers.Rules.V1
             // Assert
             Assert.Equal(disasterCardCode, result.DisasterCardCode);
             Assert.Equal(dto.PresentDisasterBonusKeys.Select(k => new DisasterBonusKey(k)), result.PresentDisasterBonusKeys);
-            Assert.Equal(CharacterCode.Alan, result.PerformingCharacter);
+            Assert.Equal(new CharacterCode("alan"), result.PerformingCharacter);
         }
 
-        [Fact]
-        public void ToQuery_InvalidCharacterKey_ThrowsBadRequestException()
+        [Theory]
+        [ClassData(typeof(NullOrWhitespaceStringData))]
+        public void ToQuery_PerformingCharacterKeyNullOrEmpty_ThrowsBadRequestException(string character)
         {
             // Arrange
             var disasterCardCode = new CardCode("card-code-123");
@@ -41,12 +42,27 @@ namespace ThunderbirdsBoardGameEngine.Api.UnitTests.Mappers.Rules.V1
             var dto = new CalculateRescueTargetRequestDto
             {
                 PresentDisasterBonusKeys = ["character:alan", "thunderbird:thunderbird4", "podvehicle.domo"],
-                PerformingCharacterKey = "invalid-character"
+                PerformingCharacterKey = character
             };
 
             // Act & Assert
-            var exception = Assert.Throws<BadRequestException>(() => dto.ToQuery(disasterCardCode.ToString()));
-            Assert.Equal("Invalid character code: invalid-character", exception.Message);
+            Assert.Throws<BadRequestException>(() => dto.ToQuery(disasterCardCode.ToString()));
+        }
+
+        [Theory]
+        [ClassData(typeof(NullOrWhitespaceStringData))]
+        public void ToQuery_PresentDisasterBonusKeysContainsNullOrWhiteSpace_ThrowsBadRequestException(string key)
+        {
+            var disasterCardCode = new CardCode("card-code-123");
+
+            var dto = new CalculateRescueTargetRequestDto
+            {
+                PresentDisasterBonusKeys = ["character:alan", "thunderbird:thunderbird4", key],
+                PerformingCharacterKey = "alan"
+            };
+
+            // Act & Assert
+            Assert.Throws<BadRequestException>(() => dto.ToQuery(disasterCardCode.ToString()));
         }
 
         [Fact]

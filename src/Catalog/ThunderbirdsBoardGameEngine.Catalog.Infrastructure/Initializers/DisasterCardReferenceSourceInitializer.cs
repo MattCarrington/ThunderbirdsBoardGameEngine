@@ -5,6 +5,7 @@ using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.ReferenceSources;
 
 namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Initializers
 {
+    [Obsolete("Catalog API is deprecated. Use Reference Data instead")]
     internal class DisasterCardReferenceSourceInitializer
     {
         private readonly IDisasterCardReader _disasterCardReader;

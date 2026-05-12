@@ -103,6 +103,20 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThunderbirdsBoardGameEngine
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThunderbirdsBoardGameEngine.Rules.Client.ComponentTests", "tests\Rules\ComponentTests\ThunderbirdsBoardGameEngine.Rules.Client.ComponentTests\ThunderbirdsBoardGameEngine.Rules.Client.ComponentTests.csproj", "{4483F3C7-8186-4E09-94CA-B90B720455C1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThunderbirdsBoardGameEngine.ReferenceData", "src\ReferenceData\ThunderbirdsBoardGameEngine.ReferenceData\ThunderbirdsBoardGameEngine.ReferenceData.csproj", "{0F5BF05C-D523-4E7A-A5ED-1B0C911B7D7A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThunderbirdsBoardGameEngine.ReferenceData.Compiler", "tools\ReferenceData\ThunderbirdsBoardGameEngine.ReferenceData.Compiler\ThunderbirdsBoardGameEngine.ReferenceData.Compiler.csproj", "{38C36D13-0FD7-EC02-3C44-20ED914D425B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThunderbirdsBoardGameEngine.ReferenceData.Compiler.UnitTests", "tests\ReferenceData\UnitTests\ThunderbirdsBoardGameEngine.ReferenceData.Compiler.UnitTests\ThunderbirdsBoardGameEngine.ReferenceData.Compiler.UnitTests.csproj", "{45A44ED5-37CD-FFEA-C7D6-0FC5A693F2D4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThunderbirdsBoardGameEngine.ReferenceData.UnitTests", "tests\ReferenceData\UnitTests\ThunderbirdsBoardGameEngine.ReferenceData.UnitTests\ThunderbirdsBoardGameEngine.ReferenceData.UnitTests.csproj", "{FD29A8FC-1CEA-CBD9-ACAB-905F33CDC56E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThunderbirdsBoardGameEngine.ReferenceData.Runtime", "src\ReferenceData\ThunderbirdsBoardGameEngine.ReferenceData.Runtime\ThunderbirdsBoardGameEngine.ReferenceData.Runtime.csproj", "{5A564779-7B59-43B6-8FD7-AF602D70AB4C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThunderbirdsBoardGameEngine.ReferenceData.ComponentTests", "tests\ReferenceData\ComponentTests\ThunderbirdsBoardGameEngine.ReferenceData.ComponentTests\ThunderbirdsBoardGameEngine.ReferenceData.ComponentTests.csproj", "{37E83918-D47C-4ED5-A31B-79891C11E50A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThunderbirdsBoardGameEngine.ReferenceData.Runtime.UnitTests", "tests\ReferenceData\UnitTests\ThunderbirdsBoardGameEngine.ReferenceData.Runtime.UnitTests\ThunderbirdsBoardGameEngine.ReferenceData.Runtime.UnitTests.csproj", "{9B1E3F9B-392D-42C4-B914-BE21D3C747B4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -285,6 +299,34 @@ Global
 		{4483F3C7-8186-4E09-94CA-B90B720455C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4483F3C7-8186-4E09-94CA-B90B720455C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4483F3C7-8186-4E09-94CA-B90B720455C1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0F5BF05C-D523-4E7A-A5ED-1B0C911B7D7A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0F5BF05C-D523-4E7A-A5ED-1B0C911B7D7A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0F5BF05C-D523-4E7A-A5ED-1B0C911B7D7A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0F5BF05C-D523-4E7A-A5ED-1B0C911B7D7A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{38C36D13-0FD7-EC02-3C44-20ED914D425B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{38C36D13-0FD7-EC02-3C44-20ED914D425B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{38C36D13-0FD7-EC02-3C44-20ED914D425B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{38C36D13-0FD7-EC02-3C44-20ED914D425B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{45A44ED5-37CD-FFEA-C7D6-0FC5A693F2D4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{45A44ED5-37CD-FFEA-C7D6-0FC5A693F2D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{45A44ED5-37CD-FFEA-C7D6-0FC5A693F2D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{45A44ED5-37CD-FFEA-C7D6-0FC5A693F2D4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FD29A8FC-1CEA-CBD9-ACAB-905F33CDC56E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FD29A8FC-1CEA-CBD9-ACAB-905F33CDC56E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FD29A8FC-1CEA-CBD9-ACAB-905F33CDC56E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FD29A8FC-1CEA-CBD9-ACAB-905F33CDC56E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5A564779-7B59-43B6-8FD7-AF602D70AB4C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5A564779-7B59-43B6-8FD7-AF602D70AB4C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5A564779-7B59-43B6-8FD7-AF602D70AB4C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5A564779-7B59-43B6-8FD7-AF602D70AB4C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{37E83918-D47C-4ED5-A31B-79891C11E50A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{37E83918-D47C-4ED5-A31B-79891C11E50A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{37E83918-D47C-4ED5-A31B-79891C11E50A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{37E83918-D47C-4ED5-A31B-79891C11E50A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9B1E3F9B-392D-42C4-B914-BE21D3C747B4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9B1E3F9B-392D-42C4-B914-BE21D3C747B4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9B1E3F9B-392D-42C4-B914-BE21D3C747B4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9B1E3F9B-392D-42C4-B914-BE21D3C747B4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -322,6 +364,11 @@ Global
 		{D06B661C-FD14-43D6-959F-56C7C4EECEDF} = {FC7280B4-F6FF-4E00-B8C0-6C5F6FA6219C}
 		{E510BCD3-BC98-5D33-A536-7EAE9FD02258} = {987A2C73-51DA-4FCE-AEF0-DFB7C4B23F2E}
 		{4483F3C7-8186-4E09-94CA-B90B720455C1} = {987A2C73-51DA-4FCE-AEF0-DFB7C4B23F2E}
+		{38C36D13-0FD7-EC02-3C44-20ED914D425B} = {FC7280B4-F6FF-4E00-B8C0-6C5F6FA6219C}
+		{45A44ED5-37CD-FFEA-C7D6-0FC5A693F2D4} = {D8475FB6-8FFD-4252-BF79-1BC0AF31A524}
+		{FD29A8FC-1CEA-CBD9-ACAB-905F33CDC56E} = {D8475FB6-8FFD-4252-BF79-1BC0AF31A524}
+		{37E83918-D47C-4ED5-A31B-79891C11E50A} = {987A2C73-51DA-4FCE-AEF0-DFB7C4B23F2E}
+		{9B1E3F9B-392D-42C4-B914-BE21D3C747B4} = {D8475FB6-8FFD-4252-BF79-1BC0AF31A524}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {92EB50C5-075F-4AF3-8107-0DC9EDBBAB83}

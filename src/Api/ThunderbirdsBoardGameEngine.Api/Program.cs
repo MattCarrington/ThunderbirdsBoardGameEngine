@@ -7,6 +7,7 @@ using ThunderbirdsBoardGameEngine.Api.Routing;
 using ThunderbirdsBoardGameEngine.Api.Swagger;
 using ThunderbirdsBoardGameEngine.Catalog.Application;
 using ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Extensions;
+using ThunderbirdsBoardGameEngine.ReferenceData.Runtime;
 using ThunderbirdsBoardGameEngine.Rules.Infrastructure;
 
 namespace ThunderbirdsBoardGameEngine.Api
@@ -31,6 +32,7 @@ namespace ThunderbirdsBoardGameEngine.Api
                 options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
             });
 
+            builder.Services.AddReferenceData();
             builder.Services.AddCatalogApplication();
             builder.Services.AddCatalogInfrastructure(builder.Configuration);
             builder.Services.AddRules();

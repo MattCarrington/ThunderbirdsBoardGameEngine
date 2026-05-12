@@ -3,6 +3,7 @@ using ThunderbirdsBoardGameEngine.Catalog.Domain.Exceptions;
 
 namespace ThunderbirdsBoardGameEngine.Catalog.Domain.Validators
 {
+    [Obsolete("Catalog API is deprecated. Use Reference Data instead")]
     public static class DisasterCardValidator
     {
         public static void ValidateAll(IEnumerable<DisasterCard> cards)

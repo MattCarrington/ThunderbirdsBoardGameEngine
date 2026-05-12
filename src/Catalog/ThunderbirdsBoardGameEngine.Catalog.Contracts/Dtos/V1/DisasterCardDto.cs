@@ -7,6 +7,7 @@
     /// All string and collection properties are non-null and preformatted for UI display.
     /// Consumers must not parse or modify these values.
     /// </remarks>
+    [Obsolete("Catalog runtime API is deprecated. Static game data is now provided by ReferenceData snapshots.")]
     public record DisasterCardDto
     {
         /// <summary>

@@ -22,8 +22,8 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints.Rules.V1
         {
             PresentDisasterBonusKeys =
                 [
-                    "podvehicle:mobilecrane",
-                    "podvehicle:domo"
+                    "mobile-crane",
+                    "domo"
                 ],
             PerformingCharacterKey = "gordon"
         };
@@ -57,13 +57,13 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints.Rules.V1
             {
                 new AppliedDisasterBonusDto
                 {
-                    BonusKey = "podvehicle:mobilecrane",
+                    BonusKey = "mobile-crane",
                     BonusValue = 2,
                     SourceType = "disaster-card"
                 },
                 new AppliedDisasterBonusDto
                 {
-                    BonusKey = "podvehicle:domo",
+                    BonusKey = "domo",
                     BonusValue = 2,
                     SourceType = "disaster-card"
                 }
@@ -151,8 +151,8 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints.Rules.V1
             {
                 PresentDisasterBonusKeys = new[]
                 {
-                    "podvehicle:mobilecrane",
-                    "podvehicle:domo"
+                    "mobile-crane",
+                    "domo"
                 }
             };
 
@@ -169,15 +169,15 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints.Rules.V1
         }
 
         [Fact]
-        public async Task CalculateRescueTarget_WhenPerformingCharacterInvalid_ReturnsBadRequest()
+        public async Task CalculateRescueTarget_WhenPerformingCharacterInvalid_ReturnsNotFound()
         {
             // Arrange
             var invalidRequestDto = new CalculateRescueTargetRequestDto
             {
                 PresentDisasterBonusKeys = new[]
                 {
-                    "podvehicle:mobilecrane",
-                    "podvehicle:domo"
+                    "mobile-crane",
+                    "domo"
                 },
                 PerformingCharacterKey = "invalid-character"
             };
@@ -190,7 +190,7 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints.Rules.V1
             using var response = await _client.SendAsync(request);
 
             // Assert
-            await ProblemDetailsAssertions.AssertBadRequestAsync(response, "Bad request.");
+            await ProblemDetailsAssertions.AssertNotFoundAsync(response, "Resource not found.");
         }
 
         [Fact]

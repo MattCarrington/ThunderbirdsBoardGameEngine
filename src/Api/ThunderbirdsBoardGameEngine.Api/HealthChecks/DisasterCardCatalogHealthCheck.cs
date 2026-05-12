@@ -3,6 +3,7 @@ using ThunderbirdsBoardGameEngine.Catalog.Application.Interfaces;
 
 namespace ThunderbirdsBoardGameEngine.Api.HealthChecks
 {
+    [Obsolete("Catalog runtime API is deprecated. Static game data is now provided by ReferenceData snapshots.")]
     public class DisasterCardCatalogHealthCheck : IHealthCheck
     {
         private readonly IDisasterCardReferenceSourceProbe _disasterCardProbe;

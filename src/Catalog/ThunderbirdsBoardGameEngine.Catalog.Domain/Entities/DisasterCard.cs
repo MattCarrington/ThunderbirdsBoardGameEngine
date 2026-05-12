@@ -16,6 +16,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Domain.Entities
     /// Instances enforce domain invariants at construction time and are
     /// always created in a valid state.
     /// </remarks>
+    [Obsolete("Catalog API is deprecated. Use Reference Data instead")]
     public class DisasterCard
     {
         public int Id { get; }
@@ -42,7 +43,7 @@ namespace ThunderbirdsBoardGameEngine.Catalog.Domain.Entities
             string name,
             CardCode code,
             int difficultyNumber,
-            BoardLocation location,
+            Enums.BoardLocation location,
             RescueType rescueType,
             IEnumerable<BonusCondition> bonusConditions,
             IEnumerable<RewardOption> rewardOptions)

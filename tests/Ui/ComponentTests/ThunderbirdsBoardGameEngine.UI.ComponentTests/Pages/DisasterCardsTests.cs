@@ -1,38 +1,43 @@
 ﻿using Bunit;
 using Microsoft.Extensions.DependencyInjection;
 using NSubstitute;
-using ThunderbirdsBoardGameEngine.Catalog.Contracts.Dtos.V1;
 using ThunderbirdsBoardGameEngine.Rules.Contracts.Dtos.Rescue.CalculateRescueTarget.V1;
 using ThunderbirdsBoardGameEngine.UI.Interfaces;
 using ThunderbirdsBoardGameEngine.UI.Pages;
+using ThunderbirdsBoardGameEngine.UI.ViewModels;
 using Xunit;
 
 namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Pages
 {
     public class DisasterCardsTests : TestContext
     {
-        private static IReadOnlyList<DisasterCardDto> Cards =>
+        private static IReadOnlyList<DisasterCardViewModel> Cards =>
         [
-            new DisasterCardDto
-            {
-                Id = 1,
-                Name = "Volcano",
-                DifficultyNumber = 5,
-                Location = "Pacific",
-                RescueType = "Air",
-                BonusConditions = [new BonusConditionDto { Description = "Have Fire Suit" }],
-                Rewards = [new RewardDto { DisplayName = "2 Reputation" }]
-            },
-            new DisasterCardDto
-            {
-                Id = 2,
-                Name = "Flood",
-                DifficultyNumber = 3,
-                Location = "Europe",
-                RescueType = "Sea",
-                BonusConditions = [],
-                Rewards = []
-            }
+            new DisasterCardViewModel(
+                Code: "volcano",
+                DisplayName: "Volcano",
+                DifficultyNumber: 5,
+                Location: "Pacific",
+                RescueType: "Air",
+                BonusConditions: [
+                    new BonusConditionViewModel(
+                        Description: "Have fire suit",
+                        Key: "have-fire-suit"
+                    )
+                ],
+                Rewards: [
+                    new RewardViewModel("teamwork")
+                ]
+            ),
+            new DisasterCardViewModel(
+                Code: "flood",
+                DisplayName: "Flood",
+                DifficultyNumber: 3,
+                Location: "Europe",
+                RescueType: "Sea",
+                BonusConditions: [],
+                Rewards: []
+            )
         ];
 
         [Fact]
@@ -47,9 +52,9 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Pages
             var cut = RenderComponent<DisasterCards>();
 
             // Assert
-            cut.WaitForElement("#disasterSelect option[value='1']"); // waits for card to render
+            cut.WaitForElement("#disasterSelect option[value='volcano']"); // waits for card to render
 
-            service.Received(1).GetAllAsync();
+            service.Received(1).GetAll();
         }
 
         [Fact]
@@ -62,13 +67,13 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Pages
 
             // Act
             var cut = RenderComponent<DisasterCards>();
-            cut.Find("#disasterSelect").Change("1");
+            cut.Find("#disasterSelect").Change("volcano");
 
             // Assert
-            cut.WaitForElement("#disasterSelect option[value='1']"); // waits for card to render
+            cut.WaitForElement("#disasterSelect option[value='volcano']"); // waits for card to render
             cut.WaitForElement("#characterSelect option[value='scott']"); // waits for characters to render
 
-            service.Received(1).GetAllAsync();
+            service.Received(1).GetAll();
         }
 
         [Fact]
@@ -77,9 +82,33 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Pages
             // Arrange
             var cards = new[]
             {
-                new DisasterCardDto { Id = 2, Name = "Beta" },
-                new DisasterCardDto { Id = 1, Name = "Alpha" },
-                new DisasterCardDto { Id = 3, Name = "Gamma" }
+                new DisasterCardViewModel(
+                    Code: "beta",
+                    DisplayName: "Beta",
+                    DifficultyNumber: 2,
+                    Location: "Location B",
+                    RescueType: "Type B",
+                    BonusConditions: [],
+                    Rewards: []
+                ),
+                new DisasterCardViewModel(
+                    Code: "alpha",
+                    DisplayName: "Alpha",
+                    DifficultyNumber: 1,
+                    Location: "Location A",
+                    RescueType: "Type A",
+                    BonusConditions: [],
+                    Rewards: []
+                ),
+                new DisasterCardViewModel(
+                    Code: "gamma",
+                    DisplayName: "Gamma",
+                    DifficultyNumber: 3,
+                    Location: "Location C",
+                    RescueType: "Type C",
+                    BonusConditions: [],
+                    Rewards: []
+                )
             };
 
             _ = SetupDisasterCardService(cards);
@@ -127,56 +156,7 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Pages
                 Assert.DoesNotContain("Disaster Card Details", cut.Markup);        // no details panel
             });
 
-            service.Received(1).GetAllAsync();
-        }
-
-        [Fact]
-        public void Render_ShowsLoading_ThenSelectAppears()
-        {
-            // Arrange
-            var tcs = new TaskCompletionSource<IReadOnlyList<DisasterCardDto>>(TaskCreationOptions.RunContinuationsAsynchronously);
-            var service = Substitute.For<IDisasterCardService>();
-            service.GetAllAsync().Returns(tcs.Task);
-
-            Services.AddSingleton(service);
-
-            _ = SetupCharactersService();
-            _ = SetupRescueService();
-
-            // Act
-            var cut = RenderComponent<DisasterCards>();
-
-            // Assert
-            Assert.Contains("Loading cards...", cut.Markup);
-
-            tcs.SetResult(Cards);
-            cut.WaitForElement("select"); // now present
-        }
-
-        [Fact]
-        public void Render_WhileFetching_ShowsLoadingThenHidesLoading()
-        {
-            // Arrange
-            var tcs = new TaskCompletionSource<IReadOnlyList<DisasterCardDto>>(
-                TaskCreationOptions.RunContinuationsAsynchronously);
-
-            var service = Substitute.For<IDisasterCardService>();
-            service.GetAllAsync().Returns(_ => tcs.Task);
-
-            Services.AddSingleton(service);
-
-            _ = SetupCharactersService();
-            _ = SetupRescueService();
-
-            // Act
-            var cut = RenderComponent<DisasterCards>();
-            Assert.Contains("Loading cards...", cut.Markup);
-
-            tcs.SetResult(Cards);
-
-            // Assert
-            cut.WaitForElement("#disasterSelect");
-            Assert.DoesNotContain("Loading cards...", cut.Markup);
+            service.Received(1).GetAll();
         }
 
         [Fact]
@@ -194,7 +174,7 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Pages
             var select = cut.WaitForElement("#disasterSelect");
 
             // Pick first card
-            select.Change("1");
+            select.Change("volcano");
             cut.WaitForAssertion(() =>
             {
                 Assert.Contains("Disaster Card Details", cut.Markup);
@@ -222,7 +202,7 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Pages
             var select = cut.WaitForElement("#disasterSelect");
 
             // Assert
-            select.Change("2");
+            select.Change("flood");
             cut.WaitForAssertion(() =>
             {
                 Assert.DoesNotContain("Bonus Conditions", cut.Markup);
@@ -245,7 +225,7 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Pages
             var select = cut.WaitForElement("#disasterSelect");
 
             // Assert
-            select.Change("1");
+            select.Change("volcano");
             cut.WaitForAssertion(() => Assert.Contains("Disaster Card Details", cut.Markup));
 
             select.Change(string.Empty); // choose placeholder
@@ -264,12 +244,12 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Pages
             var select = cut.WaitForElement("#disasterSelect");
 
             // Act
-            select.Change("1");
-            select.Change("2");
+            select.Change("volcano");
+            select.Change("flood");
             select.Change(string.Empty);
 
             // Assert
-            service.Received(1).GetAllAsync(); // still only once
+            service.Received(1).GetAll(); // still only once
         }
 
         [Fact]
@@ -296,16 +276,16 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Pages
         {
             var withNulls = new[]
             {
-                new DisasterCardDto
-                {
-                    Id = 9,
-                    Name = "Nulls",
-                    DifficultyNumber = 1,
-                    Location = "Test",
-                    RescueType = "Air",
-                    BonusConditions = null,
-                    Rewards = null
-                }
+                new DisasterCardViewModel
+                (
+                    Code: "nulls",
+                    DisplayName: "Nulls",
+                    DifficultyNumber: 1,
+                    Location: "Test",
+                    RescueType: "Air",
+                    BonusConditions: null,
+                    Rewards: null
+                )
             };
 
             _ = SetupDisasterCardService(withNulls);
@@ -314,7 +294,7 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Pages
 
             var cut = RenderComponent<DisasterCards>();
             var select = cut.WaitForElement("#disasterSelect");
-            select.Change("9");
+            select.Change("nulls");
 
             cut.WaitForAssertion(() =>
             {
@@ -329,18 +309,26 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Pages
             // Arrange
             var cards = new[]
             {
-                new DisasterCardDto
-                {
-                    Id = 1,
-                    Name = "Test Card",
-                    Code = "test-card",
-                    BonusConditions =
+                new DisasterCardViewModel
+                (
+                    Code: "test-card",
+                    DisplayName: "Test Card",
+                    DifficultyNumber: 4,
+                    RescueType: "Air",
+                    Location: "Test Location",
+                    BonusConditions:
                     [
-                        new BonusConditionDto { Key = "character:virgil", Description = "Virgil" },
-                        new BonusConditionDto { Key = "thunderbird:tb4", Description = "TB4" }
+                        new BonusConditionViewModel (
+                            Description: "Virgil",
+                            Key: "character:virgil"
+                        ),
+                        new BonusConditionViewModel (
+                            Description: "TB4",
+                            Key: "thunderbird:tb4"
+                        )
                     ],
-                    Rewards = []
-                }
+                    Rewards: []
+                )
             };
 
             var response = new CalculateRescueTargetResponseDto
@@ -360,7 +348,7 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Pages
             var cut = RenderComponent<DisasterCards>();
 
             // Select card
-            cut.WaitForElement("#disasterSelect").Change("1");
+            cut.WaitForElement("#disasterSelect").Change("test-card");
 
             // Select character
             cut.Find("#characterSelect").Change("scott");
@@ -400,7 +388,7 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Pages
 
             var cut = RenderComponent<DisasterCards>();
 
-            cut.WaitForElement("#disasterSelect").Change("1");
+            cut.WaitForElement("#disasterSelect").Change("volcano");
 
             cut.WaitForElement("#characterSelect").Change("scott");
 
@@ -422,27 +410,40 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Pages
             // Arrange
             var cards = new[]
             {
-                new DisasterCardDto
-                {
-                    Id = 1,
-                    Name = "Card One",
-                    BonusConditions =
+                new DisasterCardViewModel(
+                    Code: "card-one",
+                    DisplayName: "Card One",
+                    DifficultyNumber: 1,
+                    Location: "Test",
+                    RescueType: "Air",
+                    BonusConditions:
                     [
-                        new BonusConditionDto { Key = "bonus1", Description = "Bonus 1" },
-                        new BonusConditionDto { Key = "bonus2", Description = "Bonus 2" }
+                        new BonusConditionViewModel(
+                            Description: "Bonus 1",
+                            Key: "bonus1"
+                        ),
+                        new BonusConditionViewModel(
+                            Description: "Bonus 2",
+                            Key: "bonus2"
+                        )
                     ],
-                    Rewards = []
-                },
-                new DisasterCardDto
-                {
-                    Id = 2,
-                    Name = "Card Two",
-                    BonusConditions =
+                    Rewards: []
+                ),
+                new DisasterCardViewModel(
+                    Code: "card-two",
+                    DisplayName: "Card Two",
+                    DifficultyNumber: 2,
+                    Location: "Test",
+                    RescueType: "Sea",
+                    BonusConditions:
                     [
-                        new BonusConditionDto { Key = "bonus2", Description = "Bonus 2" }
+                        new BonusConditionViewModel(
+                            Description: "Bonus 2",
+                            Key: "bonus2"
+                        )
                     ],
-                    Rewards = []
-                }
+                    Rewards: []
+                )
             };
 
             _ = SetupDisasterCardService(cards);
@@ -452,7 +453,7 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Pages
             var cut = RenderComponent<DisasterCards>();
 
             var select = cut.WaitForElement("#disasterSelect");
-            select.Change("1");
+            select.Change("card-one");
 
             var bonus2Checkbox = cut
                 .FindAll("[data-testid='bonus-checkbox']")
@@ -461,7 +462,7 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Pages
             bonus2Checkbox.Change(true);
 
             // Act
-            select.Change("2");
+            select.Change("card-two");
 
             // Assert
             cut.WaitForAssertion(() =>
@@ -474,28 +475,36 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Pages
             // Arrange
             var cards = new[]
             {
-                new DisasterCardDto
-                {
-                    Id = 1,
-                    Name = "Card One",
-                    Code = "card-one",
-                    BonusConditions =
+                new DisasterCardViewModel(
+                    Code: "card-one",
+                    DisplayName: "Card One",
+                    DifficultyNumber: 1,
+                    Location: "Test",
+                    RescueType: "Air",
+                    BonusConditions:
                     [
-                        new BonusConditionDto { Key = "bonus1", Description = "Bonus 1" }
+                        new BonusConditionViewModel(
+                            Description: "Bonus 1",
+                            Key: "bonus1"
+                        )
                     ],
-                    Rewards = []
-                },
-                new DisasterCardDto
-                {
-                    Id = 2,
-                    Name = "Card Two",
-                    Code = "card-two",
-                    BonusConditions =
+                    Rewards: []
+                ),
+                new DisasterCardViewModel(
+                    Code: "card-two",
+                    DisplayName: "Card Two",
+                    DifficultyNumber: 2,
+                    Location: "Test",
+                    RescueType: "Sea",
+                    BonusConditions:
                     [
-                        new BonusConditionDto { Key = "bonus2", Description = "Bonus 2" }
+                        new BonusConditionViewModel(
+                            Description: "Bonus 2",
+                            Key: "bonus2"
+                        )
                     ],
-                    Rewards = []
-                }
+                    Rewards: []
+                )
             };
 
             _ = SetupDisasterCardService(cards);
@@ -506,7 +515,7 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Pages
 
             // Select first card
             var select = cut.WaitForElement("#disasterSelect");
-            select.Change("1");
+            select.Change("card-one");
 
             cut.WaitForElement("#characterSelect").Change("scott");
 
@@ -518,7 +527,7 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Pages
                 Assert.Contains("Target Number", cut.Markup));
 
             // Act — select a different card
-            select.Change("2");
+            select.Change("card-two");
 
             // Assert — result is cleared
             cut.WaitForAssertion(() =>
@@ -532,10 +541,10 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Pages
             _ = SetupRescueService();
 
             // Characters service returns empty
-            var service = SetupCharactersService(Array.Empty<CharacterDto>());
+            _ = SetupCharactersService(Array.Empty<CharacterViewModel>());
             var cut = RenderComponent<DisasterCards>();
 
-            cut.WaitForElement("#disasterSelect").Change("1");
+            cut.WaitForElement("#disasterSelect").Change("volcano");
 
             cut.WaitForAssertion(() =>
             {
@@ -553,7 +562,7 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Pages
 
             var cut = RenderComponent<DisasterCards>();
 
-            cut.WaitForElement("#disasterSelect").Change("1");
+            cut.WaitForElement("#disasterSelect").Change("volcano");
 
             var characterSelect = cut.WaitForElement("#characterSelect");
             characterSelect.Change("scott");
@@ -571,15 +580,22 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Pages
         {
             var cards = new[]
             {
-                new DisasterCardDto
-                {
-                    Id = 1,
-                    Name = "Test",
-                    BonusConditions =
+                new DisasterCardViewModel
+                (
+                    Code: "test-card",
+                    DisplayName: "Test Card",
+                    DifficultyNumber: 4,
+                    RescueType: "Air",
+                    Location: "Test Location",
+                    BonusConditions:
                     [
-                        new BonusConditionDto { Key = "bonus1", Description = "Bonus 1" }
-                    ]
-                }
+                        new BonusConditionViewModel (
+                            Description: "Virgil",
+                            Key: "character:virgil"
+                        )
+                    ],
+                    Rewards: []
+                )
             };
 
             _ = SetupDisasterCardService(cards);
@@ -588,7 +604,7 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Pages
 
             var cut = RenderComponent<DisasterCards>();
 
-            cut.WaitForElement("#disasterSelect").Change("1");
+            cut.WaitForElement("#disasterSelect").Change("test-card");
 
             var bonus = cut.Find("[data-testid='bonus-checkbox']");
             bonus.Change(true);
@@ -612,7 +628,7 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Pages
 
             var cut = RenderComponent<DisasterCards>();
 
-            cut.WaitForElement("#disasterSelect").Change("1");
+            cut.WaitForElement("#disasterSelect").Change("volcano");
             cut.Find("#characterSelect").Change("scott");
             cut.Find("[data-testid='calculate-button']").Click();
 
@@ -625,38 +641,41 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Pages
             Assert.Contains("Target Number", cut.Markup);
         }
 
-        private IDisasterCardService SetupDisasterCardService(IReadOnlyList<DisasterCardDto> cards)
+        private IDisasterCardService SetupDisasterCardService(IReadOnlyList<DisasterCardViewModel> cards)
         {
             var service = Substitute.For<IDisasterCardService>();
-            service.GetAllAsync().Returns(Task.FromResult(cards));
+            service.GetAll().Returns(cards);
+            service.GetByCode(Arg.Any<string>()).Returns(args =>
+            {
+                var code = args[0] as string;
+                return cards.SingleOrDefault(c => c.Code == code);
+            });
 
             Services.AddSingleton(service);
 
             return service;
         }
 
-        private ICharactersService SetupCharactersService()
+        private ICharacterService SetupCharactersService()
         {
-            var characters = new List<CharacterDto>
+            var characters = new List<CharacterViewModel>
             {
-                new() { DisplayName = "Scott", Key = "scott" },
-                new() { DisplayName = "Virgil", Key = "virgil" }
+                new(Key: "scott", DisplayName: "Scott"),
+                new(Key: "virgil", DisplayName: "Virgil"),
             };
 
             return SetupCharactersService(characters);
         }
 
-        private ICharactersService SetupCharactersService(IReadOnlyList<CharacterDto> characters)
+        private ICharacterService SetupCharactersService(IReadOnlyList<CharacterViewModel> characters)
         {
-            var service = Substitute.For<ICharactersService>();
-            service.GetAllAsync().Returns(Task.FromResult(characters));
+            var service = Substitute.For<ICharacterService>();
+            service.GetAll().Returns(characters);
 
             Services.AddSingleton(service);
 
             return service;
         }
-
-
 
         private IRescueService SetupRescueService()
         {

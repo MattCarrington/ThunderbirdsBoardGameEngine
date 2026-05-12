@@ -7,6 +7,7 @@ using ThunderbirdsBoardGameEngine.Catalog.Domain.Enums;
 
 namespace ThunderbirdsBoardGameEngine.Api.Mappers.Catalog.V1
 {
+    [Obsolete("Catalog API is deprecated. Use Reference Data instead")]
     public static class DisasterCardMappingExtensions
     {
         public static DisasterCardDto ToDto(this DisasterCard disasterCard)

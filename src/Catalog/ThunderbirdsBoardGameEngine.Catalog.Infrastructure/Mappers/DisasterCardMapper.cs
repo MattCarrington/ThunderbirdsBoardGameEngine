@@ -9,6 +9,7 @@ using ThunderbirdsBoardGameEngine.PublishedLanguage.Enums;
 
 namespace ThunderbirdsBoardGameEngine.Catalog.Infrastructure.Mappers
 {
+    [Obsolete("Catalog API is deprecated. Use Reference Data instead")]
     internal sealed class DisasterCardMapper : IDisasterCardMapper
     {
         public DisasterCard Map(DisasterCardCatalogDto dto)
