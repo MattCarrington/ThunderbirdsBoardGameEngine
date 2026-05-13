@@ -55,7 +55,7 @@ jobs:
         run: |
           set -e
           echo "🚀 Running all Unit Tests..."
-          for project in $(find . -name '*UnitTests.csproj' -type f); do
+          for project in $(dotnet sln "${{ inputs.solution_file }}" list | tail -n +3 | sed 's/\r$//' | grep -E 'UnitTests\.csproj$'); do
             echo "Testing: $project"
             dotnet test "$project" \
               --configuration Release \
@@ -76,7 +76,7 @@ jobs:
         run: |
           set -e
           echo "🚀 Running all Component Tests..."
-          for project in $(find . -name '*ComponentTests.csproj' -type f); do
+          for project in $(dotnet sln "${{ inputs.solution_file }}" list | tail -n +3 | sed 's/\r$//' | grep -E 'ComponentTests\.csproj$'); do
             echo "Testing: $project"
             dotnet test "$project" \
               --configuration Release \
@@ -132,7 +132,7 @@ jobs:
         run: |
           set -e
           echo "🚀 Running all Integration Tests..."
-          for project in $(find . -name '*IntegrationTests.csproj' -type f); do
+          for project in $(dotnet sln "${{ inputs.solution_file }}" list | tail -n +3 | sed 's/\r$//' | grep -E 'IntegrationTests\.csproj$'); do
             echo "Testing: $project"
             dotnet test "$project" \
               --configuration Release \
@@ -168,7 +168,7 @@ jobs:
         run: |
           set -e
           echo "🚀 Running all Playwright Tests..."
-          for project in $(find . -name '*PlaywrightTests.csproj' -type f); do
+          for project in $(dotnet sln "${{ inputs.solution_file }}" list | tail -n +3 | sed 's/\r$//' | grep -E 'PlaywrightTests\.csproj$'); do
             echo "Testing: $project"
             dotnet test "$project" \
               --configuration Release \
