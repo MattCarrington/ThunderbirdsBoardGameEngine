@@ -55,11 +55,13 @@ jobs:
         run: |
           set -e
           echo "🚀 Running all Unit Tests..."
-          dotnet test "${{ inputs.solution_file }}" \
-            --configuration Release \
-            --logger:"trx;LogFileName=unit-${RUNNER_OS}.trx" \
-            --results-directory ./TestResults \
-            --filter "FullyQualifiedName~UnitTests"
+          for project in $(find . -name '*UnitTests.csproj' -type f); do
+            echo "Testing: $project"
+            dotnet test "$project" \
+              --configuration Release \
+              --logger:"trx;LogFileName=unit-${RUNNER_OS}.trx" \
+              --results-directory ./TestResults
+          done
                 
     #   - name: Upload Test Results
     #     if: failure()  # Only upload if the tests failed
@@ -74,11 +76,13 @@ jobs:
         run: |
           set -e
           echo "🚀 Running all Component Tests..."
-          dotnet test ${{ inputs.solution_file }} \
-            --configuration Release \
-            --logger:"trx" \
-            --results-directory ./TestResults \
-            --filter "FullyQualifiedName~ComponentTests"
+          for project in $(find . -name '*ComponentTests.csproj' -type f); do
+            echo "Testing: $project"
+            dotnet test "$project" \
+              --configuration Release \
+              --logger:"trx;LogFileName=component-${RUNNER_OS}.trx" \
+              --results-directory ./TestResults
+          done
                 
     #   - name: Upload Test Results
     #     if: failure()  # Only upload if the tests failed
@@ -128,11 +132,13 @@ jobs:
         run: |
           set -e
           echo "🚀 Running all Integration Tests..."
-          dotnet test ${{ inputs.solution_file }} \
-            --configuration Release \
-            --logger:"trx" \
-            --results-directory ./TestResults/Integration \
-            --filter "FullyQualifiedName~IntegrationTests"
+          for project in $(find . -name '*IntegrationTests.csproj' -type f); do
+            echo "Testing: $project"
+            dotnet test "$project" \
+              --configuration Release \
+              --logger:"trx;LogFileName=integration-${RUNNER_OS}.trx" \
+              --results-directory ./TestResults
+          done
         env:
           CatalogBaseUrl: ${{ inputs.base_url }}
 
@@ -160,11 +166,15 @@ jobs:
         env:
           BASE_URL: ${{ inputs.base_url }}
         run: |
-          dotnet test ${{ inputs.solution_file }} \
-            --configuration Release \
-            --logger:"trx" \
-            --results-directory ./TestResults/Playwright \
-            --filter "FullyQualifiedName~PlaywrightTests"
+          set -e
+          echo "🚀 Running all Playwright Tests..."
+          for project in $(find . -name '*PlaywrightTests.csproj' -type f); do
+            echo "Testing: $project"
+            dotnet test "$project" \
+              --configuration Release \
+              --logger:"trx;LogFileName=playwright-${RUNNER_OS}.trx" \
+              --results-directory ./TestResults
+          done
 
     #   - name: Upload Playwright test results (on failure)
     #     if: failure()
