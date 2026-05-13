@@ -55,11 +55,17 @@ jobs:
         run: |
           set -e
           echo "🚀 Running all Unit Tests..."
-          for project in $(dotnet sln "${{ inputs.solution_file }}" list | tail -n +3 | sed 's/\r$//' | grep -E 'UnitTests\.csproj$'); do
+          unit_projects=$(dotnet sln "${{ inputs.solution_file }}" list | tail -n +3 | sed 's/\r$//' | grep -E 'UnitTests\.csproj$' || true)
+          if [ -z "$unit_projects" ]; then
+            echo "❌ No UnitTests projects found in solution!" >&2
+            exit 1
+          fi
+          for project in $unit_projects; do
             echo "Testing: $project"
+            base_name=$(basename "$project" .csproj)
             dotnet test "$project" \
               --configuration Release \
-              --logger:"trx;LogFileName=unit-${RUNNER_OS}.trx" \
+              --logger:"trx;LogFileName=unit-${base_name}-${RUNNER_OS}.trx" \
               --results-directory ./TestResults
           done
                 
@@ -76,11 +82,17 @@ jobs:
         run: |
           set -e
           echo "🚀 Running all Component Tests..."
-          for project in $(dotnet sln "${{ inputs.solution_file }}" list | tail -n +3 | sed 's/\r$//' | grep -E 'ComponentTests\.csproj$'); do
+          component_projects=$(dotnet sln "${{ inputs.solution_file }}" list | tail -n +3 | sed 's/\r$//' | grep -E 'ComponentTests\.csproj$' || true)
+          if [ -z "$component_projects" ]; then
+            echo "❌ No ComponentTests projects found in solution!" >&2
+            exit 1
+          fi
+          for project in $component_projects; do
             echo "Testing: $project"
+            base_name=$(basename "$project" .csproj)
             dotnet test "$project" \
               --configuration Release \
-              --logger:"trx;LogFileName=component-${RUNNER_OS}.trx" \
+              --logger:"trx;LogFileName=component-${base_name}-${RUNNER_OS}.trx" \
               --results-directory ./TestResults
           done
                 
@@ -132,11 +144,17 @@ jobs:
         run: |
           set -e
           echo "🚀 Running all Integration Tests..."
-          for project in $(dotnet sln "${{ inputs.solution_file }}" list | tail -n +3 | sed 's/\r$//' | grep -E 'IntegrationTests\.csproj$'); do
+          integration_projects=$(dotnet sln "${{ inputs.solution_file }}" list | tail -n +3 | sed 's/\r$//' | grep -E 'IntegrationTests\.csproj$' || true)
+          if [ -z "$integration_projects" ]; then
+            echo "❌ No IntegrationTests projects found in solution!" >&2
+            exit 1
+          fi
+          for project in $integration_projects; do
             echo "Testing: $project"
+            base_name=$(basename "$project" .csproj)
             dotnet test "$project" \
               --configuration Release \
-              --logger:"trx;LogFileName=integration-${RUNNER_OS}.trx" \
+              --logger:"trx;LogFileName=integration-${base_name}-${RUNNER_OS}.trx" \
               --results-directory ./TestResults
           done
         env:
@@ -168,11 +186,17 @@ jobs:
         run: |
           set -e
           echo "🚀 Running all Playwright Tests..."
-          for project in $(dotnet sln "${{ inputs.solution_file }}" list | tail -n +3 | sed 's/\r$//' | grep -E 'PlaywrightTests\.csproj$'); do
+          playwright_projects=$(dotnet sln "${{ inputs.solution_file }}" list | tail -n +3 | sed 's/\r$//' | grep -E 'PlaywrightTests\.csproj$' || true)
+          if [ -z "$playwright_projects" ]; then
+            echo "❌ No PlaywrightTests projects found in solution!" >&2
+            exit 1
+          fi
+          for project in $playwright_projects; do
             echo "Testing: $project"
+            base_name=$(basename "$project" .csproj)
             dotnet test "$project" \
               --configuration Release \
-              --logger:"trx;LogFileName=playwright-${RUNNER_OS}.trx" \
+              --logger:"trx;LogFileName=playwright-${base_name}-${RUNNER_OS}.trx" \
               --results-directory ./TestResults
           done
 
