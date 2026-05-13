@@ -55,11 +55,19 @@ jobs:
         run: |
           set -e
           echo "🚀 Running all Unit Tests..."
-          dotnet test "${{ inputs.solution_file }}" \
-            --configuration Release \
-            --logger:"trx;LogFileName=unit-${RUNNER_OS}.trx" \
-            --results-directory ./TestResults \
-            --filter "FullyQualifiedName~UnitTests"
+          unit_projects=$(dotnet sln "${{ inputs.solution_file }}" list | tail -n +3 | sed 's/\r$//' | grep -E 'UnitTests\.csproj$' || true)
+          if [ -z "$unit_projects" ]; then
+            echo "❌ No UnitTests projects found in solution!" >&2
+            exit 1
+          fi
+          for project in $unit_projects; do
+            echo "Testing: $project"
+            base_name=$(basename "$project" .csproj)
+            dotnet test "$project" \
+              --configuration Release \
+              --logger:"trx;LogFileName=unit-${base_name}-${RUNNER_OS}.trx" \
+              --results-directory ./TestResults/Unit
+          done
                 
     #   - name: Upload Test Results
     #     if: failure()  # Only upload if the tests failed
@@ -74,11 +82,19 @@ jobs:
         run: |
           set -e
           echo "🚀 Running all Component Tests..."
-          dotnet test ${{ inputs.solution_file }} \
-            --configuration Release \
-            --logger:"trx" \
-            --results-directory ./TestResults \
-            --filter "FullyQualifiedName~ComponentTests"
+          component_projects=$(dotnet sln "${{ inputs.solution_file }}" list | tail -n +3 | sed 's/\r$//' | grep -E 'ComponentTests\.csproj$' || true)
+          if [ -z "$component_projects" ]; then
+            echo "❌ No ComponentTests projects found in solution!" >&2
+            exit 1
+          fi
+          for project in $component_projects; do
+            echo "Testing: $project"
+            base_name=$(basename "$project" .csproj)
+            dotnet test "$project" \
+              --configuration Release \
+              --logger:"trx;LogFileName=component-${base_name}-${RUNNER_OS}.trx" \
+              --results-directory ./TestResults/Component
+          done
                 
     #   - name: Upload Test Results
     #     if: failure()  # Only upload if the tests failed
@@ -128,11 +144,19 @@ jobs:
         run: |
           set -e
           echo "🚀 Running all Integration Tests..."
-          dotnet test ${{ inputs.solution_file }} \
-            --configuration Release \
-            --logger:"trx" \
-            --results-directory ./TestResults/Integration \
-            --filter "FullyQualifiedName~IntegrationTests"
+          integration_projects=$(dotnet sln "${{ inputs.solution_file }}" list | tail -n +3 | sed 's/\r$//' | grep -E 'IntegrationTests\.csproj$' || true)
+          if [ -z "$integration_projects" ]; then
+            echo "❌ No IntegrationTests projects found in solution!" >&2
+            exit 1
+          fi
+          for project in $integration_projects; do
+            echo "Testing: $project"
+            base_name=$(basename "$project" .csproj)
+            dotnet test "$project" \
+              --configuration Release \
+              --logger:"trx;LogFileName=integration-${base_name}-${RUNNER_OS}.trx" \
+              --results-directory ./TestResults/Integration
+          done
         env:
           CatalogBaseUrl: ${{ inputs.base_url }}
 
@@ -160,11 +184,21 @@ jobs:
         env:
           BASE_URL: ${{ inputs.base_url }}
         run: |
-          dotnet test ${{ inputs.solution_file }} \
-            --configuration Release \
-            --logger:"trx" \
-            --results-directory ./TestResults/Playwright \
-            --filter "FullyQualifiedName~PlaywrightTests"
+          set -e
+          echo "🚀 Running all Playwright Tests..."
+          playwright_projects=$(dotnet sln "${{ inputs.solution_file }}" list | tail -n +3 | sed 's/\r$//' | grep -E 'PlaywrightTests\.csproj$' || true)
+          if [ -z "$playwright_projects" ]; then
+            echo "❌ No PlaywrightTests projects found in solution!" >&2
+            exit 1
+          fi
+          for project in $playwright_projects; do
+            echo "Testing: $project"
+            base_name=$(basename "$project" .csproj)
+            dotnet test "$project" \
+              --configuration Release \
+              --logger:"trx;LogFileName=playwright-${base_name}-${RUNNER_OS}.trx" \
+              --results-directory ./TestResults/Playwright
+          done
 
     #   - name: Upload Playwright test results (on failure)
     #     if: failure()
