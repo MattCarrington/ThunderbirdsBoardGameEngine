@@ -66,7 +66,7 @@ jobs:
             dotnet test "$project" \
               --configuration Release \
               --logger:"trx;LogFileName=unit-${base_name}-${RUNNER_OS}.trx" \
-              --results-directory ./TestResults
+              --results-directory ./TestResults/Unit
           done
                 
     #   - name: Upload Test Results
@@ -93,7 +93,7 @@ jobs:
             dotnet test "$project" \
               --configuration Release \
               --logger:"trx;LogFileName=component-${base_name}-${RUNNER_OS}.trx" \
-              --results-directory ./TestResults
+              --results-directory ./TestResults/Component
           done
                 
     #   - name: Upload Test Results
@@ -155,7 +155,7 @@ jobs:
             dotnet test "$project" \
               --configuration Release \
               --logger:"trx;LogFileName=integration-${base_name}-${RUNNER_OS}.trx" \
-              --results-directory ./TestResults
+              --results-directory ./TestResults/Integration
           done
         env:
           CatalogBaseUrl: ${{ inputs.base_url }}
@@ -197,7 +197,7 @@ jobs:
             dotnet test "$project" \
               --configuration Release \
               --logger:"trx;LogFileName=playwright-${base_name}-${RUNNER_OS}.trx" \
-              --results-directory ./TestResults
+              --results-directory ./TestResults/Playwright
           done
 
     #   - name: Upload Playwright test results (on failure)
