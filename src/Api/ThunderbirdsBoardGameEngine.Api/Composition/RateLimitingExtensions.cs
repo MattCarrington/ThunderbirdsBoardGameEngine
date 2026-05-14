@@ -1,19 +1,25 @@
 ﻿using Microsoft.AspNetCore.RateLimiting;
-using System.Runtime.CompilerServices;
 
 namespace ThunderbirdsBoardGameEngine.Api.Composition
 {
     public static class RateLimitingExtensions
     {
-        public static IServiceCollection AddAppRateLimiting(this IServiceCollection services)
+        public static IServiceCollection AddAppRateLimiting(
+            this IServiceCollection services,
+            IConfiguration configuration)
         {
+            var rateLimitOptions = configuration
+                .GetSection("RateLimiting:PublicApi")
+                .Get<PublicApiRateLimitOptions>()
+                ?? new PublicApiRateLimitOptions();
+
             services.AddRateLimiter(options =>
             {
                 options.AddFixedWindowLimiter("public-api", limiterOptions =>
                 {
-                    limiterOptions.Window = TimeSpan.FromMinutes(1);
-                    limiterOptions.PermitLimit = 60;
-                    limiterOptions.QueueLimit = 0; // no queuing, just reject when limit is hit
+                    limiterOptions.Window = TimeSpan.FromSeconds(rateLimitOptions.WindowSeconds);
+                    limiterOptions.PermitLimit = rateLimitOptions.PermitLimit;
+                    limiterOptions.QueueLimit = rateLimitOptions.QueueLimit;
                 });
 
                 options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;

@@ -9,7 +9,7 @@
             services.AddApiExceptionHandling();
             services.AddApiHealthChecks();
             services.AddApiCors(configuration);
-            services.AddAppRateLimiting();
+            services.AddAppRateLimiting(configuration);
             return services;
         }
     }
