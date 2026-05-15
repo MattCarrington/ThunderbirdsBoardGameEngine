@@ -88,6 +88,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Directory.Packages.props = Directory.Packages.props
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SmokeTests", "SmokeTests", "{BC1ABD0D-F891-4D94-93F0-AFC5419064B4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThunderbirdsBoardGameEngine.Api.SmokeTests", "tests\Api\SmokeTests\ThunderbirdsBoardGameEngine.Api.SmokeTests\ThunderbirdsBoardGameEngine.Api.SmokeTests.csproj", "{219BA569-0D41-3111-5789-5CC281925B1D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -230,6 +234,10 @@ Global
 		{9B1E3F9B-392D-42C4-B914-BE21D3C747B4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9B1E3F9B-392D-42C4-B914-BE21D3C747B4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9B1E3F9B-392D-42C4-B914-BE21D3C747B4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{219BA569-0D41-3111-5789-5CC281925B1D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{219BA569-0D41-3111-5789-5CC281925B1D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{219BA569-0D41-3111-5789-5CC281925B1D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{219BA569-0D41-3111-5789-5CC281925B1D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -262,6 +270,8 @@ Global
 		{FD29A8FC-1CEA-CBD9-ACAB-905F33CDC56E} = {D8475FB6-8FFD-4252-BF79-1BC0AF31A524}
 		{37E83918-D47C-4ED5-A31B-79891C11E50A} = {987A2C73-51DA-4FCE-AEF0-DFB7C4B23F2E}
 		{9B1E3F9B-392D-42C4-B914-BE21D3C747B4} = {D8475FB6-8FFD-4252-BF79-1BC0AF31A524}
+		{BC1ABD0D-F891-4D94-93F0-AFC5419064B4} = {C005E618-80C1-4CCD-9774-336D558E958F}
+		{219BA569-0D41-3111-5789-5CC281925B1D} = {BC1ABD0D-F891-4D94-93F0-AFC5419064B4}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {92EB50C5-075F-4AF3-8107-0DC9EDBBAB83}
