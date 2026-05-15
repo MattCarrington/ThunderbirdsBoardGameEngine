@@ -83,6 +83,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThunderbirdsBoardGameEngine
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThunderbirdsBoardGameEngine.ReferenceData.Runtime.UnitTests", "tests\ReferenceData\UnitTests\ThunderbirdsBoardGameEngine.ReferenceData.Runtime.UnitTests\ThunderbirdsBoardGameEngine.ReferenceData.Runtime.UnitTests.csproj", "{9B1E3F9B-392D-42C4-B914-BE21D3C747B4}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{CAB0ABF7-144A-4DFA-9115-80A250E4A5F8}"
+	ProjectSection(SolutionItems) = preProject
+		Directory.Packages.props = Directory.Packages.props
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
