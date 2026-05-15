@@ -75,6 +75,8 @@ namespace ThunderbirdsBoardGameEngine.Api
 
             app.UseApiCors();
 
+            app.UseAppRateLimiting();
+
             app.UseAuthorization();
 
             app.MapMetaEndpoint();
