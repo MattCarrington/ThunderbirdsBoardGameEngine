@@ -10,10 +10,16 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="coverlet.collector"/>
-    <PackageReference Include="Microsoft.NET.Test.Sdk"/>
-    <PackageReference Include="xunit"/>
-    <PackageReference Include="xunit.runner.visualstudio"/>
+    <PackageReference Include="coverlet.collector" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="xunit" />
+    <PackageReference Include="xunit.runner.visualstudio" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\src\Rules\ThunderbirdsBoardGameEngine.Rules.Client\ThunderbirdsBoardGameEngine.Rules.Client.csproj" />
+    <ProjectReference Include="..\..\..\Common\ThunderbirdsBoardGameEngine.TestUtils\ThunderbirdsBoardGameEngine.TestUtils.csproj" />
   </ItemGroup>
 
 </Project>
