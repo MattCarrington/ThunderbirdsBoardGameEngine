@@ -1,4 +1,4 @@
-namespace ThunderbirdsBoardGameEngine.Api.SmokeTests
+namespace ThunderbirdsBoardGameEngine.SmokeTests
 {
     public static class SmokeTestConfig
     {

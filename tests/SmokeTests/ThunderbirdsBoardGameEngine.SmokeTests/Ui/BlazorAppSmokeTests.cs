@@ -1,7 +1,7 @@
 using Microsoft.Playwright;
 using Xunit;
 
-namespace ThunderbirdsBoardGameEngine.Api.SmokeTests.Ui
+namespace ThunderbirdsBoardGameEngine.SmokeTests.Ui
 {
     public class BlazorAppSmokeTests : IAsyncLifetime
     {

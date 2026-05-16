@@ -21,7 +21,7 @@ WORKDIR /src
 
 # Copy solution structure
 COPY ["Directory.Packages.props", "."]
-COPY ["tests/Api/SmokeTests/ThunderbirdsBoardGameEngine.Api.SmokeTests/ThunderbirdsBoardGameEngine.Api.SmokeTests.csproj", "tests/Api/SmokeTests/ThunderbirdsBoardGameEngine.Api.SmokeTests/"]
+COPY ["tests/SmokeTests/ThunderbirdsBoardGameEngine.SmokeTests/ThunderbirdsBoardGameEngine.SmokeTests.csproj", "tests/SmokeTests/ThunderbirdsBoardGameEngine.SmokeTests/"]
 COPY ["src/Rules/ThunderbirdsBoardGameEngine.Rules.Client/ThunderbirdsBoardGameEngine.Rules.Client.csproj", "src/Rules/ThunderbirdsBoardGameEngine.Rules.Client/"]
 COPY ["src/Common/ThunderbirdsBoardGameEngine.Client.Infrastructure/ThunderbirdsBoardGameEngine.Client.Infrastructure.csproj", "src/Common/ThunderbirdsBoardGameEngine.Client.Infrastructure/"]
 COPY ["src/Rules/ThunderbirdsBoardGameEngine.Rules.Contracts/ThunderbirdsBoardGameEngine.Rules.Contracts.csproj", "src/Rules/ThunderbirdsBoardGameEngine.Rules.Contracts/"]
@@ -29,20 +29,20 @@ COPY ["tests/Common/ThunderbirdsBoardGameEngine.TestUtils/ThunderbirdsBoardGameE
 COPY ["src/ReferenceData/ThunderbirdsBoardGameEngine.ReferenceData/ThunderbirdsBoardGameEngine.ReferenceData.csproj", "src/ReferenceData/ThunderbirdsBoardGameEngine.ReferenceData/"]
 
 # Restore dependencies
-RUN dotnet restore "tests/Api/SmokeTests/ThunderbirdsBoardGameEngine.Api.SmokeTests/ThunderbirdsBoardGameEngine.Api.SmokeTests.csproj"
+RUN dotnet restore "tests/SmokeTests/ThunderbirdsBoardGameEngine.SmokeTests/ThunderbirdsBoardGameEngine.SmokeTests.csproj"
 
 # Copy all source
 COPY . .
 
 # Build the test project
-WORKDIR /src/tests/Api/SmokeTests/ThunderbirdsBoardGameEngine.Api.SmokeTests
-RUN dotnet build "ThunderbirdsBoardGameEngine.Api.SmokeTests.csproj" -c $BUILD_CONFIGURATION
+WORKDIR /src/tests/SmokeTests/ThunderbirdsBoardGameEngine.SmokeTests
+RUN dotnet build "ThunderbirdsBoardGameEngine.SmokeTests.csproj" -c $BUILD_CONFIGURATION
 
 # Install Playwright browsers
 RUN pwsh bin/$BUILD_CONFIGURATION/net8.0/playwright.ps1 install chromium --with-deps
 
 # Set working directory (stays here for entrypoint)
-WORKDIR /src/tests/Api/SmokeTests/ThunderbirdsBoardGameEngine.Api.SmokeTests
+WORKDIR /src/tests/SmokeTests/ThunderbirdsBoardGameEngine.SmokeTests
 
 # Run tests
-ENTRYPOINT ["dotnet", "test", "ThunderbirdsBoardGameEngine.Api.SmokeTests.csproj", "--no-build", "-c", "Release", "-v", "detailed"]
+ENTRYPOINT ["dotnet", "test", "ThunderbirdsBoardGameEngine.SmokeTests.csproj", "--no-build", "-c", "Release", "-v", "detailed"]

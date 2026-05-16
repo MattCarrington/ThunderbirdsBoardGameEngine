@@ -1,6 +1,6 @@
 using Xunit;
 
-namespace ThunderbirdsBoardGameEngine.Api.SmokeTests.Health
+namespace ThunderbirdsBoardGameEngine.SmokeTests.Health
 {
     public sealed class HealthEndpointTests : IDisposable
     {

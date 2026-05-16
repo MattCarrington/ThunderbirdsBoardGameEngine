@@ -2,10 +2,11 @@
 using ThunderbirdsBoardGameEngine.Rules.Client.Extensions;
 using ThunderbirdsBoardGameEngine.Rules.Client.Interfaces.V1;
 using ThunderbirdsBoardGameEngine.Rules.Contracts.Dtos.Rescue.CalculateRescueTarget.V1;
+using ThunderbirdsBoardGameEngine.SmokeTests;
 using ThunderbirdsBoardGameEngine.TestUtils.Rules.Factories;
 using Xunit;
 
-namespace ThunderbirdsBoardGameEngine.Api.SmokeTests.Api
+namespace ThunderbirdsBoardGameEngine.SmokeTests.Api
 {
     public class RulesApiTests
     {
