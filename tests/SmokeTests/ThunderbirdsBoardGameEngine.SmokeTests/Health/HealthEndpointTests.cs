@@ -10,7 +10,7 @@ namespace ThunderbirdsBoardGameEngine.SmokeTests.Health
         {
             _client = new HttpClient
             {
-                BaseAddress = new Uri(SmokeTestConfig.ApiBaseUrl)
+                BaseAddress = new Uri(SmokeTestConfig.SmokeTestBaseUrl)
             };
         }
 

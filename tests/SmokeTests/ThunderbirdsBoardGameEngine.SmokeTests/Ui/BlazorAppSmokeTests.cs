@@ -24,7 +24,7 @@ namespace ThunderbirdsBoardGameEngine.SmokeTests.Ui
         public async Task BlazorAppLoads()
         {
             // Act
-            await _page!.GotoAsync(SmokeTestConfig.ApiBaseUrl);
+            await _page!.GotoAsync(SmokeTestConfig.SmokeTestBaseUrl);
             await _page.WaitForLoadStateAsync(LoadState.NetworkIdle);
 
             // Assert - Just verify the Blazor app shell loaded

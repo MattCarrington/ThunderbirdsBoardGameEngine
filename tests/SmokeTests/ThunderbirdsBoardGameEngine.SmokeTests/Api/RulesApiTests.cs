@@ -14,7 +14,7 @@ namespace ThunderbirdsBoardGameEngine.SmokeTests.Api
         public async Task RescueEndpointIsReachable()
         {
             // Arrange
-            using var sp = RulesClientProviderFactory.Build(SmokeTestConfig.ApiBaseUrl);
+            using var sp = RulesClientProviderFactory.Build(SmokeTestConfig.SmokeTestBaseUrl);
             var client = sp.GetRequiredService<IRescueClient>();
 
             var request = new CalculateRescueTargetRequestDto

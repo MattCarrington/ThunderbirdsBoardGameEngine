@@ -2,10 +2,9 @@ namespace ThunderbirdsBoardGameEngine.SmokeTests
 {
     public static class SmokeTestConfig
     {
-        private const string EnvVarName = "API_BASE_URL";
-        private const string DefaultUrl = "http://localhost:5000";
+        private const string EnvVarName = "SMOKE_TEST_BASE_URL";
 
-        public static string ApiBaseUrl =>
-            Environment.GetEnvironmentVariable(EnvVarName) ?? DefaultUrl;
+        public static string SmokeTestBaseUrl =>
+            Environment.GetEnvironmentVariable(EnvVarName) ?? throw new InvalidOperationException("SMOKE_TEST_BASE_URL is required.");
     }
 }
