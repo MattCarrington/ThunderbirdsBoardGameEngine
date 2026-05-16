@@ -14,6 +14,14 @@ on:
         required: false
         type: string
         default: "thunderbirds-api"
+      dockerfile_path:
+        required: false
+        type: string
+        default: "src/Api/ThunderbirdsBoardGameEngine.Api/Dockerfile"
+      docker_build_context:
+        required: false
+        type: string
+        default: "."
 
 jobs:
   build:
@@ -40,6 +48,13 @@ jobs:
     steps:
       - uses: actions/checkout@v6
 
+      - name: Validate Docker Inputs
+        run: |
+          if [ ! -f "${{ inputs.dockerfile_path }}" ]; then
+            echo "Dockerfile not found: ${{ inputs.dockerfile_path }}"
+            exit 1
+          fi
+
       - name: Build Docker Image (SHA-tagged)
         run: |
           IMAGE="${{ inputs.image_name }}"
@@ -48,7 +63,8 @@ jobs:
           # Build once, with deterministic SHA tag
           docker build -t "$IMAGE:$SHA_TAG" \
                        -t "$IMAGE:dev" \
-                       -f src/Api/ThunderbirdsBoardGameEngine.Api/Dockerfile .
+                       -f "${{ inputs.dockerfile_path }}" \
+                       "${{ inputs.docker_build_context }}"
 
       - name: Save Docker Image
         run: |
