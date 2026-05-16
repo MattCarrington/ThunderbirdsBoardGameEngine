@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "ThunderbirdsBoardGameEngine.Api.SmokeTests": {
+      "commandName": "Project"
+    },
+    "Container (Dockerfile)": {
+      "commandName": "Docker"
+    }
+  }
+}
