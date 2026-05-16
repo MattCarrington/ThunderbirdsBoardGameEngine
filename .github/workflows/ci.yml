@@ -21,7 +21,7 @@ env:
   
 jobs:
   static-analysis:
-    uses: ./.github/workflows/static-analysis.yml 
+    uses: ./.github/workflows/static-analysis.yml
     with:
       solution_file: *solution
 
@@ -34,7 +34,7 @@ jobs:
       docker_build_context: *api_docker_build_context
       docker_build: ${{ github.event_name == 'push' }}
     needs:
-      - static-analysis  
+      - static-analysis
 
   tests:
     uses: ./.github/workflows/tests.yml
