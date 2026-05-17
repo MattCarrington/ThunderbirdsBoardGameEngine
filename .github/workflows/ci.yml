@@ -15,8 +15,6 @@ permissions:
 env:
   SOLUTION_FILE: &solution ThunderbirdsBoardGameEngine.sln
   IMAGE_NAME: &image_name "thunderbirds-app"
-  API_DOCKERFILE_PATH: &api_dockerfile "src/Api/ThunderbirdsBoardGameEngine.Api/Dockerfile"
-  API_DOCKER_BUILD_CONTEXT: &api_docker_build_context "."
   BASE_URL: &base_url "http://localhost:8080"
   
 jobs:
@@ -29,12 +27,18 @@ jobs:
     uses: ./.github/workflows/build.yml
     with:
       solution_file: *solution
-      image_name: *image_name
-      dockerfile_path: *api_dockerfile
-      docker_build_context: *api_docker_build_context
-      docker_build: ${{ github.event_name == 'push' }}
     needs:
       - static-analysis
+
+  docker-build:
+    if: github.event_name == 'push'
+    uses: ./.github/workflows/build-docker.yml
+    with:
+      image_name: *image_name
+      dockerfile_path: "src/Api/ThunderbirdsBoardGameEngine.Api/Dockerfile"
+      docker_build_context: "."
+    needs:
+      - build
 
   tests:
     uses: ./.github/workflows/tests.yml
@@ -47,6 +51,7 @@ jobs:
       base_url: *base_url
     needs:
       - build
+      - docker-build
 
   compute-version:
     if: github.event_name == 'push'

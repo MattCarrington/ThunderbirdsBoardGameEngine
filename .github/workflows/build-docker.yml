@@ -1,0 +1,63 @@
+name: Build Docker Image (reusable)
+
+on:
+  workflow_call:
+    inputs:
+      image_name:
+        required: false
+        type: string
+        default: "thunderbirds-api"
+      dockerfile_path:
+        required: false
+        type: string
+        default: "src/Api/ThunderbirdsBoardGameEngine.Api/Dockerfile"
+      docker_build_context:
+        required: false
+        type: string
+        default: "."
+
+jobs:
+  docker-build:
+    name: Build Docker Image
+    runs-on: ubuntu-latest
+    env:
+      IMAGE: ${{ inputs.image_name }}
+      DOCKERFILE_PATH: ${{ inputs.dockerfile_path }}
+      DOCKER_BUILD_CONTEXT: ${{ inputs.docker_build_context }}
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Validate Docker Inputs
+        run: |
+          if [ ! -f "$DOCKERFILE_PATH" ]; then
+            echo "Dockerfile not found: $DOCKERFILE_PATH"
+            exit 1
+          fi
+
+          if [ ! -d "$DOCKER_BUILD_CONTEXT" ]; then
+            echo "Docker build context must be an existing directory: $DOCKER_BUILD_CONTEXT"
+            exit 1
+          fi
+
+      - name: Build Docker Image (SHA-tagged)
+        run: |
+          SHA_TAG="sha-${GITHUB_SHA::7}"
+
+          # Build once, with deterministic SHA tag
+          docker build -t "$IMAGE:$SHA_TAG" \
+                       -t "$IMAGE:dev" \
+                       -f "$DOCKERFILE_PATH" \
+                       "$DOCKER_BUILD_CONTEXT"
+
+      - name: Save Docker Image
+        run: |
+          SHA_TAG="sha-${GITHUB_SHA::7}"
+          docker save "$IMAGE:$SHA_TAG" -o "$IMAGE.tar"
+
+      - name: Upload Image Artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: ${{ env.IMAGE }}-image
+          path: ${{ env.IMAGE }}.tar
+          retention-days: 7
