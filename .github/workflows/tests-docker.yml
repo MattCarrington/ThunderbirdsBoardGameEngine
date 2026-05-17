@@ -39,6 +39,13 @@ jobs:
         with:
           dotnet-version: '8.x'
 
+      - name: Compute API image tag
+        run: |
+          echo "API_IMAGE_TAG=sha-${GITHUB_SHA::7}" >> $GITHUB_ENV
+          
+      - name: Debug image tag
+        run: echo "Using API_IMAGE_TAG=$API_IMAGE_TAG"   
+
       - name: Download Docker image artifact
         if: ${{ inputs.run_integration || inputs.run_playwright }}
         uses: actions/download-artifact@v8
@@ -49,7 +56,7 @@ jobs:
       - name: Load Docker image
         if: ${{ inputs.run_integration || inputs.run_playwright }}
         run: docker load -i ${{ inputs.image_name }}.tar
-
+        
       - name: Start API env
         if: ${{ inputs.run_integration || inputs.run_playwright }}
         run: |
