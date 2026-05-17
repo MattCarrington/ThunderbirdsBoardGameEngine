@@ -1,4 +1,4 @@
 services:
   api:
-    image: thunderbirds-api:${API_IMAGE_TAG}
+    image: thunderbirds-app:${API_IMAGE_TAG}
     build: null
