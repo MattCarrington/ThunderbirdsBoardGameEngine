@@ -24,6 +24,6 @@ RUN dotnet build "ThunderbirdsBoardGameEngine.SmokeTests.csproj" \
     -c $BUILD_CONFIGURATION \
     --no-restore
 
-RUN pwsh bin/$BUILD_CONFIGURATION/net8.0/playwright.ps1 install chromium --with-deps
+RUN sh bin/$BUILD_CONFIGURATION/net8.0/playwright.sh install --with-deps chromium
 
 ENTRYPOINT ["dotnet", "test", "ThunderbirdsBoardGameEngine.SmokeTests.csproj", "--no-build", "-c", "Release", "-v", "normal"]
