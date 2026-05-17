@@ -5,6 +5,6 @@ namespace ThunderbirdsBoardGameEngine.SmokeTests
         private const string EnvVarName = "SMOKE_TEST_BASE_URL";
 
         public static string SmokeTestBaseUrl =>
-            Environment.GetEnvironmentVariable(EnvVarName) ?? throw new InvalidOperationException("SMOKE_TEST_BASE_URL is required.");
+            Environment.GetEnvironmentVariable(EnvVarName) ?? throw new InvalidOperationException($"{EnvVarName} is required.");
     }
 }
