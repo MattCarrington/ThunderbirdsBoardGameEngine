@@ -1,6 +1,7 @@
 FROM mcr.microsoft.com/playwright/dotnet:v1.57.0-noble
 
 ARG BUILD_CONFIGURATION=Release
+ENV BUILD_CONFIGURATION=$BUILD_CONFIGURATION
 
 WORKDIR /src
 
@@ -23,4 +24,4 @@ RUN dotnet build "ThunderbirdsBoardGameEngine.SmokeTests.csproj" \
     -c $BUILD_CONFIGURATION \
     --no-restore
 
-ENTRYPOINT ["dotnet", "test", "ThunderbirdsBoardGameEngine.SmokeTests.csproj", "--no-build", "-c", "Release", "-v", "normal"]
+ENTRYPOINT ["sh", "-c", "dotnet test ThunderbirdsBoardGameEngine.SmokeTests.csproj --no-build -c \"$BUILD_CONFIGURATION\" -v normal"]
