@@ -68,7 +68,7 @@ jobs:
       pr_title: ${{ github.event.pull_request.title || github.event.head_commit.message }}
     needs:
       - tests
-      - tests-integration
+      - tests-docker
 
   tag-repo:
     if: github.ref == 'refs/heads/main' && needs.compute-version.outputs.release_type != 'none'
