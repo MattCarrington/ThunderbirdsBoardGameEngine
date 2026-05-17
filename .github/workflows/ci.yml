@@ -37,8 +37,6 @@ jobs:
       image_name: *image_name
       dockerfile_path: "src/Api/ThunderbirdsBoardGameEngine.Api/Dockerfile"
       docker_build_context: "."
-    needs:
-      - build
 
   tests:
     uses: ./.github/workflows/tests-dotnet.yml
