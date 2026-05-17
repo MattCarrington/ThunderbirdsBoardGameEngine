@@ -41,13 +41,21 @@ jobs:
       - build
 
   tests:
-    uses: ./.github/workflows/tests.yml
+    uses: ./.github/workflows/tests-dotnet.yml
+    with:
+      solution_file: *solution
+      run_component: true
+    needs:
+      - build
+
+  tests-docker:
+    if: github.event_name == 'push'
+    uses: ./.github/workflows/tests-docker.yml
     with:
       solution_file: *solution
       image_name: *image_name
-      run_component: true
-      run_integration: ${{ github.event_name == 'push' }}
-      run_playwright: ${{ github.event_name == 'push' }}
+      run_integration: true
+      run_playwright: true
       base_url: *base_url
     needs:
       - build
@@ -60,6 +68,7 @@ jobs:
       pr_title: ${{ github.event.pull_request.title || github.event.head_commit.message }}
     needs:
       - tests
+      - tests-integration
 
   tag-repo:
     if: github.ref == 'refs/heads/main' && needs.compute-version.outputs.release_type != 'none'

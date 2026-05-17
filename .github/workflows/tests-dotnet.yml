@@ -1,0 +1,78 @@
+name: Tests (reusable)
+
+on:
+  workflow_call:
+    inputs:
+      solution_file:
+        required: true
+        type: string
+      run_component:
+        description: "Run component tests"
+        required: false
+        type: boolean
+        default: true
+
+jobs:
+  tests:
+    name: Run Unit And Component Tests
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: '8.x'
+
+      - name: Run Unit Tests
+        run: |
+          set -e
+          echo "🚀 Running all Unit Tests..."
+          unit_projects=$(dotnet sln "${{ inputs.solution_file }}" list | tail -n +3 | sed 's/\r$//' | grep -E 'UnitTests\.csproj$' || true)
+          if [ -z "$unit_projects" ]; then
+            echo "❌ No UnitTests projects found in solution!" >&2
+            exit 1
+          fi
+          for project in $unit_projects; do
+            echo "Testing: $project"
+            base_name=$(basename "$project" .csproj)
+            dotnet test "$project" \
+              --configuration Release \
+              --logger:"trx;LogFileName=unit-${base_name}-${RUNNER_OS}.trx" \
+              --results-directory ./TestResults/Unit
+          done
+                
+    #   - name: Upload Test Results
+    #     if: failure()  # Only upload if the tests failed
+    #     uses: actions/upload-artifact@v4
+    #     with:
+    #       name: unit-test-results
+    #       path: ./TestResults/Unit
+    #       retention-days: 7
+
+      - name: Run Component Tests
+        if: ${{ inputs.run_component }}
+        run: |
+          set -e
+          echo "🚀 Running all Component Tests..."
+          component_projects=$(dotnet sln "${{ inputs.solution_file }}" list | tail -n +3 | sed 's/\r$//' | grep -E 'ComponentTests\.csproj$' || true)
+          if [ -z "$component_projects" ]; then
+            echo "❌ No ComponentTests projects found in solution!" >&2
+            exit 1
+          fi
+          for project in $component_projects; do
+            echo "Testing: $project"
+            base_name=$(basename "$project" .csproj)
+            dotnet test "$project" \
+              --configuration Release \
+              --logger:"trx;LogFileName=component-${base_name}-${RUNNER_OS}.trx" \
+              --results-directory ./TestResults/Component
+          done
+                
+    #   - name: Upload Test Results
+    #     if: failure()  # Only upload if the tests failed
+    #     uses: actions/upload-artifact@v4
+    #     with:
+    #       name: component-test-results
+    #       path: ./TestResults/Component
+    #       retention-days: 7

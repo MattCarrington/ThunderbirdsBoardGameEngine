@@ -1,4 +1,4 @@
-name: Tests (reusable)
+name: Integration And Playwright Tests (reusable)
 
 on:
   workflow_call:
@@ -10,19 +10,14 @@ on:
         description: "Docker image name to use for API"
         required: false
         type: string
-        default: "thunderbirds-api"  
-      run_component:
-        description: "Run component tests"
-        required: false
-        type: boolean
-        default: true
+        default: "thunderbirds-api"
       run_integration:
-        description: "Run integration tests (assumes API is already running)"
+        description: "Run integration tests"
         required: false
         type: boolean
         default: true
       run_playwright:
-        description: "Run Playwright UI tests (assumes app/API is already running)"
+        description: "Run Playwright UI tests"
         required: false
         type: boolean
         default: true
@@ -33,10 +28,10 @@ on:
         default: "http://localhost:8080"
 
 jobs:
-  tests:
-    name: Run Tests
+  tests-docker:
+    name: Run Integration And Playwright Tests
     runs-on: ubuntu-latest
-    
+
     steps:
       - uses: actions/checkout@v6
 
@@ -44,69 +39,9 @@ jobs:
         with:
           dotnet-version: '8.x'
 
-      - name: Compute API image tag
-        run: |
-          echo "API_IMAGE_TAG=sha-${GITHUB_SHA::7}" >> $GITHUB_ENV
-          
-      - name: Debug image tag
-        run: echo "Using API_IMAGE_TAG=$API_IMAGE_TAG"   
-
-      - name: Run Unit Tests
-        run: |
-          set -e
-          echo "🚀 Running all Unit Tests..."
-          unit_projects=$(dotnet sln "${{ inputs.solution_file }}" list | tail -n +3 | sed 's/\r$//' | grep -E 'UnitTests\.csproj$' || true)
-          if [ -z "$unit_projects" ]; then
-            echo "❌ No UnitTests projects found in solution!" >&2
-            exit 1
-          fi
-          for project in $unit_projects; do
-            echo "Testing: $project"
-            base_name=$(basename "$project" .csproj)
-            dotnet test "$project" \
-              --configuration Release \
-              --logger:"trx;LogFileName=unit-${base_name}-${RUNNER_OS}.trx" \
-              --results-directory ./TestResults/Unit
-          done
-                
-    #   - name: Upload Test Results
-    #     if: failure()  # Only upload if the tests failed
-    #     uses: actions/upload-artifact@v4
-    #     with:
-    #       name: unit-test-results
-    #       path: ./TestResults/Unit
-    #       retention-days: 7
-
-      - name: Run Component Tests
-        if: ${{ inputs.run_component }}
-        run: |
-          set -e
-          echo "🚀 Running all Component Tests..."
-          component_projects=$(dotnet sln "${{ inputs.solution_file }}" list | tail -n +3 | sed 's/\r$//' | grep -E 'ComponentTests\.csproj$' || true)
-          if [ -z "$component_projects" ]; then
-            echo "❌ No ComponentTests projects found in solution!" >&2
-            exit 1
-          fi
-          for project in $component_projects; do
-            echo "Testing: $project"
-            base_name=$(basename "$project" .csproj)
-            dotnet test "$project" \
-              --configuration Release \
-              --logger:"trx;LogFileName=component-${base_name}-${RUNNER_OS}.trx" \
-              --results-directory ./TestResults/Component
-          done
-                
-    #   - name: Upload Test Results
-    #     if: failure()  # Only upload if the tests failed
-    #     uses: actions/upload-artifact@v4
-    #     with:
-    #       name: component-test-results
-    #       path: ./TestResults/Component
-    #       retention-days: 7
-            
       - name: Download Docker image artifact
         if: ${{ inputs.run_integration || inputs.run_playwright }}
-        uses: actions/download-artifact@v8
+        uses: actions/download-artifact@v7
         with:
           name: ${{ inputs.image_name }}-image
           path: .
@@ -160,14 +95,6 @@ jobs:
         env:
           CatalogBaseUrl: ${{ inputs.base_url }}
 
-    #   - name: Upload Test Results
-    #     if: failure()  Only upload if the tests failed
-    #     uses: actions/upload-artifact@v4
-    #     with:
-    #       name: integration-test-results
-    #       path: ./TestResults/Integration
-    #       retention-days: 7
-  
       - name: Install Playwright CLI
         if: ${{ inputs.run_playwright }}
         run: dotnet tool install --global Microsoft.Playwright.CLI
@@ -200,14 +127,6 @@ jobs:
               --results-directory ./TestResults/Playwright
           done
 
-    #   - name: Upload Playwright test results (on failure)
-    #     if: failure()
-    #     uses: actions/upload-artifact@v4
-    #     with:
-    #       name: playwright-test-results
-    #       path: ./TestResults/Playwright
-    #       retention-days: 7  
-      
       - name: Stop containers
         if: ${{ inputs.run_integration || inputs.run_playwright }}
         run: |
