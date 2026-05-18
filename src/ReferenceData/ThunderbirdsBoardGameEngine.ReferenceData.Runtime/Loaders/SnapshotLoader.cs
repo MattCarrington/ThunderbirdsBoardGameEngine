@@ -12,9 +12,9 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Runtime.Loaders
 
         public SnapshotLoader(ISnapshotProvider provider, ISnapshotDeserializer deserializer, ILogger<SnapshotLoader> logger)
         {
-            _provider = provider;
-            _deserializer = deserializer;
-            _logger = logger;
+            _provider = provider ?? throw new ArgumentNullException(nameof(provider));
+            _deserializer = deserializer ?? throw new ArgumentNullException(nameof(deserializer));
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
         public async Task<ReferenceDataSnapshot> LoadAsync()
