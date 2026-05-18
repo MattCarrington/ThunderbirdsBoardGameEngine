@@ -22,6 +22,8 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Runtime
         /// <returns>The same instance of <see cref="IServiceCollection"/> with reference data services registered.</returns>
         public static IServiceCollection AddReferenceData(this IServiceCollection services)
         {
+            services.AddLogging();
+
             services.AddSingleton<ISnapshotProvider, EmbeddedResourceSnapshotProvider>();
             services.AddSingleton<ISnapshotDeserializer, JsonSnapshotDeserializer>();
             services.AddSingleton<SnapshotLoader>();
