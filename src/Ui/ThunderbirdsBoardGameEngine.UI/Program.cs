@@ -16,6 +16,13 @@ namespace ThunderbirdsBoardGameEngine.UI
             builder.RootComponents.Add<App>("#app");
             builder.RootComponents.Add<HeadOutlet>("head::after");
 
+            var runtimeBaseAddress = builder.HostEnvironment.BaseAddress;
+            builder.Configuration.AddInMemoryCollection(
+                new Dictionary<string, string?>
+                {
+                    ["RulesClient:BaseAddress"] = runtimeBaseAddress,
+                });
+
             builder.Services.AddReferenceData();
             builder.Services.AddRulesClients(builder.Configuration);
 
