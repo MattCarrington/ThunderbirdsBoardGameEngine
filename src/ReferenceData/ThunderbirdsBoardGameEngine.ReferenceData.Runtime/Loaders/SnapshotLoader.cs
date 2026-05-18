@@ -25,6 +25,10 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Runtime.Loaders
 
             Validate(snapshot);
 
+            _logger.LogInformation(
+                "Successfully loaded reference data snapshot. Schema version: {SchemaVersion}, Content version: {ContentVersion}.",
+                snapshot.SchemaVersion, snapshot.ContentVersion);
+
             return snapshot;
         }
 
