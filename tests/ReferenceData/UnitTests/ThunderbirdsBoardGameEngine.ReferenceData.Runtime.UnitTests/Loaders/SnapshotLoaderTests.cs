@@ -1,4 +1,5 @@
-﻿using NSubstitute;
+﻿using Microsoft.Extensions.Logging.Abstractions;
+using NSubstitute;
 using ThunderbirdsBoardGameEngine.ReferenceData.Model;
 using ThunderbirdsBoardGameEngine.ReferenceData.Runtime.Interfaces;
 using ThunderbirdsBoardGameEngine.ReferenceData.Runtime.Loaders;
@@ -39,7 +40,9 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Runtime.UnitTests.Loaders
             var deserializer = Substitute.For<ISnapshotDeserializer>();
             deserializer.Deserialize(Arg.Any<Stream>()).Returns(ValidSnapshot());
 
-            var loader = new SnapshotLoader(provider, deserializer);
+            var logger = NullLogger<SnapshotLoader>.Instance;
+
+            var loader = new SnapshotLoader(provider, deserializer, logger);
 
             // Act
             await loader.LoadAsync();
@@ -126,7 +129,9 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Runtime.UnitTests.Loaders
             var provider = Substitute.For<ISnapshotProvider>();
             provider.GetSnapshotStreamAsync().Returns(Task.FromResult<Stream>(new MemoryStream()));
 
-            return new SnapshotLoader(provider, deserializer);
+            var logger = NullLogger<SnapshotLoader>.Instance;
+
+            return new SnapshotLoader(provider, deserializer, logger);
         }
     }
 }
