@@ -1,0 +1,11 @@
+name: thunderbirds-azure-dev
+description: Minimal Azure DEV infrastructure for Thunderbirds Board Game Engine
+runtime: dotnet
+main: ./
+config:
+  thunderbirds-azure-dev:baseName:
+    default: tbbge
+  thunderbirds-azure-dev:containerImage:
+    default: mcr.microsoft.com/azuredocs/containerapps-helloworld:latest
+  thunderbirds-azure-dev:containerPort:
+    default: 80

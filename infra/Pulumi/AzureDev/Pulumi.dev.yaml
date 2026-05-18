@@ -1,0 +1,5 @@
+config:
+  azure-native:location: uksouth
+  thunderbirds-azure-dev:baseName: tbbge
+  thunderbirds-azure-dev:containerImage: mcr.microsoft.com/azuredocs/containerapps-helloworld:latest
+  thunderbirds-azure-dev:containerPort: 80
