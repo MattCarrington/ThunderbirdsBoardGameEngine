@@ -12,6 +12,8 @@ return await Deployment.RunAsync(() =>
     var baseName = projectConfig.Get("baseName") ?? "tbbge";
     var containerImage = projectConfig.Get("containerImage") ?? "mcr.microsoft.com/azuredocs/containerapps-helloworld:latest";
     var containerPort = projectConfig.GetInt32("containerPort") ?? 80;
+    var registryUsername = projectConfig.Get("registryUsername");
+    var registryPassword = projectConfig.GetSecret("registryPassword");
     var stack = Deployment.Instance.StackName;
 
     var tags = BuildTags(stack);
@@ -40,6 +42,28 @@ return await Deployment.RunAsync(() =>
                 External = true,
                 TargetPort = containerPort,
                 Transport = IngressTransportMethod.Auto,
+            },
+            Registries =
+            {
+                // Only add registry credentials if both are set
+                registryUsername != null && registryPassword != null
+                    ? new RegistryCredentialsArgs
+                    {
+                        Server = "ghcr.io",
+                        Username = registryUsername,
+                        PasswordSecretRef = "ghcr-password"
+                    }
+                    : null
+            },
+            Secrets =
+            {
+                registryPassword != null
+                    ? new SecretArgs
+                    {
+                        Name = "ghcr-password",
+                        Value = registryPassword
+                    }
+                    : null
             },
         },
         Template = new TemplateArgs
