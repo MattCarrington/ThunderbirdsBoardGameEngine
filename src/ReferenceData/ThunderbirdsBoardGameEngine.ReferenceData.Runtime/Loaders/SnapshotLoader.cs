@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Logging;
 using ThunderbirdsBoardGameEngine.ReferenceData.Model;
 using ThunderbirdsBoardGameEngine.ReferenceData.Runtime.Interfaces;
 
@@ -7,11 +8,13 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Runtime.Loaders
     {
         private readonly ISnapshotProvider _provider;
         private readonly ISnapshotDeserializer _deserializer;
+        private readonly ILogger<SnapshotLoader> _logger;
 
-        public SnapshotLoader(ISnapshotProvider provider, ISnapshotDeserializer deserializer)
+        public SnapshotLoader(ISnapshotProvider provider, ISnapshotDeserializer deserializer, ILogger<SnapshotLoader> logger)
         {
-            _provider = provider;
-            _deserializer = deserializer;
+            _provider = provider ?? throw new ArgumentNullException(nameof(provider));
+            _deserializer = deserializer ?? throw new ArgumentNullException(nameof(deserializer));
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
         public async Task<ReferenceDataSnapshot> LoadAsync()
@@ -22,13 +25,20 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Runtime.Loaders
 
             Validate(snapshot);
 
+            _logger.LogInformation(
+                "Successfully loaded reference data snapshot. Schema version: {SchemaVersion}, Content version: {ContentVersion}.",
+                snapshot.SchemaVersion, snapshot.ContentVersion);
+
             return snapshot;
         }
 
-        private static void Validate(ReferenceDataSnapshot snapshot)
+        private void Validate(ReferenceDataSnapshot snapshot)
         {
             if (snapshot.SchemaVersion != SnapshotVersions.SchemaVersion)
             {
+                _logger.LogCritical(
+                    "Unsupported reference data schema version. Expected {ExpectedVersion}, got {ActualVersion}.",
+                    SnapshotVersions.SchemaVersion, snapshot.SchemaVersion);
                 throw new InvalidOperationException(
                     $"Unsupported reference data schema version. " +
                     $"Expected {SnapshotVersions.SchemaVersion}, got {snapshot.SchemaVersion}.");
@@ -36,22 +46,25 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Runtime.Loaders
 
             if (string.IsNullOrWhiteSpace(snapshot.ContentVersion))
             {
+                _logger.LogCritical("Reference data content version is missing.");
                 throw new InvalidOperationException("Reference data content version is missing.");
             }
 
-            // Add these basic checks
             if (snapshot.DisasterDefinitions.Count == 0)
             {
+                _logger.LogCritical("No disaster definitions loaded.");
                 throw new InvalidOperationException("No disaster definitions loaded.");
             }
 
             if (snapshot.CharacterDefinitions.Count == 0)
             {
+                _logger.LogCritical("No character definitions loaded.");
                 throw new InvalidOperationException("No character definitions loaded.");
             }
 
             if (snapshot.LocationDefinitions.Count == 0)
             {
+                _logger.LogCritical("No location definitions loaded.");
                 throw new InvalidOperationException("No location definitions loaded.");
             }
         }
