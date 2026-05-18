@@ -52,12 +52,15 @@ From this folder:
 
 ## Configuration
 
+
 Current config keys:
 
 - azure-native:location
 - thunderbirds-azure-dev:baseName
 - thunderbirds-azure-dev:containerImage
 - thunderbirds-azure-dev:containerPort
+- thunderbirds-azure-dev:registryUsername (optional, for private registries)
+- thunderbirds-azure-dev:registryPassword (optional, for private registries; must be set as a Pulumi secret)
 
 Examples:
 
@@ -65,6 +68,14 @@ pulumi config set azure-native:location westeurope
 pulumi config set thunderbirds-azure-dev:baseName tbbge2
 pulumi config set thunderbirds-azure-dev:containerImage myregistry.azurecr.io/thunderbirds-api:1.0.0
 pulumi config set thunderbirds-azure-dev:containerPort 8080
+
+# For private container registries:
+pulumi config set thunderbirds-azure-dev:registryUsername <username>
+pulumi config set --secret thunderbirds-azure-dev:registryPassword <password>
+
+If you are using a public image, you do not need to set registryUsername or registryPassword.
+
+All CLI commands in this guide work in PowerShell as well as Bash.
 
 ## CI/CD readiness
 
