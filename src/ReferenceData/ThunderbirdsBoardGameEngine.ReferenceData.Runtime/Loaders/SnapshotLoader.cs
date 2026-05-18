@@ -32,7 +32,7 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Runtime.Loaders
         {
             if (snapshot.SchemaVersion != SnapshotVersions.SchemaVersion)
             {
-                _logger.LogError(
+                _logger.LogCritical(
                     "Unsupported reference data schema version. Expected {ExpectedVersion}, got {ActualVersion}.",
                     SnapshotVersions.SchemaVersion, snapshot.SchemaVersion);
                 throw new InvalidOperationException(
@@ -42,25 +42,25 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Runtime.Loaders
 
             if (string.IsNullOrWhiteSpace(snapshot.ContentVersion))
             {
-                _logger.LogError("Reference data content version is missing.");
+                _logger.LogCritical("Reference data content version is missing.");
                 throw new InvalidOperationException("Reference data content version is missing.");
             }
 
             if (snapshot.DisasterDefinitions.Count == 0)
             {
-                _logger.LogError("No disaster definitions loaded.");
+                _logger.LogCritical("No disaster definitions loaded.");
                 throw new InvalidOperationException("No disaster definitions loaded.");
             }
 
             if (snapshot.CharacterDefinitions.Count == 0)
             {
-                _logger.LogError("No character definitions loaded.");
+                _logger.LogCritical("No character definitions loaded.");
                 throw new InvalidOperationException("No character definitions loaded.");
             }
 
             if (snapshot.LocationDefinitions.Count == 0)
             {
-                _logger.LogError("No location definitions loaded.");
+                _logger.LogCritical("No location definitions loaded.");
                 throw new InvalidOperationException("No location definitions loaded.");
             }
         }
