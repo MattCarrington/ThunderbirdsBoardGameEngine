@@ -31,6 +31,24 @@ return await Deployment.RunAsync(() =>
         Tags = tags,
     });
 
+    // Build registries and secrets lists without nulls
+    var registries = new List<RegistryCredentialsArgs>();
+    var secrets = new List<SecretArgs>();
+    if (registryUsername != null && registryPassword != null)
+    {
+        registries.Add(new RegistryCredentialsArgs
+        {
+            Server = "ghcr.io",
+            Username = registryUsername,
+            PasswordSecretRef = "ghcr-password"
+        });
+        secrets.Add(new SecretArgs
+        {
+            Name = "ghcr-password",
+            Value = registryPassword
+        });
+    }
+
     var containerApp = new ContainerApp($"{baseName}-{stack}-app", new ContainerAppArgs
     {
         ResourceGroupName = resourceGroup.Name,
@@ -43,28 +61,8 @@ return await Deployment.RunAsync(() =>
                 TargetPort = containerPort,
                 Transport = IngressTransportMethod.Auto,
             },
-            Registries =
-            {
-                // Only add registry credentials if both are set
-                registryUsername != null && registryPassword != null
-                    ? new RegistryCredentialsArgs
-                    {
-                        Server = "ghcr.io",
-                        Username = registryUsername,
-                        PasswordSecretRef = "ghcr-password"
-                    }
-                    : null
-            },
-            Secrets =
-            {
-                registryPassword != null
-                    ? new SecretArgs
-                    {
-                        Name = "ghcr-password",
-                        Value = registryPassword
-                    }
-                    : null
-            },
+            Registries = registries,
+            Secrets = secrets,
         },
         Template = new TemplateArgs
         {
