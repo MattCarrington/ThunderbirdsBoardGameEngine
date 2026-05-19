@@ -23,6 +23,10 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+        working-directory: infra/Pulumi/AzureDev
     outputs:
       deployment_uri: ${{ steps.get-uri.outputs.deployment_uri }}
 
@@ -30,19 +34,23 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      - name: Azure Login
+        uses: azure/login@v2
+        with:
+          creds: ${{ secrets.azure_credentials }}
+
       - name: Set up Pulumi
         uses: pulumi/actions@v4
         with:
-          command: login
-        env:
-          PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
+          command: version
+
+      - name: Select Pulumi stack
+        run: pulumi stack select ${{ inputs.environment }}
 
       - name: Deploy to Azure
         run: |
           pulumi up --yes --stack ${{ inputs.environment }} \
             -c "image=${{ inputs.image_name }}:${{ inputs.image_tag }}"
-        env:
-          PULUMI_CONFIG_PASSPHRASE: ${{ secrets.PULUMI_CONFIG_PASSPHRASE }}
 
       - name: Get Deployment URI
         id: get-uri
