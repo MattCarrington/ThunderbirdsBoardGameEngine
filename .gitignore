@@ -340,6 +340,10 @@ OpenCover/
 # Azure Stream Analytics local run output
 ASALocalRun/
 
+# Pulumi IaC
+.pulumi/
+Pulumi.*.yaml
+
 # MSBuild Binary and Structured Log
 *.binlog
 
