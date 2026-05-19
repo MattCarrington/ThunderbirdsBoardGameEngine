@@ -12,6 +12,10 @@ on:
       push_latest:
         type: boolean
         default: false
+    outputs:
+      image_tag:
+        description: The tag of the published Docker image
+        value: ${{ inputs.version }}
     secrets:
       registry_token:
         required: false
@@ -70,3 +74,7 @@ jobs:
           if [ "${{ inputs.push_latest }}" = "true" ]; then
             docker push "$GHCR:latest"
           fi
+
+          echo "image_tag=$VERSION" >> $GITHUB_OUTPUT
+
+

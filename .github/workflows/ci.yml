@@ -144,3 +144,25 @@ jobs:
       package_id: ${{ matrix.package.package_id }}
     needs:
       - compute-version
+
+  deploy:
+    name: Deploy Application
+    uses: ./.github/workflows/deploy.yml
+    with:
+      image_name: *image_name
+      image_tag: ${{ needs.docker-publish-app.outputs.image_tag }}
+      environment: "dev"
+    secrets:
+      azure_credentials: ${{ secrets.azure_credentials }}
+    needs:
+      - docker-publish-app
+      - docker-publish-smoke
+
+  smoke-tests:
+    name: Run Smoke Tests
+    uses: ./.github/workflows/smoke-tests.yml
+    with:
+      deployment_uri: ${{ needs.deploy.outputs.deployment_uri }}
+      image_tag: ${{ needs.docker-publish-smoke.outputs.image_tag }}
+    needs:
+      - deploy
