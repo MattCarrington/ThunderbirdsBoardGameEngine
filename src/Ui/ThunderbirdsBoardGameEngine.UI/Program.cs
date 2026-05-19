@@ -16,14 +16,29 @@ namespace ThunderbirdsBoardGameEngine.UI
             builder.RootComponents.Add<App>("#app");
             builder.RootComponents.Add<HeadOutlet>("head::after");
 
-            var runtimeBaseAddress = builder.HostEnvironment.BaseAddress;
-            builder.Configuration.AddInMemoryCollection(
-                new Dictionary<string, string?>
-                {
-                    ["RulesClient:BaseAddress"] = runtimeBaseAddress,
-                });
-
             builder.Services.AddReferenceData();
+
+            var endpointMode = builder.Configuration["RulesClient:EndpointMode"] ?? "CoHosted";
+            if (endpointMode.Equals("CoHosted", StringComparison.OrdinalIgnoreCase))
+            {
+                // Co-hosted mode: UI and API share the same origin, so use runtime host origin.
+                builder.Configuration["RulesClient:BaseAddress"] = builder.HostEnvironment.BaseAddress;
+            }
+            else if (endpointMode.Equals("External", StringComparison.OrdinalIgnoreCase))
+            {
+                var configuredBaseAddress = builder.Configuration["RulesClient:BaseAddress"];
+                if (string.IsNullOrWhiteSpace(configuredBaseAddress))
+                {
+                    throw new InvalidOperationException(
+                        "RulesClient:BaseAddress must be configured when RulesClient:EndpointMode is set to External.");
+                }
+            }
+            else
+            {
+                throw new InvalidOperationException(
+                    $"Unsupported RulesClient:EndpointMode '{endpointMode}'. Supported values are CoHosted and External.");
+            }
+
             builder.Services.AddRulesClients(builder.Configuration);
 
             // Register service layer

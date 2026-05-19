@@ -2,6 +2,24 @@
 
 This folder contains a minimal Pulumi + .NET infrastructure project for learning IaC with Azure.
 
+## Architecture
+
+The deployed application is **co-hosted**: both the UI (Blazor WebAssembly) and API (ASP.NET Core) run in the same container.
+
+- The API is the main application (port 8080)
+- The UI is published and served as static files from the API's `wwwroot` folder
+- The UI endpoint selection is explicit via `RulesClient:EndpointMode`
+- When deployed, both components share the same public URL
+
+This means:
+- No CORS complications (same origin)
+- Single container to manage
+- Co-hosted mode uses runtime browser origin for API calls at deployment URL
+
+Rules client endpoint modes:
+- `CoHosted`: Uses browser origin at runtime (`builder.HostEnvironment.BaseAddress`). Best for same-container deployments.
+- `External`: Uses configured `RulesClient:BaseAddress`. Best for local development with separate API host.
+
 ## What it provisions
 
 - Azure Resource Group
@@ -52,17 +70,33 @@ From this folder:
 
 ## Configuration
 
+### Container Image
 
-Current config keys:
+The **containerImage** is the core of your deployment. It's a pre-built Docker image containing both the API and UI (as static files).
+
+Build and push your image before deploying:
+
+```bash
+docker build -t ghcr.io/mattcarrington/thunderbirds-app:sha-6fc39bc .
+docker push ghcr.io/mattcarrington/thunderbirds-app:sha-6fc39bc
+```
+
+Then configure Pulumi to use it:
+
+```bash
+pulumi config set thunderbirds-azure-dev:containerImage ghcr.io/mattcarrington/thunderbirds-app:sha-6fc39bc
+```
+
+### All Config Keys
 
 - azure-native:location
 - thunderbirds-azure-dev:baseName
-- thunderbirds-azure-dev:containerImage
-- thunderbirds-azure-dev:containerPort
+- thunderbirds-azure-dev:containerImage (required; Docker image containing API + UI)
+- thunderbirds-azure-dev:containerPort (default: 80)
 - thunderbirds-azure-dev:registryUsername (optional, for private registries)
 - thunderbirds-azure-dev:registryPassword (optional, for private registries; must be set as a Pulumi secret)
 
-Examples:
+### Examples
 
 pulumi config set azure-native:location westeurope
 pulumi config set thunderbirds-azure-dev:baseName tbbge2
@@ -76,6 +110,23 @@ pulumi config set --secret thunderbirds-azure-dev:registryPassword <password>
 If you are using a public image, you do not need to set registryUsername or registryPassword.
 
 All CLI commands in this guide work in PowerShell as well as Bash.
+
+## How the Co-Hosted Deployment Works
+
+When the app is deployed to Azure:
+
+1. The container starts and the API runs on port 8080
+2. The browser loads the UI from the API's `wwwroot` folder
+3. `RulesClient:EndpointMode` is `CoHosted`, so the UI resolves API base URL from the **browser's current origin**
+   - In Azure: `https://tbbge-dev-app96f32a3e--0000002.victorioussand-830bb169.uksouth.azurecontainerapps.io`
+4. The UI makes API calls to that same origin (no CORS needed)
+
+For local development with separately hosted API:
+
+- Set `RulesClient:EndpointMode` to `External`
+- Set `RulesClient:BaseAddress` to your local API URL (for example `https://localhost:8080/`)
+
+This endpoint policy is handled in `src/Ui/ThunderbirdsBoardGameEngine.UI/Program.cs` and makes deployment behavior explicit.
 
 ## CI/CD readiness
 
