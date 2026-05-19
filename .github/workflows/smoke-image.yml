@@ -1,0 +1,42 @@
+name: Smoke Image
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - tests/SmokeTests/**
+      
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  compute-version:
+    uses: ./.github/workflows/version.yml
+    with:
+      pr_title: ${{ github.event.head_commit.message || github.ref_name || 'chore smoke image' }}
+      tag_prefix: smoke/v
+        
+  docker-build-smoke:
+    uses: ./.github/workflows/build-docker.yml
+    with:
+      image_name: thunderbirds-smoke-tests
+      dockerfile_path: tests/SmokeTests/ThunderbirdsBoardGameEngine.SmokeTests/Dockerfile
+      docker_build_context: .
+
+  docker-publish-smoke:
+    if: needs.compute-version.outputs.release_type != 'none'
+    uses: ./.github/workflows/publish-docker.yml
+    with:
+      image_name: thunderbirds-smoke-tests
+      version: ${{ needs.compute-version.outputs.version }}
+      push_latest: ${{ github.ref == 'refs/heads/main' }}
+    secrets:
+      registry_token: ${{ secrets.GITHUB_TOKEN }}
+    needs:
+      - compute-version
+      - docker-build-smoke

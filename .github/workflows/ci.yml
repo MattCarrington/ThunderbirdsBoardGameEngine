@@ -41,16 +41,6 @@ jobs:
     needs:
       - static-analysis
 
-  docker-build-smoke:
-    if: github.event_name == 'push'
-    uses: ./.github/workflows/build-docker.yml
-    with:
-      image_name: *smoke_image_name
-      dockerfile_path: "tests/SmokeTests/ThunderbirdsBoardGameEngine.SmokeTests/Dockerfile"
-      docker_build_context: "."
-    needs:
-      - static-analysis
-
   tests:
     uses: ./.github/workflows/tests-dotnet.yml
     with:
@@ -103,19 +93,6 @@ jobs:
       - docker-build-app
       - compute-version
 
-  docker-publish-smoke:
-    if: github.event_name == 'push' && needs.compute-version.outputs.release_type != 'none'
-    uses: ./.github/workflows/publish-docker.yml
-    with:
-      image_name: *smoke_image_name
-      version: ${{ needs.compute-version.outputs.version }}
-      push_latest: ${{ github.ref == 'refs/heads/main' }}
-    secrets:
-      registry_token: ${{ secrets.GITHUB_TOKEN }}
-    needs:
-      - docker-build-smoke
-      - compute-version
-
   publish-packages:
     strategy:
       matrix:
@@ -156,13 +133,12 @@ jobs:
       azure_credentials: ${{ secrets.azure_credentials }}
     needs:
       - docker-publish-app
-      - docker-publish-smoke
 
   smoke-tests:
     name: Run Smoke Tests
     uses: ./.github/workflows/smoke-tests.yml
     with:
       deployment_uri: ${{ needs.deploy.outputs.deployment_uri }}
-      image_tag: ${{ needs.docker-publish-smoke.outputs.image_tag }}
+      image_tag: latest
     needs:
       - deploy
