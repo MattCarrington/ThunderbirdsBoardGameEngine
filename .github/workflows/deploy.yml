@@ -25,6 +25,12 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    env:
+      PULUMI_ACCESS_TOKEN: ${{ secrets.pulumi_access_token }}
+      ARM_CLIENT_ID: ${{ fromJson(secrets.azure_credentials).clientId }}
+      ARM_CLIENT_SECRET: ${{ fromJson(secrets.azure_credentials).clientSecret }}
+      ARM_SUBSCRIPTION_ID: ${{ fromJson(secrets.azure_credentials).subscriptionId }}
+      ARM_TENANT_ID: ${{ fromJson(secrets.azure_credentials).tenantId }}
     defaults:
       run:
         shell: bash
@@ -48,15 +54,11 @@ jobs:
 
       - name: Select Pulumi stack
         run: pulumi stack select ${{ inputs.environment }}
-        env:
-          PULUMI_ACCESS_TOKEN: ${{ secrets.pulumi_access_token }}
 
       - name: Deploy to Azure
         run: |
           pulumi up --yes --stack ${{ inputs.environment }} \
             -c "image=${{ inputs.image_name }}:${{ inputs.image_tag }}"
-        env:
-          PULUMI_ACCESS_TOKEN: ${{ secrets.pulumi_access_token }}
 
       - name: Get Deployment URI
         id: get-uri
@@ -64,5 +66,3 @@ jobs:
           # Fetch the deployment URI from Pulumi stack output
           DEPLOYMENT_URI=$(pulumi stack output deploymentUri)
           echo "deployment_uri=$DEPLOYMENT_URI" >> $GITHUB_OUTPUT
-        env:
-          PULUMI_ACCESS_TOKEN: ${{ secrets.pulumi_access_token }}
