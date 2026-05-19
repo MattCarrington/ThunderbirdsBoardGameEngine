@@ -77,6 +77,6 @@ jobs:
       - name: Get Deployment URI
         id: get-uri
         run: |
-          # Fetch the deployment URI from Pulumi stack output
-          DEPLOYMENT_URI=$(pulumi stack output deploymentUri)
+          # Fetch the deployment URI from Pulumi stack output.
+          DEPLOYMENT_URI=$(pulumi stack output applicationUrl)
           echo "deployment_uri=$DEPLOYMENT_URI" >> $GITHUB_OUTPUT
