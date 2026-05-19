@@ -21,7 +21,7 @@ namespace ThunderbirdsBoardGameEngine.UI
             var endpointMode = builder.Configuration["RulesClient:EndpointMode"] ?? "CoHosted";
             if (endpointMode.Equals("CoHosted", StringComparison.OrdinalIgnoreCase))
             {
-                // Co-hosted mode: UI and API share the same origin, so use runtime host origin.
+                // Co-hosted mode: UI and API share the same runtime base URI, so use the host base address (origin + any path base).
                 builder.Configuration["RulesClient:BaseAddress"] = builder.HostEnvironment.BaseAddress;
             }
             else if (endpointMode.Equals("External", StringComparison.OrdinalIgnoreCase))
