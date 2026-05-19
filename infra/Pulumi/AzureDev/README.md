@@ -91,10 +91,12 @@ pulumi config set thunderbirds-azure-dev:containerImage ghcr.io/mattcarrington/t
 
 - azure-native:location
 - thunderbirds-azure-dev:baseName
-- thunderbirds-azure-dev:containerImage (required; Docker image containing API + UI)
-- thunderbirds-azure-dev:containerPort (default: 80)
+- thunderbirds-azure-dev:containerImage (default: ghcr.io/mattcarrington/thunderbirds-app:latest)
+- thunderbirds-azure-dev:containerPort (default: 8080)
 - thunderbirds-azure-dev:registryUsername (optional, for private registries)
 - thunderbirds-azure-dev:registryPassword (optional, for private registries; must be set as a Pulumi secret)
+
+When using registry credentials, set both registryUsername and registryPassword together, and ensure containerImage includes an explicit registry server (for example `ghcr.io/...` or `myregistry.azurecr.io/...`). The Pulumi program derives the registry server from containerImage.
 
 ### Examples
 
