@@ -21,6 +21,8 @@ on:
         required: true
       pulumi_access_token:
         required: true
+      ghcr_pull_token:
+        required: false
 
 jobs:
   deploy:
@@ -31,6 +33,7 @@ jobs:
       ARM_CLIENT_SECRET: ${{ fromJson(secrets.azure_credentials).clientSecret }}
       ARM_SUBSCRIPTION_ID: ${{ fromJson(secrets.azure_credentials).subscriptionId }}
       ARM_TENANT_ID: ${{ fromJson(secrets.azure_credentials).tenantId }}
+      GHCR_PULL_TOKEN: ${{ secrets.ghcr_pull_token }}
     defaults:
       run:
         shell: bash
@@ -55,10 +58,21 @@ jobs:
       - name: Select Pulumi stack
         run: pulumi stack select ${{ inputs.environment }}
 
+      - name: Configure deployment image and optional registry credentials
+        run: |
+          OWNER="${GITHUB_REPOSITORY_OWNER,,}"
+          IMAGE="ghcr.io/$OWNER/${{ inputs.image_name }}:${{ inputs.image_tag }}"
+
+          pulumi config set --stack ${{ inputs.environment }} thunderbirds-azure-dev:containerImage "$IMAGE"
+
+          if [ -n "$GHCR_PULL_TOKEN" ]; then
+            pulumi config set --stack ${{ inputs.environment }} thunderbirds-azure-dev:registryUsername "$OWNER"
+            pulumi config set --secret --stack ${{ inputs.environment }} thunderbirds-azure-dev:registryPassword "$GHCR_PULL_TOKEN"
+          fi
+
       - name: Deploy to Azure
         run: |
-          pulumi up --yes --stack ${{ inputs.environment }} \
-            -c "image=${{ inputs.image_name }}:${{ inputs.image_tag }}"
+          pulumi up --yes --stack ${{ inputs.environment }}
 
       - name: Get Deployment URI
         id: get-uri
