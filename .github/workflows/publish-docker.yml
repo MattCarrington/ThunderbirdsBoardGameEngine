@@ -15,7 +15,7 @@ on:
     outputs:
       image_tag:
         description: The tag of the published Docker image
-        value: ${{ inputs.version }}
+        value: ${{ jobs.publish.outputs.image_tag }}
     secrets:
       registry_token:
         required: false
@@ -23,6 +23,8 @@ on:
 jobs:
   publish:
     runs-on: ubuntu-latest
+    outputs:
+      image_tag: ${{ steps.publish.outputs.image_tag }}
     
     steps:
       - uses: actions/checkout@v6
@@ -60,6 +62,7 @@ jobs:
           fi
 
       - name: Push Image
+        id: publish
         run: |
           IMAGE="${{ inputs.image_name }}"
           VERSION="${{ inputs.version }}"
