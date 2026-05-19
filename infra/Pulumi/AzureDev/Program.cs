@@ -10,11 +10,12 @@ return await Deployment.RunAsync(() =>
 
     var location = azureConfig.Get("location") ?? "uksouth";
     var baseName = projectConfig.Get("baseName") ?? "tbbge";
-    var containerImage = projectConfig.Get("containerImage") ?? "mcr.microsoft.com/azuredocs/containerapps-helloworld:latest";
-    var containerPort = projectConfig.GetInt32("containerPort") ?? 80;
+    var containerImage = projectConfig.Get("containerImage") ?? "ghcr.io/mattcarrington/thunderbirds-app:latest";
+    var containerPort = projectConfig.GetInt32("containerPort") ?? 8080;
     var registryUsername = projectConfig.Get("registryUsername");
     var registryPassword = projectConfig.GetSecret("registryPassword");
     var stack = Deployment.Instance.StackName;
+    const string registryPasswordSecretName = "registry-password";
 
     var tags = BuildTags(stack);
 
@@ -34,19 +35,27 @@ return await Deployment.RunAsync(() =>
     // Build registries and secrets lists without nulls
     var registries = new List<RegistryCredentialsArgs>();
     var secrets = new List<SecretArgs>();
-    if (registryUsername != null && registryPassword != null)
+    if (!string.IsNullOrWhiteSpace(registryUsername) && registryPassword != null)
     {
+        var registryServer = TryGetRegistryServer(containerImage) ?? throw new InvalidOperationException(
+            "When using registry credentials, thunderbirds-azure-dev:containerImage must include an explicit registry server (for example, ghcr.io/owner/image:tag or myregistry.azurecr.io/image:tag).");
+
         registries.Add(new RegistryCredentialsArgs
         {
-            Server = "ghcr.io",
+            Server = registryServer,
             Username = registryUsername,
-            PasswordSecretRef = "ghcr-password"
+            PasswordSecretRef = registryPasswordSecretName,
         });
         secrets.Add(new SecretArgs
         {
-            Name = "ghcr-password",
-            Value = registryPassword
+            Name = registryPasswordSecretName,
+            Value = registryPassword,
         });
+    }
+    else if (!string.IsNullOrWhiteSpace(registryUsername) || registryPassword != null)
+    {
+        throw new InvalidOperationException(
+            "Both thunderbirds-azure-dev:registryUsername and thunderbirds-azure-dev:registryPassword must be set together for private registry authentication.");
     }
 
     var containerApp = new ContainerApp($"{baseName}-{stack}-app", new ContainerAppArgs
@@ -107,4 +116,22 @@ static InputMap<string> BuildTags(string stackName)
         ["environment"] = stackName,
         ["managedBy"] = "Pulumi",
     };
+}
+
+static string? TryGetRegistryServer(string containerImage)
+{
+    if (string.IsNullOrWhiteSpace(containerImage))
+    {
+        return null;
+    }
+
+    var imageWithoutDigest = containerImage.Split('@', 2)[0];
+    var firstSegment = imageWithoutDigest.Split('/', 2)[0];
+
+    if (firstSegment.Contains('.') || firstSegment.Contains(':') || firstSegment.Equals("localhost", StringComparison.OrdinalIgnoreCase))
+    {
+        return firstSegment;
+    }
+
+    return null;
 }

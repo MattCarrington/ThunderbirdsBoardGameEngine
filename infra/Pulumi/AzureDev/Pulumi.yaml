@@ -6,6 +6,6 @@ config:
   thunderbirds-azure-dev:baseName:
     default: tbbge
   thunderbirds-azure-dev:containerImage:
-    default: mcr.microsoft.com/azuredocs/containerapps-helloworld:latest
+    default: ghcr.io/mattcarrington/thunderbirds-app:latest
   thunderbirds-azure-dev:containerPort:
-    default: 80
+    default: 8080
