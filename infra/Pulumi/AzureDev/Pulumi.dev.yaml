@@ -1,8 +1,0 @@
-config:
-  azure-native:location: uksouth
-  thunderbirds-azure-dev:baseName: tbbge
-  thunderbirds-azure-dev:containerImage: ghcr.io/mattcarrington/thunderbirds-app:sha-a5d3ecc
-  thunderbirds-azure-dev:containerPort: "8080"
-  thunderbirds-azure-dev:registryPassword:
-    secure: AAABADje/SBCY6822cNAsri4SlzPAv6C5UYcUNdx4Ugx6JmhvuKTuSpy+BpX5pjp6WW1+gVQ5HzEPu027JA+e59rULKS3dOZ
-  thunderbirds-azure-dev:registryUsername: MattCarrington
