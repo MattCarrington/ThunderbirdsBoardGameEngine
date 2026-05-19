@@ -19,6 +19,8 @@ on:
     secrets:
       azure_credentials:
         required: true
+      pulumi_access_token:
+        required: true
 
 jobs:
   deploy:
@@ -46,11 +48,15 @@ jobs:
 
       - name: Select Pulumi stack
         run: pulumi stack select ${{ inputs.environment }}
+        env:
+          PULUMI_ACCESS_TOKEN: ${{ secrets.pulumi_access_token }}
 
       - name: Deploy to Azure
         run: |
           pulumi up --yes --stack ${{ inputs.environment }} \
             -c "image=${{ inputs.image_name }}:${{ inputs.image_tag }}"
+        env:
+          PULUMI_ACCESS_TOKEN: ${{ secrets.pulumi_access_token }}
 
       - name: Get Deployment URI
         id: get-uri
@@ -58,3 +64,5 @@ jobs:
           # Fetch the deployment URI from Pulumi stack output
           DEPLOYMENT_URI=$(pulumi stack output deploymentUri)
           echo "deployment_uri=$DEPLOYMENT_URI" >> $GITHUB_OUTPUT
+        env:
+          PULUMI_ACCESS_TOKEN: ${{ secrets.pulumi_access_token }}

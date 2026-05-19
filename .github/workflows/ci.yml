@@ -129,8 +129,7 @@ jobs:
       image_name: *image_name
       image_tag: ${{ needs.docker-publish-app.outputs.image_tag }}
       environment: "dev"
-    secrets:
-      azure_credentials: ${{ secrets.azure_credentials }}
+    secrets: inherit
     needs:
       - docker-publish-app
 
