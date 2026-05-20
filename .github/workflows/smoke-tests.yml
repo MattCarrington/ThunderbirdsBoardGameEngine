@@ -17,6 +17,8 @@ on:
 jobs:
   smoke-tests:
     runs-on: ubuntu-latest
+    permissions:
+      packages: read
 
     steps:
       - name: Docker Login GHCR

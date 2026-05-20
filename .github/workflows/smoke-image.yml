@@ -43,6 +43,8 @@ jobs:
 
   tag-smoke:
     if: github.ref == 'refs/heads/main' && needs.compute-version.outputs.release_type != 'none'
+    permissions:
+      contents: write
     uses: ./.github/workflows/tag-repo.yml
     with:
       version: ${{ needs.compute-version.outputs.version }}

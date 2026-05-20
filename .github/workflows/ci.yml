@@ -137,6 +137,8 @@ jobs:
   smoke-tests:
     name: Run Smoke Tests
     if: github.ref == 'refs/heads/main'
+    permissions:
+      packages: read
     uses: ./.github/workflows/smoke-tests.yml
     with:
       deployment_uri: ${{ needs.deploy.outputs.deployment_uri }}
