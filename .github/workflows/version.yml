@@ -1,4 +1,4 @@
-name: Compute Server Version (reusable)
+name: Compute Version (reusable)
 
 on:
   workflow_call:
@@ -7,6 +7,11 @@ on:
         description: "The title of the pull request or commit message"
         required: true
         type: string
+      tag_prefix:
+        description: "Tag prefix to use when computing the version stream"
+        required: false
+        type: string
+        default: "server/v"
     outputs:
       version:
         description: "Calculated server version"
@@ -32,18 +37,20 @@ jobs:
         id: compute_version
         run: |
           PR_TITLE="${{ inputs.pr_title }}"
+          TAG_PREFIX="${{ inputs.tag_prefix }}"
 
           echo "PR Title: $PR_TITLE"
+          echo "Tag prefix: $TAG_PREFIX"
 
-          # Find last server tag
-          LAST_TAG=$(git tag --list 'server/v*' | sort -V | tail -n1)
+          # Find last tag in the configured stream.
+          LAST_TAG=$(git tag --list "${TAG_PREFIX}*" | sort -V | tail -n1)
 
           if [ -z "$LAST_TAG" ]; then
             LAST_VERSION="0.0.0"
             RANGE_ARG=""
             echo "No tag found, starting from 0.0.0"
           else
-            LAST_VERSION=${LAST_TAG#server/v}
+            LAST_VERSION=${LAST_TAG#${TAG_PREFIX}}
             RANGE_ARG="$LAST_TAG..HEAD"
             echo "Found last tag: $LAST_TAG"
           fi

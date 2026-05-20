@@ -1,0 +1,82 @@
+name: Deploy
+
+on:
+  workflow_call:
+    inputs:
+      image_name:
+        required: true
+        type: string
+      image_tag:
+        required: true
+        type: string
+      environment:
+        required: true
+        type: string
+    outputs:
+      deployment_uri:
+        description: The URI of the deployed application
+        value: ${{ jobs.deploy.outputs.deployment_uri }}
+    secrets:
+      azure_credentials:
+        required: true
+      pulumi_access_token:
+        required: true
+      ghcr_pull_token:
+        required: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      PULUMI_ACCESS_TOKEN: ${{ secrets.pulumi_access_token }}
+      ARM_CLIENT_ID: ${{ fromJson(secrets.azure_credentials).clientId }}
+      ARM_CLIENT_SECRET: ${{ fromJson(secrets.azure_credentials).clientSecret }}
+      ARM_SUBSCRIPTION_ID: ${{ fromJson(secrets.azure_credentials).subscriptionId }}
+      ARM_TENANT_ID: ${{ fromJson(secrets.azure_credentials).tenantId }}
+      GHCR_PULL_TOKEN: ${{ secrets.ghcr_pull_token }}
+    defaults:
+      run:
+        shell: bash
+        working-directory: infra/Pulumi/AzureDev
+    outputs:
+      deployment_uri: ${{ steps.get-uri.outputs.deployment_uri }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Azure Login
+        uses: azure/login@v2
+        with:
+          creds: ${{ secrets.azure_credentials }}
+
+      - name: Set up Pulumi CLI
+        uses: pulumi/actions@v7
+        with:
+          pulumi-version: 3.112.0
+
+      - name: Select Pulumi stack
+        run: pulumi stack select ${{ inputs.environment }}
+
+      - name: Configure deployment image and optional registry credentials
+        run: |
+          OWNER="${GITHUB_REPOSITORY_OWNER,,}"
+          IMAGE="ghcr.io/$OWNER/${{ inputs.image_name }}:${{ inputs.image_tag }}"
+
+          pulumi config set --stack ${{ inputs.environment }} thunderbirds-azure-dev:containerImage "$IMAGE"
+
+          if [ -n "$GHCR_PULL_TOKEN" ]; then
+            pulumi config set --stack ${{ inputs.environment }} thunderbirds-azure-dev:registryUsername "$OWNER"
+            pulumi config set --secret --stack ${{ inputs.environment }} thunderbirds-azure-dev:registryPassword "$GHCR_PULL_TOKEN"
+          fi
+
+      - name: Deploy to Azure
+        run: |
+          pulumi up --yes --stack ${{ inputs.environment }}
+
+      - name: Get Deployment URI
+        id: get-uri
+        run: |
+          # Fetch the deployment URI from Pulumi stack output.
+          DEPLOYMENT_URI=$(pulumi stack output applicationUrl)
+          echo "deployment_uri=$DEPLOYMENT_URI" >> $GITHUB_OUTPUT
