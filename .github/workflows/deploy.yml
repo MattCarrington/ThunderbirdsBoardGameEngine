@@ -51,9 +51,9 @@ jobs:
           creds: ${{ secrets.azure_credentials }}
 
       - name: Set up Pulumi CLI
-        run: |
-          curl -fsSL https://get.pulumi.com | sh
-          echo "$HOME/.pulumi/bin" >> "$GITHUB_PATH"
+        uses: pulumi/actions@v7
+        with:
+          pulumi-version: 3.112.0
 
       - name: Select Pulumi stack
         run: pulumi stack select ${{ inputs.environment }}
