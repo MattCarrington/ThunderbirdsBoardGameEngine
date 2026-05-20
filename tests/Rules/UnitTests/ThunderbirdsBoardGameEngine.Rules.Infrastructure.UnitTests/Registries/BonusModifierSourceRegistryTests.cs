@@ -1,4 +1,4 @@
-﻿using ThunderbirdsBoardGameEngine.PublishedLanguage.DisasterBonus;
+﻿using ThunderbirdsBoardGameEngine.ReferenceData.Identities;
 using ThunderbirdsBoardGameEngine.Rules.Domain.FabCards;
 using ThunderbirdsBoardGameEngine.Rules.Infrastructure.Registries;
 using Xunit;
