@@ -20,11 +20,12 @@ namespace ThunderbirdsBoardGameEngine.Rules.Infrastructure.UnitTests.Registries
             var cardCode = new CardCode(cardCodeString);
 
             // Act
-            var source = registry.GetBonusModifierSource(cardCode);
+            var source = registry.TryGetBonusModifierSource(cardCode, out var result);
 
             // Assert
-            Assert.NotNull(source);
-            Assert.IsType(expectedType, source);
+            Assert.True(source);
+            Assert.NotNull(result);
+            Assert.IsType(expectedType, result);
         }
 
         [Fact]
@@ -36,10 +37,11 @@ namespace ThunderbirdsBoardGameEngine.Rules.Infrastructure.UnitTests.Registries
             var cardCode = new CardCode("non-existent-card");
 
             // Act
-            var source = registry.GetBonusModifierSource(cardCode);
+            var source = registry.TryGetBonusModifierSource(cardCode, out var result);
 
             // Assert
-            Assert.Null(source);
+            Assert.False(source);
+            Assert.Null(result);
         }
     }
 }

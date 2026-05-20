@@ -15,9 +15,9 @@ namespace ThunderbirdsBoardGameEngine.Rules.Infrastructure.Registries
             [new CardCode("astronaut-spacewalk")] = new AstronautSpacewalk()
         };
 
-        public IBonusModifierSource? GetBonusModifierSource(CardCode cardCode)
+        public bool TryGetBonusModifierSource(CardCode cardCode, out IBonusModifierSource? source)
         {
-            return _registry.TryGetValue(cardCode, out var source) ? source : null;
+            return _registry.TryGetValue(cardCode, out source!);
         }
     }
 }

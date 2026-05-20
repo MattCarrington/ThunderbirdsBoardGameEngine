@@ -5,6 +5,6 @@ namespace ThunderbirdsBoardGameEngine.Rules.Application.Rescue.Interfaces
 {
     public interface IBonusModifierSourceRegistry
     {
-        IBonusModifierSource? GetBonusModifierSource(CardCode cardCode);
+        bool TryGetBonusModifierSource(CardCode cardCode, out IBonusModifierSource? source);
     }
 }
