@@ -137,12 +137,16 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Rescue
 
         private static IMediator CreateMediator()
         {
-            var source = CreateDisasterCatalog();
+            var disasters = CreateDisasterCatalog();
             var characters = CreateCharacterCatalog();
+            var fabCards = CreateFabCardsCatalog();
+            var eventCards = CreateEventCardsCatalog();
 
             var services = new ServiceCollection();
-            services.AddSingleton<IDisasterDefinitionCatalog>(source);
+            services.AddSingleton<IDisasterDefinitionCatalog>(disasters);
             services.AddSingleton<ICharacterDefinitionCatalog>(characters);
+            services.AddSingleton<IFabCardDefinitionCatalog>(fabCards);
+            services.AddSingleton<IEventCardDefinitionCatalog>(eventCards);
             services.AddRules();
 
             var sp = services.BuildServiceProvider();
@@ -237,6 +241,36 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Rescue
             );
 
             return new FakeCharacterDefinitionCatalog(scott, virgil, gordon);
+        }
+
+        private static FakeFabCardDefinitionCatalog CreateFabCardsCatalog()
+        {
+            var underwaterSealingUnit = new ReferenceFabCardDefinition(
+                code: new CardCode("underwater-sealing-unit"),
+                displayName: "Underwater Sealing Unit"
+            );
+
+            var jeffsOrders = new ReferenceFabCardDefinition(
+                code: new CardCode("jeffs-orders"),
+                displayName: "Jeff's Orders"
+            );
+
+            return new FakeFabCardDefinitionCatalog(underwaterSealingUnit, jeffsOrders);
+        }
+
+        private static FakeEventCardDefinitionCatalog CreateEventCardsCatalog()
+        {
+            var theHoodInterferes = new ReferenceEventCardDefinition(
+                code: new CardCode("the-hood-interferes"),
+                displayName: "The Hood Interferes"
+            );
+
+            var explosionOnTracyIsland = new ReferenceEventCardDefinition(
+                code: new CardCode("explosion-on-tracy-island"),
+                displayName: "Explosion on Tracy Island"
+            );
+
+            return new FakeEventCardDefinitionCatalog(theHoodInterferes, explosionOnTracyIsland);
         }
     }
 }
