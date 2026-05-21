@@ -2,7 +2,7 @@
 
 namespace ThunderbirdsBoardGameEngine.Rules.Application.Rescue.Interfaces
 {
-    public interface IReferenceEventCardCatalogLookup
+    public interface IEventCardCatalogLookup
     {
         bool Exists(CardCode cardCode);
     }

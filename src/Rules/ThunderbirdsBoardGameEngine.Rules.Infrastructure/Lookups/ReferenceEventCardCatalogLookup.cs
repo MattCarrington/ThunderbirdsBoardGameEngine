@@ -4,7 +4,7 @@ using ThunderbirdsBoardGameEngine.Rules.Application.Rescue.Interfaces;
 
 namespace ThunderbirdsBoardGameEngine.Rules.Infrastructure.Lookups
 {
-    internal sealed class ReferenceEventCardCatalogLookup : IReferenceEventCardCatalogLookup
+    internal sealed class ReferenceEventCardCatalogLookup : IEventCardCatalogLookup
     {
         private readonly IEventCardDefinitionCatalog _catalog;
 

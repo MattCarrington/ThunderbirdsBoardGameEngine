@@ -12,6 +12,8 @@ namespace ThunderbirdsBoardGameEngine.Rules.Application.UnitTests.Rescue.Calcula
     {
         private readonly IDisasterCatalogLookup _disasterContributionLookup;
         private readonly ICharacterCatalogLookup _characterContributionLookup;
+        private readonly IFabCardCatalogLookup _fabCardCatalogLookup;
+        private readonly IEventCardCatalogLookup _eventCardCatalogLookup;
         private readonly IBonusModifierSourceRegistry _bonusModifierSourceRegistry;
         private readonly RescueTargetCalculator _rescueTargetCalculator;
         private readonly CalculateRescueTargetResolutionService _sut;
@@ -20,11 +22,15 @@ namespace ThunderbirdsBoardGameEngine.Rules.Application.UnitTests.Rescue.Calcula
         {
             _disasterContributionLookup = Substitute.For<IDisasterCatalogLookup>();
             _characterContributionLookup = Substitute.For<ICharacterCatalogLookup>();
+            _fabCardCatalogLookup = Substitute.For<IFabCardCatalogLookup>();
+            _eventCardCatalogLookup = Substitute.For<IEventCardCatalogLookup>();
             _bonusModifierSourceRegistry = Substitute.For<IBonusModifierSourceRegistry>();
             _rescueTargetCalculator = new RescueTargetCalculator();
             _sut = new CalculateRescueTargetResolutionService(
                 _disasterContributionLookup,
                 _characterContributionLookup,
+                _fabCardCatalogLookup,
+                _eventCardCatalogLookup,
                 _bonusModifierSourceRegistry,
                 _rescueTargetCalculator);
         }

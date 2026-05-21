@@ -1,23 +1,30 @@
-﻿using ThunderbirdsBoardGameEngine.Rules.Application.Rescue.Interfaces;
+﻿using ThunderbirdsBoardGameEngine.Rules.Application.Rescue.Exceptions;
+using ThunderbirdsBoardGameEngine.Rules.Application.Rescue.Interfaces;
 using ThunderbirdsBoardGameEngine.Rules.Domain.Rescue;
 
 namespace ThunderbirdsBoardGameEngine.Rules.Application.Rescue.CalculateRescueTarget
 {
     public class CalculateRescueTargetResolutionService : ICalculateRescueTargetResolutionService
     {
-        private readonly IDisasterCatalogLookup _disasterContributionLookup;
-        private readonly ICharacterCatalogLookup _characterContributionLookup;
+        private readonly IDisasterCatalogLookup _disasterCatalogLookup;
+        private readonly ICharacterCatalogLookup _characterCatalogLookup;
+        private readonly IFabCardCatalogLookup _fabCardCatalogLookup;
+        private readonly IEventCardCatalogLookup _eventCardCatalogLookup;
         private readonly IBonusModifierSourceRegistry _bonusModifierSourceRegistry;
         private readonly RescueTargetCalculator _rescueTargetCalculator;
 
         public CalculateRescueTargetResolutionService(
-            IDisasterCatalogLookup disasterContributionLookup,
-            ICharacterCatalogLookup characterContributionLookup,
+            IDisasterCatalogLookup disasterCatalogLookup,
+            ICharacterCatalogLookup characterCatalogLookup,
+            IFabCardCatalogLookup fabCardCatalogLookup,
+            IEventCardCatalogLookup eventCardCatalogLookup,
             IBonusModifierSourceRegistry bonusModifierSourceRegistry,
             RescueTargetCalculator rescueTargetCalculator)
         {
-            _disasterContributionLookup = disasterContributionLookup ?? throw new ArgumentNullException(nameof(disasterContributionLookup));
-            _characterContributionLookup = characterContributionLookup ?? throw new ArgumentNullException(nameof(characterContributionLookup));
+            _disasterCatalogLookup = disasterCatalogLookup ?? throw new ArgumentNullException(nameof(disasterCatalogLookup));
+            _characterCatalogLookup = characterCatalogLookup ?? throw new ArgumentNullException(nameof(characterCatalogLookup));
+            _fabCardCatalogLookup = fabCardCatalogLookup ?? throw new ArgumentNullException(nameof(fabCardCatalogLookup));
+            _eventCardCatalogLookup = eventCardCatalogLookup ?? throw new ArgumentNullException(nameof(eventCardCatalogLookup));
             _bonusModifierSourceRegistry = bonusModifierSourceRegistry ?? throw new ArgumentNullException(nameof(bonusModifierSourceRegistry));
             _rescueTargetCalculator = rescueTargetCalculator ?? throw new ArgumentNullException(nameof(rescueTargetCalculator));
         }
@@ -25,9 +32,9 @@ namespace ThunderbirdsBoardGameEngine.Rules.Application.Rescue.CalculateRescueTa
         public RescueTargetResult ResolveRescueCalculationAsync(
             RescueCalculationRequest request)
         {
-            var disaster = _disasterContributionLookup.GetDisasterRescueContribution(request.DisasterCardCode);
+            var disaster = _disasterCatalogLookup.GetDisasterRescueContribution(request.DisasterCardCode);
 
-            var character = _characterContributionLookup.GetCharacterRescueContribution(request.PerformingCharacter);
+            var character = _characterCatalogLookup.GetCharacterRescueContribution(request.PerformingCharacter);
 
             var input = new RescueCalculationInput(request.PresentDisasterBonusKeys, disaster.RescueType);
 
@@ -36,6 +43,22 @@ namespace ThunderbirdsBoardGameEngine.Rules.Application.Rescue.CalculateRescueTa
                 disaster,
                 character
             };
+
+            foreach (var fabCard in request.PlayedFabCardCodes)
+            {
+                if (!_fabCardCatalogLookup.Exists(fabCard))
+                {
+                    throw new InvalidRescueCalculationRequestException("FAB Card", fabCard.ToString());
+                }
+            }
+
+            foreach (var eventCard in request.ActiveEventCardCodes)
+            {
+                if (!_eventCardCatalogLookup.Exists(eventCard))
+                {
+                    throw new InvalidRescueCalculationRequestException("Event Card", eventCard.ToString());
+                }
+            }
 
             var cardCodes = request.PlayedFabCardCodes.Concat(request.ActiveEventCardCodes);
 

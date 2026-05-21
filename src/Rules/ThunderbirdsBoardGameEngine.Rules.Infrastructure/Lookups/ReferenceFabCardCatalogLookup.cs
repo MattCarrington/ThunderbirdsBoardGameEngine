@@ -4,7 +4,7 @@ using ThunderbirdsBoardGameEngine.Rules.Application.Rescue.Interfaces;
 
 namespace ThunderbirdsBoardGameEngine.Rules.Infrastructure.Lookups
 {
-    internal sealed class ReferenceFabCardCatalogLookup : IReferenceFabCardCatalogLookup
+    internal sealed class ReferenceFabCardCatalogLookup : IFabCardCatalogLookup
     {
         private readonly IFabCardDefinitionCatalog _catalog;
 

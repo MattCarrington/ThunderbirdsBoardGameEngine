@@ -41,6 +41,8 @@ namespace ThunderbirdsBoardGameEngine.Rules.Infrastructure
             services.AddSingleton<ILocationDefinitionLookup, ReferenceLocationDefinitionLookup>();
             services.AddSingleton<IMapEdgeDefinitionLookup, ReferenceMapEdgeDefinitionLookup>();
             services.AddSingleton<IThunderbirdsDefinitionLookup, ReferenceThunderbirdsDefinitionLookup>();
+            services.AddSingleton<IFabCardCatalogLookup, ReferenceFabCardCatalogLookup>();
+            services.AddSingleton<IEventCardCatalogLookup, ReferenceEventCardCatalogLookup>();
             services.AddSingleton<IBonusModifierSourceRegistry, BonusModifierSourceRegistry>();
 
             return services;
