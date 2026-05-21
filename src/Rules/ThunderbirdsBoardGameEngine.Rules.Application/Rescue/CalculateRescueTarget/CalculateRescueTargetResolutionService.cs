@@ -5,14 +5,14 @@ namespace ThunderbirdsBoardGameEngine.Rules.Application.Rescue.CalculateRescueTa
 {
     public class CalculateRescueTargetResolutionService : ICalculateRescueTargetResolutionService
     {
-        private readonly IDisasterContributionLookup _disasterContributionLookup;
-        private readonly ICharacterContributionLookup _characterContributionLookup;
+        private readonly IDisasterCatalogLookup _disasterContributionLookup;
+        private readonly ICharacterCatalogLookup _characterContributionLookup;
         private readonly IBonusModifierSourceRegistry _bonusModifierSourceRegistry;
         private readonly RescueTargetCalculator _rescueTargetCalculator;
 
         public CalculateRescueTargetResolutionService(
-            IDisasterContributionLookup disasterContributionLookup,
-            ICharacterContributionLookup characterContributionLookup,
+            IDisasterCatalogLookup disasterContributionLookup,
+            ICharacterCatalogLookup characterContributionLookup,
             IBonusModifierSourceRegistry bonusModifierSourceRegistry,
             RescueTargetCalculator rescueTargetCalculator)
         {
@@ -25,9 +25,9 @@ namespace ThunderbirdsBoardGameEngine.Rules.Application.Rescue.CalculateRescueTa
         public RescueTargetResult ResolveRescueCalculationAsync(
             RescueCalculationRequest request)
         {
-            var disaster = _disasterContributionLookup.GetDisasterContribution(request.DisasterCardCode);
+            var disaster = _disasterContributionLookup.GetDisasterRescueContribution(request.DisasterCardCode);
 
-            var character = _characterContributionLookup.GetCharacterContribution(request.PerformingCharacter);
+            var character = _characterContributionLookup.GetCharacterRescueContribution(request.PerformingCharacter);
 
             var input = new RescueCalculationInput(request.PresentDisasterBonusKeys, disaster.RescueType);
 

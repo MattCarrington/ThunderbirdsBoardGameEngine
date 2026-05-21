@@ -11,10 +11,10 @@ using Xunit;
 
 namespace ThunderbirdsBoardGameEngine.Rules.Infrastructure.UnitTests.Lookups
 {
-    public class CatalogDisasterContributionLookupTests
+    public class CatalogDisasterCatalogLookupTests
     {
         [Fact]
-        public void GetRescueContext_WhenValidDisasterCard_ReturnsRescueContext()
+        public void GetDisasterRescueContribution_WhenValidDisasterCard_ReturnsRescueContext()
         {
             // Arrange
             var code = new CardCode("test-disaster-card");
@@ -41,10 +41,10 @@ namespace ThunderbirdsBoardGameEngine.Rules.Infrastructure.UnitTests.Lookups
             var catalog = Substitute.For<IDisasterDefinitionCatalog>();
             catalog.GetByCode(Arg.Any<CardCode>()).Returns(disaster);
 
-            var lookup = new ReferenceDataDisasterContributionLookup(catalog);
+            var lookup = new ReferenceDisasterCatalogLookup(catalog);
 
             // Act
-            var result = lookup.GetDisasterContribution(code);
+            var result = lookup.GetDisasterRescueContribution(code);
 
             // Assert
             Assert.NotNull(result);
@@ -64,7 +64,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Infrastructure.UnitTests.Lookups
         }
 
         [Fact]
-        public void GetRescueContext_WhenDisasterCardNotFound_ThrowsReferenceDataNotFoundException()
+        public void GetDisasterRescueContribution_WhenDisasterCardNotFound_ThrowsReferenceDataNotFoundException()
         {
             // Arrange
             var code = new CardCode("non-existent-disaster-card");
@@ -72,10 +72,10 @@ namespace ThunderbirdsBoardGameEngine.Rules.Infrastructure.UnitTests.Lookups
             var catalog = Substitute.For<IDisasterDefinitionCatalog>();
             catalog.GetByCode(Arg.Any<CardCode>()).Throws(new KeyNotFoundException());
 
-            var lookup = new ReferenceDataDisasterContributionLookup(catalog);
+            var lookup = new ReferenceDisasterCatalogLookup(catalog);
 
             // Act & Assert
-            var ex = Assert.Throws<ReferenceDataNotFoundException>(() => lookup.GetDisasterContribution(code));
+            var ex = Assert.Throws<ReferenceDataNotFoundException>(() => lookup.GetDisasterRescueContribution(code));
             Assert.Equal("Disaster", ex.ResourceType);
             Assert.Equal(code.ToString(), ex.Code);
         }

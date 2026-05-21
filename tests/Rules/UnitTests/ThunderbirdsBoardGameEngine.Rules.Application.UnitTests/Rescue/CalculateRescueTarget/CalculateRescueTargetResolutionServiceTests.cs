@@ -10,16 +10,16 @@ namespace ThunderbirdsBoardGameEngine.Rules.Application.UnitTests.Rescue.Calcula
 {
     public class CalculateRescueTargetResolutionServiceTests
     {
-        private readonly IDisasterContributionLookup _disasterContributionLookup;
-        private readonly ICharacterContributionLookup _characterContributionLookup;
+        private readonly IDisasterCatalogLookup _disasterContributionLookup;
+        private readonly ICharacterCatalogLookup _characterContributionLookup;
         private readonly IBonusModifierSourceRegistry _bonusModifierSourceRegistry;
         private readonly RescueTargetCalculator _rescueTargetCalculator;
         private readonly CalculateRescueTargetResolutionService _sut;
 
         public CalculateRescueTargetResolutionServiceTests()
         {
-            _disasterContributionLookup = Substitute.For<IDisasterContributionLookup>();
-            _characterContributionLookup = Substitute.For<ICharacterContributionLookup>();
+            _disasterContributionLookup = Substitute.For<IDisasterCatalogLookup>();
+            _characterContributionLookup = Substitute.For<ICharacterCatalogLookup>();
             _bonusModifierSourceRegistry = Substitute.For<IBonusModifierSourceRegistry>();
             _rescueTargetCalculator = new RescueTargetCalculator();
             _sut = new CalculateRescueTargetResolutionService(
@@ -55,8 +55,8 @@ namespace ThunderbirdsBoardGameEngine.Rules.Application.UnitTests.Rescue.Calcula
                 characterCode,
                 characterRescueBonusContribution: null);
 
-            _disasterContributionLookup.GetDisasterContribution(disasterCardCode).Returns(disasterContribution);
-            _characterContributionLookup.GetCharacterContribution(characterCode).Returns(characterContribution);
+            _disasterContributionLookup.GetDisasterRescueContribution(disasterCardCode).Returns(disasterContribution);
+            _characterContributionLookup.GetCharacterRescueContribution(characterCode).Returns(characterContribution);
 
             // Act
             var result = _sut.ResolveRescueCalculationAsync(request);
@@ -64,8 +64,8 @@ namespace ThunderbirdsBoardGameEngine.Rules.Application.UnitTests.Rescue.Calcula
             // Assert
             Assert.NotNull(result);
             Assert.Equal(10, result.TargetRoll);
-            _disasterContributionLookup.Received(1).GetDisasterContribution(disasterCardCode);
-            _characterContributionLookup.Received(1).GetCharacterContribution(characterCode);
+            _disasterContributionLookup.Received(1).GetDisasterRescueContribution(disasterCardCode);
+            _characterContributionLookup.Received(1).GetCharacterRescueContribution(characterCode);
         }
 
         [Fact]
@@ -98,8 +98,8 @@ namespace ThunderbirdsBoardGameEngine.Rules.Application.UnitTests.Rescue.Calcula
             var fabCardSource = Substitute.For<IRescueModifierSource>();
             fabCardSource.ApplyRescueModifier(Arg.Any<RescueCalculationInput>()).Returns(Array.Empty<AppliedRescueModifier>());
 
-            _disasterContributionLookup.GetDisasterContribution(disasterCardCode).Returns(disasterContribution);
-            _characterContributionLookup.GetCharacterContribution(characterCode).Returns(characterContribution);
+            _disasterContributionLookup.GetDisasterRescueContribution(disasterCardCode).Returns(disasterContribution);
+            _characterContributionLookup.GetCharacterRescueContribution(characterCode).Returns(characterContribution);
             _bonusModifierSourceRegistry.TryGetBonusModifierSource(fabCardCode, out Arg.Any<IRescueModifierSource>())
                 .Returns(x =>
                 {
@@ -149,8 +149,8 @@ namespace ThunderbirdsBoardGameEngine.Rules.Application.UnitTests.Rescue.Calcula
             var fabCardSource2 = Substitute.For<IRescueModifierSource>();
             fabCardSource2.ApplyRescueModifier(Arg.Any<RescueCalculationInput>()).Returns(Array.Empty<AppliedRescueModifier>());
 
-            _disasterContributionLookup.GetDisasterContribution(disasterCardCode).Returns(disasterContribution);
-            _characterContributionLookup.GetCharacterContribution(characterCode).Returns(characterContribution);
+            _disasterContributionLookup.GetDisasterRescueContribution(disasterCardCode).Returns(disasterContribution);
+            _characterContributionLookup.GetCharacterRescueContribution(characterCode).Returns(characterContribution);
             _bonusModifierSourceRegistry.TryGetBonusModifierSource(fabCardCode1, out Arg.Any<IRescueModifierSource>())
                 .Returns(x =>
                 {
@@ -200,8 +200,8 @@ namespace ThunderbirdsBoardGameEngine.Rules.Application.UnitTests.Rescue.Calcula
                 characterCode,
                 characterRescueBonusContribution: null);
 
-            _disasterContributionLookup.GetDisasterContribution(disasterCardCode).Returns(disasterContribution);
-            _characterContributionLookup.GetCharacterContribution(characterCode).Returns(characterContribution);
+            _disasterContributionLookup.GetDisasterRescueContribution(disasterCardCode).Returns(disasterContribution);
+            _characterContributionLookup.GetCharacterRescueContribution(characterCode).Returns(characterContribution);
             _bonusModifierSourceRegistry.TryGetBonusModifierSource(fabCardCode, out Arg.Any<IRescueModifierSource>())
                 .Returns(false);
 
@@ -245,8 +245,8 @@ namespace ThunderbirdsBoardGameEngine.Rules.Application.UnitTests.Rescue.Calcula
             var knownFabCardSource = Substitute.For<IRescueModifierSource>();
             knownFabCardSource.ApplyRescueModifier(Arg.Any<RescueCalculationInput>()).Returns(Array.Empty<AppliedRescueModifier>());
 
-            _disasterContributionLookup.GetDisasterContribution(disasterCardCode).Returns(disasterContribution);
-            _characterContributionLookup.GetCharacterContribution(characterCode).Returns(characterContribution);
+            _disasterContributionLookup.GetDisasterRescueContribution(disasterCardCode).Returns(disasterContribution);
+            _characterContributionLookup.GetCharacterRescueContribution(characterCode).Returns(characterContribution);
             _bonusModifierSourceRegistry.TryGetBonusModifierSource(knownFabCardCode, out Arg.Any<IRescueModifierSource>())
                 .Returns(x =>
                 {
@@ -295,8 +295,8 @@ namespace ThunderbirdsBoardGameEngine.Rules.Application.UnitTests.Rescue.Calcula
                 characterCode,
                 characterRescueBonusContribution: null);
 
-            _disasterContributionLookup.GetDisasterContribution(disasterCardCode).Returns(disasterContribution);
-            _characterContributionLookup.GetCharacterContribution(characterCode).Returns(characterContribution);
+            _disasterContributionLookup.GetDisasterRescueContribution(disasterCardCode).Returns(disasterContribution);
+            _characterContributionLookup.GetCharacterRescueContribution(characterCode).Returns(characterContribution);
 
             // Act
             var result = _sut.ResolveRescueCalculationAsync(request);
@@ -335,8 +335,8 @@ namespace ThunderbirdsBoardGameEngine.Rules.Application.UnitTests.Rescue.Calcula
                 characterCode,
                 characterRescueBonus);
 
-            _disasterContributionLookup.GetDisasterContribution(disasterCardCode).Returns(disasterContribution);
-            _characterContributionLookup.GetCharacterContribution(characterCode).Returns(characterContribution);
+            _disasterContributionLookup.GetDisasterRescueContribution(disasterCardCode).Returns(disasterContribution);
+            _characterContributionLookup.GetCharacterRescueContribution(characterCode).Returns(characterContribution);
 
             // Act
             var result = _sut.ResolveRescueCalculationAsync(request);
@@ -375,8 +375,8 @@ namespace ThunderbirdsBoardGameEngine.Rules.Application.UnitTests.Rescue.Calcula
                 characterCode,
                 characterRescueBonusAir);
 
-            _disasterContributionLookup.GetDisasterContribution(disasterCardCode).Returns(disasterContribution);
-            _characterContributionLookup.GetCharacterContribution(characterCode).Returns(characterContribution);
+            _disasterContributionLookup.GetDisasterRescueContribution(disasterCardCode).Returns(disasterContribution);
+            _characterContributionLookup.GetCharacterRescueContribution(characterCode).Returns(characterContribution);
 
             // Act
             var result = _sut.ResolveRescueCalculationAsync(request);
@@ -414,14 +414,14 @@ namespace ThunderbirdsBoardGameEngine.Rules.Application.UnitTests.Rescue.Calcula
                 characterCode,
                 characterRescueBonusContribution: null);
 
-            _disasterContributionLookup.GetDisasterContribution(disasterCardCode).Returns(disasterContribution);
-            _characterContributionLookup.GetCharacterContribution(characterCode).Returns(characterContribution);
+            _disasterContributionLookup.GetDisasterRescueContribution(disasterCardCode).Returns(disasterContribution);
+            _characterContributionLookup.GetCharacterRescueContribution(characterCode).Returns(characterContribution);
 
             // Act
             _sut.ResolveRescueCalculationAsync(request);
 
             // Assert
-            _disasterContributionLookup.Received(1).GetDisasterContribution(disasterCardCode);
+            _disasterContributionLookup.Received(1).GetDisasterRescueContribution(disasterCardCode);
         }
 
         [Fact]
@@ -450,14 +450,14 @@ namespace ThunderbirdsBoardGameEngine.Rules.Application.UnitTests.Rescue.Calcula
                 characterCode,
                 characterRescueBonusContribution: null);
 
-            _disasterContributionLookup.GetDisasterContribution(disasterCardCode).Returns(disasterContribution);
-            _characterContributionLookup.GetCharacterContribution(characterCode).Returns(characterContribution);
+            _disasterContributionLookup.GetDisasterRescueContribution(disasterCardCode).Returns(disasterContribution);
+            _characterContributionLookup.GetCharacterRescueContribution(characterCode).Returns(characterContribution);
 
             // Act
             _sut.ResolveRescueCalculationAsync(request);
 
             // Assert
-            _characterContributionLookup.Received(1).GetCharacterContribution(characterCode);
+            _characterContributionLookup.Received(1).GetCharacterRescueContribution(characterCode);
         }
 
         [Fact]
@@ -486,8 +486,8 @@ namespace ThunderbirdsBoardGameEngine.Rules.Application.UnitTests.Rescue.Calcula
                 characterCode,
                 characterRescueBonusContribution: null);
 
-            _disasterContributionLookup.GetDisasterContribution(disasterCardCode).Returns(disasterContribution);
-            _characterContributionLookup.GetCharacterContribution(characterCode).Returns(characterContribution);
+            _disasterContributionLookup.GetDisasterRescueContribution(disasterCardCode).Returns(disasterContribution);
+            _characterContributionLookup.GetCharacterRescueContribution(characterCode).Returns(characterContribution);
 
             // Act
             var result = _sut.ResolveRescueCalculationAsync(request);
@@ -526,8 +526,8 @@ namespace ThunderbirdsBoardGameEngine.Rules.Application.UnitTests.Rescue.Calcula
                 characterCode,
                 characterRescueBonusContribution: null);
 
-            _disasterContributionLookup.GetDisasterContribution(disasterCardCode).Returns(disasterContribution);
-            _characterContributionLookup.GetCharacterContribution(characterCode).Returns(characterContribution);
+            _disasterContributionLookup.GetDisasterRescueContribution(disasterCardCode).Returns(disasterContribution);
+            _characterContributionLookup.GetCharacterRescueContribution(characterCode).Returns(characterContribution);
             _bonusModifierSourceRegistry.TryGetBonusModifierSource(Arg.Any<CardCode>(), out Arg.Any<IRescueModifierSource>())
                 .Returns(false);
 

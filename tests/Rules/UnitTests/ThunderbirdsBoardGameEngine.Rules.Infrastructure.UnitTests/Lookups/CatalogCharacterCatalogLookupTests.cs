@@ -10,10 +10,10 @@ using Xunit;
 
 namespace ThunderbirdsBoardGameEngine.Rules.Infrastructure.UnitTests.Lookups
 {
-    public class CatalogCharacterContributionLookupTests
+    public class CatalogCharacterCatalogLookupTests
     {
         [Fact]
-        public void GetCharacterContribution_WhenCharacterIsValid_ReturnsCharacterContribution()
+        public void GetCharacterRescueContribution_WhenCharacterIsValid_ReturnsCharacterContribution()
         {
             // Arrange
             var code = new CharacterCode("gordon");
@@ -27,7 +27,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Infrastructure.UnitTests.Lookups
             var lookup = CreateLookup(character);
 
             // Act
-            var result = lookup.GetCharacterContribution(code);
+            var result = lookup.GetCharacterRescueContribution(code);
 
             // Assert
             Assert.NotNull(result);
@@ -38,7 +38,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Infrastructure.UnitTests.Lookups
         }
 
         [Fact]
-        public void GetCharacterContribution_WhenCharacterHasNoRescueBonus_ReturnsCharacterContributionWithNullRescueBonus()
+        public void GetCharacterRescueContribution_WhenCharacterHasNoRescueBonus_ReturnsCharacterContributionWithNullRescueBonus()
         {
             // Arrange
             var code = new CharacterCode("lady_penelope");
@@ -48,7 +48,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Infrastructure.UnitTests.Lookups
             var lookup = CreateLookup(character);
 
             // Act
-            var result = lookup.GetCharacterContribution(code);
+            var result = lookup.GetCharacterRescueContribution(code);
 
             // Assert
             Assert.NotNull(result);
@@ -57,7 +57,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Infrastructure.UnitTests.Lookups
         }
 
         [Fact]
-        public void GetCharacterContribution_WhenCharacterIsNotFound_ThrowsReferenceDataNotFoundException()
+        public void GetCharacterRescueContribution_WhenCharacterIsNotFound_ThrowsReferenceDataNotFoundException()
         {
             // Arrange
             var code = new CharacterCode("unknown_character");
@@ -65,20 +65,20 @@ namespace ThunderbirdsBoardGameEngine.Rules.Infrastructure.UnitTests.Lookups
             var catalog = Substitute.For<ICharacterDefinitionCatalog>();
             catalog.GetByCode(Arg.Any<CharacterCode>()).Throws(new KeyNotFoundException());
 
-            var lookup = new ReferenceCharacterContributionLookup(catalog);
+            var lookup = new ReferenceCharacterCatalogLookup(catalog);
 
             // Act & Assert
-            var ex = Assert.Throws<ReferenceDataNotFoundException>(() => lookup.GetCharacterContribution(code));
+            var ex = Assert.Throws<ReferenceDataNotFoundException>(() => lookup.GetCharacterRescueContribution(code));
             Assert.Equal("Character", ex.ResourceType);
             Assert.Equal(code.ToString(), ex.Code);
         }
 
-        private static ReferenceCharacterContributionLookup CreateLookup(ReferenceCharacterDefinition characterDefinition)
+        private static ReferenceCharacterCatalogLookup CreateLookup(ReferenceCharacterDefinition characterDefinition)
         {
             var catalog = Substitute.For<ICharacterDefinitionCatalog>();
             catalog.GetByCode(Arg.Any<CharacterCode>()).Returns(characterDefinition);
 
-            return new ReferenceCharacterContributionLookup(catalog);
+            return new ReferenceCharacterCatalogLookup(catalog);
         }
     }
 }

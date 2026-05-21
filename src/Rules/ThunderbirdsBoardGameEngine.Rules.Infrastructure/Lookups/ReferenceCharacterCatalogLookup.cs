@@ -6,16 +6,16 @@ using ThunderbirdsBoardGameEngine.Rules.Domain.Rescue;
 
 namespace ThunderbirdsBoardGameEngine.Rules.Infrastructure.Lookups
 {
-    internal sealed class ReferenceCharacterContributionLookup : ICharacterContributionLookup
+    internal sealed class ReferenceCharacterCatalogLookup : ICharacterCatalogLookup
     {
         private readonly ICharacterDefinitionCatalog _characterDefinitionCatalog;
 
-        public ReferenceCharacterContributionLookup(ICharacterDefinitionCatalog characterDefinitionCatalog)
+        public ReferenceCharacterCatalogLookup(ICharacterDefinitionCatalog characterDefinitionCatalog)
         {
             _characterDefinitionCatalog = characterDefinitionCatalog ?? throw new ArgumentNullException(nameof(characterDefinitionCatalog));
         }
 
-        public CharacterContribution GetCharacterContribution(CharacterCode characterCode)
+        public CharacterContribution GetCharacterRescueContribution(CharacterCode characterCode)
         {
             try
             {
