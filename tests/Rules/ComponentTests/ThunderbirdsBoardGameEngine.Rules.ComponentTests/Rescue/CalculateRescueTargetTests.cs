@@ -5,7 +5,9 @@ using ThunderbirdsBoardGameEngine.ReferenceData.Identities;
 using ThunderbirdsBoardGameEngine.ReferenceData.Model;
 using ThunderbirdsBoardGameEngine.ReferenceData.Runtime.Interfaces;
 using ThunderbirdsBoardGameEngine.Rules.Application.Rescue.CalculateRescueTarget;
+using ThunderbirdsBoardGameEngine.Rules.Application.Rescue.Exceptions;
 using ThunderbirdsBoardGameEngine.Rules.ComponentTests.Fakes;
+using ThunderbirdsBoardGameEngine.Rules.Domain.Rescue;
 using ThunderbirdsBoardGameEngine.Rules.Infrastructure;
 using Xunit;
 
@@ -84,17 +86,82 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Rescue
             );
 
             var mediator = CreateMediator();
+
             // Act
             var result = await mediator.Send(request, CancellationToken.None);
+
             // Assert
             Assert.Equal(9, result.TargetNumber);
             Assert.Equal(2, result.TotalBonus);
-            Assert.Single(result.AppliedBonuses);
-            Assert.Contains(result.AppliedBonuses, b => b.Key == "virgil" && b.Value == 2);
+
+            var modifier = Assert.Single(result.AppliedBonuses);
+            Assert.Equal("virgil", modifier.Key);
+            Assert.Equal(2, modifier.Value);
         }
 
         [Fact]
-        public async Task RescueTargetAccountsAllBonuses()
+        public async Task RescueTargetAccountsForFabCardBonuses()
+        {
+            // Arrange
+            var request = new CalculateRescueTargetQuery
+            (
+                DisasterCardCode: new CardCode("terror-in-new-york-city"),
+                PerformingCharacter: new CharacterCode("scott"),
+                PresentDisasterBonusKeys: [],
+                PlayedFabCardCodes:
+                [
+                    new CardCode("underwater-sealing-unit")
+                ],
+                ActiveEventCardCodes: []
+            );
+
+            var mediator = CreateMediator();
+
+            // Act
+            var result = await mediator.Send(request, CancellationToken.None);
+
+            // Assert
+            Assert.Equal(8, result.TargetNumber);
+            Assert.Equal(3, result.TotalBonus);
+
+            var modifier = Assert.Single(result.AppliedBonuses);
+            Assert.Equal("underwater-sealing-unit", modifier.Key);
+            Assert.Equal(3, modifier.Value);
+            Assert.Equal(SourceType.FabCard, modifier.SourceType);
+        }
+
+        [Fact]
+        public async Task RescueTargetAccountsForEventCardBonuses()
+        {
+            // Arrange
+            var request = new CalculateRescueTargetQuery
+            (
+                DisasterCardCode: new CardCode("pit-of-peril"),
+                PerformingCharacter: new CharacterCode("gordon"),
+                PresentDisasterBonusKeys: [],
+                PlayedFabCardCodes: [],
+                ActiveEventCardCodes:
+                [
+                    new CardCode("the-hood-interferes")
+                ]
+            );
+
+            var mediator = CreateMediator();
+
+            // Act
+            var result = await mediator.Send(request, CancellationToken.None);
+
+            // Assert
+            Assert.Equal(13, result.TargetNumber);
+            Assert.Equal(-2, result.TotalBonus);
+
+            var modifier = Assert.Single(result.AppliedBonuses);
+            Assert.Equal("the-hood-interferes", modifier.Key);
+            Assert.Equal(-2, modifier.Value);
+        }
+
+        [Fact]
+        public async Task RescueTargetAccountsAllPossibleBonuses()
 
         {
             // Arrange
@@ -133,6 +200,79 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Rescue
             Assert.Contains(result.AppliedBonuses, b => b.Key == "gordon" && b.Value == 3);
             Assert.Contains(result.AppliedBonuses, b => b.Key == "underwater-sealing-unit" && b.Value == 3);
             Assert.Contains(result.AppliedBonuses, b => b.Key == "the-hood-interferes" && b.Value == -2);
+        }
+
+        [Fact]
+        public async Task ThrowsInvalidRescueCalculationRequestExceptionWhenInvalidFabCard()
+        {
+            // Arrange
+            var request = new CalculateRescueTargetQuery
+            (
+                DisasterCardCode: new CardCode("terror-in-new-york-city"),
+                PerformingCharacter: new CharacterCode("gordon"),
+                PresentDisasterBonusKeys: [],
+                PlayedFabCardCodes:
+                [
+                    new CardCode("invalid-card")
+                ],
+                ActiveEventCardCodes: []
+            );
+
+            var mediator = CreateMediator();
+
+            // Act & Assert
+            await Assert.ThrowsAsync<InvalidRescueCalculationRequestException>(() => mediator.Send(request, CancellationToken.None));
+        }
+
+        [Fact]
+        public async Task ThrowsInvalidRescueCalculationRequestExceptionWhenInvalidEventCard()
+        {
+            // Arrange
+            var request = new CalculateRescueTargetQuery
+            (
+                DisasterCardCode: new CardCode("terror-in-new-york-city"),
+                PerformingCharacter: new CharacterCode("gordon"),
+                PresentDisasterBonusKeys: [],
+                PlayedFabCardCodes: [],
+                ActiveEventCardCodes:
+                [
+                    new CardCode("invalid-card")
+                ]
+            );
+
+            var mediator = CreateMediator();
+
+            // Act & Assert
+            await Assert.ThrowsAsync<InvalidRescueCalculationRequestException>(() => mediator.Send(request, CancellationToken.None));
+        }
+
+        [Fact]
+        public async Task RescueTargetIgnoresValidCardNotInRegistry()
+        {
+            var request = new CalculateRescueTargetQuery
+            (
+                DisasterCardCode: new CardCode("terror-in-new-york-city"),
+                PerformingCharacter: new CharacterCode("virgil"),
+                PresentDisasterBonusKeys: [],
+                PlayedFabCardCodes:
+                [
+                    new CardCode("jeffs-orders")
+                ],
+                ActiveEventCardCodes:
+                [
+                    new CardCode("explosion-on-tracy-island")
+                ]
+            );
+
+            var mediator = CreateMediator();
+
+            // Act
+            var result = await mediator.Send(request, CancellationToken.None);
+
+            // Assert
+            Assert.Equal(11, result.TargetNumber);
+            Assert.Equal(0, result.TotalBonus);
+            Assert.Empty(result.AppliedBonuses);
         }
 
         private static IMediator CreateMediator()
