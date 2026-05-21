@@ -7,6 +7,7 @@ using ThunderbirdsBoardGameEngine.Rules.Application.Rescue.Interfaces;
 using ThunderbirdsBoardGameEngine.Rules.Domain.Movement;
 using ThunderbirdsBoardGameEngine.Rules.Domain.Rescue;
 using ThunderbirdsBoardGameEngine.Rules.Infrastructure.Lookups;
+using ThunderbirdsBoardGameEngine.Rules.Infrastructure.Registries;
 
 namespace ThunderbirdsBoardGameEngine.Rules.Infrastructure
 {
@@ -39,6 +40,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Infrastructure
             services.AddSingleton<ILocationDefinitionLookup, ReferenceLocationDefinitionLookup>();
             services.AddSingleton<IMapEdgeDefinitionLookup, ReferenceMapEdgeDefinitionLookup>();
             services.AddSingleton<IThunderbirdsDefinitionLookup, ReferenceThunderbirdsDefinitionLookup>();
+            services.AddSingleton<IBonusModifierSourceRegistry, BonusModifierSourceRegistry>();
 
             return services;
         }

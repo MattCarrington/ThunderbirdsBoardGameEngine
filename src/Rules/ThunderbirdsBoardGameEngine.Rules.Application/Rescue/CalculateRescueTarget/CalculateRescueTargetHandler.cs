@@ -19,15 +19,18 @@ namespace ThunderbirdsBoardGameEngine.Rules.Application.Rescue.CalculateRescueTa
     {
         private readonly IDisasterContributionLookup _disasterContributionLookup;
         private readonly ICharacterContributionLookup _characterContributionLookup;
+        private readonly IBonusModifierSourceRegistry _bonusModifierSourceRegistry;
         private readonly RescueTargetCalculator _rescueTargetCalculator;
 
         public CalculateRescueTargetHandler(
             IDisasterContributionLookup disasterContributionLookup,
             ICharacterContributionLookup characterContributionLookup,
+            IBonusModifierSourceRegistry bonusModifierSourceRegistry,
             RescueTargetCalculator rescueTargetCalculator)
         {
             _disasterContributionLookup = disasterContributionLookup ?? throw new ArgumentNullException(nameof(disasterContributionLookup));
             _characterContributionLookup = characterContributionLookup ?? throw new ArgumentNullException(nameof(characterContributionLookup));
+            _bonusModifierSourceRegistry = bonusModifierSourceRegistry ?? throw new ArgumentNullException(nameof(bonusModifierSourceRegistry));
             _rescueTargetCalculator = rescueTargetCalculator ?? throw new ArgumentNullException(nameof(rescueTargetCalculator));
         }
 
@@ -44,6 +47,14 @@ namespace ThunderbirdsBoardGameEngine.Rules.Application.Rescue.CalculateRescueTa
                 disaster,
                 character
             };
+
+            foreach (var fabCardCode in query.PlayedFabCardCodes)
+            {
+                if (_bonusModifierSourceRegistry.TryGetBonusModifierSource(fabCardCode, out var fabCard))
+                {
+                    sources.Add(fabCard);
+                }
+            }
 
             var calculatedTarget = _rescueTargetCalculator.CalculateRescueTarget(disaster.DifficultyNumber, input, sources);
 

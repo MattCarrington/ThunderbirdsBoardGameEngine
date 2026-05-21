@@ -21,7 +21,8 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Rescue
             (
                 DisasterCardCode: new CardCode("pit-of-peril"),
                 PerformingCharacter: new CharacterCode("scott"),
-                PresentDisasterBonusKeys: []
+                PresentDisasterBonusKeys: [],
+                PlayedFabCardCodes: []
             );
 
             var mediator = CreateMediator();
@@ -47,7 +48,8 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Rescue
                 [
                     new DisasterBonusKey("scott"),
                     new DisasterBonusKey("transmitter-truck")
-                ]
+                ],
+                PlayedFabCardCodes: []
             );
 
             var mediator = CreateMediator();
@@ -74,7 +76,8 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Rescue
                 PresentDisasterBonusKeys:
                 [
                     new DisasterBonusKey("gordon")
-                ]
+                ],
+                PlayedFabCardCodes: []
             );
 
             var mediator = CreateMediator();
@@ -101,6 +104,10 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Rescue
                     new DisasterBonusKey("thunderbird-4"),
                     new DisasterBonusKey("virgil"),
                     new DisasterBonusKey("firefly")
+                ],
+                PlayedFabCardCodes:
+                [
+                    new CardCode("underwater-sealing-unit")
                 ]
             );
 
@@ -110,13 +117,14 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Rescue
             var result = await mediator.Send(request, CancellationToken.None);
 
             // Assert
-            Assert.Equal(1, result.TargetNumber);
-            Assert.Equal(10, result.TotalBonus);
-            Assert.Equal(4, result.AppliedBonuses.Count);
+            Assert.Equal(-2, result.TargetNumber);
+            Assert.Equal(13, result.TotalBonus);
+            Assert.Equal(5, result.AppliedBonuses.Count);
             Assert.Contains(result.AppliedBonuses, b => b.Key == "thunderbird-4" && b.Value == 2);
             Assert.Contains(result.AppliedBonuses, b => b.Key == "virgil" && b.Value == 2);
             Assert.Contains(result.AppliedBonuses, b => b.Key == "firefly" && b.Value == 3);
             Assert.Contains(result.AppliedBonuses, b => b.Key == "gordon" && b.Value == 3);
+            Assert.Contains(result.AppliedBonuses, b => b.Key == "underwater-sealing-unit" && b.Value == 3);
         }
 
         private static IMediator CreateMediator()
