@@ -56,7 +56,9 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Compilation
                 CharacterDefinitions: characterDefinitions,
                 ThunderbirdDefinitions: thunderbirdDefinitions,
                 PodVehicleDefinitions: podVehicleDefinitions,
-                MapEdgeDefinitions: mapEdgeDefinitions
+                MapEdgeDefinitions: mapEdgeDefinitions,
+                FabCardDefinitions: [],  // TODO: Implement fab card definitions when fab cards are added to the source data model
+                EventCardDefinitions: []  // TODO: Implement event card definitions when event cards are added to the source data model
             );
         }
 

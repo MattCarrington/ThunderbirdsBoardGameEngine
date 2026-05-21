@@ -208,6 +208,8 @@ public sealed class ReferenceDataSnapshotBuilder
             CharacterDefinitions: _characters,
             ThunderbirdDefinitions: _thunderbirds,
             PodVehicleDefinitions: _podVehicles,
-            MapEdgeDefinitions: _mapEdges);
+            MapEdgeDefinitions: _mapEdges,
+            FabCardDefinitions: [], // TODO: Add fab card builder methods if needed in tests
+            EventCardDefinitions: []);  // TODO: Add event card builder methods if needed in tests
     }
 }
