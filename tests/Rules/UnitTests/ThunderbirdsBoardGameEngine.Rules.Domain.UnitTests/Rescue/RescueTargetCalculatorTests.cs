@@ -68,7 +68,8 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.Rescue
             {
                 new FakeSource() // emits empty
             };
-            RescueCalculationInput input = CreateInput();
+
+            var input = CreateInput();
 
             // Act
             var result = calculator.CalculateRescueTarget(
@@ -76,8 +77,33 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.Rescue
                 input: input,
                 sources: sources);
 
+            // Assert
             Assert.Equal(10, result.TargetRoll);
             Assert.Equal(0, result.TotalBonus);
+        }
+
+        [Fact]
+        public void CalculateRescueTarget_WhenSourcesReduceTargetBelowZero_ReturnsZeroAsMinimum()
+        {
+            // Arrange
+            var calculator = new RescueTargetCalculator();
+
+            var sources = new[]
+            {
+                new FakeSource(5, 6) // total bonus of 11
+            };
+
+            var input = CreateInput();
+
+            // Act
+            var result = calculator.CalculateRescueTarget(
+                difficultyNumber: 10,
+                input: input,
+                sources: sources);
+
+            // Assert
+            Assert.Equal(0, result.TargetRoll); // target cannot be negative
+            Assert.Equal(11, result.TotalBonus);
         }
 
         private static RescueCalculationInput CreateInput()

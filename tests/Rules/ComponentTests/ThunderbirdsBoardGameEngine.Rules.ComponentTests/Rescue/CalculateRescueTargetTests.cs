@@ -117,7 +117,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Rescue
             var result = await mediator.Send(request, CancellationToken.None);
 
             // Assert
-            Assert.Equal(-2, result.TargetNumber);
+            Assert.Equal(0, result.TargetNumber);
             Assert.Equal(13, result.TotalBonus);
             Assert.Equal(5, result.AppliedBonuses.Count);
             Assert.Contains(result.AppliedBonuses, b => b.Key == "thunderbird-4" && b.Value == 2);

@@ -30,7 +30,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.Rescue
 
             return new RescueTargetResult
             {
-                TargetRoll = difficultyNumber - bonus,
+                TargetRoll = Math.Max(0, difficultyNumber - bonus),
                 TotalBonus = bonus,
                 AppliedBonuses = appliedBonuses
             };
