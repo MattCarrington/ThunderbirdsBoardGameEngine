@@ -37,19 +37,13 @@ namespace ThunderbirdsBoardGameEngine.Rules.Application.Rescue.CalculateRescueTa
                 character
             };
 
-            foreach (var fabCardCode in request.PlayedFabCardCodes)
-            {
-                if (_bonusModifierSourceRegistry.TryGetBonusModifierSource(fabCardCode, out var fabCard))
-                {
-                    sources.Add(fabCard);
-                }
-            }
+            var cardCodes = request.PlayedFabCardCodes.Concat(request.ActiveEventCardCodes);
 
-            foreach (var eventCardCode in request.ActiveEventCardCodes)
+            foreach (var cardCode in cardCodes)
             {
-                if (_bonusModifierSourceRegistry.TryGetBonusModifierSource(eventCardCode, out var eventCard))
+                if (_bonusModifierSourceRegistry.TryGetBonusModifierSource(cardCode, out var source))
                 {
-                    sources.Add(eventCard);
+                    sources.Add(source);
                 }
             }
 
