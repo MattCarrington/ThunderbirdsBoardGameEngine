@@ -35,6 +35,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Infrastructure
             services.AddSingleton<MovementEvaluator>();
             services.AddSingleton<ActionPointCalculator>();
 
+            services.AddSingleton<ICalculateRescueTargetResolutionService, CalculateRescueTargetResolutionService>();
             services.AddSingleton<IDisasterContributionLookup, ReferenceDataDisasterContributionLookup>();
             services.AddSingleton<ICharacterContributionLookup, ReferenceCharacterContributionLookup>();
             services.AddSingleton<ILocationDefinitionLookup, ReferenceLocationDefinitionLookup>();
