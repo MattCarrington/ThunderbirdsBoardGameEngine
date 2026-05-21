@@ -25,7 +25,8 @@ namespace ThunderbirdsBoardGameEngine.Api.Mappers.Rules.V1
                 DisasterCardCode: new CardCode(disasterCardCode),
                 PerformingCharacter: new CharacterCode(request.PerformingCharacterKey),
                 PresentDisasterBonusKeys: request.PresentDisasterBonusKeys.Select(k => new DisasterBonusKey(k)).ToList(),
-                PlayedFabCardCodes: Array.Empty<CardCode>() // TODO: this will be populated elsewhere or is not needed for this mapping
+                PlayedFabCardCodes: Array.Empty<CardCode>(), // TODO: this will be populated when DTO is updated to include played FAB cards
+                ActiveEventCardCodes: Array.Empty<CardCode>() // TODO: this will be populated when DTO is updated to include active event cards
             );
         }
 

@@ -31,7 +31,8 @@ namespace ThunderbirdsBoardGameEngine.Rules.Application.Rescue.CalculateRescueTa
                 DisasterCardCode: query.DisasterCardCode,
                 PerformingCharacter: query.PerformingCharacter,
                 PresentDisasterBonusKeys: query.PresentDisasterBonusKeys,
-                PlayedFabCardCodes: query.PlayedFabCardCodes
+                PlayedFabCardCodes: query.PlayedFabCardCodes,
+                ActiveEventCardCodes: query.ActiveEventCardCodes
             );
 
             var calculatedTarget = _rescueCalculationService.ResolveRescueCalculationAsync(request);
@@ -41,7 +42,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Application.Rescue.CalculateRescueTa
                 (
                     TargetNumber: calculatedTarget.TargetRoll,
                     TotalBonus: calculatedTarget.TotalBonus,
-                    AppliedBonuses: calculatedTarget.AppliedBonuses
+                    AppliedBonuses: calculatedTarget.AppliedModifiers
                 )
             );
         }

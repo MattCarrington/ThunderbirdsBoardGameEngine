@@ -6,7 +6,7 @@
     /// <remarks>Implementations of this interface can supply one or more modifiers that affect rescue
     /// calculations. This interface is intended for use in systems where multiple sources may contribute to the overall
     /// set of applied modifiers.</remarks>
-    public interface IBonusModifierSource
+    public interface IRescueModifierSource
     {
         /// <summary>
         /// Applies all relevant rescue modifiers to the specified calculation input and returns the resulting applied

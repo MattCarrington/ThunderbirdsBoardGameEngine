@@ -9,7 +9,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.Rescue
     /// <remarks>This class encapsulates the disaster-specific bonuses that can be applied during a rescue
     /// calculation. It is typically used as part of the rescue modifier calculation process, where each available bonus
     /// is evaluated based on the current rescue context.</remarks>
-    public sealed class DisasterContribution : IBonusModifierSource
+    public sealed class DisasterContribution : IRescueModifierSource
     {
         public int DifficultyNumber { get; }
 

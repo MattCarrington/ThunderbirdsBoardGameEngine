@@ -3,7 +3,7 @@ using ThunderbirdsBoardGameEngine.Rules.Domain.Rescue;
 
 namespace ThunderbirdsBoardGameEngine.Rules.Domain.FabCards
 {
-    public sealed class UnderwaterSealingUnit : IBonusModifierSource
+    public sealed class UnderwaterSealingUnit : IRescueModifierSource
     {
         public IEnumerable<AppliedRescueModifier> ApplyRescueModifier(RescueCalculationInput input)
         {

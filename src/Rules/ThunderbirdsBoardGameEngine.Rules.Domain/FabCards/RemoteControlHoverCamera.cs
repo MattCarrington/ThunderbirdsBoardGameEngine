@@ -3,7 +3,7 @@ using ThunderbirdsBoardGameEngine.Rules.Domain.Rescue;
 
 namespace ThunderbirdsBoardGameEngine.Rules.Domain.FabCards
 {
-    public sealed class RemoteControlHoverCamera : IBonusModifierSource
+    public sealed class RemoteControlHoverCamera : IRescueModifierSource
     {
         public IEnumerable<AppliedRescueModifier> ApplyRescueModifier(RescueCalculationInput input)
         {

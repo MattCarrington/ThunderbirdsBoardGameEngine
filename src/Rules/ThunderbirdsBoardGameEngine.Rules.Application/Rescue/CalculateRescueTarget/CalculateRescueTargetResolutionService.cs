@@ -31,7 +31,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Application.Rescue.CalculateRescueTa
 
             var input = new RescueCalculationInput(request.PresentDisasterBonusKeys, disaster.RescueType);
 
-            var sources = new List<IBonusModifierSource>
+            var sources = new List<IRescueModifierSource>
             {
                 disaster,
                 character
@@ -42,6 +42,14 @@ namespace ThunderbirdsBoardGameEngine.Rules.Application.Rescue.CalculateRescueTa
                 if (_bonusModifierSourceRegistry.TryGetBonusModifierSource(fabCardCode, out var fabCard))
                 {
                     sources.Add(fabCard);
+                }
+            }
+
+            foreach (var eventCardCode in request.ActiveEventCardCodes)
+            {
+                if (_bonusModifierSourceRegistry.TryGetBonusModifierSource(eventCardCode, out var eventCard))
+                {
+                    sources.Add(eventCard);
                 }
             }
 

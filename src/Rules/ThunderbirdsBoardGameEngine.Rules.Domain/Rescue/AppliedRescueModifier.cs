@@ -13,6 +13,7 @@
     {
         DisasterCard,
         CharacterAbility,
-        FabCard
+        FabCard,
+        EventCard
     }
 }

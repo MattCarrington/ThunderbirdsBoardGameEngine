@@ -6,5 +6,6 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.Rescue
         CardCode DisasterCardCode,
         CharacterCode PerformingCharacter,
         IReadOnlyCollection<DisasterBonusKey> PresentDisasterBonusKeys,
-        IReadOnlyCollection<CardCode> PlayedFabCardCodes);
+        IReadOnlyCollection<CardCode> PlayedFabCardCodes,
+        IReadOnlyCollection<CardCode> ActiveEventCardCodes);
 }

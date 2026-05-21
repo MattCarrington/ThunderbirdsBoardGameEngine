@@ -37,12 +37,14 @@ namespace ThunderbirdsBoardGameEngine.Rules.Application.UnitTests.Rescue.Calcula
             var characterCode = new CharacterCode("test-character");
             var disasterBonusKeys = Array.Empty<DisasterBonusKey>();
             var fabCardCodes = Array.Empty<CardCode>();
+            var eventCardsCodes = Array.Empty<CardCode>();
 
             var request = new RescueCalculationRequest(
                 disasterCardCode,
                 characterCode,
                 disasterBonusKeys,
-                fabCardCodes);
+                fabCardCodes,
+                eventCardsCodes);
 
             var disasterContribution = new DisasterContribution(
                 difficultyNumber: 10,
@@ -75,12 +77,14 @@ namespace ThunderbirdsBoardGameEngine.Rules.Application.UnitTests.Rescue.Calcula
             var fabCardCode = new CardCode("fab-card-1");
             var disasterBonusKeys = Array.Empty<DisasterBonusKey>();
             var fabCardCodes = new[] { fabCardCode };
+            var eventCardCodes = Array.Empty<CardCode>();
 
             var request = new RescueCalculationRequest(
                 disasterCardCode,
                 characterCode,
                 disasterBonusKeys,
-                fabCardCodes);
+                fabCardCodes,
+                eventCardCodes);
 
             var disasterContribution = new DisasterContribution(
                 difficultyNumber: 10,
@@ -91,12 +95,12 @@ namespace ThunderbirdsBoardGameEngine.Rules.Application.UnitTests.Rescue.Calcula
                 characterCode,
                 characterRescueBonusContribution: null);
 
-            var fabCardSource = Substitute.For<IBonusModifierSource>();
+            var fabCardSource = Substitute.For<IRescueModifierSource>();
             fabCardSource.ApplyRescueModifier(Arg.Any<RescueCalculationInput>()).Returns(Array.Empty<AppliedRescueModifier>());
 
             _disasterContributionLookup.GetDisasterContribution(disasterCardCode).Returns(disasterContribution);
             _characterContributionLookup.GetCharacterContribution(characterCode).Returns(characterContribution);
-            _bonusModifierSourceRegistry.TryGetBonusModifierSource(fabCardCode, out Arg.Any<IBonusModifierSource>())
+            _bonusModifierSourceRegistry.TryGetBonusModifierSource(fabCardCode, out Arg.Any<IRescueModifierSource>())
                 .Returns(x =>
                 {
                     x[1] = fabCardSource;
@@ -108,7 +112,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Application.UnitTests.Rescue.Calcula
 
             // Assert
             Assert.NotNull(result);
-            _bonusModifierSourceRegistry.Received(1).TryGetBonusModifierSource(fabCardCode, out Arg.Any<IBonusModifierSource>());
+            _bonusModifierSourceRegistry.Received(1).TryGetBonusModifierSource(fabCardCode, out Arg.Any<IRescueModifierSource>());
         }
 
         [Fact]
@@ -121,12 +125,14 @@ namespace ThunderbirdsBoardGameEngine.Rules.Application.UnitTests.Rescue.Calcula
             var fabCardCode2 = new CardCode("fab-card-2");
             var disasterBonusKeys = Array.Empty<DisasterBonusKey>();
             var fabCardCodes = new[] { fabCardCode1, fabCardCode2 };
+            var eventCardCodes = Array.Empty<CardCode>();
 
             var request = new RescueCalculationRequest(
                 disasterCardCode,
                 characterCode,
                 disasterBonusKeys,
-                fabCardCodes);
+                fabCardCodes,
+                eventCardCodes);
 
             var disasterContribution = new DisasterContribution(
                 difficultyNumber: 10,
@@ -137,21 +143,21 @@ namespace ThunderbirdsBoardGameEngine.Rules.Application.UnitTests.Rescue.Calcula
                 characterCode,
                 characterRescueBonusContribution: null);
 
-            var fabCardSource1 = Substitute.For<IBonusModifierSource>();
+            var fabCardSource1 = Substitute.For<IRescueModifierSource>();
             fabCardSource1.ApplyRescueModifier(Arg.Any<RescueCalculationInput>()).Returns(Array.Empty<AppliedRescueModifier>());
 
-            var fabCardSource2 = Substitute.For<IBonusModifierSource>();
+            var fabCardSource2 = Substitute.For<IRescueModifierSource>();
             fabCardSource2.ApplyRescueModifier(Arg.Any<RescueCalculationInput>()).Returns(Array.Empty<AppliedRescueModifier>());
 
             _disasterContributionLookup.GetDisasterContribution(disasterCardCode).Returns(disasterContribution);
             _characterContributionLookup.GetCharacterContribution(characterCode).Returns(characterContribution);
-            _bonusModifierSourceRegistry.TryGetBonusModifierSource(fabCardCode1, out Arg.Any<IBonusModifierSource>())
+            _bonusModifierSourceRegistry.TryGetBonusModifierSource(fabCardCode1, out Arg.Any<IRescueModifierSource>())
                 .Returns(x =>
                 {
                     x[1] = fabCardSource1;
                     return true;
                 });
-            _bonusModifierSourceRegistry.TryGetBonusModifierSource(fabCardCode2, out Arg.Any<IBonusModifierSource>())
+            _bonusModifierSourceRegistry.TryGetBonusModifierSource(fabCardCode2, out Arg.Any<IRescueModifierSource>())
                 .Returns(x =>
                 {
                     x[1] = fabCardSource2;
@@ -163,8 +169,8 @@ namespace ThunderbirdsBoardGameEngine.Rules.Application.UnitTests.Rescue.Calcula
 
             // Assert
             Assert.NotNull(result);
-            _bonusModifierSourceRegistry.Received(1).TryGetBonusModifierSource(fabCardCode1, out Arg.Any<IBonusModifierSource>());
-            _bonusModifierSourceRegistry.Received(1).TryGetBonusModifierSource(fabCardCode2, out Arg.Any<IBonusModifierSource>());
+            _bonusModifierSourceRegistry.Received(1).TryGetBonusModifierSource(fabCardCode1, out Arg.Any<IRescueModifierSource>());
+            _bonusModifierSourceRegistry.Received(1).TryGetBonusModifierSource(fabCardCode2, out Arg.Any<IRescueModifierSource>());
         }
 
         [Fact]
@@ -176,12 +182,14 @@ namespace ThunderbirdsBoardGameEngine.Rules.Application.UnitTests.Rescue.Calcula
             var fabCardCode = new CardCode("unknown-fab-card");
             var disasterBonusKeys = Array.Empty<DisasterBonusKey>();
             var fabCardCodes = new[] { fabCardCode };
+            var eventCardCodes = Array.Empty<CardCode>();
 
             var request = new RescueCalculationRequest(
                 disasterCardCode,
                 characterCode,
                 disasterBonusKeys,
-                fabCardCodes);
+                fabCardCodes,
+                eventCardCodes);
 
             var disasterContribution = new DisasterContribution(
                 difficultyNumber: 10,
@@ -194,7 +202,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Application.UnitTests.Rescue.Calcula
 
             _disasterContributionLookup.GetDisasterContribution(disasterCardCode).Returns(disasterContribution);
             _characterContributionLookup.GetCharacterContribution(characterCode).Returns(characterContribution);
-            _bonusModifierSourceRegistry.TryGetBonusModifierSource(fabCardCode, out Arg.Any<IBonusModifierSource>())
+            _bonusModifierSourceRegistry.TryGetBonusModifierSource(fabCardCode, out Arg.Any<IRescueModifierSource>())
                 .Returns(false);
 
             // Act
@@ -203,7 +211,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Application.UnitTests.Rescue.Calcula
             // Assert
             Assert.NotNull(result);
             Assert.Equal(10, result.TargetRoll);
-            _bonusModifierSourceRegistry.Received(1).TryGetBonusModifierSource(fabCardCode, out Arg.Any<IBonusModifierSource>());
+            _bonusModifierSourceRegistry.Received(1).TryGetBonusModifierSource(fabCardCode, out Arg.Any<IRescueModifierSource>());
         }
 
         [Fact]
@@ -216,12 +224,14 @@ namespace ThunderbirdsBoardGameEngine.Rules.Application.UnitTests.Rescue.Calcula
             var unknownFabCardCode = new CardCode("unknown-fab-card");
             var disasterBonusKeys = Array.Empty<DisasterBonusKey>();
             var fabCardCodes = new[] { knownFabCardCode, unknownFabCardCode };
+            var eventCardCodes = Array.Empty<CardCode>();
 
             var request = new RescueCalculationRequest(
                 disasterCardCode,
                 characterCode,
                 disasterBonusKeys,
-                fabCardCodes);
+                fabCardCodes,
+                eventCardCodes);
 
             var disasterContribution = new DisasterContribution(
                 difficultyNumber: 10,
@@ -232,18 +242,18 @@ namespace ThunderbirdsBoardGameEngine.Rules.Application.UnitTests.Rescue.Calcula
                 characterCode,
                 characterRescueBonusContribution: null);
 
-            var knownFabCardSource = Substitute.For<IBonusModifierSource>();
+            var knownFabCardSource = Substitute.For<IRescueModifierSource>();
             knownFabCardSource.ApplyRescueModifier(Arg.Any<RescueCalculationInput>()).Returns(Array.Empty<AppliedRescueModifier>());
 
             _disasterContributionLookup.GetDisasterContribution(disasterCardCode).Returns(disasterContribution);
             _characterContributionLookup.GetCharacterContribution(characterCode).Returns(characterContribution);
-            _bonusModifierSourceRegistry.TryGetBonusModifierSource(knownFabCardCode, out Arg.Any<IBonusModifierSource>())
+            _bonusModifierSourceRegistry.TryGetBonusModifierSource(knownFabCardCode, out Arg.Any<IRescueModifierSource>())
                 .Returns(x =>
                 {
                     x[1] = knownFabCardSource;
                     return true;
                 });
-            _bonusModifierSourceRegistry.TryGetBonusModifierSource(unknownFabCardCode, out Arg.Any<IBonusModifierSource>())
+            _bonusModifierSourceRegistry.TryGetBonusModifierSource(unknownFabCardCode, out Arg.Any<IRescueModifierSource>())
                 .Returns(false);
 
             // Act
@@ -251,8 +261,8 @@ namespace ThunderbirdsBoardGameEngine.Rules.Application.UnitTests.Rescue.Calcula
 
             // Assert
             Assert.NotNull(result);
-            _bonusModifierSourceRegistry.Received(1).TryGetBonusModifierSource(knownFabCardCode, out Arg.Any<IBonusModifierSource>());
-            _bonusModifierSourceRegistry.Received(1).TryGetBonusModifierSource(unknownFabCardCode, out Arg.Any<IBonusModifierSource>());
+            _bonusModifierSourceRegistry.Received(1).TryGetBonusModifierSource(knownFabCardCode, out Arg.Any<IRescueModifierSource>());
+            _bonusModifierSourceRegistry.Received(1).TryGetBonusModifierSource(unknownFabCardCode, out Arg.Any<IRescueModifierSource>());
         }
 
         [Fact]
@@ -265,12 +275,14 @@ namespace ThunderbirdsBoardGameEngine.Rules.Application.UnitTests.Rescue.Calcula
             var disasterBonusKey2 = new DisasterBonusKey("bonus-2");
             var disasterBonusKeys = new[] { disasterBonusKey1, disasterBonusKey2 };
             var fabCardCodes = Array.Empty<CardCode>();
+            var eventCardCodes = Array.Empty<CardCode>();
 
             var request = new RescueCalculationRequest(
                 disasterCardCode,
                 characterCode,
                 disasterBonusKeys,
-                fabCardCodes);
+                fabCardCodes,
+                eventCardCodes);
 
             var disasterBonus1 = new DisasterBonus(disasterBonusKey1, 2);
             var disasterBonus2 = new DisasterBonus(disasterBonusKey2, 3);
@@ -293,7 +305,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Application.UnitTests.Rescue.Calcula
             Assert.NotNull(result);
             Assert.Equal(5, result.TargetRoll);
             Assert.Equal(5, result.TotalBonus);
-            Assert.Equal(2, result.AppliedBonuses.Count);
+            Assert.Equal(2, result.AppliedModifiers.Count);
         }
 
         [Fact]
@@ -304,12 +316,14 @@ namespace ThunderbirdsBoardGameEngine.Rules.Application.UnitTests.Rescue.Calcula
             var characterCode = new CharacterCode("test-character");
             var disasterBonusKeys = Array.Empty<DisasterBonusKey>();
             var fabCardCodes = Array.Empty<CardCode>();
+            var eventCardCodes = Array.Empty<CardCode>();
 
             var request = new RescueCalculationRequest(
                 disasterCardCode,
                 characterCode,
                 disasterBonusKeys,
-                fabCardCodes);
+                fabCardCodes,
+                eventCardCodes);
 
             var disasterContribution = new DisasterContribution(
                 difficultyNumber: 10,
@@ -331,7 +345,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Application.UnitTests.Rescue.Calcula
             Assert.NotNull(result);
             Assert.Equal(7, result.TargetRoll);
             Assert.Equal(3, result.TotalBonus);
-            Assert.Single(result.AppliedBonuses);
+            Assert.Single(result.AppliedModifiers);
         }
 
         [Fact]
@@ -342,12 +356,14 @@ namespace ThunderbirdsBoardGameEngine.Rules.Application.UnitTests.Rescue.Calcula
             var characterCode = new CharacterCode("test-character");
             var disasterBonusKeys = Array.Empty<DisasterBonusKey>();
             var fabCardCodes = Array.Empty<CardCode>();
+            var eventCardCodes = Array.Empty<CardCode>();
 
             var request = new RescueCalculationRequest(
                 disasterCardCode,
                 characterCode,
                 disasterBonusKeys,
-                fabCardCodes);
+                fabCardCodes,
+                eventCardCodes);
 
             var disasterContribution = new DisasterContribution(
                 difficultyNumber: 10,
@@ -369,7 +385,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Application.UnitTests.Rescue.Calcula
             Assert.NotNull(result);
             Assert.Equal(10, result.TargetRoll);
             Assert.Equal(0, result.TotalBonus);
-            Assert.Empty(result.AppliedBonuses);
+            Assert.Empty(result.AppliedModifiers);
         }
 
         [Fact]
@@ -380,12 +396,14 @@ namespace ThunderbirdsBoardGameEngine.Rules.Application.UnitTests.Rescue.Calcula
             var characterCode = new CharacterCode("test-character");
             var disasterBonusKeys = Array.Empty<DisasterBonusKey>();
             var fabCardCodes = Array.Empty<CardCode>();
+            var eventCardCodes = Array.Empty<CardCode>();
 
             var request = new RescueCalculationRequest(
                 disasterCardCode,
                 characterCode,
                 disasterBonusKeys,
-                fabCardCodes);
+                fabCardCodes,
+                eventCardCodes);
 
             var disasterContribution = new DisasterContribution(
                 difficultyNumber: 10,
@@ -414,12 +432,14 @@ namespace ThunderbirdsBoardGameEngine.Rules.Application.UnitTests.Rescue.Calcula
             var characterCode = new CharacterCode("specific-character");
             var disasterBonusKeys = Array.Empty<DisasterBonusKey>();
             var fabCardCodes = Array.Empty<CardCode>();
+            var eventCardCodes = Array.Empty<CardCode>();
 
             var request = new RescueCalculationRequest(
                 disasterCardCode,
                 characterCode,
                 disasterBonusKeys,
-                fabCardCodes);
+                fabCardCodes,
+                eventCardCodes);
 
             var disasterContribution = new DisasterContribution(
                 difficultyNumber: 10,
@@ -448,12 +468,14 @@ namespace ThunderbirdsBoardGameEngine.Rules.Application.UnitTests.Rescue.Calcula
             var characterCode = new CharacterCode("test-character");
             var disasterBonusKeys = Array.Empty<DisasterBonusKey>();
             var fabCardCodes = Array.Empty<CardCode>();
+            var eventCardCodes = Array.Empty<CardCode>();
 
             var request = new RescueCalculationRequest(
                 disasterCardCode,
                 characterCode,
                 disasterBonusKeys,
-                fabCardCodes);
+                fabCardCodes,
+                eventCardCodes);
 
             var disasterContribution = new DisasterContribution(
                 difficultyNumber: 15,
@@ -486,12 +508,14 @@ namespace ThunderbirdsBoardGameEngine.Rules.Application.UnitTests.Rescue.Calcula
             var fabCardCode3 = new CardCode("fab-card-3");
             var disasterBonusKeys = Array.Empty<DisasterBonusKey>();
             var fabCardCodes = new[] { fabCardCode1, fabCardCode2, fabCardCode3 };
+            var eventCardCodes = Array.Empty<CardCode>();
 
             var request = new RescueCalculationRequest(
                 disasterCardCode,
                 characterCode,
                 disasterBonusKeys,
-                fabCardCodes);
+                fabCardCodes,
+                eventCardCodes);
 
             var disasterContribution = new DisasterContribution(
                 difficultyNumber: 10,
@@ -504,16 +528,16 @@ namespace ThunderbirdsBoardGameEngine.Rules.Application.UnitTests.Rescue.Calcula
 
             _disasterContributionLookup.GetDisasterContribution(disasterCardCode).Returns(disasterContribution);
             _characterContributionLookup.GetCharacterContribution(characterCode).Returns(characterContribution);
-            _bonusModifierSourceRegistry.TryGetBonusModifierSource(Arg.Any<CardCode>(), out Arg.Any<IBonusModifierSource>())
+            _bonusModifierSourceRegistry.TryGetBonusModifierSource(Arg.Any<CardCode>(), out Arg.Any<IRescueModifierSource>())
                 .Returns(false);
 
             // Act
             _sut.ResolveRescueCalculationAsync(request);
 
             // Assert
-            _bonusModifierSourceRegistry.Received(1).TryGetBonusModifierSource(fabCardCode1, out Arg.Any<IBonusModifierSource>());
-            _bonusModifierSourceRegistry.Received(1).TryGetBonusModifierSource(fabCardCode2, out Arg.Any<IBonusModifierSource>());
-            _bonusModifierSourceRegistry.Received(1).TryGetBonusModifierSource(fabCardCode3, out Arg.Any<IBonusModifierSource>());
+            _bonusModifierSourceRegistry.Received(1).TryGetBonusModifierSource(fabCardCode1, out Arg.Any<IRescueModifierSource>());
+            _bonusModifierSourceRegistry.Received(1).TryGetBonusModifierSource(fabCardCode2, out Arg.Any<IRescueModifierSource>());
+            _bonusModifierSourceRegistry.Received(1).TryGetBonusModifierSource(fabCardCode3, out Arg.Any<IRescueModifierSource>());
         }
     }
 }
