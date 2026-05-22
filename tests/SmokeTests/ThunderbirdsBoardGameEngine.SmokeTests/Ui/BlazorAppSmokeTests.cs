@@ -9,7 +9,7 @@ namespace ThunderbirdsBoardGameEngine.SmokeTests.Ui
         private IBrowser? _browser;
         private IPage? _page;
 
-        public async Task InitializeAsync()
+        public async ValueTask InitializeAsync()
         {
             _playwright = await Playwright.CreateAsync();
             _browser = await _playwright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions
@@ -35,7 +35,7 @@ namespace ThunderbirdsBoardGameEngine.SmokeTests.Ui
             });
         }
 
-        public async Task DisposeAsync()
+        public async ValueTask DisposeAsync()
         {
             if (_page != null)
             {

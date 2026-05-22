@@ -17,22 +17,22 @@ namespace ThunderbirdsBoardGameEngine.PlaywrightTests.Features
     
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Reqnroll", "3.0.0.0")]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public partial class CalculateRescueBonusFeature : object, global::Xunit.IClassFixture<CalculateRescueBonusFeature.FixtureData>, global::Xunit.IAsyncLifetime
+    public partial class CalculateRescueBonusFeature : object, Xunit.IClassFixture<CalculateRescueBonusFeature.FixtureData>, Xunit.IAsyncLifetime
     {
         
         private global::Reqnroll.ITestRunner testRunner;
+        
+        private Xunit.ITestOutputHelper _testOutputHelper;
         
         private static string[] featureTags = ((string[])(null));
         
         private static global::Reqnroll.FeatureInfo featureInfo = new global::Reqnroll.FeatureInfo(new global::System.Globalization.CultureInfo("en-US"), "Features", "CalculateRescueBonus", "\tThe rescue target is calculated based on the selected disaster\r\n\tand the player’" +
                 "s selected inputs.", global::Reqnroll.ProgrammingLanguage.CSharp, featureTags, InitializeCucumberMessages());
         
-        private global::Xunit.Abstractions.ITestOutputHelper _testOutputHelper;
-        
 #line 1 "CalculateRescueBonus.feature"
 #line hidden
         
-        public CalculateRescueBonusFeature(CalculateRescueBonusFeature.FixtureData fixtureData, global::Xunit.Abstractions.ITestOutputHelper testOutputHelper)
+        public CalculateRescueBonusFeature(CalculateRescueBonusFeature.FixtureData fixtureData, Xunit.ITestOutputHelper testOutputHelper)
         {
             this._testOutputHelper = testOutputHelper;
         }
@@ -91,7 +91,7 @@ namespace ThunderbirdsBoardGameEngine.PlaywrightTests.Features
         public void ScenarioInitialize(global::Reqnroll.ScenarioInfo scenarioInfo, global::Reqnroll.RuleInfo ruleInfo)
         {
             testRunner.OnScenarioInitialize(scenarioInfo, ruleInfo);
-            testRunner.ScenarioContext.ScenarioContainer.RegisterInstanceAs<global::Xunit.Abstractions.ITestOutputHelper>(_testOutputHelper);
+            testRunner.ScenarioContext.ScenarioContainer.RegisterInstanceAs<Xunit.ITestOutputHelper>(_testOutputHelper);
         }
         
         public async global::System.Threading.Tasks.Task ScenarioStartAsync()
@@ -109,7 +109,7 @@ namespace ThunderbirdsBoardGameEngine.PlaywrightTests.Features
             return new global::Reqnroll.Formatters.RuntimeSupport.FeatureLevelCucumberMessages("Features/CalculateRescueBonus.feature.ndjson", 3);
         }
         
-        async global::System.Threading.Tasks.Task global::Xunit.IAsyncLifetime.InitializeAsync()
+        async System.Threading.Tasks.ValueTask Xunit.IAsyncLifetime.InitializeAsync()
         {
             try
             {
@@ -119,7 +119,7 @@ namespace ThunderbirdsBoardGameEngine.PlaywrightTests.Features
             {
                 try
                 {
-                    ((global::Xunit.IAsyncLifetime)(this)).DisposeAsync();
+                    ((Xunit.IAsyncLifetime)(this)).DisposeAsync();
                 }
                 catch (System.Exception e2)
                 {
@@ -129,12 +129,12 @@ namespace ThunderbirdsBoardGameEngine.PlaywrightTests.Features
             }
         }
         
-        async global::System.Threading.Tasks.Task global::Xunit.IAsyncLifetime.DisposeAsync()
+        async System.Threading.Tasks.ValueTask System.IAsyncDisposable.DisposeAsync()
         {
             await this.TestTearDownAsync();
         }
         
-        [global::Xunit.SkippableFactAttribute(DisplayName="Player can calculate a rescue target")]
+        [global::Xunit.FactAttribute(DisplayName="Player can calculate a rescue target")]
         [global::Xunit.TraitAttribute("FeatureTitle", "CalculateRescueBonus")]
         [global::Xunit.TraitAttribute("Description", "Player can calculate a rescue target")]
         public async global::System.Threading.Tasks.Task PlayerCanCalculateARescueTarget()
@@ -179,15 +179,15 @@ this.ScenarioInitialize(scenarioInfo, ruleInfo);
         
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Reqnroll", "3.0.0.0")]
         [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-        public class FixtureData : object, global::Xunit.IAsyncLifetime
+        public class FixtureData : object, Xunit.IAsyncLifetime
         {
             
-            async global::System.Threading.Tasks.Task global::Xunit.IAsyncLifetime.InitializeAsync()
+            async System.Threading.Tasks.ValueTask Xunit.IAsyncLifetime.InitializeAsync()
             {
                 await CalculateRescueBonusFeature.FeatureSetupAsync();
             }
             
-            async global::System.Threading.Tasks.Task global::Xunit.IAsyncLifetime.DisposeAsync()
+            async System.Threading.Tasks.ValueTask System.IAsyncDisposable.DisposeAsync()
             {
                 await CalculateRescueBonusFeature.FeatureTearDownAsync();
             }

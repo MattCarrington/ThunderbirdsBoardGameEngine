@@ -16,7 +16,7 @@ using Xunit;
 namespace ThunderbirdsBoardGameEngine.UI.IntegrationTests.Pages
 {
     [Collection("WireMock")]
-    public class DisasterCardsTests : TestContext
+    public class DisasterCardsTests : Bunit.TestContext
     {
         private readonly WireMockHost _host;
 

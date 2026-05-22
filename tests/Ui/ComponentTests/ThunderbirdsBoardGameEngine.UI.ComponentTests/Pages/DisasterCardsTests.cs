@@ -9,7 +9,7 @@ using Xunit;
 
 namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Pages
 {
-    public class DisasterCardsTests : TestContext
+    public class DisasterCardsTests : Bunit.TestContext
     {
         private static IReadOnlyList<DisasterCardViewModel> Cards =>
         [
