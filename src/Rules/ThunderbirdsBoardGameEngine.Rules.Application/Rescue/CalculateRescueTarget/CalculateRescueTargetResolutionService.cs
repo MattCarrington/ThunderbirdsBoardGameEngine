@@ -29,8 +29,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Application.Rescue.CalculateRescueTa
             _rescueTargetCalculator = rescueTargetCalculator ?? throw new ArgumentNullException(nameof(rescueTargetCalculator));
         }
 
-        public RescueTargetResult ResolveRescueCalculationAsync(
-            RescueCalculationRequest request)
+        public RescueTargetResult ResolveRescueCalculation(RescueCalculationRequest request)
         {
             var disaster = _disasterCatalogLookup.GetDisasterRescueContribution(request.DisasterCardCode);
 

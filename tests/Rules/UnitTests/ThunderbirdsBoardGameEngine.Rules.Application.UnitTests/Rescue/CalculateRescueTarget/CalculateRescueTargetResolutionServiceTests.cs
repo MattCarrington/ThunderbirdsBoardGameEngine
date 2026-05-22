@@ -2,6 +2,7 @@
 using ThunderbirdsBoardGameEngine.ReferenceData.Enums;
 using ThunderbirdsBoardGameEngine.ReferenceData.Identities;
 using ThunderbirdsBoardGameEngine.Rules.Application.Rescue.CalculateRescueTarget;
+using ThunderbirdsBoardGameEngine.Rules.Application.Rescue.Exceptions;
 using ThunderbirdsBoardGameEngine.Rules.Application.Rescue.Interfaces;
 using ThunderbirdsBoardGameEngine.Rules.Domain.Rescue;
 using Xunit;
@@ -10,540 +11,221 @@ namespace ThunderbirdsBoardGameEngine.Rules.Application.UnitTests.Rescue.Calcula
 {
     public class CalculateRescueTargetResolutionServiceTests
     {
-        private readonly IDisasterCatalogLookup _disasterContributionLookup;
-        private readonly ICharacterCatalogLookup _characterContributionLookup;
-        private readonly IFabCardCatalogLookup _fabCardCatalogLookup;
-        private readonly IEventCardCatalogLookup _eventCardCatalogLookup;
-        private readonly IBonusModifierSourceRegistry _bonusModifierSourceRegistry;
-        private readonly RescueTargetCalculator _rescueTargetCalculator;
-        private readonly CalculateRescueTargetResolutionService _sut;
+        private static readonly CardCode ValidFabCard = new("valid-fab-card");
+        private static readonly CardCode ValidEventCard = new("valid-event-card");
 
-        public CalculateRescueTargetResolutionServiceTests()
+        [Fact]
+        public void ResolveRescueCalculation_WhenPlayedFabCardDoesNotExist_ThrowsInvalidRescueCalculationRequestException()
         {
-            _disasterContributionLookup = Substitute.For<IDisasterCatalogLookup>();
-            _characterContributionLookup = Substitute.For<ICharacterCatalogLookup>();
-            _fabCardCatalogLookup = Substitute.For<IFabCardCatalogLookup>();
-            _eventCardCatalogLookup = Substitute.For<IEventCardCatalogLookup>();
-            _bonusModifierSourceRegistry = Substitute.For<IBonusModifierSourceRegistry>();
-            _rescueTargetCalculator = new RescueTargetCalculator();
-            _sut = new CalculateRescueTargetResolutionService(
-                _disasterContributionLookup,
-                _characterContributionLookup,
-                _fabCardCatalogLookup,
-                _eventCardCatalogLookup,
-                _bonusModifierSourceRegistry,
-                _rescueTargetCalculator);
+            // Arrange
+            var request = CreateValidRequest(
+                fabCards: [new CardCode("nonexistent-fab-card")],
+                eventCards: []);
+
+            var fabCardCatalogLookup = Substitute.For<IFabCardCatalogLookup>();
+            fabCardCatalogLookup.Exists(Arg.Any<CardCode>()).Returns(false);
+
+            var eventCardCatalogLookup = Substitute.For<IEventCardCatalogLookup>();
+            var bonusModifierSourceRegistry = Substitute.For<IBonusModifierSourceRegistry>();
+
+            var service = CreateService(fabCardCatalogLookup, eventCardCatalogLookup, bonusModifierSourceRegistry);
+
+            // Act & Assert
+            Assert.Throws<InvalidRescueCalculationRequestException>(() => service.ResolveRescueCalculation(request));
         }
 
         [Fact]
-        public void ResolveRescueCalculationAsync_WithNoFabCards_ReturnsResultWithDisasterAndCharacterContributions()
+        public void ResolveRescueCalculation_WhenActiveEventCardDoesNotExist_ThrowsInvalidRescueCalculationRequestException()
         {
             // Arrange
-            var disasterCardCode = new CardCode("test-disaster");
-            var characterCode = new CharacterCode("test-character");
-            var disasterBonusKeys = Array.Empty<DisasterBonusKey>();
-            var fabCardCodes = Array.Empty<CardCode>();
-            var eventCardsCodes = Array.Empty<CardCode>();
+            var request = CreateValidRequest(
+                fabCards: [],
+                eventCards: [new CardCode("nonexistent-event-card")]);
 
-            var request = new RescueCalculationRequest(
-                disasterCardCode,
-                characterCode,
-                disasterBonusKeys,
-                fabCardCodes,
-                eventCardsCodes);
+            var fabCardCatalogLookup = Substitute.For<IFabCardCatalogLookup>();
 
-            var disasterContribution = new DisasterContribution(
-                difficultyNumber: 10,
-                availableBonuses: Array.Empty<DisasterBonus>(),
-                rescueType: RescueType.Air);
+            var eventCardCatalogLookup = Substitute.For<IEventCardCatalogLookup>();
+            eventCardCatalogLookup.Exists(Arg.Any<CardCode>()).Returns(false);
 
-            var characterContribution = new CharacterContribution(
-                characterCode,
-                characterRescueBonusContribution: null);
+            var bonusModifierSourceRegistry = Substitute.For<IBonusModifierSourceRegistry>();
 
-            _disasterContributionLookup.GetDisasterRescueContribution(disasterCardCode).Returns(disasterContribution);
-            _characterContributionLookup.GetCharacterRescueContribution(characterCode).Returns(characterContribution);
+            var service = CreateService(fabCardCatalogLookup, eventCardCatalogLookup, bonusModifierSourceRegistry);
+
+            // Act & Assert
+            Assert.Throws<InvalidRescueCalculationRequestException>(() => service.ResolveRescueCalculation(request));
+        }
+
+        [Fact]
+        public void ResolveRescueCalculation_WhenNoFabOrEventCards_DoesNotValidateOrQueryCardModifiers()
+        {
+            // Arrange
+            var request = CreateValidRequest(
+                fabCards: [],
+                eventCards: []);
+
+            var fabCardCatalogLookup = Substitute.For<IFabCardCatalogLookup>();
+            var eventCardCatalogLookup = Substitute.For<IEventCardCatalogLookup>();
+            var bonusModifierSourceRegistry = Substitute.For<IBonusModifierSourceRegistry>();
+
+            var service = CreateService(fabCardCatalogLookup, eventCardCatalogLookup, bonusModifierSourceRegistry);
 
             // Act
-            var result = _sut.ResolveRescueCalculationAsync(request);
+            service.ResolveRescueCalculation(request);
 
             // Assert
-            Assert.NotNull(result);
-            Assert.Equal(10, result.TargetRoll);
-            _disasterContributionLookup.Received(1).GetDisasterRescueContribution(disasterCardCode);
-            _characterContributionLookup.Received(1).GetCharacterRescueContribution(characterCode);
+            fabCardCatalogLookup.DidNotReceiveWithAnyArgs().Exists(Arg.Any<CardCode>());
+            eventCardCatalogLookup.DidNotReceiveWithAnyArgs().Exists(Arg.Any<CardCode>());
+            bonusModifierSourceRegistry.DidNotReceiveWithAnyArgs().TryGetBonusModifierSource(Arg.Any<CardCode>(), out Arg.Any<IRescueModifierSource>());
         }
 
         [Fact]
-        public void ResolveRescueCalculationAsync_WithSingleFabCard_IncludesFabCardInSources()
+        public void ResolveRescueCalculation_WhenValidFabAndEventCards_AsksModifierRegistryForEachCard()
         {
             // Arrange
-            var disasterCardCode = new CardCode("test-disaster");
-            var characterCode = new CharacterCode("test-character");
-            var fabCardCode = new CardCode("fab-card-1");
-            var disasterBonusKeys = Array.Empty<DisasterBonusKey>();
-            var fabCardCodes = new[] { fabCardCode };
-            var eventCardCodes = Array.Empty<CardCode>();
+            var request = CreateValidRequest(
+                fabCards: [ValidFabCard],
+                eventCards: [ValidEventCard]);
 
-            var request = new RescueCalculationRequest(
-                disasterCardCode,
-                characterCode,
-                disasterBonusKeys,
-                fabCardCodes,
-                eventCardCodes);
+            var fabCardCatalogLookup = Substitute.For<IFabCardCatalogLookup>();
+            fabCardCatalogLookup.Exists(Arg.Is(ValidFabCard)).Returns(true);
 
-            var disasterContribution = new DisasterContribution(
-                difficultyNumber: 10,
-                availableBonuses: Array.Empty<DisasterBonus>(),
-                rescueType: RescueType.Air);
+            var eventCardCatalogLookup = Substitute.For<IEventCardCatalogLookup>();
+            eventCardCatalogLookup.Exists(Arg.Is(ValidEventCard)).Returns(true);
 
-            var characterContribution = new CharacterContribution(
-                characterCode,
-                characterRescueBonusContribution: null);
+            var bonusModifierSourceRegistry = Substitute.For<IBonusModifierSourceRegistry>();
 
-            var fabCardSource = Substitute.For<IRescueModifierSource>();
-            fabCardSource.ApplyRescueModifier(Arg.Any<RescueCalculationInput>()).Returns(Array.Empty<AppliedRescueModifier>());
+            var service = CreateService(fabCardCatalogLookup, eventCardCatalogLookup, bonusModifierSourceRegistry);
 
-            _disasterContributionLookup.GetDisasterRescueContribution(disasterCardCode).Returns(disasterContribution);
-            _characterContributionLookup.GetCharacterRescueContribution(characterCode).Returns(characterContribution);
-            _bonusModifierSourceRegistry.TryGetBonusModifierSource(fabCardCode, out Arg.Any<IRescueModifierSource>())
-                .Returns(x =>
+            // Act
+            service.ResolveRescueCalculation(request);
+
+            // Assert
+            bonusModifierSourceRegistry.Received(1).TryGetBonusModifierSource(
+                Arg.Is(ValidFabCard),
+                out Arg.Any<IRescueModifierSource>());
+
+            bonusModifierSourceRegistry.Received(1).TryGetBonusModifierSource(
+                Arg.Is(ValidEventCard),
+                out Arg.Any<IRescueModifierSource>());
+        }
+
+        [Fact]
+        public void ResolveRescueCalculation_WhenModifierSourceExists_IncludesReturnedModifiersInCalculation()
+        {
+            var request = CreateValidRequest(
+                    fabCards: [ValidFabCard],
+                    eventCards: []);
+
+            var fabCardCatalogLookup = Substitute.For<IFabCardCatalogLookup>();
+            fabCardCatalogLookup.Exists(Arg.Is(ValidFabCard)).Returns(true);
+
+            var eventCardCatalogLookup = Substitute.For<IEventCardCatalogLookup>();
+            eventCardCatalogLookup.Exists(Arg.Is(ValidEventCard)).Returns(true);
+
+            var modifierSource = Substitute.For<IRescueModifierSource>();
+            modifierSource
+                .ApplyRescueModifier(Arg.Any<RescueCalculationInput>())
+                .Returns([
+                    new AppliedRescueModifier
+                    {
+                        Key = "test-modifier",
+                        Value = 3,
+                        SourceType = SourceType.FabCard
+                    }
+                ]);
+
+            var bonusModifierSourceRegistry = Substitute.For<IBonusModifierSourceRegistry>();
+            bonusModifierSourceRegistry
+                .TryGetBonusModifierSource(
+                    Arg.Is(ValidFabCard),
+                    out Arg.Any<IRescueModifierSource>())
+                .Returns(callInfo =>
                 {
-                    x[1] = fabCardSource;
+                    callInfo[1] = modifierSource;
                     return true;
                 });
 
+            var service = CreateService(fabCardCatalogLookup, eventCardCatalogLookup, bonusModifierSourceRegistry);
+
             // Act
-            var result = _sut.ResolveRescueCalculationAsync(request);
+            var result = service.ResolveRescueCalculation(request);
 
             // Assert
             Assert.NotNull(result);
-            _bonusModifierSourceRegistry.Received(1).TryGetBonusModifierSource(fabCardCode, out Arg.Any<IRescueModifierSource>());
-        }
-
-        [Fact]
-        public void ResolveRescueCalculationAsync_WithMultipleFabCards_IncludesAllFoundFabCardsInSources()
-        {
-            // Arrange
-            var disasterCardCode = new CardCode("test-disaster");
-            var characterCode = new CharacterCode("test-character");
-            var fabCardCode1 = new CardCode("fab-card-1");
-            var fabCardCode2 = new CardCode("fab-card-2");
-            var disasterBonusKeys = Array.Empty<DisasterBonusKey>();
-            var fabCardCodes = new[] { fabCardCode1, fabCardCode2 };
-            var eventCardCodes = Array.Empty<CardCode>();
-
-            var request = new RescueCalculationRequest(
-                disasterCardCode,
-                characterCode,
-                disasterBonusKeys,
-                fabCardCodes,
-                eventCardCodes);
-
-            var disasterContribution = new DisasterContribution(
-                difficultyNumber: 10,
-                availableBonuses: Array.Empty<DisasterBonus>(),
-                rescueType: RescueType.Air);
-
-            var characterContribution = new CharacterContribution(
-                characterCode,
-                characterRescueBonusContribution: null);
-
-            var fabCardSource1 = Substitute.For<IRescueModifierSource>();
-            fabCardSource1.ApplyRescueModifier(Arg.Any<RescueCalculationInput>()).Returns(Array.Empty<AppliedRescueModifier>());
-
-            var fabCardSource2 = Substitute.For<IRescueModifierSource>();
-            fabCardSource2.ApplyRescueModifier(Arg.Any<RescueCalculationInput>()).Returns(Array.Empty<AppliedRescueModifier>());
-
-            _disasterContributionLookup.GetDisasterRescueContribution(disasterCardCode).Returns(disasterContribution);
-            _characterContributionLookup.GetCharacterRescueContribution(characterCode).Returns(characterContribution);
-            _bonusModifierSourceRegistry.TryGetBonusModifierSource(fabCardCode1, out Arg.Any<IRescueModifierSource>())
-                .Returns(x =>
-                {
-                    x[1] = fabCardSource1;
-                    return true;
-                });
-            _bonusModifierSourceRegistry.TryGetBonusModifierSource(fabCardCode2, out Arg.Any<IRescueModifierSource>())
-                .Returns(x =>
-                {
-                    x[1] = fabCardSource2;
-                    return true;
-                });
-
-            // Act
-            var result = _sut.ResolveRescueCalculationAsync(request);
-
-            // Assert
-            Assert.NotNull(result);
-            _bonusModifierSourceRegistry.Received(1).TryGetBonusModifierSource(fabCardCode1, out Arg.Any<IRescueModifierSource>());
-            _bonusModifierSourceRegistry.Received(1).TryGetBonusModifierSource(fabCardCode2, out Arg.Any<IRescueModifierSource>());
-        }
-
-        [Fact]
-        public void ResolveRescueCalculationAsync_WithUnknownFabCard_SkipsFabCardNotInRegistry()
-        {
-            // Arrange
-            var disasterCardCode = new CardCode("test-disaster");
-            var characterCode = new CharacterCode("test-character");
-            var fabCardCode = new CardCode("unknown-fab-card");
-            var disasterBonusKeys = Array.Empty<DisasterBonusKey>();
-            var fabCardCodes = new[] { fabCardCode };
-            var eventCardCodes = Array.Empty<CardCode>();
-
-            var request = new RescueCalculationRequest(
-                disasterCardCode,
-                characterCode,
-                disasterBonusKeys,
-                fabCardCodes,
-                eventCardCodes);
-
-            var disasterContribution = new DisasterContribution(
-                difficultyNumber: 10,
-                availableBonuses: Array.Empty<DisasterBonus>(),
-                rescueType: RescueType.Air);
-
-            var characterContribution = new CharacterContribution(
-                characterCode,
-                characterRescueBonusContribution: null);
-
-            _disasterContributionLookup.GetDisasterRescueContribution(disasterCardCode).Returns(disasterContribution);
-            _characterContributionLookup.GetCharacterRescueContribution(characterCode).Returns(characterContribution);
-            _bonusModifierSourceRegistry.TryGetBonusModifierSource(fabCardCode, out Arg.Any<IRescueModifierSource>())
-                .Returns(false);
-
-            // Act
-            var result = _sut.ResolveRescueCalculationAsync(request);
-
-            // Assert
-            Assert.NotNull(result);
-            Assert.Equal(10, result.TargetRoll);
-            _bonusModifierSourceRegistry.Received(1).TryGetBonusModifierSource(fabCardCode, out Arg.Any<IRescueModifierSource>());
-        }
-
-        [Fact]
-        public void ResolveRescueCalculationAsync_WithMixedKnownAndUnknownFabCards_IncludesOnlyKnownFabCards()
-        {
-            // Arrange
-            var disasterCardCode = new CardCode("test-disaster");
-            var characterCode = new CharacterCode("test-character");
-            var knownFabCardCode = new CardCode("known-fab-card");
-            var unknownFabCardCode = new CardCode("unknown-fab-card");
-            var disasterBonusKeys = Array.Empty<DisasterBonusKey>();
-            var fabCardCodes = new[] { knownFabCardCode, unknownFabCardCode };
-            var eventCardCodes = Array.Empty<CardCode>();
-
-            var request = new RescueCalculationRequest(
-                disasterCardCode,
-                characterCode,
-                disasterBonusKeys,
-                fabCardCodes,
-                eventCardCodes);
-
-            var disasterContribution = new DisasterContribution(
-                difficultyNumber: 10,
-                availableBonuses: Array.Empty<DisasterBonus>(),
-                rescueType: RescueType.Air);
-
-            var characterContribution = new CharacterContribution(
-                characterCode,
-                characterRescueBonusContribution: null);
-
-            var knownFabCardSource = Substitute.For<IRescueModifierSource>();
-            knownFabCardSource.ApplyRescueModifier(Arg.Any<RescueCalculationInput>()).Returns(Array.Empty<AppliedRescueModifier>());
-
-            _disasterContributionLookup.GetDisasterRescueContribution(disasterCardCode).Returns(disasterContribution);
-            _characterContributionLookup.GetCharacterRescueContribution(characterCode).Returns(characterContribution);
-            _bonusModifierSourceRegistry.TryGetBonusModifierSource(knownFabCardCode, out Arg.Any<IRescueModifierSource>())
-                .Returns(x =>
-                {
-                    x[1] = knownFabCardSource;
-                    return true;
-                });
-            _bonusModifierSourceRegistry.TryGetBonusModifierSource(unknownFabCardCode, out Arg.Any<IRescueModifierSource>())
-                .Returns(false);
-
-            // Act
-            var result = _sut.ResolveRescueCalculationAsync(request);
-
-            // Assert
-            Assert.NotNull(result);
-            _bonusModifierSourceRegistry.Received(1).TryGetBonusModifierSource(knownFabCardCode, out Arg.Any<IRescueModifierSource>());
-            _bonusModifierSourceRegistry.Received(1).TryGetBonusModifierSource(unknownFabCardCode, out Arg.Any<IRescueModifierSource>());
-        }
-
-        [Fact]
-        public void ResolveRescueCalculationAsync_WithDisasterBonusKeys_PassesDisasterBonusKeysToCalculationInput()
-        {
-            // Arrange
-            var disasterCardCode = new CardCode("test-disaster");
-            var characterCode = new CharacterCode("test-character");
-            var disasterBonusKey1 = new DisasterBonusKey("bonus-1");
-            var disasterBonusKey2 = new DisasterBonusKey("bonus-2");
-            var disasterBonusKeys = new[] { disasterBonusKey1, disasterBonusKey2 };
-            var fabCardCodes = Array.Empty<CardCode>();
-            var eventCardCodes = Array.Empty<CardCode>();
-
-            var request = new RescueCalculationRequest(
-                disasterCardCode,
-                characterCode,
-                disasterBonusKeys,
-                fabCardCodes,
-                eventCardCodes);
-
-            var disasterBonus1 = new DisasterBonus(disasterBonusKey1, 2);
-            var disasterBonus2 = new DisasterBonus(disasterBonusKey2, 3);
-            var disasterContribution = new DisasterContribution(
-                difficultyNumber: 10,
-                availableBonuses: new[] { disasterBonus1, disasterBonus2 },
-                rescueType: RescueType.Air);
-
-            var characterContribution = new CharacterContribution(
-                characterCode,
-                characterRescueBonusContribution: null);
-
-            _disasterContributionLookup.GetDisasterRescueContribution(disasterCardCode).Returns(disasterContribution);
-            _characterContributionLookup.GetCharacterRescueContribution(characterCode).Returns(characterContribution);
-
-            // Act
-            var result = _sut.ResolveRescueCalculationAsync(request);
-
-            // Assert
-            Assert.NotNull(result);
-            Assert.Equal(5, result.TargetRoll);
-            Assert.Equal(5, result.TotalBonus);
-            Assert.Equal(2, result.AppliedModifiers.Count);
-        }
-
-        [Fact]
-        public void ResolveRescueCalculationAsync_WithCharacterBonus_AppliesCharacterBonusWhenRescueTypeMatches()
-        {
-            // Arrange
-            var disasterCardCode = new CardCode("test-disaster");
-            var characterCode = new CharacterCode("test-character");
-            var disasterBonusKeys = Array.Empty<DisasterBonusKey>();
-            var fabCardCodes = Array.Empty<CardCode>();
-            var eventCardCodes = Array.Empty<CardCode>();
-
-            var request = new RescueCalculationRequest(
-                disasterCardCode,
-                characterCode,
-                disasterBonusKeys,
-                fabCardCodes,
-                eventCardCodes);
-
-            var disasterContribution = new DisasterContribution(
-                difficultyNumber: 10,
-                availableBonuses: Array.Empty<DisasterBonus>(),
-                rescueType: RescueType.Air);
-
-            var characterRescueBonus = new CharacterRescueBonusContribution(RescueType.Air, 3);
-            var characterContribution = new CharacterContribution(
-                characterCode,
-                characterRescueBonus);
-
-            _disasterContributionLookup.GetDisasterRescueContribution(disasterCardCode).Returns(disasterContribution);
-            _characterContributionLookup.GetCharacterRescueContribution(characterCode).Returns(characterContribution);
-
-            // Act
-            var result = _sut.ResolveRescueCalculationAsync(request);
-
-            // Assert
-            Assert.NotNull(result);
-            Assert.Equal(7, result.TargetRoll);
+            Assert.Equal(2, result.TargetRoll);
             Assert.Equal(3, result.TotalBonus);
-            Assert.Single(result.AppliedModifiers);
+
+            var appliedModifier = Assert.Single(result.AppliedModifiers);
+            Assert.Equal("test-modifier", appliedModifier.Key);
+            Assert.Equal(3, appliedModifier.Value);
+            Assert.Equal(SourceType.FabCard, appliedModifier.SourceType);
         }
 
         [Fact]
-        public void ResolveRescueCalculationAsync_PassesRescueTypeFromDisasterToCalculationInput()
+        public void ResolveRescueCalculation_WhenModifierSourceDoesNotExist_IgnoresCard()
         {
-            // Arrange
-            var disasterCardCode = new CardCode("test-disaster");
-            var characterCode = new CharacterCode("test-character");
-            var disasterBonusKeys = Array.Empty<DisasterBonusKey>();
-            var fabCardCodes = Array.Empty<CardCode>();
-            var eventCardCodes = Array.Empty<CardCode>();
+            var request = CreateValidRequest(
+                fabCards: [ValidFabCard],
+                eventCards: [ValidEventCard]);
 
-            var request = new RescueCalculationRequest(
-                disasterCardCode,
-                characterCode,
-                disasterBonusKeys,
-                fabCardCodes,
-                eventCardCodes);
+            var fabCardCatalogLookup = Substitute.For<IFabCardCatalogLookup>();
+            fabCardCatalogLookup.Exists(Arg.Is(ValidFabCard)).Returns(true);
 
-            var disasterContribution = new DisasterContribution(
-                difficultyNumber: 10,
-                availableBonuses: Array.Empty<DisasterBonus>(),
-                rescueType: RescueType.Sea);
+            var eventCardCatalogLookup = Substitute.For<IEventCardCatalogLookup>();
+            eventCardCatalogLookup.Exists(Arg.Is(ValidEventCard)).Returns(true);
 
-            var characterRescueBonusAir = new CharacterRescueBonusContribution(RescueType.Air, 3);
-            var characterContribution = new CharacterContribution(
-                characterCode,
-                characterRescueBonusAir);
+            var bonusModifierSourceRegistry = Substitute.For<IBonusModifierSourceRegistry>();
+            bonusModifierSourceRegistry.TryGetBonusModifierSource(Arg.Any<CardCode>(), out Arg.Any<IRescueModifierSource>()).Returns(false);
 
-            _disasterContributionLookup.GetDisasterRescueContribution(disasterCardCode).Returns(disasterContribution);
-            _characterContributionLookup.GetCharacterRescueContribution(characterCode).Returns(characterContribution);
+            var service = CreateService(fabCardCatalogLookup, eventCardCatalogLookup, bonusModifierSourceRegistry);
 
             // Act
-            var result = _sut.ResolveRescueCalculationAsync(request);
+            var result = service.ResolveRescueCalculation(request);
 
             // Assert
             Assert.NotNull(result);
-            Assert.Equal(10, result.TargetRoll);
-            Assert.Equal(0, result.TotalBonus);
             Assert.Empty(result.AppliedModifiers);
         }
 
-        [Fact]
-        public void ResolveRescueCalculationAsync_CallsDisasterContributionLookupWithCorrectParameter()
+        private static RescueCalculationRequest CreateValidRequest(IReadOnlyCollection<CardCode> fabCards, IReadOnlyCollection<CardCode> eventCards)
         {
-            // Arrange
-            var disasterCardCode = new CardCode("specific-disaster");
-            var characterCode = new CharacterCode("test-character");
-            var disasterBonusKeys = Array.Empty<DisasterBonusKey>();
-            var fabCardCodes = Array.Empty<CardCode>();
-            var eventCardCodes = Array.Empty<CardCode>();
-
-            var request = new RescueCalculationRequest(
-                disasterCardCode,
-                characterCode,
-                disasterBonusKeys,
-                fabCardCodes,
-                eventCardCodes);
-
-            var disasterContribution = new DisasterContribution(
-                difficultyNumber: 10,
-                availableBonuses: Array.Empty<DisasterBonus>(),
-                rescueType: RescueType.Air);
-
-            var characterContribution = new CharacterContribution(
-                characterCode,
-                characterRescueBonusContribution: null);
-
-            _disasterContributionLookup.GetDisasterRescueContribution(disasterCardCode).Returns(disasterContribution);
-            _characterContributionLookup.GetCharacterRescueContribution(characterCode).Returns(characterContribution);
-
-            // Act
-            _sut.ResolveRescueCalculationAsync(request);
-
-            // Assert
-            _disasterContributionLookup.Received(1).GetDisasterRescueContribution(disasterCardCode);
+            return new RescueCalculationRequest(
+                DisasterCardCode: new CardCode("test-disaster"),
+                PerformingCharacter: new CharacterCode("test-character"),
+                PresentDisasterBonusKeys: [new DisasterBonusKey("test-bonus")],
+                PlayedFabCardCodes: fabCards,
+                ActiveEventCardCodes: eventCards);
         }
 
-        [Fact]
-        public void ResolveRescueCalculationAsync_CallsCharacterContributionLookupWithCorrectParameter()
+        private static CalculateRescueTargetResolutionService CreateService(
+            IFabCardCatalogLookup fabCardCatalogLookup,
+            IEventCardCatalogLookup eventCardCatalogLookup,
+            IBonusModifierSourceRegistry bonusModifierSourceRegistry)
         {
-            // Arrange
-            var disasterCardCode = new CardCode("test-disaster");
-            var characterCode = new CharacterCode("specific-character");
-            var disasterBonusKeys = Array.Empty<DisasterBonusKey>();
-            var fabCardCodes = Array.Empty<CardCode>();
-            var eventCardCodes = Array.Empty<CardCode>();
+            var disaster = new DisasterContribution(
+                difficultyNumber: 5,
+                availableBonuses: [],
+                rescueType: RescueType.Land);
 
-            var request = new RescueCalculationRequest(
-                disasterCardCode,
-                characterCode,
-                disasterBonusKeys,
-                fabCardCodes,
-                eventCardCodes);
-
-            var disasterContribution = new DisasterContribution(
-                difficultyNumber: 10,
-                availableBonuses: Array.Empty<DisasterBonus>(),
-                rescueType: RescueType.Air);
-
-            var characterContribution = new CharacterContribution(
-                characterCode,
+            var character = new CharacterContribution(
+                key: new CharacterCode("test-character"),
                 characterRescueBonusContribution: null);
 
-            _disasterContributionLookup.GetDisasterRescueContribution(disasterCardCode).Returns(disasterContribution);
-            _characterContributionLookup.GetCharacterRescueContribution(characterCode).Returns(characterContribution);
+            var disasterCatalogLookup = Substitute.For<IDisasterCatalogLookup>();
+            disasterCatalogLookup.GetDisasterRescueContribution(Arg.Any<CardCode>()).Returns(disaster);
 
-            // Act
-            _sut.ResolveRescueCalculationAsync(request);
+            var characterCatalogLookup = Substitute.For<ICharacterCatalogLookup>();
+            characterCatalogLookup.GetCharacterRescueContribution(Arg.Any<CharacterCode>()).Returns(character);
 
-            // Assert
-            _characterContributionLookup.Received(1).GetCharacterRescueContribution(characterCode);
-        }
+            var rescueTargetCalculator = new RescueTargetCalculator();
 
-        [Fact]
-        public void ResolveRescueCalculationAsync_PassesDifficultyNumberFromDisasterToCalculator()
-        {
-            // Arrange
-            var disasterCardCode = new CardCode("test-disaster");
-            var characterCode = new CharacterCode("test-character");
-            var disasterBonusKeys = Array.Empty<DisasterBonusKey>();
-            var fabCardCodes = Array.Empty<CardCode>();
-            var eventCardCodes = Array.Empty<CardCode>();
-
-            var request = new RescueCalculationRequest(
-                disasterCardCode,
-                characterCode,
-                disasterBonusKeys,
-                fabCardCodes,
-                eventCardCodes);
-
-            var disasterContribution = new DisasterContribution(
-                difficultyNumber: 15,
-                availableBonuses: Array.Empty<DisasterBonus>(),
-                rescueType: RescueType.Air);
-
-            var characterContribution = new CharacterContribution(
-                characterCode,
-                characterRescueBonusContribution: null);
-
-            _disasterContributionLookup.GetDisasterRescueContribution(disasterCardCode).Returns(disasterContribution);
-            _characterContributionLookup.GetCharacterRescueContribution(characterCode).Returns(characterContribution);
-
-            // Act
-            var result = _sut.ResolveRescueCalculationAsync(request);
-
-            // Assert
-            Assert.NotNull(result);
-            Assert.Equal(15, result.TargetRoll);
-        }
-
-        [Fact]
-        public void ResolveRescueCalculationAsync_IteratesAllFabCards_ProcessesEachFabCardInOrder()
-        {
-            // Arrange
-            var disasterCardCode = new CardCode("test-disaster");
-            var characterCode = new CharacterCode("test-character");
-            var fabCardCode1 = new CardCode("fab-card-1");
-            var fabCardCode2 = new CardCode("fab-card-2");
-            var fabCardCode3 = new CardCode("fab-card-3");
-            var disasterBonusKeys = Array.Empty<DisasterBonusKey>();
-            var fabCardCodes = new[] { fabCardCode1, fabCardCode2, fabCardCode3 };
-            var eventCardCodes = Array.Empty<CardCode>();
-
-            var request = new RescueCalculationRequest(
-                disasterCardCode,
-                characterCode,
-                disasterBonusKeys,
-                fabCardCodes,
-                eventCardCodes);
-
-            var disasterContribution = new DisasterContribution(
-                difficultyNumber: 10,
-                availableBonuses: Array.Empty<DisasterBonus>(),
-                rescueType: RescueType.Air);
-
-            var characterContribution = new CharacterContribution(
-                characterCode,
-                characterRescueBonusContribution: null);
-
-            _disasterContributionLookup.GetDisasterRescueContribution(disasterCardCode).Returns(disasterContribution);
-            _characterContributionLookup.GetCharacterRescueContribution(characterCode).Returns(characterContribution);
-            _bonusModifierSourceRegistry.TryGetBonusModifierSource(Arg.Any<CardCode>(), out Arg.Any<IRescueModifierSource>())
-                .Returns(false);
-
-            // Act
-            _sut.ResolveRescueCalculationAsync(request);
-
-            // Assert
-            _bonusModifierSourceRegistry.Received(1).TryGetBonusModifierSource(fabCardCode1, out Arg.Any<IRescueModifierSource>());
-            _bonusModifierSourceRegistry.Received(1).TryGetBonusModifierSource(fabCardCode2, out Arg.Any<IRescueModifierSource>());
-            _bonusModifierSourceRegistry.Received(1).TryGetBonusModifierSource(fabCardCode3, out Arg.Any<IRescueModifierSource>());
+            return new CalculateRescueTargetResolutionService(
+                disasterCatalogLookup,
+                characterCatalogLookup,
+                fabCardCatalogLookup,
+                eventCardCatalogLookup,
+                bonusModifierSourceRegistry,
+                rescueTargetCalculator);
         }
     }
 }

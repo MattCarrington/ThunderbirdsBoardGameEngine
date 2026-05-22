@@ -35,7 +35,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Application.Rescue.CalculateRescueTa
                 ActiveEventCardCodes: query.ActiveEventCardCodes
             );
 
-            var calculatedTarget = _rescueCalculationService.ResolveRescueCalculationAsync(request);
+            var calculatedTarget = _rescueCalculationService.ResolveRescueCalculation(request);
 
             return Task.FromResult(
                 new CalculateRescueTargetResponse
