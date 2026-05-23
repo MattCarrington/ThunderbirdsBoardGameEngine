@@ -9,7 +9,7 @@
         /// <summary>
         /// Gets the collection of bonus keys that are currently active for disasters.
         /// </summary>
-        public required IReadOnlyCollection<string> PresentDisasterBonusKeys { get; init; }
+        public IReadOnlyCollection<string> PresentDisasterBonusKeys { get; init; } = [];
 
         /// <summary>
         /// Gets the unique key identifying the character performing the rescue action.
