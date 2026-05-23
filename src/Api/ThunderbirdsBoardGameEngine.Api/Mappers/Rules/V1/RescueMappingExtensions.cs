@@ -20,13 +20,23 @@ namespace ThunderbirdsBoardGameEngine.Api.Mappers.Rules.V1
                 throw new BadRequestException("Present disaster bonus keys cannot contain null or whitespace values.");
             }
 
+            if (request.PlayedFabCards.Any(string.IsNullOrWhiteSpace))
+            {
+                throw new BadRequestException("Played FAB card codes cannot contain null or whitespace values.");
+            }
+
+            if (request.ActiveEventCards.Any(string.IsNullOrWhiteSpace))
+            {
+                throw new BadRequestException("Active event card codes cannot contain null or whitespace values.");
+            }
+
             return new CalculateRescueTargetQuery
             (
                 DisasterCardCode: new CardCode(disasterCardCode),
                 PerformingCharacter: new CharacterCode(request.PerformingCharacterKey),
                 PresentDisasterBonusKeys: request.PresentDisasterBonusKeys.Select(k => new DisasterBonusKey(k)).ToList(),
-                PlayedFabCardCodes: Array.Empty<CardCode>(), // TODO: this will be populated when DTO is updated to include played FAB cards
-                ActiveEventCardCodes: Array.Empty<CardCode>() // TODO: this will be populated when DTO is updated to include active event cards
+                PlayedFabCardCodes: request.PlayedFabCards.Select(c => new CardCode(c)).ToList(),
+                ActiveEventCardCodes: request.ActiveEventCards.Select(c => new CardCode(c)).ToList()
             );
         }
 
@@ -56,6 +66,8 @@ namespace ThunderbirdsBoardGameEngine.Api.Mappers.Rules.V1
             {
                 SourceType.DisasterCard => "disaster-card",
                 SourceType.CharacterAbility => "character-ability",
+                SourceType.FabCard => "fab-card",
+                SourceType.EventCard => "event-card",
                 _ => throw new InvalidOperationException($"Unhandled SourceType '{sourceType}'")
             };
         }
