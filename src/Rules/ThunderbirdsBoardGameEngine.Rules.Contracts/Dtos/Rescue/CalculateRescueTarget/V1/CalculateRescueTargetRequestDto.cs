@@ -20,5 +20,15 @@
         /// and has not yet been declared stable.
         /// </remarks>
         public required string PerformingCharacterKey { get; init; }
+
+        /// <summary>
+        /// Gets the collection of unique keys for the Fab Cards that have been played.
+        /// </summary>
+        public IReadOnlyCollection<string> PlayedFabCards { get; init; } = [];
+
+        /// <summary>
+        /// Gets the collection of unique keys for the Event Cards that are currently active.
+        /// </summary>
+        public IReadOnlyCollection<string> ActiveEventCards { get; init; } = [];
     }
 }
