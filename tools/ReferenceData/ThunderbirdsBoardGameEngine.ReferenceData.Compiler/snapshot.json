@@ -1084,156 +1084,131 @@
     },
     {
       "code": "fab-1",
-      "displayName": "FAB 1",
-      "domain": "earth",
-      "topSpeed": 1
+      "displayName": "FAB 1"
     }
   ],
-  "mapEdgeDefinitions": [
+  "fabCardDefinitions": [
     {
-      "edge1": "europe",
-      "edge2": "north-atlantic",
-      "edgeType": "earth"
+      "code": "underwater-sealing-unit",
+      "displayName": "Underwater Sealing Unit"
     },
     {
-      "edge1": "europe",
-      "edge2": "africa",
-      "edgeType": "earth"
+      "code": "holiday-in-bonga-bonga",
+      "displayName": "Holiday in Bonga Bonga"
     },
     {
-      "edge1": "europe",
-      "edge2": "asia",
-      "edgeType": "earth"
+      "code": "mobile-command-unit",
+      "displayName": "Mobile Command Unit"
     },
     {
-      "edge1": "asia",
-      "edge2": "africa",
-      "edgeType": "earth"
+      "code": "astronaut-spacewalk",
+      "displayName": "Astronaut Spacewalk"
     },
     {
-      "edge1": "asia",
-      "edge2": "indian-ocean",
-      "edgeType": "earth"
+      "code": "grandma-s-cooking",
+      "displayName": "Grandma\u0027s Cooking"
     },
     {
-      "edge1": "asia",
-      "edge2": "australia",
-      "edgeType": "earth"
+      "code": "experimental-fuel",
+      "displayName": "Experimental Fuel"
     },
     {
-      "edge1": "asia",
-      "edge2": "north-pacific",
-      "edgeType": "earth"
+      "code": "air-sea-rescue-centre",
+      "displayName": "Air Sea Rescue Centre"
     },
     {
-      "edge1": "north-pacific",
-      "edge2": "australia",
-      "edgeType": "earth"
+      "code": "help-from-braman",
+      "displayName": "Help from Braman"
     },
     {
-      "edge1": "north-pacific",
-      "edge2": "south-pacific",
-      "edgeType": "earth"
+      "code": "powder-compact-radio",
+      "displayName": "Powder Compact Radio"
     },
     {
-      "edge1": "north-pacific",
-      "edge2": "north-america",
-      "edgeType": "earth"
+      "code": "automatic-camera-detector",
+      "displayName": "Automatic Camera Detector"
     },
     {
-      "edge1": "north-america",
-      "edge2": "south-pacific",
-      "edgeType": "earth"
+      "code": "tracy-brothers-portraits",
+      "displayName": "Tracy Brothers\u0027 Portraits"
     },
     {
-      "edge1": "north-america",
-      "edge2": "north-atlantic",
-      "edgeType": "earth"
+      "code": "agent-47-jeremiah-tuttle",
+      "displayName": "Agent-47 Jeremiah Tuttle"
     },
     {
-      "edge1": "north-america",
-      "edge2": "south-america",
-      "edgeType": "earth"
+      "code": "fab-1-hydrofoils",
+      "displayName": "FAB 1 Hydrofoils"
     },
     {
-      "edge1": "north-atlantic",
-      "edge2": "south-america",
-      "edgeType": "earth"
+      "code": "remote-control-hover-camera",
+      "displayName": "Remote Control Hover Camera"
     },
     {
-      "edge1": "north-atlantic",
-      "edge2": "south-atlantic",
-      "edgeType": "earth"
+      "code": "personal-hoverjet",
+      "displayName": "Personal Hoverjet"
     },
     {
-      "edge1": "north-atlantic",
-      "edge2": "africa",
-      "edgeType": "earth"
+      "code": "sir-jeremy-hodge",
+      "displayName": "Sir Jeremy Hodge"
     },
     {
-      "edge1": "africa",
-      "edge2": "south-atlantic",
-      "edgeType": "earth"
+      "code": "long-range-walkie-talkies",
+      "displayName": "Long-Range Walkie Talkies"
     },
     {
-      "edge1": "africa",
-      "edge2": "indian-ocean",
-      "edgeType": "earth"
+      "code": "jeff-s-orders",
+      "displayName": "Jeff\u0027s Orders"
+    }
+  ],
+  "eventCardDefinitions": [
+    {
+      "code": "the-hood-interferes",
+      "displayName": "The Hood Interferes"
     },
     {
-      "edge1": "indian-ocean",
-      "edge2": "australia",
-      "edgeType": "earth"
+      "code": "explosion-on-tracy-island",
+      "displayName": "Explosion on Tracy Island"
     },
     {
-      "edge1": "australia",
-      "edge2": "south-pacific",
-      "edgeType": "earth"
+      "code": "pod-hydraulics-sabotaged",
+      "displayName": "Pod Hydraulics Sabotaged"
     },
     {
-      "edge1": "south-pacific",
-      "edge2": "south-america",
-      "edgeType": "earth"
+      "code": "attack-of-the-zombites",
+      "displayName": "Attack of the Zombites"
     },
     {
-      "edge1": "south-america",
-      "edge2": "south-atlantic",
-      "edgeType": "earth"
+      "code": "accidental-injury",
+      "displayName": "Accidental Injury"
     },
     {
-      "edge1": "south-pacific",
-      "edge2": "geo-stationary-orbit",
-      "edgeType": "space"
+      "code": "rocket-malfunction",
+      "displayName": "Rocket Malfunction"
     },
     {
-      "edge1": "geo-stationary-orbit",
-      "edge2": "venus",
-      "edgeType": "space"
+      "code": "kyrano-kyrano",
+      "displayName": "Kyrano\u2026 Kyrano!!"
     },
     {
-      "edge1": "venus",
-      "edge2": "mercury",
-      "edgeType": "space"
+      "code": "emergency-comms-interrupted",
+      "displayName": "Emergency Comms Interrupted"
     },
     {
-      "edge1": "mercury",
-      "edge2": "the-sun",
-      "edgeType": "space"
+      "code": "the-hood-s-hynoptic-eyes",
+      "displayName": "The Hood\u0027s Hynoptic Eyes"
     },
     {
-      "edge1": "geo-stationary-orbit",
-      "edge2": "the-moon",
-      "edgeType": "space"
+      "code": "usn-sentinel-missile-strike",
+      "displayName": "USN Sentinel Missile Strike"
     },
     {
-      "edge1": "the-moon",
-      "edge2": "mars",
-      "edgeType": "space"
+      "code": "master-of-disguise",
+      "displayName": "Master of Disguise"
     },
     {
-      "edge1": "mars",
-      "edge2": "asteroid-belt",
-      "edgeType": "space"
+      "code": "icelandic-volcano-eruption",
+      "displayName": "Icelandic Volcano Eruption"
     }
   ]
 }
