@@ -3,7 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using NSubstitute;
 using ThunderbirdsBoardGameEngine.Rules.Contracts.Dtos.Rescue.CalculateRescueTarget.V1;
 using ThunderbirdsBoardGameEngine.UI.Interfaces;
-using ThunderbirdsBoardGameEngine.UI.Pages;
+using ThunderbirdsBoardGameEngine.UI.Features.DisasterCards;
 using ThunderbirdsBoardGameEngine.UI.ViewModels;
 using Xunit;
 

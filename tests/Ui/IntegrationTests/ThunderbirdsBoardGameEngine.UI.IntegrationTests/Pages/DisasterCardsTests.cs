@@ -8,7 +8,7 @@ using ThunderbirdsBoardGameEngine.Rules.WireMock;
 using ThunderbirdsBoardGameEngine.TestUtils.xUnit.Fixtures;
 using ThunderbirdsBoardGameEngine.UI.Interfaces;
 using ThunderbirdsBoardGameEngine.UI.Mappers;
-using ThunderbirdsBoardGameEngine.UI.Pages;
+using ThunderbirdsBoardGameEngine.UI.Features.DisasterCards;
 using ThunderbirdsBoardGameEngine.UI.Services;
 using ThunderbirdsBoardGameEngine.WireMock.Hosting;
 using Xunit;
