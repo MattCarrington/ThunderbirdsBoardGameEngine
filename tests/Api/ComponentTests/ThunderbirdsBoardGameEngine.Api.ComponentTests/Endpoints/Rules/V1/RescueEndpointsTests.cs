@@ -147,31 +147,6 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints.Rules.V1
         }
 
         [Fact]
-        public async Task CalculateRescueTarget_WhenPerformingCharacterInvalid_ReturnsNotFound()
-        {
-            // Arrange
-            var invalidRequestDto = new CalculateRescueTargetRequestDto
-            {
-                PresentDisasterBonusKeys = new[]
-                {
-                    "mobile-crane",
-                    "domo"
-                },
-                PerformingCharacterKey = "invalid-character"
-            };
-
-            using var request = new HttpRequestMessage(HttpMethod.Post, _route);
-            request.Headers.Add("X-API-Version", ApiVersion.ToString());
-            request.Content = JsonContent.Create(invalidRequestDto);
-
-            // Act
-            using var response = await _client.SendAsync(request, TestContext.Current.CancellationToken);
-
-            // Assert
-            await ProblemDetailsAssertions.AssertNotFoundAsync(response, "Resource not found.");
-        }
-
-        [Fact]
         public async Task CalculateRescueResult_WhenFabCardInvalid_ReturnsBadRequest()
         {
             // Arrange

@@ -68,7 +68,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Infrastructure.UnitTests.Lookups
             var lookup = new ReferenceCharacterCatalogLookup(catalog);
 
             // Act & Assert
-            var ex = Assert.Throws<ReferenceDataNotFoundException>(() => lookup.GetCharacterRescueContribution(code));
+            var ex = Assert.Throws<InvalidRescueCalculationRequestException>(() => lookup.GetCharacterRescueContribution(code));
             Assert.Equal("Character", ex.ResourceType);
             Assert.Equal(code.ToString(), ex.Code);
         }

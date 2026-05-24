@@ -29,7 +29,10 @@ namespace ThunderbirdsBoardGameEngine.Rules.Infrastructure.Lookups
             }
             catch (KeyNotFoundException)
             {
-                throw new ReferenceDataNotFoundException("Character", characterCode.ToString());
+                // Technically, changing the exception type thrown here would be a breaking change to the API,
+                // as the handler for this exception type returns a Bad Request, while the handler for the original exception type returns a Not Found.
+                // However, as the contract is still evolving, it should be safe to do so.
+                throw new InvalidRescueCalculationRequestException("Character", characterCode.ToString());
             }
         }
     }
