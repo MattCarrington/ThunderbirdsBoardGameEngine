@@ -57,7 +57,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Infrastructure.UnitTests.Lookups
         }
 
         [Fact]
-        public void GetCharacterRescueContribution_WhenCharacterIsNotFound_ThrowsReferenceDataNotFoundException()
+        public void GetCharacterRescueContribution_WhenCharacterIsNotFound_ThrowsInvalidRescueCalculationRequestException()
         {
             // Arrange
             var code = new CharacterCode("unknown_character");
