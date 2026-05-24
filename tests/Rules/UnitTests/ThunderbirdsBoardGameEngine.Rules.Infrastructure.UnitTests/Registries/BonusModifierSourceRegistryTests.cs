@@ -1,4 +1,5 @@
 ﻿using ThunderbirdsBoardGameEngine.ReferenceData.Identities;
+using ThunderbirdsBoardGameEngine.Rules.Domain.EventCards;
 using ThunderbirdsBoardGameEngine.Rules.Domain.FabCards;
 using ThunderbirdsBoardGameEngine.Rules.Infrastructure.Registries;
 using Xunit;
@@ -12,6 +13,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Infrastructure.UnitTests.Registries
         [InlineData("personal-hoverjet", typeof(PersonalHoverjet))]
         [InlineData("underwater-sealing-unit", typeof(UnderwaterSealingUnit))]
         [InlineData("astronaut-spacewalk", typeof(AstronautSpacewalk))]
+        [InlineData("the-hood-interferes", typeof(TheHoodInterferes))]
         public void GetBonusModifierSource_WhenCardExistsInRegistry_ShouldReturnExpectedSource(string cardCodeString, Type expectedType)
         {
             // Arrange
