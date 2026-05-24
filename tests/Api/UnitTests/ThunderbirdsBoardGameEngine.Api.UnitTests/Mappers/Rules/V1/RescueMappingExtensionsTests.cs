@@ -42,9 +42,8 @@ namespace ThunderbirdsBoardGameEngine.Api.UnitTests.Mappers.Rules.V1
             // Arrange
             var dto = new CalculateRescueTargetRequestDto
             {
-                PresentDisasterBonusKeys = [],
                 PerformingCharacterKey = "alan"
-                // PlayedFabCards and ActiveEventCards are not set, should default to empty lists
+                // PresentDisasterBonusKeys, PlayedFabCards and ActiveEventCards are not set, should default to empty lists
             };
 
             // Act
