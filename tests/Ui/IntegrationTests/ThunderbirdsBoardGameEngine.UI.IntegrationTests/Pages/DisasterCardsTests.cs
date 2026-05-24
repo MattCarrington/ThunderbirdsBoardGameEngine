@@ -16,7 +16,7 @@ using Xunit;
 namespace ThunderbirdsBoardGameEngine.UI.IntegrationTests.Pages
 {
     [Collection("WireMock")]
-    public class DisasterCardsTests : Bunit.TestContext
+    public class DisasterCardsTests : BunitContext
     {
         private readonly WireMockHost _host;
 
@@ -55,7 +55,7 @@ namespace ThunderbirdsBoardGameEngine.UI.IntegrationTests.Pages
         public void Render_WhenCardsAndCharactersExist_LoadsFromReferenceData()
         {
             // Act
-            var cut = RenderComponent<DisasterCards>();
+            var cut = Render<DisasterCards>();
 
             // Assert - disaster cards are loaded
             var cardOptions = cut
@@ -81,7 +81,7 @@ namespace ThunderbirdsBoardGameEngine.UI.IntegrationTests.Pages
             _host.RescueStub().RegisterCalculateRescueTargetSuccess(rescueResult);
 
             // Act
-            var cut = RenderComponent<DisasterCards>();
+            var cut = Render<DisasterCards>();
 
             // Select disaster card
             cut.Find("#disasterSelect").Change("end-of-the-road");
@@ -125,7 +125,7 @@ namespace ThunderbirdsBoardGameEngine.UI.IntegrationTests.Pages
             _host.RescueStub().RegisterCalculateRescueTargetError();
 
             // Act
-            var cut = RenderComponent<DisasterCards>();
+            var cut = Render<DisasterCards>();
 
             // Select disaster card (loads synchronously)
             cut.Find("#disasterSelect").Change("end-of-the-road");
