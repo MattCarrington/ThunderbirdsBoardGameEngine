@@ -27,44 +27,12 @@ else
                 <p><strong>Location:</strong> @selectedCard.Location</p>
                 <p><strong>Rescue Type:</strong> @selectedCard.RescueType</p>
 
-                @if (selectedCard.BonusConditions?.Any() == true)
-                {
-                    <h5>Bonus Conditions</h5>
+                <BonusConditionList 
+                    BonusConditions="selectedCard.BonusConditions"
+                    @bind-SelectedBonusKeys="selectedBonusKeys"
+                    BonusChanged="OnBonusToggled"/>
 
-                    <ul class="list-unstyled">
-                        @foreach (var bonus in selectedCard.BonusConditions)
-                        {
-                            var checkboxId = $"bonus-{bonus.Key}";
-
-                            <li>
-                                <div class="form-check">
-                                    <input class="form-check-input"
-                                           type="checkbox"
-                                           id="@checkboxId"
-                                           data-testid="bonus-checkbox"
-                                           data-bonus-key="@bonus.Key"
-                                           checked="@selectedBonusKeys.Contains(bonus.Key)"
-                                           @onchange="e => OnBonusToggled(bonus.Key, e)" />
-
-                                    <label class="form-check-label" for="@checkboxId">
-                                        @bonus.Description
-                                    </label>
-                                </div>
-                            </li>
-                        }
-                    </ul>
-                }
-
-                @if (selectedCard.Rewards?.Any() == true)
-                {
-                    <h5>Rewards</h5>
-                    <ul>
-                        @foreach (var reward in selectedCard.Rewards)
-                        {
-                            <li>@reward.Description</li>
-                        }
-                    </ul>
-                }
+                <RewardList Rewards="selectedCard.Rewards" />
 
                 <CharacterSelector
                     Characters="characters"

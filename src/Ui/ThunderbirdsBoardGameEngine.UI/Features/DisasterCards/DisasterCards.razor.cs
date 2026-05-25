@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using ThunderbirdsBoardGameEngine.Rules.Contracts.Dtos.Rescue.CalculateRescueTarget.V1;
+using ThunderbirdsBoardGameEngine.UI.Features.DisasterCards.Components;
 using ThunderbirdsBoardGameEngine.UI.Interfaces;
 using ThunderbirdsBoardGameEngine.UI.ViewModels;
 
@@ -23,7 +24,7 @@ namespace ThunderbirdsBoardGameEngine.UI.Features.DisasterCards
         private DisasterCardViewModel? selectedCard;
         private string? selectedCharacter;
 
-        private readonly HashSet<string> selectedBonusKeys = new();
+        private HashSet<string> selectedBonusKeys = new();
 
         private CalculateRescueTargetResponseDto? calculationResult;
         private bool calculationFailed;
@@ -63,17 +64,15 @@ namespace ThunderbirdsBoardGameEngine.UI.Features.DisasterCards
             }
         }
 
-        private void OnBonusToggled(string key, ChangeEventArgs e)
+        private void OnBonusToggled(BonusConditionChanged change)
         {
-            var isChecked = (bool)e.Value!;
-
-            if (isChecked)
+            if (change.Selected)
             {
-                selectedBonusKeys.Add(key);
+                selectedBonusKeys.Add(change.Key);
             }
             else
             {
-                selectedBonusKeys.Remove(key);
+                selectedBonusKeys.Remove(change.Key);
             }
         }
 
