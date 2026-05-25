@@ -1,4 +1,5 @@
 ﻿@page "/disasterCards"
+@using ThunderbirdsBoardGameEngine.UI.Features.DisasterCards.Components
 
 <h3>Select a Disaster Card</h3>
 
@@ -73,20 +74,9 @@ else
                     </ul>
                 }
 
-                @if (characters is not null && characters.Count > 0)
-                {
-                    <label for="characterSelect" class="form-label">Character</label>
-                    <select id="characterSelect" class="form-select"
-                            @bind-Value="selectedCharacterCode"
-                            @bind-Value:event="onchange" required>
-                        <option value="">-- Select a character --</option>
-
-                        @foreach (var c in characters)
-                        {
-                            <option value="@c.Key">@c.DisplayName</option>
-                        }
-                    </select>
-                }
+                <CharacterSelector
+                    Characters="characters"
+                    @bind-SelectedCharacterCode="selectedCharacter"/>
 
                 <button class="btn btn-primary mt-3"
                         data-testid="calculate-button"

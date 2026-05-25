@@ -21,7 +21,7 @@ namespace ThunderbirdsBoardGameEngine.UI.Features.DisasterCards
 
         private string? selectedCardId;
         private DisasterCardViewModel? selectedCard;
-        private string? selectedCharacterCode;
+        private string? selectedCharacter;
 
         private readonly HashSet<string> selectedBonusKeys = new();
 
@@ -32,7 +32,7 @@ namespace ThunderbirdsBoardGameEngine.UI.Features.DisasterCards
         private bool IsCalculateDisabled =>
             isCalculating
             || selectedCard is null
-            || string.IsNullOrWhiteSpace(selectedCharacterCode);
+            || string.IsNullOrWhiteSpace(selectedCharacter);
 
         protected override void OnInitialized()
         {
@@ -79,7 +79,7 @@ namespace ThunderbirdsBoardGameEngine.UI.Features.DisasterCards
 
         private async Task CalculateRescueTarget()
         {
-            if (selectedCard is null || string.IsNullOrWhiteSpace(selectedCharacterCode))
+            if (selectedCard is null || string.IsNullOrWhiteSpace(selectedCharacter))
             {
                 return;
             }
@@ -94,7 +94,7 @@ namespace ThunderbirdsBoardGameEngine.UI.Features.DisasterCards
                     await RescueService.CalculateRescueTargetAsync(
                         selectedCard.Code,
                         selectedBonusKeys,
-                        selectedCharacterCode);
+                        selectedCharacter);
 
                 calculationFailed = calculationResult is null;
             }
