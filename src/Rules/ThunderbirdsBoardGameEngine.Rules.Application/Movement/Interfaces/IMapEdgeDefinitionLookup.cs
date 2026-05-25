@@ -2,7 +2,7 @@
 
 namespace ThunderbirdsBoardGameEngine.Rules.Application.Movement.Interfaces
 {
-    public interface IReferenceMapEdgeDefinitionLookup
+    public interface IMapEdgeDefinitionLookup
     {
         IEnumerable<ReferenceMapEdgeDefinition> GetAll();
     }

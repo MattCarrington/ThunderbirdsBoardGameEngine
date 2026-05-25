@@ -4,7 +4,7 @@ using ThunderbirdsBoardGameEngine.Rules.Application.Movement.Interfaces;
 
 namespace ThunderbirdsBoardGameEngine.Rules.Infrastructure.Lookups
 {
-    internal sealed class ReferenceMapEdgeDefinitionLookup : IReferenceMapEdgeDefinitionLookup
+    internal sealed class ReferenceMapEdgeDefinitionLookup : IMapEdgeDefinitionLookup
     {
         private readonly IMapEdgeDefinitionCatalog _mapEdgeDefinitionCatalog;
 
