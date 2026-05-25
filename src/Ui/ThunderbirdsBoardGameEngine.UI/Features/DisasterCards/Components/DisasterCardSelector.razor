@@ -1,0 +1,12 @@
+﻿<label for="disasterSelect" class="form-label">Card</label>
+<select id="disasterSelect"
+        class="form-select"
+        value="@SelectedDisasterCardCode"
+        @onchange="OnChanged"
+        required>
+    <option value="">-- Select a card --</option>
+    @foreach (var c in DisasterCards)
+    {
+        <option value="@c.Code">@c.DisplayName</option>
+    }
+</select>

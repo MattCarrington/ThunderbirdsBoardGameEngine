@@ -19,7 +19,7 @@ namespace ThunderbirdsBoardGameEngine.UI.Features.DisasterCards
         private IReadOnlyList<DisasterCardViewModel>? cards;
         private IReadOnlyList<CharacterViewModel>? characters;
 
-        private string? selectedCardId;
+        private string? selectedCardCode;
         private DisasterCardViewModel? selectedCard;
         private string? selectedCharacter;
 
@@ -45,15 +45,15 @@ namespace ThunderbirdsBoardGameEngine.UI.Features.DisasterCards
 
         private string? SelectedCardId
         {
-            get => selectedCardId;
+            get => selectedCardCode;
             set
             {
-                if (selectedCardId == value)
+                if (selectedCardCode == value)
                 {
                     return;
                 }
 
-                selectedCardId = value;
+                selectedCardCode = value;
                 selectedBonusKeys.Clear();
                 calculationResult = null;
 

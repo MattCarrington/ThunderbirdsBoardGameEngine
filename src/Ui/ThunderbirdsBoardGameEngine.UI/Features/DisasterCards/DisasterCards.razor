@@ -13,17 +13,9 @@ else if (cards.Count == 0)
 }
 else
 {
-    <label for="disasterSelect" class="form-label">Card</label>
-    <select id="disasterSelect"
-            class="form-select"
-            @bind-Value="SelectedCardId"
-            @bind-Value:event="onchange">
-        <option value="">-- Select a card --</option>
-        @foreach (var c in cards)
-        {
-            <option value="@c.Code">@c.DisplayName</option>
-        }
-    </select>
+    <DisasterCardSelector 
+        DisasterCards="cards"
+        @bind-SelectedDisasterCardCode="selectedCardCode" />
 
     @if (selectedCard is not null)
     {
