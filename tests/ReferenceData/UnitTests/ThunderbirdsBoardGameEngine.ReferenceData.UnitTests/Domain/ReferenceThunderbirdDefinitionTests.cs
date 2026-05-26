@@ -1,4 +1,5 @@
-﻿using ThunderbirdsBoardGameEngine.ReferenceData.Identities;
+﻿using ThunderbirdsBoardGameEngine.ReferenceData.Enums;
+using ThunderbirdsBoardGameEngine.ReferenceData.Identities;
 using ThunderbirdsBoardGameEngine.ReferenceData.Model;
 using ThunderbirdsBoardGameEngine.TestUtils.xUnit.ClassData;
 using Xunit;
@@ -11,6 +12,8 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.UnitTests.Domain
 
         private static string ValidDisplayName => "Thunderbird 1";
 
+        private static TraversalDomain ValidDomain => TraversalDomain.Earth;
+
         [Fact]
         public void Constructor_WhenAllInputsValid_CreatesInstance()
         {
@@ -19,12 +22,14 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.UnitTests.Domain
             // Act
             var result = new ReferenceThunderbirdDefinition(
                 code: ValidThunderbirdCode,
-                displayName: ValidDisplayName
+                displayName: ValidDisplayName,
+                domain: ValidDomain
             );
 
             // Assert
             Assert.Equal(ValidThunderbirdCode, result.Code);
             Assert.Equal(ValidDisplayName, result.DisplayName);
+            Assert.Equal(ValidDomain, result.Domain);
         }
 
         [Theory]
@@ -36,7 +41,8 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.UnitTests.Domain
             // Act & Assert
             Assert.ThrowsAny<ArgumentException>(() => new ReferenceThunderbirdDefinition(
                 code: ValidThunderbirdCode,
-                displayName: displayName
+                displayName: displayName,
+                domain: ValidDomain
             ));
         }
     }

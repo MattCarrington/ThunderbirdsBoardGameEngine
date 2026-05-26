@@ -107,7 +107,9 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Compilation
             return thunderbirdInputs
                 .Select(input => new ReferenceThunderbirdDefinition(
                     new ThunderbirdCode(StringHelpers.Slugify(input.Name)),
-                    StringHelpers.NormalizeWhitespace(input.Name, nameof(input.Name))))
+                    StringHelpers.NormalizeWhitespace(input.Name, nameof(input.Name)),
+                    // Enum.Parse<TraversalDomain>(input.Domain, ignoreCase: true)))
+                    domain: TraversalDomain.Earth)) // TODO: Add domain to input and parse it here instead of hardcoding to Earth
                 .ToList();
         }
 

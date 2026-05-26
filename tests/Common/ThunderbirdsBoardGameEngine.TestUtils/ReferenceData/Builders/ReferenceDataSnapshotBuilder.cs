@@ -95,11 +95,13 @@ public sealed class ReferenceDataSnapshotBuilder
 
     public ReferenceDataSnapshotBuilder WithThunderbird(
         string code,
-        string displayName)
+        string displayName,
+        TraversalDomain domain = TraversalDomain.Earth)
     {
         _thunderbirds.Add(new ReferenceThunderbirdDefinition(
             new ThunderbirdCode(code),
-            displayName));
+            displayName,
+            domain));
 
         return this;
     }
