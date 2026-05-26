@@ -6,7 +6,7 @@ using ThunderbirdsBoardGameEngine.Rules.Domain.Movement;
 
 namespace ThunderbirdsBoardGameEngine.Rules.Infrastructure.Lookups
 {
-    internal class ReferenceThunderbirdsDefinitionLookup : IReferenceThunderbirdsDefinitionLookup
+    internal class ReferenceThunderbirdsDefinitionLookup : IThunderbirdsDefinitionLookup
     {
         private readonly IThunderbirdDefinitionCatalog _thunderbirdDefinitionCatalog;
 

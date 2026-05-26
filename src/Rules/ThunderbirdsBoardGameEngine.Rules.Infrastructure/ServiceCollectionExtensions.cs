@@ -32,6 +32,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Infrastructure
             services.AddSingleton<ICharacterContributionLookup, ReferenceCharacterContributionLookup>();
             services.AddSingleton<ILocationDefinitionLookup, ReferenceLocationDefinitionLookup>();
             services.AddSingleton<IMapEdgeDefinitionLookup, ReferenceMapEdgeDefinitionLookup>();
+            services.AddSingleton<IThunderbirdsDefinitionLookup, ReferenceThunderbirdsDefinitionLookup>();
 
             return services;
         }
