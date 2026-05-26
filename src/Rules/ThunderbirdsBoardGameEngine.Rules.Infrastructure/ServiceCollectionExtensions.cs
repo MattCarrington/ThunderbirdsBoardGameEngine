@@ -1,5 +1,7 @@
 ﻿using MediatR;
 using Microsoft.Extensions.DependencyInjection;
+using ThunderbirdsBoardGameEngine.Rules.Application.Movement.Interfaces;
+using ThunderbirdsBoardGameEngine.Rules.Application.Movement.MapTraversal;
 using ThunderbirdsBoardGameEngine.Rules.Application.Rescue.CalculateRescueTarget;
 using ThunderbirdsBoardGameEngine.Rules.Application.Rescue.Interfaces;
 using ThunderbirdsBoardGameEngine.Rules.Domain.Rescue;
@@ -23,10 +25,13 @@ namespace ThunderbirdsBoardGameEngine.Rules.Infrastructure
         public static IServiceCollection AddRules(this IServiceCollection services)
         {
             services.AddMediatR(typeof(CalculateRescueTargetHandler).Assembly);
+            services.AddMediatR(typeof(ValidateMovementHandler).Assembly);
 
             services.AddSingleton<RescueTargetCalculator>();
             services.AddSingleton<IDisasterContributionLookup, ReferenceDataDisasterContributionLookup>();
             services.AddSingleton<ICharacterContributionLookup, ReferenceCharacterContributionLookup>();
+            services.AddSingleton<ILocationDefinitionLookup, ReferenceLocationDefinitionLookup>();
+            services.AddSingleton<IMapEdgeDefinitionLookup, ReferenceMapEdgeDefinitionLookup>();
 
             return services;
         }
