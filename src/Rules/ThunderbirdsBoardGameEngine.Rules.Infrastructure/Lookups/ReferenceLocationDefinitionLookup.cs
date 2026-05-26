@@ -13,7 +13,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Infrastructure.Lookups
             _locationDefinitionCatalog = locationDefinitionCatalog;
         }
 
-        public IEnumerable<ReferenceLocationDefinition> GetAll()
+        public IReadOnlyCollection<ReferenceLocationDefinition> GetAll()
         {
             return _locationDefinitionCatalog.GetAll();
         }

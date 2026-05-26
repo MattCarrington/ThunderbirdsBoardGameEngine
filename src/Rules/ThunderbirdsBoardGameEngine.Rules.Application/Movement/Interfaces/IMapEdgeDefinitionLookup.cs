@@ -4,6 +4,6 @@ namespace ThunderbirdsBoardGameEngine.Rules.Application.Movement.Interfaces
 {
     public interface IMapEdgeDefinitionLookup
     {
-        IEnumerable<ReferenceMapEdgeDefinition> GetAll();
+        IReadOnlyCollection<ReferenceMapEdgeDefinition> GetAll();
     }
 }

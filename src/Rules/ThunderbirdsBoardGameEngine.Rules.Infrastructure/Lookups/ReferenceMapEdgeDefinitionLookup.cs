@@ -13,7 +13,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Infrastructure.Lookups
             _mapEdgeDefinitionCatalog = mapEdgeDefinitionCatalog;
         }
 
-        public IEnumerable<ReferenceMapEdgeDefinition> GetAll()
+        public IReadOnlyCollection<ReferenceMapEdgeDefinition> GetAll()
         {
             return _mapEdgeDefinitionCatalog.GetAll();
         }

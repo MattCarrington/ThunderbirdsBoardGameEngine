@@ -4,6 +4,6 @@ namespace ThunderbirdsBoardGameEngine.Rules.Application.Movement.Interfaces
 {
     public interface ILocationDefinitionLookup
     {
-        IEnumerable<ReferenceLocationDefinition> GetAll();
+        IReadOnlyCollection<ReferenceLocationDefinition> GetAll();
     }
 }
