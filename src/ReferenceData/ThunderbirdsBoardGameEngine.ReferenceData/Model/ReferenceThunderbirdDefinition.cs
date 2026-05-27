@@ -8,9 +8,9 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Model
         public ThunderbirdCode Code { get; }
 
         public string DisplayName { get; }
-        public TraversalDomain Domain { get; }
+        public MovementDomain Domain { get; }
 
-        public ReferenceThunderbirdDefinition(ThunderbirdCode code, string displayName, TraversalDomain domain)
+        public ReferenceThunderbirdDefinition(ThunderbirdCode code, string displayName, MovementDomain domain)
         {
             ArgumentException.ThrowIfNullOrWhiteSpace(displayName);
 

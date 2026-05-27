@@ -9,9 +9,9 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Model
 
         public LocationCode Edge2 { get; }
 
-        public TraversalDomain EdgeType { get; }
+        public MovementDomain EdgeType { get; }
 
-        public ReferenceMapEdgeDefinition(LocationCode edge1, LocationCode edge2, TraversalDomain edgeType)
+        public ReferenceMapEdgeDefinition(LocationCode edge1, LocationCode edge2, MovementDomain edgeType)
         {
             if (edge1 == edge2)
             {

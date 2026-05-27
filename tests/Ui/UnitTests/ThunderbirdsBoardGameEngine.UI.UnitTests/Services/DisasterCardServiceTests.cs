@@ -158,7 +158,7 @@ namespace ThunderbirdsBoardGameEngine.UI.UnitTests.Services
         {
             var locationCatalog = Substitute.For<ILocationDefinitionCatalog>();
             locationCatalog.GetByCode(Arg.Any<LocationCode>())
-                .Returns(new ReferenceLocationDefinition(new LocationCode("london"), "London"));
+                .Returns(new ReferenceLocationDefinition(new LocationCode("london"), "London", MovementDomain.Earth));
 
             var disasterBonusKeyCatalog = Substitute.For<IDisasterBonusKeyDefinitionCatalog>();
             disasterBonusKeyCatalog.GetByCode(Arg.Any<DisasterBonusKey>())

@@ -59,11 +59,13 @@ public sealed class ReferenceDataSnapshotBuilder
 
     public ReferenceDataSnapshotBuilder WithLocation(
         string code,
-        string displayName)
+        string displayName,
+        MovementDomain domain = MovementDomain.Earth)
     {
         _locations.Add(new ReferenceLocationDefinition(
             new LocationCode(code),
-            displayName));
+            displayName,
+            domain));
 
         return this;
     }
@@ -96,7 +98,7 @@ public sealed class ReferenceDataSnapshotBuilder
     public ReferenceDataSnapshotBuilder WithThunderbird(
         string code,
         string displayName,
-        TraversalDomain domain = TraversalDomain.Earth)
+        MovementDomain domain = MovementDomain.Earth)
     {
         _thunderbirds.Add(new ReferenceThunderbirdDefinition(
             new ThunderbirdCode(code),

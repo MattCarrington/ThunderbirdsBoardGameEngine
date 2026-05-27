@@ -12,7 +12,7 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.UnitTests.Domain
 
         private static string ValidDisplayName => "Thunderbird 1";
 
-        private static TraversalDomain ValidDomain => TraversalDomain.Earth;
+        private static MovementDomain ValidDomain => MovementDomain.Earth;
 
         [Fact]
         public void Constructor_WhenAllInputsValid_CreatesInstance()

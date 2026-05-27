@@ -1,6 +1,6 @@
 ﻿namespace ThunderbirdsBoardGameEngine.ReferenceData.Enums
 {
-    public enum TraversalDomain
+    public enum MovementDomain
     {
         Earth,
         Space

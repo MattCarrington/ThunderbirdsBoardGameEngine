@@ -8,20 +8,20 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.Movement
 {
     public class BreadthFirstRouteFinderTests
     {
-        private readonly ReferenceLocationDefinition _locationA = new(code: new LocationCode("A"), displayName: "Location A");
-        private readonly ReferenceLocationDefinition _locationB = new(code: new LocationCode("B"), displayName: "Location B");
-        private readonly ReferenceLocationDefinition _locationC = new(code: new LocationCode("C"), displayName: "Location C");
-        private readonly ReferenceLocationDefinition _locationD = new(code: new LocationCode("D"), displayName: "Location D");
-        private readonly ReferenceLocationDefinition _locationE = new(code: new LocationCode("E"), displayName: "Location E");
-        private readonly ReferenceLocationDefinition _locationF = new(code: new LocationCode("F"), displayName: "Location F");
-        private readonly ReferenceLocationDefinition _locationG = new(code: new LocationCode("G"), displayName: "Location G");
-        private readonly ReferenceLocationDefinition _locationH = new(code: new LocationCode("H"), displayName: "Location H");
-        private readonly ReferenceLocationDefinition _locationUnlinked = new(code: new LocationCode("unlinked"), displayName: "Unlinked");
-        private readonly ReferenceLocationDefinition _locationSpace = new(code: new LocationCode("Space"), displayName: "Space");
+        private readonly ReferenceLocationDefinition _locationA = new(code: new LocationCode("A"), displayName: "Location A", domain: MovementDomain.Earth);
+        private readonly ReferenceLocationDefinition _locationB = new(code: new LocationCode("B"), displayName: "Location B", domain: MovementDomain.Earth);
+        private readonly ReferenceLocationDefinition _locationC = new(code: new LocationCode("C"), displayName: "Location C", domain: MovementDomain.Earth);
+        private readonly ReferenceLocationDefinition _locationD = new(code: new LocationCode("D"), displayName: "Location D", domain: MovementDomain.Earth);
+        private readonly ReferenceLocationDefinition _locationE = new(code: new LocationCode("E"), displayName: "Location E", domain: MovementDomain.Earth);
+        private readonly ReferenceLocationDefinition _locationF = new(code: new LocationCode("F"), displayName: "Location F", domain: MovementDomain.Earth);
+        private readonly ReferenceLocationDefinition _locationG = new(code: new LocationCode("G"), displayName: "Location G", domain: MovementDomain.Earth);
+        private readonly ReferenceLocationDefinition _locationH = new(code: new LocationCode("H"), displayName: "Location H", domain: MovementDomain.Earth);
+        private readonly ReferenceLocationDefinition _locationUnlinked = new(code: new LocationCode("unlinked"), displayName: "Unlinked", domain: MovementDomain.Earth);
+        private readonly ReferenceLocationDefinition _locationSpace = new(code: new LocationCode("Space"), displayName: "Space", domain: MovementDomain.Space);
 
         private readonly LocationCode _invalidLocationCode = new("invalid-location-code");
 
-        private readonly ThunderbirdContribution _thunderbird = new(new ThunderbirdCode("thunderbird-1"), TraversalDomain.Earth);
+        private readonly ThunderbirdContribution _thunderbird = new(new ThunderbirdCode("thunderbird-1"), MovementDomain.Earth);
 
         [Fact]
         public void FindShortestRoute_WhenDestinationIsSameAsStart_ReturnsRouteWithSingleLocation()
@@ -204,16 +204,16 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.Movement
         {
             return
             [
-                new(edge1: _locationA.Code, edge2: _locationB.Code, edgeType: TraversalDomain.Earth),
-                new(edge1: _locationB.Code, edge2: _locationC.Code, edgeType: TraversalDomain.Earth),
-                new(edge1: _locationA.Code, edge2: _locationC.Code, edgeType: TraversalDomain.Earth),
-                new(edge1: _locationD.Code, edge2: _locationB.Code, edgeType: TraversalDomain.Earth),
-                new(edge1: _locationE.Code, edge2: _locationD.Code, edgeType: TraversalDomain.Earth),
-                new(edge1: _locationA.Code, edge2: _locationF.Code, edgeType: TraversalDomain.Earth),
-                new(edge1: _locationF.Code, edge2: _locationG.Code, edgeType: TraversalDomain.Earth),
-                new(edge1: _locationG.Code, edge2: _locationH.Code, edgeType: TraversalDomain.Earth),
-                new(edge1: _locationH.Code, edge2: _locationC.Code, edgeType: TraversalDomain.Earth),
-                new(edge1: _locationA.Code, edge2: _locationSpace.Code, edgeType: TraversalDomain.Space),
+                new(edge1: _locationA.Code, edge2: _locationB.Code, edgeType: MovementDomain.Earth),
+                new(edge1: _locationB.Code, edge2: _locationC.Code, edgeType: MovementDomain.Earth),
+                new(edge1: _locationA.Code, edge2: _locationC.Code, edgeType: MovementDomain.Earth),
+                new(edge1: _locationD.Code, edge2: _locationB.Code, edgeType: MovementDomain.Earth),
+                new(edge1: _locationE.Code, edge2: _locationD.Code, edgeType: MovementDomain.Earth),
+                new(edge1: _locationA.Code, edge2: _locationF.Code, edgeType: MovementDomain.Earth),
+                new(edge1: _locationF.Code, edge2: _locationG.Code, edgeType: MovementDomain.Earth),
+                new(edge1: _locationG.Code, edge2: _locationH.Code, edgeType: MovementDomain.Earth),
+                new(edge1: _locationH.Code, edge2: _locationC.Code, edgeType: MovementDomain.Earth),
+                new(edge1: _locationA.Code, edge2: _locationSpace.Code, edgeType: MovementDomain.Space),
             ];
         }
     }

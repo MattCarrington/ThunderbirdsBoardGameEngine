@@ -11,7 +11,7 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.UnitTests.Domain
 
         private static LocationCode ValidLocationCode2 => new("location-2");
 
-        private static TraversalDomain ValidTraversalDomain => TraversalDomain.Earth;
+        private static MovementDomain ValidTraversalDomain => MovementDomain.Earth;
 
         [Fact]
         public void Constructor_WhenAllInputsValid_CreatesInstance()

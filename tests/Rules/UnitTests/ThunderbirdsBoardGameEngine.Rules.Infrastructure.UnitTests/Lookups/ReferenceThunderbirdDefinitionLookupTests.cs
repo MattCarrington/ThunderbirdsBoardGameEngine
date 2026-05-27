@@ -21,7 +21,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Infrastructure.UnitTests.Lookups
             var thunderbirdDefinition = new ReferenceThunderbirdDefinition(
                 code: code,
                 displayName: "Test Thunderbird",
-                domain: TraversalDomain.Earth
+                domain: MovementDomain.Earth
             );
 
             var catalog = Substitute.For<IThunderbirdDefinitionCatalog>();
