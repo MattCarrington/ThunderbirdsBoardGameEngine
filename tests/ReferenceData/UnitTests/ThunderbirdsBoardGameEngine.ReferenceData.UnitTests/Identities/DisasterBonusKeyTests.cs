@@ -22,7 +22,7 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.UnitTests.Identities
 
         [Theory]
         [ClassData(typeof(NullOrWhitespaceStringData))]
-        public void Constructor_WhenInvalidKeyValues_ThrowsArgumentException(string key)
+        public void Constructor_WhenInvalidKeyValues_ThrowsArgumentException(string? key)
         {
             // Arrange
 

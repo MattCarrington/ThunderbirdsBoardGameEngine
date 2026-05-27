@@ -69,7 +69,7 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.UnitTests.Domain
 
         [Theory]
         [ClassData(typeof(NullOrWhitespaceStringData))]
-        public void Constructor_WhenDisplayNameInvalid_ThrowsArgumentException(string displayName)
+        public void Constructor_WhenDisplayNameInvalid_ThrowsArgumentException(string? displayName)
         {
             // Arrange
 

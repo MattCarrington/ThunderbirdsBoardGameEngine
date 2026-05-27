@@ -34,7 +34,7 @@ namespace ThunderbirdsBoardGameEngine.Api.UnitTests.Mappers.Rules.V1
 
         [Theory]
         [ClassData(typeof(NullOrWhitespaceStringData))]
-        public void ToQuery_PerformingCharacterKeyNullOrEmpty_ThrowsBadRequestException(string character)
+        public void ToQuery_PerformingCharacterKeyNullOrEmpty_ThrowsBadRequestException(string? character)
         {
             // Arrange
             var disasterCardCode = new CardCode("card-code-123");
@@ -51,7 +51,7 @@ namespace ThunderbirdsBoardGameEngine.Api.UnitTests.Mappers.Rules.V1
 
         [Theory]
         [ClassData(typeof(NullOrWhitespaceStringData))]
-        public void ToQuery_PresentDisasterBonusKeysContainsNullOrWhiteSpace_ThrowsBadRequestException(string key)
+        public void ToQuery_PresentDisasterBonusKeysContainsNullOrWhiteSpace_ThrowsBadRequestException(string? key)
         {
             var disasterCardCode = new CardCode("card-code-123");
 
