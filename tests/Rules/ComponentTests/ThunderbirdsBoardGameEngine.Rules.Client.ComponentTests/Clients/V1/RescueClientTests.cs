@@ -54,7 +54,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Client.ComponentTests.Clients.V1
             var (disasterCardCode, request) = CreateRequest();
 
             // Act
-            var response = await _client.CalculateRescueTargetAsync(disasterCardCode, request);
+            var response = await _client.CalculateRescueTargetAsync(disasterCardCode, request, TestContext.Current.CancellationToken);
 
             // Assert
             Assert.NotNull(response);
@@ -78,7 +78,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Client.ComponentTests.Clients.V1
             var (disasterCardCode, request) = CreateRequest();
 
             // Act
-            var response = await _client.CalculateRescueTargetAsync(disasterCardCode, request);
+            var response = await _client.CalculateRescueTargetAsync(disasterCardCode, request, TestContext.Current.CancellationToken);
 
             // Assert           
             Assert.False(response.Success);
@@ -96,7 +96,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Client.ComponentTests.Clients.V1
             var (disasterCardCode, request) = CreateRequest();
 
             // Act
-            var response = await _client.CalculateRescueTargetAsync(disasterCardCode, request);
+            var response = await _client.CalculateRescueTargetAsync(disasterCardCode, request, TestContext.Current.CancellationToken);
 
             // Assert           
             Assert.False(response.Success);
@@ -114,7 +114,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Client.ComponentTests.Clients.V1
             var (disasterCardCode, request) = CreateRequest();
 
             // Act
-            var response = await _client.CalculateRescueTargetAsync(disasterCardCode, request);
+            var response = await _client.CalculateRescueTargetAsync(disasterCardCode, request, TestContext.Current.CancellationToken);
 
             // Assert           
             Assert.False(response.Success);

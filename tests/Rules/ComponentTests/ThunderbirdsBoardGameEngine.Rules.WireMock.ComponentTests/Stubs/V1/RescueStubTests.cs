@@ -37,12 +37,12 @@ namespace ThunderbirdsBoardGameEngine.Rules.WireMock.ComponentTests.Stubs.V1
             using var client = CreateClient();
 
             // Act
-            using var response = await client.PostAsJsonAsync(RescueStub.Route, CreateValidRescueTargetRequest());
+            using var response = await client.PostAsJsonAsync(RescueStub.Route, CreateValidRescueTargetRequest(), TestContext.Current.CancellationToken);
 
             // Assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
-            var result = await response.Content.ReadFromJsonAsync<CalculateRescueTargetResponseDto>();
+            var result = await response.Content.ReadFromJsonAsync<CalculateRescueTargetResponseDto>(cancellationToken: TestContext.Current.CancellationToken);
 
             Assert.NotNull(result);
             Assert.Equal(dto.TotalBonus, result.TotalBonus);
@@ -59,12 +59,12 @@ namespace ThunderbirdsBoardGameEngine.Rules.WireMock.ComponentTests.Stubs.V1
             using var client = CreateClient();
 
             // Act
-            using var response = await client.PostAsJsonAsync(RescueStub.Route, CreateValidRescueTargetRequest());
+            using var response = await client.PostAsJsonAsync(RescueStub.Route, CreateValidRescueTargetRequest(), TestContext.Current.CancellationToken);
 
             // Assert
             Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
 
-            var problem = await response.Content.ReadFromJsonAsync<ProblemDetails>();
+            var problem = await response.Content.ReadFromJsonAsync<ProblemDetails>(cancellationToken: TestContext.Current.CancellationToken);
             Assert.NotNull(problem);
             Assert.Contains("disaster card", problem.Detail);
             Assert.Equal(StatusCodes.Status404NotFound, problem.Status);
@@ -80,12 +80,12 @@ namespace ThunderbirdsBoardGameEngine.Rules.WireMock.ComponentTests.Stubs.V1
             using var client = CreateClient();
 
             // Act
-            using var response = await client.PostAsJsonAsync(RescueStub.Route, CreateValidRescueTargetRequest());
+            using var response = await client.PostAsJsonAsync(RescueStub.Route, CreateValidRescueTargetRequest(), TestContext.Current.CancellationToken);
 
             // Assert
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
 
-            var problem = await response.Content.ReadFromJsonAsync<ProblemDetails>();
+            var problem = await response.Content.ReadFromJsonAsync<ProblemDetails>(cancellationToken: TestContext.Current.CancellationToken);
             Assert.NotNull(problem);
             Assert.Equal(StatusCodes.Status400BadRequest, problem.Status);
             Assert.Contains("Invalid request", problem.Title);
@@ -100,12 +100,12 @@ namespace ThunderbirdsBoardGameEngine.Rules.WireMock.ComponentTests.Stubs.V1
             using var client = CreateClient();
 
             // Act
-            using var response = await client.PostAsJsonAsync(RescueStub.Route, CreateValidRescueTargetRequest());
+            using var response = await client.PostAsJsonAsync(RescueStub.Route, CreateValidRescueTargetRequest(), TestContext.Current.CancellationToken);
 
             // Assert
             Assert.Equal(HttpStatusCode.InternalServerError, response.StatusCode);
 
-            var problem = await response.Content.ReadFromJsonAsync<ProblemDetails>();
+            var problem = await response.Content.ReadFromJsonAsync<ProblemDetails>(cancellationToken: TestContext.Current.CancellationToken);
             Assert.NotNull(problem);
             Assert.Equal(StatusCodes.Status500InternalServerError, problem.Status);
             Assert.Equal("An unexpected error occurred.", problem.Title);
@@ -122,12 +122,12 @@ namespace ThunderbirdsBoardGameEngine.Rules.WireMock.ComponentTests.Stubs.V1
             using var client = CreateClient();
 
             // Act
-            using var response = await client.PostAsJsonAsync(RescueStub.Route, CreateValidRescueTargetRequest());
+            using var response = await client.PostAsJsonAsync(RescueStub.Route, CreateValidRescueTargetRequest(), TestContext.Current.CancellationToken);
 
             // Assert
             Assert.Equal(HttpStatusCode.ServiceUnavailable, response.StatusCode);
 
-            var problem = await response.Content.ReadFromJsonAsync<ProblemDetails>();
+            var problem = await response.Content.ReadFromJsonAsync<ProblemDetails>(cancellationToken: TestContext.Current.CancellationToken);
             Assert.NotNull(problem);
             Assert.Equal(StatusCodes.Status503ServiceUnavailable, problem.Status);
             Assert.Equal(errorMessage, problem.Title);
@@ -144,12 +144,12 @@ namespace ThunderbirdsBoardGameEngine.Rules.WireMock.ComponentTests.Stubs.V1
             _stub.RegisterCalculateRescueTargetSuccess(dto); // should not be called
 
             // Act
-            using var response = await client.PostAsJsonAsync(RescueStub.Route, CreateValidRescueTargetRequest());
+            using var response = await client.PostAsJsonAsync(RescueStub.Route, CreateValidRescueTargetRequest(), TestContext.Current.CancellationToken);
 
             // Assert
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
 
-            var problem = await response.Content.ReadFromJsonAsync<ProblemDetails>();
+            var problem = await response.Content.ReadFromJsonAsync<ProblemDetails>(cancellationToken: TestContext.Current.CancellationToken);
             Assert.NotNull(problem);
             Assert.Contains("Missing header", problem.Detail);
             Assert.Equal(StatusCodes.Status400BadRequest, problem.Status);
@@ -167,12 +167,12 @@ namespace ThunderbirdsBoardGameEngine.Rules.WireMock.ComponentTests.Stubs.V1
             using var client = CreateClient("2.0");
 
             // Act
-            using var response = await client.PostAsJsonAsync(RescueStub.Route, CreateValidRescueTargetRequest());
+            using var response = await client.PostAsJsonAsync(RescueStub.Route, CreateValidRescueTargetRequest(), TestContext.Current.CancellationToken);
 
             // Assert
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
 
-            var problem = await response.Content.ReadFromJsonAsync<ProblemDetails>();
+            var problem = await response.Content.ReadFromJsonAsync<ProblemDetails>(cancellationToken: TestContext.Current.CancellationToken);
             Assert.NotNull(problem);
             Assert.Equal(StatusCodes.Status400BadRequest, problem.Status);
             Assert.Contains("Unsupported version in header", problem.Title);

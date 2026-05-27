@@ -41,12 +41,12 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints.Rules.V1
             request.Content = JsonContent.Create(_requestDto);
 
             // Act
-            using var response = await _client.SendAsync(request);
+            using var response = await _client.SendAsync(request, TestContext.Current.CancellationToken);
 
             // Assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
-            var target = await response.Content.ReadFromJsonAsync<CalculateRescueTargetResponseDto>();
+            var target = await response.Content.ReadFromJsonAsync<CalculateRescueTargetResponseDto>(cancellationToken: TestContext.Current.CancellationToken);
 
             Assert.NotNull(target);
             Assert.Equal(4, target.TargetNumber);
@@ -91,12 +91,12 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints.Rules.V1
             request.Content = JsonContent.Create(requestDto);
 
             // Act
-            using var response = await _client.SendAsync(request);
+            using var response = await _client.SendAsync(request, TestContext.Current.CancellationToken);
 
             // Assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
-            var target = await response.Content.ReadFromJsonAsync<CalculateRescueTargetResponseDto>();
+            var target = await response.Content.ReadFromJsonAsync<CalculateRescueTargetResponseDto>(cancellationToken: TestContext.Current.CancellationToken);
 
             Assert.NotNull(target);
             Assert.Equal(8, target.TargetNumber);
@@ -115,7 +115,7 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints.Rules.V1
             request.Content = JsonContent.Create(_requestDto);
 
             // Act
-            using var response = await _client.SendAsync(request);
+            using var response = await _client.SendAsync(request, TestContext.Current.CancellationToken);
 
             // Assert
             await ProblemDetailsAssertions.AssertNotFoundAsync(response, "Resource not found.");
@@ -135,7 +135,7 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints.Rules.V1
             request.Content = JsonContent.Create(invalidRequestDto);
 
             // Act
-            using var response = await _client.SendAsync(request);
+            using var response = await _client.SendAsync(request, TestContext.Current.CancellationToken);
 
             // Assert
             var problem = await ProblemDetailsAssertions.AssertBadRequestAsync(response, "Request validation failed.");
@@ -160,7 +160,7 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints.Rules.V1
             request.Content = JsonContent.Create(invalidRequestDto);
 
             // Act
-            using var response = await _client.SendAsync(request);
+            using var response = await _client.SendAsync(request, TestContext.Current.CancellationToken);
 
             // Assert
             var problem = await ProblemDetailsAssertions.AssertBadRequestAsync(response, "Request validation failed.");
@@ -186,7 +186,7 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints.Rules.V1
             request.Content = JsonContent.Create(invalidRequestDto);
 
             // Act
-            using var response = await _client.SendAsync(request);
+            using var response = await _client.SendAsync(request, TestContext.Current.CancellationToken);
 
             // Assert
             await ProblemDetailsAssertions.AssertNotFoundAsync(response, "Resource not found.");

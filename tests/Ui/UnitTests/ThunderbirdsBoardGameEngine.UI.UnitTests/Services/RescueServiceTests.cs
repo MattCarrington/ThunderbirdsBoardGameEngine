@@ -45,7 +45,8 @@ namespace ThunderbirdsBoardGameEngine.UI.UnitTests.Services
             await rescueClient.Received(1)
                 .CalculateRescueTargetAsync(
                     Arg.Is(disasterCardCode),
-                    Arg.Is(expectedRequest)
+                    Arg.Is(expectedRequest),
+                    TestContext.Current.CancellationToken
                 );
         }
 

@@ -24,7 +24,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Client.UnitTests.Clients.V1
             var (cardCode, request) = CreateRequest();
 
             // Act
-            _ = await client.CalculateRescueTargetAsync(cardCode, request);
+            _ = await client.CalculateRescueTargetAsync(cardCode, request, TestContext.Current.CancellationToken);
 
             // Assert
             Assert.Equal($"http://localhost/api/rules/rescue/{cardCode}/target", stubHandler.CapturedRequest?.RequestUri?.ToString());
@@ -50,7 +50,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Client.UnitTests.Clients.V1
             var (cardCode, request) = CreateRequest();
 
             // Act
-            _ = await client.CalculateRescueTargetAsync(cardCode, request);
+            _ = await client.CalculateRescueTargetAsync(cardCode, request, TestContext.Current.CancellationToken);
 
             // Assert
             await handler.Received(1).HandleResponseAsync<CalculateRescueTargetResponseDto>(Arg.Any<HttpResponseMessage>(), Arg.Any<CancellationToken>());
@@ -72,7 +72,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Client.UnitTests.Clients.V1
             var (cardCode, request) = CreateRequest();
 
             // Act
-            var result = await client.CalculateRescueTargetAsync(cardCode, request);
+            var result = await client.CalculateRescueTargetAsync(cardCode, request, TestContext.Current.CancellationToken);
 
             // Assert
             Assert.NotNull(result);
@@ -98,7 +98,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Client.UnitTests.Clients.V1
             var (cardCode, request) = CreateRequest();
 
             // Act
-            var result = await client.CalculateRescueTargetAsync(cardCode, request);
+            var result = await client.CalculateRescueTargetAsync(cardCode, request, TestContext.Current.CancellationToken);
 
             // Assert
             Assert.NotNull(result);
@@ -128,7 +128,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Client.UnitTests.Clients.V1
             };
 
             // Act
-            await client.CalculateRescueTargetAsync(rawCardCode, request);
+            await client.CalculateRescueTargetAsync(rawCardCode, request, TestContext.Current.CancellationToken);
 
             // Assert
             Assert.Equal(
@@ -152,7 +152,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Client.UnitTests.Clients.V1
             };
 
             // Act & Assert
-            await Assert.ThrowsAsync<ArgumentException>(() => client.CalculateRescueTargetAsync(input, request));
+            await Assert.ThrowsAsync<ArgumentException>(() => client.CalculateRescueTargetAsync(input, request, TestContext.Current.CancellationToken));
         }
 
         [Fact]
@@ -170,7 +170,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Client.UnitTests.Clients.V1
             };
 
             // Act & Assert
-            await Assert.ThrowsAsync<ArgumentNullException>(() => client.CalculateRescueTargetAsync(null!, request));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => client.CalculateRescueTargetAsync(null!, request, TestContext.Current.CancellationToken));
         }
 
         [Fact]
@@ -184,7 +184,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Client.UnitTests.Clients.V1
             var cardCode = "DC001";
 
             // Act & Assert
-            await Assert.ThrowsAsync<ArgumentNullException>(() => client.CalculateRescueTargetAsync(cardCode, null!));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => client.CalculateRescueTargetAsync(cardCode, null!, TestContext.Current.CancellationToken));
         }
 
         private static (string, CalculateRescueTargetRequestDto) CreateRequest()

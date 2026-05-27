@@ -20,7 +20,7 @@ namespace ThunderbirdsBoardGameEngine.SmokeTests.Health
             // Arrange
 
             // Act
-            using var response = await _client.GetAsync("/health/live");
+            using var response = await _client.GetAsync("/health/live", TestContext.Current.CancellationToken);
 
             // Assert
             Assert.True(response.IsSuccessStatusCode, $"Liveness check failed with status {response.StatusCode}");
@@ -32,7 +32,7 @@ namespace ThunderbirdsBoardGameEngine.SmokeTests.Health
             // Arrange
 
             // Act
-            using var response = await _client.GetAsync("/health/ready");
+            using var response = await _client.GetAsync("/health/ready", TestContext.Current.CancellationToken);
 
             // Assert
             Assert.True(response.IsSuccessStatusCode, $"Readiness check failed with status {response.StatusCode}");
