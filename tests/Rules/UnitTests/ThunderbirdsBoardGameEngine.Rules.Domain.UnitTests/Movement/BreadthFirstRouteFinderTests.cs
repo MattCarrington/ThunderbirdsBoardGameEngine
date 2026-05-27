@@ -8,16 +8,16 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.Movement
 {
     public class BreadthFirstRouteFinderTests
     {
-        private readonly ReferenceLocationDefinition _locationA = new(code: new LocationCode("A"), displayName: "Location A", domain: MovementDomain.Earth);
-        private readonly ReferenceLocationDefinition _locationB = new(code: new LocationCode("B"), displayName: "Location B", domain: MovementDomain.Earth);
-        private readonly ReferenceLocationDefinition _locationC = new(code: new LocationCode("C"), displayName: "Location C", domain: MovementDomain.Earth);
-        private readonly ReferenceLocationDefinition _locationD = new(code: new LocationCode("D"), displayName: "Location D", domain: MovementDomain.Earth);
-        private readonly ReferenceLocationDefinition _locationE = new(code: new LocationCode("E"), displayName: "Location E", domain: MovementDomain.Earth);
-        private readonly ReferenceLocationDefinition _locationF = new(code: new LocationCode("F"), displayName: "Location F", domain: MovementDomain.Earth);
-        private readonly ReferenceLocationDefinition _locationG = new(code: new LocationCode("G"), displayName: "Location G", domain: MovementDomain.Earth);
-        private readonly ReferenceLocationDefinition _locationH = new(code: new LocationCode("H"), displayName: "Location H", domain: MovementDomain.Earth);
-        private readonly ReferenceLocationDefinition _locationUnlinked = new(code: new LocationCode("unlinked"), displayName: "Unlinked", domain: MovementDomain.Earth);
-        private readonly ReferenceLocationDefinition _locationSpace = new(code: new LocationCode("Space"), displayName: "Space", domain: MovementDomain.Space);
+        private readonly LocationContribution _locationA = new(Key: new LocationCode("A"), Location: MovementDomain.Earth);
+        private readonly LocationContribution _locationB = new(Key: new LocationCode("B"), Location: MovementDomain.Earth);
+        private readonly LocationContribution _locationC = new(Key: new LocationCode("C"), Location: MovementDomain.Earth);
+        private readonly LocationContribution _locationD = new(Key: new LocationCode("D"), Location: MovementDomain.Earth);
+        private readonly LocationContribution _locationE = new(Key: new LocationCode("E"), Location: MovementDomain.Earth);
+        private readonly LocationContribution _locationF = new(Key: new LocationCode("F"), Location: MovementDomain.Earth);
+        private readonly LocationContribution _locationG = new(Key: new LocationCode("G"), Location: MovementDomain.Earth);
+        private readonly LocationContribution _locationH = new(Key: new LocationCode("H"), Location: MovementDomain.Earth);
+        private readonly LocationContribution _locationUnlinked = new(Key: new LocationCode("unlinked"), Location: MovementDomain.Earth);
+        private readonly LocationContribution _locationSpace = new(Key: new LocationCode("Space"), Location: MovementDomain.Space);
 
         private readonly LocationCode _invalidLocationCode = new("invalid-location-code");
 
@@ -30,8 +30,8 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.Movement
             var movementRequest = new MovementRequest(
                 _thunderbird,
                 new Topography(CreateLocations(), CreateEdges()),
-                _locationA.Code,
-                _locationA.Code);
+                _locationA.Key,
+                _locationA.Key);
 
             var routeFinder = new BreadthFirstRouteFinder();
 
@@ -51,8 +51,8 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.Movement
             var movementRequest = new MovementRequest(
                 _thunderbird,
                 new Topography(CreateLocations(), CreateEdges()),
-                _locationA.Code,
-                _locationB.Code);
+                _locationA.Key,
+                _locationB.Key);
 
             var routeFinder = new BreadthFirstRouteFinder();
 
@@ -72,8 +72,8 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.Movement
             var movementRequest = new MovementRequest(
                 _thunderbird,
                 new Topography(CreateLocations(), CreateEdges()),
-                _locationA.Code,
-                _locationE.Code);
+                _locationA.Key,
+                _locationE.Key);
 
             var routeFinder = new BreadthFirstRouteFinder();
 
@@ -93,8 +93,8 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.Movement
             var movementRequest = new MovementRequest(
                 _thunderbird,
                 new Topography(CreateLocations(), CreateEdges()),
-                _locationA.Code,
-                _locationC.Code);
+                _locationA.Key,
+                _locationC.Key);
 
             var routeFinder = new BreadthFirstRouteFinder();
 
@@ -114,8 +114,8 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.Movement
             var movementRequest = new MovementRequest(
                 _thunderbird,
                 new Topography(CreateLocations(), CreateEdges()),
-                _locationA.Code,
-                _locationSpace.Code);
+                _locationA.Key,
+                _locationSpace.Key);
 
             var routeFinder = new BreadthFirstRouteFinder();
 
@@ -134,7 +134,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.Movement
                 _thunderbird,
                 new Topography(CreateLocations(), CreateEdges()),
                 _invalidLocationCode,
-                _locationB.Code);
+                _locationB.Key);
 
             var routeFinder = new BreadthFirstRouteFinder();
 
@@ -152,7 +152,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.Movement
             var movementRequest = new MovementRequest(
                 _thunderbird,
                 new Topography(CreateLocations(), CreateEdges()),
-                _locationA.Code,
+                _locationA.Key,
                 _invalidLocationCode);
 
             var routeFinder = new BreadthFirstRouteFinder();
@@ -171,8 +171,8 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.Movement
             var movementRequest = new MovementRequest(
                 _thunderbird,
                 new Topography(CreateLocations(), CreateEdges()),
-                _locationA.Code,
-                _locationUnlinked.Code);
+                _locationA.Key,
+                _locationUnlinked.Key);
 
             var routeFinder = new BreadthFirstRouteFinder();
 
@@ -183,7 +183,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.Movement
             Assert.Null(result);
         }
 
-        private IReadOnlyCollection<ReferenceLocationDefinition> CreateLocations()
+        private IReadOnlyCollection<LocationContribution> CreateLocations()
         {
             return
             [
@@ -204,16 +204,16 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.Movement
         {
             return
             [
-                new(edge1: _locationA.Code, edge2: _locationB.Code, edgeType: MovementDomain.Earth),
-                new(edge1: _locationB.Code, edge2: _locationC.Code, edgeType: MovementDomain.Earth),
-                new(edge1: _locationA.Code, edge2: _locationC.Code, edgeType: MovementDomain.Earth),
-                new(edge1: _locationD.Code, edge2: _locationB.Code, edgeType: MovementDomain.Earth),
-                new(edge1: _locationE.Code, edge2: _locationD.Code, edgeType: MovementDomain.Earth),
-                new(edge1: _locationA.Code, edge2: _locationF.Code, edgeType: MovementDomain.Earth),
-                new(edge1: _locationF.Code, edge2: _locationG.Code, edgeType: MovementDomain.Earth),
-                new(edge1: _locationG.Code, edge2: _locationH.Code, edgeType: MovementDomain.Earth),
-                new(edge1: _locationH.Code, edge2: _locationC.Code, edgeType: MovementDomain.Earth),
-                new(edge1: _locationA.Code, edge2: _locationSpace.Code, edgeType: MovementDomain.Space),
+                new(edge1: _locationA.Key, edge2: _locationB.Key, edgeType: MovementDomain.Earth),
+                new(edge1: _locationB.Key, edge2: _locationC.Key, edgeType: MovementDomain.Earth),
+                new(edge1: _locationA.Key, edge2: _locationC.Key, edgeType: MovementDomain.Earth),
+                new(edge1: _locationD.Key, edge2: _locationB.Key, edgeType: MovementDomain.Earth),
+                new(edge1: _locationE.Key, edge2: _locationD.Key, edgeType: MovementDomain.Earth),
+                new(edge1: _locationA.Key, edge2: _locationF.Key, edgeType: MovementDomain.Earth),
+                new(edge1: _locationF.Key, edge2: _locationG.Key, edgeType: MovementDomain.Earth),
+                new(edge1: _locationG.Key, edge2: _locationH.Key, edgeType: MovementDomain.Earth),
+                new(edge1: _locationH.Key, edge2: _locationC.Key, edgeType: MovementDomain.Earth),
+                new(edge1: _locationA.Key, edge2: _locationSpace.Key, edgeType: MovementDomain.Space),
             ];
         }
     }

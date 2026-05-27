@@ -3,6 +3,6 @@
 namespace ThunderbirdsBoardGameEngine.Rules.Domain.Movement
 {
     public sealed record Topography(
-        IReadOnlyCollection<ReferenceLocationDefinition> Locations,
+        IReadOnlyCollection<LocationContribution> Locations,
         IReadOnlyCollection<ReferenceMapEdgeDefinition> Edges);
 }
