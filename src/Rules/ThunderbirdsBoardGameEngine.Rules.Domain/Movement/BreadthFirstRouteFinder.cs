@@ -1,4 +1,5 @@
 ﻿using ThunderbirdsBoardGameEngine.ReferenceData.Identities;
+using ThunderbirdsBoardGameEngine.ReferenceData.Model;
 
 namespace ThunderbirdsBoardGameEngine.Rules.Domain.Movement
 {
@@ -6,14 +7,14 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.Movement
     {
         public RouteResult? FindShortestRoute(MovementRequest request)
         {
-            var edges = request.Topography.Edges.Where(edge => edge.EdgeType == request.Thunderbird.TraversalDomain);
+            var edges = request.Topography.Edges
+                .Where(edge => edge.EdgeType == request.Thunderbird.TraversalDomain);
 
             var queue = new Queue<LocationCode>();
-            var visited = new HashSet<LocationCode>();
+            var visited = new HashSet<LocationCode> { request.Start };
             var parentMap = new Dictionary<LocationCode, LocationCode>();
 
             queue.Enqueue(request.Start);
-            visited.Add(request.Start);
 
             while (queue.Count > 0)
             {
@@ -21,45 +22,55 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.Movement
 
                 if (current == request.Destination)
                 {
-                    var route = new List<LocationCode> { request.Destination };
-                    var routeCurrent = request.Destination;
-
-                    while (routeCurrent != request.Start)
-                    {
-                        if (!parentMap.TryGetValue(routeCurrent, out var parent))
-                        {
-                            return null;
-                        }
-
-                        routeCurrent = parent;
-                        route.Add(routeCurrent);
-                    }
-
-                    route.Reverse();
-
-                    return new RouteResult(
-                        route,
-                        route.Count - 1);
+                    return BuildRoute(request.Start, request.Destination, parentMap);
                 }
 
-                var neighbours = edges
-                    .Where(edge => edge.Edge1 == current || edge.Edge2 == current)
-                    .Select(edge => edge.Edge1 == current ? edge.Edge2 : edge.Edge1);
-
-                foreach (var neighbour in neighbours)
+                foreach (var neighbour in GetNeighbours(edges, current))
                 {
-                    if (visited.Contains(neighbour))
+                    if (!visited.Add(neighbour))
                     {
                         continue;
                     }
 
-                    visited.Add(neighbour);
                     parentMap[neighbour] = current;
                     queue.Enqueue(neighbour);
                 }
             }
 
             return null;
+        }
+
+        private static IEnumerable<LocationCode> GetNeighbours(
+            IEnumerable<ReferenceMapEdgeDefinition> edges,
+            LocationCode current)
+        {
+            return edges
+                .Where(edge => edge.Edge1 == current || edge.Edge2 == current)
+                .Select(edge => edge.Edge1 == current ? edge.Edge2 : edge.Edge1);
+        }
+
+        private static RouteResult? BuildRoute(
+            LocationCode start,
+            LocationCode destination,
+            Dictionary<LocationCode, LocationCode> parentMap)
+        {
+            var route = new List<LocationCode> { destination };
+            var current = destination;
+
+            while (current != start)
+            {
+                if (!parentMap.TryGetValue(current, out var parent))
+                {
+                    return null;
+                }
+
+                current = parent;
+                route.Add(current);
+            }
+
+            route.Reverse();
+
+            return new RouteResult(route, route.Count - 1);
         }
     }
 }
