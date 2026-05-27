@@ -4,6 +4,7 @@ using ThunderbirdsBoardGameEngine.Rules.Application.Movement.Interfaces;
 using ThunderbirdsBoardGameEngine.Rules.Application.Movement.MapTraversal;
 using ThunderbirdsBoardGameEngine.Rules.Application.Rescue.CalculateRescueTarget;
 using ThunderbirdsBoardGameEngine.Rules.Application.Rescue.Interfaces;
+using ThunderbirdsBoardGameEngine.Rules.Domain.Movement;
 using ThunderbirdsBoardGameEngine.Rules.Domain.Rescue;
 using ThunderbirdsBoardGameEngine.Rules.Infrastructure.Lookups;
 
@@ -28,6 +29,8 @@ namespace ThunderbirdsBoardGameEngine.Rules.Infrastructure
             services.AddMediatR(typeof(ValidateMovementHandler).Assembly);
 
             services.AddSingleton<RescueTargetCalculator>();
+            services.AddSingleton<BreadthFirstRouteFinder>();
+
             services.AddSingleton<IDisasterContributionLookup, ReferenceDataDisasterContributionLookup>();
             services.AddSingleton<ICharacterContributionLookup, ReferenceCharacterContributionLookup>();
             services.AddSingleton<ILocationDefinitionLookup, ReferenceLocationDefinitionLookup>();

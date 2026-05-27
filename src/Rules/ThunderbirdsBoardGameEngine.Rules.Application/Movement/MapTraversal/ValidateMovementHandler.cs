@@ -9,15 +9,18 @@ namespace ThunderbirdsBoardGameEngine.Rules.Application.Movement.MapTraversal
         private readonly IThunderbirdsDefinitionLookup _thunderbirdsDefinitionLookup;
         private readonly ILocationDefinitionLookup _locationDefinitionLookup;
         private readonly IMapEdgeDefinitionLookup _edgeDefinitionLookup;
+        private readonly BreadthFirstRouteFinder _breadthFirstRouteFinder;
 
         public ValidateMovementHandler(
             IThunderbirdsDefinitionLookup thunderbirdsDefinitionLookup,
             ILocationDefinitionLookup locationDefinitionLookup,
-            IMapEdgeDefinitionLookup edgeDefinitionLookup)
+            IMapEdgeDefinitionLookup edgeDefinitionLookup,
+            BreadthFirstRouteFinder breadthFirstRouteFinder)
         {
             _thunderbirdsDefinitionLookup = thunderbirdsDefinitionLookup;
             _locationDefinitionLookup = locationDefinitionLookup;
             _edgeDefinitionLookup = edgeDefinitionLookup;
+            _breadthFirstRouteFinder = breadthFirstRouteFinder;
         }
 
         public Task<ValidateMovementResponse> Handle(ValidateMovementQuery request, CancellationToken cancellationToken)
@@ -39,9 +42,12 @@ namespace ThunderbirdsBoardGameEngine.Rules.Application.Movement.MapTraversal
 
             var topography = new Topography(locations, edges);
 
-            var movementRequest = new MovementRequest(thunderbird, topography);
+            var movementRequest = new MovementRequest(thunderbird, topography, request.Start, request.Destination);
 
-            return Task.FromResult(new ValidateMovementResponse(false));
+            var result = _breadthFirstRouteFinder.FindShortestRoute(movementRequest)
+                ?? throw new InvalidMovementCalculationRequestException("Route", $"No route found from {request.Start.Value} to {request.Destination.Value} for {request.Thunderbird}");
+
+            return Task.FromResult(new ValidateMovementResponse(result.SpacesTravelled));
         }
     }
 }
