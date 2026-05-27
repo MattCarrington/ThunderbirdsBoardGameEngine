@@ -204,16 +204,16 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.Movement
         {
             return
             [
-                new(Edge1: _locationA.Code, Edge2: _locationB.Code, EdgeType: TraversalDomain.Earth),
-                new(Edge1: _locationB.Code, Edge2: _locationC.Code, EdgeType: TraversalDomain.Earth),
-                new(Edge1: _locationA.Code, Edge2: _locationC.Code, EdgeType: TraversalDomain.Earth),
-                new(Edge1: _locationD.Code, Edge2: _locationB.Code, EdgeType: TraversalDomain.Earth),
-                new(Edge1: _locationE.Code, Edge2: _locationD.Code, EdgeType: TraversalDomain.Earth),
-                new(Edge1: _locationA.Code, Edge2: _locationF.Code, EdgeType: TraversalDomain.Earth),
-                new(Edge1: _locationF.Code, Edge2: _locationG.Code, EdgeType: TraversalDomain.Earth),
-                new(Edge1: _locationG.Code, Edge2: _locationH.Code, EdgeType: TraversalDomain.Earth),
-                new(Edge1: _locationH.Code, Edge2: _locationC.Code, EdgeType: TraversalDomain.Earth),
-                new(Edge1: _locationA.Code, Edge2: _locationSpace.Code, EdgeType: TraversalDomain.Space),
+                new(edge1: _locationA.Code, edge2: _locationB.Code, edgeType: TraversalDomain.Earth),
+                new(edge1: _locationB.Code, edge2: _locationC.Code, edgeType: TraversalDomain.Earth),
+                new(edge1: _locationA.Code, edge2: _locationC.Code, edgeType: TraversalDomain.Earth),
+                new(edge1: _locationD.Code, edge2: _locationB.Code, edgeType: TraversalDomain.Earth),
+                new(edge1: _locationE.Code, edge2: _locationD.Code, edgeType: TraversalDomain.Earth),
+                new(edge1: _locationA.Code, edge2: _locationF.Code, edgeType: TraversalDomain.Earth),
+                new(edge1: _locationF.Code, edge2: _locationG.Code, edgeType: TraversalDomain.Earth),
+                new(edge1: _locationG.Code, edge2: _locationH.Code, edgeType: TraversalDomain.Earth),
+                new(edge1: _locationH.Code, edge2: _locationC.Code, edgeType: TraversalDomain.Earth),
+                new(edge1: _locationA.Code, edge2: _locationSpace.Code, edgeType: TraversalDomain.Space),
             ];
         }
     }
