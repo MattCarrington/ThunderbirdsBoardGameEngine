@@ -26,11 +26,13 @@ jobs:
       package_regex: xunit|microsoft\.net\.test\.sdk|testcontainers|docker\.dotnet|coverlet
 
   compute-version:
-    uses: ./.github/workflows/version.yml
+    if: needs.detect-smoke-image-change.outputs.should_build == 'true'
+    uses: ./.github/workflows/compute-asset-version.yml
     with:
-      pr_title: ${{ github.event.head_commit.message || github.ref_name || 'chore smoke image' }}
       tag_prefix: smoke/v
-  
+      image_tag_prefix: smoke-
+    needs:
+      - detect-smoke-image-change
         
   docker-build-smoke:
     uses: ./.github/workflows/build-docker.yml

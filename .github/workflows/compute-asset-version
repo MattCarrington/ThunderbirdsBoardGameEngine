@@ -1,0 +1,56 @@
+name: Compute Asset Version
+
+on:
+  workflow_call:
+    inputs:
+      tag_prefix:
+        required: false
+        type: string
+        default: asset/v
+      image_tag_prefix:
+        required: false
+        type: string
+        default: asset-
+    outputs:
+      version:
+        value: ${{ jobs.compute.outputs.version }}
+      git_tag:
+        value: ${{ jobs.compute.outputs.git_tag }}
+      image_tag:
+        value: ${{ jobs.compute.outputs.image_tag }}
+
+jobs:
+  compute:
+    runs-on: ubuntu-latest
+
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+      git_tag: ${{ steps.version.outputs.git_tag }}
+      image_tag: ${{ steps.version.outputs.image_tag }}
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - id: version
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          tag_prefix="${{ inputs.tag_prefix }}"
+
+          latest="$(
+            git tag --list "${tag_prefix}[0-9]*" \
+              | sed "s#^${tag_prefix}##" \
+              | grep -E '^[0-9]+$' \
+              | sort -n \
+              | tail -1
+          )"
+
+          next=$(( ${latest:-0} + 1 ))
+          short_sha="$(git rev-parse --short=12 HEAD)"
+
+          echo "version=$next" >> "$GITHUB_OUTPUT"
+          echo "git_tag=${tag_prefix}${next}" >> "$GITHUB_OUTPUT"
+          echo "image_tag=${{ inputs.image_tag_prefix }}${short_sha}" >> "$GITHUB_OUTPUT"
