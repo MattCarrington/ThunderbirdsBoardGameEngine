@@ -19,66 +19,60 @@ permissions:
   packages: write
 
 jobs:
-  detect-smoke-image-change:
+  detect-change:
     uses: ./.github/workflows/detect.yml
     with:
       path_prefix: tests/SmokeTests
       package_regex: xunit|microsoft\.net\.test\.sdk|testcontainers|docker\.dotnet|coverlet
 
   compute-version:
-    if: needs.detect-smoke-image-change.outputs.should_build == 'true'
+    if: needs.detect-change.outputs.should_build == 'true'
     uses: ./.github/workflows/compute-asset-version.yml
     with:
       tag_prefix: smoke/v
       image_tag_prefix: smoke-
     needs:
-      - detect-smoke-image-change
+      - detect-change
         
-  docker-build-smoke:
-    uses: ./.github/workflows/build-docker.yml
+  docker-build-publish:
+    uses: ./.github/workflows/build-and-publish-docker.yml
     with:
       image_name: thunderbirds-smoke-tests
       dockerfile_path: tests/SmokeTests/ThunderbirdsBoardGameEngine.SmokeTests/Dockerfile
       docker_build_context: .
-
-  docker-publish-smoke:
-    if: needs.compute-version.outputs.release_type != 'none'
-    uses: ./.github/workflows/publish-docker.yml
-    with:
-      image_name: thunderbirds-smoke-tests
-      version: ${{ needs.compute-version.outputs.version }}
-      push_latest: ${{ github.ref == 'refs/heads/main' }}
+      image_tag: ${{ needs.compute-version.outputs.image_tag }}
+      version_tag: ${{ needs.compute-version.outputs.git_tag }}
+      push_latest: true
     secrets:
       registry_token: ${{ secrets.GITHUB_TOKEN }}
     needs:
       - compute-version
-      - docker-build-smoke
 
   tag-smoke:
-    if: github.ref == 'refs/heads/main' && needs.compute-version.outputs.release_type != 'none'
+    if: github.ref == 'refs/heads/main' && needs.docker-build-publish.result == 'success'
     permissions:
       contents: write
     uses: ./.github/workflows/tag-repo.yml
     with:
       version: ${{ needs.compute-version.outputs.version }}
-      tag_prefix: "smoke/v"      
+      tag_prefix: "smoke/v"
     needs:
       - compute-version
-      - docker-publish-smoke
+      - docker-build-publish
 
   update-smoke-image-tag:
-    if: github.ref == 'refs/heads/main' && needs.docker-publish-smoke.result == 'success'
+    if: github.ref == 'refs/heads/main' && needs.docker-build-publish.result == 'success'
     runs-on: ubuntu-latest
     permissions:
       actions: write
-    needs:
-      - docker-publish-smoke
-      - compute-version
     steps:
       - name: Update SMOKE_IMAGE_TAG repo variable
         run: |
           gh variable set SMOKE_IMAGE_TAG \
             --repo ${{ github.repository }} \
-            --body "${{ needs.compute-version.outputs.version }}"
+            --body "${{ needs.compute-version.outputs.image_tag }}"
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    needs:
+      - compute-version
+      - docker-build-publish
