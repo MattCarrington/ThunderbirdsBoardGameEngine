@@ -8,7 +8,15 @@ on:
     paths:
       - tests/SmokeTests/**
       - Directory.Packages.props
-      - github/workflows/smoke-image.yml
+      - Directory.Build.props
+      - Directory.Build.targets
+      - global.json
+      - NuGet.config
+      - .github/workflows/smoke-image.yml
+      - .github/workflows/detect.yml
+      - .github/workflows/build-and-publish-docker.yml
+      - .github/workflows/compute-asset-version.yml
+      - .github/workflows/tag-repo.yml
       
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
