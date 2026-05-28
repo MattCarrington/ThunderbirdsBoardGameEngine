@@ -3,8 +3,12 @@ name: Smoke Image
 on:
   workflow_dispatch:
   push:
+    branches:
+      - main
     paths:
       - tests/SmokeTests/**
+      - Directory.Packages.props
+      - github/workflows/smoke-image.yml
       
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -15,11 +19,18 @@ permissions:
   packages: write
 
 jobs:
+  detect-smoke-image-change:
+    uses: ./.github/workflows/detect.yml
+    with:
+      path_prefix: tests/SmokeTests
+      package_regex: xunit|microsoft\.net\.test\.sdk|testcontainers|docker\.dotnet|coverlet
+
   compute-version:
     uses: ./.github/workflows/version.yml
     with:
       pr_title: ${{ github.event.head_commit.message || github.ref_name || 'chore smoke image' }}
       tag_prefix: smoke/v
+  
         
   docker-build-smoke:
     uses: ./.github/workflows/build-docker.yml
@@ -48,7 +59,7 @@ jobs:
     uses: ./.github/workflows/tag-repo.yml
     with:
       version: ${{ needs.compute-version.outputs.version }}
-      tag_prefix: "smoke/v"
+      tag_prefix: "smoke/v"      
     needs:
       - compute-version
       - docker-publish-smoke

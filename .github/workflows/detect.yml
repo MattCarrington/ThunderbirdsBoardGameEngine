@@ -1,0 +1,73 @@
+name: Detect Changes (reusable)
+
+on:
+  workflow_call:
+    inputs:
+      path_prefix:
+        required: true
+        type: string
+
+      package_regex:
+        required: true
+        type: string
+    outputs:
+      should_build:
+        description: "Whether the smoke test image should be built and published"
+        value: ${{ jobs.detect.outputs.should_build }}
+
+jobs:
+  detect:
+    runs-on: ubuntu-latest
+    outputs:
+      should_build: ${{ steps.detect_changes.outputs.should_build }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+        with:
+            fetch-depth: 2  
+
+      - name: Detect changes in smoke test files
+        id: detect_changes
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          echo "should_build=false" >> "$GITHUB_OUTPUT"
+
+          # Manual dispatch should always build.
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "should_build=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          changed_files="$(git diff --name-only HEAD^ HEAD)"
+
+          echo "Changed files:"
+          echo "$changed_files"
+
+          # Smoke test source or docker inputs changed.
+          if echo "$changed_files" | grep -Eq '^${{ inputs.path_prefix }}/'; then
+            echo "should_build=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          # SDK/build infrastructure affecting the image.
+          if echo "$changed_files" | grep -Eq '^(global\.json|NuGet\.config|Directory\.Build\.props|Directory\.Build\.targets)$'; then
+            echo "should_build=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          # Workflow logic changed.
+          if echo "$changed_files" | grep -Eq '^\.github/workflows/(smoke-image|detect-smoke-image-change|build-docker|publish-docker|version|tag-repo)\.yml$'; then
+            echo "should_build=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          # Root package props changed. Only rebuild for smoke-relevant package changes.
+          if echo "$changed_files" | grep -q '^Directory\.Packages\.props$'; then
+            if git diff HEAD^ HEAD -- Directory.Packages.props | grep -Ei '${{ inputs.package_regex }}'; then
+              echo "should_build=true" >> "$GITHUB_OUTPUT"
+              exit 0
+            fi
+          fi
