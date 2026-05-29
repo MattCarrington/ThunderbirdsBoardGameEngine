@@ -87,13 +87,39 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Movement
         private static FakeMapEdgeDefinitionCatalog CreateEdges()
         {
             var europeToAsia = new ReferenceMapEdgeDefinition(new LocationCode("Europe"), new LocationCode("Asia"), MovementDomain.Earth);
-            var asiaToNorthAmerica = new ReferenceMapEdgeDefinition(new LocationCode("Asia"), new LocationCode("North America"), MovementDomain.Earth);
-            var northAmericaToNorthAtlantic = new ReferenceMapEdgeDefinition(new LocationCode("North America"), new LocationCode("North Atlantic"), MovementDomain.Earth);
-            var asiaToPacific = new ReferenceMapEdgeDefinition(new LocationCode("Asia"), new LocationCode("Pacific"), MovementDomain.Earth);
-            var northAtlanticToEurope = new ReferenceMapEdgeDefinition(new LocationCode("North Atlantic"), new LocationCode("Europe"), MovementDomain.Earth);
+            var europeToAfrica = new ReferenceMapEdgeDefinition(new LocationCode("Europe"), new LocationCode("Africa"), MovementDomain.Earth);
+            var asiaToAfrica = new ReferenceMapEdgeDefinition(new LocationCode("Asia"), new LocationCode("Africa"), MovementDomain.Earth);
+            var asiaToAustralia = new ReferenceMapEdgeDefinition(new LocationCode("Asia"), new LocationCode("Australia"), MovementDomain.Earth);
+            var africaToAustralia = new ReferenceMapEdgeDefinition(new LocationCode("Africa"), new LocationCode("Australia"), MovementDomain.Earth);
+            var northAmericaToSouthAmerica = new ReferenceMapEdgeDefinition(new LocationCode("North America"), new LocationCode("South America"), MovementDomain.Earth);
+            var atlanticToEurope = new ReferenceMapEdgeDefinition(new LocationCode("Atlantic"), new LocationCode("Europe"), MovementDomain.Earth);
+            var atlanticToAfrica = new ReferenceMapEdgeDefinition(new LocationCode("Atlantic"), new LocationCode("Africa"), MovementDomain.Earth);
+            var atlanticToNorthAmerica = new ReferenceMapEdgeDefinition(new LocationCode("Atlantic"), new LocationCode("North America"), MovementDomain.Earth);
+            var atlanticToSouthAmerica = new ReferenceMapEdgeDefinition(new LocationCode("Atlantic"), new LocationCode("South America"), MovementDomain.Earth);
+            var pacificToAustralia = new ReferenceMapEdgeDefinition(new LocationCode("Pacific"), new LocationCode("Australia"), MovementDomain.Earth);
+            var pacificToAsia = new ReferenceMapEdgeDefinition(new LocationCode("Asia"), new LocationCode("Pacific"), MovementDomain.Earth);
+            var pacificToNorthAmerica = new ReferenceMapEdgeDefinition(new LocationCode("Pacific"), new LocationCode("North America"), MovementDomain.Earth);
+            var pacificToSouthAmerica = new ReferenceMapEdgeDefinition(new LocationCode("Pacific"), new LocationCode("South America"), MovementDomain.Earth);
             var pacificToSpace = new ReferenceMapEdgeDefinition(new LocationCode("Pacific"), new LocationCode("Space"), MovementDomain.Space);
 
-            return new FakeMapEdgeDefinitionCatalog(europeToAsia, asiaToNorthAmerica, northAmericaToNorthAtlantic, asiaToPacific, northAtlanticToEurope, pacificToSpace);
+            return new FakeMapEdgeDefinitionCatalog(
+                europeToAsia,
+                europeToAfrica,
+                asiaToAfrica,
+                asiaToAustralia,
+                africaToAustralia,
+                northAmericaToSouthAmerica,
+                pacificToAsia,
+                asiaToAustralia,
+                northAmericaToSouthAmerica,
+                atlanticToEurope,
+                atlanticToAfrica,
+                atlanticToNorthAmerica,
+                atlanticToSouthAmerica,
+                pacificToAustralia,
+                pacificToNorthAmerica,
+                pacificToSouthAmerica,
+                pacificToSpace);
         }
 
         private static FakeLocationDefinitionCatalog CreateLocations()
@@ -101,11 +127,14 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Movement
             var europe = new ReferenceLocationDefinition(new LocationCode("Europe"), "Europe", MovementDomain.Earth);
             var asia = new ReferenceLocationDefinition(new LocationCode("Asia"), "Asia", MovementDomain.Earth);
             var northAmerica = new ReferenceLocationDefinition(new LocationCode("North America"), "North America", MovementDomain.Earth);
-            var northAtlantic = new ReferenceLocationDefinition(new LocationCode("North Atlantic"), "North Atlantic", MovementDomain.Earth);
-            var pacific = new ReferenceLocationDefinition(new LocationCode("Pacific"), "Pacific", MovementDomain.Earth);
+            var southAmerica = new ReferenceLocationDefinition(new LocationCode("South America"), "South America", MovementDomain.Earth);
+            var atlantic = new ReferenceLocationDefinition(new LocationCode("Atlantic"), "Atlantic Ocean", MovementDomain.Earth);
+            var pacific = new ReferenceLocationDefinition(new LocationCode("Pacific"), "Pacific Ocean", MovementDomain.Earth);
+            var australia = new ReferenceLocationDefinition(new LocationCode("Australia"), "Australia", MovementDomain.Earth);
+            var africa = new ReferenceLocationDefinition(new LocationCode("Africa"), "Africa", MovementDomain.Earth);
             var space = new ReferenceLocationDefinition(new LocationCode("Space"), "Space", MovementDomain.Space);
 
-            return new FakeLocationDefinitionCatalog(europe, asia, northAmerica, northAtlantic, pacific, space);
+            return new FakeLocationDefinitionCatalog(europe, asia, northAmerica, southAmerica, atlantic, pacific, australia, africa, space);
         }
 
         private static FakeThunderbirdDefinitionCatalog CreateThunderbirds()
