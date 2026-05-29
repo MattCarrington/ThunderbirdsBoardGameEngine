@@ -6,6 +6,7 @@ using ThunderbirdsBoardGameEngine.ReferenceData.Model;
 using ThunderbirdsBoardGameEngine.ReferenceData.Runtime.Interfaces;
 using ThunderbirdsBoardGameEngine.Rules.Application.Movement;
 using ThunderbirdsBoardGameEngine.Rules.Application.Movement.MapTraversal;
+using ThunderbirdsBoardGameEngine.Rules.Application.Rescue.Exceptions;
 using ThunderbirdsBoardGameEngine.Rules.ComponentTests.Fakes;
 using ThunderbirdsBoardGameEngine.Rules.Infrastructure;
 using Xunit;
@@ -15,7 +16,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Movement
     public class MovementValidationTests
     {
         [Fact]
-        public async Task MovementShouldBeValid()
+        public async Task MovementShouldBeValidForEarthboundVehicle()
         {
             // Arrange
             var request = new ValidateMovementQuery
@@ -35,6 +36,26 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Movement
         }
 
         [Fact]
+        public async Task MovementShouldBeValidForSpaceVehicle()
+        {
+            // Arrange
+            var request = new ValidateMovementQuery
+            (
+                Thunderbird: new ThunderbirdCode("thunderbird-3"),
+                Start: new LocationCode("Moon"),
+                Destination: new LocationCode("Pacific")
+            );
+
+            var mediator = CreateMediator();
+
+            // Act
+            var result = await mediator.Send(request);
+
+            // Assert
+            Assert.Equal(2, result.SpacesTravelled);
+        }
+
+        [Fact]
         public async Task MovementShouldBeInvalidDueToInvalidDestination()
         {
             // Arrange
@@ -42,7 +63,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Movement
             (
                 Thunderbird: new ThunderbirdCode("thunderbird-1"),
                 Start: new LocationCode("Europe"),
-                Destination: new LocationCode("Space")
+                Destination: new LocationCode("North Pole")
             );
 
             var mediator = CreateMediator();
@@ -60,6 +81,57 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Movement
                 Thunderbird: new ThunderbirdCode("thunderbird-1"),
                 Start: new LocationCode("Atlantis"),
                 Destination: new LocationCode("North America")
+            );
+
+            var mediator = CreateMediator();
+
+            // Act & Assert
+            await Assert.ThrowsAsync<InvalidMovementCalculationRequestException>(() => mediator.Send(request));
+        }
+
+        [Fact]
+        public async Task MovementShouldBeInvalidDueToNonExistentThunderbird()
+        {
+            // Arrange
+            var request = new ValidateMovementQuery
+            (
+                Thunderbird: new ThunderbirdCode("thunderbird-x"),
+                Start: new LocationCode("Europe"),
+                Destination: new LocationCode("North America")
+            );
+
+            var mediator = CreateMediator();
+
+            // Act & Assert
+            await Assert.ThrowsAsync<ReferenceDataNotFoundException>(() => mediator.Send(request));
+        }
+
+        [Fact]
+        public async Task MovementShouldBeInvalidAsEarthboundVehicleCannotTravelToSpace()
+        {
+            // Arrange
+            var request = new ValidateMovementQuery
+            (
+                Thunderbird: new ThunderbirdCode("thunderbird-1"),
+                Start: new LocationCode("Europe"),
+                Destination: new LocationCode("Space")
+            );
+
+            var mediator = CreateMediator();
+
+            // Act & Assert
+            await Assert.ThrowsAsync<InvalidMovementCalculationRequestException>(() => mediator.Send(request));
+        }
+
+        [Fact]
+        public async Task MovementShouldBeInvalidAsSpaceVehicleCannotTraverseEarthEdges()
+        {
+            // Arrange
+            var request = new ValidateMovementQuery
+            (
+                Thunderbird: new ThunderbirdCode("thunderbird-3"),
+                Start: new LocationCode("Space"),
+                Destination: new LocationCode("Europe")
             );
 
             var mediator = CreateMediator();
@@ -101,6 +173,8 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Movement
             var pacificToNorthAmerica = new ReferenceMapEdgeDefinition(new LocationCode("Pacific"), new LocationCode("North America"), MovementDomain.Earth);
             var pacificToSouthAmerica = new ReferenceMapEdgeDefinition(new LocationCode("Pacific"), new LocationCode("South America"), MovementDomain.Earth);
             var pacificToSpace = new ReferenceMapEdgeDefinition(new LocationCode("Pacific"), new LocationCode("Space"), MovementDomain.Space);
+            var spaceToMoon = new ReferenceMapEdgeDefinition(new LocationCode("Space"), new LocationCode("Moon"), MovementDomain.Space);
+            var spaceToSun = new ReferenceMapEdgeDefinition(new LocationCode("Space"), new LocationCode("Sun"), MovementDomain.Space);
 
             return new FakeMapEdgeDefinitionCatalog(
                 europeToAsia,
@@ -119,7 +193,9 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Movement
                 pacificToAustralia,
                 pacificToNorthAmerica,
                 pacificToSouthAmerica,
-                pacificToSpace);
+                pacificToSpace,
+                spaceToMoon,
+                spaceToSun);
         }
 
         private static FakeLocationDefinitionCatalog CreateLocations()
@@ -133,8 +209,10 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Movement
             var australia = new ReferenceLocationDefinition(new LocationCode("Australia"), "Australia", MovementDomain.Earth);
             var africa = new ReferenceLocationDefinition(new LocationCode("Africa"), "Africa", MovementDomain.Earth);
             var space = new ReferenceLocationDefinition(new LocationCode("Space"), "Space", MovementDomain.Space);
+            var moon = new ReferenceLocationDefinition(new LocationCode("Moon"), "Moon", MovementDomain.Space);
+            var sun = new ReferenceLocationDefinition(new LocationCode("Sun"), "Sun", MovementDomain.Space);
 
-            return new FakeLocationDefinitionCatalog(europe, asia, northAmerica, southAmerica, atlantic, pacific, australia, africa, space);
+            return new FakeLocationDefinitionCatalog(europe, asia, northAmerica, southAmerica, atlantic, pacific, australia, africa, space, moon, sun);
         }
 
         private static FakeThunderbirdDefinitionCatalog CreateThunderbirds()
