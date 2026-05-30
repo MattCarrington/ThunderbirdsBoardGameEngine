@@ -25,7 +25,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v6
         with:
-            fetch-depth: 2  
+          fetch-depth: 0 
 
       - name: Detect changes in smoke test files
         id: detect_changes
@@ -41,7 +41,21 @@ jobs:
             exit 0
           fi
 
-          changed_files="$(git diff --name-only HEAD^ HEAD)"
+          if [ "${{ github.event_name }}" = "push" ]; then
+            before="${{ github.event.before }}"
+            after="${{ github.sha }}"
+
+            if [[ "$before" =~ ^0+$ ]]; then
+              changed_files="$(git diff-tree --no-commit-id --name-only -r "$after")"
+              package_diff="$(git show --format= --unified=0 "$after" -- Directory.Packages.props || true)"
+            else
+              changed_files="$(git diff --name-only "$before" "$after")"
+              package_diff="$(git diff "$before" "$after" -- Directory.Packages.props || true)"
+            fi
+          else
+            changed_files="$(git diff --name-only HEAD^ HEAD)"
+            package_diff="$(git diff HEAD^ HEAD -- Directory.Packages.props || true)"
+          fi
 
           echo "Changed files:"
           echo "$changed_files"
