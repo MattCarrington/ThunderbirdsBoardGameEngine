@@ -50,7 +50,7 @@ jobs:
       docker_build_context: .
       image_tag: ${{ needs.compute-version.outputs.image_tag }}
       version_tag: smoke-v${{ needs.compute-version.outputs.version }}
-      push_latest: true
+      push_latest: ${{ github.ref == 'refs/heads/main' }}
     secrets:
       registry_token: ${{ secrets.GITHUB_TOKEN }}
     needs:
