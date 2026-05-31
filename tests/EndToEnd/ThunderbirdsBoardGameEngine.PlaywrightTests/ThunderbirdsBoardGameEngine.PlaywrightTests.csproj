@@ -6,6 +6,7 @@
 	  <Nullable>enable</Nullable>
 	  <!-- This is the important bit -->
 	  <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+	  <OutputType>Exe</OutputType>
   </PropertyGroup>
 
   <ItemGroup>
