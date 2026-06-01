@@ -14,10 +14,10 @@ namespace ThunderbirdsBoardGameEngine.TestUtils.xUnit.Fixtures
         public WireMockHost Host { get; private set; } = null!;
 
         /// <inheritdoc />
-        public async ValueTask InitializeAsync()
+        public ValueTask InitializeAsync()
         {
             Host = new WireMockHost();
-            await Task.CompletedTask;
+            return ValueTask.CompletedTask;
         }
 
         /// <inheritdoc />
