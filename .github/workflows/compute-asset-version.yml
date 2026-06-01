@@ -45,7 +45,8 @@ jobs:
               | sed "s#^${tag_prefix}##" \
               | grep -E '^[0-9]+$' \
               | sort -n \
-              | tail -1
+              | tail -1 \
+              || true
           )"
 
           next=$(( ${latest:-0} + 1 ))
