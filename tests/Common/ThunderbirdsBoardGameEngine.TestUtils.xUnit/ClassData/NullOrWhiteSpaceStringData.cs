@@ -10,7 +10,7 @@ namespace ThunderbirdsBoardGameEngine.TestUtils.xUnit.ClassData
         /// <inheritdoc />
         public NullOrWhitespaceStringData()
         {
-            Add((string)null);
+            Add((string?)null);
 
             foreach (var item in new WhiteSpaceStringData())
             {
