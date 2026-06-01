@@ -82,14 +82,14 @@ jobs:
           fi
 
           # Workflow logic changed.
-          if echo "$changed_files" | grep -Eq '^\.github/workflows/(smoke-image|detect-smoke-image-change|build-docker|publish-docker|version|tag-repo)\.yml$'; then
+          if echo "$changed_files" | grep -Eq '^\.github/workflows/(smoke-image|detect|build-and-publish-docker|compute-asset-version|tag-repo|build-docker|publish-docker|version)\.yml$'; then
             echo "should_build=true" >> "$GITHUB_OUTPUT"
             exit 0
           fi
 
           # Root package props changed. Only rebuild for smoke-relevant package changes.
           if echo "$changed_files" | grep -q '^Directory\.Packages\.props$'; then
-            if git diff HEAD^ HEAD -- Directory.Packages.props | grep -Ei '${{ inputs.package_regex }}'; then
+            if echo "$package_diff" | grep -Ei '${{ inputs.package_regex }}'; then
               echo "should_build=true" >> "$GITHUB_OUTPUT"
               exit 0
             fi
