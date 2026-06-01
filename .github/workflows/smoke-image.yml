@@ -30,6 +30,9 @@ jobs:
   detect-change:
     uses: ./.github/workflows/detect.yml
     with:
+      event_name: ${{ github.event_name }}
+      before_sha: ${{ github.event.before }}
+      after_sha: ${{ github.sha }}
       path_prefix: tests/SmokeTests
       package_regex: xunit|microsoft\.net\.test\.sdk|testcontainers|docker\.dotnet|coverlet
 

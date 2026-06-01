@@ -3,10 +3,19 @@ name: Detect Changes (reusable)
 on:
   workflow_call:
     inputs:
+      event_name:
+        required: true
+        type: string
+      before_sha:
+        required: false
+        type: string
+        default: ""
+      after_sha:
+        required: true
+        type: string
       path_prefix:
         required: true
         type: string
-
       package_regex:
         required: true
         type: string
@@ -36,14 +45,14 @@ jobs:
           echo "should_build=false" >> "$GITHUB_OUTPUT"
 
           # Manual dispatch should always build.
-          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+          if [ "${{ inputs.event_name }}" = "workflow_dispatch" ]; then
             echo "should_build=true" >> "$GITHUB_OUTPUT"
             exit 0
           fi
 
-          if [ "${{ github.event_name }}" = "push" ]; then
-            before="${{ github.event.before }}"
-            after="${{ github.sha }}"
+          if [ "${{ inputs.event_name }}" = "push" ]; then
+            before="${{ inputs.before_sha }}"
+            after="${{ inputs.after_sha }}"
 
             if [[ "$before" =~ ^0+$ ]]; then
               changed_files="$(git diff-tree --no-commit-id --name-only -r "$after")"
