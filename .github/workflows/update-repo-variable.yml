@@ -1,0 +1,31 @@
+name: Update Repository Variable (reusable)
+
+on:
+  workflow_call:
+    inputs:
+      variable_name:
+        required: true
+        type: string
+      variable_value:
+        required: true
+        type: string
+    secrets:
+      token:
+        required: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    permissions:
+      actions: write
+      contents: read
+
+    steps:
+      - name: Update repository variable
+        shell: bash
+        run: |
+          gh variable set "${{ inputs.variable_name }}" \
+            --repo "${{ github.repository }}" \
+            --body "${{ inputs.variable_value }}"
+        env:
+          GH_TOKEN: ${{ secrets.token || github.token }}

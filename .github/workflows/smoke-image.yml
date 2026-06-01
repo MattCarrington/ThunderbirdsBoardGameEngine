@@ -72,18 +72,11 @@ jobs:
       - docker-build-publish
 
   update-smoke-image-tag:
-    if: github.ref == 'refs/heads/main' && needs.docker-build-publish.result == 'success'
-    runs-on: ubuntu-latest
-    permissions:
-      actions: write
-    steps:
-      - name: Update SMOKE_IMAGE_TAG repo variable
-        run: |
-          gh variable set SMOKE_IMAGE_TAG \
-            --repo ${{ github.repository }} \
-            --body "${{ needs.compute-version.outputs.image_tag }}"
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    if: needs.docker-build-publish.result == 'success'
+    uses: ./.github/workflows/update-repo-variable.yml
+    with:
+      variable_name: SMOKE_IMAGE_TAG
+      variable_value: ${{ needs.compute-version.outputs.image_tag }}
     needs:
       - compute-version
       - docker-build-publish
