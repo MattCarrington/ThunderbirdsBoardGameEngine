@@ -40,14 +40,19 @@ jobs:
 
           tag_prefix="${{ inputs.tag_prefix }}"
 
-          latest="$(
-            git tag --list "${tag_prefix}[0-9]*" \
-              | sed "s#^${tag_prefix}##" \
-              | grep -E '^[0-9]+$' \
-              | sort -n \
-              | tail -1 \
-              || true
-          )"
+          tags="$(git tag --list "${tag_prefix}[0-9]*")"
+
+          if [ -z "$tags" ]; then
+            latest=""
+          else
+            latest="$(
+              echo "$tags" \
+                | sed "s#^${tag_prefix}##" \
+                | grep -E '^[0-9]+$' \
+                | sort -n \
+                | tail -1
+            )"
+          fi
 
           next=$(( ${latest:-0} + 1 ))
           short_sha="$(git rev-parse --short=12 HEAD)"
