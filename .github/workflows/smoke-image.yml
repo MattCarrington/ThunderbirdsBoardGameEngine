@@ -72,7 +72,7 @@ jobs:
       - docker-build-publish
 
   update-smoke-image-tag:
-    if: needs.docker-build-publish.result == 'success'
+    if: github.ref == 'refs/heads/main' && needs.docker-build-publish.result == 'success'
     uses: ./.github/workflows/update-repo-variable.yml
     with:
       variable_name: SMOKE_IMAGE_TAG
