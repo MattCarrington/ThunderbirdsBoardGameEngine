@@ -143,8 +143,14 @@ namespace ThunderbirdsBoardGameEngine.UI.IntegrationTests.Pages
             // Assert – error appears
             cut.WaitForAssertion(() =>
             {
+                var button = cut.Find("[data-testid='calculate-button']");
+                Assert.False(button.HasAttribute("disabled"), "Button should not be disabled after error response");
+
                 cut.Find("[data-testid='rescue-calculation-error']");
-            });
+
+                Assert.Empty(cut.FindAll("[data-testid='rescue-calculation-result']"));
+            },
+            timeout: TimeSpan.FromSeconds(5));
         }
     }
 }
