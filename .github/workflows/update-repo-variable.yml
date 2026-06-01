@@ -24,6 +24,8 @@ jobs:
       - name: Update repository variable
         shell: bash
         run: |
+          set -euo pipefail
+
           gh variable set "${{ inputs.variable_name }}" \
             --repo "${{ github.repository }}" \
             --body "${{ inputs.variable_value }}"
