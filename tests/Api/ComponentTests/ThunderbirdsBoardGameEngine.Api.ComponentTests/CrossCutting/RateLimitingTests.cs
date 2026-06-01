@@ -35,17 +35,17 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.CrossCutting
             using var firstRequest = new HttpRequestMessage(HttpMethod.Post, route);
             firstRequest.Headers.Add("X-API-Version", ApiVersion.ToString());
             firstRequest.Content = JsonContent.Create(dto);
-            var first = await _client.SendAsync(firstRequest);
+            var first = await _client.SendAsync(firstRequest, TestContext.Current.CancellationToken);
 
             using var secondRequest = new HttpRequestMessage(HttpMethod.Post, route);
             secondRequest.Headers.Add("X-API-Version", ApiVersion.ToString());
             secondRequest.Content = JsonContent.Create(dto);
-            var second = await _client.SendAsync(secondRequest);
+            var second = await _client.SendAsync(secondRequest, TestContext.Current.CancellationToken);
 
             using var thirdRequest = new HttpRequestMessage(HttpMethod.Post, route);
             thirdRequest.Headers.Add("X-API-Version", ApiVersion.ToString());
             thirdRequest.Content = JsonContent.Create(dto);
-            var third = await _client.SendAsync(thirdRequest);
+            var third = await _client.SendAsync(thirdRequest, TestContext.Current.CancellationToken);
 
             // Assert
             Assert.NotEqual(HttpStatusCode.TooManyRequests, first.StatusCode);

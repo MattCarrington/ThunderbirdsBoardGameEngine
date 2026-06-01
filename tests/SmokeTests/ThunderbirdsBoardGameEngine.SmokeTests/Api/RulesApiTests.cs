@@ -24,7 +24,7 @@ namespace ThunderbirdsBoardGameEngine.SmokeTests.Api
             };
 
             // Act
-            var response = await client.CalculateRescueTargetAsync("the-cham-cham", request);
+            var response = await client.CalculateRescueTargetAsync("the-cham-cham", request, TestContext.Current.CancellationToken);
 
             // Assert
             Assert.True(response.Success, $"Expected a successful status code, but got {(int)response.StatusCode}");

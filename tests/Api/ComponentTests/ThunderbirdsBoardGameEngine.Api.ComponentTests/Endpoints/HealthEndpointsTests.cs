@@ -19,7 +19,7 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints
             using var request = new HttpRequestMessage(HttpMethod.Get, "/health/live");
 
             // Act
-            using var response = await _client.SendAsync(request);
+            using var response = await _client.SendAsync(request, TestContext.Current.CancellationToken);
 
             // Assert
             Assert.True(response.IsSuccessStatusCode); // Status Code 200-299
@@ -32,7 +32,7 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints
             using var request = new HttpRequestMessage(HttpMethod.Get, "/health/ready");
 
             // Act
-            using var response = await _client.SendAsync(request);
+            using var response = await _client.SendAsync(request, TestContext.Current.CancellationToken);
 
             // Assert
             Assert.True(response.IsSuccessStatusCode); // Status Code 200-299

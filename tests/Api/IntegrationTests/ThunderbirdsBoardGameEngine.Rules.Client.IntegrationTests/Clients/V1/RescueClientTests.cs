@@ -25,7 +25,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Client.IntegrationTests.Clients.V1
             var code = "terror-in-new-york-city";
 
             // Act
-            var response = await client.CalculateRescueTargetAsync(code, request);
+            var response = await client.CalculateRescueTargetAsync(code, request, TestContext.Current.CancellationToken);
 
             // Assert
             Assert.NotNull(response);

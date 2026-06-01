@@ -17,21 +17,21 @@ namespace ThunderbirdsBoardGameEngine.PlaywrightTests.Features
     
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Reqnroll", "3.0.0.0")]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public partial class DisasterCardsFeature : object, global::Xunit.IClassFixture<DisasterCardsFeature.FixtureData>, global::Xunit.IAsyncLifetime
+    public partial class DisasterCardsFeature : object, Xunit.IClassFixture<DisasterCardsFeature.FixtureData>, Xunit.IAsyncLifetime
     {
         
         private global::Reqnroll.ITestRunner testRunner;
+        
+        private Xunit.ITestOutputHelper _testOutputHelper;
         
         private static string[] featureTags = ((string[])(null));
         
         private static global::Reqnroll.FeatureInfo featureInfo = new global::Reqnroll.FeatureInfo(new global::System.Globalization.CultureInfo("en-US"), "Features", "Disaster Cards", "The player can see and inspect the list of disaster cards.", global::Reqnroll.ProgrammingLanguage.CSharp, featureTags, InitializeCucumberMessages());
         
-        private global::Xunit.Abstractions.ITestOutputHelper _testOutputHelper;
-        
 #line 1 "DisasterCards.feature"
 #line hidden
         
-        public DisasterCardsFeature(DisasterCardsFeature.FixtureData fixtureData, global::Xunit.Abstractions.ITestOutputHelper testOutputHelper)
+        public DisasterCardsFeature(DisasterCardsFeature.FixtureData fixtureData, Xunit.ITestOutputHelper testOutputHelper)
         {
             this._testOutputHelper = testOutputHelper;
         }
@@ -90,7 +90,7 @@ namespace ThunderbirdsBoardGameEngine.PlaywrightTests.Features
         public void ScenarioInitialize(global::Reqnroll.ScenarioInfo scenarioInfo, global::Reqnroll.RuleInfo ruleInfo)
         {
             testRunner.OnScenarioInitialize(scenarioInfo, ruleInfo);
-            testRunner.ScenarioContext.ScenarioContainer.RegisterInstanceAs<global::Xunit.Abstractions.ITestOutputHelper>(_testOutputHelper);
+            testRunner.ScenarioContext.ScenarioContainer.RegisterInstanceAs<Xunit.ITestOutputHelper>(_testOutputHelper);
         }
         
         public async global::System.Threading.Tasks.Task ScenarioStartAsync()
@@ -108,7 +108,7 @@ namespace ThunderbirdsBoardGameEngine.PlaywrightTests.Features
             return new global::Reqnroll.Formatters.RuntimeSupport.FeatureLevelCucumberMessages("Features/DisasterCards.feature.ndjson", 4);
         }
         
-        async global::System.Threading.Tasks.Task global::Xunit.IAsyncLifetime.InitializeAsync()
+        async System.Threading.Tasks.ValueTask Xunit.IAsyncLifetime.InitializeAsync()
         {
             try
             {
@@ -118,7 +118,7 @@ namespace ThunderbirdsBoardGameEngine.PlaywrightTests.Features
             {
                 try
                 {
-                    ((global::Xunit.IAsyncLifetime)(this)).DisposeAsync();
+                    ((Xunit.IAsyncLifetime)(this)).DisposeAsync();
                 }
                 catch (System.Exception e2)
                 {
@@ -128,12 +128,12 @@ namespace ThunderbirdsBoardGameEngine.PlaywrightTests.Features
             }
         }
         
-        async global::System.Threading.Tasks.Task global::Xunit.IAsyncLifetime.DisposeAsync()
+        async System.Threading.Tasks.ValueTask System.IAsyncDisposable.DisposeAsync()
         {
             await this.TestTearDownAsync();
         }
         
-        [global::Xunit.SkippableFactAttribute(DisplayName="Disaster cards dropdown contains list of cards")]
+        [global::Xunit.FactAttribute(DisplayName="Disaster cards dropdown contains list of cards")]
         [global::Xunit.TraitAttribute("FeatureTitle", "Disaster Cards")]
         [global::Xunit.TraitAttribute("Description", "Disaster cards dropdown contains list of cards")]
         public async global::System.Threading.Tasks.Task DisasterCardsDropdownContainsListOfCards()
@@ -164,7 +164,7 @@ namespace ThunderbirdsBoardGameEngine.PlaywrightTests.Features
             await this.ScenarioCleanupAsync();
         }
         
-        [global::Xunit.SkippableFactAttribute(DisplayName="Selecting a card shows its details")]
+        [global::Xunit.FactAttribute(DisplayName="Selecting a card shows its details")]
         [global::Xunit.TraitAttribute("FeatureTitle", "Disaster Cards")]
         [global::Xunit.TraitAttribute("Description", "Selecting a card shows its details")]
         public async global::System.Threading.Tasks.Task SelectingACardShowsItsDetails()
@@ -200,15 +200,15 @@ namespace ThunderbirdsBoardGameEngine.PlaywrightTests.Features
         
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Reqnroll", "3.0.0.0")]
         [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-        public class FixtureData : object, global::Xunit.IAsyncLifetime
+        public class FixtureData : object, Xunit.IAsyncLifetime
         {
             
-            async global::System.Threading.Tasks.Task global::Xunit.IAsyncLifetime.InitializeAsync()
+            async System.Threading.Tasks.ValueTask Xunit.IAsyncLifetime.InitializeAsync()
             {
                 await DisasterCardsFeature.FeatureSetupAsync();
             }
             
-            async global::System.Threading.Tasks.Task global::Xunit.IAsyncLifetime.DisposeAsync()
+            async System.Threading.Tasks.ValueTask System.IAsyncDisposable.DisposeAsync()
             {
                 await DisasterCardsFeature.FeatureTearDownAsync();
             }

@@ -22,7 +22,7 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.UnitTests.Identities
 
         [Theory]
         [ClassData(typeof(NullOrWhitespaceStringData))]
-        public void Constructor_WhenInvalidLocationValues_ThrowsArgumentException(string code)
+        public void Constructor_WhenInvalidLocationValues_ThrowsArgumentException(string? code)
         {
             // Arrange
 

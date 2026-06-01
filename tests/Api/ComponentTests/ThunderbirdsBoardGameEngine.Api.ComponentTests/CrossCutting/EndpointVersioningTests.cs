@@ -31,7 +31,7 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.CrossCutting
             request.Content = JsonContent.Create(_requestDto);
 
             // Act
-            using var response = await _client.SendAsync(request);
+            using var response = await _client.SendAsync(request, TestContext.Current.CancellationToken);
 
             // Assert
             await ProblemDetailsAssertions.AssertBadRequestAsync(response, "Unspecified API version");
@@ -46,7 +46,7 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.CrossCutting
             request.Content = JsonContent.Create(_requestDto);
 
             // Act
-            using var response = await _client.SendAsync(request);
+            using var response = await _client.SendAsync(request, TestContext.Current.CancellationToken);
 
             // Assert
             await ProblemDetailsAssertions.AssertBadRequestAsync(response, "Unsupported API version");
@@ -62,7 +62,7 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.CrossCutting
             request.Content = JsonContent.Create(_requestDto);
 
             // Act
-            using var response = await _client.SendAsync(request);
+            using var response = await _client.SendAsync(request, TestContext.Current.CancellationToken);
 
             // Assert
             await ProblemDetailsAssertions.AssertBadRequestAsync(response, "Ambiguous API version");
@@ -77,7 +77,7 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.CrossCutting
             request.Content = JsonContent.Create(_requestDto);
 
             // Act
-            using var response = await _client.SendAsync(request);
+            using var response = await _client.SendAsync(request, TestContext.Current.CancellationToken);
 
             // Assert
             await ProblemDetailsAssertions.AssertBadRequestAsync(response, "Invalid API version");
