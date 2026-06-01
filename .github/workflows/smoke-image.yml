@@ -74,6 +74,9 @@ jobs:
   update-smoke-image-tag:
     if: github.ref == 'refs/heads/main' && needs.docker-build-publish.result == 'success'
     uses: ./.github/workflows/update-repo-variable.yml
+    permissions:
+       actions: write
+       contents: read
     with:
       variable_name: SMOKE_IMAGE_TAG
       variable_value: ${{ needs.compute-version.outputs.image_tag }}
