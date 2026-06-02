@@ -80,6 +80,8 @@ jobs:
     with:
       variable_name: SMOKE_IMAGE_TAG
       variable_value: ${{ needs.compute-version.outputs.image_tag }}
+    secrets:
+      token: ${{ secrets.REPO_VARIABLES_TOKEN }}
     needs:
       - compute-version
       - docker-build-publish
