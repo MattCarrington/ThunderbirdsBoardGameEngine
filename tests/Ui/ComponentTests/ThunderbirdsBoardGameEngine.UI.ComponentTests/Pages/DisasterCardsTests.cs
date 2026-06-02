@@ -9,7 +9,7 @@ using Xunit;
 
 namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Pages
 {
-    public class DisasterCardsTests : Bunit.TestContext
+    public class DisasterCardsTests : BunitContext
     {
         private static IReadOnlyList<DisasterCardViewModel> Cards =>
         [
@@ -49,7 +49,7 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Pages
             _ = SetupRescueService();
 
             // Act
-            var cut = RenderComponent<DisasterCards>();
+            var cut = Render<DisasterCards>();
 
             // Assert
             cut.WaitForElement("#disasterSelect option[value='volcano']"); // waits for card to render
@@ -66,7 +66,7 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Pages
             _ = SetupRescueService();
 
             // Act
-            var cut = RenderComponent<DisasterCards>();
+            var cut = Render<DisasterCards>();
             cut.Find("#disasterSelect").Change("volcano");
 
             // Assert
@@ -116,7 +116,7 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Pages
             _ = SetupRescueService();
 
             // Act
-            var cut = RenderComponent<DisasterCards>();
+            var cut = Render<DisasterCards>();
 
             // Await (wait for async load to complete)
             cut.WaitForElement("#disasterSelect");
@@ -146,7 +146,7 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Pages
             _ = SetupRescueService();
 
             // Act
-            var cut = RenderComponent<DisasterCards>();
+            var cut = Render<DisasterCards>();
 
             // Await + Assert
             cut.WaitForAssertion(() =>
@@ -168,7 +168,7 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Pages
             _ = SetupRescueService();
 
             // Act
-            var cut = RenderComponent<DisasterCards>();
+            var cut = Render<DisasterCards>();
 
             // Await
             var select = cut.WaitForElement("#disasterSelect");
@@ -196,7 +196,7 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Pages
             _ = SetupRescueService();
 
             // Act
-            var cut = RenderComponent<DisasterCards>();
+            var cut = Render<DisasterCards>();
 
             // Await
             var select = cut.WaitForElement("#disasterSelect");
@@ -219,7 +219,7 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Pages
             _ = SetupRescueService();
 
             // Act
-            var cut = RenderComponent<DisasterCards>();
+            var cut = Render<DisasterCards>();
 
             // Await
             var select = cut.WaitForElement("#disasterSelect");
@@ -240,7 +240,7 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Pages
             _ = SetupCharactersService();
             _ = SetupRescueService();
 
-            var cut = RenderComponent<DisasterCards>();
+            var cut = Render<DisasterCards>();
             var select = cut.WaitForElement("#disasterSelect");
 
             // Act
@@ -260,7 +260,7 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Pages
             _ = SetupCharactersService();
             _ = SetupRescueService();
 
-            var cut = RenderComponent<DisasterCards>();
+            var cut = Render<DisasterCards>();
             var select = cut.WaitForElement("#disasterSelect");
 
             // Act
@@ -292,7 +292,7 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Pages
             _ = SetupCharactersService();
             _ = SetupRescueService();
 
-            var cut = RenderComponent<DisasterCards>();
+            var cut = Render<DisasterCards>();
             var select = cut.WaitForElement("#disasterSelect");
             select.Change("nulls");
 
@@ -345,7 +345,7 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Pages
 
             var rescueService = SetupRescueService(response);
 
-            var cut = RenderComponent<DisasterCards>();
+            var cut = Render<DisasterCards>();
 
             // Select card
             cut.WaitForElement("#disasterSelect").Change("test-card");
@@ -386,7 +386,7 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Pages
 
             Services.AddSingleton(rescueService);
 
-            var cut = RenderComponent<DisasterCards>();
+            var cut = Render<DisasterCards>();
 
             cut.WaitForElement("#disasterSelect").Change("volcano");
 
@@ -450,7 +450,7 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Pages
             _ = SetupCharactersService();
             _ = SetupRescueService();
 
-            var cut = RenderComponent<DisasterCards>();
+            var cut = Render<DisasterCards>();
 
             var select = cut.WaitForElement("#disasterSelect");
             select.Change("card-one");
@@ -511,7 +511,7 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Pages
             _ = SetupCharactersService();
             _ = SetupRescueService();
 
-            var cut = RenderComponent<DisasterCards>();
+            var cut = Render<DisasterCards>();
 
             // Select first card
             var select = cut.WaitForElement("#disasterSelect");
@@ -542,7 +542,7 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Pages
 
             // Characters service returns empty
             _ = SetupCharactersService(Array.Empty<CharacterViewModel>());
-            var cut = RenderComponent<DisasterCards>();
+            var cut = Render<DisasterCards>();
 
             cut.WaitForElement("#disasterSelect").Change("volcano");
 
@@ -560,7 +560,7 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Pages
             _ = SetupCharactersService();
             _ = SetupRescueService();
 
-            var cut = RenderComponent<DisasterCards>();
+            var cut = Render<DisasterCards>();
 
             cut.WaitForElement("#disasterSelect").Change("volcano");
 
@@ -602,7 +602,7 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Pages
             _ = SetupCharactersService();
             _ = SetupRescueService();
 
-            var cut = RenderComponent<DisasterCards>();
+            var cut = Render<DisasterCards>();
 
             cut.WaitForElement("#disasterSelect").Change("test-card");
 
@@ -626,7 +626,7 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Pages
                 AppliedDisasterBonuses = []
             });
 
-            var cut = RenderComponent<DisasterCards>();
+            var cut = Render<DisasterCards>();
 
             cut.WaitForElement("#disasterSelect").Change("volcano");
             cut.Find("#characterSelect").Change("scott");
