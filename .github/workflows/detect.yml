@@ -89,8 +89,8 @@ jobs:
 
           # Root package props changed. Only rebuild for smoke-relevant package changes.
           if echo "$changed_files" | grep -q '^Directory\.Packages\.props$'; then
-            package_changed_lines="$(echo "$package_diff" | grep -E '^[+-][^+-]' || true)"
-            if echo "$package_changed_lines" | grep -Ei '${{ inputs.package_regex }}'; then
+            package_changed_lines="$(printf '%s\n' "$package_diff" | grep -E '^[+-][^+-]' || true)"
+            if printf '%s\n' "$package_changed_lines" | grep -Eiq '${{ inputs.package_regex }}'; then
               echo "should_build=true" >> "$GITHUB_OUTPUT"
               exit 0
             fi
