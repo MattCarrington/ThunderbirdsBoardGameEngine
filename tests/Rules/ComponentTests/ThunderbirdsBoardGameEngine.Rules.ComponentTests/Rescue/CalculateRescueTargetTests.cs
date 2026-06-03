@@ -256,7 +256,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Rescue
                 PresentDisasterBonusKeys: [],
                 PlayedFabCardCodes:
                 [
-                    new CardCode("jeffs-orders")
+                    new CardCode("jeff-s-orders")
                 ],
                 ActiveEventCardCodes:
                 [
@@ -391,7 +391,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Rescue
             );
 
             var jeffsOrders = new ReferenceFabCardDefinition(
-                code: new CardCode("jeffs-orders"),
+                code: new CardCode("jeff-s-orders"),
                 displayName: "Jeff's Orders"
             );
 
