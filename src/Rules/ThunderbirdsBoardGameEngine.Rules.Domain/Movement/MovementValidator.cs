@@ -2,7 +2,7 @@
 {
     public sealed class MovementValidator
     {
-        public MovementValidationResult Validate(MovementRequest request)
+        public MovementValidationResult Validate(MovementInput request)
         {
             if (!request.Topography.Locations.Any(c => c.Key == request.Start))
             {

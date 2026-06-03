@@ -27,7 +27,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.Movement
         public void FindShortestRoute_WhenDestinationIsSameAsStart_ReturnsRouteWithSingleLocation()
         {
             // Arrange
-            var movementRequest = new MovementRequest(
+            var movementRequest = new MovementInput(
                 _thunderbird,
                 new Topography(CreateLocations(), CreateEdges()),
                 _locationA.Key,
@@ -48,7 +48,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.Movement
         public void FindShortestRoute_WhenDestinationIsOneMoveAway_ReturnsRouteWithTwoLocations()
         {
             // Arrange
-            var movementRequest = new MovementRequest(
+            var movementRequest = new MovementInput(
                 _thunderbird,
                 new Topography(CreateLocations(), CreateEdges()),
                 _locationA.Key,
@@ -69,7 +69,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.Movement
         public void FindShortestRoute_DestinationIsMultipleStepsAway_ReturnsRoute()
         {
             // Arrange
-            var movementRequest = new MovementRequest(
+            var movementRequest = new MovementInput(
                 _thunderbird,
                 new Topography(CreateLocations(), CreateEdges()),
                 _locationA.Key,
@@ -90,7 +90,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.Movement
         public void FindShortestRoute_MultipleRoutesExist_ReturnsShortestRoute()
         {
             // Arrange
-            var movementRequest = new MovementRequest(
+            var movementRequest = new MovementInput(
                 _thunderbird,
                 new Topography(CreateLocations(), CreateEdges()),
                 _locationA.Key,
@@ -111,7 +111,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.Movement
         public void FindShortestRoute_RouteTraversesCrossDomain_ReturnsNull()
         {
             // Arrange
-            var movementRequest = new MovementRequest(
+            var movementRequest = new MovementInput(
                 _thunderbird,
                 new Topography(CreateLocations(), CreateEdges()),
                 _locationA.Key,
@@ -130,7 +130,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.Movement
         public void FindShortestRoute_StartLocationDoesNotExist_ReturnsNull()
         {
             // Arrange
-            var movementRequest = new MovementRequest(
+            var movementRequest = new MovementInput(
                 _thunderbird,
                 new Topography(CreateLocations(), CreateEdges()),
                 _invalidLocationCode,
@@ -149,7 +149,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.Movement
         public void FindShortestRoute_DestinationLocationDoesNotExist_ReturnsNull()
         {
             // Arrange
-            var movementRequest = new MovementRequest(
+            var movementRequest = new MovementInput(
                 _thunderbird,
                 new Topography(CreateLocations(), CreateEdges()),
                 _locationA.Key,
@@ -168,7 +168,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.Movement
         public void FindShortestRoute_NoLinkBetweenStartAndDestination_ReturnsNull()
         {
             // Arrange
-            var movementRequest = new MovementRequest(
+            var movementRequest = new MovementInput(
                 _thunderbird,
                 new Topography(CreateLocations(), CreateEdges()),
                 _locationA.Key,

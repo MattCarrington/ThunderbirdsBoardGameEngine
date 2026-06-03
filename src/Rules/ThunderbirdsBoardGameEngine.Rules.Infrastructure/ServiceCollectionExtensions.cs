@@ -28,6 +28,8 @@ namespace ThunderbirdsBoardGameEngine.Rules.Infrastructure
             services.AddMediatR(typeof(CalculateRescueTargetHandler).Assembly);
             services.AddMediatR(typeof(ValidateMovementHandler).Assembly);
 
+            services.AddSingleton<IValidateMovementResolutionService, ValidateMovementResolutionService>();
+
             services.AddSingleton<RescueTargetCalculator>();
             services.AddSingleton<MovementValidator>();
             services.AddSingleton<BreadthFirstRouteFinder>();

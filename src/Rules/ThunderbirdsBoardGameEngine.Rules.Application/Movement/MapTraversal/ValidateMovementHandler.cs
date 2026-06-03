@@ -7,69 +7,33 @@ namespace ThunderbirdsBoardGameEngine.Rules.Application.Movement.MapTraversal
 {
     public class ValidateMovementHandler : IRequestHandler<ValidateMovementQuery, ValidateMovementResponse>
     {
-        private readonly IThunderbirdsDefinitionLookup _thunderbirdsDefinitionLookup;
-        private readonly ILocationDefinitionLookup _locationDefinitionLookup;
-        private readonly IMapEdgeDefinitionLookup _edgeDefinitionLookup;
-        private readonly MovementValidator _movementValidator;
-        private readonly BreadthFirstRouteFinder _breadthFirstRouteFinder;
-        private readonly ActionPointCalculator _actionPointCalculator;
+        private readonly IValidateMovementResolutionService _validateMovementResolutionService;
 
-        public ValidateMovementHandler(
-            IThunderbirdsDefinitionLookup thunderbirdsDefinitionLookup,
-            ILocationDefinitionLookup locationDefinitionLookup,
-            IMapEdgeDefinitionLookup edgeDefinitionLookup,
-            MovementValidator movementValidator,
-            BreadthFirstRouteFinder breadthFirstRouteFinder,
-            ActionPointCalculator actionPointCalculator)
+        public ValidateMovementHandler(IValidateMovementResolutionService validateMovementResolutionService)
         {
-            _thunderbirdsDefinitionLookup = thunderbirdsDefinitionLookup;
-            _locationDefinitionLookup = locationDefinitionLookup;
-            _edgeDefinitionLookup = edgeDefinitionLookup;
-            _movementValidator = movementValidator;
-            _breadthFirstRouteFinder = breadthFirstRouteFinder;
-            _actionPointCalculator = actionPointCalculator;
+            _validateMovementResolutionService = validateMovementResolutionService;
         }
 
-        public Task<ValidateMovementResponse> Handle(ValidateMovementQuery request, CancellationToken cancellationToken)
+        public Task<ValidateMovementResponse> Handle(ValidateMovementQuery query, CancellationToken cancellationToken)
         {
-            var thunderbird = _thunderbirdsDefinitionLookup.GetThunderbirdMovementContribution(request.Thunderbird);
+            var request = new MovementRequest(
+                Thunderbird: query.Thunderbird,
+                Start: query.Start,
+                Destination: query.Destination
+            );
 
-            var locations = _locationDefinitionLookup.GetAllLocationContributions();
-            var edges = _edgeDefinitionLookup.GetAll();
+            var movementResult = _validateMovementResolutionService.ResolveMovementValidation(request);
 
-            var topography = new Topography(locations, edges);
-
-            var movementRequest = new MovementRequest(thunderbird, topography, request.Start, request.Destination);
-
-            var validationResult = _movementValidator.Validate(movementRequest);
-
-            if (!validationResult.IsValid)
-            {
-                throw new InvalidMovementCalculationRequestException(validationResult.ErrorCode!, validationResult.ErrorMessage!);
-            }
-
-            var result = _breadthFirstRouteFinder.FindShortestRoute(movementRequest);
-
-            if (result is null)
-            {
-                return Task.FromResult(new ValidateMovementResponse(
-                    IsValid: false,
-                    SpacesTravelled: 0,
-                    Route: Array.Empty<LocationCode>(),
-                    ActionPointCost: 0,
-                    TopSpeed: 0,
-                    Messages: new[] { $"No route found from {request.Start.Value} to {request.Destination.Value} for {request.Thunderbird}" }));
-            }
-
-            var actionPointCost = _actionPointCalculator.CalculateActionPoints(result.SpacesTravelled, thunderbird.TopSpeed);
-
-            return Task.FromResult(new ValidateMovementResponse(
-                IsValid: true,
-                SpacesTravelled: result.SpacesTravelled,
-                Route: result.Route,
-                ActionPointCost: actionPointCost,
-                TopSpeed: thunderbird.TopSpeed,
-                Messages: Array.Empty<string>()));
+            return Task.FromResult(
+                new ValidateMovementResponse(
+                    IsValid: movementResult.IsValid,
+                    SpacesTravelled: movementResult.SpacesTravelled,
+                    Route: movementResult.Route,
+                    ActionPointCost: movementResult.ActionPointCost,
+                    TopSpeed: movementResult.TopSpeed,
+                    Messages: movementResult.Messages
+                )
+            );
         }
     }
 }

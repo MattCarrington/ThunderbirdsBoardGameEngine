@@ -5,7 +5,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.Movement
 {
     public sealed class BreadthFirstRouteFinder
     {
-        public RouteResult? FindShortestRoute(MovementRequest request)
+        public RouteResult? FindShortestRoute(MovementInput request)
         {
             var edges = request.Topography.Edges
                 .Where(edge => edge.EdgeType == request.Thunderbird.TraversalDomain);

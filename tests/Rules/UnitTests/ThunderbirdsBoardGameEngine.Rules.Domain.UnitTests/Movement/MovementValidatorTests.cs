@@ -22,7 +22,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.Movement
             // Arrange
             var topography = CreateTopography();
 
-            var request = new MovementRequest(_thunderbird, topography, _locationA.Key, _locationB.Key);
+            var request = new MovementInput(_thunderbird, topography, _locationA.Key, _locationB.Key);
 
             var validator = new MovementValidator();
 
@@ -42,7 +42,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.Movement
             // Arrange
             var topography = CreateTopography();
 
-            var request = new MovementRequest(_thunderbird, topography, _invalidLocation, _locationB.Key);
+            var request = new MovementInput(_thunderbird, topography, _invalidLocation, _locationB.Key);
 
             var validator = new MovementValidator();
 
@@ -64,7 +64,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.Movement
             // Arrange
             var topography = CreateTopography();
 
-            var request = new MovementRequest(_thunderbird, topography, _locationA.Key, _invalidLocation);
+            var request = new MovementInput(_thunderbird, topography, _locationA.Key, _invalidLocation);
 
             var validator = new MovementValidator();
 
@@ -91,7 +91,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.Movement
 
             var invalidThunderbird = new ThunderbirdContribution(new("Invalid Thunderbird"), MovementDomain.Earth, topSpeed);
 
-            var request = new MovementRequest(invalidThunderbird, topography, _locationA.Key, _locationB.Key);
+            var request = new MovementInput(invalidThunderbird, topography, _locationA.Key, _locationB.Key);
 
             var validator = new MovementValidator();
 
