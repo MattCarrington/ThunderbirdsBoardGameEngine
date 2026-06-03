@@ -11,7 +11,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Fakes
 
         public FakeEventCardDefinitionCatalog(params ReferenceEventCardDefinition[] eventCards)
         {
-            _eventCards = eventCards.ToFrozenDictionary(fabCard => fabCard.Code);
+            _eventCards = eventCards.ToFrozenDictionary(eventCard => eventCard.Code);
         }
 
         public bool Exists(CardCode cardCode)
