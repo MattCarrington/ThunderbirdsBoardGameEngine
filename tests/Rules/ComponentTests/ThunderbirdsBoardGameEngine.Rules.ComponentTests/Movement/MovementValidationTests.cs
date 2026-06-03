@@ -21,7 +21,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Movement
             // Arrange
             var request = new ValidateMovementQuery
             (
-                Thunderbird: new ThunderbirdCode("thunderbird-1"),
+                Thunderbird: new ThunderbirdCode("thunderbird-4"),
                 Start: new LocationCode("Europe"),
                 Destination: new LocationCode("North America")
             );
@@ -32,7 +32,9 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Movement
             var result = await mediator.Send(request, CancellationToken.None);
 
             // Assert
+            Assert.True(result.IsValid);
             Assert.Equal(2, result.SpacesTravelled);
+            Assert.Equal(2, result.ActionPointCost);
         }
 
         [Fact]
@@ -52,7 +54,9 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Movement
             var result = await mediator.Send(request, CancellationToken.None);
 
             // Assert
+            Assert.True(result.IsValid);
             Assert.Equal(2, result.SpacesTravelled);
+            Assert.Equal(1, result.ActionPointCost);
         }
 
         [Fact]
@@ -119,8 +123,11 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Movement
 
             var mediator = CreateMediator();
 
-            // Act & Assert
-            await Assert.ThrowsAsync<InvalidMovementCalculationRequestException>(() => mediator.Send(request, CancellationToken.None));
+            // Act
+            var result = await mediator.Send(request, CancellationToken.None);
+
+            // Assert
+            Assert.False(result.IsValid);
         }
 
         [Fact]
@@ -136,8 +143,11 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Movement
 
             var mediator = CreateMediator();
 
-            // Act & Assert
-            await Assert.ThrowsAsync<InvalidMovementCalculationRequestException>(() => mediator.Send(request, CancellationToken.None));
+            // Act
+            var result = await mediator.Send(request, CancellationToken.None);
+
+            // Assert
+            Assert.False(result.IsValid);
         }
 
         private static IMediator CreateMediator()
