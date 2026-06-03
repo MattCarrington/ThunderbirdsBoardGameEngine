@@ -8,15 +8,20 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Model
         public ThunderbirdCode Code { get; }
 
         public string DisplayName { get; }
+
         public MovementDomain Domain { get; }
 
-        public ReferenceThunderbirdDefinition(ThunderbirdCode code, string displayName, MovementDomain domain)
+        public int TopSpeed { get; }
+
+        public ReferenceThunderbirdDefinition(ThunderbirdCode code, string displayName, MovementDomain domain, int topSpeed)
         {
             ArgumentException.ThrowIfNullOrWhiteSpace(displayName);
+            ArgumentOutOfRangeException.ThrowIfNegative(topSpeed);
 
             Code = code;
             DisplayName = displayName;
             Domain = domain;
+            TopSpeed = topSpeed;
         }
     }
 }

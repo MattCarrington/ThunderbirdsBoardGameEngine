@@ -14,6 +14,8 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.UnitTests.Domain
 
         private static MovementDomain ValidDomain => MovementDomain.Earth;
 
+        private static int ValidTopSpeed => 3;
+
         [Fact]
         public void Constructor_WhenAllInputsValid_CreatesInstance()
         {
@@ -23,13 +25,14 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.UnitTests.Domain
             var result = new ReferenceThunderbirdDefinition(
                 code: ValidThunderbirdCode,
                 displayName: ValidDisplayName,
-                domain: ValidDomain
-            );
+                domain: ValidDomain,
+                topSpeed: ValidTopSpeed);
 
             // Assert
             Assert.Equal(ValidThunderbirdCode, result.Code);
             Assert.Equal(ValidDisplayName, result.DisplayName);
             Assert.Equal(ValidDomain, result.Domain);
+            Assert.Equal(ValidTopSpeed, result.TopSpeed);
         }
 
         [Theory]
@@ -42,8 +45,41 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.UnitTests.Domain
             Assert.ThrowsAny<ArgumentException>(() => new ReferenceThunderbirdDefinition(
                 code: ValidThunderbirdCode,
                 displayName: displayName,
-                domain: ValidDomain
-            ));
+                domain: ValidDomain,
+                topSpeed: ValidTopSpeed));
+        }
+
+        [Theory]
+        [InlineData(1)]
+        [InlineData(0)]
+        public void Constructor_WhenTopSpeedValid_CreatesInstance(int topSpeed)
+        {
+            // Arrange
+
+            // Act
+            var result = new ReferenceThunderbirdDefinition(
+                code: ValidThunderbirdCode,
+                displayName: ValidDisplayName,
+                domain: ValidDomain,
+                topSpeed: topSpeed);
+
+            // Assert
+            Assert.Equal(topSpeed, result.TopSpeed);
+        }
+
+        [Theory]
+        [InlineData(-1)]
+        [InlineData(int.MinValue)]
+        public void Constructor_WhenTopSpeedInvalid_ThrowsArgumentException(int topSpeed)
+        {
+            // Arrange
+
+            // Act & Assert
+            Assert.ThrowsAny<ArgumentException>(() => new ReferenceThunderbirdDefinition(
+                code: ValidThunderbirdCode,
+                displayName: ValidDisplayName,
+                domain: ValidDomain,
+                topSpeed: topSpeed));
         }
     }
 }

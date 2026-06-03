@@ -98,12 +98,14 @@ public sealed class ReferenceDataSnapshotBuilder
     public ReferenceDataSnapshotBuilder WithThunderbird(
         string code,
         string displayName,
-        MovementDomain domain = MovementDomain.Earth)
+        MovementDomain domain = MovementDomain.Earth,
+        int topSpeed = 0)
     {
         _thunderbirds.Add(new ReferenceThunderbirdDefinition(
             new ThunderbirdCode(code),
             displayName,
-            domain));
+            domain,
+            topSpeed));
 
         return this;
     }
