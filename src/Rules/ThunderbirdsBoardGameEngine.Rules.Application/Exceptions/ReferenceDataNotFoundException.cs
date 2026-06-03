@@ -1,4 +1,4 @@
-﻿namespace ThunderbirdsBoardGameEngine.Rules.Application.Rescue.Exceptions
+﻿namespace ThunderbirdsBoardGameEngine.Rules.Application.Exceptions
 {
     public sealed class ReferenceDataNotFoundException : Exception
     {

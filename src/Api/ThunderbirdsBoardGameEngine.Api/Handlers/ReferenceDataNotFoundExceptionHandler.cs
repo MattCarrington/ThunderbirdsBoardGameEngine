@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using ThunderbirdsBoardGameEngine.Api.Error;
-using ThunderbirdsBoardGameEngine.Rules.Application.Rescue.Exceptions;
+using ThunderbirdsBoardGameEngine.Rules.Application.Exceptions;
 
 namespace ThunderbirdsBoardGameEngine.Api.Handlers
 {
