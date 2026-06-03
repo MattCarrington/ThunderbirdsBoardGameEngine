@@ -3,5 +3,5 @@ using ThunderbirdsBoardGameEngine.ReferenceData.Identities;
 
 namespace ThunderbirdsBoardGameEngine.Rules.Domain.Movement
 {
-    public sealed record ThunderbirdContribution(ThunderbirdCode Key, MovementDomain TraversalDomain);
+    public sealed record ThunderbirdContribution(ThunderbirdCode Key, MovementDomain TraversalDomain, int TopSpeed);
 }

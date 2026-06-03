@@ -21,7 +21,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.Movement
 
         private readonly LocationCode _invalidLocationCode = new("invalid-location-code");
 
-        private readonly ThunderbirdContribution _thunderbird = new(new ThunderbirdCode("thunderbird-1"), MovementDomain.Earth);
+        private readonly ThunderbirdContribution _thunderbird = new(new ThunderbirdCode("thunderbird-1"), MovementDomain.Earth, 1);
 
         [Fact]
         public void FindShortestRoute_WhenDestinationIsSameAsStart_ReturnsRouteWithSingleLocation()

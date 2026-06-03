@@ -36,6 +36,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Infrastructure.UnitTests.Lookups
             Assert.NotNull(result);
             Assert.Equal(thunderbirdDefinition.Code, result.Key);
             Assert.Equal(thunderbirdDefinition.Domain, result.TraversalDomain);
+            Assert.Equal(thunderbirdDefinition.TopSpeed, result.TopSpeed);
         }
 
         [Fact]

@@ -14,6 +14,11 @@
                 return new MovementValidationResult(false, request.Destination.Value, "Unknown destination location");
             }
 
+            if (request.Thunderbird.TopSpeed <= 0)
+            {
+                return new MovementValidationResult(false, request.Thunderbird.Key.Value, $"Invalid movement range: {request.Thunderbird.TopSpeed}");
+            }
+
             return new MovementValidationResult(true);
         }
     }

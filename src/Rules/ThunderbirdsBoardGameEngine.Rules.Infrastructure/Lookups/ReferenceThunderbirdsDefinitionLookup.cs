@@ -23,8 +23,8 @@ namespace ThunderbirdsBoardGameEngine.Rules.Infrastructure.Lookups
 
                 return new ThunderbirdContribution(
                     Key: thunderbirdDefinition.Code,
-                    TraversalDomain: thunderbirdDefinition.Domain
-                );
+                    TraversalDomain: thunderbirdDefinition.Domain,
+                    TopSpeed: thunderbirdDefinition.TopSpeed);
             }
             catch (KeyNotFoundException)
             {
