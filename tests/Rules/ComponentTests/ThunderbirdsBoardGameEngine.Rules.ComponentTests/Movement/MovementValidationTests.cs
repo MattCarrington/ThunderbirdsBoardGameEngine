@@ -29,7 +29,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Movement
             var mediator = CreateMediator();
 
             // Act
-            var result = await mediator.Send(request);
+            var result = await mediator.Send(request, CancellationToken.None);
 
             // Assert
             Assert.Equal(2, result.SpacesTravelled);
@@ -49,7 +49,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Movement
             var mediator = CreateMediator();
 
             // Act
-            var result = await mediator.Send(request);
+            var result = await mediator.Send(request, CancellationToken.None);
 
             // Assert
             Assert.Equal(2, result.SpacesTravelled);
@@ -69,7 +69,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Movement
             var mediator = CreateMediator();
 
             // Act & Assert
-            await Assert.ThrowsAsync<InvalidMovementCalculationRequestException>(() => mediator.Send(request));
+            await Assert.ThrowsAsync<InvalidMovementCalculationRequestException>(() => mediator.Send(request, CancellationToken.None));
         }
 
         [Fact]
@@ -86,7 +86,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Movement
             var mediator = CreateMediator();
 
             // Act & Assert
-            await Assert.ThrowsAsync<InvalidMovementCalculationRequestException>(() => mediator.Send(request));
+            await Assert.ThrowsAsync<InvalidMovementCalculationRequestException>(() => mediator.Send(request, CancellationToken.None));
         }
 
         [Fact]
@@ -103,7 +103,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Movement
             var mediator = CreateMediator();
 
             // Act & Assert
-            await Assert.ThrowsAsync<ReferenceDataNotFoundException>(() => mediator.Send(request));
+            await Assert.ThrowsAsync<ReferenceDataNotFoundException>(() => mediator.Send(request, CancellationToken.None));
         }
 
         [Fact]
@@ -120,7 +120,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Movement
             var mediator = CreateMediator();
 
             // Act & Assert
-            await Assert.ThrowsAsync<InvalidMovementCalculationRequestException>(() => mediator.Send(request));
+            await Assert.ThrowsAsync<InvalidMovementCalculationRequestException>(() => mediator.Send(request, CancellationToken.None));
         }
 
         [Fact]
@@ -137,7 +137,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Movement
             var mediator = CreateMediator();
 
             // Act & Assert
-            await Assert.ThrowsAsync<InvalidMovementCalculationRequestException>(() => mediator.Send(request));
+            await Assert.ThrowsAsync<InvalidMovementCalculationRequestException>(() => mediator.Send(request, CancellationToken.None));
         }
 
         private static IMediator CreateMediator()
