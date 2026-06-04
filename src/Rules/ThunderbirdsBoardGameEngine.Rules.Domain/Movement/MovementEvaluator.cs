@@ -2,10 +2,10 @@
 {
     public sealed class MovementEvaluator
     {
-        private readonly BreadthFirstRouteFinder _routeFinder;
+        private readonly IRouteFinder _routeFinder;
         private readonly ActionPointCalculator _actionPointCalculator;
 
-        public MovementEvaluator(BreadthFirstRouteFinder routeFinder, ActionPointCalculator actionPointCalculator)
+        public MovementEvaluator(IRouteFinder routeFinder, ActionPointCalculator actionPointCalculator)
         {
             _routeFinder = routeFinder ?? throw new ArgumentNullException(nameof(routeFinder));
             _actionPointCalculator = actionPointCalculator ?? throw new ArgumentNullException(nameof(actionPointCalculator));

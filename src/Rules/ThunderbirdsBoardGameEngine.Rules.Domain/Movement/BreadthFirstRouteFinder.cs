@@ -2,7 +2,7 @@
 
 namespace ThunderbirdsBoardGameEngine.Rules.Domain.Movement
 {
-    public sealed class BreadthFirstRouteFinder
+    public sealed class BreadthFirstRouteFinder : IRouteFinder
     {
         public RouteResult? FindShortestRoute(MovementInput request)
         {
