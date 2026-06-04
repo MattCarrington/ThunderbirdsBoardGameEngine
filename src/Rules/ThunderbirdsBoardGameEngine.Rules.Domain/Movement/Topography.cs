@@ -1,7 +1,18 @@
-﻿using ThunderbirdsBoardGameEngine.ReferenceData.Model;
+﻿using ThunderbirdsBoardGameEngine.ReferenceData.Enums;
+using ThunderbirdsBoardGameEngine.ReferenceData.Identities;
+using ThunderbirdsBoardGameEngine.ReferenceData.Model;
 
 namespace ThunderbirdsBoardGameEngine.Rules.Domain.Movement
 {
     public sealed record Topography(
-        IReadOnlyCollection<ReferenceMapEdgeDefinition> Edges);
+        IReadOnlyCollection<ReferenceMapEdgeDefinition> Edges)
+    {
+        public IEnumerable<LocationCode> GetNeighbours(LocationCode location, MovementDomain domain)
+        {
+            return Edges
+                .Where(edge => edge.EdgeType == domain)
+                .Where(edge => edge.Edge1 == location || edge.Edge2 == location)
+                .Select(edge => edge.Edge1 == location ? edge.Edge2 : edge.Edge1);
+        }
+    }
 }

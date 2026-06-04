@@ -1,5 +1,4 @@
 ﻿using ThunderbirdsBoardGameEngine.ReferenceData.Identities;
-using ThunderbirdsBoardGameEngine.ReferenceData.Model;
 
 namespace ThunderbirdsBoardGameEngine.Rules.Domain.Movement
 {
@@ -7,9 +6,6 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.Movement
     {
         public RouteResult? FindShortestRoute(MovementInput request)
         {
-            var edges = request.Topography.Edges
-                .Where(edge => edge.EdgeType == request.Thunderbird.TraversalDomain);
-
             var queue = new Queue<LocationCode>();
             var visited = new HashSet<LocationCode> { request.Start };
             var parentMap = new Dictionary<LocationCode, LocationCode>();
@@ -25,7 +21,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.Movement
                     return BuildRoute(request.Start, request.Destination, parentMap);
                 }
 
-                foreach (var neighbour in GetNeighbours(edges, current))
+                foreach (var neighbour in request.Topography.GetNeighbours(current, request.Thunderbird.TraversalDomain))
                 {
                     if (!visited.Add(neighbour))
                     {
@@ -38,15 +34,6 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.Movement
             }
 
             return null;
-        }
-
-        private static IEnumerable<LocationCode> GetNeighbours(
-            IEnumerable<ReferenceMapEdgeDefinition> edges,
-            LocationCode current)
-        {
-            return edges
-                .Where(edge => edge.Edge1 == current || edge.Edge2 == current)
-                .Select(edge => edge.Edge1 == current ? edge.Edge2 : edge.Edge1);
         }
 
         private static RouteResult? BuildRoute(
