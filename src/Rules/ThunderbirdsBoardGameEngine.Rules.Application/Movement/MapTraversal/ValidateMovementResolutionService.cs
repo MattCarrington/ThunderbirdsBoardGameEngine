@@ -10,23 +10,17 @@ namespace ThunderbirdsBoardGameEngine.Rules.Application.Movement.MapTraversal
         private readonly IThunderbirdsDefinitionLookup _thunderbirdsDefinitionLookup;
         private readonly ILocationDefinitionLookup _locationDefinitionLookup;
         private readonly IMapEdgeDefinitionLookup _edgeDefinitionLookup;
-        private readonly MovementValidator _movementValidator;
-        private readonly BreadthFirstRouteFinder _breadthFirstRouteFinder;
-        private readonly ActionPointCalculator _actionPointCalculator;
+        private readonly MovementEvaluator _movementEvaluator;
 
         public ValidateMovementResolutionService(IThunderbirdsDefinitionLookup thunderbirdsDefinitionLookup,
             ILocationDefinitionLookup locationDefinitionLookup,
             IMapEdgeDefinitionLookup edgeDefinitionLookup,
-            MovementValidator movementValidator,
-            BreadthFirstRouteFinder breadthFirstRouteFinder,
-            ActionPointCalculator actionPointCalculator)
+            MovementEvaluator movementEvaluator)
         {
             _thunderbirdsDefinitionLookup = thunderbirdsDefinitionLookup ?? throw new ArgumentNullException(nameof(thunderbirdsDefinitionLookup));
             _locationDefinitionLookup = locationDefinitionLookup ?? throw new ArgumentNullException(nameof(locationDefinitionLookup));
             _edgeDefinitionLookup = edgeDefinitionLookup ?? throw new ArgumentNullException(nameof(edgeDefinitionLookup));
-            _movementValidator = movementValidator ?? throw new ArgumentNullException(nameof(movementValidator));
-            _breadthFirstRouteFinder = breadthFirstRouteFinder ?? throw new ArgumentNullException(nameof(breadthFirstRouteFinder));
-            _actionPointCalculator = actionPointCalculator ?? throw new ArgumentNullException(nameof(actionPointCalculator));
+            _movementEvaluator = movementEvaluator ?? throw new ArgumentNullException(nameof(movementEvaluator));
         }
 
         public MovementResponse ResolveMovementValidation(MovementRequest request)
@@ -51,37 +45,17 @@ namespace ThunderbirdsBoardGameEngine.Rules.Application.Movement.MapTraversal
 
             var topography = new Topography(edges);
 
-            var movementRequest = new MovementInput(thunderbird, topography, request.Start, request.Destination);
+            var input = new MovementInput(thunderbird, topography, request.Start, request.Destination);
 
-            var validationResult = _movementValidator.Validate(movementRequest);
-
-            if (!validationResult.IsValid)
-            {
-                throw new InvalidMovementCalculationRequestException(validationResult.ErrorCode!, validationResult.ErrorMessage!);
-            }
-
-            var routeResult = _breadthFirstRouteFinder.FindShortestRoute(movementRequest);
-
-            if (routeResult is null)
-            {
-                return new MovementResponse(
-                    IsValid: false,
-                    SpacesTravelled: 0,
-                    Route: Array.Empty<LocationCode>(),
-                    ActionPointCost: 0,
-                    TopSpeed: 0,
-                    Messages: new[] { $"No route found from {request.Start.Value} to {request.Destination.Value} for {request.Thunderbird}" });
-            }
-
-            var actionPointCost = _actionPointCalculator.CalculateActionPoints(routeResult.SpacesTravelled, thunderbird.TopSpeed);
+            var evaluationResult = _movementEvaluator.Evaluate(input);
 
             return new MovementResponse(
-                IsValid: true,
-                SpacesTravelled: routeResult.SpacesTravelled,
-                Route: routeResult.Route,
-                ActionPointCost: actionPointCost,
+                IsValid: evaluationResult.IsMoveValid,
+                SpacesTravelled: evaluationResult.SpacesTravelled,
+                Route: evaluationResult.Route,
+                ActionPointCost: evaluationResult.ActionPointCost,
                 TopSpeed: thunderbird.TopSpeed,
-                Messages: Array.Empty<string>());
+                Messages: evaluationResult.Messages);
         }
     }
 }

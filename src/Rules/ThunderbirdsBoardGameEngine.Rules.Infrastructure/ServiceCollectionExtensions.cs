@@ -31,7 +31,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Infrastructure
             services.AddSingleton<IValidateMovementResolutionService, ValidateMovementResolutionService>();
 
             services.AddSingleton<RescueTargetCalculator>();
-            services.AddSingleton<MovementValidator>();
+            services.AddSingleton<MovementEvaluator>();
             services.AddSingleton<BreadthFirstRouteFinder>();
             services.AddSingleton<ActionPointCalculator>();
 
