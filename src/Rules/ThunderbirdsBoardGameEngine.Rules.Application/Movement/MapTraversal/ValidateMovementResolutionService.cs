@@ -1,4 +1,5 @@
 ﻿using ThunderbirdsBoardGameEngine.ReferenceData.Identities;
+using ThunderbirdsBoardGameEngine.Rules.Application.Exceptions;
 using ThunderbirdsBoardGameEngine.Rules.Application.Movement.Interfaces;
 using ThunderbirdsBoardGameEngine.Rules.Domain.Movement;
 
@@ -32,10 +33,23 @@ namespace ThunderbirdsBoardGameEngine.Rules.Application.Movement.MapTraversal
         {
             var thunderbird = _thunderbirdsDefinitionLookup.GetThunderbirdMovementContribution(request.Thunderbird);
 
-            var locations = _locationDefinitionLookup.GetAllLocationContributions();
+            if (!_locationDefinitionLookup.Exists(request.Start))
+            {
+                throw new ReferenceDataNotFoundException(
+                    resourceType: "Location",
+                    code: request.Start.Value);
+            }
+
+            if (!_locationDefinitionLookup.Exists(request.Destination))
+            {
+                throw new ReferenceDataNotFoundException(
+                    resourceType: "Location",
+                    code: request.Destination.Value);
+            }
+
             var edges = _edgeDefinitionLookup.GetAll();
 
-            var topography = new Topography(locations, edges);
+            var topography = new Topography(edges);
 
             var movementRequest = new MovementInput(thunderbird, topography, request.Start, request.Destination);
 

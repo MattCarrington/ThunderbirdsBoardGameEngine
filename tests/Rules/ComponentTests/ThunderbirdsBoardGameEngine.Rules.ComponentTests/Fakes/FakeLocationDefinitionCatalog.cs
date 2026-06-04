@@ -15,14 +15,14 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Fakes
             _locations = locations.ToFrozenDictionary(location => location.Code);
         }
 
-        public bool Exists(LocationCode code)
-        {
-            throw new NotImplementedException();
-        }
-
         public ImmutableArray<ReferenceLocationDefinition> GetAll()
         {
-            return _locations.Values.ToImmutableArray();
+            return _locations.Values;
+        }
+
+        public bool Exists(LocationCode code)
+        {
+            return _locations.ContainsKey(code);
         }
 
         public ReferenceLocationDefinition GetByCode(LocationCode code)

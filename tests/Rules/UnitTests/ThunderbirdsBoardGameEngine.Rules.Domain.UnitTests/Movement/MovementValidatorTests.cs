@@ -1,6 +1,4 @@
-﻿using System.Collections.ObjectModel;
-using ThunderbirdsBoardGameEngine.ReferenceData.Enums;
-using ThunderbirdsBoardGameEngine.ReferenceData.Identities;
+﻿using ThunderbirdsBoardGameEngine.ReferenceData.Enums;
 using ThunderbirdsBoardGameEngine.ReferenceData.Model;
 using ThunderbirdsBoardGameEngine.Rules.Domain.Movement;
 using Xunit;
@@ -14,7 +12,6 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.Movement
 
         private readonly ThunderbirdContribution _thunderbird = new(new("Thunderbird 1"), MovementDomain.Earth, 1);
 
-        private readonly LocationCode _invalidLocation = new("Invalid");
 
         [Fact]
         public void Validate_ValidRequest_ReturnsValidResult()
@@ -34,50 +31,6 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.Movement
             Assert.True(result.IsValid);
             Assert.Null(result.ErrorCode);
             Assert.Null(result.ErrorMessage);
-        }
-
-        [Fact]
-        public void Validate_InvalidStartLocation_ReturnsInvalidResult()
-        {
-            // Arrange
-            var topography = CreateTopography();
-
-            var request = new MovementInput(_thunderbird, topography, _invalidLocation, _locationB.Key);
-
-            var validator = new MovementValidator();
-
-            // Act
-            var result = validator.Validate(request);
-
-            // Assert
-            Assert.NotNull(result);
-            Assert.False(result.IsValid);
-            Assert.NotNull(result.ErrorMessage);
-            Assert.Equal("Unknown start location", result.ErrorMessage);
-            Assert.NotNull(result.ErrorCode);
-            Assert.Equal(_invalidLocation.Value, result.ErrorCode);
-        }
-
-        [Fact]
-        public void Validate_InvalidEndLocation_ReturnsInvalidResult()
-        {
-            // Arrange
-            var topography = CreateTopography();
-
-            var request = new MovementInput(_thunderbird, topography, _locationA.Key, _invalidLocation);
-
-            var validator = new MovementValidator();
-
-            // Act
-            var result = validator.Validate(request);
-
-            // Assert
-            Assert.NotNull(result);
-            Assert.False(result.IsValid);
-            Assert.NotNull(result.ErrorMessage);
-            Assert.Equal("Unknown destination location", result.ErrorMessage);
-            Assert.NotNull(result.ErrorCode);
-            Assert.Equal(_invalidLocation.Value, result.ErrorCode);
         }
 
         [Theory]
@@ -107,15 +60,9 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.Movement
             Assert.Equal(invalidThunderbird.Key.Value, result.ErrorCode);
         }
 
-        private Topography CreateTopography()
+        private static Topography CreateTopography()
         {
-            var locations = new Collection<LocationContribution>
-            {
-                _locationA,
-                _locationB
-            };
-
-            return new Topography(locations, Array.Empty<ReferenceMapEdgeDefinition>());
+            return new Topography(Array.Empty<ReferenceMapEdgeDefinition>());
         }
     }
 }

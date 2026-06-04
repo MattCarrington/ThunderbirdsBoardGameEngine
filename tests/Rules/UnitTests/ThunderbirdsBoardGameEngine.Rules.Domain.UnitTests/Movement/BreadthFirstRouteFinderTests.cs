@@ -29,7 +29,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.Movement
             // Arrange
             var movementRequest = new MovementInput(
                 _thunderbird,
-                new Topography(CreateLocations(), CreateEdges()),
+                new Topography(CreateEdges()),
                 _locationA.Key,
                 _locationA.Key);
 
@@ -50,7 +50,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.Movement
             // Arrange
             var movementRequest = new MovementInput(
                 _thunderbird,
-                new Topography(CreateLocations(), CreateEdges()),
+                new Topography(CreateEdges()),
                 _locationA.Key,
                 _locationB.Key);
 
@@ -71,7 +71,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.Movement
             // Arrange
             var movementRequest = new MovementInput(
                 _thunderbird,
-                new Topography(CreateLocations(), CreateEdges()),
+                new Topography(CreateEdges()),
                 _locationA.Key,
                 _locationE.Key);
 
@@ -92,7 +92,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.Movement
             // Arrange
             var movementRequest = new MovementInput(
                 _thunderbird,
-                new Topography(CreateLocations(), CreateEdges()),
+                new Topography(CreateEdges()),
                 _locationA.Key,
                 _locationC.Key);
 
@@ -113,7 +113,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.Movement
             // Arrange
             var movementRequest = new MovementInput(
                 _thunderbird,
-                new Topography(CreateLocations(), CreateEdges()),
+                new Topography(CreateEdges()),
                 _locationA.Key,
                 _locationSpace.Key);
 
@@ -132,7 +132,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.Movement
             // Arrange
             var movementRequest = new MovementInput(
                 _thunderbird,
-                new Topography(CreateLocations(), CreateEdges()),
+                new Topography(CreateEdges()),
                 _invalidLocationCode,
                 _locationB.Key);
 
@@ -151,7 +151,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.Movement
             // Arrange
             var movementRequest = new MovementInput(
                 _thunderbird,
-                new Topography(CreateLocations(), CreateEdges()),
+                new Topography(CreateEdges()),
                 _locationA.Key,
                 _invalidLocationCode);
 
@@ -170,7 +170,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.Movement
             // Arrange
             var movementRequest = new MovementInput(
                 _thunderbird,
-                new Topography(CreateLocations(), CreateEdges()),
+                new Topography(CreateEdges()),
                 _locationA.Key,
                 _locationUnlinked.Key);
 
@@ -181,23 +181,6 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.Movement
 
             // Assert
             Assert.Null(result);
-        }
-
-        private IReadOnlyCollection<LocationContribution> CreateLocations()
-        {
-            return
-            [
-                _locationA,
-                _locationB,
-                _locationC,
-                _locationD,
-                _locationE,
-                _locationF,
-                _locationG,
-                _locationH,
-                _locationSpace,
-                _locationUnlinked
-            ];
         }
 
         private IReadOnlyCollection<ReferenceMapEdgeDefinition> CreateEdges()

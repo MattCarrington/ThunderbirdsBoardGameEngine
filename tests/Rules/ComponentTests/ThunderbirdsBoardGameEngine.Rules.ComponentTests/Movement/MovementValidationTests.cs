@@ -5,7 +5,6 @@ using ThunderbirdsBoardGameEngine.ReferenceData.Identities;
 using ThunderbirdsBoardGameEngine.ReferenceData.Model;
 using ThunderbirdsBoardGameEngine.ReferenceData.Runtime.Interfaces;
 using ThunderbirdsBoardGameEngine.Rules.Application.Exceptions;
-using ThunderbirdsBoardGameEngine.Rules.Application.Movement;
 using ThunderbirdsBoardGameEngine.Rules.Application.Movement.MapTraversal;
 using ThunderbirdsBoardGameEngine.Rules.ComponentTests.Fakes;
 using ThunderbirdsBoardGameEngine.Rules.Infrastructure;
@@ -73,7 +72,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Movement
             var mediator = CreateMediator();
 
             // Act & Assert
-            await Assert.ThrowsAsync<InvalidMovementCalculationRequestException>(() => mediator.Send(request, CancellationToken.None));
+            await Assert.ThrowsAsync<ReferenceDataNotFoundException>(() => mediator.Send(request, CancellationToken.None));
         }
 
         [Fact]
@@ -90,7 +89,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Movement
             var mediator = CreateMediator();
 
             // Act & Assert
-            await Assert.ThrowsAsync<InvalidMovementCalculationRequestException>(() => mediator.Send(request, CancellationToken.None));
+            await Assert.ThrowsAsync<ReferenceDataNotFoundException>(() => mediator.Send(request, CancellationToken.None));
         }
 
         [Fact]
