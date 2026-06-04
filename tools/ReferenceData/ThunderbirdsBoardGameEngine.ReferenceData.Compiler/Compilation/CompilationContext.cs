@@ -13,5 +13,7 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Compilation
         public List<ThunderbirdInput> Thunderbirds { get; init; } = new();
 
         public List<PodVehicleInput> PodVehicles { get; init; } = new();
+
+        public List<MapEdgeInput> MapEdges { get; init; } = new();
     }
 }

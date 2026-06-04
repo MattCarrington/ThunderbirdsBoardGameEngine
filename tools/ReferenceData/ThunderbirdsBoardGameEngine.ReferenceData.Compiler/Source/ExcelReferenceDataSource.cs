@@ -13,6 +13,7 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Source
         private readonly ExcelCharacterReader _characterReader = new();
         private readonly ExcelThunderbirdReader _thunderbirdReader = new();
         private readonly ExcelPodVehicleReader _podVehicleReader = new();
+        private readonly ExcelMapEdgeReader _mapEdgeReader = new();
 
         public ExcelReferenceDataSource(string path)
         {
@@ -28,6 +29,7 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Source
             var characters = _characterReader.ReadFrom(workbook.Worksheet("Characters"));
             var thunderbirds = _thunderbirdReader.ReadFrom(workbook.Worksheet("Thunderbirds"));
             var podVehicles = _podVehicleReader.ReadFrom(workbook.Worksheet("Pod Vehicles"));
+            var mapEdges = _mapEdgeReader.ReadFrom(workbook.Worksheet("Map Edges"));
 
             return new CompilationContext
             {
@@ -35,7 +37,8 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Source
                 Locations = locations,
                 Characters = characters,
                 Thunderbirds = thunderbirds,
-                PodVehicles = podVehicles
+                PodVehicles = podVehicles,
+                MapEdges = mapEdges
             };
         }
     }

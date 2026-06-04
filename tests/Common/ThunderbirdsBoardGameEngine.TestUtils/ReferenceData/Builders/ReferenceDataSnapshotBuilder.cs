@@ -187,6 +187,7 @@ public sealed class ReferenceDataSnapshotBuilder
             LocationDefinitions: _locations,
             CharacterDefinitions: _characters,
             ThunderbirdDefinitions: _thunderbirds,
-            PodVehicleDefinitions: _podVehicles);
+            PodVehicleDefinitions: _podVehicles,
+            MapEdgeDefinitions: []);    // TODO: Add builder methods for map edges if needed in tests
     }
 }
