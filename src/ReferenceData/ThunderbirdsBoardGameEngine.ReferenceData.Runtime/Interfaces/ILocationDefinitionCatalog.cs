@@ -16,6 +16,13 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Runtime.Interfaces
         ImmutableArray<ReferenceLocationDefinition> GetAll();
 
         /// <summary>
+        /// Checks if a location definition with the specified code exists.
+        /// </summary>
+        /// <param name="code">The location code.</param>
+        /// <returns>True if the location definition exists; otherwise, false.</returns>
+        bool Exists(LocationCode code);
+
+        /// <summary>
         /// Gets a location definition by its unique code.
         /// </summary>
         /// <param name="code">The location code.</param>

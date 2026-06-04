@@ -23,6 +23,32 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Runtime.UnitTests.Catalogs
         }
 
         [Fact]
+        public void Exists_WithValidCode_ReturnsTrue()
+        {
+            // Arrange
+            var catalog = CreateCatalog();
+
+            // Act
+            var result = catalog.Exists(new LocationCode("location-1"));
+
+            // Assert
+            Assert.True(result);
+        }
+
+        [Fact]
+        public void Exists_WithInvalidCode_ReturnsFalse()
+        {
+            // Arrange
+            var catalog = CreateCatalog();
+
+            // Act
+            var result = catalog.Exists(new LocationCode("invalid-code"));
+
+            // Assert
+            Assert.False(result);
+        }
+
+        [Fact]
         public void GetByCode_WithValidCode_ReturnsLocation()
         {
             // Arrange

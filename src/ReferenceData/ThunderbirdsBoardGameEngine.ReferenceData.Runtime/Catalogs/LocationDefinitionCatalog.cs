@@ -28,6 +28,11 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Runtime.Catalogs
             return _locations;
         }
 
+        public bool Exists(LocationCode code)
+        {
+            return _byCode.ContainsKey(code);
+        }
+
         public ReferenceLocationDefinition GetByCode(LocationCode code)
         {
             if (!_byCode.TryGetValue(code, out var location))
