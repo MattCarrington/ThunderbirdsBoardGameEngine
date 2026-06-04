@@ -34,7 +34,7 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Compilation
                 new ReferenceLocationDefinition(
                     new LocationCode(StringHelpers.Slugify(l.Name)),
                     StringHelpers.NormalizeWhitespace(l.Name, nameof(l.Name)),
-                    MovementDomain.Earth// TODO: Add domain to input and parse it here instead of hardcoding to Earth
+                    Enum.Parse<MovementDomain>(l.Domain, true)
                 )
             ).ToList();
 
@@ -109,9 +109,8 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Compilation
                 .Select(input => new ReferenceThunderbirdDefinition(
                     new ThunderbirdCode(StringHelpers.Slugify(input.Name)),
                     StringHelpers.NormalizeWhitespace(input.Name, nameof(input.Name)),
-                    // Enum.Parse<TraversalDomain>(input.Domain, ignoreCase: true)))
-                    domain: MovementDomain.Earth,  // TODO: Add domain to input and parse it here instead of hardcoding to Earth
-                    topSpeed: 0 // TODO: Add top speed to input and parse it here instead of hardcoding to 0
+                    domain: Enum.Parse<MovementDomain>(input.MovementDomain, ignoreCase: true),
+                    topSpeed: input.TopSpeed
                 ))
                 .ToList();
         }

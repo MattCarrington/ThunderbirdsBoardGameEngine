@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "contentVersion": "1.0.0",
-  "generatedAt": "2026-05-12T12:05:05.1068816+00:00",
+  "generatedAt": "2026-06-04T18:08:48.5482496+00:00",
   "generatorVersion": "1.0.0",
   "characterDefinitions": [
     {
@@ -920,75 +920,93 @@
   "locationDefinitions": [
     {
       "code": "europe",
-      "displayName": "Europe"
+      "displayName": "Europe",
+      "domain": "earth"
     },
     {
       "code": "asia",
-      "displayName": "Asia"
+      "displayName": "Asia",
+      "domain": "earth"
     },
     {
       "code": "africa",
-      "displayName": "Africa"
+      "displayName": "Africa",
+      "domain": "earth"
     },
     {
       "code": "north-america",
-      "displayName": "North America"
+      "displayName": "North America",
+      "domain": "earth"
     },
     {
       "code": "south-america",
-      "displayName": "South America"
+      "displayName": "South America",
+      "domain": "earth"
     },
     {
       "code": "north-pacific",
-      "displayName": "North Pacific"
+      "displayName": "North Pacific",
+      "domain": "earth"
     },
     {
       "code": "south-pacific",
-      "displayName": "South Pacific"
+      "displayName": "South Pacific",
+      "domain": "earth"
     },
     {
       "code": "north-atlantic",
-      "displayName": "North Atlantic"
+      "displayName": "North Atlantic",
+      "domain": "earth"
     },
     {
       "code": "south-atlantic",
-      "displayName": "South Atlantic"
+      "displayName": "South Atlantic",
+      "domain": "earth"
     },
     {
       "code": "indian-ocean",
-      "displayName": "Indian Ocean"
+      "displayName": "Indian Ocean",
+      "domain": "earth"
     },
     {
       "code": "australia",
-      "displayName": "Australia"
+      "displayName": "Australia",
+      "domain": "earth"
     },
     {
       "code": "geo-stationary-orbit",
-      "displayName": "Geo-Stationary Orbit"
+      "displayName": "Geo-Stationary Orbit",
+      "domain": "space"
     },
     {
       "code": "venus",
-      "displayName": "Venus"
+      "displayName": "Venus",
+      "domain": "space"
     },
     {
       "code": "mercury",
-      "displayName": "Mercury"
+      "displayName": "Mercury",
+      "domain": "space"
     },
     {
       "code": "the-sun",
-      "displayName": "The Sun"
+      "displayName": "The Sun",
+      "domain": "space"
     },
     {
       "code": "the-moon",
-      "displayName": "The Moon"
+      "displayName": "The Moon",
+      "domain": "space"
     },
     {
       "code": "mars",
-      "displayName": "Mars"
+      "displayName": "Mars",
+      "domain": "space"
     },
     {
       "code": "asteroid-belt",
-      "displayName": "Asteroid Belt"
+      "displayName": "Asteroid Belt",
+      "domain": "space"
     }
   ],
   "podVehicleDefinitions": [
@@ -1036,27 +1054,39 @@
   "thunderbirdDefinitions": [
     {
       "code": "thunderbird-1",
-      "displayName": "Thunderbird 1"
+      "displayName": "Thunderbird 1",
+      "domain": "earth",
+      "topSpeed": 3
     },
     {
       "code": "thunderbird-2",
-      "displayName": "Thunderbird 2"
+      "displayName": "Thunderbird 2",
+      "domain": "earth",
+      "topSpeed": 2
     },
     {
       "code": "thunderbird-3",
-      "displayName": "Thunderbird 3"
+      "displayName": "Thunderbird 3",
+      "domain": "space",
+      "topSpeed": 3
     },
     {
       "code": "thunderbird-4",
-      "displayName": "Thunderbird 4"
+      "displayName": "Thunderbird 4",
+      "domain": "earth",
+      "topSpeed": 1
     },
     {
       "code": "thunderbird-5",
-      "displayName": "Thunderbird 5"
+      "displayName": "Thunderbird 5",
+      "domain": "space",
+      "topSpeed": 0
     },
     {
       "code": "fab-1",
-      "displayName": "FAB 1"
+      "displayName": "FAB 1",
+      "domain": "earth",
+      "topSpeed": 1
     }
   ]
 }
