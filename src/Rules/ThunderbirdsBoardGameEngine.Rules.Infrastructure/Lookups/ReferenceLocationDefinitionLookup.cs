@@ -1,4 +1,5 @@
-﻿using ThunderbirdsBoardGameEngine.ReferenceData.Model;
+﻿using ThunderbirdsBoardGameEngine.ReferenceData.Identities;
+using ThunderbirdsBoardGameEngine.ReferenceData.Model;
 using ThunderbirdsBoardGameEngine.ReferenceData.Runtime.Interfaces;
 using ThunderbirdsBoardGameEngine.Rules.Application.Movement.Interfaces;
 using ThunderbirdsBoardGameEngine.Rules.Domain.Movement;
@@ -17,6 +18,11 @@ namespace ThunderbirdsBoardGameEngine.Rules.Infrastructure.Lookups
         public IReadOnlyCollection<LocationContribution> GetAllLocationContributions()
         {
             return _locationDefinitionCatalog.GetAll().Select(MapToLocationContribution).ToList();
+        }
+
+        public bool Exists(LocationCode locationCode)
+        {
+            return _locationDefinitionCatalog.Exists(locationCode);
         }
 
         private static LocationContribution MapToLocationContribution(ReferenceLocationDefinition location)
