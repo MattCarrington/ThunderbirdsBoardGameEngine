@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using ThunderbirdsBoardGameEngine.ReferenceData.ComponentTests.Helpers;
+using ThunderbirdsBoardGameEngine.ReferenceData.Enums;
 using ThunderbirdsBoardGameEngine.ReferenceData.Identities;
 using ThunderbirdsBoardGameEngine.ReferenceData.Runtime.Interfaces;
 using Xunit;
@@ -39,6 +40,7 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.ComponentTests.Loader
             Assert.NotNull(result);
             Assert.Equal("north-america", result.Code.ToString());
             Assert.Equal("North America", result.DisplayName);
+            Assert.Equal(MovementDomain.Earth, result.Domain);
         }
     }
 }
