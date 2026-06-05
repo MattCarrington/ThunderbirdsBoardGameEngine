@@ -20,6 +20,7 @@ public sealed class ReferenceDataSnapshotBuilder
     private readonly List<ReferenceCharacterDefinition> _characters = [];
     private readonly List<ReferenceThunderbirdDefinition> _thunderbirds = [];
     private readonly List<ReferencePodVehicleDefinition> _podVehicles = [];
+    private readonly List<ReferenceMapEdgeDefinition> _mapEdges = [];
 
     public static ReferenceDataSnapshotBuilder Valid()
     {
@@ -176,6 +177,25 @@ public sealed class ReferenceDataSnapshotBuilder
         return this;
     }
 
+    public ReferenceDataSnapshotBuilder WithMapEdge(
+        string edge1,
+        string edge2,
+        MovementDomain domain = MovementDomain.Earth)
+    {
+        _mapEdges.Add(new ReferenceMapEdgeDefinition(
+            new LocationCode(edge1),
+            new LocationCode(edge2),
+            domain));
+
+        return this;
+    }
+
+    public ReferenceDataSnapshotBuilder WithoutMapEdges()
+    {
+        _mapEdges.Clear();
+        return this;
+    }
+
     public ReferenceDataSnapshot Build()
     {
         return new ReferenceDataSnapshot(
@@ -188,6 +208,6 @@ public sealed class ReferenceDataSnapshotBuilder
             CharacterDefinitions: _characters,
             ThunderbirdDefinitions: _thunderbirds,
             PodVehicleDefinitions: _podVehicles,
-            MapEdgeDefinitions: []);    // TODO: Add builder methods for map edges if needed in tests
+            MapEdgeDefinitions: _mapEdges);
     }
 }
