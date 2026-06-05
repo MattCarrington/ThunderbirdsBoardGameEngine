@@ -1,8 +1,8 @@
 {
-  "schemaVersion": 1,
-  "contentVersion": "1.0.0",
-  "generatedAt": "2026-06-04T18:36:06.5614835+00:00",
-  "generatorVersion": "1.0.0",
+  "schemaVersion": 2,
+  "contentVersion": "1.1.0",
+  "generatedAt": "2026-06-05T11:52:29.3725675+00:00",
+  "generatorVersion": "1.1.0",
   "characterDefinitions": [
     {
       "code": "scott",
