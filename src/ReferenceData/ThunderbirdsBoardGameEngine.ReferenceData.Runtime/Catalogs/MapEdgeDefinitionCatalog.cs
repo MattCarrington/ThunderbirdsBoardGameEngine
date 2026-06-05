@@ -6,9 +6,18 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Runtime.Catalogs
 {
     internal class MapEdgeDefinitionCatalog : IMapEdgeDefinitionCatalog
     {
+        private readonly ImmutableArray<ReferenceMapEdgeDefinition> _mapEdges;
+
+        public MapEdgeDefinitionCatalog(ReferenceDataSnapshot snapshot)
+        {
+            ArgumentNullException.ThrowIfNull(snapshot);
+
+            _mapEdges = snapshot.MapEdgeDefinitions.ToImmutableArray();
+        }
+
         public ImmutableArray<ReferenceMapEdgeDefinition> GetAll()
         {
-            throw new NotImplementedException();
+            return _mapEdges;
         }
     }
 }
