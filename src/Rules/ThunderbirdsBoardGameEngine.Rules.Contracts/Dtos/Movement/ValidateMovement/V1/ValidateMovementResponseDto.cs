@@ -14,7 +14,7 @@
         /// Gets the number of action points required to perform the movement action, if it is valid. 
         /// This value may be used by the client to determine if the performing character has sufficient resources to execute the movement.
         /// </summary>
-        public required int ActionPointsCost { get; init; }
+        public required int ActionPointCost { get; init; }
 
         /// <summary>
         /// Gets the number of spaces travelled during the movement action.
