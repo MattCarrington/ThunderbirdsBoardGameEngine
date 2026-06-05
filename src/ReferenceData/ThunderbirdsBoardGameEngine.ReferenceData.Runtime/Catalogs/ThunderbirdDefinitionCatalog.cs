@@ -1,4 +1,5 @@
 ﻿using System.Collections.Frozen;
+using System.Diagnostics.CodeAnalysis;
 using ThunderbirdsBoardGameEngine.ReferenceData.Identities;
 using ThunderbirdsBoardGameEngine.ReferenceData.Model;
 using ThunderbirdsBoardGameEngine.ReferenceData.Runtime.Interfaces;
@@ -18,14 +19,9 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Runtime.Catalogs
                 .ToFrozenDictionary();
         }
 
-        public ReferenceThunderbirdDefinition GetByCode(ThunderbirdCode code)
+        public bool TryGetByCode(ThunderbirdCode code, [NotNullWhen(true)] out ReferenceThunderbirdDefinition? definition)
         {
-            if (!_byCode.TryGetValue(code, out var thunderbird))
-            {
-                throw new KeyNotFoundException($"Thunderbird with code '{code}' not found.");
-            }
-
-            return thunderbird;
+            return _byCode.TryGetValue(code, out definition);
         }
     }
 }

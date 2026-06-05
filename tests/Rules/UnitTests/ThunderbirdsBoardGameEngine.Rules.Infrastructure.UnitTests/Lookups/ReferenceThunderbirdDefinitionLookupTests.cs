@@ -25,7 +25,11 @@ namespace ThunderbirdsBoardGameEngine.Rules.Infrastructure.UnitTests.Lookups
                 topSpeed: 3);
 
             var catalog = Substitute.For<IThunderbirdDefinitionCatalog>();
-            catalog.GetByCode(Arg.Any<ThunderbirdCode>()).Returns(thunderbirdDefinition);
+            catalog.TryGetByCode(Arg.Any<ThunderbirdCode>(), out Arg.Any<ReferenceThunderbirdDefinition?>()).Returns(x =>
+            {
+                x[1] = thunderbirdDefinition;
+                return true;
+            });
 
             var lookup = new ReferenceThunderbirdsDefinitionLookup(catalog);
 
@@ -46,7 +50,11 @@ namespace ThunderbirdsBoardGameEngine.Rules.Infrastructure.UnitTests.Lookups
             var code = new ThunderbirdCode("non-existent-thunderbird");
 
             var catalog = Substitute.For<IThunderbirdDefinitionCatalog>();
-            catalog.GetByCode(Arg.Any<ThunderbirdCode>()).Throws(new KeyNotFoundException());
+            catalog.TryGetByCode(Arg.Any<ThunderbirdCode>(), out Arg.Any<ReferenceThunderbirdDefinition?>()).Returns(x =>
+            {
+                x[1] = null;
+                return false;
+            });
 
             var lookup = new ReferenceThunderbirdsDefinitionLookup(catalog);
 

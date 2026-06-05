@@ -17,19 +17,15 @@ namespace ThunderbirdsBoardGameEngine.Rules.Infrastructure.Lookups
 
         public ThunderbirdContribution GetThunderbirdMovementContribution(ThunderbirdCode thunderbirdCode)
         {
-            try
+            if (!_thunderbirdDefinitionCatalog.TryGetByCode(thunderbirdCode, out var thunderbird))
             {
-                var thunderbirdDefinition = _thunderbirdDefinitionCatalog.GetByCode(thunderbirdCode);
+                throw new ReferenceDataNotFoundException("Thunderbird", thunderbirdCode.Value);
+            }
 
-                return new ThunderbirdContribution(
-                    Key: thunderbirdDefinition.Code,
-                    TraversalDomain: thunderbirdDefinition.Domain,
-                    TopSpeed: thunderbirdDefinition.TopSpeed);
-            }
-            catch (KeyNotFoundException)
-            {
-                throw new ReferenceDataNotFoundException("Thunderbird", thunderbirdCode.ToString());
-            }
+            return new ThunderbirdContribution(
+                Key: thunderbird.Code,
+                TraversalDomain: thunderbird.Domain,
+                TopSpeed: thunderbird.TopSpeed);
         }
     }
 }

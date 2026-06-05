@@ -18,14 +18,15 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.ComponentTests.Loader
             var catalog = provider.GetRequiredService<IThunderbirdDefinitionCatalog>();
 
             // Act            
-            var result = catalog.GetByCode(new ThunderbirdCode("thunderbird-1"));
+            var result = catalog.TryGetByCode(new ThunderbirdCode("thunderbird-1"), out var definition);
 
             // Assert
-            Assert.NotNull(result);
-            Assert.Equal("thunderbird-1", result.Code.ToString());
-            Assert.Equal("Thunderbird 1", result.DisplayName);
-            Assert.Equal(MovementDomain.Earth, result.Domain);
-            Assert.Equal(3, result.TopSpeed);
+            Assert.True(result);
+            Assert.NotNull(definition);
+            Assert.Equal("thunderbird-1", definition!.Code.ToString());
+            Assert.Equal("Thunderbird 1", definition.DisplayName);
+            Assert.Equal(MovementDomain.Earth, definition.Domain);
+            Assert.Equal(3, definition.TopSpeed);
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using ThunderbirdsBoardGameEngine.ReferenceData.Identities;
+﻿using System.Diagnostics.CodeAnalysis;
+using ThunderbirdsBoardGameEngine.ReferenceData.Identities;
 using ThunderbirdsBoardGameEngine.ReferenceData.Model;
 
 namespace ThunderbirdsBoardGameEngine.ReferenceData.Runtime.Interfaces
@@ -10,13 +11,15 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Runtime.Interfaces
     {
 
         /// <summary>
-        /// Gets a Thunderbird definition by its unique code.
+        /// Tries to get a Thunderbird definition by its unique code.
         /// </summary>
         /// <param name="code">The Thunderbird code.</param>
-        /// <returns>The Thunderbird definition.</returns>
-        /// <exception cref="KeyNotFoundException">
-        /// Thrown when no Thunderbird with the specified code exists.
-        /// </exception>
-        ReferenceThunderbirdDefinition GetByCode(ThunderbirdCode code);
+        /// <param name="definition">The Thunderbird definition if found; otherwise, null.</param>
+        /// <returns>True if the Thunderbird definition was found; otherwise, false.</returns>
+
+        bool TryGetByCode(
+            ThunderbirdCode code,
+            [NotNullWhen(true)]
+            out ReferenceThunderbirdDefinition? definition);
     }
 }
