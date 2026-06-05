@@ -14,13 +14,16 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Movement
 {
     public class MovementValidationTests
     {
-        [Fact]
-        public async Task MovementShouldBeValidForEarthboundVehicle()
+        [Theory]
+        [InlineData("thunderbird-1", 1)]
+        [InlineData("thunderbird-2", 1)]
+        [InlineData("thunderbird-4", 2)]
+        public async Task MovementShouldBeValidForEarthboundVehicle(string thunderbird, int expectedActionPointCost)
         {
             // Arrange
             var request = new ValidateMovementQuery
             (
-                Thunderbird: new ThunderbirdCode("thunderbird-4"),
+                Thunderbird: new ThunderbirdCode(thunderbird),
                 Start: new LocationCode("Europe"),
                 Destination: new LocationCode("North America")
             );
@@ -33,7 +36,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Movement
             // Assert
             Assert.True(result.IsValid);
             Assert.Equal(2, result.SpacesTravelled);
-            Assert.Equal(2, result.ActionPointCost);
+            Assert.Equal(expectedActionPointCost, result.ActionPointCost);
         }
 
         [Fact]
@@ -109,13 +112,16 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Movement
             await Assert.ThrowsAsync<ReferenceDataNotFoundException>(() => mediator.Send(request, CancellationToken.None));
         }
 
-        [Fact]
-        public async Task MovementShouldBeInvalidAsEarthboundVehicleCannotTravelToSpace()
+        [Theory]
+        [InlineData("thunderbird-1")]
+        [InlineData("thunderbird-2")]
+        [InlineData("thunderbird-4")]
+        public async Task MovementShouldBeInvalidAsEarthboundVehicleCannotTravelToSpace(string thunderbird)
         {
             // Arrange
             var request = new ValidateMovementQuery
             (
-                Thunderbird: new ThunderbirdCode("thunderbird-1"),
+                Thunderbird: new ThunderbirdCode(thunderbird),
                 Start: new LocationCode("Europe"),
                 Destination: new LocationCode("Space")
             );
@@ -140,6 +146,25 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Movement
                 Destination: new LocationCode("Europe")
             );
 
+            var mediator = CreateMediator();
+
+            // Act
+            var result = await mediator.Send(request, CancellationToken.None);
+
+            // Assert
+            Assert.False(result.IsValid);
+        }
+
+        [Fact]
+        public async Task MovementShouldBeInvalidAsVehicleCannotMove()
+        {
+            // Arrange
+            var request = new ValidateMovementQuery
+            (
+                Thunderbird: new ThunderbirdCode("thunderbird-5"),
+                Start: new LocationCode("Moon"),
+                Destination: new LocationCode("Sun")
+            );
             var mediator = CreateMediator();
 
             // Act
@@ -230,7 +255,8 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Movement
             var thunderbird2 = new ReferenceThunderbirdDefinition(new ThunderbirdCode("thunderbird-2"), "Thunderbird 2", MovementDomain.Earth, 2);
             var thunderbird3 = new ReferenceThunderbirdDefinition(new ThunderbirdCode("thunderbird-3"), "Thunderbird 3", MovementDomain.Space, 3);
             var thunderbird4 = new ReferenceThunderbirdDefinition(new ThunderbirdCode("thunderbird-4"), "Thunderbird 4", MovementDomain.Earth, 1);
-            return new FakeThunderbirdDefinitionCatalog(thunderbird1, thunderbird2, thunderbird3, thunderbird4);
+            var thunderbird5 = new ReferenceThunderbirdDefinition(new ThunderbirdCode("thunderbird-5"), "Thunderbird 5", MovementDomain.Space, 0);
+            return new FakeThunderbirdDefinitionCatalog(thunderbird1, thunderbird2, thunderbird3, thunderbird4, thunderbird5);
         }
     }
 }
