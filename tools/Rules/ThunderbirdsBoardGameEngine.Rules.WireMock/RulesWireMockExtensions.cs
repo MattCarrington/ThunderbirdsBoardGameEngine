@@ -17,5 +17,15 @@ namespace ThunderbirdsBoardGameEngine.Rules.WireMock
         {
             return new RescueStub(host.WireMockServer);
         }
+
+        /// <summary>
+        /// Creates a new instance of the MovementStub class for the specified WireMockHost.
+        /// </summary>
+        /// <param name="host">The WireMockHost to associate with the MovementStub instance. Cannot be null.</param>
+        /// <returns>A MovementStub instance associated with the specified WireMockHost.</returns>
+        public static MovementStub MovementStub(this WireMockHost host)
+        {
+            return new MovementStub(host.WireMockServer);
+        }
     }
 }
