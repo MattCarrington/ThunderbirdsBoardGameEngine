@@ -1,8 +1,8 @@
 ﻿using NSubstitute;
 using System.Net;
 using ThunderbirdsBoardGameEngine.Client.Infrastructure;
-using ThunderbirdsBoardGameEngine.Client.Infrastructure.Interfaces;
 using ThunderbirdsBoardGameEngine.Rules.Client.Clients.V1;
+using ThunderbirdsBoardGameEngine.Rules.Client.UnitTests.Helpers;
 using ThunderbirdsBoardGameEngine.Rules.Contracts.Dtos.Rescue.CalculateRescueTarget.V1;
 using ThunderbirdsBoardGameEngine.TestUtils.Stubs;
 using ThunderbirdsBoardGameEngine.TestUtils.xUnit.ClassData;
@@ -43,7 +43,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Client.UnitTests.Clients.V1
 
             var apiResult = CreateSuccessApiResult();
 
-            var handler = CreateMockHttpResponseHandler(apiResult);
+            var handler = HttpResponseHandlerHelpers.CreateMockHttpResponseHandler(apiResult);
 
             var client = new RescueClient(httpClient, handler);
 
@@ -212,15 +212,6 @@ namespace ThunderbirdsBoardGameEngine.Rules.Client.UnitTests.Clients.V1
             return ApiResult<CalculateRescueTargetResponseDto>.SuccessResult(responseDto, HttpStatusCode.OK);
         }
 
-        private static IHttpResponseHandler CreateMockHttpResponseHandler(ApiResult<CalculateRescueTargetResponseDto> apiResult)
-        {
-            var handler = Substitute.For<IHttpResponseHandler>();
-            handler.HandleResponseAsync<CalculateRescueTargetResponseDto>(Arg.Any<HttpResponseMessage>(), Arg.Any<CancellationToken>())
-                .Returns(apiResult);
-
-            return handler;
-        }
-
         private static RescueClient CreateRescueClient(ApiResult<CalculateRescueTargetResponseDto> apiResult)
         {
             var stubHandler = new StubHttpMessageHandler("{}", HttpStatusCode.OK);
@@ -235,7 +226,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Client.UnitTests.Clients.V1
                 BaseAddress = new Uri("http://localhost")
             };
 
-            var handler = CreateMockHttpResponseHandler(apiResult);
+            var handler = HttpResponseHandlerHelpers.CreateMockHttpResponseHandler(apiResult);
 
             return new RescueClient(httpClient, handler);
         }

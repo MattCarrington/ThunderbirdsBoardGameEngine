@@ -3,5 +3,7 @@
     internal static class ApiRoutes
     {
         public const string RescueTarget = "api/rules/rescue/{disasterCardCode}/target";
+
+        public const string ValidateMovement = "api/rules/movement/{thunderbirdCode}/validate";
     }
 }
