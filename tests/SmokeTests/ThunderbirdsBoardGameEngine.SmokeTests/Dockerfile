@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/playwright/dotnet:v1.57.0-noble
+FROM mcr.microsoft.com/playwright/dotnet:v1.60.0-noble
 
 ARG BUILD_CONFIGURATION=Release
 ENV BUILD_CONFIGURATION=$BUILD_CONFIGURATION
