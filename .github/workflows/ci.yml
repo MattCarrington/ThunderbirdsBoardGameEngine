@@ -97,6 +97,10 @@ jobs:
     strategy:
       matrix:
         package:
+          - name: Client.Infrastructure
+            project_path: src/Common/ThunderbirdsBoardGameEngine.Client.Infrastructure/ThunderbirdsBoardGameEngine.Client.Infrastructure.csproj
+            package_id: ThunderbirdsBoardGameEngine.Client.Infrastructure
+
           - name: ReferenceData.Runtime
             project_path: src/ReferenceData/ThunderbirdsBoardGameEngine.ReferenceData.Runtime/ThunderbirdsBoardGameEngine.ReferenceData.Runtime.csproj
             package_id: ThunderbirdsBoardGameEngine.ReferenceData.Runtime
