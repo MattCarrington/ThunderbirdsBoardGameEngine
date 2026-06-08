@@ -40,6 +40,8 @@ namespace ThunderbirdsBoardGameEngine.Rules.Client.IntegrationTests.Clients.V1
             Assert.Equal(1, result.ActionPointCost);
             Assert.Equal(3, result.TopSpeed);
             Assert.NotEmpty(result.Route);
+            Assert.Equal("south-america", result.Route.First());
+            Assert.Equal("asia", result.Route.Last());
             Assert.Empty(result.Message);
         }
     }
