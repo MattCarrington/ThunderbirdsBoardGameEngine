@@ -1,4 +1,5 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System.Collections.Immutable;
+using System.Diagnostics.CodeAnalysis;
 using ThunderbirdsBoardGameEngine.ReferenceData.Identities;
 using ThunderbirdsBoardGameEngine.ReferenceData.Model;
 
@@ -21,5 +22,11 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Runtime.Interfaces
             ThunderbirdCode code,
             [NotNullWhen(true)]
             out ReferenceThunderbirdDefinition? definition);
+
+        /// <summary>
+        /// Gets all Thunderbird definitions in the catalog.
+        /// </summary>
+        /// <returns></returns>
+        ImmutableArray<ReferenceThunderbirdDefinition> GetAll();
     }
 }

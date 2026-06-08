@@ -53,6 +53,21 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Runtime.UnitTests.Catalogs
             Assert.Null(definition);
         }
 
+        [Fact]
+        public void GetAll_WhenCalled_ReturnsAllThunderbirds()
+        {
+            // Arrange
+            var catalog = CreateCatalog();
+
+            // Act
+            var result = catalog.GetAll();
+
+            // Assert
+            Assert.Equal(2, result.Length);
+            Assert.Contains(result, t => t.Code == new ThunderbirdCode("thunderbird-1") && t.DisplayName == "Thunderbird 1" && t.Domain == MovementDomain.Earth && t.TopSpeed == 0);
+            Assert.Contains(result, t => t.Code == new ThunderbirdCode("thunderbird-2") && t.DisplayName == "Thunderbird 2" && t.Domain == MovementDomain.Space && t.TopSpeed == 3);
+        }
+
         private static ThunderbirdDefinitionCatalog CreateCatalog()
         {
             var snapshot = new ReferenceDataSnapshotBuilder()

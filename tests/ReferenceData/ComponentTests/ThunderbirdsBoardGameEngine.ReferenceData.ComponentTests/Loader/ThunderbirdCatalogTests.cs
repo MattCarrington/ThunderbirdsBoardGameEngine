@@ -10,6 +10,22 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.ComponentTests.Loader
     public class ThunderbirdCatalogTests
     {
         [Fact]
+        public void CanLoadAllThunderbirdDefinitions()
+        {
+            // Arrange
+            using var provider = ReferenceDataTestHost.BuildServiceProvider();
+
+            var catalog = provider.GetRequiredService<IThunderbirdDefinitionCatalog>();
+
+            // Act            
+            var result = catalog.GetAll();
+
+            // Assert
+            Assert.NotEmpty(result);
+            Assert.Equal(6, result.Length);
+        }
+
+        [Fact]
         public void CanLoadKnownThunderbirdDefinition()
         {
             // Arrange
@@ -23,7 +39,7 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.ComponentTests.Loader
             // Assert
             Assert.True(result);
             Assert.NotNull(definition);
-            Assert.Equal("thunderbird-1", definition!.Code.ToString());
+            Assert.Equal("thunderbird-1", definition.Code.ToString());
             Assert.Equal("Thunderbird 1", definition.DisplayName);
             Assert.Equal(MovementDomain.Earth, definition.Domain);
             Assert.Equal(3, definition.TopSpeed);

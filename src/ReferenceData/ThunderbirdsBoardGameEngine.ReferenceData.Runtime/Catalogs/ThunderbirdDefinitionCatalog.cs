@@ -1,4 +1,5 @@
 ﻿using System.Collections.Frozen;
+using System.Collections.Immutable;
 using System.Diagnostics.CodeAnalysis;
 using ThunderbirdsBoardGameEngine.ReferenceData.Identities;
 using ThunderbirdsBoardGameEngine.ReferenceData.Model;
@@ -17,6 +18,11 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Runtime.Catalogs
             _byCode = snapshot.ThunderbirdDefinitions
                 .ToDictionary(t => t.Code)
                 .ToFrozenDictionary();
+        }
+
+        public ImmutableArray<ReferenceThunderbirdDefinition> GetAll()
+        {
+            return _byCode.Values;
         }
 
         public bool TryGetByCode(ThunderbirdCode code, [NotNullWhen(true)] out ReferenceThunderbirdDefinition? definition)

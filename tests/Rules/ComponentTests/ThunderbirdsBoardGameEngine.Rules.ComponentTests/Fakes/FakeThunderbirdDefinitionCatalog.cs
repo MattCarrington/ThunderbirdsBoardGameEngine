@@ -16,6 +16,11 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Fakes
             _thunderbirds = thunderbirds.ToFrozenDictionary(thunderbird => thunderbird.Code);
         }
 
+        public ImmutableArray<ReferenceThunderbirdDefinition> GetAll()
+        {
+            return _thunderbirds.Values;
+        }
+
         public bool TryGetByCode(ThunderbirdCode code, [NotNullWhen(true)] out ReferenceThunderbirdDefinition? definition)
         {
             return _thunderbirds.TryGetValue(code, out definition);
