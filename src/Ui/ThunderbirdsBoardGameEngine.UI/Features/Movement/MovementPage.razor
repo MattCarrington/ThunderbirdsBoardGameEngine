@@ -5,7 +5,7 @@
 <label for="movementSelect" class="form-label">Thunderbird</label>
 <select id="movementSelect"
         class="form-select"
-        @bind-Value="ThunderbirdCode"
+        @bind-Value="_thunderbirdCode"
         @bind-Value:event="onchange">
     <option value="">-- Select a Thunderbird --</option>
     @foreach (var t in _mobileThunderbirds)
@@ -14,12 +14,12 @@
     }
 </select>
 
-@if (!string.IsNullOrEmpty(ThunderbirdCode))
+@if (!string.IsNullOrEmpty(_thunderbirdCode))
 {
     <label for="startLocation" class="form-label">Start Location</label>
     <select id="startLocation"
             class="form-select"
-            @bind-Value="StartLocationCode"
+            @bind-Value="_startLocationCode"
             @bind-Value:event="onchange">
         <option value="">-- Select a Start Location --</option>
         @foreach (var l in _movementLocations)
@@ -31,7 +31,7 @@
     <label for="destination" class="form-label">Destination</label>
     <select id="destination"
             class="form-select"
-            @bind-Value="DestinationCode"
+            @bind-Value="_destinationCode"
             @bind-Value:event="onchange">
         <option value="">-- Select a Destination --</option>
         @foreach (var l in _movementLocations)
@@ -39,4 +39,11 @@
             <option value="@l.Key">@l.DisplayName</option>
         }
     </select>
+
+    <button class="btn btn-primary mt-3"
+            data-testid="calculate-button"
+            disabled="@IsValidationDisabled"
+            @onclick="ValidateMovement">
+        Validate Movement
+    </button>
 }
