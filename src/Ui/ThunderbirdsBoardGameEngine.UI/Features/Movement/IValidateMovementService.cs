@@ -4,6 +4,6 @@ namespace ThunderbirdsBoardGameEngine.UI.Features.Movement
 {
     public interface IValidateMovementService
     {
-        Task<ValidateMovementResponseDto?> ValidateMovementAsync(string thunderbirdCode, string startLocationCode, string destinationLocationCode);
+        Task<MovementResultViewModel?> ValidateMovementAsync(string thunderbirdCode, string startLocationCode, string destinationLocationCode);
     }
 }

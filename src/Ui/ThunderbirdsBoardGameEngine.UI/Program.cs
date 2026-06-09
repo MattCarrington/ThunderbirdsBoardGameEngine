@@ -52,6 +52,7 @@ namespace ThunderbirdsBoardGameEngine.UI
 
             builder.Services.AddSingleton<DisasterCardMapper>();
             builder.Services.AddSingleton<CharacterMapper>();
+            builder.Services.AddSingleton<MovementResultMapper>();
 
             await builder.Build().RunAsync();
         }

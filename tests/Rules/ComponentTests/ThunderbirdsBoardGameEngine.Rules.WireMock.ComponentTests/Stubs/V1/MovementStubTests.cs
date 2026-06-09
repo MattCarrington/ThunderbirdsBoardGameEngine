@@ -50,7 +50,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.WireMock.ComponentTests.Stubs.V1
             Assert.Equal(dto.SpacesTravelled, result.SpacesTravelled);
             Assert.Equal(dto.TopSpeed, result.TopSpeed);
             Assert.Equal(dto.Route, result.Route);
-            Assert.Equal(dto.Message, result.Message);
+            Assert.Equal(dto.Messages, result.Messages);
         }
 
         [Fact]
@@ -212,7 +212,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.WireMock.ComponentTests.Stubs.V1
                 SpacesTravelled = 2,
                 TopSpeed = 120,
                 Route = ["HQ", "City"],
-                Message = ["Movement is valid."]
+                Messages = ["Movement is valid."]
             };
         }
     }

@@ -51,7 +51,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Client.ComponentTests.Clients.V1
                 SpacesTravelled = 3,
                 TopSpeed = 5,
                 Route = ["europe", "middle-east", "asia"],
-                Message = ["Movement is valid."]
+                Messages = ["Movement is valid."]
             };
 
             _host.MovementStub().RegisterValidateMovementSuccess(dto);
@@ -74,7 +74,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Client.ComponentTests.Clients.V1
             Assert.Equal(dto.SpacesTravelled, result.SpacesTravelled);
             Assert.Equal(dto.TopSpeed, result.TopSpeed);
             Assert.Equal(dto.Route, result.Route);
-            Assert.Equal(dto.Message, result.Message);
+            Assert.Equal(dto.Messages, result.Messages);
         }
 
         [Fact]

@@ -86,9 +86,9 @@ namespace ThunderbirdsBoardGameEngine.Rules.Client.UnitTests.Clients.V1
             Assert.Equal(apiResult.Data.SpacesTravelled, result.Data.SpacesTravelled);
             Assert.Equal(apiResult.Data.TopSpeed, result.Data.TopSpeed);
             Assert.NotEmpty(result.Data.Route);
-            Assert.NotEmpty(result.Data.Message);
+            Assert.NotEmpty(result.Data.Messages);
             Assert.Equal(apiResult.Data.Route, result.Data.Route);
-            Assert.Equal(apiResult.Data.Message, result.Data.Message);
+            Assert.Equal(apiResult.Data.Messages, result.Data.Messages);
         }
 
         [Theory]
@@ -187,7 +187,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Client.UnitTests.Clients.V1
                 SpacesTravelled = 2,
                 TopSpeed = 120,
                 Route = ["HQ", "street", "home"],
-                Message = ["Movement is valid."]
+                Messages = ["Movement is valid."]
             };
 
             return ApiResult<ValidateMovementResponseDto>.SuccessResult(responseDto, HttpStatusCode.OK);

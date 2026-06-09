@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Components;
-using ThunderbirdsBoardGameEngine.Rules.Contracts.Dtos.Movement.ValidateMovement.V1;
 
 namespace ThunderbirdsBoardGameEngine.UI.Features.Movement
 {
@@ -21,7 +20,7 @@ namespace ThunderbirdsBoardGameEngine.UI.Features.Movement
         private string? _startLocationCode;
         private string? _destinationCode;
 
-        private ValidateMovementResponseDto? _validationResult;
+        private MovementResultViewModel? _validationResult;
         private bool _isValidating = false;
         private bool _validationFailed;
 

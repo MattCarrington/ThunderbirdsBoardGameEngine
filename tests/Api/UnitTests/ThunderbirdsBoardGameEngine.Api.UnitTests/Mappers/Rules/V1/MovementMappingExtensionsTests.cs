@@ -85,7 +85,7 @@ namespace ThunderbirdsBoardGameEngine.Api.UnitTests.Mappers.Rules.V1
             Assert.Equal(2, result.Route.Count);
             Assert.Equal(5, result.TopSpeed);
 
-            var message = Assert.Single(result.Message);
+            var message = Assert.Single(result.Messages);
             Assert.Equal("Move successful.", message);
 
             Assert.NotEmpty(result.Route);

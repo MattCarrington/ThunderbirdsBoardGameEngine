@@ -34,7 +34,7 @@ namespace ThunderbirdsBoardGameEngine.Api.Mappers.Rules.V1
                 IsValid = response.IsValid,
                 ActionPointCost = response.ActionPointCost,
                 SpacesTravelled = response.SpacesTravelled,
-                Message = response.Messages.ToList(),
+                Messages = response.Messages.ToList(),
                 Route = response.Route.Select(locationCode => locationCode.Value).ToList(),
                 TopSpeed = response.TopSpeed
             };

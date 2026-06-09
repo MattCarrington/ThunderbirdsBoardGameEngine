@@ -6,13 +6,15 @@ namespace ThunderbirdsBoardGameEngine.UI.Features.Movement
     public class ValidateMovementService : IValidateMovementService
     {
         private readonly IMovementClient _client;
+        private readonly MovementResultMapper _mapper;
 
-        public ValidateMovementService(IMovementClient client)
+        public ValidateMovementService(IMovementClient client, MovementResultMapper mapper)
         {
             _client = client;
+            _mapper = mapper;
         }
 
-        public async Task<ValidateMovementResponseDto?> ValidateMovementAsync(
+        public async Task<MovementResultViewModel?> ValidateMovementAsync(
             string thunderbirdCode,
             string startLocationCode,
             string destinationLocationCode)
@@ -25,7 +27,7 @@ namespace ThunderbirdsBoardGameEngine.UI.Features.Movement
 
             var result = await _client.ValidateMovementAsync(thunderbirdCode, request);
 
-            return result.Success ? result.Data : null;
+            return result.Success ? _mapper.ToViewModel(result.Data!) : null;
         }
     }
 }

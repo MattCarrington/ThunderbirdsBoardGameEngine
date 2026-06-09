@@ -42,7 +42,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Client.IntegrationTests.Clients.V1
             Assert.NotEmpty(result.Route);
             Assert.Equal("south-america", result.Route.First());
             Assert.Equal("asia", result.Route.Last());
-            Assert.Empty(result.Message);
+            Assert.Empty(result.Messages);
         }
     }
 }

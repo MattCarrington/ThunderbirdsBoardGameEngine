@@ -1,0 +1,29 @@
+﻿using ThunderbirdsBoardGameEngine.ReferenceData.Identities;
+using ThunderbirdsBoardGameEngine.ReferenceData.Runtime.Interfaces;
+using ThunderbirdsBoardGameEngine.Rules.Contracts.Dtos.Movement.ValidateMovement.V1;
+
+namespace ThunderbirdsBoardGameEngine.UI.Features.Movement
+{
+    public sealed class MovementResultMapper
+    {
+        private readonly ILocationDefinitionCatalog _catalog;
+
+        public MovementResultMapper(ILocationDefinitionCatalog catalog)
+        {
+            _catalog = catalog;
+        }
+
+        public MovementResultViewModel ToViewModel(ValidateMovementResponseDto response)
+        {
+            return new MovementResultViewModel(
+                response.IsValid,
+                response.ActionPointCost,
+                response.SpacesTravelled,
+                response.TopSpeed,
+                response.Route
+                    .Select(c => _catalog.TryGetByCode(new LocationCode(c), out var location) ? location.DisplayName : c)
+                    .ToList(),
+                response.Messages.ToList());
+        }
+    }
+}

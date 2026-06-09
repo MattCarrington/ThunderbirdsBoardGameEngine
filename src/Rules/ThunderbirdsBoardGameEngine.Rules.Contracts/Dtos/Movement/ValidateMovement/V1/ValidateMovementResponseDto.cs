@@ -34,6 +34,6 @@
         /// <summary>
         /// Gets an optional message providing additional information about the validation result, such as reasons for invalidity.
         /// </summary>
-        public required IReadOnlyCollection<string> Message { get; init; }
+        public required IReadOnlyCollection<string> Messages { get; init; }
     }
 }

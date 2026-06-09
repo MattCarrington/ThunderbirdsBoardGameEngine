@@ -1,6 +1,10 @@
 ﻿using NSubstitute;
 using System.Net;
 using ThunderbirdsBoardGameEngine.Client.Infrastructure;
+using ThunderbirdsBoardGameEngine.ReferenceData.Enums;
+using ThunderbirdsBoardGameEngine.ReferenceData.Identities;
+using ThunderbirdsBoardGameEngine.ReferenceData.Model;
+using ThunderbirdsBoardGameEngine.ReferenceData.Runtime.Interfaces;
 using ThunderbirdsBoardGameEngine.Rules.Client.Interfaces.V1;
 using ThunderbirdsBoardGameEngine.Rules.Contracts.Dtos.Movement.ValidateMovement.V1;
 using ThunderbirdsBoardGameEngine.UI.Features.Movement;
@@ -27,7 +31,7 @@ namespace ThunderbirdsBoardGameEngine.UI.UnitTests.Services
                 ActionPointCost = 2,
                 SpacesTravelled = 1,
                 TopSpeed = 3,
-                Message = ["Movement is valid."]
+                Messages = ["Movement is valid."]
             };
 
             var apiResult = ApiResult<ValidateMovementResponseDto>.SuccessResult(expectedResponse, HttpStatusCode.OK);
@@ -40,7 +44,7 @@ namespace ThunderbirdsBoardGameEngine.UI.UnitTests.Services
                     Arg.Any<CancellationToken>())
                 .Returns(Task.FromResult(apiResult));
 
-            var service = new ValidateMovementService(movementClient);
+            var service = CreateService(movementClient);
 
             // Act
             var result = await service.ValidateMovementAsync(ThunderbirdCode, StartLocationCode, DestinationLocationCode);
@@ -48,11 +52,11 @@ namespace ThunderbirdsBoardGameEngine.UI.UnitTests.Services
             // Assert
             Assert.NotNull(result);
             Assert.True(result.IsValid);
-            Assert.Equal(expectedResponse.Route, result.Route);
+            Assert.NotEmpty(result.Route);
             Assert.Equal(expectedResponse.ActionPointCost, result.ActionPointCost);
             Assert.Equal(expectedResponse.SpacesTravelled, result.SpacesTravelled);
             Assert.Equal(expectedResponse.TopSpeed, result.TopSpeed);
-            Assert.Equal(expectedResponse.Message, result.Message);
+            Assert.Equal(expectedResponse.Messages, result.Messages);
         }
 
         [Fact]
@@ -69,13 +73,29 @@ namespace ThunderbirdsBoardGameEngine.UI.UnitTests.Services
                     Arg.Any<CancellationToken>())
                 .Returns(Task.FromResult(apiResult));
 
-            var service = new ValidateMovementService(movementClient);
+            var service = CreateService(movementClient);
 
             // Act
             var result = await service.ValidateMovementAsync(ThunderbirdCode, StartLocationCode, DestinationLocationCode);
 
             // Assert
             Assert.Null(result);
+        }
+
+        private static ValidateMovementService CreateService(IMovementClient movementClient)
+        {
+            var catalog = Substitute.For<ILocationDefinitionCatalog>();
+            catalog.TryGetByCode(Arg.Any<LocationCode>(), out Arg.Any<ReferenceLocationDefinition>()).Returns(x =>
+            {
+                var code = (LocationCode)x[0];
+                var location = new ReferenceLocationDefinition(code, $"Location {code.Value}", MovementDomain.Earth);
+                x[1] = location;
+                return true;
+            });
+
+            var mapper = new MovementResultMapper(catalog);
+
+            return new ValidateMovementService(movementClient, mapper);
         }
     }
 }
