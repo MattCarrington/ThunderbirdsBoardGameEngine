@@ -14,8 +14,8 @@ namespace ThunderbirdsBoardGameEngine.UI.Features.Movement
         private IReadOnlyList<MovementLocationOptions> _movementLocations = Array.Empty<MovementLocationOptions>();
 
         private string? ThunderbirdCode { get; set; }
-
         private string? StartLocationCode { get; set; }
+        private string? DestinationCode { get; set; }
 
         protected override void OnInitialized()
         {

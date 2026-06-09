@@ -27,4 +27,16 @@
             <option value="@l.Key">@l.DisplayName</option>
         }
     </select>
+
+    <label for="destination" class="form-label">Destination</label>
+    <select id="destination"
+            class="form-select"
+            @bind-Value="DestinationCode"
+            @bind-Value:event="onchange">
+        <option value="">-- Select a Destination --</option>
+        @foreach (var l in _movementLocations)
+        {
+            <option value="@l.Key">@l.DisplayName</option>
+        }
+    </select>
 }
