@@ -82,6 +82,36 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Runtime.UnitTests.Catalogs
             Assert.Throws<ArgumentNullException>(() => new LocationDefinitionCatalog(null!));
         }
 
+        [Fact]
+        public void TryGetByCode_WithValidCode_ReturnsTrue()
+        {
+            // Arrange
+            var catalog = CreateCatalog();
+
+            // Act
+            var result = catalog.TryGetByCode(new LocationCode("location-1"), out var location);
+
+            // Assert
+            Assert.True(result);
+            Assert.NotNull(location);
+            Assert.Equal(new LocationCode("location-1"), location.Code);
+            Assert.Equal("Location 1", location.DisplayName);
+        }
+
+        [Fact]
+        public void TryGetByCode_WithInvalidCode_ReturnsFalse()
+        {
+            // Arrange
+            var catalog = CreateCatalog();
+
+            // Act
+            var result = catalog.TryGetByCode(new LocationCode("invalid-code"), out var location);
+
+            // Assert
+            Assert.False(result);
+            Assert.Null(location);
+        }
+
         private static LocationDefinitionCatalog CreateCatalog()
         {
             var snapshot = new ReferenceDataSnapshotBuilder()

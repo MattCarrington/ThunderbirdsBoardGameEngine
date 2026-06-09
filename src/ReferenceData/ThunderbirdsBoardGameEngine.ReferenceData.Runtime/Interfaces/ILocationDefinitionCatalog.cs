@@ -1,4 +1,5 @@
 ﻿using System.Collections.Immutable;
+using System.Diagnostics.CodeAnalysis;
 using ThunderbirdsBoardGameEngine.ReferenceData.Identities;
 using ThunderbirdsBoardGameEngine.ReferenceData.Model;
 
@@ -31,5 +32,16 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Runtime.Interfaces
         /// Thrown when no location with the specified code exists.
         /// </exception>
         ReferenceLocationDefinition GetByCode(LocationCode code);
+
+        /// <summary>
+        /// Tries to get a location definition by its unique code.
+        /// </summary>
+        /// <param name="code">The location code.</param>
+        /// <param name="locationDefinition">The location definition if found; otherwise, null.</param>
+        /// <returns>True if the location definition was found; otherwise, false.</returns>
+        bool TryGetByCode(
+            LocationCode code,
+            [NotNullWhen(true)]
+            out ReferenceLocationDefinition? locationDefinition);
     }
 }

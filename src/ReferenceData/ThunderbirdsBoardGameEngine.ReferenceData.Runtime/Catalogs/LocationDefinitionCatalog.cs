@@ -1,5 +1,6 @@
 ﻿using System.Collections.Frozen;
 using System.Collections.Immutable;
+using System.Diagnostics.CodeAnalysis;
 using ThunderbirdsBoardGameEngine.ReferenceData.Identities;
 using ThunderbirdsBoardGameEngine.ReferenceData.Model;
 using ThunderbirdsBoardGameEngine.ReferenceData.Runtime.Interfaces;
@@ -41,6 +42,11 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Runtime.Catalogs
             }
 
             return location;
+        }
+
+        public bool TryGetByCode(LocationCode code, [NotNullWhen(true)] out ReferenceLocationDefinition? locationDefinition)
+        {
+            return _byCode.TryGetValue(code, out locationDefinition);
         }
     }
 }
