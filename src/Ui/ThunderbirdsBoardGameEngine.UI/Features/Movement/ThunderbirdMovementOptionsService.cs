@@ -5,6 +5,7 @@ namespace ThunderbirdsBoardGameEngine.UI.Features.Movement
     public class ThunderbirdMovementOptionsService : IThunderbirdMovementOptionsService
     {
         private readonly IThunderbirdDefinitionCatalog _catalog;
+
         public ThunderbirdMovementOptionsService(IThunderbirdDefinitionCatalog catalog)
         {
             _catalog = catalog;
