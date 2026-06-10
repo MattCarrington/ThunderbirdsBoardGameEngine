@@ -14,9 +14,9 @@ dotnet build --configuration Release
 if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
 Write-Host "Finding unit test projects..."
-$unitTestProjects = Get-ChildItem -Recurse -Filter "*.UnitTests.csproj"
+$unitTestProjects = @(Get-ChildItem -Path "tests" -Recurse -Filter "*.UnitTests.csproj" -File)
 
-if ($unitTestProjects.Count -eq 0) {
+if ($unitTestProjects.Length -eq 0) {
     Write-Host "No unit test projects found."
     exit 1
 }
