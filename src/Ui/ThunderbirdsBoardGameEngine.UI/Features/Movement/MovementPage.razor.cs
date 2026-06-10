@@ -48,12 +48,23 @@ namespace ThunderbirdsBoardGameEngine.UI.Features.Movement
             }
 
             _isValidating = true;
+            _validationFailed = false;
+            _validationResult = null;
 
-            _validationResult = await MovementService.ValidateMovementAsync(_thunderbirdCode!, _startLocationCode!, _destinationCode!);
+            try
+            {
+                _validationResult = await MovementService.ValidateMovementAsync(_thunderbirdCode!, _startLocationCode!, _destinationCode!);
 
-            _validationFailed = _validationResult is null;
-
-            _isValidating = false;
+                _validationFailed = _validationResult is null;
+            }
+            catch
+            {
+                _validationFailed = true;
+            }
+            finally
+            {
+                _isValidating = false;
+            }
         }
     }
 }
