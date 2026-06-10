@@ -13,5 +13,23 @@ Write-Host "Running dotnet build..."
 dotnet build --configuration Release
 if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
+Write-Host "Finding unit test projects..."
+$unitTestProjects = Get-ChildItem -Recurse -Filter "*.UnitTests.csproj"
+
+if ($unitTestProjects.Count -eq 0) {
+    Write-Host "No unit test projects found."
+    exit 1
+}
+
+foreach ($project in $unitTestProjects) {
+    Write-Host "Running unit tests: $($project.FullName)"
+    dotnet test $project.FullName --configuration Release --no-build
+
+    if ($LASTEXITCODE -ne 0) {
+        Write-Host "Unit tests failed: $($project.FullName)"
+        exit $LASTEXITCODE
+    }
+}
+
 Write-Host "Pre-commit checks passed successfully."
 exit 0
