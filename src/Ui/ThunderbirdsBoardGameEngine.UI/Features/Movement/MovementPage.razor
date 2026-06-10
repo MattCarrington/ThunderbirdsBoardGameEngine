@@ -3,17 +3,9 @@
 
 <h3>Movement</h3>
 
-<label for="movementSelect" class="form-label">Thunderbird</label>
-<select id="movementSelect"
-        class="form-select"
-        @bind-Value="_thunderbirdCode"
-        @bind-Value:event="onchange">
-    <option value="">-- Select a Thunderbird --</option>
-    @foreach (var t in _mobileThunderbirds)
-    {
-        <option value="@t.Key">@t.DisplayName</option>
-    }
-</select>
+<ThunderbirdSelector 
+    Thunderbirds="_mobileThunderbirds"
+    @bind-SelectedThunderbirdCode="_thunderbirdCode" />
 
 @if (!string.IsNullOrEmpty(_thunderbirdCode))
 {

@@ -1,0 +1,13 @@
+﻿<label for="thunderbirdSelector">Thunderbird Selector</label>
+<select id="thunderbirdSelector"
+    class="form-select"
+    value="@SelectedThunderbirdCode"
+    @onchange="OnChanged"
+        required>
+    <option value="">--Select a Thunderbird--</option>
+
+    @foreach (var thunderbird in Thunderbirds)
+    {
+        <option value="@thunderbird.Key">@thunderbird.DisplayName</option>
+    }
+</select>
