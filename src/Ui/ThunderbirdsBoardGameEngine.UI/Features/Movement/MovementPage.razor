@@ -28,31 +28,7 @@
 
     @if (_validationResult is not null)
     {
-        @if (_validationResult.IsValid)
-        {
-            <div class="alert alert-success mt-3"
-                 data-testid="validation-success">
-                <h4>Movement is valid</h4>
-                <p><strong>Action Point Cost:</strong> @_validationResult.ActionPointCost</p>
-                <p><strong>Spaces Travelled:</strong> @_validationResult.SpacesTravelled</p>
-                <h5>Route</h5>
-                <ul>
-                    @foreach (var location in _validationResult.Route)
-                    {
-                        <li>@location</li>
-                    }
-                </ul>
-            </div>
-        }
-        else
-        {
-            <div class="alert alert-warning">
-                @foreach (var message in _validationResult.Messages)
-                {
-                    <p>@message</p>
-                }
-            </div>
-        }
+        <MovementResultDetail MovementResult="_validationResult" />
     }
 
     @if (_validationFailed)

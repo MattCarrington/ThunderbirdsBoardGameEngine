@@ -1,0 +1,25 @@
+﻿@if (MovementResult.IsValid)
+{
+    <div class="alert alert-success mt-3"
+         data-testid="validation-success">
+        <h4>Movement is valid</h4>
+        <p data-testid="action-point-cost"><strong>Action Point Cost:</strong> @MovementResult.ActionPointCost</p>
+        <p data-testid="spaces-travelled"><strong>Spaces Travelled:</strong> @MovementResult.SpacesTravelled</p>
+        <p>Route</p>
+        <ul data-testid="route">
+            @foreach (var location in MovementResult.Route)
+            {
+                <li>@location</li>
+            }
+        </ul>
+    </div>
+}
+else
+{
+    <div class="alert alert-warning" data-testid="validation-failure">
+        @foreach (var message in MovementResult.Messages)
+        {
+            <p>@message</p>
+        }
+    </div>
+}
