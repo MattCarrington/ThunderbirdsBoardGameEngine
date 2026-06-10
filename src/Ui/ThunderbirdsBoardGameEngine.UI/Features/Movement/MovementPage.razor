@@ -9,13 +9,13 @@
 
 @if (!string.IsNullOrEmpty(_thunderbirdCode))
 {
-    <label for="startLocation" class="form-label">Start Location</label>
-    <LocationSelector Id="startLocation"
+    <LocationSelector LocationId="startLocation"
+                      LocationTitle="Start Location"
                       Locations="_movementLocations"
                       @bind-SelectedLocationKey="_startLocationCode" />
 
-    <label for="destination" class="form-label">Destination</label>
-    <LocationSelector Id="destination"
+    <LocationSelector LocationId="destination"
+                      LocationTitle="Destination"
                       Locations="_movementLocations"
                       @bind-SelectedLocationKey="_destinationCode" />
 

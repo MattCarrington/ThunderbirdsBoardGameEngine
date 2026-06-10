@@ -15,7 +15,10 @@ namespace ThunderbirdsBoardGameEngine.UI.Features.Movement.Components
         public EventCallback<string> SelectedLocationKeyChanged { get; set; }
 
         [Parameter]
-        public string Id { get; set; } = Guid.NewGuid().ToString();
+        public string LocationId { get; set; } = Guid.NewGuid().ToString();
+
+        [Parameter]
+        public string LocationTitle { get; set; } = string.Empty;
 
         private Task OnChanged(ChangeEventArgs e)
         {

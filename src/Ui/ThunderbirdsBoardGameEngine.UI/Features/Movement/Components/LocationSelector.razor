@@ -1,6 +1,7 @@
-﻿<select 
+﻿<label for="@LocationId" class="form-label">@LocationTitle</label>
+<select 
     class="form-select"
-    id="@Id"
+    id="@LocationId"
     @onchange="OnChanged"
     value="@SelectedLocationKey"
     required>
