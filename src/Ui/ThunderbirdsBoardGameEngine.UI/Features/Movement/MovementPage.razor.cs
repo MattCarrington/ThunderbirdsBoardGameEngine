@@ -26,7 +26,7 @@ namespace ThunderbirdsBoardGameEngine.UI.Features.Movement
         private bool _isValidating = false;
         private bool _validationFailed;
 
-        private bool? IsValidationDisabled =>
+        private bool IsValidationDisabled =>
             _isValidating
             || string.IsNullOrEmpty(_thunderbirdCode)
             || string.IsNullOrEmpty(_startLocationCode)
