@@ -1,0 +1,12 @@
+﻿<select 
+    class="form-select"
+    @onchange="OnChanged"
+    value="@SelectedLocationKey"
+    required>
+
+    <option value="">-- Select a Location --</option>
+    @foreach (var option in Locations)
+    {
+        <option value="@option.Key">@option.DisplayName</option>
+    }
+</select>

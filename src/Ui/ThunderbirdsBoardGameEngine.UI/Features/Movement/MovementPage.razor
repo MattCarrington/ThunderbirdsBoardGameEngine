@@ -1,4 +1,5 @@
 ﻿@page "/movement"
+@using ThunderbirdsBoardGameEngine.UI.Features.Movement.Components
 
 <h3>Movement</h3>
 
@@ -17,28 +18,14 @@
 @if (!string.IsNullOrEmpty(_thunderbirdCode))
 {
     <label for="startLocation" class="form-label">Start Location</label>
-    <select id="startLocation"
-            class="form-select"
-            @bind-Value="_startLocationCode"
-            @bind-Value:event="onchange">
-        <option value="">-- Select a Start Location --</option>
-        @foreach (var l in _movementLocations)
-        {
-            <option value="@l.Key">@l.DisplayName</option>
-        }
-    </select>
+    <LocationSelector Id="startLocation"
+                      Locations="_movementLocations"
+                      @bind-SelectedLocationKey="_startLocationCode" />
 
     <label for="destination" class="form-label">Destination</label>
-    <select id="destination"
-            class="form-select"
-            @bind-Value="_destinationCode"
-            @bind-Value:event="onchange">
-        <option value="">-- Select a Destination --</option>
-        @foreach (var l in _movementLocations)
-        {
-            <option value="@l.Key">@l.DisplayName</option>
-        }
-    </select>
+    <LocationSelector Id="destination"
+                      Locations="_movementLocations"
+                      @bind-SelectedLocationKey="_destinationCode" />
 
     <button class="btn btn-primary mt-3"
             data-testid="calculate-button"
