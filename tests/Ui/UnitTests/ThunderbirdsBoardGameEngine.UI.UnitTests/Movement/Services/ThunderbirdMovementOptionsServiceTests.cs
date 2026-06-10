@@ -4,10 +4,10 @@ using ThunderbirdsBoardGameEngine.ReferenceData.Enums;
 using ThunderbirdsBoardGameEngine.ReferenceData.Identities;
 using ThunderbirdsBoardGameEngine.ReferenceData.Model;
 using ThunderbirdsBoardGameEngine.ReferenceData.Runtime.Interfaces;
-using ThunderbirdsBoardGameEngine.UI.Features.Movement;
+using ThunderbirdsBoardGameEngine.UI.Features.Movement.Services;
 using Xunit;
 
-namespace ThunderbirdsBoardGameEngine.UI.UnitTests.Services
+namespace ThunderbirdsBoardGameEngine.UI.UnitTests.Movement.Services
 {
     public class ThunderbirdMovementOptionsServiceTests
     {

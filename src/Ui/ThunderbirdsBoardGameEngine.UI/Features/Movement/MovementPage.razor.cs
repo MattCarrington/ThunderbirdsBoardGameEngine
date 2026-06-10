@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
+using ThunderbirdsBoardGameEngine.UI.Features.Movement.Interfaces;
+using ThunderbirdsBoardGameEngine.UI.Features.Movement.Models;
 
 namespace ThunderbirdsBoardGameEngine.UI.Features.Movement
 {
@@ -11,7 +13,7 @@ namespace ThunderbirdsBoardGameEngine.UI.Features.Movement
         public IMovementLocationOptionsService LocationService { get; set; } = null!;
 
         [Inject]
-        public IValidateMovementService MovementService { get; set; } = null!;
+        public IMovementClientService MovementService { get; set; } = null!;
 
         private IReadOnlyList<ThunderbirdMovementOptions> _mobileThunderbirds = Array.Empty<ThunderbirdMovementOptions>();
         private IReadOnlyList<MovementLocationOptions> _movementLocations = Array.Empty<MovementLocationOptions>();

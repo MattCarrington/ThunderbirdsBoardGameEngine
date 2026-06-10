@@ -1,6 +1,8 @@
 ﻿using ThunderbirdsBoardGameEngine.ReferenceData.Runtime.Interfaces;
+using ThunderbirdsBoardGameEngine.UI.Features.Movement.Interfaces;
+using ThunderbirdsBoardGameEngine.UI.Features.Movement.Models;
 
-namespace ThunderbirdsBoardGameEngine.UI.Features.Movement
+namespace ThunderbirdsBoardGameEngine.UI.Features.Movement.Services
 {
     public class MovementLocationOptionsService : IMovementLocationOptionsService
     {

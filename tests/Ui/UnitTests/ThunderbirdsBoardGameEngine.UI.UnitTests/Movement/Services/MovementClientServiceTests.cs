@@ -7,12 +7,13 @@ using ThunderbirdsBoardGameEngine.ReferenceData.Model;
 using ThunderbirdsBoardGameEngine.ReferenceData.Runtime.Interfaces;
 using ThunderbirdsBoardGameEngine.Rules.Client.Interfaces.V1;
 using ThunderbirdsBoardGameEngine.Rules.Contracts.Dtos.Movement.ValidateMovement.V1;
-using ThunderbirdsBoardGameEngine.UI.Features.Movement;
+using ThunderbirdsBoardGameEngine.UI.Features.Movement.Mappers;
+using ThunderbirdsBoardGameEngine.UI.Features.Movement.Services;
 using Xunit;
 
-namespace ThunderbirdsBoardGameEngine.UI.UnitTests.Services
+namespace ThunderbirdsBoardGameEngine.UI.UnitTests.Movement.Services
 {
-    public class ValidateMovementServiceTests
+    public class MovementClientServiceTests
     {
         private static string ThunderbirdCode => "TB001";
 
@@ -82,7 +83,7 @@ namespace ThunderbirdsBoardGameEngine.UI.UnitTests.Services
             Assert.Null(result);
         }
 
-        private static ValidateMovementService CreateService(IMovementClient movementClient)
+        private static MovementClientService CreateService(IMovementClient movementClient)
         {
             var catalog = Substitute.For<ILocationDefinitionCatalog>();
             catalog.TryGetByCode(Arg.Any<LocationCode>(), out Arg.Any<ReferenceLocationDefinition>()).Returns(x =>
@@ -95,7 +96,7 @@ namespace ThunderbirdsBoardGameEngine.UI.UnitTests.Services
 
             var mapper = new MovementResultMapper(catalog);
 
-            return new ValidateMovementService(movementClient, mapper);
+            return new MovementClientService(movementClient, mapper);
         }
     }
 }

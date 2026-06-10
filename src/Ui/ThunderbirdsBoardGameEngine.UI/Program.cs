@@ -2,7 +2,9 @@ using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using ThunderbirdsBoardGameEngine.ReferenceData.Runtime;
 using ThunderbirdsBoardGameEngine.Rules.Client.Extensions;
-using ThunderbirdsBoardGameEngine.UI.Features.Movement;
+using ThunderbirdsBoardGameEngine.UI.Features.Movement.Interfaces;
+using ThunderbirdsBoardGameEngine.UI.Features.Movement.Mappers;
+using ThunderbirdsBoardGameEngine.UI.Features.Movement.Services;
 using ThunderbirdsBoardGameEngine.UI.Interfaces;
 using ThunderbirdsBoardGameEngine.UI.Mappers;
 using ThunderbirdsBoardGameEngine.UI.Services;
@@ -48,7 +50,7 @@ namespace ThunderbirdsBoardGameEngine.UI
             builder.Services.AddScoped<IRescueService, RescueService>();
             builder.Services.AddScoped<IThunderbirdMovementOptionsService, ThunderbirdMovementOptionsService>();
             builder.Services.AddScoped<IMovementLocationOptionsService, MovementLocationOptionsService>();
-            builder.Services.AddScoped<IValidateMovementService, ValidateMovementService>();
+            builder.Services.AddScoped<IMovementClientService, MovementClientService>();
 
             builder.Services.AddSingleton<DisasterCardMapper>();
             builder.Services.AddSingleton<CharacterMapper>();

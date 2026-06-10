@@ -1,4 +1,6 @@
-﻿namespace ThunderbirdsBoardGameEngine.UI.Features.Movement
+﻿using ThunderbirdsBoardGameEngine.UI.Features.Movement.Models;
+
+namespace ThunderbirdsBoardGameEngine.UI.Features.Movement.Interfaces
 {
     public interface IThunderbirdMovementOptionsService
     {

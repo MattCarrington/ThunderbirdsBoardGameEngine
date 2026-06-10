@@ -1,4 +1,4 @@
-﻿namespace ThunderbirdsBoardGameEngine.UI.Features.Movement
+﻿namespace ThunderbirdsBoardGameEngine.UI.Features.Movement.Models
 {
     public sealed record MovementLocationOptions(
         string Key,
