@@ -18,7 +18,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Fakes
 
         public ImmutableArray<ReferenceLocationDefinition> GetAll()
         {
-            return _locations.Values;
+            return _locations.Values.ToImmutableArray();
         }
 
         public bool Exists(LocationCode code)

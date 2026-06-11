@@ -18,7 +18,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Fakes
 
         public ImmutableArray<ReferenceThunderbirdDefinition> GetAll()
         {
-            return _thunderbirds.Values;
+            return _thunderbirds.Values.ToImmutableArray();
         }
 
         public bool TryGetByCode(ThunderbirdCode code, [NotNullWhen(true)] out ReferenceThunderbirdDefinition? definition)

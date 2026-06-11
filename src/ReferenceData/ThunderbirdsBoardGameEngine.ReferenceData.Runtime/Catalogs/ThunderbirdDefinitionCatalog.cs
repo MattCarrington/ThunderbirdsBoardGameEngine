@@ -10,6 +10,7 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Runtime.Catalogs
     internal class ThunderbirdDefinitionCatalog : IThunderbirdDefinitionCatalog
     {
         private readonly FrozenDictionary<ThunderbirdCode, ReferenceThunderbirdDefinition> _byCode;
+        private readonly ImmutableArray<ReferenceThunderbirdDefinition> _thunderbirds;
 
         public ThunderbirdDefinitionCatalog(ReferenceDataSnapshot snapshot)
         {
@@ -18,11 +19,13 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Runtime.Catalogs
             _byCode = snapshot.ThunderbirdDefinitions
                 .ToDictionary(t => t.Code)
                 .ToFrozenDictionary();
+
+            _thunderbirds = snapshot.ThunderbirdDefinitions.ToImmutableArray();
         }
 
         public ImmutableArray<ReferenceThunderbirdDefinition> GetAll()
         {
-            return _byCode.Values;
+            return _thunderbirds;
         }
 
         public bool TryGetByCode(ThunderbirdCode code, [NotNullWhen(true)] out ReferenceThunderbirdDefinition? definition)
