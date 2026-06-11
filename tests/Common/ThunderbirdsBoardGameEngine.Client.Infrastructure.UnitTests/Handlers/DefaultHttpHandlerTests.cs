@@ -85,7 +85,7 @@ namespace ThunderbirdsBoardGameEngine.Client.Infrastructure.UnitTests.Handlers
 
             using var response = new HttpResponseMessage(HttpStatusCode.BadRequest)
             {
-                Content = new StringContent("Bad Request Error Messages")
+                Content = new StringContent("Bad Request Error Message")
             };
 
             // Act
@@ -97,7 +97,7 @@ namespace ThunderbirdsBoardGameEngine.Client.Infrastructure.UnitTests.Handlers
             Assert.Equal(HttpStatusCode.BadRequest, result.StatusCode);
             Assert.Null(result.Data);
             Assert.NotNull(result.ErrorMessage);
-            Assert.Equal("Bad Request Error Messages", result.ErrorMessage);
+            Assert.Equal("Bad Request Error Message", result.ErrorMessage);
         }
 
         [Fact]
