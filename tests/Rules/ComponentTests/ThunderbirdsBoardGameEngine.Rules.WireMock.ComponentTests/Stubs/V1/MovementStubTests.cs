@@ -27,7 +27,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.WireMock.ComponentTests.Stubs.V1
         }
 
         [Fact]
-        public async Task CalculateRescueTargetAsync_WhenSuccessSpecified_ReturnsSuccess()
+        public async Task ValidateMovementAsync_WhenSuccessSpecified_ReturnsSuccess()
         {
             // Arrange
             var dto = CreateValidateMovementResponse();
@@ -54,7 +54,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.WireMock.ComponentTests.Stubs.V1
         }
 
         [Fact]
-        public async Task CalculateRescueTargetAsync_WhenNotFoundSpecified_ReturnsNotFound()
+        public async Task ValidateMovementAsync_WhenNotFoundSpecified_ReturnsNotFound()
         {
             // Arrange
             _stub.RegisterValidateMovementNotFound();
@@ -75,7 +75,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.WireMock.ComponentTests.Stubs.V1
         }
 
         [Fact]
-        public async Task CalculateRescueTargetAsync_WhenBadRequestSpecified_ReturnsNotFound()
+        public async Task ValidateMovementAsync_WhenBadRequestSpecified_ReturnsBadRequest()
         {
             // Arrange
             _stub.RegisterInvalidValidateMovementRequest();
@@ -95,7 +95,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.WireMock.ComponentTests.Stubs.V1
         }
 
         [Fact]
-        public async Task CalculateRescueTargetAsync_WhenErrorUnpecified_ReturnsError()
+        public async Task ValidateMovementAsync_WhenErrorUnspecified_ReturnsError()
         {
             // Arrange
             _stub.RegisterValidateMovementError();
@@ -115,7 +115,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.WireMock.ComponentTests.Stubs.V1
         }
 
         [Fact]
-        public async Task CalculateRescueTargetAsync_WhenErrorSpecified_ReturnsError()
+        public async Task ValidateMovementAsync_WhenErrorSpecified_ReturnsError()
         {
             // Arrange
             var errorMessage = "The service is unavailable right now";
@@ -137,7 +137,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.WireMock.ComponentTests.Stubs.V1
         }
 
         [Fact]
-        public async Task GetAllAsync_WhenNoVersionHeader_ReturnsBadRequestAsync()
+        public async Task ValidateMovementAsync_WhenNoVersionHeader_ReturnsBadRequestAsync()
         {
             // Arrange
             using var client = new HttpClient { BaseAddress = new Uri(_server.Urls[0]) };
@@ -160,7 +160,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.WireMock.ComponentTests.Stubs.V1
         }
 
         [Fact]
-        public async Task GetAllAsync_WhenWrongVersionHeader_ReturnsBadRequestAsync()
+        public async Task ValidateMovementAsync_WhenWrongVersionHeader_ReturnsBadRequestAsync()
         {
             // Arrange
             var dto = CreateValidateMovementResponse();

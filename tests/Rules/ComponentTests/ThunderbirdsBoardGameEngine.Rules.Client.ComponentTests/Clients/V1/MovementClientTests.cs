@@ -78,7 +78,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Client.ComponentTests.Clients.V1
         }
 
         [Fact]
-        public async Task GetAllAsync_WhenServerError_ReturnsFailureApiResult()
+        public async Task ValidateMovementAsync_WhenServerError_ReturnsFailureApiResult()
         {
             // Arrange
             _host.MovementStub().RegisterValidateMovementError();
@@ -96,7 +96,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Client.ComponentTests.Clients.V1
         }
 
         [Fact]
-        public async Task GetAllAsync_WhenNotFound_ReturnsFailureApiResult()
+        public async Task ValidateMovementAsync_WhenNotFound_ReturnsFailureApiResult()
         {
             // Arrange
             _host.MovementStub().RegisterValidateMovementNotFound();
@@ -114,7 +114,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Client.ComponentTests.Clients.V1
         }
 
         [Fact]
-        public async Task GetAllAsync_WhenBadRequest_ReturnsFailureApiResult()
+        public async Task ValidateMovementAsync_WhenBadRequest_ReturnsFailureApiResult()
         {
             // Arrange
             _host.MovementStub().RegisterInvalidValidateMovementRequest();

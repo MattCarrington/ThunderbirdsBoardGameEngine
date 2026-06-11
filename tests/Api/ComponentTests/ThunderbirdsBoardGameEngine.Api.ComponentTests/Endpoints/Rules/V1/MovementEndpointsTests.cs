@@ -141,7 +141,7 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints.Rules.V1
         }
 
         [Fact]
-        public async Task ReturnsBadRequestWhendDestionationLocationNotPresent()
+        public async Task ReturnsBadRequestWhenDestinationLocationNotPresent()
         {
             var dto = new
             {
