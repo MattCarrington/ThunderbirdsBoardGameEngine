@@ -26,7 +26,6 @@ namespace ThunderbirdsBoardGameEngine.Rules.Infrastructure
         public static IServiceCollection AddRules(this IServiceCollection services)
         {
             services.AddMediatR(typeof(CalculateRescueTargetHandler).Assembly);
-            services.AddMediatR(typeof(ValidateMovementHandler).Assembly);
 
             services.AddSingleton<IValidateMovementResolutionService, ValidateMovementResolutionService>();
             services.AddSingleton<IRouteFinder, BreadthFirstRouteFinder>();
