@@ -32,7 +32,7 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Features.Movement.Compon
             Assert.Contains("A4", route.TextContent);
             Assert.Contains("A5", route.TextContent);
 
-            var validationFailed = cut.FindAll("[data-testid='validation-warning']");
+            var validationFailed = cut.FindAll("[data-testid='validation-failure']");
             Assert.Empty(validationFailed);
         }
 

@@ -173,7 +173,7 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Features.Movement
             // Assert
             cut.WaitForAssertion(() =>
             {
-                cut.Find("[data-testid='validation-failed']");
+                cut.Find("[data-testid='validation-error']");
             });
         }
 
