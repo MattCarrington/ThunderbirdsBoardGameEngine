@@ -66,5 +66,29 @@ namespace ThunderbirdsBoardGameEngine.UI.Features.Movement
                 _isValidating = false;
             }
         }
+
+        private void OnThunderbirdChanged(string? value)
+        {
+            _thunderbirdCode = value;
+            ClearValidationState();
+        }
+
+        private void OnStartLocationChanged(string? value)
+        {
+            _startLocationCode = value;
+            ClearValidationState();
+        }
+
+        private void OnDestinationChanged(string? value)
+        {
+            _destinationCode = value;
+            ClearValidationState();
+        }
+
+        private void ClearValidationState()
+        {
+            _validationResult = null;
+            _validationFailed = false;
+        }
     }
 }

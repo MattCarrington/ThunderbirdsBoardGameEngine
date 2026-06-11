@@ -5,19 +5,22 @@
 
 <ThunderbirdSelector 
     Thunderbirds="_mobileThunderbirds"
-    @bind-SelectedThunderbirdCode="_thunderbirdCode" />
+    SelectedThunderbirdCode="_thunderbirdCode"
+    SelectedThunderbirdCodeChanged="OnThunderbirdChanged"/>
 
 @if (!string.IsNullOrEmpty(_thunderbirdCode))
 {
     <LocationSelector LocationId="startLocation"
                       LocationTitle="Start Location"
                       Locations="_movementLocations"
-                      @bind-SelectedLocationKey="_startLocationCode" />
+                      SelectedLocationKey="_startLocationCode"
+                      SelectedLocationKeyChanged="OnStartLocationChanged" />
 
     <LocationSelector LocationId="destination"
                       LocationTitle="Destination"
                       Locations="_movementLocations"
-                      @bind-SelectedLocationKey="_destinationCode" />
+                      SelectedLocationKey="_destinationCode"
+                      SelectedLocationKeyChanged="OnDestinationChanged" />
 
     <button class="btn btn-primary mt-3"
             data-testid="calculate-button"
