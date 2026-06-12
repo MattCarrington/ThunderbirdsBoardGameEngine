@@ -8,13 +8,13 @@ using Xunit;
 
 namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints.Rules.V1
 {
-    public class MovementEndpointsTests : IClassFixture<WebApplicationFactory<Program>>
+    public class ValidateMovementTests : IClassFixture<WebApplicationFactory<Program>>
     {
         private readonly HttpClient _client;
 
         private const int ApiVersion = 1;
 
-        public MovementEndpointsTests(WebApplicationFactory<Program> factory)
+        public ValidateMovementTests(WebApplicationFactory<Program> factory)
         {
             _client = factory.CreateClient();
         }
