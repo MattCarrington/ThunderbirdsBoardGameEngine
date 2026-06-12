@@ -21,6 +21,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Client.Extensions
                         new ApiVersionHeaderHandler(Version));
 
             AddV1<IRescueClient, Clients.V1.RescueClient>();
+            AddV1<IMovementClient, Clients.V1.MovementClient>();
 
             return services;
         }

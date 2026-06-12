@@ -5,7 +5,7 @@ using ThunderbirdsBoardGameEngine.Api.Error;
 using ThunderbirdsBoardGameEngine.Api.Handlers;
 using ThunderbirdsBoardGameEngine.Api.UnitTests.Fakes;
 using ThunderbirdsBoardGameEngine.Api.UnitTests.Helpers;
-using ThunderbirdsBoardGameEngine.Rules.Application.Rescue.Exceptions;
+using ThunderbirdsBoardGameEngine.Rules.Application.Exceptions;
 using Xunit;
 
 namespace ThunderbirdsBoardGameEngine.Api.UnitTests.Handlers

@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using ThunderbirdsBoardGameEngine.ReferenceData.ComponentTests.Helpers;
+using ThunderbirdsBoardGameEngine.ReferenceData.Enums;
 using ThunderbirdsBoardGameEngine.ReferenceData.Identities;
 using ThunderbirdsBoardGameEngine.ReferenceData.Runtime.Interfaces;
 using Xunit;
@@ -33,12 +34,14 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.ComponentTests.Loader
             var catalog = provider.GetRequiredService<ILocationDefinitionCatalog>();
 
             // Act            
-            var result = catalog.GetByCode(new LocationCode("north-america"));
+            var result = catalog.TryGetByCode(new LocationCode("north-america"), out var location);
 
             // Assert
-            Assert.NotNull(result);
-            Assert.Equal("north-america", result.Code.ToString());
-            Assert.Equal("North America", result.DisplayName);
+            Assert.True(result);
+            Assert.NotNull(location);
+            Assert.Equal("north-america", location.Code.Value);
+            Assert.Equal("North America", location.DisplayName);
+            Assert.Equal(MovementDomain.Earth, location.Domain);
         }
     }
 }

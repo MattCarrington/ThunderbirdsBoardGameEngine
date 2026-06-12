@@ -1,4 +1,5 @@
-﻿using ThunderbirdsBoardGameEngine.ReferenceData.Identities;
+﻿using ThunderbirdsBoardGameEngine.ReferenceData.Enums;
+using ThunderbirdsBoardGameEngine.ReferenceData.Identities;
 
 namespace ThunderbirdsBoardGameEngine.ReferenceData.Model
 {
@@ -8,12 +9,15 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Model
 
         public string DisplayName { get; }
 
-        public ReferenceLocationDefinition(LocationCode code, string displayName)
+        public MovementDomain Domain { get; }
+
+        public ReferenceLocationDefinition(LocationCode code, string displayName, MovementDomain domain)
         {
             ArgumentException.ThrowIfNullOrWhiteSpace(displayName);
 
             Code = code;
             DisplayName = displayName;
+            Domain = domain;
         }
     }
 }

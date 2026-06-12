@@ -33,7 +33,8 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Compilation
             var locations = context.Locations.Select(l =>
                 new ReferenceLocationDefinition(
                     new LocationCode(StringHelpers.Slugify(l.Name)),
-                    StringHelpers.NormalizeWhitespace(l.Name, nameof(l.Name))
+                    StringHelpers.NormalizeWhitespace(l.Name, nameof(l.Name)),
+                    Enum.Parse<MovementDomain>(l.Domain, true)
                 )
             ).ToList();
 
@@ -42,6 +43,8 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Compilation
             var thunderbirdDefinitions = BuildThunderbirdDefinitions(context.Thunderbirds);
 
             var podVehicleDefinitions = BuildPodVehicleDefinitions(context.PodVehicles);
+
+            var mapEdgeDefinitions = BuildMapEdgeDefinitions(context.MapEdges, new LocationCodeResolver(locations));
 
             return new ReferenceDataSnapshot(
                 SchemaVersion: SnapshotVersions.SchemaVersion,
@@ -52,7 +55,8 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Compilation
                 LocationDefinitions: locations,
                 CharacterDefinitions: characterDefinitions,
                 ThunderbirdDefinitions: thunderbirdDefinitions,
-                PodVehicleDefinitions: podVehicleDefinitions
+                PodVehicleDefinitions: podVehicleDefinitions,
+                MapEdgeDefinitions: mapEdgeDefinitions
             );
         }
 
@@ -107,7 +111,10 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Compilation
             return thunderbirdInputs
                 .Select(input => new ReferenceThunderbirdDefinition(
                     new ThunderbirdCode(StringHelpers.Slugify(input.Name)),
-                    StringHelpers.NormalizeWhitespace(input.Name, nameof(input.Name))))
+                    StringHelpers.NormalizeWhitespace(input.Name, nameof(input.Name)),
+                    domain: Enum.Parse<MovementDomain>(input.MovementDomain, ignoreCase: true),
+                    topSpeed: input.TopSpeed
+                ))
                 .ToList();
         }
 
@@ -118,6 +125,15 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Compilation
                 .Select(input => new ReferencePodVehicleDefinition(
                     new PodVehicleCode(StringHelpers.Slugify(input.Name)),
                     StringHelpers.NormalizeWhitespace(input.Name, nameof(input.Name))))
+                .ToList();
+        }
+
+        private static List<ReferenceMapEdgeDefinition> BuildMapEdgeDefinitions(List<MapEdgeInput> mapEdges, LocationCodeResolver locationCodeResolver)
+        {
+            return mapEdges.Select(input => new ReferenceMapEdgeDefinition(
+                    locationCodeResolver.Resolve(input.Edge1),
+                    locationCodeResolver.Resolve(input.Edge2),
+                    Enum.Parse<MovementDomain>(input.Domain, ignoreCase: true)))
                 .ToList();
         }
     }

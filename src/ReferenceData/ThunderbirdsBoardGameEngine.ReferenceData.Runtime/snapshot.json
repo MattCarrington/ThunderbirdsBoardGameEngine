@@ -1,8 +1,8 @@
 {
-  "schemaVersion": 1,
-  "contentVersion": "1.0.0",
-  "generatedAt": "2026-05-12T12:05:05.1068816+00:00",
-  "generatorVersion": "1.0.0",
+  "schemaVersion": 2,
+  "contentVersion": "1.1.0",
+  "generatedAt": "2026-06-05T11:52:29.3725675+00:00",
+  "generatorVersion": "1.1.0",
   "characterDefinitions": [
     {
       "code": "scott",
@@ -920,75 +920,93 @@
   "locationDefinitions": [
     {
       "code": "europe",
-      "displayName": "Europe"
+      "displayName": "Europe",
+      "domain": "earth"
     },
     {
       "code": "asia",
-      "displayName": "Asia"
+      "displayName": "Asia",
+      "domain": "earth"
     },
     {
       "code": "africa",
-      "displayName": "Africa"
+      "displayName": "Africa",
+      "domain": "earth"
     },
     {
       "code": "north-america",
-      "displayName": "North America"
+      "displayName": "North America",
+      "domain": "earth"
     },
     {
       "code": "south-america",
-      "displayName": "South America"
+      "displayName": "South America",
+      "domain": "earth"
     },
     {
       "code": "north-pacific",
-      "displayName": "North Pacific"
+      "displayName": "North Pacific",
+      "domain": "earth"
     },
     {
       "code": "south-pacific",
-      "displayName": "South Pacific"
+      "displayName": "South Pacific",
+      "domain": "earth"
     },
     {
       "code": "north-atlantic",
-      "displayName": "North Atlantic"
+      "displayName": "North Atlantic",
+      "domain": "earth"
     },
     {
       "code": "south-atlantic",
-      "displayName": "South Atlantic"
+      "displayName": "South Atlantic",
+      "domain": "earth"
     },
     {
       "code": "indian-ocean",
-      "displayName": "Indian Ocean"
+      "displayName": "Indian Ocean",
+      "domain": "earth"
     },
     {
       "code": "australia",
-      "displayName": "Australia"
+      "displayName": "Australia",
+      "domain": "earth"
     },
     {
       "code": "geo-stationary-orbit",
-      "displayName": "Geo-Stationary Orbit"
+      "displayName": "Geo-Stationary Orbit",
+      "domain": "space"
     },
     {
       "code": "venus",
-      "displayName": "Venus"
+      "displayName": "Venus",
+      "domain": "space"
     },
     {
       "code": "mercury",
-      "displayName": "Mercury"
+      "displayName": "Mercury",
+      "domain": "space"
     },
     {
       "code": "the-sun",
-      "displayName": "The Sun"
+      "displayName": "The Sun",
+      "domain": "space"
     },
     {
       "code": "the-moon",
-      "displayName": "The Moon"
+      "displayName": "The Moon",
+      "domain": "space"
     },
     {
       "code": "mars",
-      "displayName": "Mars"
+      "displayName": "Mars",
+      "domain": "space"
     },
     {
       "code": "asteroid-belt",
-      "displayName": "Asteroid Belt"
+      "displayName": "Asteroid Belt",
+      "domain": "space"
     }
   ],
   "podVehicleDefinitions": [
@@ -1036,27 +1054,186 @@
   "thunderbirdDefinitions": [
     {
       "code": "thunderbird-1",
-      "displayName": "Thunderbird 1"
+      "displayName": "Thunderbird 1",
+      "domain": "earth",
+      "topSpeed": 3
     },
     {
       "code": "thunderbird-2",
-      "displayName": "Thunderbird 2"
+      "displayName": "Thunderbird 2",
+      "domain": "earth",
+      "topSpeed": 2
     },
     {
       "code": "thunderbird-3",
-      "displayName": "Thunderbird 3"
+      "displayName": "Thunderbird 3",
+      "domain": "space",
+      "topSpeed": 3
     },
     {
       "code": "thunderbird-4",
-      "displayName": "Thunderbird 4"
+      "displayName": "Thunderbird 4",
+      "domain": "earth",
+      "topSpeed": 1
     },
     {
       "code": "thunderbird-5",
-      "displayName": "Thunderbird 5"
+      "displayName": "Thunderbird 5",
+      "domain": "space",
+      "topSpeed": 0
     },
     {
       "code": "fab-1",
-      "displayName": "FAB 1"
+      "displayName": "FAB 1",
+      "domain": "earth",
+      "topSpeed": 1
+    }
+  ],
+  "mapEdgeDefinitions": [
+    {
+      "edge1": "europe",
+      "edge2": "north-atlantic",
+      "edgeType": "earth"
+    },
+    {
+      "edge1": "europe",
+      "edge2": "africa",
+      "edgeType": "earth"
+    },
+    {
+      "edge1": "europe",
+      "edge2": "asia",
+      "edgeType": "earth"
+    },
+    {
+      "edge1": "asia",
+      "edge2": "africa",
+      "edgeType": "earth"
+    },
+    {
+      "edge1": "asia",
+      "edge2": "indian-ocean",
+      "edgeType": "earth"
+    },
+    {
+      "edge1": "asia",
+      "edge2": "australia",
+      "edgeType": "earth"
+    },
+    {
+      "edge1": "asia",
+      "edge2": "north-pacific",
+      "edgeType": "earth"
+    },
+    {
+      "edge1": "north-pacific",
+      "edge2": "australia",
+      "edgeType": "earth"
+    },
+    {
+      "edge1": "north-pacific",
+      "edge2": "south-pacific",
+      "edgeType": "earth"
+    },
+    {
+      "edge1": "north-pacific",
+      "edge2": "north-america",
+      "edgeType": "earth"
+    },
+    {
+      "edge1": "north-america",
+      "edge2": "south-pacific",
+      "edgeType": "earth"
+    },
+    {
+      "edge1": "north-america",
+      "edge2": "north-atlantic",
+      "edgeType": "earth"
+    },
+    {
+      "edge1": "north-america",
+      "edge2": "south-america",
+      "edgeType": "earth"
+    },
+    {
+      "edge1": "north-atlantic",
+      "edge2": "south-america",
+      "edgeType": "earth"
+    },
+    {
+      "edge1": "north-atlantic",
+      "edge2": "south-atlantic",
+      "edgeType": "earth"
+    },
+    {
+      "edge1": "north-atlantic",
+      "edge2": "africa",
+      "edgeType": "earth"
+    },
+    {
+      "edge1": "africa",
+      "edge2": "south-atlantic",
+      "edgeType": "earth"
+    },
+    {
+      "edge1": "africa",
+      "edge2": "indian-ocean",
+      "edgeType": "earth"
+    },
+    {
+      "edge1": "indian-ocean",
+      "edge2": "australia",
+      "edgeType": "earth"
+    },
+    {
+      "edge1": "australia",
+      "edge2": "south-pacific",
+      "edgeType": "earth"
+    },
+    {
+      "edge1": "south-pacific",
+      "edge2": "south-america",
+      "edgeType": "earth"
+    },
+    {
+      "edge1": "south-america",
+      "edge2": "south-atlantic",
+      "edgeType": "earth"
+    },
+    {
+      "edge1": "south-pacific",
+      "edge2": "geo-stationary-orbit",
+      "edgeType": "space"
+    },
+    {
+      "edge1": "geo-stationary-orbit",
+      "edge2": "venus",
+      "edgeType": "space"
+    },
+    {
+      "edge1": "venus",
+      "edge2": "mercury",
+      "edgeType": "space"
+    },
+    {
+      "edge1": "mercury",
+      "edge2": "the-sun",
+      "edgeType": "space"
+    },
+    {
+      "edge1": "geo-stationary-orbit",
+      "edge2": "the-moon",
+      "edgeType": "space"
+    },
+    {
+      "edge1": "the-moon",
+      "edge2": "mars",
+      "edgeType": "space"
+    },
+    {
+      "edge1": "mars",
+      "edge2": "asteroid-belt",
+      "edgeType": "space"
     }
   ]
 }

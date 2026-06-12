@@ -1,0 +1,61 @@
+﻿using ThunderbirdsBoardGameEngine.ReferenceData.Identities;
+using ThunderbirdsBoardGameEngine.Rules.Application.Exceptions;
+using ThunderbirdsBoardGameEngine.Rules.Application.Movement.Interfaces;
+using ThunderbirdsBoardGameEngine.Rules.Domain.Movement;
+
+namespace ThunderbirdsBoardGameEngine.Rules.Application.Movement.MapTraversal
+{
+    public class ValidateMovementResolutionService : IValidateMovementResolutionService
+    {
+        private readonly IThunderbirdsDefinitionLookup _thunderbirdsDefinitionLookup;
+        private readonly ILocationDefinitionLookup _locationDefinitionLookup;
+        private readonly IMapEdgeDefinitionLookup _edgeDefinitionLookup;
+        private readonly MovementEvaluator _movementEvaluator;
+
+        public ValidateMovementResolutionService(IThunderbirdsDefinitionLookup thunderbirdsDefinitionLookup,
+            ILocationDefinitionLookup locationDefinitionLookup,
+            IMapEdgeDefinitionLookup edgeDefinitionLookup,
+            MovementEvaluator movementEvaluator)
+        {
+            _thunderbirdsDefinitionLookup = thunderbirdsDefinitionLookup ?? throw new ArgumentNullException(nameof(thunderbirdsDefinitionLookup));
+            _locationDefinitionLookup = locationDefinitionLookup ?? throw new ArgumentNullException(nameof(locationDefinitionLookup));
+            _edgeDefinitionLookup = edgeDefinitionLookup ?? throw new ArgumentNullException(nameof(edgeDefinitionLookup));
+            _movementEvaluator = movementEvaluator ?? throw new ArgumentNullException(nameof(movementEvaluator));
+        }
+
+        public MovementResponse ResolveMovementValidation(MovementRequest request)
+        {
+            var thunderbird = _thunderbirdsDefinitionLookup.GetThunderbirdMovementContribution(request.Thunderbird);
+
+            if (!_locationDefinitionLookup.Exists(request.Start))
+            {
+                throw new ReferenceDataNotFoundException(
+                    resourceType: "Location",
+                    code: request.Start.Value);
+            }
+
+            if (!_locationDefinitionLookup.Exists(request.Destination))
+            {
+                throw new ReferenceDataNotFoundException(
+                    resourceType: "Location",
+                    code: request.Destination.Value);
+            }
+
+            var edges = _edgeDefinitionLookup.GetAll();
+
+            var topography = new Topography(edges);
+
+            var input = new MovementInput(thunderbird, topography, request.Start, request.Destination);
+
+            var evaluationResult = _movementEvaluator.Evaluate(input);
+
+            return new MovementResponse(
+                IsValid: evaluationResult.IsMoveValid,
+                SpacesTravelled: evaluationResult.SpacesTravelled,
+                Route: evaluationResult.Route,
+                ActionPointCost: evaluationResult.ActionPointCost,
+                TopSpeed: thunderbird.TopSpeed,
+                Messages: evaluationResult.Messages);
+        }
+    }
+}

@@ -1,4 +1,5 @@
-﻿using ThunderbirdsBoardGameEngine.ReferenceData.Identities;
+﻿using ThunderbirdsBoardGameEngine.ReferenceData.Enums;
+using ThunderbirdsBoardGameEngine.ReferenceData.Identities;
 
 namespace ThunderbirdsBoardGameEngine.ReferenceData.Model
 {
@@ -8,12 +9,19 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Model
 
         public string DisplayName { get; }
 
-        public ReferenceThunderbirdDefinition(ThunderbirdCode code, string displayName)
+        public MovementDomain Domain { get; }
+
+        public int TopSpeed { get; }
+
+        public ReferenceThunderbirdDefinition(ThunderbirdCode code, string displayName, MovementDomain domain, int topSpeed)
         {
             ArgumentException.ThrowIfNullOrWhiteSpace(displayName);
+            ArgumentOutOfRangeException.ThrowIfNegative(topSpeed);
 
             Code = code;
             DisplayName = displayName;
+            Domain = domain;
+            TopSpeed = topSpeed;
         }
     }
 }

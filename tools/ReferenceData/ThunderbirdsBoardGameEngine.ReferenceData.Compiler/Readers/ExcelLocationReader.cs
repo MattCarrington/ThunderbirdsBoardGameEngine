@@ -27,7 +27,9 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Readers
                     continue;
                 }
 
-                locations.Add(new LocationInput(name));
+                var domain = row.Cell(columnMap["Domain"]).GetString();
+
+                locations.Add(new LocationInput(name, domain));
             }
 
             return locations;

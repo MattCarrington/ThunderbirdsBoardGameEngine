@@ -9,6 +9,7 @@
         IReadOnlyList<ReferenceDisasterDefinition> DisasterDefinitions,
         IReadOnlyList<ReferenceLocationDefinition> LocationDefinitions,
         IReadOnlyList<ReferencePodVehicleDefinition> PodVehicleDefinitions,
-        IReadOnlyList<ReferenceThunderbirdDefinition> ThunderbirdDefinitions
+        IReadOnlyList<ReferenceThunderbirdDefinition> ThunderbirdDefinitions,
+        IReadOnlyList<ReferenceMapEdgeDefinition> MapEdgeDefinitions
     );
 }

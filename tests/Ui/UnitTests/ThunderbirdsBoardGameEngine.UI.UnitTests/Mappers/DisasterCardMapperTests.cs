@@ -187,7 +187,8 @@ namespace ThunderbirdsBoardGameEngine.UI.UnitTests.Mappers
             // Arrange
             var geoStationaryOrbit = new ReferenceLocationDefinition(
                 code: new LocationCode("geo-stationary-orbit"),
-                displayName: "Geo-Stationary Orbit"
+                displayName: "Geo-Stationary Orbit",
+                domain: MovementDomain.Space
             );
 
             var disaster = new ReferenceDisasterDefinition(
@@ -245,7 +246,8 @@ namespace ThunderbirdsBoardGameEngine.UI.UnitTests.Mappers
             var locationCatalog = Substitute.For<ILocationDefinitionCatalog>();
             locationCatalog.GetByCode(Arg.Any<LocationCode>()).Returns(new ReferenceLocationDefinition(
                 code: new LocationCode("test-location"),
-                displayName: "Test Location"
+                displayName: "Test Location",
+                domain: MovementDomain.Earth
             ));
 
             var disasterBonusKeyCatalog = Substitute.For<IDisasterBonusKeyDefinitionCatalog>();

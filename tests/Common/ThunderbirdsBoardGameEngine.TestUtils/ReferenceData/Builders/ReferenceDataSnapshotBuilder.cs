@@ -20,6 +20,7 @@ public sealed class ReferenceDataSnapshotBuilder
     private readonly List<ReferenceCharacterDefinition> _characters = [];
     private readonly List<ReferenceThunderbirdDefinition> _thunderbirds = [];
     private readonly List<ReferencePodVehicleDefinition> _podVehicles = [];
+    private readonly List<ReferenceMapEdgeDefinition> _mapEdges = [];
 
     public static ReferenceDataSnapshotBuilder Valid()
     {
@@ -59,11 +60,13 @@ public sealed class ReferenceDataSnapshotBuilder
 
     public ReferenceDataSnapshotBuilder WithLocation(
         string code,
-        string displayName)
+        string displayName,
+        MovementDomain domain = MovementDomain.Earth)
     {
         _locations.Add(new ReferenceLocationDefinition(
             new LocationCode(code),
-            displayName));
+            displayName,
+            domain));
 
         return this;
     }
@@ -95,11 +98,15 @@ public sealed class ReferenceDataSnapshotBuilder
 
     public ReferenceDataSnapshotBuilder WithThunderbird(
         string code,
-        string displayName)
+        string displayName,
+        MovementDomain domain = MovementDomain.Earth,
+        int topSpeed = 0)
     {
         _thunderbirds.Add(new ReferenceThunderbirdDefinition(
             new ThunderbirdCode(code),
-            displayName));
+            displayName,
+            domain,
+            topSpeed));
 
         return this;
     }
@@ -170,6 +177,25 @@ public sealed class ReferenceDataSnapshotBuilder
         return this;
     }
 
+    public ReferenceDataSnapshotBuilder WithMapEdge(
+        string edge1,
+        string edge2,
+        MovementDomain domain = MovementDomain.Earth)
+    {
+        _mapEdges.Add(new ReferenceMapEdgeDefinition(
+            new LocationCode(edge1),
+            new LocationCode(edge2),
+            domain));
+
+        return this;
+    }
+
+    public ReferenceDataSnapshotBuilder WithoutMapEdges()
+    {
+        _mapEdges.Clear();
+        return this;
+    }
+
     public ReferenceDataSnapshot Build()
     {
         return new ReferenceDataSnapshot(
@@ -181,6 +207,7 @@ public sealed class ReferenceDataSnapshotBuilder
             LocationDefinitions: _locations,
             CharacterDefinitions: _characters,
             ThunderbirdDefinitions: _thunderbirds,
-            PodVehicleDefinitions: _podVehicles);
+            PodVehicleDefinitions: _podVehicles,
+            MapEdgeDefinitions: _mapEdges);
     }
 }

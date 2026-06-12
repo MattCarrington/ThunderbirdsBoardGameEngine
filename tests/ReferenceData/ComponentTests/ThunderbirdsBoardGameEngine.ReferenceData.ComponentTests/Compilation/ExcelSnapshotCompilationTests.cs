@@ -51,6 +51,7 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.ComponentTests.Compilation
                 Assert.NotEmpty(snapshot.LocationDefinitions);
                 Assert.NotEmpty(snapshot.ThunderbirdDefinitions);
                 Assert.NotEmpty(snapshot.PodVehicleDefinitions);
+                Assert.NotEmpty(snapshot.MapEdgeDefinitions);
             }
             finally
             {

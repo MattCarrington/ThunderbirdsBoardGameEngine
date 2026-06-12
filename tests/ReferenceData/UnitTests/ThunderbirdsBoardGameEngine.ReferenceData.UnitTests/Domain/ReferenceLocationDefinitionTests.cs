@@ -1,4 +1,5 @@
-﻿using ThunderbirdsBoardGameEngine.ReferenceData.Identities;
+﻿using ThunderbirdsBoardGameEngine.ReferenceData.Enums;
+using ThunderbirdsBoardGameEngine.ReferenceData.Identities;
 using ThunderbirdsBoardGameEngine.ReferenceData.Model;
 using ThunderbirdsBoardGameEngine.TestUtils.xUnit.ClassData;
 using Xunit;
@@ -19,12 +20,14 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.UnitTests.Domain
             // Act
             var result = new ReferenceLocationDefinition(
                 code: ValidLocationCode,
-                displayName: ValidDisplayName
+                displayName: ValidDisplayName,
+                domain: MovementDomain.Earth
             );
 
             // Assert
             Assert.Equal(ValidLocationCode, result.Code);
             Assert.Equal(ValidDisplayName, result.DisplayName);
+            Assert.Equal(MovementDomain.Earth, result.Domain);
         }
 
         [Theory]
@@ -36,7 +39,8 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.UnitTests.Domain
             // Act & Assert
             Assert.ThrowsAny<ArgumentException>(() => new ReferenceLocationDefinition(
                 code: ValidLocationCode,
-                displayName: displayName
+                displayName: displayName,
+                domain: MovementDomain.Earth
             ));
         }
     }

@@ -27,7 +27,11 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Readers
                     continue;
                 }
 
-                thunderbirds.Add(new ThunderbirdInput(name));
+                var topSpeed = row.Cell(columnMap["Top Speed"]).GetValue<int>();
+
+                var movementDomain = row.Cell(columnMap["Domain"]).GetString();
+
+                thunderbirds.Add(new ThunderbirdInput(name, topSpeed, movementDomain));
             }
 
             return thunderbirds;

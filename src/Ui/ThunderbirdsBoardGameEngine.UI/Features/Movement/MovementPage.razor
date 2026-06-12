@@ -1,0 +1,44 @@
+﻿@page "/movement"
+@using ThunderbirdsBoardGameEngine.UI.Features.Movement.Components
+
+<h3>Movement</h3>
+
+<ThunderbirdSelector 
+    Thunderbirds="_mobileThunderbirds"
+    SelectedThunderbirdCode="_thunderbirdCode"
+    SelectedThunderbirdCodeChanged="OnThunderbirdChanged"/>
+
+@if (!string.IsNullOrEmpty(_thunderbirdCode))
+{
+    <LocationSelector LocationId="startLocation"
+                      LocationTitle="Start Location"
+                      Locations="_movementLocations"
+                      SelectedLocationKey="_startLocationCode"
+                      SelectedLocationKeyChanged="OnStartLocationChanged" />
+
+    <LocationSelector LocationId="destination"
+                      LocationTitle="Destination"
+                      Locations="_movementLocations"
+                      SelectedLocationKey="_destinationCode"
+                      SelectedLocationKeyChanged="OnDestinationChanged" />
+
+    <button class="btn btn-primary mt-3"
+            data-testid="calculate-button"
+            disabled="@IsValidationDisabled"
+            @onclick="ValidateMovement">
+        Validate Movement
+    </button>
+
+    @if (_validationResult is not null)
+    {
+        <MovementResultDetail MovementResult="_validationResult" />
+    }
+
+    @if (_validationFailed)
+    {
+        <div class="alert alert-danger mt-3"
+             data-testid="validation-error">            
+            <p>There was an error validating the movement. Please check the inputs and try again.</p>
+        </div>
+    }
+}
