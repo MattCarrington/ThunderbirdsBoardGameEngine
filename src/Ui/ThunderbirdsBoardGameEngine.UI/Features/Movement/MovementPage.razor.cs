@@ -18,9 +18,9 @@ namespace ThunderbirdsBoardGameEngine.UI.Features.Movement
         private IReadOnlyList<ThunderbirdMovementOptions> _mobileThunderbirds = Array.Empty<ThunderbirdMovementOptions>();
         private IReadOnlyList<MovementLocationOptions> _movementLocations = Array.Empty<MovementLocationOptions>();
 
-        private string? _thunderbirdCode;
-        private string? _startLocationCode;
-        private string? _destinationCode;
+        private string? _thunderbirdCode = string.Empty;
+        private string? _startLocationCode = string.Empty;
+        private string? _destinationCode = string.Empty;
 
         private MovementResultViewModel? _validationResult;
         private bool _isValidating = false;
