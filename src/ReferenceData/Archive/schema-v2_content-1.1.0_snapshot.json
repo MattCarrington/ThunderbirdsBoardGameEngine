@@ -1,8 +1,8 @@
 {
-  "schemaVersion": 3,
-  "contentVersion": "1.2.0",
-  "generatedAt": "2026-06-13T18:37:46.3158318+00:00",
-  "generatorVersion": "1.2.0",
+  "schemaVersion": 2,
+  "contentVersion": "1.1.0",
+  "generatedAt": "2026-06-05T11:52:29.3725675+00:00",
+  "generatorVersion": "1.1.0",
   "characterDefinitions": [
     {
       "code": "scott",
@@ -1234,130 +1234,6 @@
       "edge1": "mars",
       "edge2": "asteroid-belt",
       "edgeType": "space"
-    }
-  ],
-  "fabCardDefinitions": [
-    {
-      "code": "underwater-sealing-unit",
-      "displayName": "Underwater Sealing Unit"
-    },
-    {
-      "code": "holiday-in-bonga-bonga",
-      "displayName": "Holiday in Bonga Bonga"
-    },
-    {
-      "code": "mobile-command-unit",
-      "displayName": "Mobile Command Unit"
-    },
-    {
-      "code": "astronaut-spacewalk",
-      "displayName": "Astronaut Spacewalk"
-    },
-    {
-      "code": "grandma-s-cooking",
-      "displayName": "Grandma\u0027s Cooking"
-    },
-    {
-      "code": "experimental-fuel",
-      "displayName": "Experimental Fuel"
-    },
-    {
-      "code": "air-sea-rescue-centre",
-      "displayName": "Air Sea Rescue Centre"
-    },
-    {
-      "code": "help-from-braman",
-      "displayName": "Help from Braman"
-    },
-    {
-      "code": "powder-compact-radio",
-      "displayName": "Powder Compact Radio"
-    },
-    {
-      "code": "automatic-camera-detector",
-      "displayName": "Automatic Camera Detector"
-    },
-    {
-      "code": "tracy-brothers-portraits",
-      "displayName": "Tracy Brothers\u0027 Portraits"
-    },
-    {
-      "code": "agent-47-jeremiah-tuttle",
-      "displayName": "Agent-47 Jeremiah Tuttle"
-    },
-    {
-      "code": "fab-1-hydrofoils",
-      "displayName": "FAB 1 Hydrofoils"
-    },
-    {
-      "code": "remote-control-hover-camera",
-      "displayName": "Remote Control Hover Camera"
-    },
-    {
-      "code": "personal-hoverjet",
-      "displayName": "Personal Hoverjet"
-    },
-    {
-      "code": "sir-jeremy-hodge",
-      "displayName": "Sir Jeremy Hodge"
-    },
-    {
-      "code": "long-range-walkie-talkies",
-      "displayName": "Long-Range Walkie Talkies"
-    },
-    {
-      "code": "jeff-s-orders",
-      "displayName": "Jeff\u0027s Orders"
-    }
-  ],
-  "eventCardDefinitions": [
-    {
-      "code": "the-hood-interferes",
-      "displayName": "The Hood Interferes"
-    },
-    {
-      "code": "explosion-on-tracy-island",
-      "displayName": "Explosion on Tracy Island"
-    },
-    {
-      "code": "pod-hydraulics-sabotaged",
-      "displayName": "Pod Hydraulics Sabotaged"
-    },
-    {
-      "code": "attack-of-the-zombites",
-      "displayName": "Attack of the Zombites"
-    },
-    {
-      "code": "accidental-injury",
-      "displayName": "Accidental Injury"
-    },
-    {
-      "code": "rocket-malfunction",
-      "displayName": "Rocket Malfunction"
-    },
-    {
-      "code": "kyrano-kyrano",
-      "displayName": "Kyrano\u2026 Kyrano!!"
-    },
-    {
-      "code": "emergency-comms-interrupted",
-      "displayName": "Emergency Comms Interrupted"
-    },
-    {
-      "code": "the-hood-s-hypnotic-eyes",
-      "displayName": "The Hood\u0027s Hypnotic Eyes"
-    },
-    {
-      "code": "usn-sentinel-missile-strike",
-      "displayName": "USN Sentinel Missile Strike"
-    },
-    {
-      "code": "master-of-disguise",
-      "displayName": "Master of Disguise"
-    },
-    {
-      "code": "icelandic-volcano-eruption",
-      "displayName": "Icelandic Volcano Eruption"
     }
   ]
 }

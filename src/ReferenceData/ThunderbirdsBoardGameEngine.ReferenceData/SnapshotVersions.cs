@@ -12,7 +12,7 @@
         /// This version must match between the compiler and runtime to ensure compatibility.
         /// Increment this value when making breaking changes to the snapshot structure.
         /// </remarks>
-        public const int SchemaVersion = 2;
+        public const int SchemaVersion = 3;
 
         /// <summary>
         /// The version of the compiler tool that generates snapshots.
@@ -20,7 +20,7 @@
         /// <remarks>
         /// Currently hardcoded for simplicity. Future versions may derive this from assembly metadata.
         /// </remarks>
-        public const string GeneratorVersion = "1.1.0";
+        public const string GeneratorVersion = "1.2.0";
 
         /// <summary>
         /// The default content version for generated snapshots.
@@ -29,6 +29,6 @@
         /// Currently hardcoded for simplicity. Future versions may use semantic versioning 
         /// or timestamp-based versioning.
         /// </remarks>
-        public const string ContentVersion = "1.1.0";
+        public const string ContentVersion = "1.2.0";
     }
 }
