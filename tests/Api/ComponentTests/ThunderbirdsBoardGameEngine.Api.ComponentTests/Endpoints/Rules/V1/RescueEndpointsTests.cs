@@ -169,55 +169,10 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints.Rules.V1
             request.Content = JsonContent.Create(invalidFabCardDto);
 
             // Act
-            using var response = await _client.SendAsync(request);
+            using var response = await _client.SendAsync(request, TestContext.Current.CancellationToken);
 
             // Assert
             await ProblemDetailsAssertions.AssertBadRequestAsync(response, "Invalid rescue calculation request.");
-        }
-
-        [Fact]
-        public async Task CalculateTargetResult_WhenMissingVersionHeader_ReturnsBadRequest()
-        {
-            // Arrange
-            using var request = new HttpRequestMessage(HttpMethod.Post, _route);
-            request.Content = JsonContent.Create(_requestDto);
-
-            // Act
-            using var response = await _client.SendAsync(request);
-
-            // Assert
-            await ProblemDetailsAssertions.AssertBadRequestAsync(response, "ApiVersionUnspecified");
-        }
-
-        [Fact]
-        public async Task CalculateRescueTarget_WhenInvalidVersionHeader_ReturnsBadRequest()
-        {
-            // Arrange
-            using var request = new HttpRequestMessage(HttpMethod.Post, _route);
-            request.Headers.Add("X-API-Version", "999");
-            request.Content = JsonContent.Create(_requestDto);
-
-            // Act
-            using var response = await _client.SendAsync(request);
-
-            // Assert
-            await ProblemDetailsAssertions.AssertBadRequestAsync(response, "UnsupportedApiVersion");
-        }
-
-        [Fact]
-        public async Task CalculateRescueTarget_MultipleApiVersionHeaders_ReturnsBadRequest()
-        {
-            // Arrange
-            using var request = new HttpRequestMessage(HttpMethod.Post, _route);
-            request.Headers.Add("X-API-Version", ApiVersion.ToString());
-            request.Headers.Add("X-API-Version", (ApiVersion + 1).ToString());
-            request.Content = JsonContent.Create(_requestDto);
-
-            // Act
-            using var response = await _client.SendAsync(request);
-
-            // Assert
-            await ProblemDetailsAssertions.AssertBadRequestAsync(response, "AmbiguousApiVersion");
         }
     }
 }

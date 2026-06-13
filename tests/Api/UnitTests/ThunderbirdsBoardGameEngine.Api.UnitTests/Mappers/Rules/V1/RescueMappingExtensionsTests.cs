@@ -88,7 +88,7 @@ namespace ThunderbirdsBoardGameEngine.Api.UnitTests.Mappers.Rules.V1
 
         [Theory]
         [ClassData(typeof(NullOrWhitespaceStringData))]
-        public void ToQuery_PlayedFabCardsContainsNullOrWhiteSpace_ThrowsBadRequestException(string card)
+        public void ToQuery_PlayedFabCardsContainsNullOrWhiteSpace_ThrowsBadRequestException(string? card)
         {
             var dto = new CalculateRescueTargetRequestDto
             {
@@ -103,7 +103,7 @@ namespace ThunderbirdsBoardGameEngine.Api.UnitTests.Mappers.Rules.V1
 
         [Theory]
         [ClassData(typeof(NullOrWhitespaceStringData))]
-        public void ToQuery_ActiveEventCardsContainsNullOrWhiteSpace_ThrowsBadRequestException(string card)
+        public void ToQuery_ActiveEventCardsContainsNullOrWhiteSpace_ThrowsBadRequestException(string? card)
         {
             var dto = new CalculateRescueTargetRequestDto
             {
