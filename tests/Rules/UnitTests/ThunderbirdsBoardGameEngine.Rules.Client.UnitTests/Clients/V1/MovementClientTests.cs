@@ -4,7 +4,6 @@ using ThunderbirdsBoardGameEngine.Client.Infrastructure;
 using ThunderbirdsBoardGameEngine.Rules.Client.Clients.V1;
 using ThunderbirdsBoardGameEngine.Rules.Client.UnitTests.Helpers;
 using ThunderbirdsBoardGameEngine.Rules.Contracts.Dtos.Movement.ValidateMovement.V1;
-using ThunderbirdsBoardGameEngine.Rules.Contracts.Dtos.Rescue.CalculateRescueTarget.V1;
 using ThunderbirdsBoardGameEngine.TestUtils.Stubs;
 using ThunderbirdsBoardGameEngine.TestUtils.xUnit.ClassData;
 
@@ -12,6 +11,8 @@ namespace ThunderbirdsBoardGameEngine.Rules.Client.UnitTests.Clients.V1
 {
     public class MovementClientTests
     {
+        private const string ThunderbirdCode = "thunderbird-001";
+
         [Fact]
         public async Task ValidateMovementAsync_WhenCalled_ShouldCallCorrectEndpoint()
         {
@@ -22,13 +23,13 @@ namespace ThunderbirdsBoardGameEngine.Rules.Client.UnitTests.Clients.V1
 
             var client = CreateMovementClient(stubHandler, apiResult);
 
-            var (thunderbirdCode, request) = CreateRequest();
+            var request = CreateRequest();
 
             // Act
-            _ = await client.ValidateMovementAsync(thunderbirdCode, request, TestContext.Current.CancellationToken);
+            _ = await client.ValidateMovementAsync(ThunderbirdCode, request, TestContext.Current.CancellationToken);
 
             // Assert
-            Assert.Equal($"http://localhost/api/rules/movement/{thunderbirdCode}/validate", stubHandler.CapturedRequest?.RequestUri?.ToString());
+            Assert.Equal($"http://localhost/api/rules/movement/{ThunderbirdCode}/validate", stubHandler.CapturedRequest?.RequestUri?.ToString());
         }
 
         [Fact]
@@ -48,10 +49,10 @@ namespace ThunderbirdsBoardGameEngine.Rules.Client.UnitTests.Clients.V1
 
             var client = new MovementClient(httpClient, handler);
 
-            var (thunderbirdCode, request) = CreateRequest();
+            var request = CreateRequest();
 
             // Act
-            _ = await client.ValidateMovementAsync(thunderbirdCode, request, TestContext.Current.CancellationToken);
+            _ = await client.ValidateMovementAsync(ThunderbirdCode, request, TestContext.Current.CancellationToken);
 
             // Assert
             await handler.Received(1).HandleResponseAsync<ValidateMovementResponseDto>(Arg.Any<HttpResponseMessage>(), Arg.Any<CancellationToken>());
@@ -70,10 +71,10 @@ namespace ThunderbirdsBoardGameEngine.Rules.Client.UnitTests.Clients.V1
 
             var client = CreateMovementClient(apiResult);
 
-            var (thunderbirdCode, request) = CreateRequest();
+            var request = CreateRequest();
 
             // Act
-            var result = await client.ValidateMovementAsync(thunderbirdCode, request, TestContext.Current.CancellationToken);
+            var result = await client.ValidateMovementAsync(ThunderbirdCode, request, TestContext.Current.CancellationToken);
 
             // Assert
             Assert.NotNull(result);
@@ -101,10 +102,10 @@ namespace ThunderbirdsBoardGameEngine.Rules.Client.UnitTests.Clients.V1
 
             var client = CreateMovementClient(apiResult);
 
-            var (cardCode, request) = CreateRequest();
+            var request = CreateRequest();
 
             // Act
-            var result = await client.ValidateMovementAsync(cardCode, request, TestContext.Current.CancellationToken);
+            var result = await client.ValidateMovementAsync(ThunderbirdCode, request, TestContext.Current.CancellationToken);
 
             // Assert
             Assert.NotNull(result);
@@ -159,13 +160,11 @@ namespace ThunderbirdsBoardGameEngine.Rules.Client.UnitTests.Clients.V1
 
             var client = CreateMovementClient(apiResult);
 
-            var thunderbirdCode = "thunderbird-001";
-
             // Act & Assert
-            await Assert.ThrowsAsync<ArgumentNullException>(() => client.ValidateMovementAsync(thunderbirdCode, null!, TestContext.Current.CancellationToken));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => client.ValidateMovementAsync(ThunderbirdCode, null!, TestContext.Current.CancellationToken));
         }
 
-        private static (string, ValidateMovementRequestDto) CreateRequest()
+        private static ValidateMovementRequestDto CreateRequest()
         {
             var request = new ValidateMovementRequestDto
             {
@@ -173,9 +172,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Client.UnitTests.Clients.V1
                 DestinationLocation = "home"
             };
 
-            var thunderbirdCode = "thunderbird-001";
-
-            return (thunderbirdCode, request);
+            return request;
         }
 
         private static ApiResult<ValidateMovementResponseDto> CreateSuccessApiResult()
