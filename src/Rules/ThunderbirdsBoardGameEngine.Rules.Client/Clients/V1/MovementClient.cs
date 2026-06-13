@@ -4,6 +4,7 @@ using ThunderbirdsBoardGameEngine.Client.Infrastructure;
 using ThunderbirdsBoardGameEngine.Client.Infrastructure.Interfaces;
 using ThunderbirdsBoardGameEngine.Rules.Client.Interfaces.V1;
 using ThunderbirdsBoardGameEngine.Rules.Client.Routing.V1;
+using ThunderbirdsBoardGameEngine.Rules.Contracts.Dtos.Movement.AccessibleLocations.V1;
 using ThunderbirdsBoardGameEngine.Rules.Contracts.Dtos.Movement.ValidateMovement.V1;
 
 namespace ThunderbirdsBoardGameEngine.Rules.Client.Clients.V1
@@ -41,6 +42,23 @@ namespace ThunderbirdsBoardGameEngine.Rules.Client.Clients.V1
             using var response = await _httpClient.SendAsync(message, cancellationToken);
 
             return await _httpResponseHandler.HandleResponseAsync<ValidateMovementResponseDto>(response, cancellationToken);
+        }
+
+        public async Task<ApiResult<AccessibleLocationsResponseDto>> GetAccessibleLocationsAsync(
+            string thunderbirdCode,
+            CancellationToken cancellationToken = default)
+        {
+            ArgumentException.ThrowIfNullOrWhiteSpace(thunderbirdCode);
+
+            var encodedCode = Uri.EscapeDataString(thunderbirdCode);
+
+            var route = ApiRoutes.GetAccessibleLocations.Replace("{thunderbirdCode}", encodedCode);
+
+            using var message = new HttpRequestMessage(HttpMethod.Get, route);
+
+            using var response = await _httpClient.SendAsync(message, cancellationToken);
+
+            return await _httpResponseHandler.HandleResponseAsync<AccessibleLocationsResponseDto>(response, cancellationToken);
         }
     }
 }
