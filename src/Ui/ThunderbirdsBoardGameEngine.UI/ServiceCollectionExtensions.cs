@@ -15,12 +15,12 @@ namespace ThunderbirdsBoardGameEngine.UI
             services.AddScoped<ICharacterService, CharacterService>();
             services.AddScoped<IRescueService, RescueService>();
             services.AddScoped<IThunderbirdMovementOptionsService, ThunderbirdMovementOptionsService>();
-            services.AddScoped<IMovementLocationOptionsService, MovementLocationOptionsService>();
             services.AddScoped<IMovementClientService, MovementClientService>();
 
             services.AddSingleton<DisasterCardMapper>();
             services.AddSingleton<CharacterMapper>();
             services.AddSingleton<MovementResultMapper>();
+            services.AddSingleton<MovementLocationOptionsMapper>();
 
             return services;
         }

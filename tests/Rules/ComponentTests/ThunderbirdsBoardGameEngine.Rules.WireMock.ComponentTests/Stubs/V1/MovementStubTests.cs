@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using System.Net.Http.Json;
+using ThunderbirdsBoardGameEngine.Rules.Contracts.Dtos.Movement.AccessibleLocations.V1;
 using ThunderbirdsBoardGameEngine.Rules.Contracts.Dtos.Movement.ValidateMovement.V1;
 using ThunderbirdsBoardGameEngine.Rules.WireMock.Stubs.V1;
 using ThunderbirdsBoardGameEngine.TestUtils.xUnit.Fixtures;
@@ -37,7 +38,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.WireMock.ComponentTests.Stubs.V1
             using var client = CreateClient();
 
             // Act
-            using var response = await client.PostAsJsonAsync(MovementStub.Route, CreateValidateMovementRequest(), TestContext.Current.CancellationToken);
+            using var response = await client.PostAsJsonAsync(MovementStub.ValidateMovementRoute, CreateValidateMovementRequest(), TestContext.Current.CancellationToken);
 
             // Assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
@@ -62,7 +63,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.WireMock.ComponentTests.Stubs.V1
             using var client = CreateClient();
 
             // Act
-            using var response = await client.PostAsJsonAsync(MovementStub.Route, CreateValidateMovementRequest(), TestContext.Current.CancellationToken);
+            using var response = await client.PostAsJsonAsync(MovementStub.ValidateMovementRoute, CreateValidateMovementRequest(), TestContext.Current.CancellationToken);
 
             // Assert
             Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
@@ -83,7 +84,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.WireMock.ComponentTests.Stubs.V1
             using var client = CreateClient();
 
             // Act
-            using var response = await client.PostAsJsonAsync(MovementStub.Route, CreateValidateMovementRequest(), TestContext.Current.CancellationToken);
+            using var response = await client.PostAsJsonAsync(MovementStub.ValidateMovementRoute, CreateValidateMovementRequest(), TestContext.Current.CancellationToken);
 
             // Assert
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
@@ -103,7 +104,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.WireMock.ComponentTests.Stubs.V1
             using var client = CreateClient();
 
             // Act
-            using var response = await client.PostAsJsonAsync(MovementStub.Route, CreateValidateMovementRequest(), TestContext.Current.CancellationToken);
+            using var response = await client.PostAsJsonAsync(MovementStub.ValidateMovementRoute, CreateValidateMovementRequest(), TestContext.Current.CancellationToken);
 
             // Assert
             Assert.Equal(HttpStatusCode.InternalServerError, response.StatusCode);
@@ -125,7 +126,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.WireMock.ComponentTests.Stubs.V1
             using var client = CreateClient();
 
             // Act
-            using var response = await client.PostAsJsonAsync(MovementStub.Route, CreateValidateMovementRequest(), TestContext.Current.CancellationToken);
+            using var response = await client.PostAsJsonAsync(MovementStub.ValidateMovementRoute, CreateValidateMovementRequest(), TestContext.Current.CancellationToken);
 
             // Assert
             Assert.Equal(HttpStatusCode.ServiceUnavailable, response.StatusCode);
@@ -147,7 +148,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.WireMock.ComponentTests.Stubs.V1
             _stub.RegisterValidateMovementSuccess(dto); // should not be called
 
             // Act
-            using var response = await client.PostAsJsonAsync(MovementStub.Route, CreateValidateMovementRequest(), TestContext.Current.CancellationToken);
+            using var response = await client.PostAsJsonAsync(MovementStub.ValidateMovementRoute, CreateValidateMovementRequest(), TestContext.Current.CancellationToken);
 
             // Assert
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
@@ -170,7 +171,124 @@ namespace ThunderbirdsBoardGameEngine.Rules.WireMock.ComponentTests.Stubs.V1
             using var client = CreateClient("2.0");
 
             // Act
-            using var response = await client.PostAsJsonAsync(MovementStub.Route, CreateValidateMovementRequest(), TestContext.Current.CancellationToken);
+            using var response = await client.PostAsJsonAsync(MovementStub.ValidateMovementRoute, CreateValidateMovementRequest(), TestContext.Current.CancellationToken);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+
+            var problem = await response.Content.ReadFromJsonAsync<ProblemDetails>(cancellationToken: TestContext.Current.CancellationToken);
+            Assert.NotNull(problem);
+            Assert.Equal(StatusCodes.Status400BadRequest, problem.Status);
+            Assert.Contains("Unsupported version in header", problem.Title);
+        }
+
+        [Fact]
+        public async Task GetAccessibleLocations_WhenSuccessSpecified_ReturnsSuccess()
+        {
+            // Arrange
+            var dto = new AccessibleLocationsResponseDto
+            {
+                AccessibleLocations = new List<string> { "HQ", "City", "Village" }
+            };
+
+            _stub.RegisterGetAccessibleLocationsSuccess(dto);
+
+            using var client = CreateClient();
+
+            // Act
+            using var response = await client.GetAsync(MovementStub.GetAccessibleLocationsRoute, TestContext.Current.CancellationToken);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+            var result = await response.Content.ReadFromJsonAsync<AccessibleLocationsResponseDto>(cancellationToken: TestContext.Current.CancellationToken);
+            Assert.NotNull(result);
+            Assert.Equal(dto.AccessibleLocations, result.AccessibleLocations);
+        }
+
+        [Fact]
+        public async Task GetAccessibleLocations_WhenErrorUnspecified_ReturnsError()
+        {
+            // Arrange
+            _stub.RegisterGetAccessibleLocationsError();
+
+            using var client = CreateClient();
+
+            // Act
+            using var response = await client.GetAsync(MovementStub.GetAccessibleLocationsRoute, TestContext.Current.CancellationToken);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.InternalServerError, response.StatusCode);
+
+            var problem = await response.Content.ReadFromJsonAsync<ProblemDetails>(cancellationToken: TestContext.Current.CancellationToken);
+            Assert.NotNull(problem);
+            Assert.Equal(StatusCodes.Status500InternalServerError, problem.Status);
+            Assert.Equal("An unexpected error occurred.", problem.Title);
+        }
+
+        [Fact]
+        public async Task GetAccessibleLocations_WhenErrorSpecified_ReturnsError()
+        {
+            // Arrange
+            var errorMessage = "The service is unavailable right now";
+
+            _stub.RegisterGetAccessibleLocationsError(HttpStatusCode.ServiceUnavailable, errorMessage);
+
+            using var client = CreateClient();
+
+            // Act
+            using var response = await client.GetAsync(MovementStub.GetAccessibleLocationsRoute, TestContext.Current.CancellationToken);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.ServiceUnavailable, response.StatusCode);
+
+            var problem = await response.Content.ReadFromJsonAsync<ProblemDetails>(cancellationToken: TestContext.Current.CancellationToken);
+            Assert.NotNull(problem);
+            Assert.Equal(StatusCodes.Status503ServiceUnavailable, problem.Status);
+            Assert.Equal(errorMessage, problem.Title);
+        }
+
+        [Fact]
+        public async Task GetAccessibleLocations_WhenNoVersionHeader_ReturnsBadRequestAsync()
+        {
+            // Arrange
+            using var client = new HttpClient { BaseAddress = new Uri(_server.Urls[0]) };
+
+            var dto = new AccessibleLocationsResponseDto
+            {
+                AccessibleLocations = new List<string> { "HQ", "City", "Village" }
+            };
+
+            _stub.RegisterGetAccessibleLocationsSuccess(dto); // should not be called
+
+            // Act
+            using var response = await client.GetAsync(MovementStub.GetAccessibleLocationsRoute, TestContext.Current.CancellationToken);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+
+            var problem = await response.Content.ReadFromJsonAsync<ProblemDetails>(cancellationToken: TestContext.Current.CancellationToken);
+            Assert.NotNull(problem);
+            Assert.Contains("Missing header", problem.Detail);
+            Assert.Equal(StatusCodes.Status400BadRequest, problem.Status);
+            Assert.Equal("Missing API version header", problem.Title);
+        }
+
+        [Fact]
+        public async Task GetAccessibleLocations_WhenWrongVersionHeader_ReturnsBadRequestAsync()
+        {
+            // Arrange
+            var dto = new AccessibleLocationsResponseDto
+            {
+                AccessibleLocations = new List<string> { "HQ", "City", "Village" }
+            };
+
+            _stub.RegisterGetAccessibleLocationsSuccess(dto); // should not be called
+
+            using var client = CreateClient("2.0");
+
+            // Act
+            using var response = await client.GetAsync(MovementStub.GetAccessibleLocationsRoute, TestContext.Current.CancellationToken);
 
             // Assert
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);

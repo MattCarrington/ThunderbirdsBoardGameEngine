@@ -14,5 +14,14 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.Movement
                 .Where(edge => edge.Edge1 == location || edge.Edge2 == location)
                 .Select(edge => edge.Edge1 == location ? edge.Edge2 : edge.Edge1);
         }
+
+        public IReadOnlyCollection<LocationCode> GetAccessibleLocationsForDomain(MovementDomain domain)
+        {
+            return Edges
+                .Where(edge => edge.EdgeType == domain)
+                .SelectMany(edge => new[] { edge.Edge1, edge.Edge2 })
+                .Distinct()
+                .ToList();
+        }
     }
 }

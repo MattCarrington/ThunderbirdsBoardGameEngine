@@ -107,7 +107,7 @@ namespace ThunderbirdsBoardGameEngine.PlaywrightTests.Features
         
         private static global::Reqnroll.Formatters.RuntimeSupport.FeatureLevelCucumberMessages InitializeCucumberMessages()
         {
-            return new global::Reqnroll.Formatters.RuntimeSupport.FeatureLevelCucumberMessages("Features/ValidateMovement.feature.ndjson", 4);
+            return new global::Reqnroll.Formatters.RuntimeSupport.FeatureLevelCucumberMessages("Features/ValidateMovement.feature.ndjson", 3);
         }
         
         async System.Threading.Tasks.ValueTask Xunit.IAsyncLifetime.InitializeAsync()
@@ -172,46 +172,6 @@ this.ScenarioInitialize(scenarioInfo, ruleInfo);
 #line hidden
 #line 12
  await testRunner.ThenAsync("the validation success result should be displayed", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
-#line hidden
-            }
-            await this.ScenarioCleanupAsync();
-        }
-        
-        [global::Xunit.FactAttribute(DisplayName="Player can validate movement route is invalid")]
-        [global::Xunit.TraitAttribute("FeatureTitle", "ValidateMovement")]
-        [global::Xunit.TraitAttribute("Description", "Player can validate movement route is invalid")]
-        public async global::System.Threading.Tasks.Task PlayerCanValidateMovementRouteIsInvalid()
-        {
-            string[] tagsOfScenario = ((string[])(null));
-            global::System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new global::System.Collections.Specialized.OrderedDictionary();
-            string pickleIndex = "1";
-            global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("Player can validate movement route is invalid", null, tagsOfScenario, argumentsOfScenario, featureTags, pickleIndex);
-            string[] tagsOfRule = ((string[])(null));
-            global::Reqnroll.RuleInfo ruleInfo = null;
-#line 14
-this.ScenarioInitialize(scenarioInfo, ruleInfo);
-#line hidden
-            if ((global::Reqnroll.TagHelper.ContainsIgnoreTag(scenarioInfo.CombinedTags) || global::Reqnroll.TagHelper.ContainsIgnoreTag(featureTags)))
-            {
-                await testRunner.SkipScenarioAsync();
-            }
-            else
-            {
-                await this.ScenarioStartAsync();
-#line 15
- await testRunner.GivenAsync("\"Thunderbird 2\" is selected", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
-#line hidden
-#line 16
- await testRunner.AndAsync("\"The Sun\" is selected as the start location", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
-#line hidden
-#line 17
- await testRunner.AndAsync("\"The Moon\" is selected as the destination", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
-#line hidden
-#line 18
- await testRunner.WhenAsync("the movement is validated", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
-#line hidden
-#line 19
- await testRunner.ThenAsync("the validation failure result should be displayed", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
             }
             await this.ScenarioCleanupAsync();

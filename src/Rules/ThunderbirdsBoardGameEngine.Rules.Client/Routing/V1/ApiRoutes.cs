@@ -5,5 +5,7 @@
         public const string RescueTarget = "api/rules/rescue/{disasterCardCode}/target";
 
         public const string ValidateMovement = "api/rules/movement/{thunderbirdCode}/validate";
+
+        public const string GetAccessibleLocations = "api/rules/movement/{thunderbirdCode}/accessible-locations";
     }
 }

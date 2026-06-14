@@ -65,6 +65,26 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.Movement
             Assert.Empty(result);
         }
 
+        [Theory]
+        [InlineData(MovementDomain.Earth, new[] { "A", "B", "C", "D" })]
+        [InlineData(MovementDomain.Space, new[] { "A", "D" })]
+        public void GetAccessibleLocationsForDomain_WhenCalled_ReturnsExpectedLocations(MovementDomain domain, string[] expectedLocations)
+        {
+            // Arrange
+            var topography = CreateTopography();
+
+            // Act
+            var result = topography.GetAccessibleLocationsForDomain(domain);
+
+            // Assert
+            Assert.Equal(expectedLocations.Length, result.Count);
+
+            foreach (var location in expectedLocations)
+            {
+                Assert.Contains(new LocationCode(location), result);
+            }
+        }
+
         private static Topography CreateTopography()
         {
             var edges = new List<ReferenceMapEdgeDefinition>

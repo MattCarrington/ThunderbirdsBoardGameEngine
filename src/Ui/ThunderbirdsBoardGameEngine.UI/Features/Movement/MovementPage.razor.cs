@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
+using ThunderbirdsBoardGameEngine.ReferenceData.Identities;
 using ThunderbirdsBoardGameEngine.UI.Features.Movement.Interfaces;
 using ThunderbirdsBoardGameEngine.UI.Features.Movement.Models;
 
@@ -8,9 +9,6 @@ namespace ThunderbirdsBoardGameEngine.UI.Features.Movement
     {
         [Inject]
         public IThunderbirdMovementOptionsService ThunderbirdService { get; set; } = null!;
-
-        [Inject]
-        public IMovementLocationOptionsService LocationService { get; set; } = null!;
 
         [Inject]
         public IMovementClientService MovementService { get; set; } = null!;
@@ -35,7 +33,6 @@ namespace ThunderbirdsBoardGameEngine.UI.Features.Movement
         protected override void OnInitialized()
         {
             _mobileThunderbirds = ThunderbirdService.GetAllMobileVehicles();
-            _movementLocations = LocationService.GetAll();
         }
 
         private async Task ValidateMovement()
@@ -67,10 +64,32 @@ namespace ThunderbirdsBoardGameEngine.UI.Features.Movement
             }
         }
 
-        private void OnThunderbirdChanged(string? value)
+        private async Task OnThunderbirdChanged(string? thunderbirdCode)
         {
-            _thunderbirdCode = value;
+            _thunderbirdCode = thunderbirdCode;
+
+            _startLocationCode = string.Empty;
+            _destinationCode = string.Empty;
+            _movementLocations = Array.Empty<MovementLocationOptions>();
+
             ClearValidationState();
+
+            if (string.IsNullOrWhiteSpace(thunderbirdCode))
+            {
+                return;
+            }
+
+            var requestedThunderbirdCode = thunderbirdCode;
+
+            var locations =
+                await MovementService.GetAccessibleLocationsAsync(requestedThunderbirdCode);
+
+            if (_thunderbirdCode != requestedThunderbirdCode)
+            {
+                return;
+            }
+
+            _movementLocations = locations;
         }
 
         private void OnStartLocationChanged(string? value)

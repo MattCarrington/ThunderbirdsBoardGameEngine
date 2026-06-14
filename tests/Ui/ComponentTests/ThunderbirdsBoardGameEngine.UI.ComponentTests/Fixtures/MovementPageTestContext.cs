@@ -10,16 +10,12 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Fixtures
         public IThunderbirdMovementOptionsService ThunderbirdService { get; }
             = Substitute.For<IThunderbirdMovementOptionsService>();
 
-        public IMovementLocationOptionsService LocationService { get; }
-            = Substitute.For<IMovementLocationOptionsService>();
-
         public IMovementClientService MovementService { get; }
             = Substitute.For<IMovementClientService>();
 
         public MovementPageTestContext(BunitContext context)
         {
             context.Services.AddSingleton(ThunderbirdService);
-            context.Services.AddSingleton(LocationService);
             context.Services.AddSingleton(MovementService);
         }
     }

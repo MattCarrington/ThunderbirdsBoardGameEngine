@@ -14,13 +14,15 @@
                       LocationTitle="Start Location"
                       Locations="_movementLocations"
                       SelectedLocationKey="_startLocationCode"
-                      SelectedLocationKeyChanged="OnStartLocationChanged" />
+                      SelectedLocationKeyChanged="OnStartLocationChanged" 
+                      @key="@($"start-{_thunderbirdCode}")" />
 
     <LocationSelector LocationId="destination"
                       LocationTitle="Destination"
                       Locations="_movementLocations"
                       SelectedLocationKey="_destinationCode"
-                      SelectedLocationKeyChanged="OnDestinationChanged" />
+                      SelectedLocationKeyChanged="OnDestinationChanged"
+                      @key="@($"destination-{_thunderbirdCode}")" />
 
     <button class="btn btn-primary mt-3"
             data-testid="calculate-button"

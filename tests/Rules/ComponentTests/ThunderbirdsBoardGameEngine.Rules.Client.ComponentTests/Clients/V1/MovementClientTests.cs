@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using System.Net;
 using ThunderbirdsBoardGameEngine.Rules.Client.Interfaces.V1;
+using ThunderbirdsBoardGameEngine.Rules.Contracts.Dtos.Movement.AccessibleLocations.V1;
 using ThunderbirdsBoardGameEngine.Rules.Contracts.Dtos.Movement.ValidateMovement.V1;
 using ThunderbirdsBoardGameEngine.Rules.WireMock;
 using ThunderbirdsBoardGameEngine.TestUtils.Rules.Factories;
@@ -127,6 +128,63 @@ namespace ThunderbirdsBoardGameEngine.Rules.Client.ComponentTests.Clients.V1
             // Assert           
             Assert.False(response.Success);
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+            Assert.Null(response.Data);
+            Assert.NotNull(response.ErrorMessage);
+        }
+
+        [Fact]
+        public async Task GetAccessibleLocationsAsync_WhenValidResponse_ReturnsSuccessApiResult()
+        {
+            // Arrange
+            var dto = new AccessibleLocationsResponseDto()
+            {
+                AccessibleLocations = ["europe", "asia", "africa"]
+            };
+
+            _host.MovementStub().RegisterGetAccessibleLocationsSuccess(dto);
+
+            // Act
+            var response = await _client.GetAccessibleLocationsAsync(ThunderbirdCode, TestContext.Current.CancellationToken);
+
+            // Assert
+            Assert.NotNull(response);
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            Assert.True(response.Success);
+            Assert.Null(response.ErrorMessage);
+
+            var result = Assert.IsType<AccessibleLocationsResponseDto>(response.Data);
+            Assert.NotNull(result);
+            Assert.Equal(dto.AccessibleLocations, result.AccessibleLocations);
+        }
+
+        [Fact]
+        public async Task GetAccessibleLocationsAsync_WhenServerError_ReturnsFailureApiResult()
+        {
+            // Arrange
+            _host.MovementStub().RegisterGetAccessibleLocationsError();
+
+            // Act
+            var response = await _client.GetAccessibleLocationsAsync(ThunderbirdCode, TestContext.Current.CancellationToken);
+
+            // Assert           
+            Assert.False(response.Success);
+            Assert.Equal(HttpStatusCode.InternalServerError, response.StatusCode);
+            Assert.Null(response.Data);
+            Assert.NotNull(response.ErrorMessage);
+        }
+
+        [Fact]
+        public async Task GetAccessibleLocationsAsync_WhenNotFound_ReturnsFailureApiResult()
+        {
+            // Arrange
+            _host.MovementStub().RegisterGetAccessibleLocationsNotFound();
+
+            // Act
+            var response = await _client.GetAccessibleLocationsAsync(ThunderbirdCode, TestContext.Current.CancellationToken);
+
+            // Assert           
+            Assert.False(response.Success);
+            Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
             Assert.Null(response.Data);
             Assert.NotNull(response.ErrorMessage);
         }
