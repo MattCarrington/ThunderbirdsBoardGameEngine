@@ -6,7 +6,7 @@
     <Nullable>enable</Nullable>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
     <PackageId>ThunderbirdsBoardGameEngine.Rules.Contracts</PackageId>
-    <Version>0.3.0</Version>
+    <Version>0.4.0</Version>
     <Authors>Matthew Carrington</Authors>
     <Description>Public DTO contracts for the Thunderbirds Board Game Engine rules API.</Description>
     <RepositoryUrl>https://github.com/MattCarrington/ThunderbirdsBoardGameEngine</RepositoryUrl>
