@@ -9,12 +9,14 @@ namespace ThunderbirdsBoardGameEngine.UI.Features.Movement.Services
     public class MovementClientService : IMovementClientService
     {
         private readonly IMovementClient _client;
-        private readonly MovementResultMapper _mapper;
+        private readonly MovementResultMapper _resultMapper;
+        private readonly MovementLocationOptionsMapper _locationsMapper;
 
-        public MovementClientService(IMovementClient client, MovementResultMapper mapper)
+        public MovementClientService(IMovementClient client, MovementResultMapper resultMapper, MovementLocationOptionsMapper locationsMapper)
         {
             _client = client;
-            _mapper = mapper;
+            _resultMapper = resultMapper;
+            _locationsMapper = locationsMapper;
         }
 
         public async Task<MovementResultViewModel?> ValidateMovementAsync(
@@ -30,7 +32,16 @@ namespace ThunderbirdsBoardGameEngine.UI.Features.Movement.Services
 
             var result = await _client.ValidateMovementAsync(thunderbirdCode, request);
 
-            return result.Success ? _mapper.ToViewModel(result.Data!) : null;
+            return result.Success ? _resultMapper.ToViewModel(result.Data!) : null;
+        }
+
+        public async Task<IReadOnlyList<MovementLocationOptions>> GetAccessibleLocationsAsync(string thunderbirdCode)
+        {
+            var result = await _client.GetAccessibleLocationsAsync(thunderbirdCode);
+
+            return result.Success
+                ? _locationsMapper.ToViewModel(result.Data!.AccessibleLocations)
+                : Array.Empty<MovementLocationOptions>();
         }
     }
 }

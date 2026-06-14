@@ -10,9 +10,6 @@ namespace ThunderbirdsBoardGameEngine.UI.Features.Movement
         public IThunderbirdMovementOptionsService ThunderbirdService { get; set; } = null!;
 
         [Inject]
-        public IMovementLocationOptionsService LocationService { get; set; } = null!;
-
-        [Inject]
         public IMovementClientService MovementService { get; set; } = null!;
 
         private IReadOnlyList<ThunderbirdMovementOptions> _mobileThunderbirds = Array.Empty<ThunderbirdMovementOptions>();
@@ -35,7 +32,6 @@ namespace ThunderbirdsBoardGameEngine.UI.Features.Movement
         protected override void OnInitialized()
         {
             _mobileThunderbirds = ThunderbirdService.GetAllMobileVehicles();
-            _movementLocations = LocationService.GetAll();
         }
 
         private async Task ValidateMovement()
@@ -67,10 +63,21 @@ namespace ThunderbirdsBoardGameEngine.UI.Features.Movement
             }
         }
 
-        private void OnThunderbirdChanged(string? value)
+        private async Task OnThunderbirdChanged(string? value)
         {
             _thunderbirdCode = value;
+            _startLocationCode = string.Empty;
+            _destinationCode = string.Empty;
             ClearValidationState();
+
+            if (!string.IsNullOrEmpty(_thunderbirdCode))
+            {
+                _movementLocations = await MovementService.GetAccessibleLocationsAsync(_thunderbirdCode);
+            }
+            else
+            {
+                _movementLocations = Array.Empty<MovementLocationOptions>();
+            }
         }
 
         private void OnStartLocationChanged(string? value)

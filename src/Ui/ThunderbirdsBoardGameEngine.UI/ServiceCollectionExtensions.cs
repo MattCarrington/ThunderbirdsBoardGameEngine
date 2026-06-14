@@ -21,6 +21,7 @@ namespace ThunderbirdsBoardGameEngine.UI
             services.AddSingleton<DisasterCardMapper>();
             services.AddSingleton<CharacterMapper>();
             services.AddSingleton<MovementResultMapper>();
+            services.AddSingleton<MovementLocationOptionsMapper>();
 
             return services;
         }
