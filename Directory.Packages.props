@@ -28,7 +28,7 @@
     <PackageVersion Include="Microsoft.Playwright.Xunit.v3" Version="1.60.0" />
     <PackageVersion Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.23.0" />
     <PackageVersion Include="NSubstitute" Version="5.3.0" />
-    <PackageVersion Include="Pulumi" Version="3.106.2" />
+    <PackageVersion Include="Pulumi" Version="3.107.0" />
     <PackageVersion Include="Pulumi.AzureNative" Version="2.37.0" />
     <PackageVersion Include="Reqnroll.xunit.v3" Version="3.3.4" />
     <PackageVersion Include="Swashbuckle.AspNetCore" Version="6.6.2" />
