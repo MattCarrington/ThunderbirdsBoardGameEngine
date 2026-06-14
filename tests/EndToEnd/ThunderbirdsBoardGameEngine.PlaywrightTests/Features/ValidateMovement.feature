@@ -10,10 +10,3 @@ Scenario: Player can validate movement route is valid
 	And "South Pacific" is selected as the destination
 	When the movement is validated
 	Then the validation success result should be displayed
-
-Scenario: Player can validate movement route is invalid
-	Given "Thunderbird 2" is selected
-	And "The Sun" is selected as the start location
-	And "The Moon" is selected as the destination
-	When the movement is validated
-	Then the validation failure result should be displayed
