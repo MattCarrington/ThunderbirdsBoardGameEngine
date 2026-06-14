@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using ThunderbirdsBoardGameEngine.ReferenceData.Runtime;
 using ThunderbirdsBoardGameEngine.Rules.Client.Extensions;
+using ThunderbirdsBoardGameEngine.Rules.Contracts.Dtos.Movement.AccessibleLocations.V1;
 using ThunderbirdsBoardGameEngine.Rules.Contracts.Dtos.Movement.ValidateMovement.V1;
 using ThunderbirdsBoardGameEngine.Rules.WireMock;
 using ThunderbirdsBoardGameEngine.Rules.WireMock.Stubs.V1;
@@ -57,19 +58,45 @@ namespace ThunderbirdsBoardGameEngine.UI.IntegrationTests.Pages
         [Fact]
         public void LoadsMovementLocationsWhenThunderbirdSelected()
         {
-            // Arrange
+            var response = new AccessibleLocationsResponseDto
+            {
+                AccessibleLocations =
+                [
+                    "europe",
+                    "north-atlantic",
+                    "africa",
+                    "asia",
+                    "indian-ocean",
+                    "australia",
+                    "north-pacific",
+                    "south-pacific",
+                    "north-america",
+                    "south-america",
+                    "south-atlantic"
+                ]
+            };
+
+            _movementStub.RegisterGetAccessibleLocationsSuccess(response);
+
             var cut = Render<MovementPage>();
 
             cut.Find("#thunderbirdSelector").Change("fab-1");
 
-            // Act
-            var locationOptions = cut
-                .FindAll("#startLocation option")
-                .Select(o => o.TextContent.Trim())
-                .ToList();
+            cut.WaitForAssertion(() =>
+            {
+                var locationOptions = cut
+                    .FindAll("#startLocation option")
+                    .Select(o => o.TextContent.Trim())
+                    .ToList();
 
-            // Assert
-            Assert.Equal(18, locationOptions.Count - 1); // Subtract 1 for the default "Select a Location" option
+                Assert.Equal(
+                    response.AccessibleLocations.Count + 1,
+                    locationOptions.Count);
+
+                Assert.Contains("Europe", locationOptions);
+                Assert.Contains("Indian Ocean", locationOptions);
+            },
+            timeout: TimeSpan.FromSeconds(5));
         }
 
         [Fact]
