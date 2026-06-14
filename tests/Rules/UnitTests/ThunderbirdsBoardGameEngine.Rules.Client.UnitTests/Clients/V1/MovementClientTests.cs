@@ -171,7 +171,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Client.UnitTests.Clients.V1
             // Arrange
             var stubHandler = new StubHttpMessageHandler("{}", HttpStatusCode.OK);
 
-            var apiResult = CreateValidateMovementSuccessApiResult();
+            var apiResult = CreateAccessibleLocationsSuccessApiResult();
 
             var client = CreateMovementClient(stubHandler, apiResult);
 
