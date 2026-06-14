@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
+using ThunderbirdsBoardGameEngine.ReferenceData.Identities;
 using ThunderbirdsBoardGameEngine.UI.Features.Movement.Interfaces;
 using ThunderbirdsBoardGameEngine.UI.Features.Movement.Models;
 
@@ -63,21 +64,32 @@ namespace ThunderbirdsBoardGameEngine.UI.Features.Movement
             }
         }
 
-        private async Task OnThunderbirdChanged(string? value)
+        private async Task OnThunderbirdChanged(string? thunderbirdCode)
         {
-            _thunderbirdCode = value;
+            _thunderbirdCode = thunderbirdCode;
+
             _startLocationCode = string.Empty;
             _destinationCode = string.Empty;
+            _movementLocations = Array.Empty<MovementLocationOptions>();
+
             ClearValidationState();
 
-            if (!string.IsNullOrEmpty(_thunderbirdCode))
+            if (string.IsNullOrWhiteSpace(thunderbirdCode))
             {
-                _movementLocations = await MovementService.GetAccessibleLocationsAsync(_thunderbirdCode);
+                return;
             }
-            else
+
+            var requestedThunderbirdCode = thunderbirdCode;
+
+            var locations =
+                await MovementService.GetAccessibleLocationsAsync(requestedThunderbirdCode);
+
+            if (_thunderbirdCode != requestedThunderbirdCode)
             {
-                _movementLocations = Array.Empty<MovementLocationOptions>();
+                return;
             }
+
+            _movementLocations = locations;
         }
 
         private void OnStartLocationChanged(string? value)
