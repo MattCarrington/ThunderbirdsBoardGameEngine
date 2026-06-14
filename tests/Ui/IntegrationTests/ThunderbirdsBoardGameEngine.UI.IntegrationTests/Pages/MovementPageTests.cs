@@ -7,7 +7,6 @@ using ThunderbirdsBoardGameEngine.Rules.WireMock;
 using ThunderbirdsBoardGameEngine.Rules.WireMock.Stubs.V1;
 using ThunderbirdsBoardGameEngine.TestUtils.xUnit.Fixtures;
 using ThunderbirdsBoardGameEngine.UI.Features.Movement;
-using ThunderbirdsBoardGameEngine.WireMock.Hosting;
 using Xunit;
 
 namespace ThunderbirdsBoardGameEngine.UI.IntegrationTests.Pages

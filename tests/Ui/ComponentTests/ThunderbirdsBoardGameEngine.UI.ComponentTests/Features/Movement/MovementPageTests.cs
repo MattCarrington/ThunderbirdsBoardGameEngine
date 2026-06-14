@@ -10,7 +10,7 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Features.Movement
     public class MovementPageTests : BunitContext
     {
         [Fact]
-        public void CallsAppropriateServicesOnInitialization()
+        public void CallsThunderbirdServiceOnInitialization()
         {
             // Arrange
             var context = CreateTestContext();
@@ -20,7 +20,24 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Features.Movement
 
             // Assert
             context.ThunderbirdService.Received(1).GetAllMobileVehicles();
-            context.LocationService.Received(1).GetAll();
+        }
+
+        [Fact]
+        public void CallsLocationServiceWhenThunderbirdSelected()
+        {
+            // Arrange
+            var context = CreateTestContext();
+            context.ThunderbirdService.GetAllMobileVehicles().Returns(CreateThunderbirdMovementOptions());
+
+            var cut = Render<MovementPage>();
+
+            // Act
+            cut.Find("#thunderbirdSelector").Change("TB2");
+
+            // Assert
+            context.MovementService.Received(1).GetAccessibleLocationsAsync(
+                Arg.Is<string>(x => x == "TB2")
+            );
         }
 
         [Fact]
@@ -43,7 +60,7 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Features.Movement
             var context = CreateTestContext();
 
             context.ThunderbirdService.GetAllMobileVehicles().Returns(CreateThunderbirdMovementOptions());
-            context.LocationService.GetAll().Returns(CreateMovementLocationOptions());
+            context.MovementService.GetAccessibleLocationsAsync(Arg.Any<string>()).Returns(CreateMovementLocationOptions());
 
             var cut = Render<MovementPage>();
 
@@ -63,7 +80,7 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Features.Movement
             var context = CreateTestContext();
 
             context.ThunderbirdService.GetAllMobileVehicles().Returns(CreateThunderbirdMovementOptions());
-            context.LocationService.GetAll().Returns(CreateMovementLocationOptions());
+            context.MovementService.GetAccessibleLocationsAsync(Arg.Any<string>()).Returns(CreateMovementLocationOptions());
 
             var cut = Render<MovementPage>();
 
@@ -83,7 +100,7 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Features.Movement
             var context = CreateTestContext();
 
             context.ThunderbirdService.GetAllMobileVehicles().Returns(CreateThunderbirdMovementOptions());
-            context.LocationService.GetAll().Returns(CreateMovementLocationOptions());
+            context.MovementService.GetAccessibleLocationsAsync(Arg.Any<string>()).Returns(CreateMovementLocationOptions());
 
             var cut = Render<MovementPage>();
 
@@ -177,12 +194,50 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Features.Movement
             });
         }
 
+        [Fact]
+        public void LocationsChangeWhenThunderbirdChanges()
+        {
+            // Arrange
+            var context = CreateTestContext();
+            context.ThunderbirdService.GetAllMobileVehicles().Returns(CreateThunderbirdMovementOptions());
+            context.MovementService
+                .GetAccessibleLocationsAsync("TB1")
+                .Returns([
+                    new MovementLocationOptions("indian-ocean", "Indian Ocean")
+                ]);
+
+            context.MovementService
+                .GetAccessibleLocationsAsync("TB2")
+                .Returns([
+                    new MovementLocationOptions("the-sun", "The Sun")
+                ]);
+
+            var cut = Render<MovementPage>();
+
+            // Act
+            cut.Find("#thunderbirdSelector").Change("TB1");
+
+            cut.WaitForAssertion(() =>
+                Assert.Contains("Indian Ocean", cut.Markup));
+
+            cut.Find("#startLocation").Change("indian-ocean");
+
+            cut.Find("#thunderbirdSelector").Change("TB2");
+
+            // Assert
+            cut.WaitForAssertion(() =>
+            {
+                Assert.Contains("The Sun", cut.Markup);
+                Assert.DoesNotContain("Indian Ocean", cut.Markup);
+            });
+        }
+
         private MovementPageTestContext CreateTestContext()
         {
             var context = new MovementPageTestContext(this);
 
             context.ThunderbirdService.GetAllMobileVehicles().Returns(CreateThunderbirdMovementOptions());
-            context.LocationService.GetAll().Returns(CreateMovementLocationOptions());
+            context.MovementService.GetAccessibleLocationsAsync(Arg.Any<string>()).Returns(CreateMovementLocationOptions());
 
             return context;
         }

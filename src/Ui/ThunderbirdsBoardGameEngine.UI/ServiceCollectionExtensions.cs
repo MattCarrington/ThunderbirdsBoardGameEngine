@@ -15,7 +15,6 @@ namespace ThunderbirdsBoardGameEngine.UI
             services.AddScoped<ICharacterService, CharacterService>();
             services.AddScoped<IRescueService, RescueService>();
             services.AddScoped<IThunderbirdMovementOptionsService, ThunderbirdMovementOptionsService>();
-            services.AddScoped<IMovementLocationOptionsService, MovementLocationOptionsService>();
             services.AddScoped<IMovementClientService, MovementClientService>();
 
             services.AddSingleton<DisasterCardMapper>();
