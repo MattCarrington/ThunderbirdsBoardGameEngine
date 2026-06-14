@@ -23,7 +23,7 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Features.Movement
         }
 
         [Fact]
-        public void CallsLocationServiceWhenThunderbirdSelected()
+        public void CallsMovementServiceWhenThunderbirdSelected()
         {
             // Arrange
             var context = CreateTestContext();

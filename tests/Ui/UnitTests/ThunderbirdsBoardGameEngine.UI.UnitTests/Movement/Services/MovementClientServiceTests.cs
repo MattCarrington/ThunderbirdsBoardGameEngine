@@ -85,7 +85,7 @@ namespace ThunderbirdsBoardGameEngine.UI.UnitTests.Movement.Services
         }
 
         [Fact]
-        public async Task GetAccessibleLocations_WhenResponseIsSuccess_ReturnsAccessibleLocations()
+        public async Task GetAccessibleLocationsAsync_WhenResponseIsSuccess_ReturnsAccessibleLocations()
         {
             // Arrange        
             var expectedResponse = new AccessibleLocationsResponseDto
@@ -114,7 +114,7 @@ namespace ThunderbirdsBoardGameEngine.UI.UnitTests.Movement.Services
         }
 
         [Fact]
-        public async Task GetAccessibleLocations_WhenResponseIsError_ReturnsEmptyList()
+        public async Task GetAccessibleLocationsAsync_WhenResponseIsError_ReturnsEmptyList()
         {
             // Arrange        
             var apiResult = ApiResult<AccessibleLocationsResponseDto>.Failure("Error", HttpStatusCode.BadRequest);
