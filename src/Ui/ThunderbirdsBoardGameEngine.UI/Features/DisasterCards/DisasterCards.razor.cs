@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using ThunderbirdsBoardGameEngine.Rules.Contracts.Dtos.Rescue.CalculateRescueTarget.V1;
-using ThunderbirdsBoardGameEngine.UI.Features.DisasterCards.Components;
+using ThunderbirdsBoardGameEngine.UI.Features.DisasterCards.ViewModels;
 using ThunderbirdsBoardGameEngine.UI.Interfaces;
 using ThunderbirdsBoardGameEngine.UI.ViewModels;
 
@@ -17,94 +17,85 @@ namespace ThunderbirdsBoardGameEngine.UI.Features.DisasterCards
         [Inject]
         private IRescueService RescueService { get; set; } = null!;
 
-        private IReadOnlyList<DisasterCardViewModel>? cards;
-        private IReadOnlyList<CharacterViewModel>? characters;
+        private IReadOnlyList<DisasterCardViewModel> _cards = Array.Empty<DisasterCardViewModel>();
+        private IReadOnlyList<CharacterViewModel> _characters = Array.Empty<CharacterViewModel>();
 
-        private string? selectedCardCode;
-        private DisasterCardViewModel? selectedCard;
-        private string? selectedCharacter;
+        private string? _selectedCardCode = string.Empty;
+        private DisasterCardViewModel? _selectedCard;
+        private string? _selectedCharacter = string.Empty;
 
-        private HashSet<string> selectedBonusKeys = new();
+        private HashSet<string> _selectedBonusKeys = new();
 
-        private CalculateRescueTargetResponseDto? calculationResult;
-        private bool calculationFailed;
-        private bool isCalculating;
+        private CalculateRescueTargetResponseDto? _calculationResult;
+        private bool _calculationFailed;
+        private bool _isCalculating;
 
         private bool IsCalculateDisabled =>
-            isCalculating
-            || selectedCard is null
-            || string.IsNullOrWhiteSpace(selectedCharacter);
+            _isCalculating
+            || _selectedCard is null
+            || string.IsNullOrWhiteSpace(_selectedCharacter);
 
         protected override void OnInitialized()
         {
             var allCards = DisasterCardService.GetAll();
-            cards = allCards.OrderBy(c => c.DisplayName ?? string.Empty, StringComparer.OrdinalIgnoreCase).ToList();
+            _cards = allCards.OrderBy(c => c.DisplayName ?? string.Empty, StringComparer.OrdinalIgnoreCase).ToList();
 
             var allCharacters = CharacterService.GetAll();
-            characters = allCharacters.OrderBy(c => c.DisplayName ?? string.Empty, StringComparer.OrdinalIgnoreCase).ToList();
+            _characters = allCharacters.OrderBy(c => c.DisplayName ?? string.Empty, StringComparer.OrdinalIgnoreCase).ToList();
         }
 
-        private string? SelectedCardId
+        private void OnDisasterCardChanged(string disasterCard)
         {
-            get => selectedCardCode;
-            set
-            {
-                if (selectedCardCode == value)
-                {
-                    return;
-                }
+            _selectedCardCode = disasterCard;
+            _selectedBonusKeys.Clear();
+            _calculationResult = null;
 
-                selectedCardCode = value;
-                selectedBonusKeys.Clear();
-                calculationResult = null;
-
-                selectedCard = !string.IsNullOrWhiteSpace(value)
-                    ? DisasterCardService.GetByCode(value)
-                    : null;
-            }
+            _selectedCard = !string.IsNullOrWhiteSpace(disasterCard)
+                ? DisasterCardService.GetByCode(disasterCard)
+                : null;
         }
 
         private void OnBonusToggled(BonusConditionChanged change)
         {
             if (change.Selected)
             {
-                selectedBonusKeys.Add(change.Key);
+                _selectedBonusKeys.Add(change.Key);
             }
             else
             {
-                selectedBonusKeys.Remove(change.Key);
+                _selectedBonusKeys.Remove(change.Key);
             }
         }
 
         private async Task CalculateRescueTarget()
         {
-            if (selectedCard is null || string.IsNullOrWhiteSpace(selectedCharacter))
+            if (_selectedCard is null || string.IsNullOrWhiteSpace(_selectedCharacter))
             {
                 return;
             }
 
-            isCalculating = true;
-            calculationFailed = false;
-            calculationResult = null;
+            _isCalculating = true;
+            _calculationFailed = false;
+            _calculationResult = null;
 
             try
             {
-                calculationResult =
+                _calculationResult =
                     await RescueService.CalculateRescueTargetAsync(
-                        selectedCard.Code,
-                        selectedBonusKeys,
-                        selectedCharacter);
+                        _selectedCard.Code,
+                        _selectedBonusKeys,
+                        _selectedCharacter);
 
-                calculationFailed = calculationResult is null;
+                _calculationFailed = _calculationResult is null;
             }
             catch
             {
                 // HTTP error or other exception occurred
-                calculationFailed = true;
+                _calculationFailed = true;
             }
             finally
             {
-                isCalculating = false;
+                _isCalculating = false;
             }
         }
     }

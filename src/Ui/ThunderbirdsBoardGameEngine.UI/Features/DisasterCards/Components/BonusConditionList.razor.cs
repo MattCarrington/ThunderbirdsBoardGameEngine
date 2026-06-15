@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
+using ThunderbirdsBoardGameEngine.UI.Features.DisasterCards.ViewModels;
 using ThunderbirdsBoardGameEngine.UI.ViewModels;
 
 namespace ThunderbirdsBoardGameEngine.UI.Features.DisasterCards.Components
@@ -21,9 +22,4 @@ namespace ThunderbirdsBoardGameEngine.UI.Features.DisasterCards.Components
             return BonusChanged.InvokeAsync(new BonusConditionChanged(key, selected));
         }
     }
-
-    public record BonusConditionChanged(
-        string Key,
-        bool Selected
-    );
 }

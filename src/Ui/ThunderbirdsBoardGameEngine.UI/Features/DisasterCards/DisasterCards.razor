@@ -3,40 +3,31 @@
 
 <h3>Select a Disaster Card</h3>
 
-@if (cards is null)
-{
-    <p data-testid="loading">Loading cards...</p>
-}
-else if (cards.Count == 0)
-{
-    <p data-testid="empty-state">No disaster cards available.</p>
-}
-else
-{
     <DisasterCardSelector 
-        DisasterCards="cards"
-        @bind-SelectedDisasterCardCode="selectedCardCode" />
+        DisasterCards="_cards"
+        SelectedDisasterCardCode="selectedCardCode"
+        SelectedDisasterCardCodeChanged="OnDisasterCardChanged" />
 
-    @if (selectedCard is not null)
+    @if (_selectedCard is not null)
     {
         <div class="mt-4" data-testid="details">
             <h3>Disaster Card Details</h3>
             <div class="card shadow-sm p-3">
-                <h4>@selectedCard.DisplayName</h4>
-                <p><strong>Difficulty:</strong> @selectedCard.DifficultyNumber</p>
-                <p><strong>Location:</strong> @selectedCard.Location</p>
-                <p><strong>Rescue Type:</strong> @selectedCard.RescueType</p>
+                <h4>@_selectedCard.DisplayName</h4>
+                <p><strong>Difficulty:</strong> @_selectedCard.DifficultyNumber</p>
+                <p><strong>Location:</strong> @_selectedCard.Location</p>
+                <p><strong>Rescue Type:</strong> @_selectedCard.RescueType</p>
 
                 <BonusConditionList 
-                    BonusConditions="selectedCard.BonusConditions"
-                    @bind-SelectedBonusKeys="selectedBonusKeys"
+                    BonusConditions="_selectedCard.BonusConditions"
+                    SelectedBonusKeys="_selectedBonusKeys"
                     BonusChanged="OnBonusToggled"/>
 
-                <RewardList Rewards="selectedCard.Rewards" />
+                <RewardList Rewards="_selectedCard.Rewards" />
 
                 <CharacterSelector
-                    Characters="characters"
-                    @bind-SelectedCharacterCode="selectedCharacter"/>
+                    Characters="_characters"
+                    @bind-SelectedCharacterCode="_selectedCharacter"/>
 
                 <button class="btn btn-primary mt-3"
                         data-testid="calculate-button"
@@ -45,16 +36,16 @@ else
                     Calculate Rescue Target
                 </button>
 
-                @if (calculationResult is not null)
+                @if (_calculationResult is not null)
                 {
                     <div class="alert alert-info mt-3"
                          data-testid="rescue-calculation-result">
-                        <p><strong>Target Number:</strong> @calculationResult.TargetNumber</p>
-                        <p><strong>Total Bonus:</strong> @calculationResult.TotalBonus</p>
+                        <p><strong>Target Number:</strong> @_calculationResult.TargetNumber</p>
+                        <p><strong>Total Bonus:</strong> @_calculationResult.TotalBonus</p>
                     </div>
                 }
 
-                @if (calculationFailed)
+                @if (_calculationFailed)
                 {
                     <div class="alert alert-danger mt-3"
                         data-testid="rescue-calculation-error">
@@ -64,4 +55,3 @@ else
             </div>
         </div>
     }
-}
