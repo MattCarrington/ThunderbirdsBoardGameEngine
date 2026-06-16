@@ -10,6 +10,16 @@
 
     @if (_selectedCard is not null)
     {
+    @* <DisasterCardDetails Card="_selectedCard"
+                         Characters="_characters"
+                         SelectedBonusKeys="_selectedBonusKeys"
+                         SelectedCharacterCode="_selectedCharacter"
+                         BonusChanged="OnBonusToggled"
+                         CalculationResult="_calculationResult"
+                         CalculationFailed="_calculationFailed"
+                         IsCalculationDisabled="IsCalculateDisabled"
+                         CalculateClicked="CalculateRescueTarget" /> *@
+
         <div class="mt-4" data-testid="details">
             <h3>Disaster Card Details</h3>
             <div class="card shadow-sm p-3">
@@ -27,7 +37,8 @@
 
                 <CharacterSelector
                     Characters="_characters"
-                    @bind-SelectedCharacterCode="_selectedCharacter"/>
+                    SelectedCharacterCode="_selectedCharacter"
+                    SelectedCharacterCodeChanged="OnCharacterChanged"/>
 
                 <button class="btn btn-primary mt-3"
                         data-testid="calculate-button"

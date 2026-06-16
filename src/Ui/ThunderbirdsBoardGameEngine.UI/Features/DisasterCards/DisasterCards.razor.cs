@@ -98,5 +98,11 @@ namespace ThunderbirdsBoardGameEngine.UI.Features.DisasterCards
                 _isCalculating = false;
             }
         }
+
+        private void OnCharacterChanged(string characterCode)
+        {
+            _selectedCharacter = characterCode;
+            _calculationResult = null;
+        }
     }
 }

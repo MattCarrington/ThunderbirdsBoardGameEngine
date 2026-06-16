@@ -20,7 +20,7 @@ namespace ThunderbirdsBoardGameEngine.UI.Features.DisasterCards.Components
         public IReadOnlySet<string> SelectedBonusKeys { get; set; } = new HashSet<string>();
 
         [Parameter]
-        public CalculateRescueTargetResponseDto? CalculationRequest { get; set; }
+        public CalculateRescueTargetResponseDto? CalculationResult { get; set; }
 
         [Parameter]
         public bool CalculationFailed { get; set; }

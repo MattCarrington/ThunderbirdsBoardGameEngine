@@ -16,7 +16,10 @@ namespace ThunderbirdsBoardGameEngine.UI.Features.DisasterCards.Components
 
         private Task OnChanged(ChangeEventArgs e)
         {
-            return SelectedDisasterCardCodeChanged.InvokeAsync(e.Value?.ToString());
+            var value = e.Value?.ToString();
+
+            return SelectedDisasterCardCodeChanged.InvokeAsync(
+                string.IsNullOrWhiteSpace(value) ? null : value);
         }
     }
 }
