@@ -22,6 +22,12 @@ a fully featured game product.
 
 ---
 
+## Getting started
+
+See [docs/DevelopmentSetup.md](docs/DevelopmentSetup.md) for prerequisites and instructions on running the application locally via `dotnet run` or Docker Compose.
+
+---
+
 ## Quick orientation for non-contributors
 
 In plain terms:
