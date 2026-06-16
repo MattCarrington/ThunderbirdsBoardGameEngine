@@ -1,11 +1,12 @@
 # Rules Bounded Context
 
 The Rules bounded context evaluates game rules based on
-inputs from the Catalog and player choices.
+inputs from the Reference Data and player choices.
 
 ## Responsibilities
 - Calculates rescue targets
 - Applies bonuses by identity
+- Calculates movement routes
 - Produces deterministic results
 
 ## Design Notes
