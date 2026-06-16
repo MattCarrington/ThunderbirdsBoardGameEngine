@@ -1,4 +1,4 @@
-﻿# End-to-End Tests
+# End-to-End Tests
 
 The end-to-end tests use [Playwright](https://playwright.dev/dotnet/) with
 [Reqnroll](https://reqnroll.net/) (BDD) to exercise key user journeys through
