@@ -93,6 +93,8 @@ see [src/ReferenceData/Readme.md](src/ReferenceData/Readme.md).
 
 ## Testing
 
+This project uses Playwright for end to end testing. See [tests/EndToEnd/Readme.md](tests/EndToEnd/Readme.md)
+for more detail.
 
 There are also containerised smoke tests that are run as part of the deployment process.
 For more detail, see [tests/SmokeTests/Readme.md](tests/SmokeTests/Readme.md).
