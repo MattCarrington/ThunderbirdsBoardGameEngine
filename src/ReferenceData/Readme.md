@@ -11,6 +11,7 @@ Examples include:
 - Location definitions
 - Thunderbird definitions
 - Pod vehicle definitions
+- Map edge definitions
 
 Reference data is generated at development/build time from source spreadsheets and embedded into the application as a versioned snapshot.
 

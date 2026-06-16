@@ -1,6 +1,6 @@
 # ThunderbirdsBoardGameEngine
 
-This repository contains an experimental ASP.NET�based application built
+This repository contains an experimental ASP.NET based application built
 around the *Thunderbirds* board game domain, with a strong emphasis on
 **testability, contract-driven design, and automation**.
 
@@ -70,7 +70,22 @@ integration and end-to-end testing scenarios.
 
 ---
 
-## What�s included
+## Reference data
+
+Static game data — disasters, characters, locations, Thunderbirds, and pod
+vehicles — is managed as **reference data**: compiled from spreadsheets at
+build time into a versioned JSON snapshot, then embedded into the application
+and loaded into read-only in-memory catalogs at startup.
+
+This avoids a dependency on a live catalog service and keeps the runtime
+fully self-contained.
+
+For more detail on the compiler, snapshot versioning, and catalog interfaces,
+see [src/ReferenceData/Readme.md](src/ReferenceData/Readme.md).
+
+---
+
+## What is included
 
 - **CI & versioning discipline**  
   - manual version bumps
