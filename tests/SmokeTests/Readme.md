@@ -36,7 +36,7 @@ Run the smoke test container:
 
 ```powershell
 docker run --rm `
-  -e SMOKE_TEST_BASE_URL="http://host.docker.internal:8080" `
+  -e SMOKE_TEST_BASE_URL="http://host.docker.internal:<HOST_PORT>" `
   thunderbirds-smoke-tests:local
 ```
 
