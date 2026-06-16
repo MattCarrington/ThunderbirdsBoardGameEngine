@@ -4,8 +4,10 @@ using ThunderbirdsBoardGameEngine.Rules.Domain.Movement;
 
 namespace ThunderbirdsBoardGameEngine.Rules.Domain.EventCards
 {
-    public sealed class AttackOfTheZombites : IMovementModifierSource
+    public sealed class AttackOfTheZombites : IMovementSpeedModifierSource
     {
+        public CardCode EventCardCode => KnownEventCardCodes.AttackOfTheZombites;
+
         public AppliedMovementSpeedModifier? ApplyMovementModifier(ThunderbirdCode input)
         {
             if (input == KnownThunderbirdCodes.Thunderbird1)

@@ -4,8 +4,10 @@ using ThunderbirdsBoardGameEngine.Rules.Domain.Movement;
 
 namespace ThunderbirdsBoardGameEngine.Rules.Domain.EventCards
 {
-    public sealed class RocketMalfunction : IMovementModifierSource
+    public sealed class RocketMalfunction : IMovementSpeedModifierSource
     {
+        public CardCode EventCardCode => KnownEventCardCodes.RocketMalfunction;
+
         public AppliedMovementSpeedModifier? ApplyMovementModifier(ThunderbirdCode input)
         {
             if (input == KnownThunderbirdCodes.Thunderbird3)

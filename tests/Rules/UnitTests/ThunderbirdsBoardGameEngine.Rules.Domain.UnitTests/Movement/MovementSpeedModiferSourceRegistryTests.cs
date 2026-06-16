@@ -1,0 +1,85 @@
+﻿using ThunderbirdsBoardGameEngine.ReferenceData.Identities;
+using ThunderbirdsBoardGameEngine.ReferenceData.KnownIdentities;
+using ThunderbirdsBoardGameEngine.Rules.Domain.EventCards;
+using ThunderbirdsBoardGameEngine.Rules.Domain.Movement;
+using Xunit;
+
+namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.Movement
+{
+    public class MovementSpeedModiferSourceRegistryTests
+    {
+        private static CardCode TestCardCode1 => new("test-1");
+
+        private static CardCode TestCardCode2 => new("test-2");
+
+        [Fact]
+        public void TryGet_WhenSourceExists_ShouldReturnTrueAndSource()
+        {
+            // Arrange
+            var registry = CreateRegistry();
+
+            var cardCode = TestCardCode2;
+
+            // Act
+            var result = registry.TryGet(cardCode, out var source);
+
+            // Assert
+            Assert.True(result);
+            Assert.NotNull(source);
+            Assert.Equal(cardCode, source.EventCardCode);
+        }
+
+        [Fact]
+        public void TryGet_WhenSourceDoesNotExist_ShouldReturnFalseAndNull()
+        {
+            // Arrange
+            var registry = CreateRegistry();
+
+            var cardCode = new CardCode("non-existant-card");
+
+            // Act
+            var result = registry.TryGet(cardCode, out var source);
+
+            // Assert
+            Assert.False(result);
+            Assert.Null(source);
+        }
+
+        private static MovementSpeedModifierSourceRegistry CreateRegistry()
+        {
+            var sources = new List<IMovementSpeedModifierSource>
+            {
+                new TestRegistrySource1(),
+                new TestRegistrySource2(),
+            };
+
+            return new MovementSpeedModifierSourceRegistry(sources);
+        }
+
+        private class TestRegistrySource1 : IMovementSpeedModifierSource
+        {
+            public CardCode EventCardCode => TestCardCode1;
+
+            public AppliedMovementSpeedModifier? ApplyMovementModifier(ThunderbirdCode input)
+            {
+                return new AppliedMovementSpeedModifier(
+                    Card: EventCardCode,
+                    TopSpeedModifier: 100,
+                    Message: $"{EventCardCode} applied");
+            }
+        }
+
+        private class TestRegistrySource2 : IMovementSpeedModifierSource
+        {
+            public CardCode EventCardCode => TestCardCode2;
+
+            public AppliedMovementSpeedModifier? ApplyMovementModifier(ThunderbirdCode input)
+            {
+                return new AppliedMovementSpeedModifier(
+                    Card: EventCardCode,
+                    TopSpeedModifier: 1,
+                    Message: $"{EventCardCode} applied");
+            }
+        }
+    }
+}
