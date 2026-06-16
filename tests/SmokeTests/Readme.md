@@ -27,11 +27,10 @@ docker build `
 
 Start the application locally and note the URL.
 
-For a locally running application on port `8080`:
+For example:
 
-```text
-http://localhost:8080
-```
+- `dotnet run` (default): `http://localhost:5197`
+- Docker Compose (default): `http://localhost:8000`
 
 Run the smoke test container:
 
