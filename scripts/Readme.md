@@ -1,12 +1,14 @@
-# Development Setup
+# Scripts
 
-1. Install .NET 8 SDK
-2. Install Docker Desktop
-3. Clone repository
-4. Run:
+This folder contains development helper scripts.
 
-   ```powershell
-   .\\scripts\\install-hooks.ps1
-   ```
+## install-hooks.ps1
 
-5. Start development
+Installs the Git hooks for this repository. Run once after cloning:
+
+```powershell
+.\scripts\install-hooks.ps1
+```
+
+For full setup instructions including how to run the application locally,
+see [docs/DevelopmentSetup.md](../docs/DevelopmentSetup.md).
