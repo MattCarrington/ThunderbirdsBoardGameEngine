@@ -59,6 +59,9 @@ The application consists of:
 Both are built and shipped together as a **single Docker image** for
 simplicity and repeatability.
 
+For a detailed breakdown of the bounded contexts, dependency rules, and
+package structure, see [docs/Architecture.md](docs/Architecture.md).
+
 ---
 
 ## Current focus
