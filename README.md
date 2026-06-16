@@ -20,6 +20,9 @@ engineering practices** rather than to deliver a finished game product.
 This is intentionally an **engineering-quality demonstration** rather than
 a fully featured game product.
 
+For a detailed breakdown of the test layers and the reasoning behind them,
+see [docs/TestStrategy.md](docs/TestStrategy.md).
+
 ---
 
 ## Getting started
