@@ -25,7 +25,8 @@ docker build `
 
 ## Running the Smoke Test Docker Image
 
-Start the application locally and note the URL.
+Start the application locally and note the URL. This is required for 
+`SMOKE_TEST_BASE_URL` variable used to run the tests and needs to be set before running the tests.
 
 For example:
 
@@ -55,13 +56,13 @@ The Playwright package version and the Playwright Docker base image must remain 
 Verify that:
 
 ```text
-SMOKE_TEST_BASE_URL=http://host.docker.internal:8080
+SMOKE_TEST_BASE_URL=http://host.docker.internal:<HOST_PORT>
 ```
 
 is being used rather than:
 
 ```text
-http://localhost:8080
+http://localhost:<HOST_PORT>
 ```
 
 as `localhost` inside the container refers to the container itself.
