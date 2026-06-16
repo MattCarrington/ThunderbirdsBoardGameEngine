@@ -9,6 +9,33 @@ engineering practices** rather than to deliver a finished game product.
 
 ---
 
+## What this project demonstrates
+
+- End-to-end quality engineering practices, not just unit testing
+- Contract-driven architecture across bounded contexts
+- Automated, repeatable test environments with minimal hidden coupling
+- Clear separation between domain, contracts, clients, and infrastructure
+- CI-aware versioning and publishing discipline
+
+This is intentionally an **engineering-quality demonstration** rather than
+a fully featured game product.
+
+---
+
+## Quick orientation for non-contributors
+
+In plain terms:
+
+- The backend is an ASP.NET API.
+- The frontend is a Blazor WebAssembly UI.
+- They are shipped together as a single Docker image.
+- The UI exists mainly to support integration and end-to-end validation.
+
+The current implementation focuses on the **Rules** bounded context as a
+realistic vertical slice.
+
+---
+
 ## Architecture overview
 
 The application consists of:
@@ -53,15 +80,21 @@ integration and end-to-end testing scenarios.
 
 ---
 
-## What�s intentionally out of scope (for now)
+## Why the scope is intentionally narrow
 
-- Complete game rules engine
-- Sophisticated UI/UX
-- Persistence beyond generated data
+This repository prioritizes confidence and engineering discipline over
+feature breadth.
+
+What is intentionally out of scope right now:
+
+- Complete game rules coverage
+- Advanced UI/UX
+- Long-term persistence strategy
 - Multiplayer or real-time gameplay
-- Production hosting concerns
+- Production-grade hosting concerns
 
-These may be explored in later slices if useful for testing scenarios.
+Narrow scope allows deeper focus on verification strategy, contracts, and
+automation quality.
 
 ---
 
