@@ -91,6 +91,12 @@ see [src/ReferenceData/Readme.md](src/ReferenceData/Readme.md).
 
 ---
 
+## Testing
+
+
+There are also containerised smoke tests that are run as part of the deployment process.
+For more detail, see [tests/SmokeTests/Readme.md](tests/SmokeTests/Readme.md).
+
 ## What is included
 
 - **CI & versioning discipline**  
