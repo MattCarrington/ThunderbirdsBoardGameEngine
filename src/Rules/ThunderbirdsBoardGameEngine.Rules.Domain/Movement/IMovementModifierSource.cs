@@ -1,7 +1,6 @@
 ﻿using ThunderbirdsBoardGameEngine.ReferenceData.Identities;
-using ThunderbirdsBoardGameEngine.Rules.Domain.Movement;
 
-namespace ThunderbirdsBoardGameEngine.Rules.Application.Movement.Interfaces
+namespace ThunderbirdsBoardGameEngine.Rules.Domain.Movement
 {
     public interface IMovementModifierSource
     {
