@@ -56,6 +56,55 @@ namespace ThunderbirdsBoardGameEngine.UI.UnitTests.DisasterCards.Services
         }
 
         [Fact]
+        public void GetAll_WhenCatalogReturnsItemsInAnyOrder_ReturnsItemsSortedByDisplayName()
+        {
+            // Arrange
+            var disaster1 = new ReferenceDisasterDefinition(
+                code: new CardCode("DC003"),
+                displayName: "Space Disaster",
+                difficultyNumber: 5,
+                location: new LocationCode("london"),
+                rescueType: RescueType.Space,
+                bonuses: [new ReferenceDisasterBonus(new DisasterBonusKey("test"), 1, null)],
+                rewards: [new ReferenceDisasterReward.SpecificToken(BonusToken.Teamwork)]
+            );
+            var disaster2 = new ReferenceDisasterDefinition(
+                code: new CardCode("DC002"),
+                displayName: "Land Disaster",
+                difficultyNumber: 3,
+                location: new LocationCode("paris"),
+                rescueType: RescueType.Land,
+                bonuses: [new ReferenceDisasterBonus(new DisasterBonusKey("test2"), 2, null)],
+                rewards: [new ReferenceDisasterReward.SpecificToken(BonusToken.Intelligence)]
+            );
+            var disaster3 = new ReferenceDisasterDefinition(
+                code: new CardCode("DC001"),
+                displayName: "Air Disaster",
+                difficultyNumber: 4,
+                location: new LocationCode("newyork"),
+                rescueType: RescueType.Air,
+                bonuses: [new ReferenceDisasterBonus(new DisasterBonusKey("test3"), 3, null)],
+                rewards: [new ReferenceDisasterReward.SpecificToken(BonusToken.Determination)]
+            );
+
+            var catalog = Substitute.For<IDisasterDefinitionCatalog>();
+            catalog.GetAll().Returns(new[] { disaster1, disaster2, disaster3 }.ToImmutableArray());
+
+            var mapper = CreateMapper();
+
+            var service = new DisasterCardService(catalog, mapper);
+
+            // Act
+            var result = service.GetAll();
+
+            // Assert
+            Assert.Equal(3, result.Count);
+            Assert.Equal("DC001", result[0].Code);
+            Assert.Equal("DC002", result[1].Code);
+            Assert.Equal("DC003", result[2].Code);
+        }
+
+        [Fact]
         public void GetAll_WhenCatalogIsEmpty_ReturnsEmptyList()
         {
             // Arrange
@@ -154,7 +203,7 @@ namespace ThunderbirdsBoardGameEngine.UI.UnitTests.DisasterCards.Services
             );
         }
 
-        private DisasterCardMapper CreateMapper()
+        private static DisasterCardMapper CreateMapper()
         {
             var locationCatalog = Substitute.For<ILocationDefinitionCatalog>();
             locationCatalog.GetByCode(Arg.Any<LocationCode>())

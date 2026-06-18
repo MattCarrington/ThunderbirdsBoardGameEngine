@@ -26,7 +26,11 @@ namespace ThunderbirdsBoardGameEngine.UI.Features.DisasterCards.Services
 
         public IReadOnlyList<DisasterCardSummaryViewModel> GetAll()
         {
-            return _catalog.GetAll().Select(d => new DisasterCardSummaryViewModel(d.Code.Value, d.DisplayName)).ToList();
+            var disasters = _catalog.GetAll();
+
+            var summaries = disasters.Select(d => new DisasterCardSummaryViewModel(d.Code.Value, d.DisplayName)).ToList();
+
+            return summaries.OrderBy(c => c.DisplayName ?? string.Empty, StringComparer.OrdinalIgnoreCase).ToList();
         }
     }
 }

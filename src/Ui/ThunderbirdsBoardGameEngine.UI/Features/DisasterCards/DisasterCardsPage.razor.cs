@@ -36,9 +36,7 @@ namespace ThunderbirdsBoardGameEngine.UI.Features.DisasterCards
 
         protected override void OnInitialized()
         {
-            var allCards = DisasterCardService.GetAll();
-            _cards = allCards.OrderBy(c => c.DisplayName ?? string.Empty, StringComparer.OrdinalIgnoreCase).ToList();
-
+            _cards = DisasterCardService.GetAll();
             _characters = CharacterService.GetAll();
         }
 
