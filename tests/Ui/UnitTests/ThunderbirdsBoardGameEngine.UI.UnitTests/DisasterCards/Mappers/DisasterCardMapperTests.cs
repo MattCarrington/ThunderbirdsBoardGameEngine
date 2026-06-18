@@ -8,7 +8,7 @@ using ThunderbirdsBoardGameEngine.UI.Features.DisasterCards.Mappers;
 using ThunderbirdsBoardGameEngine.UI.Features.DisasterCards.ViewModels;
 using Xunit;
 
-namespace ThunderbirdsBoardGameEngine.UI.UnitTests.Mappers
+namespace ThunderbirdsBoardGameEngine.UI.UnitTests.DisasterCards.Mappers
 {
     public class DisasterCardMapperTests
     {

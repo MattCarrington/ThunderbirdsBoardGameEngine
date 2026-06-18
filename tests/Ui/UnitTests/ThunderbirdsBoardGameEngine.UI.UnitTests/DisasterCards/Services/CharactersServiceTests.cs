@@ -6,7 +6,7 @@ using ThunderbirdsBoardGameEngine.ReferenceData.Runtime.Interfaces;
 using ThunderbirdsBoardGameEngine.UI.Features.DisasterCards.Services;
 using Xunit;
 
-namespace ThunderbirdsBoardGameEngine.UI.UnitTests.Services
+namespace ThunderbirdsBoardGameEngine.UI.UnitTests.DisasterCards.Services
 {
     public class CharactersServiceTests
     {
