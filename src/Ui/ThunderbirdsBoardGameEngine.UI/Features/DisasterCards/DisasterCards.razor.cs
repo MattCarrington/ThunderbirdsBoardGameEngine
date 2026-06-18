@@ -40,8 +40,7 @@ namespace ThunderbirdsBoardGameEngine.UI.Features.DisasterCards
             var allCards = DisasterCardService.GetAll();
             _cards = allCards.OrderBy(c => c.DisplayName ?? string.Empty, StringComparer.OrdinalIgnoreCase).ToList();
 
-            var allCharacters = CharacterService.GetAll();
-            _characters = allCharacters.OrderBy(c => c.DisplayName ?? string.Empty, StringComparer.OrdinalIgnoreCase).ToList();
+            _characters = CharacterService.GetAll();
         }
 
         private void OnDisasterCardChanged(string disasterCard)
