@@ -13,7 +13,7 @@ namespace ThunderbirdsBoardGameEngine.UI
         {
             services.AddScoped<IDisasterCardService, DisasterCardService>();
             services.AddScoped<ICharacterService, CharacterService>();
-            services.AddScoped<IRescueService, RescueService>();
+            services.AddScoped<IRescueClientService, RescueClientService>();
             services.AddScoped<IThunderbirdMovementOptionsService, ThunderbirdMovementOptionsService>();
             services.AddScoped<IMovementClientService, MovementClientService>();
 

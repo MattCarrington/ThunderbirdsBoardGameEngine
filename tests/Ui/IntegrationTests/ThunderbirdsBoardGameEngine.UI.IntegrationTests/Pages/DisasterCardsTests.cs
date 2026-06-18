@@ -45,7 +45,7 @@ namespace ThunderbirdsBoardGameEngine.UI.IntegrationTests.Pages
             // Register UI services
             Services.AddSingleton<ICharacterService, CharacterService>();
             Services.AddSingleton<IDisasterCardService, DisasterCardService>();
-            Services.AddSingleton<IRescueService, RescueService>();
+            Services.AddSingleton<IRescueClientService, RescueClientService>();
 
             Services.AddSingleton<DisasterCardMapper>();
         }
@@ -54,7 +54,7 @@ namespace ThunderbirdsBoardGameEngine.UI.IntegrationTests.Pages
         public void Render_WhenCardsAndCharactersExist_LoadsFromReferenceData()
         {
             // Act
-            var cut = Render<DisasterCards>();
+            var cut = Render<DisasterCardsPage>();
 
             // Assert - disaster cards are loaded
             var cardOptions = cut
@@ -80,7 +80,7 @@ namespace ThunderbirdsBoardGameEngine.UI.IntegrationTests.Pages
             _host.RescueStub().RegisterCalculateRescueTargetSuccess(rescueResult);
 
             // Act
-            var cut = Render<DisasterCards>();
+            var cut = Render<DisasterCardsPage>();
 
             // Select disaster card
             cut.Find("#disasterSelect").Change("end-of-the-road");
@@ -124,7 +124,7 @@ namespace ThunderbirdsBoardGameEngine.UI.IntegrationTests.Pages
             _host.RescueStub().RegisterCalculateRescueTargetError();
 
             // Act
-            var cut = Render<DisasterCards>();
+            var cut = Render<DisasterCardsPage>();
 
             // Select disaster card (loads synchronously)
             cut.Find("#disasterSelect").Change("end-of-the-road");

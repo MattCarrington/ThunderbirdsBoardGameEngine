@@ -4,11 +4,11 @@ using ThunderbirdsBoardGameEngine.UI.Features.DisasterCards.Interfaces;
 
 namespace ThunderbirdsBoardGameEngine.UI.Features.DisasterCards.Services
 {
-    public class RescueService : IRescueService
+    public class RescueClientService : IRescueClientService
     {
         private readonly IRescueClient _rescueClient;
 
-        public RescueService(IRescueClient rescueClient)
+        public RescueClientService(IRescueClient rescueClient)
         {
             _rescueClient = rescueClient;
         }

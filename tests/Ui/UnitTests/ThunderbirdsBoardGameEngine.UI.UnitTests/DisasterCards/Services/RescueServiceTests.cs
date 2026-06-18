@@ -89,9 +89,9 @@ namespace ThunderbirdsBoardGameEngine.UI.UnitTests.DisasterCards.Services
             return rescueClient;
         }
 
-        private static RescueService CreateRescueService(IRescueClient rescueClient)
+        private static RescueClientService CreateRescueService(IRescueClient rescueClient)
         {
-            return new RescueService(rescueClient);
+            return new RescueClientService(rescueClient);
         }
     }
 }

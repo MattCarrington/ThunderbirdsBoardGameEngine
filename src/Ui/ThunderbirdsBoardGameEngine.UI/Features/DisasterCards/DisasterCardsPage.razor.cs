@@ -5,7 +5,7 @@ using ThunderbirdsBoardGameEngine.UI.Features.DisasterCards.ViewModels;
 
 namespace ThunderbirdsBoardGameEngine.UI.Features.DisasterCards
 {
-    public partial class DisasterCards
+    public partial class DisasterCardsPage
     {
         [Inject]
         private IDisasterCardService DisasterCardService { get; set; } = null!;
@@ -14,7 +14,7 @@ namespace ThunderbirdsBoardGameEngine.UI.Features.DisasterCards
         private ICharacterService CharacterService { get; set; } = null!;
 
         [Inject]
-        private IRescueService RescueService { get; set; } = null!;
+        private IRescueClientService RescueService { get; set; } = null!;
 
         private IReadOnlyList<DisasterCardViewModel> _cards = Array.Empty<DisasterCardViewModel>();
         private IReadOnlyList<CharacterViewModel> _characters = Array.Empty<CharacterViewModel>();
@@ -63,6 +63,8 @@ namespace ThunderbirdsBoardGameEngine.UI.Features.DisasterCards
             {
                 _selectedBonusKeys.Remove(change.Key);
             }
+
+            ClearCalculationState();
         }
 
         private async Task CalculateRescueTarget()
@@ -73,8 +75,8 @@ namespace ThunderbirdsBoardGameEngine.UI.Features.DisasterCards
             }
 
             _isCalculating = true;
-            _calculationFailed = false;
-            _calculationResult = null;
+
+            ClearCalculationState();
 
             try
             {
@@ -100,7 +102,14 @@ namespace ThunderbirdsBoardGameEngine.UI.Features.DisasterCards
         private void OnCharacterChanged(string characterCode)
         {
             _selectedCharacter = characterCode;
+
+            ClearCalculationState();
+        }
+
+        private void ClearCalculationState()
+        {
             _calculationResult = null;
+            _calculationFailed = false;
         }
     }
 }
