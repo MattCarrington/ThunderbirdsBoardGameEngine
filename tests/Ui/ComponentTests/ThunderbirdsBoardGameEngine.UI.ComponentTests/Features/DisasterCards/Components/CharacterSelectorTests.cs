@@ -30,7 +30,6 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Features.DisasterCards.C
             // Arrange
             var characters = CreateCharacters();
 
-
             string? selectedCharacter = "scott";
 
             var cut = Render<CharacterSelector>(parameters => parameters

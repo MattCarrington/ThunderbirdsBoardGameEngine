@@ -48,6 +48,33 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Features.DisasterCards.C
             Assert.True(receivedEvent.Selected);
         }
 
+        [Fact]
+        public void BonusConditionShouldNotifyParentWhenBonusDeselected()
+        {
+            // Arrange
+            var conditions = CreateSampleConditions();
+
+            BonusConditionChanged? receivedEvent = null;
+
+            var cut = Render<BonusConditionList>(parameters => parameters
+                .Add(p => p.BonusConditions, conditions)
+                .Add(
+                    p => p.BonusChanged,
+                    value => receivedEvent = value));
+
+            // Act
+            cut.Find("[data-bonus-key='condition-2']")
+                .Change(true);
+
+            cut.Find("[data-bonus-key='condition-2']")
+                .Change(false);
+
+            // Assert
+            Assert.NotNull(receivedEvent);
+            Assert.Equal("condition-2", receivedEvent!.Key);
+            Assert.False(receivedEvent.Selected);
+        }
+
         private static IReadOnlyList<BonusConditionViewModel> CreateSampleConditions()
         {
             return
