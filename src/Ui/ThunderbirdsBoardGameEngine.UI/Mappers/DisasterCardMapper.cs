@@ -25,7 +25,7 @@ namespace ThunderbirdsBoardGameEngine.UI.Mappers
                 DisplayName: disaster.DisplayName,
                 DifficultyNumber: disaster.DifficultyNumber,
                 RescueType: disaster.RescueType.ToString(),
-                Location: _locationDefinitionCatalog.GetByCode(disaster.Location).DisplayName,
+                Location: _locationDefinitionCatalog.TryGetByCode(disaster.Location, out var location) ? location.DisplayName : $"Unknown location '{disaster.Location}'",
                 BonusConditions: disaster.Bonuses.Select(MapBonus).ToList(),
                 Rewards: disaster.Rewards.Select(MapReward).ToList()
             );
@@ -37,9 +37,7 @@ namespace ThunderbirdsBoardGameEngine.UI.Mappers
 
             if (bonusCondition.Location.HasValue)
             {
-                locationText = bonusCondition.Location.Value == GeoStationaryOrbit
-                    ? "on Thunderbird 5"
-                    : $"in {_locationDefinitionCatalog.GetByCode(bonusCondition.Location.Value).DisplayName}";
+                locationText = GetLocationDisplayText(bonusCondition.Location.Value);
             }
 
             var disasterBonusKeyDefinition = _disasterBonusKeyDefinitionCatalog.GetByCode(bonusCondition.Key);
@@ -52,6 +50,18 @@ namespace ThunderbirdsBoardGameEngine.UI.Mappers
                 Key: bonusCondition.Key.ToString(),
                 Description: description
             );
+        }
+
+        private string GetLocationDisplayText(LocationCode locationCode)
+        {
+            if (locationCode == GeoStationaryOrbit)
+            {
+                return "on Thunderbird 5";
+            }
+
+            return _locationDefinitionCatalog.TryGetByCode(locationCode, out var location)
+                ? $"in {location.DisplayName}"
+                : $"in unknown location '{locationCode}'";
         }
 
         private static RewardViewModel MapReward(ReferenceDisasterReward reward)

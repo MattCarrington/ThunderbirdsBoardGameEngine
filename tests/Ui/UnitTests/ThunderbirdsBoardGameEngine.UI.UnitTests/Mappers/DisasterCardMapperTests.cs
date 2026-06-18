@@ -211,7 +211,11 @@ namespace ThunderbirdsBoardGameEngine.UI.UnitTests.Mappers
             );
 
             var locationCatalog = Substitute.For<ILocationDefinitionCatalog>();
-            locationCatalog.GetByCode(Arg.Is(geoStationaryOrbit.Code)).Returns(geoStationaryOrbit);
+            locationCatalog.TryGetByCode(Arg.Is(geoStationaryOrbit.Code), out Arg.Any<ReferenceLocationDefinition>()).Returns(callInfo =>
+            {
+                callInfo[1] = geoStationaryOrbit;
+                return true;
+            });
 
             var disasterBonusKeyCatalog = Substitute.For<IDisasterBonusKeyDefinitionCatalog>();
             disasterBonusKeyCatalog.GetByCode(Arg.Any<DisasterBonusKey>()).Returns(new DisasterBonusKeyDefinition(
@@ -244,11 +248,15 @@ namespace ThunderbirdsBoardGameEngine.UI.UnitTests.Mappers
         private static DisasterCardMapper CreateMapper()
         {
             var locationCatalog = Substitute.For<ILocationDefinitionCatalog>();
-            locationCatalog.GetByCode(Arg.Any<LocationCode>()).Returns(new ReferenceLocationDefinition(
-                code: new LocationCode("test-location"),
-                displayName: "Test Location",
-                domain: MovementDomain.Earth
-            ));
+            locationCatalog.TryGetByCode(Arg.Any<LocationCode>(), out Arg.Any<ReferenceLocationDefinition>()).Returns(callInfo =>
+            {
+                callInfo[1] = new ReferenceLocationDefinition(
+                    code: new LocationCode("test-location"),
+                    displayName: "Test Location",
+                    domain: MovementDomain.Earth
+                );
+                return true;
+            });
 
             var disasterBonusKeyCatalog = Substitute.For<IDisasterBonusKeyDefinitionCatalog>();
             disasterBonusKeyCatalog.GetByCode(Arg.Any<DisasterBonusKey>()).Returns(new DisasterBonusKeyDefinition(
