@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
 using ThunderbirdsBoardGameEngine.UI.Features.DisasterCards.ViewModels;
-using ThunderbirdsBoardGameEngine.UI.ViewModels;
 
 namespace ThunderbirdsBoardGameEngine.UI.Features.DisasterCards.Components
 {

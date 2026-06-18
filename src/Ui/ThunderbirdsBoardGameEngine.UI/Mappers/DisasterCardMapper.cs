@@ -1,7 +1,7 @@
 ﻿using ThunderbirdsBoardGameEngine.ReferenceData.Identities;
 using ThunderbirdsBoardGameEngine.ReferenceData.Model;
 using ThunderbirdsBoardGameEngine.ReferenceData.Runtime.Interfaces;
-using ThunderbirdsBoardGameEngine.UI.ViewModels;
+using ThunderbirdsBoardGameEngine.UI.Features.DisasterCards.ViewModels;
 
 namespace ThunderbirdsBoardGameEngine.UI.Mappers
 {

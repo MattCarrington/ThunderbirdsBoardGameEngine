@@ -1,7 +1,6 @@
 ﻿using Bunit;
 using ThunderbirdsBoardGameEngine.UI.Features.DisasterCards.Components;
 using ThunderbirdsBoardGameEngine.UI.Features.DisasterCards.ViewModels;
-using ThunderbirdsBoardGameEngine.UI.ViewModels;
 using Xunit;
 
 namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Features.DisasterCards.Components
