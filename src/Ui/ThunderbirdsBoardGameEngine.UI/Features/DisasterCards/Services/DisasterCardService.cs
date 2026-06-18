@@ -24,9 +24,9 @@ namespace ThunderbirdsBoardGameEngine.UI.Features.DisasterCards.Services
             return _mapper.Map(disaster);
         }
 
-        public IReadOnlyList<DisasterCardViewModel> GetAll()
+        public IReadOnlyList<DisasterCardSummaryViewModel> GetAll()
         {
-            return _catalog.GetAll().Select(_mapper.Map).ToList();
+            return _catalog.GetAll().Select(d => new DisasterCardSummaryViewModel(d.Code.Value, d.DisplayName)).ToList();
         }
     }
 }

@@ -44,34 +44,16 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Features.DisasterCards.C
             Assert.Equal("flood", selectedDisasterCardCode);
         }
 
-        private static IReadOnlyList<DisasterCardViewModel> CreateDisasterCards()
+        private static IReadOnlyList<DisasterCardSummaryViewModel> CreateDisasterCards()
         {
             return
             [
-                new DisasterCardViewModel(
+                new DisasterCardSummaryViewModel(
                     Code: "fire",
-                    DisplayName: "Fire",
-                    DifficultyNumber: 1,
-                    RescueType: "Air",
-                    Location: "Asia",
-                    BonusConditions: [
-                        new BonusConditionViewModel(Description: "Extra points for quick response", Key: "extra-points")
-                    ],
-                    Rewards: [
-                        new RewardViewModel(Description: "Bonus points for quick response")
-                    ]),
-                new DisasterCardViewModel(
+                    DisplayName: "Fire"),
+                new DisasterCardSummaryViewModel(
                     Code: "flood",
-                    DisplayName: "Flood",
-                    DifficultyNumber: 2,
-                    RescueType: "Sea",
-                    Location: "Europe",
-                    BonusConditions: [
-                        new BonusConditionViewModel(Description: "Extra points for quick response", Key: "extra-points")
-                    ],
-                    Rewards: [
-                        new RewardViewModel(Description: "Bonus points for quick response")
-                    ]),
+                    DisplayName: "Flood")
             ];
         }
     }

@@ -6,7 +6,7 @@ namespace ThunderbirdsBoardGameEngine.UI.Features.DisasterCards.Components
     public partial class DisasterCardSelector
     {
         [Parameter, EditorRequired]
-        public IReadOnlyList<DisasterCardViewModel> DisasterCards { get; set; } = [];
+        public IReadOnlyList<DisasterCardSummaryViewModel> DisasterCards { get; set; } = [];
 
         [Parameter]
         public string? SelectedDisasterCardCode { get; set; }

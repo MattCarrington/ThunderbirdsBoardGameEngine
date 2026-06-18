@@ -266,7 +266,7 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Features.DisasterCards
 
             var disasterCards = CreateDisasterCards();
 
-            context.DisasterCardService.GetAll().Returns(disasterCards);
+            context.DisasterCardService.GetAll().Returns(disasterCards.Select(d => new DisasterCardSummaryViewModel(d.Code, d.DisplayName)).ToList());
             context.DisasterCardService.GetByCode("DC1").Returns(disasterCards.First());
             context.CharacterService.GetAll().Returns(CreateCharacters());
 

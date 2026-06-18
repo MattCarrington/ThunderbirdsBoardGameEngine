@@ -4,7 +4,7 @@ namespace ThunderbirdsBoardGameEngine.UI.Features.DisasterCards.Interfaces
 {
     public interface IDisasterCardService
     {
-        IReadOnlyList<DisasterCardViewModel> GetAll();
+        IReadOnlyList<DisasterCardSummaryViewModel> GetAll();
 
         DisasterCardViewModel GetByCode(string code);
     }
