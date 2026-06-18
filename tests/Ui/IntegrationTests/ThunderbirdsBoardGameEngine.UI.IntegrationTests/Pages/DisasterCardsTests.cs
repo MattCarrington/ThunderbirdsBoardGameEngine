@@ -48,7 +48,6 @@ namespace ThunderbirdsBoardGameEngine.UI.IntegrationTests.Pages
             Services.AddSingleton<IRescueService, RescueService>();
 
             Services.AddSingleton<DisasterCardMapper>();
-            Services.AddSingleton<CharacterMapper>();
         }
 
         [Fact]
