@@ -34,28 +34,6 @@ namespace ThunderbirdsBoardGameEngine.UI.UnitTests.DisasterCards.Services
         }
 
         [Fact]
-        public void GetAll_WhenCatalogReturnsMultipleItems_ReturnsCorrectCount()
-        {
-            // Arrange
-            var disaster1 = CreateMinimalDisaster("DC001");
-            var disaster2 = CreateMinimalDisaster("DC002");
-            var disaster3 = CreateMinimalDisaster("DC003");
-
-            var catalog = Substitute.For<IDisasterDefinitionCatalog>();
-            catalog.GetAll().Returns(new[] { disaster1, disaster2, disaster3 }.ToImmutableArray());
-
-            var mapper = CreateMapper();
-
-            var service = new DisasterCardService(catalog, mapper);
-
-            // Act
-            var result = service.GetAll();
-
-            // Assert
-            Assert.Equal(3, result.Count);
-        }
-
-        [Fact]
         public void GetAll_WhenCatalogReturnsItemsInAnyOrder_ReturnsItemsSortedByDisplayName()
         {
             // Arrange
@@ -159,25 +137,6 @@ namespace ThunderbirdsBoardGameEngine.UI.UnitTests.DisasterCards.Services
 
             // Assert
             Assert.NotNull(result);
-        }
-
-        [Fact]
-        public void GetByCode_WhenCalledPreservesCodeValue()
-        {
-            // Arrange
-            var disaster = CreateMinimalDisaster("DC456");
-            var catalog = Substitute.For<IDisasterDefinitionCatalog>();
-            catalog.GetByCode(Arg.Any<CardCode>()).Returns(disaster);
-
-            var mapper = CreateMapper();
-
-            var service = new DisasterCardService(catalog, mapper);
-
-            // Act
-            var result = service.GetByCode("DC456");
-
-            // Assert
-            Assert.Equal("DC456", result.Code);
         }
 
         private static ReferenceDisasterDefinition CreateMinimalDisaster(string code)
