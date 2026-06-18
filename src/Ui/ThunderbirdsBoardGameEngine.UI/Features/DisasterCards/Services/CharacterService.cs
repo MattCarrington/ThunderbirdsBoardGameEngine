@@ -1,8 +1,8 @@
 ﻿using ThunderbirdsBoardGameEngine.ReferenceData.Runtime.Interfaces;
+using ThunderbirdsBoardGameEngine.UI.Features.DisasterCards.Interfaces;
 using ThunderbirdsBoardGameEngine.UI.Features.DisasterCards.ViewModels;
-using ThunderbirdsBoardGameEngine.UI.Interfaces;
 
-namespace ThunderbirdsBoardGameEngine.UI.Services
+namespace ThunderbirdsBoardGameEngine.UI.Features.DisasterCards.Services
 {
     public class CharacterService : ICharacterService
     {

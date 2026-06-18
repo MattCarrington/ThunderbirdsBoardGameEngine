@@ -1,10 +1,10 @@
 ﻿using ThunderbirdsBoardGameEngine.ReferenceData.Identities;
 using ThunderbirdsBoardGameEngine.ReferenceData.Runtime.Interfaces;
+using ThunderbirdsBoardGameEngine.UI.Features.DisasterCards.Interfaces;
+using ThunderbirdsBoardGameEngine.UI.Features.DisasterCards.Mappers;
 using ThunderbirdsBoardGameEngine.UI.Features.DisasterCards.ViewModels;
-using ThunderbirdsBoardGameEngine.UI.Interfaces;
-using ThunderbirdsBoardGameEngine.UI.Mappers;
 
-namespace ThunderbirdsBoardGameEngine.UI.Services
+namespace ThunderbirdsBoardGameEngine.UI.Features.DisasterCards.Services
 {
     public class DisasterCardService : IDisasterCardService
     {

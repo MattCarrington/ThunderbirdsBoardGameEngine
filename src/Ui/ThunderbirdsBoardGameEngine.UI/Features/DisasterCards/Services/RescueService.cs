@@ -1,8 +1,8 @@
 ﻿using ThunderbirdsBoardGameEngine.Rules.Client.Interfaces.V1;
 using ThunderbirdsBoardGameEngine.Rules.Contracts.Dtos.Rescue.CalculateRescueTarget.V1;
-using ThunderbirdsBoardGameEngine.UI.Interfaces;
+using ThunderbirdsBoardGameEngine.UI.Features.DisasterCards.Interfaces;
 
-namespace ThunderbirdsBoardGameEngine.UI.Services
+namespace ThunderbirdsBoardGameEngine.UI.Features.DisasterCards.Services
 {
     public class RescueService : IRescueService
     {

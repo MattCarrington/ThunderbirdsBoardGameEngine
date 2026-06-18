@@ -3,7 +3,7 @@ using ThunderbirdsBoardGameEngine.ReferenceData.Model;
 using ThunderbirdsBoardGameEngine.ReferenceData.Runtime.Interfaces;
 using ThunderbirdsBoardGameEngine.UI.Features.DisasterCards.ViewModels;
 
-namespace ThunderbirdsBoardGameEngine.UI.Mappers
+namespace ThunderbirdsBoardGameEngine.UI.Features.DisasterCards.Mappers
 {
     public sealed class DisasterCardMapper
     {

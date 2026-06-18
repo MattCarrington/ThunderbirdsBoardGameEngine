@@ -1,6 +1,6 @@
 ﻿using ThunderbirdsBoardGameEngine.UI.Features.DisasterCards.ViewModels;
 
-namespace ThunderbirdsBoardGameEngine.UI.Interfaces
+namespace ThunderbirdsBoardGameEngine.UI.Features.DisasterCards.Interfaces
 {
     public interface ICharacterService
     {

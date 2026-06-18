@@ -2,10 +2,10 @@
 using Microsoft.Extensions.DependencyInjection;
 using NSubstitute;
 using ThunderbirdsBoardGameEngine.Rules.Contracts.Dtos.Rescue.CalculateRescueTarget.V1;
-using ThunderbirdsBoardGameEngine.UI.Interfaces;
 using ThunderbirdsBoardGameEngine.UI.Features.DisasterCards;
 using Xunit;
 using ThunderbirdsBoardGameEngine.UI.Features.DisasterCards.ViewModels;
+using ThunderbirdsBoardGameEngine.UI.Features.DisasterCards.Interfaces;
 
 namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Pages
 {

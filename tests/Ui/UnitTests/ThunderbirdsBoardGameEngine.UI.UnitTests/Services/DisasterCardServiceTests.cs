@@ -5,8 +5,8 @@ using ThunderbirdsBoardGameEngine.ReferenceData.Identities;
 using ThunderbirdsBoardGameEngine.ReferenceData.Model;
 using ThunderbirdsBoardGameEngine.ReferenceData.Runtime.Interfaces;
 using ThunderbirdsBoardGameEngine.ReferenceData.Runtime.Models;
-using ThunderbirdsBoardGameEngine.UI.Mappers;
-using ThunderbirdsBoardGameEngine.UI.Services;
+using ThunderbirdsBoardGameEngine.UI.Features.DisasterCards.Mappers;
+using ThunderbirdsBoardGameEngine.UI.Features.DisasterCards.Services;
 using Xunit;
 
 namespace ThunderbirdsBoardGameEngine.UI.UnitTests.Services

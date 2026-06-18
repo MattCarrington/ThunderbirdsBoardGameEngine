@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using ThunderbirdsBoardGameEngine.Rules.Contracts.Dtos.Rescue.CalculateRescueTarget.V1;
+using ThunderbirdsBoardGameEngine.UI.Features.DisasterCards.Interfaces;
 using ThunderbirdsBoardGameEngine.UI.Features.DisasterCards.ViewModels;
-using ThunderbirdsBoardGameEngine.UI.Interfaces;
 
 namespace ThunderbirdsBoardGameEngine.UI.Features.DisasterCards
 {
