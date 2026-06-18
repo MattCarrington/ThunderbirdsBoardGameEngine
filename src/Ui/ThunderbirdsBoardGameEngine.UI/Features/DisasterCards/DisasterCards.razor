@@ -3,66 +3,22 @@
 
 <h3>Select a Disaster Card</h3>
 
-    <DisasterCardSelector 
-        DisasterCards="_cards"
-        SelectedDisasterCardCode="selectedCardCode"
-        SelectedDisasterCardCodeChanged="OnDisasterCardChanged" />
+<DisasterCardSelector 
+    DisasterCards="_cards"
+    SelectedDisasterCardCode="selectedCardCode"
+    SelectedDisasterCardCodeChanged="OnDisasterCardChanged" />
 
-    @if (_selectedCard is not null)
-    {
-    @* <DisasterCardDetails Card="_selectedCard"
-                         Characters="_characters"
-                         SelectedBonusKeys="_selectedBonusKeys"
-                         SelectedCharacterCode="_selectedCharacter"
-                         BonusChanged="OnBonusToggled"
-                         CalculationResult="_calculationResult"
-                         CalculationFailed="_calculationFailed"
-                         IsCalculationDisabled="IsCalculateDisabled"
-                         CalculateClicked="CalculateRescueTarget" /> *@
-
-        <div class="mt-4" data-testid="details">
-            <h3>Disaster Card Details</h3>
-            <div class="card shadow-sm p-3">
-                <h4>@_selectedCard.DisplayName</h4>
-                <p><strong>Difficulty:</strong> @_selectedCard.DifficultyNumber</p>
-                <p><strong>Location:</strong> @_selectedCard.Location</p>
-                <p><strong>Rescue Type:</strong> @_selectedCard.RescueType</p>
-
-                <BonusConditionList 
-                    BonusConditions="_selectedCard.BonusConditions"
-                    SelectedBonusKeys="_selectedBonusKeys"
-                    BonusChanged="OnBonusToggled"/>
-
-                <RewardList Rewards="_selectedCard.Rewards" />
-
-                <CharacterSelector
-                    Characters="_characters"
-                    SelectedCharacterCode="_selectedCharacter"
-                    SelectedCharacterCodeChanged="OnCharacterChanged"/>
-
-                <button class="btn btn-primary mt-3"
-                        data-testid="calculate-button"
-                        disabled="@IsCalculateDisabled"
-                        @onclick="CalculateRescueTarget">
-                    Calculate Rescue Target
-                </button>
-
-                @if (_calculationResult is not null)
-                {
-                    <div class="alert alert-info mt-3"
-                         data-testid="rescue-calculation-result">
-                        <p><strong>Target Number:</strong> @_calculationResult.TargetNumber</p>
-                        <p><strong>Total Bonus:</strong> @_calculationResult.TotalBonus</p>
-                    </div>
-                }
-
-                @if (_calculationFailed)
-                {
-                    <div class="alert alert-danger mt-3"
-                        data-testid="rescue-calculation-error">
-                        Unable to calculate rescue target.
-                    </div>
-                }
-            </div>
-        </div>
-    }
+@if (_selectedCard is not null)
+{
+    <DisasterCardDetails 
+        Card="_selectedCard"
+        Characters="_characters"
+        SelectedBonusKeys="_selectedBonusKeys"
+        SelectedCharacterCode="_selectedCharacter"
+        BonusChanged="OnBonusToggled"
+        CalculationResult="_calculationResult"
+        CalculationFailed="_calculationFailed"
+        IsCalculationDisabled="IsCalculateDisabled"
+        CalculateClicked="CalculateRescueTarget"
+        SelectedCharacterCodeChanged="OnCharacterChanged"/>        
+}
