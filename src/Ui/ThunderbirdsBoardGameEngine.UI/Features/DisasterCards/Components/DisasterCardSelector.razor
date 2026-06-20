@@ -1,0 +1,16 @@
+﻿<label for="disasterSelect" class="form-label">Card</label>
+<select id="disasterSelect"
+        class="form-select"
+        @onchange="OnChanged"
+        required>
+    <option value="" selected="@string.IsNullOrWhiteSpace(SelectedDisasterCardCode)">
+        -- Select a card --
+    </option>
+    @foreach (var card in DisasterCards)
+    {
+        <option value="@card.Code"
+                selected="@(card.Code == SelectedDisasterCardCode)">
+            @card.DisplayName
+        </option>
+    }
+</select>

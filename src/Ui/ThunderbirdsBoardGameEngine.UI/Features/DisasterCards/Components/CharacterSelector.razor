@@ -1,0 +1,13 @@
+﻿<label for="characterSelect" class="form-label">Character</label>
+<select id="characterSelect"
+        class="form-select"
+        value="@SelectedCharacterCode"
+        @onchange="OnChanged"
+        required>
+    <option value="">-- Select a character --</option>
+
+    @foreach (var c in Characters)
+    {
+        <option value="@c.Key">@c.DisplayName</option>
+    }
+</select>

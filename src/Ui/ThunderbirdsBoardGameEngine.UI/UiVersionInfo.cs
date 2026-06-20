@@ -2,6 +2,6 @@
 {
     public static class UiVersionInfo
     {
-        public const string UiVersion = "0.5.0";
+        public const string UiVersion = "0.5.1";
     }
 }

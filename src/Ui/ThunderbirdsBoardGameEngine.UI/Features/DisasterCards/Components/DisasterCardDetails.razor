@@ -1,0 +1,44 @@
+﻿<div class="mt-4" data-testid="details">
+    <h3>Disaster Card Details</h3>
+    <div class="card shadow-sm p-3">
+        <h4>@Card.DisplayName</h4>
+        <p><strong>Difficulty:</strong> @Card.DifficultyNumber</p>
+        <p><strong>Location:</strong> @Card.Location</p>
+        <p><strong>Rescue Type:</strong> @Card.RescueType</p>
+
+        <BonusConditionList BonusConditions="@Card.BonusConditions"
+                    SelectedBonusKeys="@SelectedBonusKeys"
+                    BonusChanged="BonusChanged" />
+
+        <RewardList Rewards="Card.Rewards" />
+
+        <CharacterSelector
+            Characters="@Characters"
+            SelectedCharacterCode="@SelectedCharacterCode"
+            SelectedCharacterCodeChanged="SelectedCharacterCodeChanged" />
+
+        <button class="btn btn-primary mt-3"
+                data-testid="calculate-button"
+        disabled="@IsCalculationDisabled"
+        @onclick="CalculateClicked">
+            Calculate Rescue Target
+        </button>
+
+        @if (CalculationResult is not null)
+        {
+            <div class="alert alert-info mt-3"
+                    data-testid="rescue-calculation-result">
+                <p><strong>Target Number:</strong> @CalculationResult.TargetNumber</p>
+                <p><strong>Total Bonus:</strong> @CalculationResult.TotalBonus</p>
+            </div>
+        }
+
+        @if (CalculationFailed)
+        {
+            <div class="alert alert-danger mt-3"
+                data-testid="rescue-calculation-error">
+                Unable to calculate rescue target.
+            </div>
+        }
+    </div>
+</div>
