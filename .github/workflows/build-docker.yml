@@ -24,7 +24,6 @@ jobs:
       IMAGE: ${{ inputs.image_name }}
       DOCKERFILE_PATH: ${{ inputs.dockerfile_path }}
       DOCKER_BUILD_CONTEXT: ${{ inputs.docker_build_context }}
-      NUGET_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     steps:
       - uses: actions/checkout@v6

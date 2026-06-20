@@ -26,8 +26,11 @@
     <PackageReference Include="Microsoft.Extensions.Http" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" />
     <PackageReference Include="Microsoft.Extensions.Options" />
-    <PackageReference Include="ThunderbirdsBoardGameEngine.Client.Infrastructure" />
-    <PackageReference Include="ThunderbirdsBoardGameEngine.Rules.Contracts" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Common\ThunderbirdsBoardGameEngine.Client.Infrastructure\ThunderbirdsBoardGameEngine.Client.Infrastructure.csproj" />
+    <ProjectReference Include="..\ThunderbirdsBoardGameEngine.Rules.Contracts\ThunderbirdsBoardGameEngine.Rules.Contracts.csproj" />
   </ItemGroup>
 
 </Project>
