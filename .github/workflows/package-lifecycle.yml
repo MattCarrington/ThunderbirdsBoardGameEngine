@@ -140,7 +140,9 @@ jobs:
         run: |
           dotnet pack "${{ inputs.project_path }}" \
             -c Release \
+            --no-restore \
             -p:PackageVersion=${{ steps.compute.outputs.version }} \
+            -p:BuildProjectReferences=false \
             -o ./artifacts
 
       - name: Publish to GitHub Packages
