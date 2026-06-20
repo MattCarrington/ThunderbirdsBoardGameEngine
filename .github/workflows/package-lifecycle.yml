@@ -138,13 +138,8 @@ jobs:
       - name: Pack
         if: steps.compute.outputs.should_publish == 'true'
         run: |
-          dotnet build "${{ inputs.project_path }}" \
-            -c Release
-
           dotnet pack "${{ inputs.project_path }}" \
             -c Release \
-            --no-restore \
-            -p:PackageVersion=${{ steps.compute.outputs.version }} \
             -o ./artifacts
 
       - name: Publish to GitHub Packages
