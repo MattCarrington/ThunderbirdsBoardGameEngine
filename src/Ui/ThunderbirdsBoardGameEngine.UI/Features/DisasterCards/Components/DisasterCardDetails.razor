@@ -6,15 +6,15 @@
         <p><strong>Location:</strong> @Card.Location</p>
         <p><strong>Rescue Type:</strong> @Card.RescueType</p>
 
-        <BonusConditionList BonusConditions="Card.BonusConditions"
-                    SelectedBonusKeys="SelectedBonusKeys"
+        <BonusConditionList BonusConditions="@Card.BonusConditions"
+                    SelectedBonusKeys="@SelectedBonusKeys"
                     BonusChanged="BonusChanged" />
 
         <RewardList Rewards="Card.Rewards" />
 
         <CharacterSelector
-            Characters="Characters"
-            SelectedCharacterCode="SelectedCharacterCode"
+            Characters="@Characters"
+            SelectedCharacterCode="@SelectedCharacterCode"
             SelectedCharacterCodeChanged="SelectedCharacterCodeChanged" />
 
         <button class="btn btn-primary mt-3"
