@@ -40,7 +40,7 @@ namespace ThunderbirdsBoardGameEngine.UI.Features.DisasterCards
             _characters = CharacterService.GetAll();
         }
 
-        private void OnDisasterCardChanged(string disasterCard)
+        private void OnDisasterCardChanged(string? disasterCard)
         {
             _selectedCardCode = disasterCard;
             _selectedBonusKeys.Clear();
@@ -97,7 +97,7 @@ namespace ThunderbirdsBoardGameEngine.UI.Features.DisasterCards
             }
         }
 
-        private void OnCharacterChanged(string characterCode)
+        private void OnCharacterChanged(string? characterCode)
         {
             _selectedCharacter = characterCode;
 
