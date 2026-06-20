@@ -66,8 +66,10 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Features.DisasterCards
 
             // Act
             select.Change(""); // Deselect the disaster card
+
             // Assert
             Assert.DoesNotContain("Disaster Card Details", cut.Markup);
+        }
 
         [Fact]
         public void CallsRescueClientServiceWhenCalculateClicked()
