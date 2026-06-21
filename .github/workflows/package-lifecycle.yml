@@ -144,6 +144,7 @@ jobs:
           sed -i "0,/<Version>.*<\/Version>/s//<Version>${VERSION}<\/Version>/" "$PROJECT"
 
       - name: Pack
+        if: steps.compute.outputs.should_publish == 'true'
         run: |
           dotnet pack "${{ inputs.project_path }}" \
             -c Release \
