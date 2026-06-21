@@ -135,12 +135,19 @@ jobs:
 
           echo "version=$FINAL_VERSION" >> "$GITHUB_OUTPUT"
 
+      - name: Apply package version to target project only
+        if: steps.compute.outputs.should_publish == 'true'
+        run: |
+          VERSION="${{ steps.compute.outputs.version }}"
+          PROJECT="${{ inputs.project_path }}"
+
+          sed -i "0,/<Version>.*<\/Version>/s//<Version>${VERSION}<\/Version>/" "$PROJECT"
+
       - name: Pack
         if: steps.compute.outputs.should_publish == 'true'
         run: |
           dotnet pack "${{ inputs.project_path }}" \
             -c Release \
-            -p:PackageVersion=${{ steps.compute.outputs.version }} \
             -o ./artifacts
 
       - name: Publish to GitHub Packages
