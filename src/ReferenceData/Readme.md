@@ -30,7 +30,7 @@ The ReferenceData compiler:
 1. Reads source spreadsheets
 2. Validates the source data
 3. Builds a strongly typed snapshot
-4. Serializes the snapshot to JSON
+4. Serialises the snapshot to JSON
 
 ### Runtime
 
