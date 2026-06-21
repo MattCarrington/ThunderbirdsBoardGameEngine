@@ -2,6 +2,9 @@
 
 The smoke tests validate that a deployed application is reachable and that key user journeys function correctly.
 
+The smoke tests now use the Rules.Client package instead of project references. A GitHub PAT with `packages:read`
+is now required to build the smoke tests
+
 ## Running Smoke Tests from Source
 
 Run the smoke tests directly using the .NET test runner:
@@ -18,6 +21,7 @@ Build the smoke test image locally:
 
 ```powershell
 docker build `
+  --secret id=github_packages_token,env=GITHUB_PACKAGES_TOKEN `
   -t thunderbirds-smoke-tests:local `
   -f tests/SmokeTests/ThunderbirdsBoardGameEngine.SmokeTests/Dockerfile `
   .
