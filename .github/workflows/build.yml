@@ -19,6 +19,8 @@ jobs:
         with:
           dotnet-version: '8.x'
 
+      - uses: ./.github/actions/authenticate-github-packages
+
       - name: Restore & Build
         run: |
           dotnet restore "${{ inputs.solution_file }}"

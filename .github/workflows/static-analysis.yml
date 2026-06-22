@@ -19,6 +19,8 @@ jobs:
         with:
           dotnet-version: '8.x'
 
+      - uses: ./.github/actions/authenticate-github-packages
+
       # Optional but nice: ensure formatting is clean
       - name: Check code format
         run: |

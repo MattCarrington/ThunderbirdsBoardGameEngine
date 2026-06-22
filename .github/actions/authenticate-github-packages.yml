@@ -1,0 +1,13 @@
+name: Authenticate GitHub Packages
+description: Authenticates NuGet restore against GitHub Packages
+
+runs:
+  using: composite
+  steps:
+    - name: Authenticate GitHub Packages
+      shell: bash
+      run: |
+        dotnet nuget update source GitHub \
+          --username "${{ github.actor }}" \
+          --password "${{ github.token }}" \
+          --store-password-in-clear-text
