@@ -29,7 +29,7 @@ on:
         default: false
     secrets:
       registry_token:
-        required: false
+        required: false      
     outputs:
       image_tag:
         value: ${{ jobs.docker-build-publish.outputs.image_tag }}
@@ -89,6 +89,8 @@ jobs:
       - name: Build, Tag and Push Image
         id: publish
         shell: bash
+        env:
+          GITHUB_PACKAGES_TOKEN: ${{ secrets.registry_token }}
         run: |
           set -euo pipefail
 
@@ -101,6 +103,7 @@ jobs:
           ghcr="ghcr.io/$owner/$image"
 
           docker build \
+            --secret id=github_packages_token,env=GITHUB_PACKAGES_TOKEN \
             -t "$ghcr:$image_tag" \
             -f "${{ inputs.dockerfile_path }}" \
             "${{ inputs.docker_build_context }}"
