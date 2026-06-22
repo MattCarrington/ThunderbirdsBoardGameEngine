@@ -11,11 +11,16 @@ COPY ["Directory.Packages.props", "."]
 COPY ["tests/SmokeTests/ThunderbirdsBoardGameEngine.SmokeTests/ThunderbirdsBoardGameEngine.SmokeTests.csproj", "tests/SmokeTests/ThunderbirdsBoardGameEngine.SmokeTests/"]
 
 RUN --mount=type=secret,id=github_packages_token \
-    dotnet nuget update source GitHub \
-      --username "MattCarrington" \
-      --password "$(cat /run/secrets/github_packages_token)" \
-      --store-password-in-clear-text \
-    && dotnet restore "tests/SmokeTests/ThunderbirdsBoardGameEngine.SmokeTests/ThunderbirdsBoardGameEngine.SmokeTests.csproj"
+    sh -c 'set -eu \
+      && cp nuget.config /tmp/nuget.config \
+      && dotnet nuget update source GitHub \
+           --configfile /tmp/nuget.config \
+           --username "MattCarrington" \
+           --password "$(cat /run/secrets/github_packages_token)" \
+           --store-password-in-clear-text \
+      && dotnet restore "tests/SmokeTests/ThunderbirdsBoardGameEngine.SmokeTests/ThunderbirdsBoardGameEngine.SmokeTests.csproj" \
+           --configfile /tmp/nuget.config \
+      && rm /tmp/nuget.config'
 
 COPY . .
 
