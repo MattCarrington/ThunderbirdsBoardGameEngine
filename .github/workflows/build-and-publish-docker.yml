@@ -40,7 +40,8 @@ jobs:
   docker-build-publish:
     name: Build & Publish Docker Image
     runs-on: ubuntu-latest
-
+    env:
+      DOCKER_BUILDKIT: 1
     outputs:
       image_tag: ${{ steps.publish.outputs.image_tag }}
       image_ref: ${{ steps.publish.outputs.image_ref }}
@@ -90,7 +91,7 @@ jobs:
         id: publish
         shell: bash
         env:
-          GITHUB_PACKAGES_TOKEN: ${{ secrets.registry_token || github.token }}
+          GITHUB_PACKAGES_TOKEN: ${{ secrets.registry_token || github.token }}          
         run: |
           set -euo pipefail
 
