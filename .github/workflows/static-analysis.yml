@@ -5,12 +5,15 @@ on:
     inputs:
       solution_file:
         required: true
-        type: string
+        type: string    
 
 jobs:
   static-analysis:
     name: Static Analysis
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: read
 
     steps:
       - uses: actions/checkout@v6

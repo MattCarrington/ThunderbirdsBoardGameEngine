@@ -11,6 +11,9 @@ jobs:
   build:
     name: Build .NET Solution
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: read
 
     steps:
       - uses: actions/checkout@v6
