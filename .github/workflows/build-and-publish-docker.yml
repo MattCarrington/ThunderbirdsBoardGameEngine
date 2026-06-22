@@ -29,7 +29,7 @@ on:
         default: false
     secrets:
       registry_token:
-        required: false      
+        required: false
     outputs:
       image_tag:
         value: ${{ jobs.docker-build-publish.outputs.image_tag }}
