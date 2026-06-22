@@ -4,10 +4,10 @@ The smoke tests validate that a deployed application is reachable and that key u
 
 ## Prerequisites
 
-Set your GitHub username and a PAT with read:packages permission:
+Set your GitHub username and a PAT with `read:packages` permission:
 
-$env:GITHUB_PACKAGES_USERNAME = "your-github-username"
-$env:GITHUB_PACKAGES_TOKEN = "<your-pat>"
+    $env:GITHUB_PACKAGES_USERNAME = "your-github-username"
+    $env:GITHUB_PACKAGES_TOKEN = "<your-pat>"
 
 ## Running Smoke Tests from Source
 
@@ -24,6 +24,7 @@ dotnet test `
 Build the smoke test image locally:
 
 ```powershell
+$env:DOCKER_BUILDKIT = "1"
 docker build `
   --build-arg GITHUB_PACKAGES_USERNAME="$env:GITHUB_PACKAGES_USERNAME" `
   --secret id=github_packages_token,env=GITHUB_PACKAGES_TOKEN `
