@@ -20,6 +20,8 @@ jobs:
           dotnet-version: '8.x'
 
       - uses: ./.github/actions/authenticate-github-packages
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Restore & Build
         run: |
