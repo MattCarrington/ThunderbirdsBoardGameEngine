@@ -2,8 +2,8 @@
 
 The smoke tests validate that a deployed application is reachable and that key user journeys function correctly.
 
-The smoke tests now use the Rules.Client package instead of project references. A GitHub PAT with `packages:read`
-is now required to build the smoke tests
+The smoke tests now use the Rules.Client package instead of project references. A GitHub PAT with `read:packages`
+is now required to build the smoke tests. Docker BuildKit is used to handle the secret. This needs to be enabled.
 
 ## Running Smoke Tests from Source
 
