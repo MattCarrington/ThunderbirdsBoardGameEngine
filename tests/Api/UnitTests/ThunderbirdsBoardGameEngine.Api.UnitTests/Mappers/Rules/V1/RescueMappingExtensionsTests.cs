@@ -21,7 +21,7 @@ namespace ThunderbirdsBoardGameEngine.Api.UnitTests.Mappers.Rules.V1
             {
                 PresentDisasterBonusKeys = ["character:alan", "thunderbird:thunderbird4", "podvehicle.domo"],
                 PerformingCharacterKey = "alan",
-                PlayedFabCards = ["fab1", "fab2"],
+                PlayedFabCardKeys = ["fab1", "fab2"],
                 ActiveEventCards = ["event1", "event2"]
             };
 
@@ -32,7 +32,7 @@ namespace ThunderbirdsBoardGameEngine.Api.UnitTests.Mappers.Rules.V1
             Assert.Equal(ValidDisasterCardCode, result.DisasterCardCode);
             Assert.Equal(dto.PresentDisasterBonusKeys.Select(k => new DisasterBonusKey(k)), result.PresentDisasterBonusKeys);
             Assert.Equal(new CharacterCode("alan"), result.PerformingCharacter);
-            Assert.Equal(dto.PlayedFabCards.Select(c => new CardCode(c)), result.PlayedFabCardCodes);
+            Assert.Equal(dto.PlayedFabCardKeys.Select(c => new CardCode(c)), result.PlayedFabCardCodes);
             Assert.Equal(dto.ActiveEventCards.Select(c => new CardCode(c)), result.ActiveEventCardCodes);
         }
 
@@ -94,7 +94,7 @@ namespace ThunderbirdsBoardGameEngine.Api.UnitTests.Mappers.Rules.V1
             {
                 PresentDisasterBonusKeys = ["character:alan", "thunderbird:thunderbird4"],
                 PerformingCharacterKey = "alan",
-                PlayedFabCards = ["fab1", card]
+                PlayedFabCardKeys = ["fab1", card]
             };
 
             // Act & Assert

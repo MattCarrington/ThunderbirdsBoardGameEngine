@@ -158,7 +158,7 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints.Rules.V1
                     "domo"
                 },
                 PerformingCharacterKey = "gordon",
-                PlayedFabCards = new[]
+                PlayedFabCardKeys = new[]
                 {
                     "invalid-fab-card"
                 }

@@ -4,6 +4,10 @@ namespace ThunderbirdsBoardGameEngine.UI.Features.DisasterCards.Interfaces
 {
     public interface IRescueClientService
     {
-        Task<CalculateRescueTargetResponseDto?> CalculateRescueTargetAsync(string disasterCardCode, IReadOnlyCollection<string> presentBonusKeys, string performingCharacterKey);
+        Task<CalculateRescueTargetResponseDto?> CalculateRescueTargetAsync(
+            string disasterCardCode,
+            IReadOnlyCollection<string> presentBonusKeys,
+            string performingCharacterKey,
+            IReadOnlyCollection<string> playedFabCardKeys);
     }
 }

@@ -1,7 +1,7 @@
 ﻿@page "/disasterCards"
 @using ThunderbirdsBoardGameEngine.UI.Features.DisasterCards.Components
 
-<h3>Select a Disaster Card</h3>
+<h4>Select a Disaster Card</h4>
 
 <DisasterCardSelector 
     DisasterCards="_cards"
@@ -20,5 +20,8 @@
         CalculationFailed="_calculationFailed"
         IsCalculationDisabled="IsCalculateDisabled"
         CalculateClicked="CalculateRescueTarget"
-        SelectedCharacterCodeChanged="OnCharacterChanged"/>        
+        SelectedCharacterCodeChanged="OnCharacterChanged"
+        FabCardModifiers="_fabCardModifiers"
+        EventCardModifiers="_eventCardModifiers"
+        FabCardsChanged="OnFabCardChanged" />        
 }

@@ -19,6 +19,9 @@ namespace ThunderbirdsBoardGameEngine.UI.Features.DisasterCards.Components
         public IReadOnlySet<string> SelectedBonusKeys { get; set; } = new HashSet<string>();
 
         [Parameter]
+        public IReadOnlySet<string> SelectedFabCards { get; set; } = new HashSet<string>();
+
+        [Parameter]
         public CalculateRescueTargetResponseDto? CalculationResult { get; set; }
 
         [Parameter]
@@ -28,6 +31,12 @@ namespace ThunderbirdsBoardGameEngine.UI.Features.DisasterCards.Components
         public bool IsCalculationDisabled { get; set; }
 
         [Parameter]
+        public IReadOnlyList<CardModifierViewModel> FabCardModifiers { get; set; } = [];
+
+        [Parameter]
+        public IReadOnlyList<CardModifierViewModel> EventCardModifiers { get; set; } = [];
+
+        [Parameter]
         public EventCallback<string?> SelectedCharacterCodeChanged { get; set; }
 
         [Parameter]
@@ -35,5 +44,8 @@ namespace ThunderbirdsBoardGameEngine.UI.Features.DisasterCards.Components
 
         [Parameter]
         public EventCallback CalculateClicked { get; set; }
+
+        [Parameter]
+        public EventCallback<FabCardsChanged> FabCardsChanged { get; set; }
     }
 }

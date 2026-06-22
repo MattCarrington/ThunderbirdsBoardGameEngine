@@ -89,8 +89,8 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Features.DisasterCards
             context.RescueClientService.Received(1).CalculateRescueTargetAsync(
                 disasterCardCode: Arg.Is<string>(x => x == "DC1"),
                 presentBonusKeys: Arg.Any<IReadOnlyCollection<string>>(),
-                performingCharacterKey: Arg.Is<string>(x => x == "C1")
-            );
+                performingCharacterKey: Arg.Is<string>(x => x == "C1"),
+                playedFabCardKeys: Arg.Any<IReadOnlyCollection<string>>());
         }
 
         [Fact]
@@ -278,7 +278,8 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Features.DisasterCards
             context.RescueClientService.CalculateRescueTargetAsync(
                 Arg.Any<string>(),
                 Arg.Any<IReadOnlyCollection<string>>(),
-                Arg.Any<string>())
+                Arg.Any<string>(),
+                Arg.Any<IReadOnlyCollection<string>>())
                 .Returns(response);
         }
 
