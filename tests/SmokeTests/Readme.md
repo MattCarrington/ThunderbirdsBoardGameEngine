@@ -21,6 +21,7 @@ Build the smoke test image locally:
 
 ```powershell
 docker build `
+  --build-arg GITHUB_PACKAGES_USERNAME="$env:GITHUB_PACKAGES_USERNAME" `
   --secret id=github_packages_token,env=GITHUB_PACKAGES_TOKEN `
   -t thunderbirds-smoke-tests:local `
   -f tests/SmokeTests/ThunderbirdsBoardGameEngine.SmokeTests/Dockerfile `
