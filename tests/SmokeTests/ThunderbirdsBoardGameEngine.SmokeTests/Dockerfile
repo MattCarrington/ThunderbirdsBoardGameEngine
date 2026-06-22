@@ -1,18 +1,20 @@
 FROM mcr.microsoft.com/playwright/dotnet:v1.60.0-noble
 
 ARG BUILD_CONFIGURATION=Release
+ARG GITHUB_PACKAGES_USERNAME
+
 ENV BUILD_CONFIGURATION=$BUILD_CONFIGURATION
 
 WORKDIR /src
 
-COPY ["nuget.config", "."]
+COPY ["NuGet.config", "."]
 COPY ["Directory.Packages.props", "."]
 
 COPY ["tests/SmokeTests/ThunderbirdsBoardGameEngine.SmokeTests/ThunderbirdsBoardGameEngine.SmokeTests.csproj", "tests/SmokeTests/ThunderbirdsBoardGameEngine.SmokeTests/"]
 
 RUN --mount=type=secret,id=github_packages_token \
     sh -c 'set -eu \
-      && cp nuget.config /tmp/nuget.config \
+      && cp NuGet.config /tmp/nuget.config \
       && dotnet nuget update source GitHub \
            --configfile /tmp/nuget.config \
            --username "$GITHUB_PACKAGES_USERNAME" \

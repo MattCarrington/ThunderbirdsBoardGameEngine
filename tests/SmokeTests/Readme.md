@@ -2,8 +2,12 @@
 
 The smoke tests validate that a deployed application is reachable and that key user journeys function correctly.
 
-The smoke tests now use the Rules.Client package instead of project references. A GitHub PAT with `read:packages`
-is now required to build the smoke tests. Docker BuildKit is used to handle the secret. This needs to be enabled.
+## Prerequisites
+
+Set your GitHub username and a PAT with `read:packages` permission:
+
+    $env:GITHUB_PACKAGES_USERNAME = "your-github-username"
+    $env:GITHUB_PACKAGES_TOKEN = "<your-pat>"
 
 ## Running Smoke Tests from Source
 
@@ -20,12 +24,16 @@ dotnet test `
 Build the smoke test image locally:
 
 ```powershell
+$env:DOCKER_BUILDKIT = "1"
 docker build `
+  --build-arg GITHUB_PACKAGES_USERNAME="$env:GITHUB_PACKAGES_USERNAME" `
   --secret id=github_packages_token,env=GITHUB_PACKAGES_TOKEN `
   -t thunderbirds-smoke-tests:local `
   -f tests/SmokeTests/ThunderbirdsBoardGameEngine.SmokeTests/Dockerfile `
   .
 ```
+
+The Docker build uses BuildKit secrets to authenticate against GitHub Packages during package restore. The token is only available during the restore step and is not baked into the final image.
 
 ## Running the Smoke Test Docker Image
 
