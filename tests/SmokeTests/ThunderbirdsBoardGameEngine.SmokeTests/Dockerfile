@@ -15,7 +15,7 @@ RUN --mount=type=secret,id=github_packages_token \
       && cp nuget.config /tmp/nuget.config \
       && dotnet nuget update source GitHub \
            --configfile /tmp/nuget.config \
-           --username "MattCarrington" \
+           --username "$GITHUB_PACKAGES_USERNAME" \
            --password "$(cat /run/secrets/github_packages_token)" \
            --store-password-in-clear-text \
       && dotnet restore "tests/SmokeTests/ThunderbirdsBoardGameEngine.SmokeTests/ThunderbirdsBoardGameEngine.SmokeTests.csproj" \

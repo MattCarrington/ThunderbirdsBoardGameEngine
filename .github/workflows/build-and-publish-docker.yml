@@ -103,6 +103,7 @@ jobs:
           ghcr="ghcr.io/$owner/$image"
 
           docker build \
+            --build-arg GITHUB_PACKAGES_USERNAME="${GITHUB_ACTOR}" \
             --secret id=github_packages_token,env=GITHUB_PACKAGES_TOKEN \
             -t "$ghcr:$image_tag" \
             -f "${{ inputs.dockerfile_path }}" \
