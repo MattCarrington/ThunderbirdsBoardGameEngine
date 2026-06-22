@@ -2,9 +2,12 @@ name: Authenticate GitHub Packages
 description: Authenticates NuGet restore against GitHub Packages
 
 inputs:
+  username:
+    required: false
+    description: Optional username for GitHub Packages authentication (defaults to github.actor)
   token:
     required: true
-    description: GitHub token with read access to packages (e.g., GITHUB_TOKEN or a personal access token)
+    description: GitHub token with read access to packages (e.g., GITHUB_TOKEN or a personal access token)  
 
 runs:
   using: composite
@@ -13,6 +16,6 @@ runs:
       shell: bash
       run: |
         dotnet nuget update source GitHub \
-          --username "${{ github.actor }}" \
+          --username "${{ inputs.username || github.actor }}" \
           --password "${{ inputs.token }}" \
           --store-password-in-clear-text
