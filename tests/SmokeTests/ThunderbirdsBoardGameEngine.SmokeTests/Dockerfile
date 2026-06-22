@@ -5,16 +5,22 @@ ENV BUILD_CONFIGURATION=$BUILD_CONFIGURATION
 
 WORKDIR /src
 
+COPY ["nuget.config", "."]
 COPY ["Directory.Packages.props", "."]
 
 COPY ["tests/SmokeTests/ThunderbirdsBoardGameEngine.SmokeTests/ThunderbirdsBoardGameEngine.SmokeTests.csproj", "tests/SmokeTests/ThunderbirdsBoardGameEngine.SmokeTests/"]
-COPY ["src/Rules/ThunderbirdsBoardGameEngine.Rules.Client/ThunderbirdsBoardGameEngine.Rules.Client.csproj", "src/Rules/ThunderbirdsBoardGameEngine.Rules.Client/"]
-COPY ["src/Common/ThunderbirdsBoardGameEngine.Client.Infrastructure/ThunderbirdsBoardGameEngine.Client.Infrastructure.csproj", "src/Common/ThunderbirdsBoardGameEngine.Client.Infrastructure/"]
-COPY ["src/Rules/ThunderbirdsBoardGameEngine.Rules.Contracts/ThunderbirdsBoardGameEngine.Rules.Contracts.csproj", "src/Rules/ThunderbirdsBoardGameEngine.Rules.Contracts/"]
-COPY ["tests/Common/ThunderbirdsBoardGameEngine.TestUtils/ThunderbirdsBoardGameEngine.TestUtils.csproj", "tests/Common/ThunderbirdsBoardGameEngine.TestUtils/"]
-COPY ["src/ReferenceData/ThunderbirdsBoardGameEngine.ReferenceData/ThunderbirdsBoardGameEngine.ReferenceData.csproj", "src/ReferenceData/ThunderbirdsBoardGameEngine.ReferenceData/"]
 
-RUN dotnet restore "tests/SmokeTests/ThunderbirdsBoardGameEngine.SmokeTests/ThunderbirdsBoardGameEngine.SmokeTests.csproj"
+RUN --mount=type=secret,id=github_packages_token \
+    sh -c 'set -eu \
+      && cp nuget.config /tmp/nuget.config \
+      && dotnet nuget update source GitHub \
+           --configfile /tmp/nuget.config \
+           --username "$GITHUB_PACKAGES_USERNAME" \
+           --password "$(cat /run/secrets/github_packages_token)" \
+           --store-password-in-clear-text \
+      && dotnet restore "tests/SmokeTests/ThunderbirdsBoardGameEngine.SmokeTests/ThunderbirdsBoardGameEngine.SmokeTests.csproj" \
+           --configfile /tmp/nuget.config \
+      && rm /tmp/nuget.config'
 
 COPY . .
 

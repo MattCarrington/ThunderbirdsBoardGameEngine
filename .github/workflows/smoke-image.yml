@@ -34,7 +34,7 @@ jobs:
       before_sha: ${{ github.event.before }}
       after_sha: ${{ github.sha }}
       path_prefix: tests/SmokeTests
-      package_regex: xunit|microsoft\.net\.test\.sdk|testcontainers|docker\.dotnet|coverlet
+      package_regex: xunit|microsoft\.net\.test\.sdk|testcontainers|docker\.dotnet|coverlet|ThunderbirdsBoardGameEngine
 
   compute-version:
     if: needs.detect-change.outputs.should_build == 'true'

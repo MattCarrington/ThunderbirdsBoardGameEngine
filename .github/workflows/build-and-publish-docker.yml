@@ -40,7 +40,8 @@ jobs:
   docker-build-publish:
     name: Build & Publish Docker Image
     runs-on: ubuntu-latest
-
+    env:
+      DOCKER_BUILDKIT: 1
     outputs:
       image_tag: ${{ steps.publish.outputs.image_tag }}
       image_ref: ${{ steps.publish.outputs.image_ref }}
@@ -89,6 +90,8 @@ jobs:
       - name: Build, Tag and Push Image
         id: publish
         shell: bash
+        env:
+          GITHUB_PACKAGES_TOKEN: ${{ secrets.registry_token || github.token }}          
         run: |
           set -euo pipefail
 
@@ -101,6 +104,8 @@ jobs:
           ghcr="ghcr.io/$owner/$image"
 
           docker build \
+            --build-arg GITHUB_PACKAGES_USERNAME="${GITHUB_ACTOR}" \
+            --secret id=github_packages_token,env=GITHUB_PACKAGES_TOKEN \
             -t "$ghcr:$image_tag" \
             -f "${{ inputs.dockerfile_path }}" \
             "${{ inputs.docker_build_context }}"

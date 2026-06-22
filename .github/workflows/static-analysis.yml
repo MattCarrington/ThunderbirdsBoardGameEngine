@@ -5,12 +5,15 @@ on:
     inputs:
       solution_file:
         required: true
-        type: string
+        type: string    
 
 jobs:
   static-analysis:
     name: Static Analysis
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: read
 
     steps:
       - uses: actions/checkout@v6
@@ -18,6 +21,10 @@ jobs:
       - uses: actions/setup-dotnet@v5
         with:
           dotnet-version: '8.x'
+
+      - uses: ./.github/actions/authenticate-github-packages
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       # Optional but nice: ensure formatting is clean
       - name: Check code format
