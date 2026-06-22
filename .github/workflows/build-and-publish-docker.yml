@@ -90,7 +90,7 @@ jobs:
         id: publish
         shell: bash
         env:
-          GITHUB_PACKAGES_TOKEN: ${{ secrets.registry_token }}
+          GITHUB_PACKAGES_TOKEN: ${{ secrets.registry_token || github.token }}
         run: |
           set -euo pipefail
 
