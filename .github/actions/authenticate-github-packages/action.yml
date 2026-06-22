@@ -7,7 +7,11 @@ inputs:
     description: Optional username for GitHub Packages authentication (defaults to github.actor)
   token:
     required: true
-    description: GitHub token with read access to packages (e.g., GITHUB_TOKEN or a personal access token)  
+    description: GitHub token with read access to packages (e.g., GITHUB_TOKEN or a personal access token)
+  config_file:
+    required: false
+    default: NuGet.config
+    description: Path to the NuGet configuration file to update (defaults to NuGet.config in the repository root)
 
 runs:
   using: composite
@@ -18,4 +22,5 @@ runs:
         dotnet nuget update source GitHub \
           --username "${{ inputs.username || github.actor }}" \
           --password "${{ inputs.token }}" \
+          --configfile "${{ inputs.config_file }}" \
           --store-password-in-clear-text
