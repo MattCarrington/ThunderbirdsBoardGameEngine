@@ -15,20 +15,9 @@ namespace ThunderbirdsBoardGameEngine.Api.Mappers.Rules.V1
                 throw new BadRequestException("Performing character key must be provided.");
             }
 
-            if (request.PresentDisasterBonusKeys.Any(string.IsNullOrWhiteSpace))
-            {
-                throw new BadRequestException("Present disaster bonus keys cannot contain null or whitespace values.");
-            }
-
-            if (request.PlayedFabCardKeys.Any(string.IsNullOrWhiteSpace))
-            {
-                throw new BadRequestException("Played F.AB card codes cannot contain null or whitespace values.");
-            }
-
-            if (request.ActiveEventCardKeys.Any(string.IsNullOrWhiteSpace))
-            {
-                throw new BadRequestException("Active event card codes cannot contain null or whitespace values.");
-            }
+            ValidateOptionalStringList(request.PresentDisasterBonusKeys, nameof(request.PresentDisasterBonusKeys));
+            ValidateOptionalStringList(request.PlayedFabCardKeys, nameof(request.PlayedFabCardKeys));
+            ValidateOptionalStringList(request.ActiveEventCardKeys, nameof(request.ActiveEventCardKeys));
 
             return new CalculateRescueTargetQuery
             (
@@ -70,6 +59,19 @@ namespace ThunderbirdsBoardGameEngine.Api.Mappers.Rules.V1
                 SourceType.EventCard => "event-card",
                 _ => throw new InvalidOperationException($"Unhandled SourceType '{sourceType}'")
             };
+        }
+
+        private static void ValidateOptionalStringList(IEnumerable<string> list, string propertyName)
+        {
+            if (list is null)
+            {
+                throw new BadRequestException($"{propertyName} cannot be null.");
+            }
+
+            if (list.Any(string.IsNullOrWhiteSpace))
+            {
+                throw new BadRequestException($"{propertyName} cannot contain null or whitespace values.");
+            }
         }
     }
 }

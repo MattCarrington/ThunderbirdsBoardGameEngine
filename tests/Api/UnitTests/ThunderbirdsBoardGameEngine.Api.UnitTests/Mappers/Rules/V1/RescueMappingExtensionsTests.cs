@@ -37,7 +37,7 @@ namespace ThunderbirdsBoardGameEngine.Api.UnitTests.Mappers.Rules.V1
         }
 
         [Fact]
-        public void ToQuery_FabCardAndEventCardKeysMissing_ReturnsExpectedQuery()
+        public void ToQuery_OptionalKeysMissing_ReturnsExpectedQuery()
         {
             // Arrange
             var dto = new CalculateRescueTargetRequestDto
@@ -54,6 +54,63 @@ namespace ThunderbirdsBoardGameEngine.Api.UnitTests.Mappers.Rules.V1
             Assert.Empty(result.PresentDisasterBonusKeys);
             Assert.Equal(new CharacterCode("alan"), result.PerformingCharacter);
             Assert.Empty(result.PlayedFabCardCodes);
+            Assert.Empty(result.ActiveEventCardCodes);
+        }
+
+        [Fact]
+        public void ToQuery_PresentDisasterBonusKeysEmpty_ReturnsExpectedQuery()
+        {
+            // Arrange
+            var dto = new CalculateRescueTargetRequestDto
+            {
+                PresentDisasterBonusKeys = [],
+                PerformingCharacterKey = "alan"
+            };
+
+            // Act
+            var result = dto.ToQuery(ValidDisasterCardCode.ToString());
+
+            // Assert
+            Assert.Equal(ValidDisasterCardCode, result.DisasterCardCode);
+            Assert.Empty(result.PresentDisasterBonusKeys);
+            Assert.Equal(new CharacterCode("alan"), result.PerformingCharacter);
+        }
+
+        [Fact]
+        public void ToQuery_PlayedFabCardKeysEmpty_ReturnsExpectedQuery()
+        {
+            // Arrange
+            var dto = new CalculateRescueTargetRequestDto
+            {
+                PerformingCharacterKey = "alan",
+                PlayedFabCardKeys = []
+            };
+
+            // Act
+            var result = dto.ToQuery(ValidDisasterCardCode.ToString());
+
+            // Assert
+            Assert.Equal(ValidDisasterCardCode, result.DisasterCardCode);
+            Assert.Equal(new CharacterCode("alan"), result.PerformingCharacter);
+            Assert.Empty(result.PlayedFabCardCodes);
+        }
+
+        [Fact]
+        public void ToQuery_ActiveEventCardKeysEmpty_ReturnsExpectedQuery()
+        {
+            // Arrange
+            var dto = new CalculateRescueTargetRequestDto
+            {
+                PerformingCharacterKey = "alan",
+                ActiveEventCardKeys = []
+            };
+
+            // Act
+            var result = dto.ToQuery(ValidDisasterCardCode.ToString());
+
+            // Assert
+            Assert.Equal(ValidDisasterCardCode, result.DisasterCardCode);
+            Assert.Equal(new CharacterCode("alan"), result.PerformingCharacter);
             Assert.Empty(result.ActiveEventCardCodes);
         }
 
@@ -110,6 +167,48 @@ namespace ThunderbirdsBoardGameEngine.Api.UnitTests.Mappers.Rules.V1
                 PresentDisasterBonusKeys = ["character:alan", "thunderbird:thunderbird4"],
                 PerformingCharacterKey = "alan",
                 ActiveEventCardKeys = ["event1", card]
+            };
+
+            // Act & Assert
+            Assert.Throws<BadRequestException>(() => dto.ToQuery(ValidDisasterCardCode.ToString()));
+        }
+
+        [Fact]
+        public void ToQuery_PresentDisasterBonusKeysNull_ThrowsBadRequestException()
+        {
+            // Arrange
+            var dto = new CalculateRescueTargetRequestDto
+            {
+                PresentDisasterBonusKeys = null,
+                PerformingCharacterKey = "alan"
+            };
+
+            // Act & Assert
+            Assert.Throws<BadRequestException>(() => dto.ToQuery(ValidDisasterCardCode.ToString()));
+        }
+
+        [Fact]
+        public void ToQuery_PlayedFabCardKeysNull_ThrowsBadRequestException()
+        {
+            // Arrange
+            var dto = new CalculateRescueTargetRequestDto
+            {
+                PerformingCharacterKey = "alan",
+                PlayedFabCardKeys = null
+            };
+
+            // Act & Assert
+            Assert.Throws<BadRequestException>(() => dto.ToQuery(ValidDisasterCardCode.ToString()));
+        }
+
+        [Fact]
+        public void ToQuery_ActiveEventCardKeysNull_ThrowsBadRequestException()
+        {
+            // Arrange
+            var dto = new CalculateRescueTargetRequestDto
+            {
+                PerformingCharacterKey = "alan",
+                ActiveEventCardKeys = null
             };
 
             // Act & Assert
