@@ -3,7 +3,7 @@ using ThunderbirdsBoardGameEngine.UI.Features.DisasterCards.ViewModels;
 
 namespace ThunderbirdsBoardGameEngine.UI.Features.DisasterCards.Services
 {
-    public class CardModifierService : ICardModifierService
+    public class RescueCalculationModifierService : IRescueCalculationModifierService
     {
         public IReadOnlyList<CardModifierViewModel> GetFabCards()
         {

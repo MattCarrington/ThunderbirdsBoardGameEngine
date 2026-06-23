@@ -2,7 +2,7 @@
 
 namespace ThunderbirdsBoardGameEngine.UI.Features.DisasterCards.Interfaces
 {
-    public interface ICardModifierService
+    public interface IRescueCalculationModifierService
     {
         IReadOnlyList<CardModifierViewModel> GetEventCards();
 

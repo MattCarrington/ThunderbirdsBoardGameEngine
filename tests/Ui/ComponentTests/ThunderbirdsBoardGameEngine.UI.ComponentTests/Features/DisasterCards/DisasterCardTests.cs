@@ -46,8 +46,8 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Features.DisasterCards
             _ = Render<DisasterCardsPage>();
 
             // Assert
-            context.CardModifierService.Received(1).GetFabCards();
-            context.CardModifierService.Received(1).GetEventCards();
+            context.RescueCalculationModifierService.Received(1).GetFabCards();
+            context.RescueCalculationModifierService.Received(1).GetEventCards();
         }
 
         [Fact]
@@ -356,8 +356,8 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Features.DisasterCards
             context.DisasterCardService.GetAll().Returns(disasterCards.Select(d => new DisasterCardSummaryViewModel(d.Code, d.DisplayName)).ToList());
             context.DisasterCardService.GetByCode("DC1").Returns(disasterCards.First());
             context.CharacterService.GetAll().Returns(CreateCharacters());
-            context.CardModifierService.GetFabCards().Returns(CreateFabCardModifiers());
-            context.CardModifierService.GetEventCards().Returns(CreateEventCardModifiers());
+            context.RescueCalculationModifierService.GetFabCards().Returns(CreateFabCardModifiers());
+            context.RescueCalculationModifierService.GetEventCards().Returns(CreateEventCardModifiers());
 
             return context;
         }
