@@ -18,6 +18,7 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Validators
                 new LocationReferenceValidator(),
                 new DisasterBonusSystemValidator(),
                 new MapEdgeValidator(),
+                new CardUniquenessValidator()
             ];
         }
 
