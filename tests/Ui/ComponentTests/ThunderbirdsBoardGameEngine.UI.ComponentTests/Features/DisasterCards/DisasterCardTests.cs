@@ -90,7 +90,8 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Features.DisasterCards
                 disasterCardCode: Arg.Is<string>(x => x == "DC1"),
                 presentBonusKeys: Arg.Any<IReadOnlyCollection<string>>(),
                 performingCharacterKey: Arg.Is<string>(x => x == "C1"),
-                playedFabCardKeys: Arg.Any<IReadOnlyCollection<string>>());
+                playedFabCardKeys: Arg.Any<IReadOnlyCollection<string>>(),
+                activeEventCardKeys: Arg.Any<IReadOnlyCollection<string>>());
         }
 
         [Fact]
@@ -279,6 +280,7 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Features.DisasterCards
                 Arg.Any<string>(),
                 Arg.Any<IReadOnlyCollection<string>>(),
                 Arg.Any<string>(),
+                Arg.Any<IReadOnlyCollection<string>>(),
                 Arg.Any<IReadOnlyCollection<string>>())
                 .Returns(response);
         }

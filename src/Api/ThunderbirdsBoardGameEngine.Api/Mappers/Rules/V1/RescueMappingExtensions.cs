@@ -25,7 +25,7 @@ namespace ThunderbirdsBoardGameEngine.Api.Mappers.Rules.V1
                 throw new BadRequestException("Played FAB card codes cannot contain null or whitespace values.");
             }
 
-            if (request.ActiveEventCards.Any(string.IsNullOrWhiteSpace))
+            if (request.ActiveEventCardKeys.Any(string.IsNullOrWhiteSpace))
             {
                 throw new BadRequestException("Active event card codes cannot contain null or whitespace values.");
             }
@@ -36,7 +36,7 @@ namespace ThunderbirdsBoardGameEngine.Api.Mappers.Rules.V1
                 PerformingCharacter: new CharacterCode(request.PerformingCharacterKey),
                 PresentDisasterBonusKeys: request.PresentDisasterBonusKeys.Select(k => new DisasterBonusKey(k)).ToList(),
                 PlayedFabCardCodes: request.PlayedFabCardKeys.Select(c => new CardCode(c)).ToList(),
-                ActiveEventCardCodes: request.ActiveEventCards.Select(c => new CardCode(c)).ToList()
+                ActiveEventCardCodes: request.ActiveEventCardKeys.Select(c => new CardCode(c)).ToList()
             );
         }
 

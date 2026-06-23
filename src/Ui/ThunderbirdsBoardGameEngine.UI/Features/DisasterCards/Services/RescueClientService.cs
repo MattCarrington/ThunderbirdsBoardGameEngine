@@ -17,13 +17,15 @@ namespace ThunderbirdsBoardGameEngine.UI.Features.DisasterCards.Services
             string disasterCardCode,
             IReadOnlyCollection<string> presentBonusKeys,
             string performingCharacterKey,
-            IReadOnlyCollection<string> playedFabCardKeys)
+            IReadOnlyCollection<string> playedFabCardKeys,
+            IReadOnlyCollection<string> activeEventCardKeys)
         {
             var request = new CalculateRescueTargetRequestDto
             {
                 PresentDisasterBonusKeys = presentBonusKeys,
                 PerformingCharacterKey = performingCharacterKey,
-                PlayedFabCardKeys = playedFabCardKeys
+                PlayedFabCardKeys = playedFabCardKeys,
+                ActiveEventCardKeys = activeEventCardKeys
             };
 
             var result = await _rescueClient.CalculateRescueTargetAsync(disasterCardCode, request);

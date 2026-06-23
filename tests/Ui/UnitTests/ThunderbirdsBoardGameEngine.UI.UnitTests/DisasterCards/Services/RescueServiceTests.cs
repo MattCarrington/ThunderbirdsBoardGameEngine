@@ -30,7 +30,12 @@ namespace ThunderbirdsBoardGameEngine.UI.UnitTests.DisasterCards.Services
             var service = CreateRescueService(rescueClient);
 
             // Act
-            var result = await service.CalculateRescueTargetAsync(parameters.DisasterCardCode, parameters.PresentBonusKeys, parameters.PerformingCharacterKey, parameters.PresentFabKeys);
+            var result = await service.CalculateRescueTargetAsync(
+                parameters.DisasterCardCode,
+                parameters.PresentBonusKeys,
+                parameters.PerformingCharacterKey,
+                parameters.PresentFabCardKeys,
+                parameters.ActiveEventCardKeys);
 
             // Assert
             Assert.NotNull(result);
@@ -40,7 +45,7 @@ namespace ThunderbirdsBoardGameEngine.UI.UnitTests.DisasterCards.Services
             {
                 PresentDisasterBonusKeys = parameters.PresentBonusKeys,
                 PerformingCharacterKey = parameters.PerformingCharacterKey,
-                PlayedFabCardKeys = parameters.PresentFabKeys
+                PlayedFabCardKeys = parameters.PresentFabCardKeys
             };
 
             await rescueClient.Received(1)
@@ -64,7 +69,12 @@ namespace ThunderbirdsBoardGameEngine.UI.UnitTests.DisasterCards.Services
             var service = CreateRescueService(rescueClient);
 
             // Act
-            var result = await service.CalculateRescueTargetAsync(parameters.DisasterCardCode, parameters.PresentBonusKeys, parameters.PerformingCharacterKey, parameters.PresentFabKeys);
+            var result = await service.CalculateRescueTargetAsync(
+                parameters.DisasterCardCode,
+                parameters.PresentBonusKeys,
+                parameters.PerformingCharacterKey,
+                parameters.PresentFabCardKeys,
+                parameters.ActiveEventCardKeys);
 
             // Assert
             Assert.Null(result);
@@ -78,7 +88,7 @@ namespace ThunderbirdsBoardGameEngine.UI.UnitTests.DisasterCards.Services
 
             var performingCharacterKey = "CHARACTER_001";
 
-            return new RequestParameters(disasterCardCode, presentBonusKeys, performingCharacterKey, Array.Empty<string>());
+            return new RequestParameters(disasterCardCode, presentBonusKeys, performingCharacterKey, Array.Empty<string>(), Array.Empty<string>());
         }
 
         private static IRescueClient CreateRescueClient(ApiResult<CalculateRescueTargetResponseDto> apiResult)
@@ -99,6 +109,7 @@ namespace ThunderbirdsBoardGameEngine.UI.UnitTests.DisasterCards.Services
             string DisasterCardCode,
             IReadOnlyCollection<string> PresentBonusKeys,
             string PerformingCharacterKey,
-            IReadOnlyCollection<string> PresentFabKeys);
+            IReadOnlyCollection<string> PresentFabCardKeys,
+            IReadOnlyCollection<string> ActiveEventCardKeys);
     }
 }

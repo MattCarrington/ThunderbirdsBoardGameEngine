@@ -1,0 +1,24 @@
+﻿<h5>Event Cards</h5>
+
+<ul class="list-unstyled">
+    @foreach (var eventCard in EventCards)
+    {
+        var checkboxId = $"event-{eventCard.Key}";
+
+        <li>
+            <div class="form-check">
+                <input class="form-check-input"
+                       type="checkbox"
+                       id="@checkboxId"
+                       data-testid="event-checkbox"
+                       data-event-key="@eventCard.Key"
+                       checked="@SelectedEventCards.Contains(eventCard.Key)"
+                       @onchange="e => OnChanged(eventCard.Key, e)" />
+
+                <label class="form-check-label" for="@checkboxId">
+                    @eventCard.DisplayName
+                </label>
+            </div>
+        </li>
+    }
+</ul>

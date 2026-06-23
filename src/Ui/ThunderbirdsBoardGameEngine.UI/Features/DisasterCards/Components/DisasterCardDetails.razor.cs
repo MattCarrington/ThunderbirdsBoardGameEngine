@@ -22,6 +22,9 @@ namespace ThunderbirdsBoardGameEngine.UI.Features.DisasterCards.Components
         public IReadOnlySet<string> SelectedFabCards { get; set; } = new HashSet<string>();
 
         [Parameter]
+        public IReadOnlySet<string> SelectedEventCards { get; set; } = new HashSet<string>();
+
+        [Parameter]
         public CalculateRescueTargetResponseDto? CalculationResult { get; set; }
 
         [Parameter]
@@ -47,5 +50,8 @@ namespace ThunderbirdsBoardGameEngine.UI.Features.DisasterCards.Components
 
         [Parameter]
         public EventCallback<FabCardsChanged> FabCardsChanged { get; set; }
+
+        [Parameter]
+        public EventCallback<EventCardsChanged> EventCardsChanged { get; set; }
     }
 }

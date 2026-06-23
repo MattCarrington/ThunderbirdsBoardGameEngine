@@ -8,6 +8,7 @@ namespace ThunderbirdsBoardGameEngine.UI.Features.DisasterCards.Interfaces
             string disasterCardCode,
             IReadOnlyCollection<string> presentBonusKeys,
             string performingCharacterKey,
-            IReadOnlyCollection<string> playedFabCardKeys);
+            IReadOnlyCollection<string> playedFabCardKeys,
+            IReadOnlyCollection<string> activeEventCardKeys);
     }
 }

@@ -29,6 +29,6 @@
         /// <summary>
         /// Gets the collection of unique keys for the Event Cards that are currently active.
         /// </summary>
-        public IReadOnlyCollection<string> ActiveEventCards { get; init; } = [];
+        public IReadOnlyCollection<string> ActiveEventCardKeys { get; init; } = [];
     }
 }

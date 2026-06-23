@@ -21,6 +21,10 @@
                      SelectedFabCards="@SelectedFabCards"
                      FabCardsChanged="FabCardsChanged" />
 
+        <EventCardList EventCards="@EventCardModifiers"
+                       SelectedEventCards="@SelectedEventCards"
+                       EventCardsChanged="EventCardsChanged" />
+
         <button class="btn btn-primary mt-3"
                 data-testid="calculate-button"
         disabled="@IsCalculationDisabled"

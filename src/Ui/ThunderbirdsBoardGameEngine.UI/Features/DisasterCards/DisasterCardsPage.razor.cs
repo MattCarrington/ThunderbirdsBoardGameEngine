@@ -30,6 +30,7 @@ namespace ThunderbirdsBoardGameEngine.UI.Features.DisasterCards
 
         private HashSet<string> _selectedBonusKeys = new();
         private HashSet<string> _selectedFabCardKeys = new();
+        private HashSet<string> _selectedEventCardKeys = new();
 
         private CalculateRescueTargetResponseDto? _calculationResult;
         private bool _calculationFailed;
@@ -91,7 +92,8 @@ namespace ThunderbirdsBoardGameEngine.UI.Features.DisasterCards
                         _selectedCard.Code,
                         _selectedBonusKeys,
                         _selectedCharacter,
-                        _selectedFabCardKeys);
+                        _selectedFabCardKeys,
+                        _selectedEventCardKeys);
 
                 _calculationFailed = _calculationResult is null;
             }
@@ -122,6 +124,20 @@ namespace ThunderbirdsBoardGameEngine.UI.Features.DisasterCards
             else
             {
                 _selectedFabCardKeys.Remove(change.Key);
+            }
+
+            ClearCalculationState();
+        }
+
+        private void OnEventCardChanged(EventCardsChanged change)
+        {
+            if (change.Selected)
+            {
+                _selectedEventCardKeys.Add(change.Key);
+            }
+            else
+            {
+                _selectedEventCardKeys.Remove(change.Key);
             }
 
             ClearCalculationState();
