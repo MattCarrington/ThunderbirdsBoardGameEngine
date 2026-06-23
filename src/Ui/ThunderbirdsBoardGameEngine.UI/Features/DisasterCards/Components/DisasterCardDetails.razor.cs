@@ -49,9 +49,9 @@ namespace ThunderbirdsBoardGameEngine.UI.Features.DisasterCards.Components
         public EventCallback CalculateClicked { get; set; }
 
         [Parameter]
-        public EventCallback<FabCardsChanged> FabCardsChanged { get; set; }
+        public EventCallback<FabCardChanged> FabCardsChanged { get; set; }
 
         [Parameter]
-        public EventCallback<EventCardsChanged> EventCardsChanged { get; set; }
+        public EventCallback<EventCardChanged> EventCardsChanged { get; set; }
     }
 }

@@ -115,7 +115,7 @@ namespace ThunderbirdsBoardGameEngine.UI.Features.DisasterCards
             ClearCalculationState();
         }
 
-        private void OnFabCardChanged(FabCardsChanged change)
+        private void OnFabCardChanged(FabCardChanged change)
         {
             if (change.Selected)
             {
@@ -129,7 +129,7 @@ namespace ThunderbirdsBoardGameEngine.UI.Features.DisasterCards
             ClearCalculationState();
         }
 
-        private void OnEventCardChanged(EventCardsChanged change)
+        private void OnEventCardChanged(EventCardChanged change)
         {
             if (change.Selected)
             {

@@ -37,6 +37,20 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Features.DisasterCards
         }
 
         [Fact]
+        public void CallsModifierCardsOnInitialization()
+        {
+            // Arrange
+            var context = CreateTestContext();
+
+            // Act
+            _ = Render<DisasterCardsPage>();
+
+            // Assert
+            context.CardModifierService.Received(1).GetFabCards();
+            context.CardModifierService.Received(1).GetEventCards();
+        }
+
+        [Fact]
         public void DisplaysDisasterCardDetailsWhenSelected()
         {
             // Arrange
@@ -261,6 +275,78 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Features.DisasterCards
             });
         }
 
+        [Fact]
+        public void ClearsCalculatedResultWhenFabCardToggled()
+        {
+            // Arrange
+            var context = CreateTestContext();
+
+            var response = CreateRescueCalculationResponse();
+
+            SetupRescueClientService(context, response);
+
+            var cut = Render<DisasterCardsPage>();
+
+            cut.Find("#disasterSelect").Change("DC1");
+            cut.Find("#characterSelect").Change("C1");
+
+            cut.Find("[data-testid='calculate-button']").Click();
+
+            cut.WaitForAssertion(() =>
+            {
+                cut.Find("[data-testid='rescue-calculation-result']");
+            });
+
+            // Act
+            var fabCheckbox = cut
+                .FindAll("[data-testid='fab-checkbox']")
+                .First();
+            fabCheckbox.Change(true);
+
+            // Assert
+            cut.WaitForAssertion(() =>
+            {
+                Assert.Throws<ElementNotFoundException>(() => cut.Find("[data-testid='rescue-calculation-result']"));
+                Assert.Throws<ElementNotFoundException>(() => cut.Find("[data-testid='rescue-calculation-error']"));
+            });
+        }
+
+        [Fact]
+        public void ClearsCalculatedResultWhenEventCardToggled()
+        {
+            // Arrange
+            var context = CreateTestContext();
+
+            var response = CreateRescueCalculationResponse();
+
+            SetupRescueClientService(context, response);
+
+            var cut = Render<DisasterCardsPage>();
+
+            cut.Find("#disasterSelect").Change("DC1");
+            cut.Find("#characterSelect").Change("C1");
+
+            cut.Find("[data-testid='calculate-button']").Click();
+
+            cut.WaitForAssertion(() =>
+            {
+                cut.Find("[data-testid='rescue-calculation-result']");
+            });
+
+            // Act
+            var eventCheckbox = cut
+                .FindAll("[data-testid='event-checkbox']")
+                .First();
+            eventCheckbox.Change(true);
+
+            // Assert
+            cut.WaitForAssertion(() =>
+            {
+                Assert.Throws<ElementNotFoundException>(() => cut.Find("[data-testid='rescue-calculation-result']"));
+                Assert.Throws<ElementNotFoundException>(() => cut.Find("[data-testid='rescue-calculation-error']"));
+            });
+        }
+
         private DisasterCardPageTestContext CreateTestContext()
         {
             var context = new DisasterCardPageTestContext(this);
@@ -270,6 +356,8 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Features.DisasterCards
             context.DisasterCardService.GetAll().Returns(disasterCards.Select(d => new DisasterCardSummaryViewModel(d.Code, d.DisplayName)).ToList());
             context.DisasterCardService.GetByCode("DC1").Returns(disasterCards.First());
             context.CharacterService.GetAll().Returns(CreateCharacters());
+            context.CardModifierService.GetFabCards().Returns(CreateFabCardModifiers());
+            context.CardModifierService.GetEventCards().Returns(CreateEventCardModifiers());
 
             return context;
         }
@@ -310,6 +398,24 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Features.DisasterCards
             [
                 new(Key: "C1", DisplayName: "Character 1"),
                 new(Key: "C2", DisplayName: "Character 2")
+            ];
+        }
+
+        private static IReadOnlyCollection<CardModifierViewModel> CreateFabCardModifiers()
+        {
+            return
+            [
+                new(Key: "fab1", DisplayName: "FAB Card 1"),
+                new(Key: "fab2", DisplayName: "FAB Card 2")
+            ];
+        }
+
+        private static IReadOnlyCollection<CardModifierViewModel> CreateEventCardModifiers()
+        {
+            return
+            [
+                new(Key: "event1", DisplayName: "Event Card 1"),
+                new(Key: "event2", DisplayName: "Event Card 2")
             ];
         }
     }

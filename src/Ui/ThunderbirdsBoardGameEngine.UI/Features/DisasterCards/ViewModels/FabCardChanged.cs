@@ -1,6 +1,6 @@
 ﻿namespace ThunderbirdsBoardGameEngine.UI.Features.DisasterCards.ViewModels
 {
-    public sealed record EventCardsChanged(
+    public sealed record FabCardChanged(
         string Key,
         bool Selected
     );

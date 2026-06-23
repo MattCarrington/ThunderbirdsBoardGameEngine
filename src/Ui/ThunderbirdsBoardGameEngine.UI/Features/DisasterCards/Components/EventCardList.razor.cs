@@ -12,13 +12,13 @@ namespace ThunderbirdsBoardGameEngine.UI.Features.DisasterCards.Components
         public IReadOnlySet<string> SelectedEventCards { get; set; } = new HashSet<string>();
 
         [Parameter]
-        public EventCallback<EventCardsChanged> EventCardsChanged { get; set; }
+        public EventCallback<EventCardChanged> EventCardChanged { get; set; }
 
         private Task OnChanged(string key, ChangeEventArgs e)
         {
             var selected = (bool)e.Value!;
 
-            return EventCardsChanged.InvokeAsync(new EventCardsChanged(key, selected));
+            return EventCardChanged.InvokeAsync(new EventCardChanged(key, selected));
         }
     }
 }

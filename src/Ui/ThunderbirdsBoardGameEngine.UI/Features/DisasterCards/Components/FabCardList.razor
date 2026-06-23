@@ -3,15 +3,15 @@
 <ul class="list-unstyled">
     @foreach (var fabCard in FabCards)
     {
-        var checkboxId = $"bonus-{fabCard.Key}";
+        var checkboxId = $"fabcard-{fabCard.Key}";
 
         <li>
             <div class="form-check">
                 <input class="form-check-input"
                        type="checkbox"
                        id="@checkboxId"
-                       data-testid="bonus-checkbox"
-                       data-bonus-key="@fabCard.Key"
+                       data-testid="fab-checkbox"
+                       data-fab-key="@fabCard.Key"
                        checked="@SelectedFabCards.Contains(fabCard.Key)"
                        @onchange="e => OnChanged(fabCard.Key, e)" />
 
