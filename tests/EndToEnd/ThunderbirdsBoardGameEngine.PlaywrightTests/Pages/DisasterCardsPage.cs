@@ -28,7 +28,7 @@ namespace ThunderbirdsBoardGameEngine.PlaywrightTests.Pages
         {
             await Page.GotoAsync($"{_settings.BaseUrl}/disasterCards");
             await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
-            await Page.WaitForSelectorAsync("h3:text-is('Select a Disaster Card')");
+            await Page.WaitForSelectorAsync("h4:text-is('Select a Disaster Card')");
         }
 
         public async Task SelectCardAsync(string cardName)
@@ -45,6 +45,30 @@ namespace ThunderbirdsBoardGameEngine.PlaywrightTests.Pages
         public async Task MarkBonusCheckboxAsync(string bonusName)
         {
             var checkbox = Page.GetByLabel(bonusName);
+
+            await checkbox.WaitForAsync();
+
+            if (!await checkbox.IsCheckedAsync())
+            {
+                await checkbox.CheckAsync();
+            }
+        }
+
+        public async Task MarkFabCardCheckboxAsync(string cardName)
+        {
+            var checkbox = Page.GetByLabel(cardName);
+
+            await checkbox.WaitForAsync();
+
+            if (!await checkbox.IsCheckedAsync())
+            {
+                await checkbox.CheckAsync();
+            }
+        }
+
+        public async Task MarkEventCardCheckboxAsync(string cardName)
+        {
+            var checkbox = Page.GetByLabel(cardName);
 
             await checkbox.WaitForAsync();
 

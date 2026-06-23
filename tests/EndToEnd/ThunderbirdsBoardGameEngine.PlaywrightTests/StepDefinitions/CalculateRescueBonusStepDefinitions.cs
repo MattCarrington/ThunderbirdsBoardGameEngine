@@ -32,6 +32,18 @@ namespace ThunderbirdsBoardGameEngine.PlaywrightTests.StepDefinitions
             await _page.MarkBonusCheckboxAsync(bonusName);
         }
 
+        [Given("the player marks the F.A.B. card {string} as being played")]
+        public async Task GivenThePlayerMarksTheFabCardAsBeingPlayed(string cardName)
+        {
+            await _page.MarkFabCardCheckboxAsync(cardName);
+        }
+
+        [Given("the player marks the event card {string} as being active")]
+        public async Task GivenThePlayerMarksTheEventCardAsBeingActive(string cardName)
+        {
+            await _page.MarkEventCardCheckboxAsync(cardName);
+        }
+
         [When("the rescue target is calculated")]
         public async Task WhenTheRescueTargetIsCalculated()
         {
