@@ -47,7 +47,7 @@ jobs:
       image_ref: ${{ steps.publish.outputs.image_ref }}
 
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
       - name: Validate Docker Inputs
         shell: bash
