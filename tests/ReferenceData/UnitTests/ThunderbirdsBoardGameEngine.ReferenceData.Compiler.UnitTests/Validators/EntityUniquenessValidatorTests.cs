@@ -203,15 +203,15 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.UnitTests.Validator
             // Arrange
             var validator = new EntityUniquenessValidator();
             var snapshot = new ReferenceDataSnapshotBuilder()
-                .WithFabCard("duplicate-code", "FAB Card 1")
-                .WithFabCard("duplicate-code", "FAB Card 2")
+                .WithFabCard("duplicate-code", "F.A.B. Card 1")
+                .WithFabCard("duplicate-code", "F.A.B. Card 2")
                 .Build();
 
             // Act & Assert
             var ex = Assert.Throws<ReferenceDataCompilationException>(() =>
                 validator.Validate(snapshot));
             Assert.Contains("duplicate-code", ex.Message);
-            Assert.Contains("FAB card codes", ex.Message);
+            Assert.Contains("F.A.B. card codes", ex.Message);
         }
 
         [Fact]
@@ -228,7 +228,7 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.UnitTests.Validator
             var ex = Assert.Throws<ReferenceDataCompilationException>(() =>
                 validator.Validate(snapshot));
             Assert.Contains("Duplicate Name", ex.Message);
-            Assert.Contains("FAB card names", ex.Message);
+            Assert.Contains("F.A.B. card names", ex.Message);
         }
 
         [Fact]

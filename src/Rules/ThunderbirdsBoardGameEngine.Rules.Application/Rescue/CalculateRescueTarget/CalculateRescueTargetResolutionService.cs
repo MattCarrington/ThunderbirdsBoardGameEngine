@@ -47,7 +47,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Application.Rescue.CalculateRescueTa
             {
                 if (!_fabCardCatalogLookup.Exists(fabCard))
                 {
-                    throw new InvalidRescueCalculationRequestException("FAB Card", fabCard.ToString());
+                    throw new InvalidRescueCalculationRequestException("F.A.B. Card", fabCard.ToString());
                 }
             }
 

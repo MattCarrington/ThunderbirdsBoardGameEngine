@@ -8,9 +8,9 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Validators
     {
         public void Validate(ReferenceDataSnapshot snapshot)
         {
-            var allCards = snapshot.FabCardDefinitions.Select(c => new CardEntry(c.Code.Value, c.DisplayName, "FAB"))
-                .Concat(snapshot.EventCardDefinitions.Select(c => new CardEntry(c.Code.Value, c.DisplayName, "Event")))
-                .Concat(snapshot.DisasterDefinitions.Select(d => new CardEntry(d.Code.Value, d.DisplayName, "Disaster")))
+            var allCards = snapshot.FabCardDefinitions.Select(c => new CardEntry(c.Code.Value, c.DisplayName, "F.A.B. Card"))
+                .Concat(snapshot.EventCardDefinitions.Select(c => new CardEntry(c.Code.Value, c.DisplayName, "Event Card")))
+                .Concat(snapshot.DisasterDefinitions.Select(d => new CardEntry(d.Code.Value, d.DisplayName, "Disaster Card")))
                 .ToList();
 
             EnsureUniqueValues(allCards, c => c.Code, "codes");

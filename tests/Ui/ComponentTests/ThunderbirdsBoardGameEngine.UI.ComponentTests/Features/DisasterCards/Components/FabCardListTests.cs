@@ -19,9 +19,9 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Features.DisasterCards.C
             );
 
             // Assert
-            Assert.Contains("FAB Card 1", cut.Markup);
-            Assert.Contains("FAB Card 2", cut.Markup);
-            Assert.Contains("FAB Card 3", cut.Markup);
+            Assert.Contains("F.A.B. Card 1", cut.Markup);
+            Assert.Contains("F.A.B. Card 2", cut.Markup);
+            Assert.Contains("F.A.B. Card 3", cut.Markup);
         }
 
         [Fact]
@@ -79,9 +79,9 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Features.DisasterCards.C
         {
             return
             [
-                new(Key: "fab-card-1", DisplayName: "FAB Card 1"),
-                new(Key: "fab-card-2", DisplayName: "FAB Card 2"),
-                new(Key: "fab-card-3", DisplayName: "FAB Card 3")
+                new(Key: "fab-card-1", DisplayName: "F.A.B. Card 1"),
+                new(Key: "fab-card-2", DisplayName: "F.A.B. Card 2"),
+                new(Key: "fab-card-3", DisplayName: "F.A.B. Card 3")
             ];
         }
     }

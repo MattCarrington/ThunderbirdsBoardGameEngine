@@ -22,7 +22,7 @@ namespace ThunderbirdsBoardGameEngine.Api.Mappers.Rules.V1
 
             if (request.PlayedFabCardKeys.Any(string.IsNullOrWhiteSpace))
             {
-                throw new BadRequestException("Played FAB card codes cannot contain null or whitespace values.");
+                throw new BadRequestException("Played F.AB card codes cannot contain null or whitespace values.");
             }
 
             if (request.ActiveEventCardKeys.Any(string.IsNullOrWhiteSpace))

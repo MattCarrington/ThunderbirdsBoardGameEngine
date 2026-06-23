@@ -32,7 +32,7 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Source
             var thunderbirds = _thunderbirdReader.ReadFrom(workbook.Worksheet("Thunderbirds"));
             var podVehicles = _podVehicleReader.ReadFrom(workbook.Worksheet("Pod Vehicles"));
             var mapEdges = _mapEdgeReader.ReadFrom(workbook.Worksheet("Map Edges"));
-            var fabCards = _fabCardReader.ReadFrom(workbook.Worksheet("FAB Cards"));
+            var fabCards = _fabCardReader.ReadFrom(workbook.Worksheet("F.A.B. Cards"));
             var eventCards = _eventCardReader.ReadFrom(workbook.Worksheet("Event Cards"));
 
             return new CompilationContext

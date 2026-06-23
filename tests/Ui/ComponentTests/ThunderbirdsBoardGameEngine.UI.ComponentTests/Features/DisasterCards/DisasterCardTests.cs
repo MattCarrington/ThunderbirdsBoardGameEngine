@@ -405,8 +405,8 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Features.DisasterCards
         {
             return
             [
-                new(Key: "fab1", DisplayName: "FAB Card 1"),
-                new(Key: "fab2", DisplayName: "FAB Card 2")
+                new(Key: "fab1", DisplayName: "F.A.B. Card 1"),
+                new(Key: "fab2", DisplayName: "F.A.B. Card 2")
             ];
         }
 

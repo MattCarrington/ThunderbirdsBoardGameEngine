@@ -17,7 +17,7 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Validators
             ValidateEntitySet(snapshot.ThunderbirdDefinitions, t => t.Code.Value, t => t.DisplayName, "thunderbird");
             ValidateEntitySet(snapshot.PodVehicleDefinitions, v => v.Code.Value, v => v.DisplayName, "pod vehicle");
             ValidateEntitySet(snapshot.DisasterDefinitions, d => d.Code.Value, d => d.DisplayName, "disaster");
-            ValidateEntitySet(snapshot.FabCardDefinitions, c => c.Code.Value, c => c.DisplayName, "FAB card");
+            ValidateEntitySet(snapshot.FabCardDefinitions, c => c.Code.Value, c => c.DisplayName, "F.A.B. card");
             ValidateEntitySet(snapshot.EventCardDefinitions, c => c.Code.Value, c => c.DisplayName, "event card");
         }
 
