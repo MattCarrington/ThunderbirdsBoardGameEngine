@@ -43,11 +43,7 @@ namespace ThunderbirdsBoardGameEngine.UI.IntegrationTests.Pages
             Services.AddRulesClients(configuration);
 
             // Register UI services
-            Services.AddSingleton<ICharacterService, CharacterService>();
-            Services.AddSingleton<IDisasterCardService, DisasterCardService>();
-            Services.AddSingleton<IRescueClientService, RescueClientService>();
-
-            Services.AddSingleton<DisasterCardMapper>();
+            Services.AddUiServices();
         }
 
         [Fact]
