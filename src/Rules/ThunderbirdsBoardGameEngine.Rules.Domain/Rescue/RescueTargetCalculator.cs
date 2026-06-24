@@ -20,19 +20,19 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.Rescue
         /// <param name="difficultyNumber">The base difficulty number to which bonus modifiers will be applied.</param>
         /// <param name="input">The input parameters used for rescue calculation, providing context for bonus modifiers.</param>
         /// <param name="sources">A collection of sources that provide bonus modifiers to be applied to the rescue calculation.</param>
-        /// <returns>A RescueTargetResult containing the adjusted target roll, the total bonus applied, and details of all
-        /// applied bonuses.</returns>
+        /// <returns>A RescueTargetResult containing the adjusted target roll, the total bonus modifier applied, and details of all
+        /// applied bonus modifiers.</returns>
         public RescueTargetResult CalculateRescueTarget(int difficultyNumber, RescueCalculationInput input, IEnumerable<IRescueModifierSource> sources)
         {
-            var appliedBonuses = sources.SelectMany(source => source.ApplyRescueModifier(input)).ToList();
+            var appliedModifiers = sources.SelectMany(source => source.ApplyRescueModifier(input)).ToList();
 
-            var bonus = appliedBonuses.Sum(b => b.Value);
+            var bonus = appliedModifiers.Sum(b => b.Value);
 
             return new RescueTargetResult
             {
                 TargetRoll = Math.Max(0, difficultyNumber - bonus),
                 TotalBonus = bonus,
-                AppliedModifiers = appliedBonuses
+                AppliedModifiers = appliedModifiers
             };
         }
     }
