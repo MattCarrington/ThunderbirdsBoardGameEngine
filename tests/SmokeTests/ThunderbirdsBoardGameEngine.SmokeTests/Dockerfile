@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/playwright/dotnet:v1.60.0-noble
+FROM mcr.microsoft.com/playwright/dotnet:v1.61.0-noble
 
 ARG BUILD_CONFIGURATION=Release
 ARG GITHUB_PACKAGES_USERNAME
