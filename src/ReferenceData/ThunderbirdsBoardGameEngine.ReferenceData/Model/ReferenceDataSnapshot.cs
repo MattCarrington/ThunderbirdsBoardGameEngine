@@ -10,6 +10,8 @@
         IReadOnlyList<ReferenceLocationDefinition> LocationDefinitions,
         IReadOnlyList<ReferencePodVehicleDefinition> PodVehicleDefinitions,
         IReadOnlyList<ReferenceThunderbirdDefinition> ThunderbirdDefinitions,
-        IReadOnlyList<ReferenceMapEdgeDefinition> MapEdgeDefinitions
+        IReadOnlyList<ReferenceMapEdgeDefinition> MapEdgeDefinitions,
+        IReadOnlyList<ReferenceFabCardDefinition> FabCardDefinitions,
+        IReadOnlyList<ReferenceEventCardDefinition> EventCardDefinitions
     );
 }

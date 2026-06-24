@@ -14,7 +14,7 @@ namespace ThunderbirdsBoardGameEngine.UI.UnitTests.DisasterCards.Services
         public async Task CalculateRescueTargetAsync_WhenResponseIsSuccessful_ReturnsCalculateRescueTargetResponseDto()
         {
             // Arrange
-            var (disasterCardCode, presentBonusKeys, performingCharacterKey) = CreateRequestParameters();
+            var parameters = CreateRequestParameters();
 
             var expectedResponse = new CalculateRescueTargetResponseDto
             {
@@ -30,7 +30,12 @@ namespace ThunderbirdsBoardGameEngine.UI.UnitTests.DisasterCards.Services
             var service = CreateRescueService(rescueClient);
 
             // Act
-            var result = await service.CalculateRescueTargetAsync(disasterCardCode, presentBonusKeys, performingCharacterKey);
+            var result = await service.CalculateRescueTargetAsync(
+                parameters.DisasterCardCode,
+                parameters.PresentBonusKeys,
+                parameters.PerformingCharacterKey,
+                parameters.PresentFabCardKeys,
+                parameters.ActiveEventCardKeys);
 
             // Assert
             Assert.NotNull(result);
@@ -38,13 +43,14 @@ namespace ThunderbirdsBoardGameEngine.UI.UnitTests.DisasterCards.Services
 
             var expectedRequest = new CalculateRescueTargetRequestDto
             {
-                PresentDisasterBonusKeys = presentBonusKeys,
-                PerformingCharacterKey = performingCharacterKey
+                PresentDisasterBonusKeys = parameters.PresentBonusKeys,
+                PerformingCharacterKey = parameters.PerformingCharacterKey,
+                PlayedFabCardKeys = parameters.PresentFabCardKeys
             };
 
             await rescueClient.Received(1)
                 .CalculateRescueTargetAsync(
-                    Arg.Is(disasterCardCode),
+                    Arg.Is(parameters.DisasterCardCode),
                     Arg.Is(expectedRequest),
                     Arg.Any<CancellationToken>()
                 );
@@ -54,7 +60,7 @@ namespace ThunderbirdsBoardGameEngine.UI.UnitTests.DisasterCards.Services
         public async Task CalculateRescueTargetAsync_WhenResponseIsNotSuccessful_ReturnsNull()
         {
             // Arrange
-            var (disasterCardCode, presentBonusKeys, performingCharacterKey) = CreateRequestParameters();
+            var parameters = CreateRequestParameters();
 
             var apiResult = ApiResult<CalculateRescueTargetResponseDto>.Failure("Error", HttpStatusCode.BadRequest);
 
@@ -63,13 +69,18 @@ namespace ThunderbirdsBoardGameEngine.UI.UnitTests.DisasterCards.Services
             var service = CreateRescueService(rescueClient);
 
             // Act
-            var result = await service.CalculateRescueTargetAsync(disasterCardCode, presentBonusKeys, performingCharacterKey);
+            var result = await service.CalculateRescueTargetAsync(
+                parameters.DisasterCardCode,
+                parameters.PresentBonusKeys,
+                parameters.PerformingCharacterKey,
+                parameters.PresentFabCardKeys,
+                parameters.ActiveEventCardKeys);
 
             // Assert
             Assert.Null(result);
         }
 
-        private static (string, IReadOnlyCollection<string>, string) CreateRequestParameters()
+        private static RequestParameters CreateRequestParameters()
         {
             var disasterCardCode = "DISASTER_001";
 
@@ -77,7 +88,7 @@ namespace ThunderbirdsBoardGameEngine.UI.UnitTests.DisasterCards.Services
 
             var performingCharacterKey = "CHARACTER_001";
 
-            return (disasterCardCode, presentBonusKeys, performingCharacterKey);
+            return new RequestParameters(disasterCardCode, presentBonusKeys, performingCharacterKey, Array.Empty<string>(), Array.Empty<string>());
         }
 
         private static IRescueClient CreateRescueClient(ApiResult<CalculateRescueTargetResponseDto> apiResult)
@@ -93,5 +104,12 @@ namespace ThunderbirdsBoardGameEngine.UI.UnitTests.DisasterCards.Services
         {
             return new RescueClientService(rescueClient);
         }
+
+        private record RequestParameters(
+            string DisasterCardCode,
+            IReadOnlyCollection<string> PresentBonusKeys,
+            string PerformingCharacterKey,
+            IReadOnlyCollection<string> PresentFabCardKeys,
+            IReadOnlyCollection<string> ActiveEventCardKeys);
     }
 }

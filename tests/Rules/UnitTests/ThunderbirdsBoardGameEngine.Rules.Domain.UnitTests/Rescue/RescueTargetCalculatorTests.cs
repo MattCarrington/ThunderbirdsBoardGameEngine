@@ -16,7 +16,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.Rescue
 
             var input = CreateInput();
 
-            var bonusSources = Array.Empty<IBonusModifierSource>();
+            var bonusSources = Array.Empty<IRescueModifierSource>();
 
             // Act
             var result = calculator.CalculateRescueTarget(difficultyNumber, input, bonusSources);
@@ -24,7 +24,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.Rescue
             // Assert
             Assert.Equal(difficultyNumber, result.TargetRoll);
             Assert.Equal(0, result.TotalBonus);
-            Assert.Empty(result.AppliedBonuses);
+            Assert.Empty(result.AppliedModifiers);
         }
 
         [Fact]
@@ -37,7 +37,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.Rescue
 
             var input = CreateInput();
 
-            var bonusSources = new IBonusModifierSource[]
+            var bonusSources = new IRescueModifierSource[]
             {
                 new FakeSource(2, 3),
                 new FakeSource(1)
@@ -52,10 +52,10 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.Rescue
 
             Assert.Equal(expectedTarget, result.TargetRoll);
             Assert.Equal(expectedTotalBonus, result.TotalBonus);
-            Assert.Equal(3, result.AppliedBonuses.Count);
-            Assert.Contains(result.AppliedBonuses, b => b.Key == "FAKE_BONUS_2" && b.Value == 2);
-            Assert.Contains(result.AppliedBonuses, b => b.Key == "FAKE_BONUS_3" && b.Value == 3);
-            Assert.Contains(result.AppliedBonuses, b => b.Key == "FAKE_BONUS_1" && b.Value == 1);
+            Assert.Equal(3, result.AppliedModifiers.Count);
+            Assert.Contains(result.AppliedModifiers, b => b.Key == "FAKE_BONUS_2" && b.Value == 2);
+            Assert.Contains(result.AppliedModifiers, b => b.Key == "FAKE_BONUS_3" && b.Value == 3);
+            Assert.Contains(result.AppliedModifiers, b => b.Key == "FAKE_BONUS_1" && b.Value == 1);
         }
 
         [Fact]
@@ -68,7 +68,8 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.Rescue
             {
                 new FakeSource() // emits empty
             };
-            RescueCalculationInput input = CreateInput();
+
+            var input = CreateInput();
 
             // Act
             var result = calculator.CalculateRescueTarget(
@@ -76,8 +77,33 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.Rescue
                 input: input,
                 sources: sources);
 
+            // Assert
             Assert.Equal(10, result.TargetRoll);
             Assert.Equal(0, result.TotalBonus);
+        }
+
+        [Fact]
+        public void CalculateRescueTarget_WhenSourcesReduceTargetBelowZero_ReturnsZeroAsMinimum()
+        {
+            // Arrange
+            var calculator = new RescueTargetCalculator();
+
+            var sources = new[]
+            {
+                new FakeSource(5, 6) // total bonus of 11
+            };
+
+            var input = CreateInput();
+
+            // Act
+            var result = calculator.CalculateRescueTarget(
+                difficultyNumber: 10,
+                input: input,
+                sources: sources);
+
+            // Assert
+            Assert.Equal(0, result.TargetRoll); // target cannot be negative
+            Assert.Equal(11, result.TotalBonus);
         }
 
         private static RescueCalculationInput CreateInput()
@@ -88,7 +114,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.Rescue
             );
         }
 
-        private sealed class FakeSource : IBonusModifierSource
+        private sealed class FakeSource : IRescueModifierSource
         {
             private readonly IEnumerable<AppliedRescueModifier> _modifiers;
 

@@ -15,16 +15,17 @@ namespace ThunderbirdsBoardGameEngine.Api.Mappers.Rules.V1
                 throw new BadRequestException("Performing character key must be provided.");
             }
 
-            if (request.PresentDisasterBonusKeys.Any(string.IsNullOrWhiteSpace))
-            {
-                throw new BadRequestException("Present disaster bonus keys cannot contain null or whitespace values.");
-            }
+            ValidateOptionalStringList(request.PresentDisasterBonusKeys, nameof(request.PresentDisasterBonusKeys));
+            ValidateOptionalStringList(request.PlayedFabCardKeys, nameof(request.PlayedFabCardKeys));
+            ValidateOptionalStringList(request.ActiveEventCardKeys, nameof(request.ActiveEventCardKeys));
 
             return new CalculateRescueTargetQuery
             (
                 DisasterCardCode: new CardCode(disasterCardCode),
                 PerformingCharacter: new CharacterCode(request.PerformingCharacterKey),
-                PresentDisasterBonusKeys: request.PresentDisasterBonusKeys.Select(k => new DisasterBonusKey(k)).ToList()
+                PresentDisasterBonusKeys: request.PresentDisasterBonusKeys.Select(k => new DisasterBonusKey(k)).ToList(),
+                PlayedFabCardCodes: request.PlayedFabCardKeys.Select(c => new CardCode(c)).ToList(),
+                ActiveEventCardCodes: request.ActiveEventCardKeys.Select(c => new CardCode(c)).ToList()
             );
         }
 
@@ -54,8 +55,23 @@ namespace ThunderbirdsBoardGameEngine.Api.Mappers.Rules.V1
             {
                 SourceType.DisasterCard => "disaster-card",
                 SourceType.CharacterAbility => "character-ability",
+                SourceType.FabCard => "fab-card",
+                SourceType.EventCard => "event-card",
                 _ => throw new InvalidOperationException($"Unhandled SourceType '{sourceType}'")
             };
+        }
+
+        private static void ValidateOptionalStringList(IEnumerable<string> list, string propertyName)
+        {
+            if (list is null)
+            {
+                throw new BadRequestException($"{propertyName} cannot be null.");
+            }
+
+            if (list.Any(string.IsNullOrWhiteSpace))
+            {
+                throw new BadRequestException($"{propertyName} cannot contain null or whitespace values.");
+            }
         }
     }
 }

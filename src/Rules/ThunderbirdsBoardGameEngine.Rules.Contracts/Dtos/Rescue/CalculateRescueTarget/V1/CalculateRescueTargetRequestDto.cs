@@ -9,7 +9,7 @@
         /// <summary>
         /// Gets the collection of bonus keys that are currently active for disasters.
         /// </summary>
-        public required IReadOnlyCollection<string> PresentDisasterBonusKeys { get; init; }
+        public IReadOnlyCollection<string> PresentDisasterBonusKeys { get; init; } = [];
 
         /// <summary>
         /// Gets the unique key identifying the character performing the rescue action.
@@ -20,5 +20,15 @@
         /// and has not yet been declared stable.
         /// </remarks>
         public required string PerformingCharacterKey { get; init; }
+
+        /// <summary>
+        /// Gets the collection of unique keys for the Fab Cards that have been played.
+        /// </summary>
+        public IReadOnlyCollection<string> PlayedFabCardKeys { get; init; } = [];
+
+        /// <summary>
+        /// Gets the collection of unique keys for the Event Cards that are currently active.
+        /// </summary>
+        public IReadOnlyCollection<string> ActiveEventCardKeys { get; init; } = [];
     }
 }

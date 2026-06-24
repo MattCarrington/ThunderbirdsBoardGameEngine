@@ -168,9 +168,15 @@ this.ScenarioInitialize(scenarioInfo, ruleInfo);
  await testRunner.AndAsync("the player marks \"Firefly\" as being present", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
 #line 11
- await testRunner.WhenAsync("the rescue target is calculated", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+ await testRunner.AndAsync("the player marks the F.A.B. card \"Underwater Sealing Unit\" as being played", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
 #line 12
+ await testRunner.AndAsync("the player marks the event card \"The Hood Interferes\" as being active", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
+#line hidden
+#line 13
+ await testRunner.WhenAsync("the rescue target is calculated", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+#line hidden
+#line 14
  await testRunner.ThenAsync("the rescue target should be displayed", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
             }

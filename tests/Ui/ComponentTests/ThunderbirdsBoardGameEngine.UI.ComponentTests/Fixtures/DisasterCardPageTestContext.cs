@@ -16,11 +16,15 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Fixtures
         public ICharacterService CharacterService { get; }
             = Substitute.For<ICharacterService>();
 
+        public IRescueCalculationModifierService RescueCalculationModifierService { get; }
+            = Substitute.For<IRescueCalculationModifierService>();
+
         public DisasterCardPageTestContext(BunitContext context)
         {
             context.Services.AddSingleton(RescueClientService);
             context.Services.AddSingleton(DisasterCardService);
             context.Services.AddSingleton(CharacterService);
+            context.Services.AddSingleton(RescueCalculationModifierService);
         }
     }
 }

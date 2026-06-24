@@ -21,6 +21,8 @@ public sealed class ReferenceDataSnapshotBuilder
     private readonly List<ReferenceThunderbirdDefinition> _thunderbirds = [];
     private readonly List<ReferencePodVehicleDefinition> _podVehicles = [];
     private readonly List<ReferenceMapEdgeDefinition> _mapEdges = [];
+    private readonly List<ReferenceFabCardDefinition> _fabCards = [];
+    private readonly List<ReferenceEventCardDefinition> _eventCards = [];
 
     public static ReferenceDataSnapshotBuilder Valid()
     {
@@ -196,6 +198,40 @@ public sealed class ReferenceDataSnapshotBuilder
         return this;
     }
 
+    public ReferenceDataSnapshotBuilder WithFabCard(
+        string code,
+        string displayName)
+    {
+        _fabCards.Add(new ReferenceFabCardDefinition(
+            new CardCode(code),
+            displayName));
+
+        return this;
+    }
+
+    public ReferenceDataSnapshotBuilder WithoutFabCards()
+    {
+        _fabCards.Clear();
+        return this;
+    }
+
+    public ReferenceDataSnapshotBuilder WithEventCard(
+        string code,
+        string displayName)
+    {
+        _eventCards.Add(new ReferenceEventCardDefinition(
+            new CardCode(code),
+            displayName));
+
+        return this;
+    }
+
+    public ReferenceDataSnapshotBuilder WithoutEventCards()
+    {
+        _eventCards.Clear();
+        return this;
+    }
+
     public ReferenceDataSnapshot Build()
     {
         return new ReferenceDataSnapshot(
@@ -208,6 +244,8 @@ public sealed class ReferenceDataSnapshotBuilder
             CharacterDefinitions: _characters,
             ThunderbirdDefinitions: _thunderbirds,
             PodVehicleDefinitions: _podVehicles,
-            MapEdgeDefinitions: _mapEdges);
+            MapEdgeDefinitions: _mapEdges,
+            FabCardDefinitions: _fabCards,
+            EventCardDefinitions: _eventCards);
     }
 }

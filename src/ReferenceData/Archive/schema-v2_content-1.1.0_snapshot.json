@@ -1,0 +1,1239 @@
+{
+  "schemaVersion": 2,
+  "contentVersion": "1.1.0",
+  "generatedAt": "2026-06-05T11:52:29.3725675+00:00",
+  "generatorVersion": "1.1.0",
+  "characterDefinitions": [
+    {
+      "code": "scott",
+      "displayName": "Scott",
+      "rescueBonus": {
+        "rescueType": "air",
+        "value": 2
+      }
+    },
+    {
+      "code": "virgil",
+      "displayName": "Virgil",
+      "rescueBonus": {
+        "rescueType": "land",
+        "value": 2
+      }
+    },
+    {
+      "code": "john",
+      "displayName": "John",
+      "rescueBonus": {
+        "rescueType": "space",
+        "value": 2
+      }
+    },
+    {
+      "code": "gordon",
+      "displayName": "Gordon",
+      "rescueBonus": {
+        "rescueType": "sea",
+        "value": 3
+      }
+    },
+    {
+      "code": "alan",
+      "displayName": "Alan",
+      "rescueBonus": {
+        "rescueType": "space",
+        "value": 2
+      }
+    },
+    {
+      "code": "lady-penelope",
+      "displayName": "Lady Penelope"
+    }
+  ],
+  "disasterDefinitions": [
+    {
+      "code": "signal-from-sigma",
+      "displayName": "Signal From Sigma",
+      "difficultyNumber": 8,
+      "location": "asteroid-belt",
+      "rescueType": "space",
+      "bonuses": [
+        {
+          "key": "john",
+          "value": 1
+        },
+        {
+          "key": "transmitter-truck",
+          "value": 3,
+          "location": "south-america"
+        }
+      ],
+      "rewards": [
+        {
+          "rewardType": "playerChoice"
+        }
+      ]
+    },
+    {
+      "code": "the-mighty-atom",
+      "displayName": "The Mighty Atom",
+      "difficultyNumber": 10,
+      "location": "africa",
+      "rescueType": "land",
+      "bonuses": [
+        {
+          "key": "thunderbird-4",
+          "value": 3
+        },
+        {
+          "key": "lady-penelope",
+          "value": 2
+        }
+      ],
+      "rewards": [
+        {
+          "rewardType": "specificToken",
+          "token": "technology"
+        },
+        {
+          "rewardType": "playerChoice"
+        }
+      ]
+    },
+    {
+      "code": "the-moon-mine-menace",
+      "displayName": "The Moon Mine Menace",
+      "difficultyNumber": 8,
+      "location": "the-moon",
+      "rescueType": "space",
+      "bonuses": [
+        {
+          "key": "gordon",
+          "value": 2
+        },
+        {
+          "key": "john",
+          "value": 2
+        }
+      ],
+      "rewards": [
+        {
+          "rewardType": "playerChoice"
+        }
+      ]
+    },
+    {
+      "code": "the-perils-of-penelope",
+      "displayName": "The Perils of Penelope",
+      "difficultyNumber": 7,
+      "location": "europe",
+      "rescueType": "land",
+      "bonuses": [
+        {
+          "key": "lady-penelope",
+          "value": 2
+        },
+        {
+          "key": "fab-1",
+          "value": 1
+        }
+      ],
+      "rewards": [
+        {
+          "rewardType": "specificToken",
+          "token": "determination"
+        }
+      ]
+    },
+    {
+      "code": "towering-ocean",
+      "displayName": "Towering Ocean",
+      "difficultyNumber": 8,
+      "location": "south-pacific",
+      "rescueType": "sea",
+      "bonuses": [
+        {
+          "key": "thunderbird-3",
+          "value": 2
+        },
+        {
+          "key": "thunderbird-4",
+          "value": 2
+        }
+      ],
+      "rewards": [
+        {
+          "rewardType": "playerChoice"
+        }
+      ]
+    },
+    {
+      "code": "30-minutes-after-noon",
+      "displayName": "30 Minutes After Noon",
+      "difficultyNumber": 8,
+      "location": "north-america",
+      "rescueType": "land",
+      "bonuses": [
+        {
+          "key": "thunderbird-1",
+          "value": 2
+        },
+        {
+          "key": "laser-cutter",
+          "value": 3,
+          "location": "europe"
+        }
+      ],
+      "rewards": [
+        {
+          "rewardType": "playerChoice"
+        }
+      ]
+    },
+    {
+      "code": "city-of-fire",
+      "displayName": "City of Fire",
+      "difficultyNumber": 8,
+      "location": "north-america",
+      "rescueType": "land",
+      "bonuses": [
+        {
+          "key": "firefly",
+          "value": 3
+        },
+        {
+          "key": "mole",
+          "value": 2
+        }
+      ],
+      "rewards": [
+        {
+          "rewardType": "playerChoice"
+        }
+      ]
+    },
+    {
+      "code": "rockquake",
+      "displayName": "Rockquake!",
+      "difficultyNumber": 10,
+      "location": "australia",
+      "rescueType": "air",
+      "bonuses": [
+        {
+          "key": "recovery-vehicles",
+          "value": 2
+        },
+        {
+          "key": "excavator",
+          "value": 2
+        },
+        {
+          "key": "virgil",
+          "value": 2
+        }
+      ],
+      "rewards": [
+        {
+          "rewardType": "specificToken",
+          "token": "intelligence"
+        },
+        {
+          "rewardType": "playerChoice"
+        }
+      ]
+    },
+    {
+      "code": "flight-path-to-fear",
+      "displayName": "Flight Path to Fear",
+      "difficultyNumber": 9,
+      "location": "asia",
+      "rescueType": "air",
+      "bonuses": [
+        {
+          "key": "laser-cutter",
+          "value": 2
+        },
+        {
+          "key": "elevator-cars",
+          "value": 2
+        },
+        {
+          "key": "john",
+          "value": 2
+        }
+      ],
+      "rewards": [
+        {
+          "rewardType": "specificToken",
+          "token": "technology"
+        },
+        {
+          "rewardType": "specificToken",
+          "token": "logistics"
+        }
+      ]
+    },
+    {
+      "code": "sun-probe",
+      "displayName": "Sun Probe",
+      "difficultyNumber": 11,
+      "location": "the-sun",
+      "rescueType": "space",
+      "bonuses": [
+        {
+          "key": "scott",
+          "value": 2
+        },
+        {
+          "key": "virgil",
+          "value": 2,
+          "location": "asia"
+        },
+        {
+          "key": "transmitter-truck",
+          "value": 3,
+          "location": "asia"
+        }
+      ],
+      "rewards": [
+        {
+          "rewardType": "specificToken",
+          "token": "logistics"
+        },
+        {
+          "rewardType": "playerChoice"
+        }
+      ]
+    },
+    {
+      "code": "the-uninvited",
+      "displayName": "The Uninvited",
+      "difficultyNumber": 8,
+      "location": "africa",
+      "rescueType": "land",
+      "bonuses": [
+        {
+          "key": "scott",
+          "value": 2
+        },
+        {
+          "key": "gordon",
+          "value": 2
+        }
+      ],
+      "rewards": [
+        {
+          "rewardType": "playerChoice"
+        }
+      ]
+    },
+    {
+      "code": "the-cham-cham",
+      "displayName": "The Cham-Cham",
+      "difficultyNumber": 7,
+      "location": "europe",
+      "rescueType": "air",
+      "bonuses": [
+        {
+          "key": "lady-penelope",
+          "value": 2
+        },
+        {
+          "key": "thunderbird-1",
+          "value": 2,
+          "location": "north-america"
+        }
+      ],
+      "rewards": [
+        {
+          "rewardType": "specificToken",
+          "token": "intelligence"
+        }
+      ]
+    },
+    {
+      "code": "trapped-in-the-sky",
+      "displayName": "Trapped in the Sky",
+      "difficultyNumber": 11,
+      "location": "europe",
+      "rescueType": "air",
+      "bonuses": [
+        {
+          "key": "elevator-cars",
+          "value": 3
+        },
+        {
+          "key": "fab-1",
+          "value": 2
+        },
+        {
+          "key": "thunderbird-1",
+          "value": 2
+        }
+      ],
+      "rewards": [
+        {
+          "rewardType": "specificToken",
+          "token": "intelligence"
+        },
+        {
+          "rewardType": "playerChoice"
+        }
+      ]
+    },
+    {
+      "code": "terror-in-new-york-city",
+      "displayName": "Terror in New York City",
+      "difficultyNumber": 11,
+      "location": "north-america",
+      "rescueType": "sea",
+      "bonuses": [
+        {
+          "key": "firefly",
+          "value": 3
+        },
+        {
+          "key": "virgil",
+          "value": 2
+        },
+        {
+          "key": "thunderbird-4",
+          "value": 2
+        }
+      ],
+      "rewards": [
+        {
+          "rewardType": "specificToken",
+          "token": "teamwork"
+        },
+        {
+          "rewardType": "playerChoice"
+        }
+      ]
+    },
+    {
+      "code": "end-of-the-road",
+      "displayName": "End of the Road",
+      "difficultyNumber": 9,
+      "location": "asia",
+      "rescueType": "land",
+      "bonuses": [
+        {
+          "key": "alan",
+          "value": 2
+        },
+        {
+          "key": "thunderbird-1",
+          "value": 2
+        }
+      ],
+      "rewards": [
+        {
+          "rewardType": "specificToken",
+          "token": "intelligence"
+        },
+        {
+          "rewardType": "specificToken",
+          "token": "teamwork"
+        }
+      ]
+    },
+    {
+      "code": "attack-of-the-alligators",
+      "displayName": "Attack of the Alligators",
+      "difficultyNumber": 10,
+      "location": "south-america",
+      "rescueType": "sea",
+      "bonuses": [
+        {
+          "key": "thunderbird-4",
+          "value": 3
+        },
+        {
+          "key": "virgil",
+          "value": 2
+        }
+      ],
+      "rewards": [
+        {
+          "rewardType": "specificToken",
+          "token": "teamwork"
+        },
+        {
+          "rewardType": "playerChoice"
+        }
+      ]
+    },
+    {
+      "code": "atlantic-inferno",
+      "displayName": "Atlantic Inferno",
+      "difficultyNumber": 8,
+      "location": "south-atlantic",
+      "rescueType": "sea",
+      "bonuses": [
+        {
+          "key": "thunderbird-4",
+          "value": 2
+        },
+        {
+          "key": "scott",
+          "value": 3,
+          "location": "south-pacific"
+        }
+      ],
+      "rewards": [
+        {
+          "rewardType": "playerChoice"
+        }
+      ]
+    },
+    {
+      "code": "the-duchess-assignment",
+      "displayName": "The Duchess Assignment",
+      "difficultyNumber": 8,
+      "location": "north-america",
+      "rescueType": "land",
+      "bonuses": [
+        {
+          "key": "domo",
+          "value": 3
+        },
+        {
+          "key": "mole",
+          "value": 2
+        }
+      ],
+      "rewards": [
+        {
+          "rewardType": "playerChoice"
+        }
+      ]
+    },
+    {
+      "code": "pit-of-peril",
+      "displayName": "Pit of Peril",
+      "difficultyNumber": 11,
+      "location": "africa",
+      "rescueType": "land",
+      "bonuses": [
+        {
+          "key": "recovery-vehicles",
+          "value": 3
+        },
+        {
+          "key": "mole",
+          "value": 2
+        },
+        {
+          "key": "scott",
+          "value": 2
+        }
+      ],
+      "rewards": [
+        {
+          "rewardType": "specificToken",
+          "token": "determination"
+        },
+        {
+          "rewardType": "playerChoice"
+        }
+      ]
+    },
+    {
+      "code": "sunrise-on-mars",
+      "displayName": "Sunrise on Mars",
+      "difficultyNumber": 10,
+      "location": "mars",
+      "rescueType": "space",
+      "bonuses": [
+        {
+          "key": "lady-penelope",
+          "value": 2
+        },
+        {
+          "key": "gordon",
+          "value": 2
+        },
+        {
+          "key": "john",
+          "value": 2,
+          "location": "geo-stationary-orbit"
+        }
+      ],
+      "rewards": [
+        {
+          "rewardType": "specificToken",
+          "token": "technology"
+        },
+        {
+          "rewardType": "playerChoice"
+        }
+      ]
+    },
+    {
+      "code": "ricochet",
+      "displayName": "Ricochet",
+      "difficultyNumber": 9,
+      "location": "geo-stationary-orbit",
+      "rescueType": "space",
+      "bonuses": [
+        {
+          "key": "scott",
+          "value": 2
+        },
+        {
+          "key": "alan",
+          "value": 2
+        }
+      ],
+      "rewards": [
+        {
+          "rewardType": "specificToken",
+          "token": "teamwork"
+        },
+        {
+          "rewardType": "specificToken",
+          "token": "technology"
+        }
+      ]
+    },
+    {
+      "code": "bound-for-venus",
+      "displayName": "Bound for Venus",
+      "difficultyNumber": 8,
+      "location": "venus",
+      "rescueType": "space",
+      "bonuses": [
+        {
+          "key": "john",
+          "value": 2
+        },
+        {
+          "key": "alan",
+          "value": 2
+        }
+      ],
+      "rewards": [
+        {
+          "rewardType": "playerChoice"
+        }
+      ]
+    },
+    {
+      "code": "the-imposters",
+      "displayName": "The Imposters",
+      "difficultyNumber": 9,
+      "location": "geo-stationary-orbit",
+      "rescueType": "space",
+      "bonuses": [
+        {
+          "key": "scott",
+          "value": 2
+        },
+        {
+          "key": "fab-1",
+          "value": 3,
+          "location": "north-america"
+        }
+      ],
+      "rewards": [
+        {
+          "rewardType": "specificToken",
+          "token": "logistics"
+        },
+        {
+          "rewardType": "specificToken",
+          "token": "determination"
+        }
+      ]
+    },
+    {
+      "code": "desperate-intruder",
+      "displayName": "Desperate Intruder",
+      "difficultyNumber": 8,
+      "location": "africa",
+      "rescueType": "sea",
+      "bonuses": [
+        {
+          "key": "thunderbird-1",
+          "value": 2
+        },
+        {
+          "key": "thunderbird-4",
+          "value": 2
+        }
+      ],
+      "rewards": [
+        {
+          "rewardType": "playerChoice"
+        }
+      ]
+    },
+    {
+      "code": "edge-of-impact",
+      "displayName": "Edge of Impact",
+      "difficultyNumber": 8,
+      "location": "europe",
+      "rescueType": "air",
+      "bonuses": [
+        {
+          "key": "thunderizer",
+          "value": 3
+        },
+        {
+          "key": "alan",
+          "value": 2
+        }
+      ],
+      "rewards": [
+        {
+          "rewardType": "playerChoice"
+        }
+      ]
+    },
+    {
+      "code": "operation-crash-dive",
+      "displayName": "Operation Crash Dive",
+      "difficultyNumber": 9,
+      "location": "north-atlantic",
+      "rescueType": "sea",
+      "bonuses": [
+        {
+          "key": "thunderbird-1",
+          "value": 2
+        },
+        {
+          "key": "alan",
+          "value": 2,
+          "location": "geo-stationary-orbit"
+        }
+      ],
+      "rewards": [
+        {
+          "rewardType": "specificToken",
+          "token": "technology"
+        },
+        {
+          "rewardType": "specificToken",
+          "token": "logistics"
+        }
+      ]
+    },
+    {
+      "code": "path-of-destruction",
+      "displayName": "Path of Destruction",
+      "difficultyNumber": 9,
+      "location": "south-america",
+      "rescueType": "land",
+      "bonuses": [
+        {
+          "key": "mobile-crane",
+          "value": 3
+        },
+        {
+          "key": "lady-penelope",
+          "value": 3,
+          "location": "europe"
+        }
+      ],
+      "rewards": [
+        {
+          "rewardType": "specificToken",
+          "token": "logistics"
+        },
+        {
+          "rewardType": "specificToken",
+          "token": "determination"
+        }
+      ]
+    },
+    {
+      "code": "target-tiger-one",
+      "displayName": "Target: Tiger One",
+      "difficultyNumber": 9,
+      "location": "north-pacific",
+      "rescueType": "air",
+      "bonuses": [
+        {
+          "key": "alan",
+          "value": 2
+        },
+        {
+          "key": "fab-1",
+          "value": 3,
+          "location": "asia"
+        }
+      ],
+      "rewards": [
+        {
+          "rewardType": "specificToken",
+          "token": "determination"
+        },
+        {
+          "rewardType": "specificToken",
+          "token": "intelligence"
+        }
+      ]
+    },
+    {
+      "code": "bolt-from-the-blue",
+      "displayName": "Bolt from the Blue",
+      "difficultyNumber": 8,
+      "location": "indian-ocean",
+      "rescueType": "air",
+      "bonuses": [
+        {
+          "key": "john",
+          "value": 2
+        },
+        {
+          "key": "gordon",
+          "value": 2,
+          "location": "australia"
+        }
+      ],
+      "rewards": [
+        {
+          "rewardType": "playerChoice"
+        }
+      ]
+    },
+    {
+      "code": "danger-at-ocean-deep",
+      "displayName": "Danger at Ocean Deep",
+      "difficultyNumber": 7,
+      "location": "europe",
+      "rescueType": "sea",
+      "bonuses": [
+        {
+          "key": "john",
+          "value": 2
+        },
+        {
+          "key": "thunderbird-1",
+          "value": 2,
+          "location": "north-pacific"
+        }
+      ],
+      "rewards": [
+        {
+          "rewardType": "specificToken",
+          "token": "technology"
+        }
+      ]
+    },
+    {
+      "code": "the-longest-day",
+      "displayName": "The Longest Day",
+      "difficultyNumber": 7,
+      "location": "mercury",
+      "rescueType": "space",
+      "bonuses": [
+        {
+          "key": "gordon",
+          "value": 2
+        },
+        {
+          "key": "lady-penelope",
+          "value": 1
+        }
+      ],
+      "rewards": [
+        {
+          "rewardType": "specificToken",
+          "token": "logistics"
+        }
+      ]
+    },
+    {
+      "code": "martian-invasion",
+      "displayName": "Martian Invasion",
+      "difficultyNumber": 7,
+      "location": "north-america",
+      "rescueType": "land",
+      "bonuses": [
+        {
+          "key": "excavator",
+          "value": 3
+        }
+      ],
+      "rewards": [
+        {
+          "rewardType": "specificToken",
+          "token": "teamwork"
+        }
+      ]
+    },
+    {
+      "code": "day-of-disaster",
+      "displayName": "Day of Disaster",
+      "difficultyNumber": 9,
+      "location": "europe",
+      "rescueType": "sea",
+      "bonuses": [
+        {
+          "key": "thunderbird-4",
+          "value": 3
+        },
+        {
+          "key": "fab-1",
+          "value": 2
+        }
+      ],
+      "rewards": [
+        {
+          "rewardType": "specificToken",
+          "token": "determination"
+        },
+        {
+          "rewardType": "specificToken",
+          "token": "teamwork"
+        }
+      ]
+    },
+    {
+      "code": "they-call-him-mr-x",
+      "displayName": "They Call Him Mr. X",
+      "difficultyNumber": 8,
+      "location": "asia",
+      "rescueType": "air",
+      "bonuses": [
+        {
+          "key": "mobile-crane",
+          "value": 2
+        },
+        {
+          "key": "thunderizer",
+          "value": 2
+        },
+        {
+          "key": "domo",
+          "value": 2
+        }
+      ],
+      "rewards": [
+        {
+          "rewardType": "playerChoice"
+        }
+      ]
+    }
+  ],
+  "locationDefinitions": [
+    {
+      "code": "europe",
+      "displayName": "Europe",
+      "domain": "earth"
+    },
+    {
+      "code": "asia",
+      "displayName": "Asia",
+      "domain": "earth"
+    },
+    {
+      "code": "africa",
+      "displayName": "Africa",
+      "domain": "earth"
+    },
+    {
+      "code": "north-america",
+      "displayName": "North America",
+      "domain": "earth"
+    },
+    {
+      "code": "south-america",
+      "displayName": "South America",
+      "domain": "earth"
+    },
+    {
+      "code": "north-pacific",
+      "displayName": "North Pacific",
+      "domain": "earth"
+    },
+    {
+      "code": "south-pacific",
+      "displayName": "South Pacific",
+      "domain": "earth"
+    },
+    {
+      "code": "north-atlantic",
+      "displayName": "North Atlantic",
+      "domain": "earth"
+    },
+    {
+      "code": "south-atlantic",
+      "displayName": "South Atlantic",
+      "domain": "earth"
+    },
+    {
+      "code": "indian-ocean",
+      "displayName": "Indian Ocean",
+      "domain": "earth"
+    },
+    {
+      "code": "australia",
+      "displayName": "Australia",
+      "domain": "earth"
+    },
+    {
+      "code": "geo-stationary-orbit",
+      "displayName": "Geo-Stationary Orbit",
+      "domain": "space"
+    },
+    {
+      "code": "venus",
+      "displayName": "Venus",
+      "domain": "space"
+    },
+    {
+      "code": "mercury",
+      "displayName": "Mercury",
+      "domain": "space"
+    },
+    {
+      "code": "the-sun",
+      "displayName": "The Sun",
+      "domain": "space"
+    },
+    {
+      "code": "the-moon",
+      "displayName": "The Moon",
+      "domain": "space"
+    },
+    {
+      "code": "mars",
+      "displayName": "Mars",
+      "domain": "space"
+    },
+    {
+      "code": "asteroid-belt",
+      "displayName": "Asteroid Belt",
+      "domain": "space"
+    }
+  ],
+  "podVehicleDefinitions": [
+    {
+      "code": "mole",
+      "displayName": "Mole"
+    },
+    {
+      "code": "firefly",
+      "displayName": "Firefly"
+    },
+    {
+      "code": "laser-cutter",
+      "displayName": "Laser Cutter"
+    },
+    {
+      "code": "recovery-vehicles",
+      "displayName": "Recovery Vehicles"
+    },
+    {
+      "code": "domo",
+      "displayName": "DOMO"
+    },
+    {
+      "code": "elevator-cars",
+      "displayName": "Elevator Cars"
+    },
+    {
+      "code": "excavator",
+      "displayName": "Excavator"
+    },
+    {
+      "code": "thunderizer",
+      "displayName": "Thunderizer"
+    },
+    {
+      "code": "transmitter-truck",
+      "displayName": "Transmitter Truck"
+    },
+    {
+      "code": "mobile-crane",
+      "displayName": "Mobile Crane"
+    }
+  ],
+  "thunderbirdDefinitions": [
+    {
+      "code": "thunderbird-1",
+      "displayName": "Thunderbird 1",
+      "domain": "earth",
+      "topSpeed": 3
+    },
+    {
+      "code": "thunderbird-2",
+      "displayName": "Thunderbird 2",
+      "domain": "earth",
+      "topSpeed": 2
+    },
+    {
+      "code": "thunderbird-3",
+      "displayName": "Thunderbird 3",
+      "domain": "space",
+      "topSpeed": 3
+    },
+    {
+      "code": "thunderbird-4",
+      "displayName": "Thunderbird 4",
+      "domain": "earth",
+      "topSpeed": 1
+    },
+    {
+      "code": "thunderbird-5",
+      "displayName": "Thunderbird 5",
+      "domain": "space",
+      "topSpeed": 0
+    },
+    {
+      "code": "fab-1",
+      "displayName": "FAB 1",
+      "domain": "earth",
+      "topSpeed": 1
+    }
+  ],
+  "mapEdgeDefinitions": [
+    {
+      "edge1": "europe",
+      "edge2": "north-atlantic",
+      "edgeType": "earth"
+    },
+    {
+      "edge1": "europe",
+      "edge2": "africa",
+      "edgeType": "earth"
+    },
+    {
+      "edge1": "europe",
+      "edge2": "asia",
+      "edgeType": "earth"
+    },
+    {
+      "edge1": "asia",
+      "edge2": "africa",
+      "edgeType": "earth"
+    },
+    {
+      "edge1": "asia",
+      "edge2": "indian-ocean",
+      "edgeType": "earth"
+    },
+    {
+      "edge1": "asia",
+      "edge2": "australia",
+      "edgeType": "earth"
+    },
+    {
+      "edge1": "asia",
+      "edge2": "north-pacific",
+      "edgeType": "earth"
+    },
+    {
+      "edge1": "north-pacific",
+      "edge2": "australia",
+      "edgeType": "earth"
+    },
+    {
+      "edge1": "north-pacific",
+      "edge2": "south-pacific",
+      "edgeType": "earth"
+    },
+    {
+      "edge1": "north-pacific",
+      "edge2": "north-america",
+      "edgeType": "earth"
+    },
+    {
+      "edge1": "north-america",
+      "edge2": "south-pacific",
+      "edgeType": "earth"
+    },
+    {
+      "edge1": "north-america",
+      "edge2": "north-atlantic",
+      "edgeType": "earth"
+    },
+    {
+      "edge1": "north-america",
+      "edge2": "south-america",
+      "edgeType": "earth"
+    },
+    {
+      "edge1": "north-atlantic",
+      "edge2": "south-america",
+      "edgeType": "earth"
+    },
+    {
+      "edge1": "north-atlantic",
+      "edge2": "south-atlantic",
+      "edgeType": "earth"
+    },
+    {
+      "edge1": "north-atlantic",
+      "edge2": "africa",
+      "edgeType": "earth"
+    },
+    {
+      "edge1": "africa",
+      "edge2": "south-atlantic",
+      "edgeType": "earth"
+    },
+    {
+      "edge1": "africa",
+      "edge2": "indian-ocean",
+      "edgeType": "earth"
+    },
+    {
+      "edge1": "indian-ocean",
+      "edge2": "australia",
+      "edgeType": "earth"
+    },
+    {
+      "edge1": "australia",
+      "edge2": "south-pacific",
+      "edgeType": "earth"
+    },
+    {
+      "edge1": "south-pacific",
+      "edge2": "south-america",
+      "edgeType": "earth"
+    },
+    {
+      "edge1": "south-america",
+      "edge2": "south-atlantic",
+      "edgeType": "earth"
+    },
+    {
+      "edge1": "south-pacific",
+      "edge2": "geo-stationary-orbit",
+      "edgeType": "space"
+    },
+    {
+      "edge1": "geo-stationary-orbit",
+      "edge2": "venus",
+      "edgeType": "space"
+    },
+    {
+      "edge1": "venus",
+      "edge2": "mercury",
+      "edgeType": "space"
+    },
+    {
+      "edge1": "mercury",
+      "edge2": "the-sun",
+      "edgeType": "space"
+    },
+    {
+      "edge1": "geo-stationary-orbit",
+      "edge2": "the-moon",
+      "edgeType": "space"
+    },
+    {
+      "edge1": "the-moon",
+      "edge2": "mars",
+      "edgeType": "space"
+    },
+    {
+      "edge1": "mars",
+      "edge2": "asteroid-belt",
+      "edgeType": "space"
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <TargetFramework>net8.0</TargetFramework>
+    <IsTestProject>true</IsTestProject>
+    <IsPackable>false</IsPackable>
+    <LangVersion>latest</LangVersion>
+    <DisableTransitiveProjectReferences>false</DisableTransitiveProjectReferences>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="NSubstitute" />
+    <PackageReference Include="xunit.v3" />
+    <PackageReference Include="xunit.runner.visualstudio" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\src\Rules\ThunderbirdsBoardGameEngine.Rules.Application\ThunderbirdsBoardGameEngine.Rules.Application.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Using Include="Xunit" />
+  </ItemGroup>
+
+</Project>

@@ -1,6 +1,5 @@
 ﻿using Bunit;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using ThunderbirdsBoardGameEngine.ReferenceData.Runtime;
 using ThunderbirdsBoardGameEngine.Rules.Client.Extensions;
 using ThunderbirdsBoardGameEngine.Rules.Contracts.Dtos.Rescue.CalculateRescueTarget.V1;
@@ -9,9 +8,6 @@ using ThunderbirdsBoardGameEngine.TestUtils.xUnit.Fixtures;
 using ThunderbirdsBoardGameEngine.UI.Features.DisasterCards;
 using ThunderbirdsBoardGameEngine.WireMock.Hosting;
 using Xunit;
-using ThunderbirdsBoardGameEngine.UI.Features.DisasterCards.Interfaces;
-using ThunderbirdsBoardGameEngine.UI.Features.DisasterCards.Services;
-using ThunderbirdsBoardGameEngine.UI.Features.DisasterCards.Mappers;
 
 namespace ThunderbirdsBoardGameEngine.UI.IntegrationTests.Pages
 {
@@ -43,11 +39,7 @@ namespace ThunderbirdsBoardGameEngine.UI.IntegrationTests.Pages
             Services.AddRulesClients(configuration);
 
             // Register UI services
-            Services.AddSingleton<ICharacterService, CharacterService>();
-            Services.AddSingleton<IDisasterCardService, DisasterCardService>();
-            Services.AddSingleton<IRescueClientService, RescueClientService>();
-
-            Services.AddSingleton<DisasterCardMapper>();
+            Services.AddUiServices();
         }
 
         [Fact]

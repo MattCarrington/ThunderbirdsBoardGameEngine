@@ -6,6 +6,6 @@
 
         public required int TotalBonus { get; init; }
 
-        public IReadOnlyList<AppliedRescueModifier> AppliedBonuses { get; init; } = [];
+        public IReadOnlyList<AppliedRescueModifier> AppliedModifiers { get; init; } = [];
     }
 }

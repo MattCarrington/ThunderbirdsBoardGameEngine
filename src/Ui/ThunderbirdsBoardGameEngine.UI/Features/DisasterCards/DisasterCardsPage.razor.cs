@@ -16,14 +16,21 @@ namespace ThunderbirdsBoardGameEngine.UI.Features.DisasterCards
         [Inject]
         private IRescueClientService RescueService { get; set; } = null!;
 
+        [Inject]
+        private IRescueCalculationModifierService CardModifierService { get; set; } = null!;
+
         private IReadOnlyList<DisasterCardSummaryViewModel> _cards = Array.Empty<DisasterCardSummaryViewModel>();
         private IReadOnlyList<CharacterViewModel> _characters = Array.Empty<CharacterViewModel>();
+        private IReadOnlyList<CardModifierViewModel> _fabCardModifiers = Array.Empty<CardModifierViewModel>();
+        private IReadOnlyList<CardModifierViewModel> _eventCardModifiers = Array.Empty<CardModifierViewModel>();
 
         private string? _selectedCardCode = string.Empty;
         private DisasterCardViewModel? _selectedCard;
         private string? _selectedCharacter = string.Empty;
 
         private HashSet<string> _selectedBonusKeys = new();
+        private HashSet<string> _selectedFabCardKeys = new();
+        private HashSet<string> _selectedEventCardKeys = new();
 
         private CalculateRescueTargetResponseDto? _calculationResult;
         private bool _calculationFailed;
@@ -38,6 +45,8 @@ namespace ThunderbirdsBoardGameEngine.UI.Features.DisasterCards
         {
             _cards = DisasterCardService.GetAll();
             _characters = CharacterService.GetAll();
+            _fabCardModifiers = CardModifierService.GetFabCards();
+            _eventCardModifiers = CardModifierService.GetEventCards();
         }
 
         private void OnDisasterCardChanged(string? disasterCard)
@@ -82,7 +91,9 @@ namespace ThunderbirdsBoardGameEngine.UI.Features.DisasterCards
                     await RescueService.CalculateRescueTargetAsync(
                         _selectedCard.Code,
                         _selectedBonusKeys,
-                        _selectedCharacter);
+                        _selectedCharacter,
+                        _selectedFabCardKeys,
+                        _selectedEventCardKeys);
 
                 _calculationFailed = _calculationResult is null;
             }
@@ -100,6 +111,34 @@ namespace ThunderbirdsBoardGameEngine.UI.Features.DisasterCards
         private void OnCharacterChanged(string? characterCode)
         {
             _selectedCharacter = characterCode;
+
+            ClearCalculationState();
+        }
+
+        private void OnFabCardChanged(FabCardChanged change)
+        {
+            if (change.Selected)
+            {
+                _selectedFabCardKeys.Add(change.Key);
+            }
+            else
+            {
+                _selectedFabCardKeys.Remove(change.Key);
+            }
+
+            ClearCalculationState();
+        }
+
+        private void OnEventCardChanged(EventCardChanged change)
+        {
+            if (change.Selected)
+            {
+                _selectedEventCardKeys.Add(change.Key);
+            }
+            else
+            {
+                _selectedEventCardKeys.Remove(change.Key);
+            }
 
             ClearCalculationState();
         }

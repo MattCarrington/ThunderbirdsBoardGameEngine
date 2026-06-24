@@ -1,21 +1,21 @@
 ﻿using ThunderbirdsBoardGameEngine.ReferenceData.Identities;
 using ThunderbirdsBoardGameEngine.ReferenceData.Runtime.Interfaces;
-using ThunderbirdsBoardGameEngine.Rules.Application.Exceptions;
+using ThunderbirdsBoardGameEngine.Rules.Application.Rescue.Exceptions;
 using ThunderbirdsBoardGameEngine.Rules.Application.Rescue.Interfaces;
 using ThunderbirdsBoardGameEngine.Rules.Domain.Rescue;
 
 namespace ThunderbirdsBoardGameEngine.Rules.Infrastructure.Lookups
 {
-    internal sealed class ReferenceCharacterContributionLookup : ICharacterContributionLookup
+    internal sealed class ReferenceCharacterCatalogLookup : ICharacterCatalogLookup
     {
         private readonly ICharacterDefinitionCatalog _characterDefinitionCatalog;
 
-        public ReferenceCharacterContributionLookup(ICharacterDefinitionCatalog characterDefinitionCatalog)
+        public ReferenceCharacterCatalogLookup(ICharacterDefinitionCatalog characterDefinitionCatalog)
         {
             _characterDefinitionCatalog = characterDefinitionCatalog ?? throw new ArgumentNullException(nameof(characterDefinitionCatalog));
         }
 
-        public CharacterContribution GetCharacterContribution(CharacterCode characterCode)
+        public CharacterContribution GetCharacterRescueContribution(CharacterCode characterCode)
         {
             try
             {
@@ -29,7 +29,10 @@ namespace ThunderbirdsBoardGameEngine.Rules.Infrastructure.Lookups
             }
             catch (KeyNotFoundException)
             {
-                throw new ReferenceDataNotFoundException("Character", characterCode.ToString());
+                // Technically, changing the exception type thrown here would be a breaking change to the API,
+                // as the handler for this exception type returns a Bad Request, while the handler for the original exception type returns a Not Found.
+                // However, as the contract is still evolving, it should be safe to do so.
+                throw new InvalidRescueCalculationRequestException("Character", characterCode.ToString());
             }
         }
     }

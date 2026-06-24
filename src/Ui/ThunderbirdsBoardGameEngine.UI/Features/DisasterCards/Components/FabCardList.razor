@@ -1,0 +1,24 @@
+﻿<h5>F.A.B. Cards</h5>
+
+<ul class="list-unstyled">
+    @foreach (var fabCard in FabCards)
+    {
+        var checkboxId = $"fabcard-{fabCard.Key}";
+
+        <li>
+            <div class="form-check">
+                <input class="form-check-input"
+                       type="checkbox"
+                       id="@checkboxId"
+                       data-testid="fab-checkbox"
+                       data-fab-key="@fabCard.Key"
+                       checked="@SelectedFabCards.Contains(fabCard.Key)"
+                       @onchange="e => OnChanged(fabCard.Key, e)" />
+
+                <label class="form-check-label" for="@checkboxId">
+                    @fabCard.DisplayName
+                </label>
+            </div>
+        </li>
+    }
+</ul>

@@ -1,9 +1,13 @@
 ﻿using MediatR;
 using ThunderbirdsBoardGameEngine.ReferenceData.Identities;
-using ThunderbirdsBoardGameEngine.Rules.Domain.Rescue;
 
 namespace ThunderbirdsBoardGameEngine.Rules.Application.Rescue.CalculateRescueTarget
 {
-    public record CalculateRescueTargetQuery(CardCode DisasterCardCode, CharacterCode PerformingCharacter, IReadOnlyCollection<DisasterBonusKey> PresentDisasterBonusKeys)
+    public record CalculateRescueTargetQuery(
+        CardCode DisasterCardCode,
+        CharacterCode PerformingCharacter,
+        IReadOnlyCollection<DisasterBonusKey> PresentDisasterBonusKeys,
+        IReadOnlyCollection<CardCode> PlayedFabCardCodes,
+        IReadOnlyCollection<CardCode> ActiveEventCardCodes)
         : IRequest<CalculateRescueTargetResponse>;
 }

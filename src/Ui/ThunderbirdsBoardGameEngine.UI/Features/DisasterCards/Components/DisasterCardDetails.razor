@@ -17,6 +17,14 @@
             SelectedCharacterCode="@SelectedCharacterCode"
             SelectedCharacterCodeChanged="SelectedCharacterCodeChanged" />
 
+        <FabCardList FabCards="@FabCardModifiers"
+                     SelectedFabCards="@SelectedFabCards"
+                     FabCardChanged="FabCardsChanged" />
+
+        <EventCardList EventCards="@EventCardModifiers"
+                       SelectedEventCards="@SelectedEventCards"
+                       EventCardChanged="EventCardsChanged" />
+
         <button class="btn btn-primary mt-3"
                 data-testid="calculate-button"
         disabled="@IsCalculationDisabled"

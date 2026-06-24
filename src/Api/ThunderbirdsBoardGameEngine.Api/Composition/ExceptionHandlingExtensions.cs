@@ -9,6 +9,7 @@ namespace ThunderbirdsBoardGameEngine.Api.Composition
             // Order: specific → fallback
             services.AddExceptionHandler<ReferenceDataNotFoundExceptionHandler>();
             services.AddExceptionHandler<BadRequestExceptionHandler>();
+            services.AddExceptionHandler<InvalidRescueCalculationRequestExceptionHandler>();
             services.AddExceptionHandler<UnhandledExceptionHandler>();
 
             return services;

@@ -196,5 +196,72 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.UnitTests.Validator
             Assert.Contains("Duplicate Name", ex.Message);
             Assert.Contains("disaster names", ex.Message);
         }
+
+        [Fact]
+        public void Validate_WhenDuplicateFabCardCodes_Throws()
+        {
+            // Arrange
+            var validator = new EntityUniquenessValidator();
+            var snapshot = new ReferenceDataSnapshotBuilder()
+                .WithFabCard("duplicate-code", "F.A.B. Card 1")
+                .WithFabCard("duplicate-code", "F.A.B. Card 2")
+                .Build();
+
+            // Act & Assert
+            var ex = Assert.Throws<ReferenceDataCompilationException>(() =>
+                validator.Validate(snapshot));
+            Assert.Contains("duplicate-code", ex.Message);
+            Assert.Contains("F.A.B. card codes", ex.Message);
+        }
+
+        [Fact]
+        public void Validate_WhenDuplicateFabCardNames_Throws()
+        {
+            // Arrange
+            var validator = new EntityUniquenessValidator();
+            var snapshot = new ReferenceDataSnapshotBuilder()
+                .WithFabCard("fab-1", "Duplicate Name")
+                .WithFabCard("fab-2", "Duplicate Name")
+                .Build();
+
+            // Act & Assert
+            var ex = Assert.Throws<ReferenceDataCompilationException>(() =>
+                validator.Validate(snapshot));
+            Assert.Contains("Duplicate Name", ex.Message);
+            Assert.Contains("F.A.B. card names", ex.Message);
+        }
+
+        [Fact]
+        public void Validate_WhenDuplicateEventCardCodes_Throws()
+        {
+            // Arrange
+            var validator = new EntityUniquenessValidator();
+            var snapshot = new ReferenceDataSnapshotBuilder()
+                .WithEventCard("duplicate-code", "Event Card 1")
+                .WithEventCard("duplicate-code", "Event Card 2")
+                .Build();
+            // Act & Assert
+            var ex = Assert.Throws<ReferenceDataCompilationException>(() =>
+                validator.Validate(snapshot));
+            Assert.Contains("duplicate-code", ex.Message);
+            Assert.Contains("event card codes", ex.Message);
+        }
+
+        [Fact]
+        public void Validate_WhenDuplicateEventCardNames_Throws()
+        {
+            // Arrange
+            var validator = new EntityUniquenessValidator();
+            var snapshot = new ReferenceDataSnapshotBuilder()
+                .WithEventCard("event-1", "Duplicate Name")
+                .WithEventCard("event-2", "Duplicate Name")
+                .Build();
+
+            // Act & Assert
+            var ex = Assert.Throws<ReferenceDataCompilationException>(() =>
+                validator.Validate(snapshot));
+            Assert.Contains("Duplicate Name", ex.Message);
+            Assert.Contains("event card names", ex.Message);
+        }
     }
 }

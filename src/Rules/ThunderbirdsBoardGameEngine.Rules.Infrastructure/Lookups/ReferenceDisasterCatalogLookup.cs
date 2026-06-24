@@ -7,16 +7,16 @@ using ThunderbirdsBoardGameEngine.Rules.Domain.Rescue;
 
 namespace ThunderbirdsBoardGameEngine.Rules.Infrastructure.Lookups
 {
-    internal sealed class ReferenceDataDisasterContributionLookup : IDisasterContributionLookup
+    internal sealed class ReferenceDisasterCatalogLookup : IDisasterCatalogLookup
     {
         private readonly IDisasterDefinitionCatalog _disasterCardReferenceSource;
 
-        public ReferenceDataDisasterContributionLookup(IDisasterDefinitionCatalog disasterCardReferenceSource)
+        public ReferenceDisasterCatalogLookup(IDisasterDefinitionCatalog disasterCardReferenceSource)
         {
             _disasterCardReferenceSource = disasterCardReferenceSource ?? throw new ArgumentNullException(nameof(disasterCardReferenceSource));
         }
 
-        public DisasterContribution GetDisasterContribution(CardCode disasterCode)
+        public DisasterContribution GetDisasterRescueContribution(CardCode disasterCode)
         {
             try
             {

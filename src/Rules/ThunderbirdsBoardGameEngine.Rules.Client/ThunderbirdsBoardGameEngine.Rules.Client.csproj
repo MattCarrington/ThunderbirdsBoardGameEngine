@@ -6,7 +6,7 @@
     <Nullable>enable</Nullable>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
     <PackageId>ThunderbirdsBoardGameEngine.Rules.Client</PackageId>
-    <Version>0.4.1</Version>
+    <Version>0.5.0</Version>
     <Authors>Matthew Carrington</Authors>
     <Description>Public request/response contracts for the Rules bounded context of ThunderbirdsBoardGameEngine.</Description>
     <RepositoryUrl>https://github.com/MattCarrington/ThunderbirdsBoardGameEngine</RepositoryUrl>

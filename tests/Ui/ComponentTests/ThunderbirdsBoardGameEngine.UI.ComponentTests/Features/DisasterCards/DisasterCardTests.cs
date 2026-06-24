@@ -37,6 +37,20 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Features.DisasterCards
         }
 
         [Fact]
+        public void CallsModifierCardsOnInitialization()
+        {
+            // Arrange
+            var context = CreateTestContext();
+
+            // Act
+            _ = Render<DisasterCardsPage>();
+
+            // Assert
+            context.RescueCalculationModifierService.Received(1).GetFabCards();
+            context.RescueCalculationModifierService.Received(1).GetEventCards();
+        }
+
+        [Fact]
         public void DisplaysDisasterCardDetailsWhenSelected()
         {
             // Arrange
@@ -89,8 +103,9 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Features.DisasterCards
             context.RescueClientService.Received(1).CalculateRescueTargetAsync(
                 disasterCardCode: Arg.Is<string>(x => x == "DC1"),
                 presentBonusKeys: Arg.Any<IReadOnlyCollection<string>>(),
-                performingCharacterKey: Arg.Is<string>(x => x == "C1")
-            );
+                performingCharacterKey: Arg.Is<string>(x => x == "C1"),
+                playedFabCardKeys: Arg.Any<IReadOnlyCollection<string>>(),
+                activeEventCardKeys: Arg.Any<IReadOnlyCollection<string>>());
         }
 
         [Fact]
@@ -260,6 +275,78 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Features.DisasterCards
             });
         }
 
+        [Fact]
+        public void ClearsCalculatedResultWhenFabCardToggled()
+        {
+            // Arrange
+            var context = CreateTestContext();
+
+            var response = CreateRescueCalculationResponse();
+
+            SetupRescueClientService(context, response);
+
+            var cut = Render<DisasterCardsPage>();
+
+            cut.Find("#disasterSelect").Change("DC1");
+            cut.Find("#characterSelect").Change("C1");
+
+            cut.Find("[data-testid='calculate-button']").Click();
+
+            cut.WaitForAssertion(() =>
+            {
+                cut.Find("[data-testid='rescue-calculation-result']");
+            });
+
+            // Act
+            var fabCheckbox = cut
+                .FindAll("[data-testid='fab-checkbox']")
+                .First();
+            fabCheckbox.Change(true);
+
+            // Assert
+            cut.WaitForAssertion(() =>
+            {
+                Assert.Throws<ElementNotFoundException>(() => cut.Find("[data-testid='rescue-calculation-result']"));
+                Assert.Throws<ElementNotFoundException>(() => cut.Find("[data-testid='rescue-calculation-error']"));
+            });
+        }
+
+        [Fact]
+        public void ClearsCalculatedResultWhenEventCardToggled()
+        {
+            // Arrange
+            var context = CreateTestContext();
+
+            var response = CreateRescueCalculationResponse();
+
+            SetupRescueClientService(context, response);
+
+            var cut = Render<DisasterCardsPage>();
+
+            cut.Find("#disasterSelect").Change("DC1");
+            cut.Find("#characterSelect").Change("C1");
+
+            cut.Find("[data-testid='calculate-button']").Click();
+
+            cut.WaitForAssertion(() =>
+            {
+                cut.Find("[data-testid='rescue-calculation-result']");
+            });
+
+            // Act
+            var eventCheckbox = cut
+                .FindAll("[data-testid='event-checkbox']")
+                .First();
+            eventCheckbox.Change(true);
+
+            // Assert
+            cut.WaitForAssertion(() =>
+            {
+                Assert.Throws<ElementNotFoundException>(() => cut.Find("[data-testid='rescue-calculation-result']"));
+                Assert.Throws<ElementNotFoundException>(() => cut.Find("[data-testid='rescue-calculation-error']"));
+            });
+        }
+
         private DisasterCardPageTestContext CreateTestContext()
         {
             var context = new DisasterCardPageTestContext(this);
@@ -269,6 +356,8 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Features.DisasterCards
             context.DisasterCardService.GetAll().Returns(disasterCards.Select(d => new DisasterCardSummaryViewModel(d.Code, d.DisplayName)).ToList());
             context.DisasterCardService.GetByCode("DC1").Returns(disasterCards.First());
             context.CharacterService.GetAll().Returns(CreateCharacters());
+            context.RescueCalculationModifierService.GetFabCards().Returns(CreateFabCardModifiers());
+            context.RescueCalculationModifierService.GetEventCards().Returns(CreateEventCardModifiers());
 
             return context;
         }
@@ -278,7 +367,9 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Features.DisasterCards
             context.RescueClientService.CalculateRescueTargetAsync(
                 Arg.Any<string>(),
                 Arg.Any<IReadOnlyCollection<string>>(),
-                Arg.Any<string>())
+                Arg.Any<string>(),
+                Arg.Any<IReadOnlyCollection<string>>(),
+                Arg.Any<IReadOnlyCollection<string>>())
                 .Returns(response);
         }
 
@@ -307,6 +398,24 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Features.DisasterCards
             [
                 new(Key: "C1", DisplayName: "Character 1"),
                 new(Key: "C2", DisplayName: "Character 2")
+            ];
+        }
+
+        private static IReadOnlyCollection<CardModifierViewModel> CreateFabCardModifiers()
+        {
+            return
+            [
+                new(Key: "fab1", DisplayName: "F.A.B. Card 1"),
+                new(Key: "fab2", DisplayName: "F.A.B. Card 2")
+            ];
+        }
+
+        private static IReadOnlyCollection<CardModifierViewModel> CreateEventCardModifiers()
+        {
+            return
+            [
+                new(Key: "event1", DisplayName: "Event Card 1"),
+                new(Key: "event2", DisplayName: "Event Card 2")
             ];
         }
     }

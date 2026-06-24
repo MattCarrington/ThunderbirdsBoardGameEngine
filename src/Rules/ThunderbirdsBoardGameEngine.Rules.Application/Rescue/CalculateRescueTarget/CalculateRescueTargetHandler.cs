@@ -17,42 +17,32 @@ namespace ThunderbirdsBoardGameEngine.Rules.Application.Rescue.CalculateRescueTa
     /// </remarks>
     public class CalculateRescueTargetHandler : IRequestHandler<CalculateRescueTargetQuery, CalculateRescueTargetResponse>
     {
-        private readonly IDisasterContributionLookup _disasterContributionLookup;
-        private readonly ICharacterContributionLookup _characterContributionLookup;
-        private readonly RescueTargetCalculator _rescueTargetCalculator;
+        private readonly ICalculateRescueTargetResolutionService _rescueCalculationService;
 
-        public CalculateRescueTargetHandler(
-            IDisasterContributionLookup disasterContributionLookup,
-            ICharacterContributionLookup characterContributionLookup,
-            RescueTargetCalculator rescueTargetCalculator)
+        public CalculateRescueTargetHandler(ICalculateRescueTargetResolutionService rescueCalculationService)
         {
-            _disasterContributionLookup = disasterContributionLookup ?? throw new ArgumentNullException(nameof(disasterContributionLookup));
-            _characterContributionLookup = characterContributionLookup ?? throw new ArgumentNullException(nameof(characterContributionLookup));
-            _rescueTargetCalculator = rescueTargetCalculator ?? throw new ArgumentNullException(nameof(rescueTargetCalculator));
+            _rescueCalculationService = rescueCalculationService ?? throw new ArgumentNullException(nameof(rescueCalculationService));
         }
 
         public Task<CalculateRescueTargetResponse> Handle(CalculateRescueTargetQuery query, CancellationToken cancellationToken)
         {
-            var disaster = _disasterContributionLookup.GetDisasterContribution(query.DisasterCardCode);
+            var request = new RescueCalculationRequest
+            (
+                DisasterCardCode: query.DisasterCardCode,
+                PerformingCharacter: query.PerformingCharacter,
+                PresentDisasterBonusKeys: query.PresentDisasterBonusKeys,
+                PlayedFabCardCodes: query.PlayedFabCardCodes,
+                ActiveEventCardCodes: query.ActiveEventCardCodes
+            );
 
-            var character = _characterContributionLookup.GetCharacterContribution(query.PerformingCharacter);
-
-            var input = new RescueCalculationInput(query.PresentDisasterBonusKeys, disaster.RescueType);
-
-            var sources = new List<IBonusModifierSource>
-            {
-                disaster,
-                character
-            };
-
-            var calculatedTarget = _rescueTargetCalculator.CalculateRescueTarget(disaster.DifficultyNumber, input, sources);
+            var calculatedTarget = _rescueCalculationService.ResolveRescueCalculation(request);
 
             return Task.FromResult(
                 new CalculateRescueTargetResponse
                 (
                     TargetNumber: calculatedTarget.TargetRoll,
                     TotalBonus: calculatedTarget.TotalBonus,
-                    AppliedBonuses: calculatedTarget.AppliedBonuses
+                    AppliedBonuses: calculatedTarget.AppliedModifiers
                 )
             );
         }

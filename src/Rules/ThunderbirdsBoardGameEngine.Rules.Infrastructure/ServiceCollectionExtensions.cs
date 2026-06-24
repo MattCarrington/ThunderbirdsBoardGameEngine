@@ -7,6 +7,7 @@ using ThunderbirdsBoardGameEngine.Rules.Application.Rescue.Interfaces;
 using ThunderbirdsBoardGameEngine.Rules.Domain.Movement;
 using ThunderbirdsBoardGameEngine.Rules.Domain.Rescue;
 using ThunderbirdsBoardGameEngine.Rules.Infrastructure.Lookups;
+using ThunderbirdsBoardGameEngine.Rules.Infrastructure.Registries;
 
 namespace ThunderbirdsBoardGameEngine.Rules.Infrastructure
 {
@@ -34,11 +35,15 @@ namespace ThunderbirdsBoardGameEngine.Rules.Infrastructure
             services.AddSingleton<MovementEvaluator>();
             services.AddSingleton<ActionPointCalculator>();
 
-            services.AddSingleton<IDisasterContributionLookup, ReferenceDataDisasterContributionLookup>();
-            services.AddSingleton<ICharacterContributionLookup, ReferenceCharacterContributionLookup>();
+            services.AddSingleton<ICalculateRescueTargetResolutionService, CalculateRescueTargetResolutionService>();
+            services.AddSingleton<IDisasterCatalogLookup, ReferenceDisasterCatalogLookup>();
+            services.AddSingleton<ICharacterCatalogLookup, ReferenceCharacterCatalogLookup>();
             services.AddSingleton<ILocationDefinitionLookup, ReferenceLocationDefinitionLookup>();
             services.AddSingleton<IMapEdgeDefinitionLookup, ReferenceMapEdgeDefinitionLookup>();
             services.AddSingleton<IThunderbirdsDefinitionLookup, ReferenceThunderbirdsDefinitionLookup>();
+            services.AddSingleton<IFabCardCatalogLookup, ReferenceFabCardCatalogLookup>();
+            services.AddSingleton<IEventCardCatalogLookup, ReferenceEventCardCatalogLookup>();
+            services.AddSingleton<IBonusModifierSourceRegistry, BonusModifierSourceRegistry>();
 
             return services;
         }
