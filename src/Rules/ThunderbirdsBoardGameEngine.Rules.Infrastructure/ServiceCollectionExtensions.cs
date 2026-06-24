@@ -4,6 +4,7 @@ using ThunderbirdsBoardGameEngine.Rules.Application.Movement.Interfaces;
 using ThunderbirdsBoardGameEngine.Rules.Application.Movement.MapTraversal;
 using ThunderbirdsBoardGameEngine.Rules.Application.Rescue.CalculateRescueTarget;
 using ThunderbirdsBoardGameEngine.Rules.Application.Rescue.Interfaces;
+using ThunderbirdsBoardGameEngine.Rules.Domain.EventCards;
 using ThunderbirdsBoardGameEngine.Rules.Domain.Movement;
 using ThunderbirdsBoardGameEngine.Rules.Domain.Rescue;
 using ThunderbirdsBoardGameEngine.Rules.Infrastructure.Lookups;
@@ -28,12 +29,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Infrastructure
         {
             services.AddMediatR(typeof(CalculateRescueTargetHandler).Assembly);
 
-            services.AddSingleton<IValidateMovementResolutionService, ValidateMovementResolutionService>();
-            services.AddSingleton<IRouteFinder, BreadthFirstRouteFinder>();
-
             services.AddSingleton<RescueTargetCalculator>();
-            services.AddSingleton<MovementEvaluator>();
-            services.AddSingleton<ActionPointCalculator>();
 
             services.AddSingleton<ICalculateRescueTargetResolutionService, CalculateRescueTargetResolutionService>();
             services.AddSingleton<IDisasterCatalogLookup, ReferenceDisasterCatalogLookup>();
@@ -45,7 +41,27 @@ namespace ThunderbirdsBoardGameEngine.Rules.Infrastructure
             services.AddSingleton<IEventCardCatalogLookup, ReferenceEventCardCatalogLookup>();
             services.AddSingleton<IBonusModifierSourceRegistry, BonusModifierSourceRegistry>();
 
+            RegisterMovementServices(services);
+            RegisterMovementSpeedModifierSources(services);
+
             return services;
+        }
+
+        private static void RegisterMovementServices(IServiceCollection services)
+        {
+            services.AddSingleton<IValidateMovementResolutionService, ValidateMovementResolutionService>();
+            services.AddSingleton<IRouteFinder, BreadthFirstRouteFinder>();
+            services.AddSingleton<RescueTargetCalculator>();
+            services.AddSingleton<MovementEvaluator>();
+            services.AddSingleton<ActionPointCalculator>();
+        }
+
+        private static void RegisterMovementSpeedModifierSources(IServiceCollection services)
+        {
+            services.AddSingleton<IMovementSpeedModifierSourceRegistry, MovementSpeedModifierSourceRegistry>();
+            services.AddSingleton<IMovementSpeedModifierSource, AttackOfTheZombites>();
+            services.AddSingleton<IMovementSpeedModifierSource, UsnSentinelMissileStrike>();
+            services.AddSingleton<IMovementSpeedModifierSource, RocketMalfunction>();
         }
     }
 }

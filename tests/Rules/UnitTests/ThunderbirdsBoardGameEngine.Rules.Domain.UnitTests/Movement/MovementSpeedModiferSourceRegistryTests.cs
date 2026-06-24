@@ -21,7 +21,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.Movement
             var cardCode = TestCardCode2;
 
             // Act
-            var result = registry.TryGet(cardCode, out var source);
+            var result = registry.TryGetEventCard(cardCode, out var source);
 
             // Assert
             Assert.True(result);
@@ -38,7 +38,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.Movement
             var cardCode = new CardCode("non-existant-card");
 
             // Act
-            var result = registry.TryGet(cardCode, out var source);
+            var result = registry.TryGetEventCard(cardCode, out var source);
 
             // Assert
             Assert.False(result);

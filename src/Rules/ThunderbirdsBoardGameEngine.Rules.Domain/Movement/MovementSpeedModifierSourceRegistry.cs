@@ -4,7 +4,7 @@ using ThunderbirdsBoardGameEngine.ReferenceData.Identities;
 
 namespace ThunderbirdsBoardGameEngine.Rules.Domain.Movement
 {
-    public sealed class MovementSpeedModifierSourceRegistry
+    public sealed class MovementSpeedModifierSourceRegistry : IMovementSpeedModifierSourceRegistry
     {
         private readonly FrozenDictionary<CardCode, IMovementSpeedModifierSource> _sources;
 
@@ -14,7 +14,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.Movement
             _sources = sources.ToFrozenDictionary(x => x.EventCardCode);
         }
 
-        public bool TryGet(
+        public bool TryGetEventCard(
             CardCode cardCode,
             [NotNullWhen(true)] out IMovementSpeedModifierSource? source)
         {
