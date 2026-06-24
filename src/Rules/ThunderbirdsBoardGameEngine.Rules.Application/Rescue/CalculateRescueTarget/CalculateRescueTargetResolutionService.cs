@@ -59,7 +59,9 @@ namespace ThunderbirdsBoardGameEngine.Rules.Application.Rescue.CalculateRescueTa
                 }
             }
 
-            var cardCodes = request.PlayedFabCardCodes.Concat(request.ActiveEventCardCodes);
+            var cardCodes = request.PlayedFabCardCodes
+                .Concat(request.ActiveEventCardCodes)
+                .Distinct();
 
             foreach (var cardCode in cardCodes)
             {
