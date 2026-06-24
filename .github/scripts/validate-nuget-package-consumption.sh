@@ -23,6 +23,9 @@ SAFE_PACKAGE_VERSION="${PACKAGE_VERSION//[^A-Za-z0-9_.-]/_}"
 WORK_DIR="${WORK_ROOT}/${SAFE_PACKAGE_ID}-${SAFE_PACKAGE_VERSION}"
 CONSUMER_DIR="${WORK_DIR}/consumer"
 NUGET_CONFIG="${WORK_DIR}/NuGet.config"
+NUGET_PACKAGES="${WORK_DIR}/packages"
+
+export NUGET_PACKAGES
 
 echo "Validating NuGet package consumption"
 echo "Package: ${PACKAGE_ID}"
@@ -64,7 +67,6 @@ dotnet new console \
   --output "$CONSUMER_DIR"
 
 PROJECT_FILE="${CONSUMER_DIR}/consumer.csproj"
-cp "$NUGET_CONFIG" "$CONSUMER_DIR/NuGet.config"
 
 pushd "$CONSUMER_DIR" > /dev/null
 
