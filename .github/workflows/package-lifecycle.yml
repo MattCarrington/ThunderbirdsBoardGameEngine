@@ -158,6 +158,15 @@ jobs:
             --api-key "${{ github.token }}" \
             --skip-duplicate
 
+      - name: Validate package consumption
+        if: steps.compute.outputs.should_publish == 'true'
+        run: bash ./.github/scripts/validate-nuget-package-consumption.sh
+        env:
+          PACKAGE_ID: ${{ inputs.package_id }}
+          PACKAGE_VERSION: ${{ steps.compute.outputs.version }}
+          GITHUB_OWNER: ${{ github.repository_owner }}
+          GITHUB_TOKEN: ${{ github.token }}
+
       - name: Skip publish (stable already exists)
         if: steps.compute.outputs.should_publish != 'true'
         run: |
