@@ -275,6 +275,60 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Rescue
             Assert.Empty(result.AppliedBonuses);
         }
 
+        [Fact]
+        public async Task RescueTargetEnsuresFabCardOnlyCountsOnce()
+        {
+            var request = new CalculateRescueTargetQuery
+            (
+                DisasterCardCode: new CardCode("terror-in-new-york-city"),
+                PerformingCharacter: new CharacterCode("virgil"),
+                PresentDisasterBonusKeys: [],
+                PlayedFabCardCodes:
+                [
+                    new CardCode("underwater-sealing-unit"),
+                    new CardCode("underwater-sealing-unit")
+                ],
+                ActiveEventCardCodes: []
+            );
+
+            var mediator = CreateMediator();
+
+            // Act
+            var result = await mediator.Send(request, CancellationToken.None);
+
+            // Assert
+            Assert.Equal(8, result.TargetNumber);
+            Assert.Equal(3, result.TotalBonus);
+            Assert.Single(result.AppliedBonuses);
+        }
+
+        [Fact]
+        public async Task RescueTargetEnsuresEventCardOnlyCountsOnce()
+        {
+            var request = new CalculateRescueTargetQuery
+            (
+                DisasterCardCode: new CardCode("pit-of-peril"),
+                PerformingCharacter: new CharacterCode("gordon"),
+                PresentDisasterBonusKeys: [],
+                PlayedFabCardCodes: [],
+                ActiveEventCardCodes:
+                [
+                    new CardCode("the-hood-interferes"),
+                    new CardCode("the-hood-interferes")
+                ]
+            );
+
+            var mediator = CreateMediator();
+
+            // Act
+            var result = await mediator.Send(request, CancellationToken.None);
+
+            // Assert
+            Assert.Equal(13, result.TargetNumber);
+            Assert.Equal(-2, result.TotalBonus);
+            Assert.Single(result.AppliedBonuses);
+        }
+
         private static IMediator CreateMediator()
         {
             var disasters = CreateDisasterCatalog();
