@@ -1,6 +1,6 @@
 ﻿using ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Compilation;
-using ThunderbirdsBoardGameEngine.ReferenceData.Identities;
-using ThunderbirdsBoardGameEngine.ReferenceData.Model;
+using ThunderbirdsBoardGameEngine.ReferenceData.Core.Identities;
+using ThunderbirdsBoardGameEngine.ReferenceData.Core.Model;
 
 namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Helpers
 {

@@ -1,7 +1,7 @@
 ﻿using NSubstitute;
 using System.Collections.Immutable;
-using ThunderbirdsBoardGameEngine.ReferenceData.Identities;
-using ThunderbirdsBoardGameEngine.ReferenceData.Model;
+using ThunderbirdsBoardGameEngine.ReferenceData.Core.Model;
+using ThunderbirdsBoardGameEngine.ReferenceData.Core.Identities;
 using ThunderbirdsBoardGameEngine.ReferenceData.Runtime.Interfaces;
 using ThunderbirdsBoardGameEngine.UI.Features.DisasterCards.Services;
 using Xunit;

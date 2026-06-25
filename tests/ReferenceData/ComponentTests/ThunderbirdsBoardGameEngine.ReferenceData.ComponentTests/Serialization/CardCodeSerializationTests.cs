@@ -1,6 +1,6 @@
 ﻿using System.Text.Json;
 using ThunderbirdsBoardGameEngine.ReferenceData.ComponentTests.Helpers;
-using ThunderbirdsBoardGameEngine.ReferenceData.Identities;
+using ThunderbirdsBoardGameEngine.ReferenceData.Core.Identities;
 using Xunit;
 
 namespace ThunderbirdsBoardGameEngine.ReferenceData.ComponentTests.Serialization

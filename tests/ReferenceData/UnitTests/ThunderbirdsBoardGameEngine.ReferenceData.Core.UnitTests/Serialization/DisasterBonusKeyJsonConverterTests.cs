@@ -1,7 +1,7 @@
 using System.Text;
 using System.Text.Json;
-using ThunderbirdsBoardGameEngine.ReferenceData.Identities;
-using ThunderbirdsBoardGameEngine.ReferenceData.Serialization;
+using ThunderbirdsBoardGameEngine.ReferenceData.Core.Identities;
+using ThunderbirdsBoardGameEngine.ReferenceData.Core.Serialization;
 using Xunit;
 
 namespace ThunderbirdsBoardGameEngine.ReferenceData.UnitTests.Serialization

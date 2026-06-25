@@ -1,4 +1,4 @@
-﻿using ThunderbirdsBoardGameEngine.ReferenceData.Identities;
+﻿using ThunderbirdsBoardGameEngine.ReferenceData.Core.Identities;
 using ThunderbirdsBoardGameEngine.Rules.Domain.Movement;
 
 namespace ThunderbirdsBoardGameEngine.Rules.Application.Movement.Interfaces

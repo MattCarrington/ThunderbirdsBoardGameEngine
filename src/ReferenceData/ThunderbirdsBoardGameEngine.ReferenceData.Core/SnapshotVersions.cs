@@ -1,4 +1,4 @@
-﻿namespace ThunderbirdsBoardGameEngine.ReferenceData
+﻿namespace ThunderbirdsBoardGameEngine.ReferenceData.Core
 {
     /// <summary>
     /// Defines version constants for reference data snapshot compatibility and tracking.

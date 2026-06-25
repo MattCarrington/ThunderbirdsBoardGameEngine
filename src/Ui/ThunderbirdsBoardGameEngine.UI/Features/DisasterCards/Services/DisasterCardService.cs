@@ -1,4 +1,4 @@
-﻿using ThunderbirdsBoardGameEngine.ReferenceData.Identities;
+﻿using ThunderbirdsBoardGameEngine.ReferenceData.Core.Identities;
 using ThunderbirdsBoardGameEngine.ReferenceData.Runtime.Interfaces;
 using ThunderbirdsBoardGameEngine.UI.Features.DisasterCards.Interfaces;
 using ThunderbirdsBoardGameEngine.UI.Features.DisasterCards.Mappers;

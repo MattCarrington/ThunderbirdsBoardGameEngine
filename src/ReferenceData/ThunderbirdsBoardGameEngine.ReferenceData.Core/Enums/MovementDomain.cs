@@ -1,4 +1,4 @@
-﻿namespace ThunderbirdsBoardGameEngine.ReferenceData.Enums
+﻿namespace ThunderbirdsBoardGameEngine.ReferenceData.Core.Enums
 {
     public enum MovementDomain
     {

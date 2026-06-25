@@ -1,6 +1,6 @@
-﻿using ThunderbirdsBoardGameEngine.ReferenceData.Identities;
+﻿using ThunderbirdsBoardGameEngine.ReferenceData.Core.Identities;
 
-namespace ThunderbirdsBoardGameEngine.ReferenceData.Model
+namespace ThunderbirdsBoardGameEngine.ReferenceData.Core.Model
 {
     public sealed record ReferenceCharacterDefinition
     {

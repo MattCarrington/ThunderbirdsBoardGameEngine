@@ -1,10 +1,10 @@
 ﻿using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using ThunderbirdsBoardGameEngine.ReferenceData.Identities;
-using ThunderbirdsBoardGameEngine.ReferenceData.Serialization;
+using ThunderbirdsBoardGameEngine.ReferenceData.Core.Identities;
+using ThunderbirdsBoardGameEngine.ReferenceData.Core.Serialization;
 
-namespace ThunderbirdsBoardGameEngine.ReferenceData
+namespace ThunderbirdsBoardGameEngine.ReferenceData.Core
 {
     /// <summary>
     /// Provides pre-configured JSON serialization options for reference data snapshots.

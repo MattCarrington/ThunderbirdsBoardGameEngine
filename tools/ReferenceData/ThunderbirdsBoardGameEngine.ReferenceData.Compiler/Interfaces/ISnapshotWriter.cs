@@ -1,4 +1,4 @@
-﻿using ThunderbirdsBoardGameEngine.ReferenceData.Model;
+﻿using ThunderbirdsBoardGameEngine.ReferenceData.Core.Model;
 
 namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Interfaces
 {

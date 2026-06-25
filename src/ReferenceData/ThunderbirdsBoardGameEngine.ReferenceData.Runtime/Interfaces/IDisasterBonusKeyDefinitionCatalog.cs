@@ -1,4 +1,4 @@
-﻿using ThunderbirdsBoardGameEngine.ReferenceData.Identities;
+﻿using ThunderbirdsBoardGameEngine.ReferenceData.Core.Identities;
 using ThunderbirdsBoardGameEngine.ReferenceData.Runtime.Models;
 
 namespace ThunderbirdsBoardGameEngine.ReferenceData.Runtime.Interfaces

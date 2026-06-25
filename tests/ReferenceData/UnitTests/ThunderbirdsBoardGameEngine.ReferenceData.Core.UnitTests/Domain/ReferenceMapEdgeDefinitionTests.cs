@@ -1,6 +1,6 @@
-﻿using ThunderbirdsBoardGameEngine.ReferenceData.Enums;
-using ThunderbirdsBoardGameEngine.ReferenceData.Identities;
-using ThunderbirdsBoardGameEngine.ReferenceData.Model;
+﻿using ThunderbirdsBoardGameEngine.ReferenceData.Core.Enums;
+using ThunderbirdsBoardGameEngine.ReferenceData.Core.Identities;
+using ThunderbirdsBoardGameEngine.ReferenceData.Core.Model;
 using Xunit;
 
 namespace ThunderbirdsBoardGameEngine.ReferenceData.UnitTests.Domain

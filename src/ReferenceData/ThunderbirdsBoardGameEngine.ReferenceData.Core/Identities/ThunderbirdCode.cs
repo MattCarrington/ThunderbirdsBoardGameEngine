@@ -1,4 +1,4 @@
-﻿namespace ThunderbirdsBoardGameEngine.ReferenceData.Identities
+﻿namespace ThunderbirdsBoardGameEngine.ReferenceData.Core.Identities
 {
     /// <summary>
     /// Represents a Thunderbird code as an immutable value object.

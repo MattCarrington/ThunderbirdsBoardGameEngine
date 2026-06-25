@@ -1,8 +1,8 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using ThunderbirdsBoardGameEngine.ReferenceData.Identities;
+using ThunderbirdsBoardGameEngine.ReferenceData.Core.Identities;
 
-namespace ThunderbirdsBoardGameEngine.ReferenceData.Serialization
+namespace ThunderbirdsBoardGameEngine.ReferenceData.Core.Serialization
 {
     internal sealed class CardCodeJsonConverter : JsonConverter<CardCode>
     {

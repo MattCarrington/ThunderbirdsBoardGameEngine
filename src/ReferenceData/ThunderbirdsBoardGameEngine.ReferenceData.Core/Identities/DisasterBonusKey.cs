@@ -1,4 +1,4 @@
-﻿namespace ThunderbirdsBoardGameEngine.ReferenceData.Identities
+﻿namespace ThunderbirdsBoardGameEngine.ReferenceData.Core.Identities
 {
     /// <summary>
     /// Represents a disaster bonus key as an immutable value object.

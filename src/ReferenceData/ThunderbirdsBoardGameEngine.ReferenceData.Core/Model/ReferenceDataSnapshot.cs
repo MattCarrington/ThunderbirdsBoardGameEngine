@@ -1,4 +1,4 @@
-﻿namespace ThunderbirdsBoardGameEngine.ReferenceData.Model
+﻿namespace ThunderbirdsBoardGameEngine.ReferenceData.Core.Model
 {
     public sealed record ReferenceDataSnapshot(
         int SchemaVersion,

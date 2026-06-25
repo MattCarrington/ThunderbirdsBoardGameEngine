@@ -1,6 +1,7 @@
 ﻿using System.Text.Json;
 using ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Interfaces;
-using ThunderbirdsBoardGameEngine.ReferenceData.Model;
+using ThunderbirdsBoardGameEngine.ReferenceData.Core;
+using ThunderbirdsBoardGameEngine.ReferenceData.Core.Model;
 
 namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Writers
 {
