@@ -4,7 +4,8 @@ using ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Source;
 using ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Validators;
 using ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Writers;
 using ThunderbirdsBoardGameEngine.ReferenceData.ComponentTests.Helpers;
-using ThunderbirdsBoardGameEngine.ReferenceData.Model;
+using ThunderbirdsBoardGameEngine.ReferenceData.Core;
+using ThunderbirdsBoardGameEngine.ReferenceData.Core.Model;
 using Xunit;
 
 namespace ThunderbirdsBoardGameEngine.ReferenceData.ComponentTests.Compilation

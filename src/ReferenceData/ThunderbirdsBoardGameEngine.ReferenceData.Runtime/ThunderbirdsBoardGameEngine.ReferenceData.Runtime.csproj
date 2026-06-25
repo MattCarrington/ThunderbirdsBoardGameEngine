@@ -13,7 +13,7 @@
     <RepositoryUrl>https://github.com/MattCarrington/ThunderbirdsBoardGameEngine</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageLicenseExpression>UNLICENSED</PackageLicenseExpression>
-    <Title>ThunderbirdsBoardGameEngine.ReferenceData</Title>
+    <Title>ThunderbirdsBoardGameEngine.ReferenceData.Runtime</Title>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -48,7 +48,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ThunderbirdsBoardGameEngine.ReferenceData\ThunderbirdsBoardGameEngine.ReferenceData.csproj" />
+    <ProjectReference Include="..\ThunderbirdsBoardGameEngine.ReferenceData.Core\ThunderbirdsBoardGameEngine.ReferenceData.Core.csproj" />
   </ItemGroup>
 
 </Project>

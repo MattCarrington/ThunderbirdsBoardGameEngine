@@ -1,5 +1,5 @@
 ﻿using System.Collections.Immutable;
-using ThunderbirdsBoardGameEngine.ReferenceData.Model;
+using ThunderbirdsBoardGameEngine.ReferenceData.Core.Model;
 
 namespace ThunderbirdsBoardGameEngine.ReferenceData.Runtime.Interfaces
 {

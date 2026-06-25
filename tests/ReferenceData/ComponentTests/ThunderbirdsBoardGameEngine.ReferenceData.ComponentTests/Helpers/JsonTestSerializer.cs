@@ -1,4 +1,5 @@
 ﻿using System.Text.Json;
+using ThunderbirdsBoardGameEngine.ReferenceData.Core;
 
 namespace ThunderbirdsBoardGameEngine.ReferenceData.ComponentTests.Helpers
 {

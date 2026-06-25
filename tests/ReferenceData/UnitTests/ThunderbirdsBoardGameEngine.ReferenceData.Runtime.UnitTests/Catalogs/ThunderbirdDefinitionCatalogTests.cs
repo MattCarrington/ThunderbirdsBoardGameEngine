@@ -1,5 +1,5 @@
-﻿using ThunderbirdsBoardGameEngine.ReferenceData.Enums;
-using ThunderbirdsBoardGameEngine.ReferenceData.Identities;
+﻿using ThunderbirdsBoardGameEngine.ReferenceData.Core.Enums;
+using ThunderbirdsBoardGameEngine.ReferenceData.Core.Identities;
 using ThunderbirdsBoardGameEngine.ReferenceData.Runtime.Catalogs;
 using ThunderbirdsBoardGameEngine.TestUtils.ReferenceData.Builders;
 using Xunit;
