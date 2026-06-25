@@ -74,7 +74,6 @@ PACKAGE_RESTORED=false
 
 dotnet add "$PROJECT_FILE" package "$PACKAGE_ID" \
   --version "$PACKAGE_VERSION" \
-  --prerelease \
   --no-restore
 
 for attempt in {1..12}; do
