@@ -48,7 +48,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ThunderbirdsBoardGameEngine.ReferenceData\ThunderbirdsBoardGameEngine.ReferenceData.csproj" />
+    <ProjectReference Include="..\ThunderbirdsBoardGameEngine.ReferenceData.Core\ThunderbirdsBoardGameEngine.ReferenceData.Core.csproj" />
   </ItemGroup>
 
 </Project>

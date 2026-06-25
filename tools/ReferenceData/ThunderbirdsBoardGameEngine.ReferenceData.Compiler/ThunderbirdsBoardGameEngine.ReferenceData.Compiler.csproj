@@ -18,7 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\src\ReferenceData\ThunderbirdsBoardGameEngine.ReferenceData\ThunderbirdsBoardGameEngine.ReferenceData.csproj" />
+    <ProjectReference Include="..\..\..\src\ReferenceData\ThunderbirdsBoardGameEngine.ReferenceData.Core\ThunderbirdsBoardGameEngine.ReferenceData.Core.csproj" />
   </ItemGroup>
 
 </Project>
