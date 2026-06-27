@@ -14,7 +14,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.EventCards
             {
                 return new AppliedMovementSpeedModifier(
                     Card: KnownEventCardCodes.RocketMalfunction,
-                    TopSpeedModifier: 1,
+                    EffectiveTopSpeed: 1,
                     Message: "Rocket Malfunction: Thunderbird 3's top speed is reduced to 1.");
             }
 

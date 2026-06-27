@@ -4,7 +4,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.Movement
 {
     public sealed record AppliedMovementSpeedModifier(
         CardCode Card,
-        int TopSpeedModifier,
+        int EffectiveTopSpeed,
         string Message);
 
 }

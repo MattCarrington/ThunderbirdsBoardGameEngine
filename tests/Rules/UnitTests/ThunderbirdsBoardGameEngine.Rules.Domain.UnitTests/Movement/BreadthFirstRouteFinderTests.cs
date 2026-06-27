@@ -23,6 +23,8 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.Movement
 
         private readonly ThunderbirdContribution _thunderbird = new(new ThunderbirdCode("thunderbird-1"), MovementDomain.Earth, 1);
 
+        private static readonly IReadOnlyCollection<CardCode> _noCards = [];
+
         [Fact]
         public void FindShortestRoute_WhenDestinationIsSameAsStart_ReturnsRouteWithSingleLocation()
         {
@@ -31,7 +33,8 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.Movement
                 _thunderbird,
                 new Topography(CreateEdges()),
                 _locationA.Key,
-                _locationA.Key);
+                _locationA.Key,
+                _noCards);
 
             var routeFinder = new BreadthFirstRouteFinder();
 
@@ -52,7 +55,8 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.Movement
                 _thunderbird,
                 new Topography(CreateEdges()),
                 _locationA.Key,
-                _locationB.Key);
+                _locationB.Key,
+                _noCards);
 
             var routeFinder = new BreadthFirstRouteFinder();
 
@@ -73,7 +77,8 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.Movement
                 _thunderbird,
                 new Topography(CreateEdges()),
                 _locationA.Key,
-                _locationE.Key);
+                _locationE.Key,
+                Array.Empty<CardCode>());
 
             var routeFinder = new BreadthFirstRouteFinder();
 
@@ -94,7 +99,8 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.Movement
                 _thunderbird,
                 new Topography(CreateEdges()),
                 _locationA.Key,
-                _locationC.Key);
+                _locationC.Key,
+                _noCards);
 
             var routeFinder = new BreadthFirstRouteFinder();
 
@@ -115,7 +121,8 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.Movement
                 _thunderbird,
                 new Topography(CreateEdges()),
                 _locationA.Key,
-                _locationSpace.Key);
+                _locationSpace.Key,
+                _noCards);
 
             var routeFinder = new BreadthFirstRouteFinder();
 
@@ -134,7 +141,8 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.Movement
                 _thunderbird,
                 new Topography(CreateEdges()),
                 _invalidLocationCode,
-                _locationB.Key);
+                _locationB.Key,
+                _noCards);
 
             var routeFinder = new BreadthFirstRouteFinder();
 
@@ -153,7 +161,8 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.Movement
                 _thunderbird,
                 new Topography(CreateEdges()),
                 _locationA.Key,
-                _invalidLocationCode);
+                _invalidLocationCode,
+                _noCards);
 
             var routeFinder = new BreadthFirstRouteFinder();
 
@@ -172,7 +181,8 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.Movement
                 _thunderbird,
                 new Topography(CreateEdges()),
                 _locationA.Key,
-                _locationUnlinked.Key);
+                _locationUnlinked.Key,
+                _noCards);
 
             var routeFinder = new BreadthFirstRouteFinder();
 

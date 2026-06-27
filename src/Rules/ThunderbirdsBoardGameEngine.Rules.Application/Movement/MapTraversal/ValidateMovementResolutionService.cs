@@ -44,7 +44,9 @@ namespace ThunderbirdsBoardGameEngine.Rules.Application.Movement.MapTraversal
 
             var topography = new Topography(edges);
 
-            var input = new MovementInput(thunderbird, topography, request.Start, request.Destination);
+            var eventCards = Array.Empty<CardCode>();   // TODO: Implement event card handling in movement validation
+
+            var input = new MovementInput(thunderbird, topography, request.Start, request.Destination, eventCards);
 
             var evaluationResult = _movementEvaluator.Evaluate(input);
 

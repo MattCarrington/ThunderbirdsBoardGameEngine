@@ -1,6 +1,7 @@
 ﻿using NSubstitute;
 using ThunderbirdsBoardGameEngine.ReferenceData.Core.Enums;
 using ThunderbirdsBoardGameEngine.ReferenceData.Core.Identities;
+using NSubstitute.Routing;
 using ThunderbirdsBoardGameEngine.Rules.Domain.Movement;
 using Xunit;
 
@@ -84,21 +85,93 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.Movement
             Assert.Equal("thunderbird cannot move.", result.Messages.First());
         }
 
+        [Fact]
+        public void Evaluate_WhenEventCardAppliesModifier_ReturnsValidMoveWithModifiedTopSpeed()
+        {
+            // Arrange
+            var eventCardCode = new CardCode("event-card");
+
+            var input = CreateMovementInput(3, new[] { eventCardCode });
+
+            var testModifierSource = new TestMovementSpeedModifierSource(eventCardCode);
+
+            var registry = Substitute.For<IMovementSpeedModifierSourceRegistry>();
+            registry.TryGetEventCard(eventCardCode, out Arg.Any<IMovementSpeedModifierSource?>())
+                .Returns(x =>
+                {
+                    x[1] = testModifierSource;
+                    return true;
+                });
+
+            var movementEvaluator = CreateMovementEvaluator(registry);
+
+            // Act
+            var result = movementEvaluator.Evaluate(input);
+
+            // Assert
+            Assert.True(result.IsMoveValid);
+            Assert.Equal(1, result.TopSpeed);
+            Assert.Equal(2, result.ActionPointCost);
+            Assert.Single(result.Messages);
+        }
+
         private static MovementInput CreateMovementInput(int topSpeed)
+        {
+            return CreateMovementInput(topSpeed, Enumerable.Empty<CardCode>());
+        }
+
+        private static MovementInput CreateMovementInput(int topSpeed, IEnumerable<CardCode> eventCards)
         {
             return new MovementInput(
                 Thunderbird: new ThunderbirdContribution(new("thunderbird"), MovementDomain.Earth, topSpeed),
                 Topography: new Topography([]),
                 Start: new LocationCode("A"),
-                Destination: new LocationCode("B")
+                Destination: new LocationCode("B"),
+                EventCards: eventCards.ToList()
             );
-
         }
 
         private static MovementEvaluator CreateMovementEvaluator(IRouteFinder routeFinder)
         {
+            var registry = Substitute.For<IMovementSpeedModifierSourceRegistry>();
+            registry.TryGetEventCard(Arg.Any<CardCode>(), out Arg.Any<IMovementSpeedModifierSource?>()).Returns(false);
+
+            return CreateMovementEvaluator(routeFinder, registry);
+        }
+
+        private static MovementEvaluator CreateMovementEvaluator(IMovementSpeedModifierSourceRegistry registry)
+        {
+            var route = new[] { new LocationCode("A"), new LocationCode("B"), new LocationCode("C") };
+
+            var routeFinder = Substitute.For<IRouteFinder>();
+            routeFinder.FindShortestRoute(Arg.Any<MovementInput>()).Returns(new RouteResult
+            (
+                Route: route.ToList(),
+                SpacesTravelled: 2
+            ));
+
+            return CreateMovementEvaluator(routeFinder, registry);
+        }
+
+        private static MovementEvaluator CreateMovementEvaluator(IRouteFinder routeFinder, IMovementSpeedModifierSourceRegistry registry)
+        {
             var actionPointCalculator = new ActionPointCalculator();
-            return new MovementEvaluator(routeFinder, actionPointCalculator);
+            return new MovementEvaluator(routeFinder, registry, actionPointCalculator);
+        }
+
+        private class TestMovementSpeedModifierSource : IMovementSpeedModifierSource
+        {
+            public TestMovementSpeedModifierSource(CardCode cardCode)
+            {
+                EventCardCode = cardCode;
+            }
+
+            public CardCode EventCardCode { get; }
+
+            public AppliedMovementSpeedModifier? ApplyMovementModifier(ThunderbirdCode input)
+            {
+                return new AppliedMovementSpeedModifier(EventCardCode, 1, "Test modifier applied.");
+            }
         }
     }
 }

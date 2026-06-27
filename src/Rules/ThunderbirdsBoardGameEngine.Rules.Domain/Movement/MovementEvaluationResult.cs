@@ -26,7 +26,8 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.Movement
             IReadOnlyCollection<LocationCode> route,
             int spacesTravelled,
             int topSpeed,
-            int actionPointCost)
+            int actionPointCost,
+            IReadOnlyCollection<string> messages)
         {
             return new(
                 IsMoveValid: true,
@@ -34,7 +35,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.Movement
                 SpacesTravelled: spacesTravelled,
                 TopSpeed: topSpeed,
                 ActionPointCost: actionPointCost,
-                Messages: Array.Empty<string>());
+                Messages: messages);
         }
     }
 }

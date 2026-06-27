@@ -14,7 +14,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.EventCards
             {
                 return new AppliedMovementSpeedModifier(
                     Card: KnownEventCardCodes.AttackOfTheZombites,
-                    TopSpeedModifier: 1,
+                    EffectiveTopSpeed: 1,
                     Message: "Attack of the Zombites: Thunderbird 1's top speed is reduced to 1.");
             }
 

@@ -19,7 +19,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.EventCards
             // Assert
             Assert.NotNull(result);
             Assert.Equal(KnownEventCardCodes.UsnSentinelMissileStrike, result.Card);
-            Assert.Equal(1, result.TopSpeedModifier);
+            Assert.Equal(1, result.EffectiveTopSpeed);
             Assert.Equal("USN Sentinel Missile Strike: Thunderbird 2's top speed is reduced to 1.", result.Message);
         }
 

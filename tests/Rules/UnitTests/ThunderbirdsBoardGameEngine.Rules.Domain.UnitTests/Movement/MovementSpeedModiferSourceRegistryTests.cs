@@ -64,7 +64,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.Movement
             {
                 return new AppliedMovementSpeedModifier(
                     Card: EventCardCode,
-                    TopSpeedModifier: 100,
+                    EffectiveTopSpeed: 100,
                     Message: $"{EventCardCode} applied");
             }
         }
@@ -77,7 +77,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.Movement
             {
                 return new AppliedMovementSpeedModifier(
                     Card: EventCardCode,
-                    TopSpeedModifier: 1,
+                    EffectiveTopSpeed: 1,
                     Message: $"{EventCardCode} applied");
             }
         }

@@ -14,7 +14,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.EventCards
             {
                 return new AppliedMovementSpeedModifier(
                     Card: EventCardCode,
-                    TopSpeedModifier: 1,
+                    EffectiveTopSpeed: 1,
                     Message: "USN Sentinel Missile Strike: Thunderbird 2's top speed is reduced to 1.");
             }
 
