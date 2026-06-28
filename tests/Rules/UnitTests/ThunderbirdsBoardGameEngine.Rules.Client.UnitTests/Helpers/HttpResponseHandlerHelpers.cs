@@ -1,6 +1,6 @@
 ﻿using NSubstitute;
-using ThunderbirdsBoardGameEngine.Client.Infrastructure;
-using ThunderbirdsBoardGameEngine.Client.Infrastructure.Interfaces;
+using ThunderbirdsBoardGameEngine.Client.Core;
+using ThunderbirdsBoardGameEngine.Client.Core.Interfaces;
 
 namespace ThunderbirdsBoardGameEngine.Rules.Client.UnitTests.Helpers
 {

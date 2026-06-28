@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
-using ThunderbirdsBoardGameEngine.Client.Infrastructure;
+using ThunderbirdsBoardGameEngine.Client.Core;
 using ThunderbirdsBoardGameEngine.Rules.Client.Configuration;
 
 namespace ThunderbirdsBoardGameEngine.Rules.Client.Extensions

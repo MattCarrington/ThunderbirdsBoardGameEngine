@@ -1,4 +1,4 @@
-﻿using ThunderbirdsBoardGameEngine.Client.Infrastructure;
+﻿using ThunderbirdsBoardGameEngine.Client.Core;
 using ThunderbirdsBoardGameEngine.Rules.Contracts.Dtos.Movement.AccessibleLocations.V1;
 using ThunderbirdsBoardGameEngine.Rules.Contracts.Dtos.Movement.ValidateMovement.V1;
 

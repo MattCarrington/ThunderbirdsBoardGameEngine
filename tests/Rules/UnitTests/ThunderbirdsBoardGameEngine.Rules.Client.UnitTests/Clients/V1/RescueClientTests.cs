@@ -1,6 +1,6 @@
 ﻿using NSubstitute;
 using System.Net;
-using ThunderbirdsBoardGameEngine.Client.Infrastructure;
+using ThunderbirdsBoardGameEngine.Client.Core;
 using ThunderbirdsBoardGameEngine.Rules.Client.Clients.V1;
 using ThunderbirdsBoardGameEngine.Rules.Client.UnitTests.Helpers;
 using ThunderbirdsBoardGameEngine.Rules.Contracts.Dtos.Rescue.CalculateRescueTarget.V1;
