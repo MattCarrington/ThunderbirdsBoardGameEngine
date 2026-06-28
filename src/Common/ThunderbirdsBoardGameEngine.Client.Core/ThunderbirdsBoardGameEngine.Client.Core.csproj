@@ -5,7 +5,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
-    <PackageId>ThunderbirdsBoardGameEngine.Client.Infrastructure</PackageId>
+    <PackageId>ThunderbirdsBoardGameEngine.Client.Core</PackageId>
     <Version>0.1.0</Version>
     <Authors>Matthew Carrington</Authors>
     <Description>Shared infrastructure for API Clients to use</Description>
