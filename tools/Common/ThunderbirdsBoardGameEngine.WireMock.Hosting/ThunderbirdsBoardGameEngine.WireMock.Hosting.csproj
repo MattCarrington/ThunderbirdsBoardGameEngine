@@ -5,6 +5,14 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
+    <PackageId>ThunderbirdsBoardGameEngine.WireMock.Hosting</PackageId>
+    <Title>ThunderbirdsBoardGameEngine.WireMock.Hosting</Title>
+    <Version>0.1.0</Version>
+    <Authors>Matthew Carrington</Authors>
+    <Description>Shared hosting library for WireMock.NET</Description>
+    <RepositoryUrl>https://github.com/MattCarrington/ThunderbirdsBoardGameEngine</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageLicenseExpression>UNLICENSED</PackageLicenseExpression>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
