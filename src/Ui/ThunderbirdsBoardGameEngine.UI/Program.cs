@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
+using ThunderbirdsBoardGameEngine.GameState.Client;
 using ThunderbirdsBoardGameEngine.ReferenceData.Runtime;
 using ThunderbirdsBoardGameEngine.Rules.Client.Extensions;
 
@@ -20,6 +21,7 @@ namespace ThunderbirdsBoardGameEngine.UI
             {
                 // Co-hosted mode: UI and API share the same runtime base URI, so use the host base address (origin + any path base).
                 builder.Configuration["RulesClient:BaseAddress"] = builder.HostEnvironment.BaseAddress;
+                builder.Configuration["GameStateClient:BaseAddress"] = builder.HostEnvironment.BaseAddress;
             }
             else if (endpointMode.Equals("External", StringComparison.OrdinalIgnoreCase))
             {
@@ -37,6 +39,7 @@ namespace ThunderbirdsBoardGameEngine.UI
             }
 
             builder.Services.AddRulesClients(builder.Configuration);
+            builder.Services.AddGameStateClients(builder.Configuration);
 
             // Register service layer
             builder.Services.AddUiServices();

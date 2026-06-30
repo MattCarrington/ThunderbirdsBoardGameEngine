@@ -1,0 +1,32 @@
+﻿@page "/gamesession"
+
+<h3>Game Session</h3>
+
+@if (_gameSessionViewModel is not null)
+{
+    <h4>Thunderbirds</h4>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>Vehicle</th>
+                <th>Current Location</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var vehicle in _gameSessionViewModel.ThunderbirdLocations)
+            {
+                <tr>
+                    <td>@vehicle.ThunderbirdDisplayName</td>
+                    <td>@vehicle.LocationDisplayName</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+<button class="btn btn-primary mt-3"
+        data-testid="create-button"
+        @onclick="CreateGame">
+    Create Game Session
+</button>

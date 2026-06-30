@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MediatR" />
+    <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ThunderbirdsBoardGameEngine.GameState.Application\ThunderbirdsBoardGameEngine.GameState.Application.csproj" />
+    <ProjectReference Include="..\ThunderbirdsBoardGameEngine.GameState.Domain\ThunderbirdsBoardGameEngine.GameState.Domain.csproj" />
+  </ItemGroup>
+
+</Project>

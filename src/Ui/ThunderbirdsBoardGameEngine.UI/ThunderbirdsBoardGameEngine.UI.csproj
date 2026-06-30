@@ -20,6 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\GameState\ThunderbirdsBoardGameEngine.GameState.Client\ThunderbirdsBoardGameEngine.GameState.Client.csproj" />
     <ProjectReference Include="..\..\ReferenceData\ThunderbirdsBoardGameEngine.ReferenceData.Runtime\ThunderbirdsBoardGameEngine.ReferenceData.Runtime.csproj" />
     <ProjectReference Include="..\..\Rules\ThunderbirdsBoardGameEngine.Rules.Client\ThunderbirdsBoardGameEngine.Rules.Client.csproj" />
   </ItemGroup>
