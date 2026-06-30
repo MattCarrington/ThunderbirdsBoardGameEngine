@@ -2,6 +2,8 @@
 {
     public interface IGameService
     {
-        Task<GameSessionViewModel?> GetGameSessionViewModel(CancellationToken cancellationToken = default);
+        Task<GameSessionViewModel?> CreateGameSessionViewModel(CancellationToken cancellationToken = default);
+        Task<GameSessionViewModel?> GetGameSessionViewModel(Guid gameId, CancellationToken cancellationToken = default);
+        Task<GameSessionViewModel?> MoveThunderbirdAsync(Guid gameId, string thunderbirdCode, string destinationLocationCode, CancellationToken cancellationToken = default);
     }
 }

@@ -13,6 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Rules\ThunderbirdsBoardGameEngine.Rules.Application\ThunderbirdsBoardGameEngine.Rules.Application.csproj" />
     <ProjectReference Include="..\ThunderbirdsBoardGameEngine.GameState.Application\ThunderbirdsBoardGameEngine.GameState.Application.csproj" />
     <ProjectReference Include="..\ThunderbirdsBoardGameEngine.GameState.Domain\ThunderbirdsBoardGameEngine.GameState.Domain.csproj" />
   </ItemGroup>

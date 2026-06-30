@@ -4,8 +4,10 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ThunderbirdsBoardGameEngine.GameState.Application.CreateGame;
 using ThunderbirdsBoardGameEngine.GameState.Application.GetGame;
+using ThunderbirdsBoardGameEngine.GameState.Application.MoveThunderbird;
 using ThunderbirdsBoardGameEngine.GameState.Contracts.V1;
 using ThunderbirdsBoardGameEngine.GameState.Domain;
+using ThunderbirdsBoardGameEngine.ReferenceData.Core.Identities;
 
 namespace ThunderbirdsBoardGameEngine.Api.Controllers.GameState
 {
@@ -46,7 +48,23 @@ namespace ThunderbirdsBoardGameEngine.Api.Controllers.GameState
             return Ok(result);
         }
 
-        private GameSessionDto Map(GameSession response)
+        [HttpPost("{gameId}/move")]
+        public async Task<IActionResult> MoveThunderbird([FromRoute] Guid gameId, [FromBody] MoveThunderbirdLocationRequestDto request, CancellationToken cancellationToken)
+        {
+            var command = new MoveThunderbirdCommand(
+                GameId: gameId,
+                ThunderbirdCode: new ThunderbirdCode(request.ThunderbirdCode),
+                Destination: new LocationCode(request.Destination)
+                );
+
+            var response = await _mediator.Send(command, cancellationToken);
+
+            var result = Map(response.GameSession);
+
+            return Ok(result);
+        }
+
+        private static GameSessionDto Map(GameSession response)
         {
             var thunderbirdLocations = new List<ThunderbirdLocationDto>();
 

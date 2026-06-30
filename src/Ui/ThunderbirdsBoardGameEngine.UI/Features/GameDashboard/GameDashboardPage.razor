@@ -2,15 +2,22 @@
 
 <h3>Game Session</h3>
 
+<button class="btn btn-primary mt-3"
+        data-testid="create-button"
+        @onclick="CreateGame">
+    Create Game Session
+</button>
+
 @if (_gameSessionViewModel is not null)
 {
     <h4>Thunderbirds</h4>
-    
+
     <table>
         <thead>
             <tr>
                 <th>Vehicle</th>
                 <th>Current Location</th>
+                <th>Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -19,14 +26,52 @@
                 <tr>
                     <td>@vehicle.ThunderbirdDisplayName</td>
                     <td>@vehicle.LocationDisplayName</td>
+                    <td>
+                        <button class="btn btn-sm btn-primary"
+                                @onclick="() => ShowMoveDialog(vehicle)">
+                            Move
+                        </button>
+                    </td>
                 </tr>
             }
         </tbody>
     </table>
 }
 
-<button class="btn btn-primary mt-3"
-        data-testid="create-button"
-        @onclick="CreateGame">
-    Create Game Session
-</button>
+@if (_selectedThunderbird is not null)
+{
+    <div class="modal-backdrop">
+        <div class="card p-3">
+
+            <h4>Move @_selectedThunderbird.ThunderbirdDisplayName</h4>
+
+            <p>
+                Current location:
+                @_selectedThunderbird.LocationDisplayName
+            </p>
+
+            <select @bind="_selectedDestination">
+
+                @foreach (var location in _locations)
+                {
+                    <option value="@location.Key">
+                        @location.DisplayName
+                    </option>
+                }
+
+            </select>
+
+            <button class="btn btn-primary mt-3"
+                    data-testid="calculate-button"
+                    disabled="@string.IsNullOrEmpty(_selectedDestination)"
+                    @onclick="MoveThunderbird">
+                Movement
+            </button>
+
+            <button class="btn btn-secondary"
+                    @onclick="CloseDialog">
+                Cancel
+            </button>
+        </div>
+    </div>
+}

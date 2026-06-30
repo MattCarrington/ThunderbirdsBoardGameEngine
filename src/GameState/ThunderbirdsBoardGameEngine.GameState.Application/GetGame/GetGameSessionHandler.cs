@@ -14,7 +14,7 @@ namespace ThunderbirdsBoardGameEngine.GameState.Application.GetGame
 
         public async Task<GetGameSessionResponse> Handle(GetGameSessionQuery request, CancellationToken cancellationToken)
         {
-            var gameSession = await _gameSessionRespository.GetGameSession(request.GameId);
+            var gameSession = await _gameSessionRespository.GetGameSession(request.GameId, cancellationToken);
             return new GetGameSessionResponse(gameSession);
         }
     }

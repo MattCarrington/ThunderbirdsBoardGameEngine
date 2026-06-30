@@ -13,7 +13,7 @@ namespace ThunderbirdsBoardGameEngine.GameState.Application.CreateGame
             _gameSessionRespository = gameSessionRespository;
         }
 
-        public Task<CreateGameSessionResponse> Handle(CreateGameSessionCommand request, CancellationToken cancellationToken)
+        public async Task<CreateGameSessionResponse> Handle(CreateGameSessionCommand request, CancellationToken cancellationToken)
         {
             var gameId = Guid.NewGuid();
 
@@ -28,9 +28,9 @@ namespace ThunderbirdsBoardGameEngine.GameState.Application.CreateGame
             };
 
             var gameSession = new GameSession(gameId, vehicleDefinitions);
-            _gameSessionRespository.SaveGameSession(gameSession);
+            await _gameSessionRespository.SaveGameSession(gameSession, cancellationToken);
 
-            return Task.FromResult(new CreateGameSessionResponse(gameSession));
+            return new CreateGameSessionResponse(gameSession);
         }
     }
 }

@@ -13,5 +13,29 @@ namespace ThunderbirdsBoardGameEngine.GameState.Domain
             GameId = gameId;
             VehicleDefinitions = vehicleDefinitions;
         }
+
+        public void MoveVehicleLocation(ThunderbirdCode thunderbirdCode, LocationCode newLocation)
+        {
+            if (VehicleDefinitions.ContainsKey(thunderbirdCode))
+            {
+                VehicleDefinitions[thunderbirdCode] = newLocation;
+            }
+            else
+            {
+                throw new Exception($"Thunderbird with code {thunderbirdCode} not found in the game session.");
+            }
+        }
+
+        public LocationCode GetVehicleLocation(ThunderbirdCode thunderbirdCode)
+        {
+            if (VehicleDefinitions.TryGetValue(thunderbirdCode, out var location))
+            {
+                return location;
+            }
+            else
+            {
+                throw new Exception($"Thunderbird with code {thunderbirdCode} not found in the game session.");
+            }
+        }
     }
 }

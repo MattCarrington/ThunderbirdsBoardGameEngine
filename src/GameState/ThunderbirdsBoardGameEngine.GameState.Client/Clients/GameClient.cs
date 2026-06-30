@@ -1,4 +1,5 @@
-﻿using ThunderbirdsBoardGameEngine.Client.Infrastructure;
+﻿using System.Net.Http.Json;
+using ThunderbirdsBoardGameEngine.Client.Infrastructure;
 using ThunderbirdsBoardGameEngine.Client.Infrastructure.Interfaces;
 using ThunderbirdsBoardGameEngine.GameState.Contracts.V1;
 
@@ -29,6 +30,20 @@ namespace ThunderbirdsBoardGameEngine.GameState.Client.Clients
             var route = $"api/games/game/{gameId}";
 
             using var message = new HttpRequestMessage(HttpMethod.Get, route);
+
+            using var response = await _httpClient.SendAsync(message, cancellationToken);
+
+            return await _httpResponseHandler.HandleResponseAsync<GameSessionDto>(response, cancellationToken);
+        }
+
+        public async Task<ApiResult<GameSessionDto>> MoveThunderbirdAsync(Guid gameId, MoveThunderbirdLocationRequestDto request, CancellationToken cancellationToken = default)
+        {
+            var route = $"api/games/game/{gameId}/move";
+
+            using var message = new HttpRequestMessage(HttpMethod.Post, route)
+            {
+                Content = JsonContent.Create(request)
+            };
 
             using var response = await _httpClient.SendAsync(message, cancellationToken);
 

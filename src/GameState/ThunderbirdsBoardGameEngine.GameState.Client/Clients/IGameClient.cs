@@ -8,5 +8,7 @@ namespace ThunderbirdsBoardGameEngine.GameState.Client.Clients
         Task<ApiResult<GameSessionDto>> CreateGameStateAsync(CancellationToken cancellationToken = default);
 
         Task<ApiResult<GameSessionDto>> GetGameStateAsync(Guid gameId, CancellationToken cancellationToken = default);
+
+        Task<ApiResult<GameSessionDto>> MoveThunderbirdAsync(Guid gameId, MoveThunderbirdLocationRequestDto request, CancellationToken cancellationToken = default);
     }
 }
