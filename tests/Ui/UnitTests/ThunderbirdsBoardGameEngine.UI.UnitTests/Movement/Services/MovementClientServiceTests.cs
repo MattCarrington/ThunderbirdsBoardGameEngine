@@ -156,7 +156,7 @@ namespace ThunderbirdsBoardGameEngine.UI.UnitTests.Movement.Services
             _ = await service.GetAccessibleLocationsAsync(ThunderbirdCode);
 
             // Assert
-            await movementClient.Received(1).GetAccessibleLocationsAsync(Arg.Is<string>(x => x == ThunderbirdCode), Arg.Any<CancellationToken>());
+            await AssertClientCalled(movementClient, ThunderbirdCode, 1);
         }
 
         [Fact]
@@ -179,8 +179,92 @@ namespace ThunderbirdsBoardGameEngine.UI.UnitTests.Movement.Services
             _ = await service.GetAccessibleLocationsAsync("TB002");
 
             // Assert
-            await movementClient.Received(1).GetAccessibleLocationsAsync(Arg.Is<string>(x => x == "TB001"), Arg.Any<CancellationToken>());
-            await movementClient.Received(1).GetAccessibleLocationsAsync(Arg.Is<string>(x => x == "TB002"), Arg.Any<CancellationToken>());
+            await AssertClientCalled(movementClient, "TB001", 1);
+            await AssertClientCalled(movementClient, "TB002", 1);
+        }
+
+        [Fact]
+        public async Task GetAccessibleLocationsAsync_WhenFirstRequestIsFailure_DoesNotCache()
+        {
+            // Arrange
+            var failureResult = ApiResult<AccessibleLocationsResponseDto>.Failure("Error", HttpStatusCode.BadRequest);
+
+            var successResult = CreateValidAccessibleLocationsResponseDto();
+
+            var movementClient = Substitute.For<IMovementClient>();
+            movementClient
+                .GetAccessibleLocationsAsync(
+                    Arg.Is<string>(x => x == ThunderbirdCode),
+                    Arg.Any<CancellationToken>())
+                .Returns(Task.FromResult(failureResult), Task.FromResult(successResult));
+
+            var service = CreateService(movementClient);
+
+            // Act
+            var result1 = await service.GetAccessibleLocationsAsync(ThunderbirdCode);
+            var result2 = await service.GetAccessibleLocationsAsync(ThunderbirdCode);
+
+            // Assert
+            await AssertClientCalled(movementClient, ThunderbirdCode, 2);
+
+            Assert.Empty(result1);
+            Assert.NotEmpty(result2);
+        }
+
+        [Fact]
+        public async Task GetAccessibleLocationsAsync_WhenFirstRequestIsNull_DoesNotCache()
+        {
+            // Arrange
+            var nullResult = ApiResult<AccessibleLocationsResponseDto>.SuccessResult(null, HttpStatusCode.OK);
+
+            var successResult = CreateValidAccessibleLocationsResponseDto();
+
+            var movementClient = Substitute.For<IMovementClient>();
+            movementClient
+                .GetAccessibleLocationsAsync(
+                    Arg.Is<string>(x => x == ThunderbirdCode),
+                    Arg.Any<CancellationToken>())
+                .Returns(Task.FromResult(nullResult), Task.FromResult(successResult));
+
+            var service = CreateService(movementClient);
+
+            // Act
+            var result1 = await service.GetAccessibleLocationsAsync(ThunderbirdCode);
+            var result2 = await service.GetAccessibleLocationsAsync(ThunderbirdCode);
+
+            // Assert
+            await AssertClientCalled(movementClient, ThunderbirdCode, 2);
+
+            Assert.Empty(result1);
+            Assert.NotEmpty(result2);
+        }
+
+        [Fact]
+        public async Task GetAccessibleLocationsAsync_WhenFirstRequestIsEmpty_DoesNotCallClientAgain()
+        {
+            // Arrange
+            var emptyResult = ApiResult<AccessibleLocationsResponseDto>.SuccessResult(new AccessibleLocationsResponseDto { AccessibleLocations = Array.Empty<string>() }, HttpStatusCode.OK);
+
+            var successResult = CreateValidAccessibleLocationsResponseDto();
+
+            var movementClient = Substitute.For<IMovementClient>();
+            movementClient
+                .GetAccessibleLocationsAsync(
+                    Arg.Is<string>(x => x == ThunderbirdCode),
+                    Arg.Any<CancellationToken>())
+                .Returns(Task.FromResult(emptyResult), Task.FromResult(successResult));
+
+            var service = CreateService(movementClient);
+
+            // Act
+            var result1 = await service.GetAccessibleLocationsAsync(ThunderbirdCode);
+            var result2 = await service.GetAccessibleLocationsAsync(ThunderbirdCode);
+
+            // Assert
+            await AssertClientCalled(movementClient, ThunderbirdCode, 1);
+
+            Assert.Empty(result1);
+            Assert.Empty(result2);
         }
 
         private static ApiResult<AccessibleLocationsResponseDto> CreateValidAccessibleLocationsResponseDto()
@@ -208,6 +292,11 @@ namespace ThunderbirdsBoardGameEngine.UI.UnitTests.Movement.Services
             var locationsMapper = new MovementLocationOptionsMapper(catalog);
 
             return new MovementClientService(movementClient, resultMapper, locationsMapper);
+        }
+
+        private static Task<ApiResult<AccessibleLocationsResponseDto>> AssertClientCalled(IMovementClient client, string thunderbirdCode, int expectedCallCount)
+        {
+            return client.Received(expectedCallCount).GetAccessibleLocationsAsync(Arg.Is<string>(x => x == thunderbirdCode), Arg.Any<CancellationToken>());
         }
     }
 }
