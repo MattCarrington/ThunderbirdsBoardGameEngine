@@ -46,9 +46,12 @@ namespace ThunderbirdsBoardGameEngine.UI.Features.Movement.Services
 
             var result = await _client.GetAccessibleLocationsAsync(thunderbirdCode);
 
-            var locations = result.Success
-                ? _locationsMapper.ToViewModel(result.Data!.AccessibleLocations)
-                : Array.Empty<MovementLocationOptions>();
+            if (!result.Success || result.Data is null)
+            {
+                return Array.Empty<MovementLocationOptions>();
+            }
+
+            var locations = _locationsMapper.ToViewModel(result.Data.AccessibleLocations);
 
             _accessibleLocationsCache[thunderbirdCode] = locations;
 
