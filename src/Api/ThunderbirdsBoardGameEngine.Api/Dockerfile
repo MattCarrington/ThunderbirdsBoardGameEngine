@@ -20,7 +20,7 @@ COPY ["src/Rules/ThunderbirdsBoardGameEngine.Rules.Domain/ThunderbirdsBoardGameE
 
 COPY ["src/Ui/ThunderbirdsBoardGameEngine.UI/ThunderbirdsBoardGameEngine.UI.csproj", "Ui/ThunderbirdsBoardGameEngine.UI/"]
 COPY ["src/Rules/ThunderbirdsBoardGameEngine.Rules.Client/ThunderbirdsBoardGameEngine.Rules.Client.csproj", "Rules/ThunderbirdsBoardGameEngine.Rules.Client/"]
-COPY ["src/Common/ThunderbirdsBoardGameEngine.Client.Infrastructure/ThunderbirdsBoardGameEngine.Client.Infrastructure.csproj", "Common/ThunderbirdsBoardGameEngine.Client.Infrastructure/"]
+COPY ["src/Common/ThunderbirdsBoardGameEngine.Client.Core/ThunderbirdsBoardGameEngine.Client.Core.csproj", "Common/ThunderbirdsBoardGameEngine.Client.Core/"]
 
 RUN dotnet restore "./Api/ThunderbirdsBoardGameEngine.Api/ThunderbirdsBoardGameEngine.Api.csproj"
 
