@@ -136,6 +136,63 @@ namespace ThunderbirdsBoardGameEngine.UI.UnitTests.Movement.Services
             Assert.Empty(result);
         }
 
+        [Fact]
+        public async Task GetAccesibileLocationsAsync_WhenCalledMultipleTimesForSameThunderbird_CallsClientOnce()
+        {
+            // Arrange        
+            var apiResult = CreateValidAccessibleLocationsResponseDto();
+
+            var movementClient = Substitute.For<IMovementClient>();
+            movementClient
+                .GetAccessibleLocationsAsync(
+                    Arg.Is<string>(x => x == ThunderbirdCode),
+                    Arg.Any<CancellationToken>())
+                .Returns(Task.FromResult(apiResult));
+
+            var service = CreateService(movementClient);
+
+            // Act
+            _ = await service.GetAccessibleLocationsAsync(ThunderbirdCode);
+            _ = await service.GetAccessibleLocationsAsync(ThunderbirdCode);
+
+            // Assert
+            await movementClient.Received(1).GetAccessibleLocationsAsync(Arg.Is<string>(x => x == ThunderbirdCode), Arg.Any<CancellationToken>());
+        }
+
+        [Fact]
+        public async Task GetAccesibileLocationsAsync_WhenCalledMultipleTimesForDifferentThunderbirds_CallsClientForEachThunderbird()
+        {
+            // Arrange        
+            var apiResult = CreateValidAccessibleLocationsResponseDto();
+
+            var movementClient = Substitute.For<IMovementClient>();
+            movementClient
+                .GetAccessibleLocationsAsync(
+                    Arg.Any<string>(),
+                    Arg.Any<CancellationToken>())
+                .Returns(Task.FromResult(apiResult));
+
+            var service = CreateService(movementClient);
+
+            // Act
+            _ = await service.GetAccessibleLocationsAsync("TB001");
+            _ = await service.GetAccessibleLocationsAsync("TB002");
+
+            // Assert
+            await movementClient.Received(1).GetAccessibleLocationsAsync(Arg.Is<string>(x => x == "TB001"), Arg.Any<CancellationToken>());
+            await movementClient.Received(1).GetAccessibleLocationsAsync(Arg.Is<string>(x => x == "TB002"), Arg.Any<CancellationToken>());
+        }
+
+        private static ApiResult<AccessibleLocationsResponseDto> CreateValidAccessibleLocationsResponseDto()
+        {
+            var responseDto = new AccessibleLocationsResponseDto
+            {
+                AccessibleLocations = ["LOC001", "LOC002", "LOC003"]
+            };
+
+            return ApiResult<AccessibleLocationsResponseDto>.SuccessResult(responseDto, HttpStatusCode.OK);
+        }
+
         private static MovementClientService CreateService(IMovementClient movementClient)
         {
             var catalog = Substitute.For<ILocationDefinitionCatalog>();
