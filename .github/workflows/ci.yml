@@ -117,6 +117,10 @@ jobs:
             project_path: src/Rules/ThunderbirdsBoardGameEngine.Rules.Client/ThunderbirdsBoardGameEngine.Rules.Client.csproj
             package_id: ThunderbirdsBoardGameEngine.Rules.Client
 
+          - name: WireMock.Hosting
+            project_path: tools/Common/ThunderbirdsBoardGameEngine.WireMock.Hosting/ThunderbirdsBoardGameEngine.WireMock.Hosting.csproj
+            package_id: ThunderbirdsBoardGameEngine.WireMock.Hosting
+
           - name: Rules.WireMock
             project_path: tools/Rules/ThunderbirdsBoardGameEngine.Rules.WireMock/ThunderbirdsBoardGameEngine.Rules.WireMock.csproj
             package_id: ThunderbirdsBoardGameEngine.Rules.WireMock
