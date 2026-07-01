@@ -93,44 +93,10 @@ jobs:
       - docker-build-app
       - compute-version
 
-  publish-packages:
-    strategy:
-      matrix:
-        package:
-          - name: Client.Core
-            project_path: src/Common/ThunderbirdsBoardGameEngine.Client.Core/ThunderbirdsBoardGameEngine.Client.Core.csproj
-            package_id: ThunderbirdsBoardGameEngine.Client.Core
-
-          - name: ReferenceData.Core
-            project_path: src/ReferenceData/ThunderbirdsBoardGameEngine.ReferenceData.Core/ThunderbirdsBoardGameEngine.ReferenceData.Core.csproj
-            package_id: ThunderbirdsBoardGameEngine.ReferenceData.Core
-
-          - name: ReferenceData.Runtime
-            project_path: src/ReferenceData/ThunderbirdsBoardGameEngine.ReferenceData.Runtime/ThunderbirdsBoardGameEngine.ReferenceData.Runtime.csproj
-            package_id: ThunderbirdsBoardGameEngine.ReferenceData.Runtime
-            
-          - name: Rules.Contracts
-            project_path: src/Rules/ThunderbirdsBoardGameEngine.Rules.Contracts/ThunderbirdsBoardGameEngine.Rules.Contracts.csproj
-            package_id: ThunderbirdsBoardGameEngine.Rules.Contracts
-
-          - name: Rules.Client
-            project_path: src/Rules/ThunderbirdsBoardGameEngine.Rules.Client/ThunderbirdsBoardGameEngine.Rules.Client.csproj
-            package_id: ThunderbirdsBoardGameEngine.Rules.Client
-
-          - name: WireMock.Hosting
-            project_path: tools/Common/ThunderbirdsBoardGameEngine.WireMock.Hosting/ThunderbirdsBoardGameEngine.WireMock.Hosting.csproj
-            package_id: ThunderbirdsBoardGameEngine.WireMock.Hosting
-
-          - name: Rules.WireMock
-            project_path: tools/Rules/ThunderbirdsBoardGameEngine.Rules.WireMock/ThunderbirdsBoardGameEngine.Rules.WireMock.csproj
-            package_id: ThunderbirdsBoardGameEngine.Rules.WireMock
-
-    name: Package → ${{ matrix.package.name }}
+  packages:
     if: github.event_name == 'push' && needs.compute-version.outputs.release_type != 'none'
-    uses: ./.github/workflows/package-lifecycle.yml
-    with:
-      project_path: ${{ matrix.package.project_path }}
-      package_id: ${{ matrix.package.package_id }}
+    uses: ./.github/workflows/package-release.yml
+    secrets: inherit
     needs:
       - compute-version
 

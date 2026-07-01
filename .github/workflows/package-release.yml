@@ -1,0 +1,87 @@
+name: Release .NET Packages
+
+on:
+  workflow_call:
+
+jobs:
+  package-matrix:
+    runs-on: ubuntu-latest
+    outputs:
+      packages: ${{ steps.packages.outputs.packages }}
+
+    steps:
+      - name: Define packages
+        id: packages
+        run: |
+          {
+            echo 'packages<<JSON'
+            cat <<'JSON'
+          [
+            {
+              "name": "Client.Core",
+              "project_path": "src/Common/ThunderbirdsBoardGameEngine.Client.Core/ThunderbirdsBoardGameEngine.Client.Core.csproj",
+              "package_id": "ThunderbirdsBoardGameEngine.Client.Core"
+            },
+            {
+              "name": "ReferenceData.Core",
+              "project_path": "src/ReferenceData/ThunderbirdsBoardGameEngine.ReferenceData.Core/ThunderbirdsBoardGameEngine.ReferenceData.Core.csproj",
+              "package_id": "ThunderbirdsBoardGameEngine.ReferenceData.Core"
+            },
+            {
+              "name": "ReferenceData.Runtime",
+              "project_path": "src/ReferenceData/ThunderbirdsBoardGameEngine.ReferenceData.Runtime/ThunderbirdsBoardGameEngine.ReferenceData.Runtime.csproj",
+              "package_id": "ThunderbirdsBoardGameEngine.ReferenceData.Runtime"
+            },
+            {
+              "name": "Rules.Contracts",
+              "project_path": "src/Rules/ThunderbirdsBoardGameEngine.Rules.Contracts/ThunderbirdsBoardGameEngine.Rules.Contracts.csproj",
+              "package_id": "ThunderbirdsBoardGameEngine.Rules.Contracts"
+            },
+            {
+              "name": "Rules.Client",
+              "project_path": "src/Rules/ThunderbirdsBoardGameEngine.Rules.Client/ThunderbirdsBoardGameEngine.Rules.Client.csproj",
+              "package_id": "ThunderbirdsBoardGameEngine.Rules.Client"
+            },
+            {
+              "name": "WireMock.Hosting",
+              "project_path": "tools/Common/ThunderbirdsBoardGameEngine.WireMock.Hosting/ThunderbirdsBoardGameEngine.WireMock.Hosting.csproj",
+              "package_id": "ThunderbirdsBoardGameEngine.WireMock.Hosting"
+            },
+            {
+              "name": "Rules.WireMock",
+              "project_path": "tools/Rules/ThunderbirdsBoardGameEngine.Rules.WireMock/ThunderbirdsBoardGameEngine.Rules.WireMock.csproj",
+              "package_id": "ThunderbirdsBoardGameEngine.Rules.WireMock"
+            }
+          ]
+          JSON
+            echo 'JSON'
+          } >> "$GITHUB_OUTPUT"
+
+  publish-packages:
+    strategy:
+      matrix:
+        package: ${{ fromJSON(needs.package-matrix.outputs.packages) }}
+
+    name: Package -> ${{ matrix.package.name }}
+    uses: ./.github/workflows/package-lifecycle.yml
+    with:
+      project_path: ${{ matrix.package.project_path }}
+      package_id: ${{ matrix.package.package_id }}
+    secrets: inherit
+    needs:
+      - package-matrix
+
+  validate-packages:
+    strategy:
+      matrix:
+        package: ${{ fromJSON(needs.package-matrix.outputs.packages) }}
+
+    name: Validate Package -> ${{ matrix.package.name }}
+    uses: ./.github/workflows/validate-package-consumption.yml
+    with:
+      project_path: ${{ matrix.package.project_path }}
+      package_id: ${{ matrix.package.package_id }}
+    secrets: inherit
+    needs:
+      - package-matrix
+      - publish-packages
