@@ -12,6 +12,8 @@ namespace ThunderbirdsBoardGameEngine.UI.Features.Movement.Services
         private readonly MovementResultMapper _resultMapper;
         private readonly MovementLocationOptionsMapper _locationsMapper;
 
+        private readonly Dictionary<string, IReadOnlyList<MovementLocationOptions>> _accessibleLocationsCache = new();
+
         public MovementClientService(IMovementClient client, MovementResultMapper resultMapper, MovementLocationOptionsMapper locationsMapper)
         {
             _client = client;
@@ -37,11 +39,23 @@ namespace ThunderbirdsBoardGameEngine.UI.Features.Movement.Services
 
         public async Task<IReadOnlyList<MovementLocationOptions>> GetAccessibleLocationsAsync(string thunderbirdCode)
         {
+            if (_accessibleLocationsCache.TryGetValue(thunderbirdCode, out var cachedLocations))
+            {
+                return cachedLocations;
+            }
+
             var result = await _client.GetAccessibleLocationsAsync(thunderbirdCode);
 
-            return result.Success
-                ? _locationsMapper.ToViewModel(result.Data!.AccessibleLocations)
-                : Array.Empty<MovementLocationOptions>();
+            if (!result.Success || result.Data is null)
+            {
+                return Array.Empty<MovementLocationOptions>();
+            }
+
+            var locations = _locationsMapper.ToViewModel(result.Data.AccessibleLocations);
+
+            _accessibleLocationsCache[thunderbirdCode] = locations;
+
+            return locations;
         }
     }
 }
