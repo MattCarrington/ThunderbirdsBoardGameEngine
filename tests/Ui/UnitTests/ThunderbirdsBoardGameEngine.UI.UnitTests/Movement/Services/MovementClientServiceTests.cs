@@ -137,7 +137,7 @@ namespace ThunderbirdsBoardGameEngine.UI.UnitTests.Movement.Services
         }
 
         [Fact]
-        public async Task GetAccesibileLocationsAsync_WhenCalledMultipleTimesForSameThunderbird_CallsClientOnce()
+        public async Task GetAccessibleLocationsAsync_WhenCalledMultipleTimesForSameThunderbird_CallsClientOnce()
         {
             // Arrange        
             var apiResult = CreateValidAccessibleLocationsResponseDto();
