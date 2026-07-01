@@ -29,7 +29,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Common\ThunderbirdsBoardGameEngine.Client.Infrastructure\ThunderbirdsBoardGameEngine.Client.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\Common\ThunderbirdsBoardGameEngine.Client.Core\ThunderbirdsBoardGameEngine.Client.Core.csproj" />
     <ProjectReference Include="..\ThunderbirdsBoardGameEngine.Rules.Contracts\ThunderbirdsBoardGameEngine.Rules.Contracts.csproj" />
   </ItemGroup>
 

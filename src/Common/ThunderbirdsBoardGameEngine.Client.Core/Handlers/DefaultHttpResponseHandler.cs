@@ -1,8 +1,8 @@
 ﻿using System.Text.Json;
-using ThunderbirdsBoardGameEngine.Client.Infrastructure.Interfaces;
-using ThunderbirdsBoardGameEngine.Client.Infrastructure.Serialization;
+using ThunderbirdsBoardGameEngine.Client.Core.Interfaces;
+using ThunderbirdsBoardGameEngine.Client.Core.Serialization;
 
-namespace ThunderbirdsBoardGameEngine.Client.Infrastructure.Handlers
+namespace ThunderbirdsBoardGameEngine.Client.Core.Handlers
 {
     /// <summary>
     /// Provides a default implementation for processing HTTP responses and extracting deserialized content or error

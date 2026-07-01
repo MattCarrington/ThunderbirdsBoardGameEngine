@@ -1,4 +1,4 @@
-﻿namespace ThunderbirdsBoardGameEngine.Client.Infrastructure.DelegatingHandlers
+﻿namespace ThunderbirdsBoardGameEngine.Client.Core.DelegatingHandlers
 {
     /// <summary>
     /// Adds an <c>X-Api-Version</c> request header for all outgoing requests.

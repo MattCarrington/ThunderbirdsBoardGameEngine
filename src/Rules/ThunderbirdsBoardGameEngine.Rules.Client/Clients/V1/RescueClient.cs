@@ -1,7 +1,7 @@
 ﻿using System.Text;
 using System.Text.Json;
-using ThunderbirdsBoardGameEngine.Client.Infrastructure;
-using ThunderbirdsBoardGameEngine.Client.Infrastructure.Interfaces;
+using ThunderbirdsBoardGameEngine.Client.Core;
+using ThunderbirdsBoardGameEngine.Client.Core.Interfaces;
 using ThunderbirdsBoardGameEngine.Rules.Client.Interfaces.V1;
 using ThunderbirdsBoardGameEngine.Rules.Client.Routing.V1;
 using ThunderbirdsBoardGameEngine.Rules.Contracts.Dtos.Rescue.CalculateRescueTarget.V1;

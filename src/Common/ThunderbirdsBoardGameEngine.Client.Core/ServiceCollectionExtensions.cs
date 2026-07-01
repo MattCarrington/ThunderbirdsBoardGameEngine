@@ -1,8 +1,8 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using ThunderbirdsBoardGameEngine.Client.Infrastructure.Handlers;
-using ThunderbirdsBoardGameEngine.Client.Infrastructure.Interfaces;
+using ThunderbirdsBoardGameEngine.Client.Core.Handlers;
+using ThunderbirdsBoardGameEngine.Client.Core.Interfaces;
 
-namespace ThunderbirdsBoardGameEngine.Client.Infrastructure
+namespace ThunderbirdsBoardGameEngine.Client.Core
 {
     /// <summary>
     /// Provides extension methods for registering client infrastructure services with an <see

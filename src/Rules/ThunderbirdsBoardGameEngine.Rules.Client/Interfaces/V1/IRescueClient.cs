@@ -1,4 +1,4 @@
-﻿using ThunderbirdsBoardGameEngine.Client.Infrastructure;
+﻿using ThunderbirdsBoardGameEngine.Client.Core;
 using ThunderbirdsBoardGameEngine.Rules.Contracts.Dtos.Rescue.CalculateRescueTarget.V1;
 
 namespace ThunderbirdsBoardGameEngine.Rules.Client.Interfaces.V1

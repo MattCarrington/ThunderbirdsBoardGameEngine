@@ -1,8 +1,8 @@
 ﻿using System.Net;
-using ThunderbirdsBoardGameEngine.Client.Infrastructure.Handlers;
+using ThunderbirdsBoardGameEngine.Client.Core.Handlers;
 using Xunit;
 
-namespace ThunderbirdsBoardGameEngine.Client.Infrastructure.UnitTests.Handlers
+namespace ThunderbirdsBoardGameEngine.Client.Core.UnitTests.Handlers
 {
     public class DefaultHttpHandlerTests
     {
