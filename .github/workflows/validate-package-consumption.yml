@@ -1,0 +1,53 @@
+name: Validate .NET Package Consumption
+
+on:
+  workflow_call:
+    inputs:
+      project_path:
+        description: "Path to the .csproj"
+        required: true
+        type: string
+      package_id:
+        description: NuGet package ID
+        required: true
+        type: string
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: read
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Compute package version
+        id: package-version
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          BASE_VERSION=$(dotnet msbuild "${{ inputs.project_path }}" \
+            -getProperty:Version -nologo)
+
+          if [[ "${GITHUB_REF}" == "refs/heads/main" ]]; then
+            PACKAGE_VERSION="$BASE_VERSION"
+          else
+            PACKAGE_VERSION="$BASE_VERSION-beta.${GITHUB_RUN_NUMBER}"
+          fi
+
+          echo "version=$PACKAGE_VERSION" >> "$GITHUB_OUTPUT"
+
+      - name: Validate package consumption
+        run: bash ./.github/scripts/validate-nuget-package-consumption.sh
+        env:
+          PACKAGE_ID: ${{ inputs.package_id }}
+          PACKAGE_VERSION: ${{ steps.package-version.outputs.version }}
+          GITHUB_OWNER: ${{ github.repository_owner }}
+          GITHUB_TOKEN: ${{ github.token }}
