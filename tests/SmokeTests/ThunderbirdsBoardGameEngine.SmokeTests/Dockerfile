@@ -9,6 +9,7 @@ WORKDIR /src
 
 COPY ["NuGet.config", "."]
 COPY ["Directory.Packages.props", "."]
+COPY ["Directory.Build.props", "."]
 
 COPY ["tests/SmokeTests/ThunderbirdsBoardGameEngine.SmokeTests/ThunderbirdsBoardGameEngine.SmokeTests.csproj", "tests/SmokeTests/ThunderbirdsBoardGameEngine.SmokeTests/"]
 
