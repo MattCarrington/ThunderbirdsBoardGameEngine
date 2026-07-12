@@ -26,3 +26,26 @@ updates:
       - "dependencies"
     commit-message:
       prefix: "chore"
+
+  # Docker base images
+  - package-ecosystem: "docker"
+    directory: "/src/Api/ThunderbirdsBoardGameEngine.Api"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+    open-pull-requests-limit: 5
+    labels:
+      - "dependencies"
+    commit-message:
+      prefix: "chore"
+
+  - package-ecosystem: "docker"
+    directory: "/tests/SmokeTests/ThunderbirdsBoardGameEngine.SmokeTests"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+    open-pull-requests-limit: 5
+    labels:
+      - "dependencies"
+    commit-message:
+      prefix: "chore"
