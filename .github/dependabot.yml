@@ -29,9 +29,18 @@ updates:
 
   # Docker base images
   - package-ecosystem: "docker"
-    directories:
-      - "/src/Api/ThunderbirdsBoardGameEngine.Api"
-      - "/tests/SmokeTests/ThunderbirdsBoardGameEngine.SmokeTests"
+    directory: "/src/Api/ThunderbirdsBoardGameEngine.Api"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+    open-pull-requests-limit: 5
+    labels:
+      - "dependencies"
+    commit-message:
+      prefix: "chore"
+
+  - package-ecosystem: "docker"
+    directory: "/tests/SmokeTests/ThunderbirdsBoardGameEngine.SmokeTests"
     schedule:
       interval: "weekly"
       day: "monday"
