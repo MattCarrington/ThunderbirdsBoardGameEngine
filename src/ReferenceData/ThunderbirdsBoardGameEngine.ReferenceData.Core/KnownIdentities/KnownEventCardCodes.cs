@@ -1,6 +1,6 @@
-﻿using ThunderbirdsBoardGameEngine.ReferenceData.Identities;
+﻿using ThunderbirdsBoardGameEngine.ReferenceData.Core.Identities;
 
-namespace ThunderbirdsBoardGameEngine.ReferenceData.KnownIdentities
+namespace ThunderbirdsBoardGameEngine.ReferenceData.Core.KnownIdentities
 {
     public static class KnownEventCardCodes
     {

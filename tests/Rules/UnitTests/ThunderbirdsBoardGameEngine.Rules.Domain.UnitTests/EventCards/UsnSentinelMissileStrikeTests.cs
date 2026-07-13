@@ -1,5 +1,5 @@
-﻿using ThunderbirdsBoardGameEngine.ReferenceData.Identities;
-using ThunderbirdsBoardGameEngine.ReferenceData.KnownIdentities;
+﻿using ThunderbirdsBoardGameEngine.ReferenceData.Core.Identities;
+using ThunderbirdsBoardGameEngine.ReferenceData.Core.KnownIdentities;
 using ThunderbirdsBoardGameEngine.Rules.Domain.EventCards;
 using Xunit;
 
