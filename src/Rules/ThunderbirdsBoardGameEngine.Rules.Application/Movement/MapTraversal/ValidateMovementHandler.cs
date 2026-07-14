@@ -18,7 +18,8 @@ namespace ThunderbirdsBoardGameEngine.Rules.Application.Movement.MapTraversal
             var request = new MovementRequest(
                 Thunderbird: query.Thunderbird,
                 Start: query.Start,
-                Destination: query.Destination
+                Destination: query.Destination,
+                ActiveEventCards: query.EventCards
             );
 
             var movementResult = _validateMovementResolutionService.ResolveMovementValidation(request);

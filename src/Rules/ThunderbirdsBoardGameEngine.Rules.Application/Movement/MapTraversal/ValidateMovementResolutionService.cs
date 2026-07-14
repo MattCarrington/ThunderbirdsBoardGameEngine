@@ -1,6 +1,7 @@
 ﻿using ThunderbirdsBoardGameEngine.ReferenceData.Core.Identities;
 using ThunderbirdsBoardGameEngine.Rules.Application.Exceptions;
 using ThunderbirdsBoardGameEngine.Rules.Application.Movement.Interfaces;
+using ThunderbirdsBoardGameEngine.Rules.Application.Validators;
 using ThunderbirdsBoardGameEngine.Rules.Domain.Movement;
 
 namespace ThunderbirdsBoardGameEngine.Rules.Application.Movement.MapTraversal
@@ -10,16 +11,19 @@ namespace ThunderbirdsBoardGameEngine.Rules.Application.Movement.MapTraversal
         private readonly IThunderbirdsDefinitionLookup _thunderbirdsDefinitionLookup;
         private readonly ILocationDefinitionLookup _locationDefinitionLookup;
         private readonly IMapEdgeDefinitionLookup _edgeDefinitionLookup;
+        private readonly IEventCardValidator _eventCardValidator;
         private readonly MovementEvaluator _movementEvaluator;
 
         public ValidateMovementResolutionService(IThunderbirdsDefinitionLookup thunderbirdsDefinitionLookup,
             ILocationDefinitionLookup locationDefinitionLookup,
             IMapEdgeDefinitionLookup edgeDefinitionLookup,
+            IEventCardValidator eventCardValidator,
             MovementEvaluator movementEvaluator)
         {
             _thunderbirdsDefinitionLookup = thunderbirdsDefinitionLookup ?? throw new ArgumentNullException(nameof(thunderbirdsDefinitionLookup));
             _locationDefinitionLookup = locationDefinitionLookup ?? throw new ArgumentNullException(nameof(locationDefinitionLookup));
             _edgeDefinitionLookup = edgeDefinitionLookup ?? throw new ArgumentNullException(nameof(edgeDefinitionLookup));
+            _eventCardValidator = eventCardValidator ?? throw new ArgumentNullException(nameof(eventCardValidator));
             _movementEvaluator = movementEvaluator ?? throw new ArgumentNullException(nameof(movementEvaluator));
         }
 
@@ -45,9 +49,9 @@ namespace ThunderbirdsBoardGameEngine.Rules.Application.Movement.MapTraversal
 
             var topography = new Topography(edges);
 
-            var eventCards = Array.Empty<CardCode>();   // TODO: Implement event card handling in movement validation
+            _eventCardValidator.Validate(request.ActiveEventCards);
 
-            var input = new MovementInput(thunderbird, topography, request.Start, request.Destination, eventCards);
+            var input = new MovementInput(thunderbird, topography, request.Start, request.Destination, request.ActiveEventCards);
 
             var evaluationResult = _movementEvaluator.Evaluate(input);
 
@@ -56,7 +60,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Application.Movement.MapTraversal
                 SpacesTravelled: evaluationResult.SpacesTravelled,
                 Route: evaluationResult.Route,
                 ActionPointCost: evaluationResult.ActionPointCost,
-                TopSpeed: thunderbird.TopSpeed,
+                TopSpeed: evaluationResult.TopSpeed == 0 ? thunderbird.TopSpeed : evaluationResult.TopSpeed,
                 Messages: evaluationResult.Messages);
         }
     }

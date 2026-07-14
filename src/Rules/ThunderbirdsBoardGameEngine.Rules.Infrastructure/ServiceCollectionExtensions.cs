@@ -4,6 +4,7 @@ using ThunderbirdsBoardGameEngine.Rules.Application.Movement.Interfaces;
 using ThunderbirdsBoardGameEngine.Rules.Application.Movement.MapTraversal;
 using ThunderbirdsBoardGameEngine.Rules.Application.Rescue.CalculateRescueTarget;
 using ThunderbirdsBoardGameEngine.Rules.Application.Rescue.Interfaces;
+using ThunderbirdsBoardGameEngine.Rules.Application.Validators;
 using ThunderbirdsBoardGameEngine.Rules.Domain.EventCards;
 using ThunderbirdsBoardGameEngine.Rules.Domain.Movement;
 using ThunderbirdsBoardGameEngine.Rules.Domain.Rescue;
@@ -40,6 +41,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Infrastructure
             services.AddSingleton<IFabCardCatalogLookup, ReferenceFabCardCatalogLookup>();
             services.AddSingleton<IEventCardCatalogLookup, ReferenceEventCardCatalogLookup>();
             services.AddSingleton<IBonusModifierSourceRegistry, BonusModifierSourceRegistry>();
+            services.AddSingleton<IEventCardValidator, EventCardValidator>();
 
             RegisterMovementServices(services);
             RegisterMovementSpeedModifierSources(services);

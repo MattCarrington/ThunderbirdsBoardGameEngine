@@ -23,7 +23,8 @@ namespace ThunderbirdsBoardGameEngine.Api.Mappers.Rules.V1
             (
                 Thunderbird: new ThunderbirdCode(thunderbirdCode),
                 Start: new LocationCode(request.StartLocation),
-                Destination: new LocationCode(request.DestinationLocation)
+                Destination: new LocationCode(request.DestinationLocation),
+                EventCards: Array.Empty<CardCode>()  // TODO: Populate EventCards
             );
         }
 
