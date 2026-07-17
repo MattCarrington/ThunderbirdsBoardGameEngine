@@ -106,6 +106,33 @@ The compiler validates that a bonus location is not explicitly set to the same l
 
 ---
 
+## Runtime Relationship Contract
+
+The compiler guarantees that relationships in a generated snapshot contain the
+canonical, strongly typed identifiers of existing definitions. It establishes
+referential integrity before writing the snapshot, including relationships from
+disasters and map edges to locations and from disaster bonuses to their permitted
+asset types.
+
+The runtime therefore treats compiled relationships as trusted references. It
+uses their typed identifiers for catalog lookups and does not:
+
+- Resolve human-readable source names
+- Generate relationship identifiers by normalizing or slugifying values
+- Infer missing targets
+- Repair ambiguous or invalid relationships
+
+The runtime still applies the domain semantics of a valid relationship. For
+example, an omitted disaster bonus location means that the bonus requires its
+asset at the owning disaster's location, as described above.
+
+See the compiler's
+[Typed Reference Relationship Policy](../../tools/ReferenceData/README.md#typed-reference-relationship-policy)
+for the authoritative rules governing identity creation and relationship
+resolution.
+
+---
+
 ## Future Evolution
 
 The current implementation uses embedded snapshots.
