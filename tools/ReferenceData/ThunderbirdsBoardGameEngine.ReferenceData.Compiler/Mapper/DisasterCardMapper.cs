@@ -9,8 +9,8 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Mapper
 {
     public class DisasterCardMapper
     {
-        LocationCodeResolver _locationCodeResolver;
-        DisasterBonusTargetResolver _disasterBonusTargetResolver;
+        private readonly LocationCodeResolver _locationCodeResolver;
+        private readonly DisasterBonusTargetResolver _disasterBonusTargetResolver;
 
         public DisasterCardMapper(LocationCodeResolver locationCodeResolver, DisasterBonusTargetResolver disasterBonusTargetResolver)
         {
