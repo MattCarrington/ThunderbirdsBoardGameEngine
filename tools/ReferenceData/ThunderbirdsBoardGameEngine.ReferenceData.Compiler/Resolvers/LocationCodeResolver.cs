@@ -1,8 +1,9 @@
 ﻿using ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Compilation;
+using ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Helpers;
 using ThunderbirdsBoardGameEngine.ReferenceData.Core.Identities;
 using ThunderbirdsBoardGameEngine.ReferenceData.Core.Model;
 
-namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Helpers
+namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Resolvers
 {
     public sealed class LocationCodeResolver
     {
@@ -10,11 +11,28 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Helpers
 
         public LocationCodeResolver(IEnumerable<ReferenceLocationDefinition> locations)
         {
-            _locationsByName = locations.ToDictionary(
-                location => location.DisplayName,
-                location => location.Code,
-                StringComparer.OrdinalIgnoreCase
-            );
+            var locationsByName = locations
+                .GroupBy(
+                    location => location.DisplayName,
+                    StringComparer.OrdinalIgnoreCase)
+                .ToList();
+
+            var ambiguousNames = locationsByName
+                .Where(location => location.Count() > 1)
+                .Select(location => location.Key)
+                .ToList();
+
+            if (ambiguousNames.Count != 0)
+            {
+                throw new ReferenceDataCompilationException(
+                    "Location names must be unique for relationship resolution. " +
+                    $"Ambiguous names: {string.Join(", ", ambiguousNames)}");
+            }
+
+            _locationsByName = locationsByName.ToDictionary(
+                location => location.Key,
+                location => location.Single().Code,
+                StringComparer.OrdinalIgnoreCase);
         }
 
         public LocationCode Resolve(string locationName)
