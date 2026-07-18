@@ -16,10 +16,10 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Mappers
 
         public IEnumerable<ReferenceMapEdgeDefinition> Map(IEnumerable<MapEdgeInput> inputs)
         {
-            return inputs.Select(MapGameBoardEdges);
+            return inputs.Select(MapGameBoardEdge);
         }
 
-        private ReferenceMapEdgeDefinition MapGameBoardEdges(MapEdgeInput input)    // Renamed method to MapGameBoardEdges for clarity as MapMapEdges was very confusing in this context
+        private ReferenceMapEdgeDefinition MapGameBoardEdge(MapEdgeInput input)
         {
             return new ReferenceMapEdgeDefinition(
                 _locationCodeResolver.Resolve(input.Edge1),
