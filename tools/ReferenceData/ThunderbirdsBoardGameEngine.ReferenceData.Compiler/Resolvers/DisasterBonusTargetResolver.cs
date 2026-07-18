@@ -47,6 +47,22 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Resolvers
                     $"Ambiguous targets: {string.Join("; ", ambiguousNames)}");
             }
 
+            var duplicateCodes = targets
+                .GroupBy(
+                    target => target.Key.Value,
+                    StringComparer.OrdinalIgnoreCase)
+                .Where(group => group.Count() > 1)
+                .Select(group =>
+                    $"'{group.Key}' ({string.Join(", ", group.Select(target =>
+                        $"{target.Type} '{target.Name}'"))})")
+                .ToList();
+
+            if (duplicateCodes.Count != 0)
+            {
+                throw new ReferenceDataCompilationException(
+                    $"Disaster bonus target codes must be unique across characters, Thunderbirds, and pod vehicles. Ambiguous codes: {string.Join("; ", duplicateCodes)}");
+            }
+
             _bonusKeysByName = targetsByName.ToDictionary(
                 group => group.Key,
                 group => group.Single().Key,

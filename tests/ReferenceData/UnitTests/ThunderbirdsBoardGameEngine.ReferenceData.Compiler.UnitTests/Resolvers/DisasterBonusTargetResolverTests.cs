@@ -1,4 +1,5 @@
-﻿using ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Compilation;
+﻿using DocumentFormat.OpenXml.ExtendedProperties;
+using ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Compilation;
 using ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Resolvers;
 using ThunderbirdsBoardGameEngine.ReferenceData.Core.Enums;
 using ThunderbirdsBoardGameEngine.ReferenceData.Core.Identities;
@@ -218,6 +219,35 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.UnitTests.Resolvers
             Assert.Contains("Character A (Character, Pod Vehicle)", exception.Message);
             Assert.Contains("Thunderbird 1 (Character, Thunderbird)", exception.Message);
             Assert.Contains("Pod Vehicle A (Pod Vehicle, Thunderbird)", exception.Message);
+        }
+
+        [Fact]
+        public void Constructor_WhenCodesDuplicatedAcrossTypes_ShouldThrowReferenceDataCompilationException()
+        {
+            // Arrange
+            var characters = new List<ReferenceCharacterDefinition>
+            {
+                new(displayName: "Character A", code: new CharacterCode("DUPLICATE_CODE"), rescueBonus: null)
+            };
+
+            var thunderbirds = new List<ReferenceThunderbirdDefinition>
+            {
+                new(displayName: "Thunderbird 1", code: new ThunderbirdCode("DUPLICATE_CODE"), topSpeed: 100, domain: MovementDomain.Earth)
+            };
+
+            var podVehicles = new List<ReferencePodVehicleDefinition>
+            {
+                new(displayName: "Pod Vehicle A", code: new PodVehicleCode("DUPLICATE_CODE"))
+            };
+
+            // Act & Assert
+            var exception = Assert.Throws<ReferenceDataCompilationException>(() => new DisasterBonusTargetResolver(characters, podVehicles, thunderbirds));
+            Assert.Contains(
+                "Disaster bonus target codes must be unique across characters, Thunderbirds, and pod vehicles. Ambiguous codes: 'DUPLICATE_CODE'",
+                exception.Message);
+            Assert.Contains("Character 'Character A'", exception.Message);
+            Assert.Contains("Thunderbird 'Thunderbird 1'", exception.Message);
+            Assert.Contains("Pod Vehicle 'Pod Vehicle A'", exception.Message);
         }
 
         private static DisasterBonusTargetResolver CreateResolver()
