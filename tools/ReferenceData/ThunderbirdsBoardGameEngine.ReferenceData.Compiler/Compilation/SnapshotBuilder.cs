@@ -26,24 +26,22 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Compilation
             var locationCodeResolver = new LocationCodeResolver(locations);
 
             var characterMapper = new CharacterMapper();
-
             var thunderbirdMapper = new ThunderbirdMapper();
+            var podVehicleMapper = new PodVehicleMapper();
 
             var characterDefinitions = characterMapper.Map(context.Characters).ToList();
-
             var thunderbirdDefinitions = thunderbirdMapper.Map(context.Thunderbirds).ToList();
+            var podVehicleDefinitions = podVehicleMapper.Map(context.PodVehicles).ToList();
 
-            var podVehicleDefinitions = BuildPodVehicleDefinitions(context.PodVehicles);
+            var disasterBonusTargetResolver = new DisasterBonusTargetResolver(characterDefinitions, podVehicleDefinitions, thunderbirdDefinitions);
+
+            var disasterCardMapper = new DisasterCardMapper(locationCodeResolver, disasterBonusTargetResolver);
 
             var mapEdgeDefinitions = BuildMapEdgeDefinitions(context.MapEdges, locationCodeResolver);
 
             var fabCardDefinitions = BuildFabCardDefinitions(context.FabCards);
 
             var eventCardDefinitions = BuildEventCardDefinitions(context.EventCards);
-
-            var disasterBonusTargetResolver = new DisasterBonusTargetResolver(characterDefinitions, podVehicleDefinitions, thunderbirdDefinitions);
-
-            var disasterCardMapper = new DisasterCardMapper(locationCodeResolver, disasterBonusTargetResolver);
 
             return new ReferenceDataSnapshot(
                 SchemaVersion: SnapshotVersions.SchemaVersion,
@@ -59,16 +57,6 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Compilation
                 FabCardDefinitions: fabCardDefinitions,
                 EventCardDefinitions: eventCardDefinitions
             );
-        }
-
-        private static List<ReferencePodVehicleDefinition> BuildPodVehicleDefinitions(
-            List<PodVehicleInput> podVehicleInputs)
-        {
-            return podVehicleInputs
-                .Select(input => new ReferencePodVehicleDefinition(
-                    new PodVehicleCode(StringHelpers.Slugify(input.Name)),
-                    StringHelpers.NormalizeWhitespace(input.Name, nameof(input.Name))))
-                .ToList();
         }
 
         private static List<ReferenceMapEdgeDefinition> BuildMapEdgeDefinitions(List<MapEdgeInput> mapEdges, LocationCodeResolver locationCodeResolver)
