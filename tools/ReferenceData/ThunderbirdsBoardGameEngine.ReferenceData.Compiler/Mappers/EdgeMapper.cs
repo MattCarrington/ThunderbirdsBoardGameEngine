@@ -22,9 +22,9 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Mappers
         private ReferenceMapEdgeDefinition MapGameBoardEdges(MapEdgeInput input)    // Renamed method to MapGameBoardEdges for clarity as MapMapEdges was very confusing in this context
         {
             return new ReferenceMapEdgeDefinition(
-                _locationCodeResolver.Resolve(input.Edge1),
-                _locationCodeResolver.Resolve(input.Edge2),
-                Enum.Parse<MovementDomain>(input.Domain, ignoreCase: true));
+                edge1: _locationCodeResolver.Resolve(input.Edge1),
+                edge2: _locationCodeResolver.Resolve(input.Edge2),
+                edgeType: Enum.Parse<MovementDomain>(input.Domain, ignoreCase: true));
         }
     }
 }

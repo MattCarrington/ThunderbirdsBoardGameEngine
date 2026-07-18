@@ -14,8 +14,8 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Mappers
         private ReferencePodVehicleDefinition MapPodVehicle(PodVehicleInput input)
         {
             return new ReferencePodVehicleDefinition(
-                new PodVehicleCode(StringHelpers.Slugify(input.Name)),
-                StringHelpers.NormalizeWhitespace(input.Name, nameof(input.Name)));
+                code: new PodVehicleCode(StringHelpers.Slugify(input.Name)),
+                displayName: StringHelpers.NormalizeWhitespace(input.Name, nameof(input.Name)));
         }
     }
 }
