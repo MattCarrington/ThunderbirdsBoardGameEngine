@@ -1,11 +1,7 @@
-﻿using ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Helpers;
-using ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Inputs;
-using ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Interfaces;
+﻿using ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Interfaces;
 using ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Mappers;
 using ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Resolvers;
 using ThunderbirdsBoardGameEngine.ReferenceData.Core;
-using ThunderbirdsBoardGameEngine.ReferenceData.Core.Enums;
-using ThunderbirdsBoardGameEngine.ReferenceData.Core.Identities;
 using ThunderbirdsBoardGameEngine.ReferenceData.Core.Model;
 
 namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Compilation
@@ -38,9 +34,8 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Compilation
 
             var mapEdgeMapper = new EdgeMapper(locationCodeResolver);
 
-            var fabCardDefinitions = BuildFabCardDefinitions(context.FabCards);
-
-            var eventCardDefinitions = BuildEventCardDefinitions(context.EventCards);
+            var fabCardMapper = new FabCardMapper();
+            var eventCardMapper = new EventCardMapper();
 
             return new ReferenceDataSnapshot(
                 SchemaVersion: SnapshotVersions.SchemaVersion,
@@ -53,29 +48,9 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Compilation
                 ThunderbirdDefinitions: thunderbirdDefinitions,
                 PodVehicleDefinitions: podVehicleDefinitions,
                 MapEdgeDefinitions: mapEdgeMapper.Map(context.MapEdges).ToList(),
-                FabCardDefinitions: fabCardDefinitions,
-                EventCardDefinitions: eventCardDefinitions
+                FabCardDefinitions: fabCardMapper.Map(context.FabCards).ToList(),
+                EventCardDefinitions: eventCardMapper.Map(context.EventCards).ToList()
             );
-        }
-
-        private static List<ReferenceFabCardDefinition> BuildFabCardDefinitions(
-            List<FabCardInput> fabCardInputs)
-        {
-            return fabCardInputs
-                .Select(input => new ReferenceFabCardDefinition(
-                    new CardCode(StringHelpers.Slugify(input.Name)),
-                    StringHelpers.NormalizeWhitespace(input.Name, nameof(input.Name))))
-                .ToList();
-        }
-
-        private static List<ReferenceEventCardDefinition> BuildEventCardDefinitions(
-            List<EventCardInput> eventCardInputs)
-        {
-            return eventCardInputs
-                .Select(input => new ReferenceEventCardDefinition(
-                    new CardCode(StringHelpers.Slugify(input.Name)),
-                    StringHelpers.NormalizeWhitespace(input.Name, nameof(input.Name))))
-                .ToList();
         }
     }
 }
