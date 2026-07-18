@@ -19,23 +19,25 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Compilation
 
         public ReferenceDataSnapshot Build(CompilationContext context)
         {
-            var disasters = context.Disasters.Select(d =>
-                new ReferenceDisasterDefinition(
-                    new CardCode(StringHelpers.Slugify(d.Name)),
-                    StringHelpers.NormalizeWhitespace(d.Name, nameof(d.Name)),
-                    d.DifficultyNumber,
-                    new LocationCode(StringHelpers.Slugify(d.Location)),
-                    Enum.Parse<RescueType>(d.RescueType, true),
-                    MapBonuses(d.Bonuses),
-                    MapRewards(d.Rewards)
-                )
-            ).ToList();
-
             var locations = context.Locations.Select(l =>
                 new ReferenceLocationDefinition(
                     new LocationCode(StringHelpers.Slugify(l.Name)),
                     StringHelpers.NormalizeWhitespace(l.Name, nameof(l.Name)),
                     Enum.Parse<MovementDomain>(l.Domain, true)
+                )
+            ).ToList();
+
+            var locationCodeResolver = new LocationCodeResolver(locations);
+
+            var disasters = context.Disasters.Select(d =>
+                new ReferenceDisasterDefinition(
+                    new CardCode(StringHelpers.Slugify(d.Name)),
+                    StringHelpers.NormalizeWhitespace(d.Name, nameof(d.Name)),
+                    d.DifficultyNumber,
+                    locationCodeResolver.Resolve(d.Location),
+                    Enum.Parse<RescueType>(d.RescueType, true),
+                    MapBonuses(d.Bonuses, locationCodeResolver),
+                    MapRewards(d.Rewards)
                 )
             ).ToList();
 
@@ -45,7 +47,7 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Compilation
 
             var podVehicleDefinitions = BuildPodVehicleDefinitions(context.PodVehicles);
 
-            var mapEdgeDefinitions = BuildMapEdgeDefinitions(context.MapEdges, new LocationCodeResolver(locations));
+            var mapEdgeDefinitions = BuildMapEdgeDefinitions(context.MapEdges, locationCodeResolver);
 
             var fabCardDefinitions = BuildFabCardDefinitions(context.FabCards);
 
@@ -67,13 +69,13 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Compilation
             );
         }
 
-        private static IReadOnlyList<ReferenceDisasterBonus> MapBonuses(IEnumerable<BonusInput> bonuses)
+        private static IReadOnlyList<ReferenceDisasterBonus> MapBonuses(IEnumerable<BonusInput> bonuses, LocationCodeResolver locationCodeResolver)
         {
             return bonuses.Select(b =>
                 new ReferenceDisasterBonus(
                     new DisasterBonusKey(StringHelpers.Slugify(b.TargetName)),
                     b.Value,
-                    b.Location is null ? null : new LocationCode(StringHelpers.Slugify(b.Location))
+                    b.Location is null ? null : locationCodeResolver.Resolve(b.Location)
                 )
             ).ToList();
         }
