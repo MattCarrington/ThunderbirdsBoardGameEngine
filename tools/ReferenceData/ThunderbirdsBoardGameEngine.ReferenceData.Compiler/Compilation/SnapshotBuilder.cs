@@ -31,7 +31,9 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Compilation
 
             var locationCodeResolver = new LocationCodeResolver(locations);
 
-            var characterDefinitions = BuildCharacterDefinitions(context.Characters);
+            var characterMapper = new CharacterMapper();
+
+            var characterDefinitions = characterMapper.Map(context.Characters).ToList();
 
             var thunderbirdDefinitions = BuildThunderbirdDefinitions(context.Thunderbirds);
 
@@ -61,30 +63,6 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Compilation
                 FabCardDefinitions: fabCardDefinitions,
                 EventCardDefinitions: eventCardDefinitions
             );
-        }
-
-        private static List<ReferenceCharacterDefinition> BuildCharacterDefinitions(
-            List<CharacterInput> characterInputs)
-        {
-            return characterInputs
-                .Select(input =>
-                {
-                    var code = new CharacterCode(StringHelpers.Slugify(input.Name));
-
-                    // Build optional rescue bonus (null for Lady Penelope)
-                    ReferenceCharacterRescueBonus? rescueBonus = null;
-                    if (!string.IsNullOrWhiteSpace(input.RescueType) && input.BonusValue.HasValue)
-                    {
-                        var rescueType = Enum.Parse<RescueType>(input.RescueType, ignoreCase: true);
-                        rescueBonus = new ReferenceCharacterRescueBonus(rescueType, input.BonusValue.Value);
-                    }
-
-                    return new ReferenceCharacterDefinition(
-                        code,
-                        input.Name,
-                        rescueBonus);
-                })
-                .ToList();
         }
 
         private static List<ReferenceThunderbirdDefinition> BuildThunderbirdDefinitions(
