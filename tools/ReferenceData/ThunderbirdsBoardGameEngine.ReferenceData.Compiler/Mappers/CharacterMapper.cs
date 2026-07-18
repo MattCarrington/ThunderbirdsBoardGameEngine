@@ -25,7 +25,7 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Mappers
 
             return new ReferenceCharacterDefinition(
                 code: new CharacterCode(StringHelpers.Slugify(input.Name)),
-                displayName: input.Name,
+                displayName: StringHelpers.NormalizeWhitespace(input.Name, nameof(input.Name)),
                 rescueBonus: rescueBonus);
         }
     }

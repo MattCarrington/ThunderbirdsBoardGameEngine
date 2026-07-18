@@ -5,7 +5,7 @@ using ThunderbirdsBoardGameEngine.ReferenceData.Core.Model;
 
 namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Mappers
 {
-    public sealed class EdgeMapper  // Simplifying name to EdgeMapper for clarity as MapEdgeMapper is a bit confusing in this context
+    public sealed class EdgeMapper
     {
         private readonly LocationCodeResolver _locationCodeResolver;
 
@@ -16,10 +16,10 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Mappers
 
         public IEnumerable<ReferenceMapEdgeDefinition> Map(IEnumerable<MapEdgeInput> inputs)
         {
-            return inputs.Select(MapGameBoardEdges);
+            return inputs.Select(MapGameBoardEdge);
         }
 
-        private ReferenceMapEdgeDefinition MapGameBoardEdges(MapEdgeInput input)    // Renamed method to MapGameBoardEdges for clarity as MapMapEdges was very confusing in this context
+        private ReferenceMapEdgeDefinition MapGameBoardEdge(MapEdgeInput input)
         {
             return new ReferenceMapEdgeDefinition(
                 edge1: _locationCodeResolver.Resolve(input.Edge1),
