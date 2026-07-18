@@ -33,9 +33,11 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Compilation
 
             var characterMapper = new CharacterMapper();
 
+            var thunderbirdMapper = new ThunderbirdMapper();
+
             var characterDefinitions = characterMapper.Map(context.Characters).ToList();
 
-            var thunderbirdDefinitions = BuildThunderbirdDefinitions(context.Thunderbirds);
+            var thunderbirdDefinitions = thunderbirdMapper.Map(context.Thunderbirds).ToList();
 
             var podVehicleDefinitions = BuildPodVehicleDefinitions(context.PodVehicles);
 
@@ -63,19 +65,6 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Compilation
                 FabCardDefinitions: fabCardDefinitions,
                 EventCardDefinitions: eventCardDefinitions
             );
-        }
-
-        private static List<ReferenceThunderbirdDefinition> BuildThunderbirdDefinitions(
-            List<ThunderbirdInput> thunderbirdInputs)
-        {
-            return thunderbirdInputs
-                .Select(input => new ReferenceThunderbirdDefinition(
-                    new ThunderbirdCode(StringHelpers.Slugify(input.Name)),
-                    StringHelpers.NormalizeWhitespace(input.Name, nameof(input.Name)),
-                    domain: Enum.Parse<MovementDomain>(input.MovementDomain, ignoreCase: true),
-                    topSpeed: input.TopSpeed
-                ))
-                .ToList();
         }
 
         private static List<ReferencePodVehicleDefinition> BuildPodVehicleDefinitions(
