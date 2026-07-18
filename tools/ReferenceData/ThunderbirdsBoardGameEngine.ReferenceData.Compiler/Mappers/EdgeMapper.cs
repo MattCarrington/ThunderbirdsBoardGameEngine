@@ -5,7 +5,7 @@ using ThunderbirdsBoardGameEngine.ReferenceData.Core.Model;
 
 namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Mappers
 {
-    public sealed class EdgeMapper  // Simplifying name to EdgeMapper for clarity as MapEdgeMapper is a bit confusing in this context
+    public sealed class EdgeMapper
     {
         private readonly LocationCodeResolver _locationCodeResolver;
 
