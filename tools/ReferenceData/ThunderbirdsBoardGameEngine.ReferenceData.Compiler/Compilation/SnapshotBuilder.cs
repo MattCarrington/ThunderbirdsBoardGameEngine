@@ -21,14 +21,8 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Compilation
 
         public ReferenceDataSnapshot Build(CompilationContext context)
         {
-            var locations = context.Locations.Select(l =>
-                new ReferenceLocationDefinition(
-                    new LocationCode(StringHelpers.Slugify(l.Name)),
-                    StringHelpers.NormalizeWhitespace(l.Name, nameof(l.Name)),
-                    Enum.Parse<MovementDomain>(l.Domain, true)
-                )
-            ).ToList();
-
+            var locationMapper = new LocationMapper();
+            var locations = locationMapper.Map(context.Locations).ToList();
             var locationCodeResolver = new LocationCodeResolver(locations);
 
             var characterMapper = new CharacterMapper();

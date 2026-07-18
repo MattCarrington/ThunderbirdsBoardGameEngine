@@ -23,7 +23,6 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Mappers
         {
             return inputs
                 .Select(MapDisaster);
-
         }
 
         private ReferenceDisasterDefinition MapDisaster(DisasterInput input)
