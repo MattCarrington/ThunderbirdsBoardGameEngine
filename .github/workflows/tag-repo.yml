@@ -46,17 +46,21 @@ jobs:
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
 
-      - name: Skip if tag exists
-        if: inputs.skip_if_exists == true
+      - name: Check if tag exists
+        id: check
         run: |
           TAG="${{ steps.build.outputs.tag }}"
 
-          if git rev-parse "$TAG" >/dev/null 2>&1; then
-            echo "Tag $TAG already exists — skipping."
-            exit 0
+          if git rev-parse -q --verify "refs/tags/$TAG" >/dev/null 2>&1; then
+            echo "exists=true" >> $GITHUB_OUTPUT
+            echo "Tag $TAG already exists."
+          else
+            echo "exists=false" >> $GITHUB_OUTPUT
+            echo "Tag $TAG does not exist."
           fi
 
       - name: Create tag
+        if: inputs.skip_if_exists != true || steps.check.outputs.exists != 'true'
         run: |
           TAG="${{ steps.build.outputs.tag }}"
           REF="${{ inputs.ref }}"
@@ -64,6 +68,7 @@ jobs:
           git tag "$TAG" "$REF"
 
       - name: Push tag
+        if: inputs.skip_if_exists != true || steps.check.outputs.exists != 'true'
         run: |
           TAG="${{ steps.build.outputs.tag }}"
           git push origin "$TAG"
