@@ -5,7 +5,7 @@ using ThunderbirdsBoardGameEngine.ReferenceData.Core.Enums;
 using ThunderbirdsBoardGameEngine.ReferenceData.Core.Identities;
 using ThunderbirdsBoardGameEngine.ReferenceData.Core.Model;
 
-namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Mapper
+namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Mappers
 {
     public class DisasterCardMapper
     {
@@ -23,19 +23,18 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Mapper
         {
             return inputs
                 .Select(MapDisaster);
-
         }
 
         private ReferenceDisasterDefinition MapDisaster(DisasterInput input)
         {
             return new ReferenceDisasterDefinition(
-                new CardCode(StringHelpers.Slugify(input.Name)),
-                StringHelpers.NormalizeWhitespace(input.Name, nameof(input.Name)),
-                input.DifficultyNumber,
-                _locationCodeResolver.Resolve(input.Location),
-                Enum.Parse<RescueType>(input.RescueType, true),
-                MapBonuses(input.Bonuses).ToList(),
-                MapRewards(input.Rewards).ToList());
+                code: new CardCode(StringHelpers.Slugify(input.Name)),
+                displayName: StringHelpers.NormalizeWhitespace(input.Name, nameof(input.Name)),
+                difficultyNumber: input.DifficultyNumber,
+                location: _locationCodeResolver.Resolve(input.Location),
+                rescueType: Enum.Parse<RescueType>(input.RescueType, true),
+                bonuses: MapBonuses(input.Bonuses).ToList(),
+                rewards: MapRewards(input.Rewards).ToList());
         }
 
         private IEnumerable<ReferenceDisasterBonus> MapBonuses(IEnumerable<BonusInput> bonuses)
