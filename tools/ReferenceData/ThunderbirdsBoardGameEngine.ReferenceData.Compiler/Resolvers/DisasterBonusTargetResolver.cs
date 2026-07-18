@@ -16,15 +16,15 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Resolvers
         {
             var targets = characters
                 .Select(character => (
-                    Name: character.DisplayName,
+                    Name: StringHelpers.NormalizeWhitespace(character.DisplayName, nameof(character.DisplayName)),
                     Key: new DisasterBonusKey(character.Code.Value),
                     Type: "Character"))
                 .Concat(podVehicles.Select(podVehicle => (
-                    Name: podVehicle.DisplayName,
+                    Name: StringHelpers.NormalizeWhitespace(podVehicle.DisplayName, nameof(podVehicle.DisplayName)),
                     Key: new DisasterBonusKey(podVehicle.Code.Value),
                     Type: "Pod Vehicle")))
                 .Concat(thunderbirds.Select(thunderbird => (
-                    Name: thunderbird.DisplayName,
+                    Name: StringHelpers.NormalizeWhitespace(thunderbird.DisplayName, nameof(thunderbird.DisplayName)),
                     Key: new DisasterBonusKey(thunderbird.Code.Value),
                     Type: "Thunderbird")))
                 .ToList();
