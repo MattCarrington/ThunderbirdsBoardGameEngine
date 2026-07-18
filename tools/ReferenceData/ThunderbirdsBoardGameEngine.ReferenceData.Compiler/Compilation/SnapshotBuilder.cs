@@ -30,18 +30,6 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Compilation
 
             var locationCodeResolver = new LocationCodeResolver(locations);
 
-            var disasters = context.Disasters.Select(d =>
-                new ReferenceDisasterDefinition(
-                    new CardCode(StringHelpers.Slugify(d.Name)),
-                    StringHelpers.NormalizeWhitespace(d.Name, nameof(d.Name)),
-                    d.DifficultyNumber,
-                    locationCodeResolver.Resolve(d.Location),
-                    Enum.Parse<RescueType>(d.RescueType, true),
-                    MapBonuses(d.Bonuses, locationCodeResolver),
-                    MapRewards(d.Rewards)
-                )
-            ).ToList();
-
             var characterDefinitions = BuildCharacterDefinitions(context.Characters);
 
             var thunderbirdDefinitions = BuildThunderbirdDefinitions(context.Thunderbirds);
@@ -53,6 +41,20 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Compilation
             var fabCardDefinitions = BuildFabCardDefinitions(context.FabCards);
 
             var eventCardDefinitions = BuildEventCardDefinitions(context.EventCards);
+
+            var disasterBonusKeyResolver = new DisasterBonusKeyResolver(characterDefinitions, podVehicleDefinitions, thunderbirdDefinitions);
+
+            var disasters = context.Disasters.Select(d =>
+                new ReferenceDisasterDefinition(
+                    new CardCode(StringHelpers.Slugify(d.Name)),
+                    StringHelpers.NormalizeWhitespace(d.Name, nameof(d.Name)),
+                    d.DifficultyNumber,
+                    locationCodeResolver.Resolve(d.Location),
+                    Enum.Parse<RescueType>(d.RescueType, true),
+                    MapBonuses(d.Bonuses, locationCodeResolver, disasterBonusKeyResolver),
+                    MapRewards(d.Rewards)
+                )
+            ).ToList();
 
             return new ReferenceDataSnapshot(
                 SchemaVersion: SnapshotVersions.SchemaVersion,
@@ -70,11 +72,14 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Compilation
             );
         }
 
-        private static IReadOnlyList<ReferenceDisasterBonus> MapBonuses(IEnumerable<BonusInput> bonuses, LocationCodeResolver locationCodeResolver)
+        private static IReadOnlyList<ReferenceDisasterBonus> MapBonuses(
+            IEnumerable<BonusInput> bonuses,
+            LocationCodeResolver locationCodeResolver,
+            DisasterBonusKeyResolver disasterBonusKeyResolver)
         {
             return bonuses.Select(b =>
                 new ReferenceDisasterBonus(
-                    new DisasterBonusKey(StringHelpers.Slugify(b.TargetName)),
+                    disasterBonusKeyResolver.Resolve(b.TargetName),
                     b.Value,
                     b.Location is null ? null : locationCodeResolver.Resolve(b.Location)
                 )
