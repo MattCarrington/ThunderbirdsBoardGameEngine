@@ -1,6 +1,7 @@
 ﻿using ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Helpers;
 using ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Inputs;
 using ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Interfaces;
+using ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Mapper;
 using ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Resolvers;
 using ThunderbirdsBoardGameEngine.ReferenceData.Core;
 using ThunderbirdsBoardGameEngine.ReferenceData.Core.Enums;
@@ -44,24 +45,14 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Compilation
 
             var disasterBonusTargetResolver = new DisasterBonusTargetResolver(characterDefinitions, podVehicleDefinitions, thunderbirdDefinitions);
 
-            var disasters = context.Disasters.Select(d =>
-                new ReferenceDisasterDefinition(
-                    new CardCode(StringHelpers.Slugify(d.Name)),
-                    StringHelpers.NormalizeWhitespace(d.Name, nameof(d.Name)),
-                    d.DifficultyNumber,
-                    locationCodeResolver.Resolve(d.Location),
-                    Enum.Parse<RescueType>(d.RescueType, true),
-                    MapBonuses(d.Bonuses, locationCodeResolver, disasterBonusTargetResolver),
-                    MapRewards(d.Rewards)
-                )
-            ).ToList();
+            var disasterCardMapper = new DisasterCardMapper(locationCodeResolver, disasterBonusTargetResolver);
 
             return new ReferenceDataSnapshot(
                 SchemaVersion: SnapshotVersions.SchemaVersion,
                 ContentVersion: SnapshotVersions.ContentVersion,
                 GeneratedAt: _clock.UtcNow,
                 GeneratorVersion: SnapshotVersions.GeneratorVersion,
-                DisasterDefinitions: disasters,
+                DisasterDefinitions: disasterCardMapper.Map(context.Disasters).ToList(),
                 LocationDefinitions: locations,
                 CharacterDefinitions: characterDefinitions,
                 ThunderbirdDefinitions: thunderbirdDefinitions,
@@ -70,30 +61,6 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Compilation
                 FabCardDefinitions: fabCardDefinitions,
                 EventCardDefinitions: eventCardDefinitions
             );
-        }
-
-        private static IReadOnlyList<ReferenceDisasterBonus> MapBonuses(
-            IEnumerable<BonusInput> bonuses,
-            LocationCodeResolver locationCodeResolver,
-            DisasterBonusTargetResolver disasterBonusTargetResolver)
-        {
-            return bonuses.Select(b =>
-                new ReferenceDisasterBonus(
-                    disasterBonusTargetResolver.Resolve(b.TargetName),
-                    b.Value,
-                    b.Location is null ? null : locationCodeResolver.Resolve(b.Location)
-                )
-            ).ToList();
-        }
-
-        private static IReadOnlyList<ReferenceDisasterReward> MapRewards(IEnumerable<string> rewards)
-        {
-            return rewards.Select(r =>
-                r.Equals("User Choice", StringComparison.OrdinalIgnoreCase)
-                    ? (ReferenceDisasterReward)new ReferenceDisasterReward.PlayerChoice()
-                    : new ReferenceDisasterReward.SpecificToken(
-                        Enum.Parse<BonusToken>(r, true))
-            ).ToList();
         }
 
         private static List<ReferenceCharacterDefinition> BuildCharacterDefinitions(
