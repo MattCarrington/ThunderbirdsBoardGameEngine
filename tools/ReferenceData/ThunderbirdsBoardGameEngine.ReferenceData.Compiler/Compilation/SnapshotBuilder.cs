@@ -1,7 +1,7 @@
 ﻿using ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Helpers;
 using ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Inputs;
 using ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Interfaces;
-using ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Mapper;
+using ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Mappers;
 using ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Resolvers;
 using ThunderbirdsBoardGameEngine.ReferenceData.Core;
 using ThunderbirdsBoardGameEngine.ReferenceData.Core.Enums;
