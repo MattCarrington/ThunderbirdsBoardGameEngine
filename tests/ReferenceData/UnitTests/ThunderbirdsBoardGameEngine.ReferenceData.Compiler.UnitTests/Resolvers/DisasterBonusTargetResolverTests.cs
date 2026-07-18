@@ -8,7 +8,7 @@ using Xunit;
 
 namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.UnitTests.Resolvers
 {
-    public class DisasterBonusKeyResolverTests
+    public class DisasterBonusTargetResolverTests
     {
         [Fact]
         public void Resolve_WhenCharacterNameExists_ShouldReturnCorrectDisasterBonusKey()
@@ -124,7 +124,7 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.UnitTests.Resolvers
             };
 
             // Act & Assert
-            var exception = Assert.Throws<ReferenceDataCompilationException>(() => new DisasterBonusKeyResolver(characters, podVehicles, thunderbirds));
+            var exception = Assert.Throws<ReferenceDataCompilationException>(() => new DisasterBonusTargetResolver(characters, podVehicles, thunderbirds));
             Assert.Equal(
                 "Disaster bonus target names must be unique across characters, Thunderbirds, and pod vehicles. Ambiguous targets: Character A (Character, Character)",
                 exception.Message);
@@ -153,7 +153,7 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.UnitTests.Resolvers
             };
 
             // Act & Assert
-            var exception = Assert.Throws<ReferenceDataCompilationException>(() => new DisasterBonusKeyResolver(characters, podVehicles, thunderbirds));
+            var exception = Assert.Throws<ReferenceDataCompilationException>(() => new DisasterBonusTargetResolver(characters, podVehicles, thunderbirds));
             Assert.Equal(
                 "Disaster bonus target names must be unique across characters, Thunderbirds, and pod vehicles. Ambiguous targets: Thunderbird 1 (Thunderbird, Thunderbird)",
                 exception.Message);
@@ -182,7 +182,7 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.UnitTests.Resolvers
             };
 
             // Act & Assert
-            var exception = Assert.Throws<ReferenceDataCompilationException>(() => new DisasterBonusKeyResolver(characters, podVehicles, thunderbirds));
+            var exception = Assert.Throws<ReferenceDataCompilationException>(() => new DisasterBonusTargetResolver(characters, podVehicles, thunderbirds));
             Assert.Equal(
                 "Disaster bonus target names must be unique across characters, Thunderbirds, and pod vehicles. Ambiguous targets: Pod Vehicle A (Pod Vehicle, Pod Vehicle)",
                 exception.Message);
@@ -211,7 +211,7 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.UnitTests.Resolvers
             };
 
             // Act & Assert
-            var exception = Assert.Throws<ReferenceDataCompilationException>(() => new DisasterBonusKeyResolver(characters, podVehicles, thunderbirds));
+            var exception = Assert.Throws<ReferenceDataCompilationException>(() => new DisasterBonusTargetResolver(characters, podVehicles, thunderbirds));
             Assert.Contains(
                 "Disaster bonus target names must be unique across characters, Thunderbirds, and pod vehicles. Ambiguous targets:",
                 exception.Message);
@@ -220,7 +220,7 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.UnitTests.Resolvers
             Assert.Contains("Pod Vehicle A (Pod Vehicle, Thunderbird)", exception.Message);
         }
 
-        private static DisasterBonusKeyResolver CreateResolver()
+        private static DisasterBonusTargetResolver CreateResolver()
         {
             var characters = new List<ReferenceCharacterDefinition>
             {
@@ -240,7 +240,7 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.UnitTests.Resolvers
                 new(displayName: "Pod Vehicle B", code: new PodVehicleCode("PV_B"))
             };
 
-            return new DisasterBonusKeyResolver(characters, podVehicles, thunderbirds);
+            return new DisasterBonusTargetResolver(characters, podVehicles, thunderbirds);
         }
     }
 }

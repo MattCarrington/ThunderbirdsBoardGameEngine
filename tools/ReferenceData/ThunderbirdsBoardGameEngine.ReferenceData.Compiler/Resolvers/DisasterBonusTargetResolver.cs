@@ -5,11 +5,11 @@ using ThunderbirdsBoardGameEngine.ReferenceData.Core.Model;
 
 namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Resolvers
 {
-    public sealed class DisasterBonusKeyResolver
+    public sealed class DisasterBonusTargetResolver
     {
         private readonly Dictionary<string, DisasterBonusKey> _bonusKeysByName;
 
-        public DisasterBonusKeyResolver(
+        public DisasterBonusTargetResolver(
             IEnumerable<ReferenceCharacterDefinition> characters,
             IEnumerable<ReferencePodVehicleDefinition> podVehicles,
             IEnumerable<ReferenceThunderbirdDefinition> thunderbirds)
