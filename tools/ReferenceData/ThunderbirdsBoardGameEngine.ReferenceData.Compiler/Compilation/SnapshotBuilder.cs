@@ -34,10 +34,9 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Compilation
             var podVehicleDefinitions = podVehicleMapper.Map(context.PodVehicles).ToList();
 
             var disasterBonusTargetResolver = new DisasterBonusTargetResolver(characterDefinitions, podVehicleDefinitions, thunderbirdDefinitions);
-
             var disasterCardMapper = new DisasterCardMapper(locationCodeResolver, disasterBonusTargetResolver);
 
-            var mapEdgeDefinitions = BuildMapEdgeDefinitions(context.MapEdges, locationCodeResolver);
+            var mapEdgeMapper = new EdgeMapper(locationCodeResolver);
 
             var fabCardDefinitions = BuildFabCardDefinitions(context.FabCards);
 
@@ -53,19 +52,10 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Compilation
                 CharacterDefinitions: characterDefinitions,
                 ThunderbirdDefinitions: thunderbirdDefinitions,
                 PodVehicleDefinitions: podVehicleDefinitions,
-                MapEdgeDefinitions: mapEdgeDefinitions,
+                MapEdgeDefinitions: mapEdgeMapper.Map(context.MapEdges).ToList(),
                 FabCardDefinitions: fabCardDefinitions,
                 EventCardDefinitions: eventCardDefinitions
             );
-        }
-
-        private static List<ReferenceMapEdgeDefinition> BuildMapEdgeDefinitions(List<MapEdgeInput> mapEdges, LocationCodeResolver locationCodeResolver)
-        {
-            return mapEdges.Select(input => new ReferenceMapEdgeDefinition(
-                    locationCodeResolver.Resolve(input.Edge1),
-                    locationCodeResolver.Resolve(input.Edge2),
-                    Enum.Parse<MovementDomain>(input.Domain, ignoreCase: true)))
-                .ToList();
         }
 
         private static List<ReferenceFabCardDefinition> BuildFabCardDefinitions(
