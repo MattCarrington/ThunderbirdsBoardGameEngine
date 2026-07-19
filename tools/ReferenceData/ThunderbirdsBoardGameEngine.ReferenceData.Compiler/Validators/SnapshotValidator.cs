@@ -10,9 +10,9 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Validators
     {
         private readonly IReadOnlyList<ISnapshotValidator> _validators;
 
-        public SnapshotValidator(IReadOnlyList<ISnapshotValidator> validators)
+        public SnapshotValidator(IEnumerable<ISnapshotValidator> validators)
         {
-            _validators = validators;
+            _validators = validators?.ToList() ?? throw new ArgumentNullException(nameof(validators));
         }
 
         public void Validate(ReferenceDataSnapshot snapshot)

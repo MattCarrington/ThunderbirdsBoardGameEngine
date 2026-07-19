@@ -4,7 +4,7 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Validators
 {
     public static class ValidatorCompostion
     {
-        public static IReadOnlyList<ISnapshotValidator> CreateValidators()
+        public static IEnumerable<ISnapshotValidator> CreateValidators()
         {
             return
             [
