@@ -4,7 +4,7 @@ using ThunderbirdsBoardGameEngine.ReferenceData.Core.Model;
 
 namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Validators
 {
-    public class DisasterLocationOverrideValidator : ISnapshotValidator
+    public class DisasterBonusLocationOverrideValidator : ISnapshotValidator
     {
         public void Validate(ReferenceDataSnapshot snapshot)
         {
