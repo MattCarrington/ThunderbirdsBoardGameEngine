@@ -19,6 +19,9 @@ env:
   BASE_URL: &base_url "http://localhost:8080"
   
 jobs:
+  ci-script-tests:
+    uses: ./.github/workflows/tests-ci-scripts.yml
+
   static-analysis:
     uses: ./.github/workflows/static-analysis.yml
     with:
@@ -70,6 +73,7 @@ jobs:
     needs:
       - tests
       - tests-docker
+      - ci-script-tests
 
   tag-repo:
     if: github.ref == 'refs/heads/main' && needs.compute-version.outputs.release_type != 'none'
