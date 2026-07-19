@@ -25,7 +25,7 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.ComponentTests.Compilation
             {
                 var dateTimeOffset = new DateTimeOffset(2026, 6, 1, 12, 0, 0, TimeSpan.Zero);
 
-                var validators = ValidatorCompostion.CreateValidators();
+                var validators = ValidatorComposition.CreateValidators();
 
                 var compiler = new ReferenceDataCompiler(
                     new ExcelReferenceDataSource("ReferenceData.xlsx"),

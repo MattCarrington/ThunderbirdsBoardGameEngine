@@ -4,7 +4,7 @@ using ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Source;
 using ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Validators;
 using ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Writers;
 
-var validators = ValidatorCompostion.CreateValidators();
+var validators = ValidatorComposition.CreateValidators();
 
 var compiler = new ReferenceDataCompiler(
     new ExcelReferenceDataSource("ReferenceData.xlsx"),
