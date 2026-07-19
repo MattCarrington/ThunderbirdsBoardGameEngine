@@ -8,17 +8,20 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Validators
     /// </summary>
     public sealed class SnapshotValidator
     {
-        private readonly ISnapshotValidator[] _validators;
+        private readonly IReadOnlyList<ISnapshotValidator> _validators;
 
-        public SnapshotValidator()
+        public SnapshotValidator(IEnumerable<ISnapshotValidator> validators)
         {
-            _validators =
-            [
-                new EntityUniquenessValidator(),
-                new MapEdgeValidator(),
-                new CardUniquenessValidator(),
-                new DisasterLocationOverrideValidator()
-            ];
+            ArgumentNullException.ThrowIfNull(validators);
+
+            if (validators.Any(validator => validator is null))
+            {
+                throw new ArgumentException(
+                    "Validator collection cannot contain null entries.",
+                    nameof(validators));
+            }
+
+            _validators = validators.ToList();
         }
 
         public void Validate(ReferenceDataSnapshot snapshot)

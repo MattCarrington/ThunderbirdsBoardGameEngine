@@ -4,10 +4,12 @@ using ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Source;
 using ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Validators;
 using ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Writers;
 
+var validators = ValidatorComposition.CreateValidators();
+
 var compiler = new ReferenceDataCompiler(
     new ExcelReferenceDataSource("ReferenceData.xlsx"),
     new SnapshotBuilder(new SystemClock()),
-    new SnapshotValidator(),
+    new SnapshotValidator(validators),
     new JsonSnapshotWriter("snapshot.json"));
 
 compiler.Compile();

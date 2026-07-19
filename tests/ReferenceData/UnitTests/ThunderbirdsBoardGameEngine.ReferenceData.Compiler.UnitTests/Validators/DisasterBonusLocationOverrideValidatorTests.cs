@@ -5,7 +5,7 @@ using Xunit;
 
 namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.UnitTests.Validators
 {
-    public class DisasterLocationOverrideValidatorTests
+    public class DisasterBonusLocationOverrideValidatorTests
     {
         [Fact]
         public void Validate_WhenDisasterBonusLocationNull_DoesNotThrowException()
@@ -22,7 +22,7 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.UnitTests.Validator
                    ("mole", 3, null))
                .Build();
 
-            var validator = new DisasterLocationOverrideValidator();
+            var validator = new DisasterBonusLocationOverrideValidator();
 
             // Act & Assert
             var exception = Record.Exception(() => validator.Validate(snapshot));
@@ -44,7 +44,7 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.UnitTests.Validator
                    ("thunderbird-1", 2, "location-2"),
                    ("mole", 3, null))
                .Build();
-            var validator = new DisasterLocationOverrideValidator();
+            var validator = new DisasterBonusLocationOverrideValidator();
             // Act & Assert
             var exception = Record.Exception(() => validator.Validate(snapshot));
             Assert.Null(exception);
@@ -65,7 +65,7 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.UnitTests.Validator
                    ("mole", 3, null))
                .Build();
 
-            var validator = new DisasterLocationOverrideValidator();
+            var validator = new DisasterBonusLocationOverrideValidator();
 
             // Act & Assert
             var exception = Assert.Throws<ReferenceDataCompilationException>(() => validator.Validate(snapshot));
