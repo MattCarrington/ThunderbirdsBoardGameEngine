@@ -52,10 +52,10 @@ jobs:
           TAG="${{ steps.build.outputs.tag }}"
 
           if git rev-parse -q --verify "refs/tags/$TAG" >/dev/null 2>&1; then
-            echo "exists=true" >> $GITHUB_OUTPUT
+            echo "exists=true" >> "$GITHUB_OUTPUT"
             echo "Tag $TAG already exists."
           else
-            echo "exists=false" >> $GITHUB_OUTPUT
+            echo "exists=false" >> "$GITHUB_OUTPUT"
             echo "Tag $TAG does not exist."
           fi
 
