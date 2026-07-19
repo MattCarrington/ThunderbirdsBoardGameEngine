@@ -8,17 +8,11 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Validators
     /// </summary>
     public sealed class SnapshotValidator
     {
-        private readonly ISnapshotValidator[] _validators;
+        private readonly IReadOnlyList<ISnapshotValidator> _validators;
 
-        public SnapshotValidator()
+        public SnapshotValidator(IReadOnlyList<ISnapshotValidator> validators)
         {
-            _validators =
-            [
-                new EntityUniquenessValidator(),
-                new MapEdgeValidator(),
-                new CardUniquenessValidator(),
-                new DisasterBonusLocationOverrideValidator()
-            ];
+            _validators = validators;
         }
 
         public void Validate(ReferenceDataSnapshot snapshot)
