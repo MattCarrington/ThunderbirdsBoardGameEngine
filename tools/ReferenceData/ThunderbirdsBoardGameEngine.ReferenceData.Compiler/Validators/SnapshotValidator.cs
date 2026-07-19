@@ -12,7 +12,16 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Validators
 
         public SnapshotValidator(IEnumerable<ISnapshotValidator> validators)
         {
-            _validators = validators?.ToList() ?? throw new ArgumentNullException(nameof(validators));
+            ArgumentNullException.ThrowIfNull(validators);
+
+            if (validators.Any(validator => validator is null))
+            {
+                throw new ArgumentException(
+                    "Validator collection cannot contain null entries.",
+                    nameof(validators));
+            }
+
+            _validators = validators.ToList();
         }
 
         public void Validate(ReferenceDataSnapshot snapshot)
