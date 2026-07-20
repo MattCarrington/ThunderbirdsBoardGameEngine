@@ -1,7 +1,6 @@
-﻿using NSubstitute;
+using NSubstitute;
 using ThunderbirdsBoardGameEngine.ReferenceData.Core.Enums;
 using ThunderbirdsBoardGameEngine.ReferenceData.Core.Identities;
-using NSubstitute.Routing;
 using ThunderbirdsBoardGameEngine.Rules.Domain.Movement;
 using Xunit;
 

@@ -1,5 +1,4 @@
-﻿using ThunderbirdsBoardGameEngine.ReferenceData.Core.Identities;
-using ThunderbirdsBoardGameEngine.Rules.Application.Exceptions;
+using ThunderbirdsBoardGameEngine.Rules.Application.Exceptions;
 using ThunderbirdsBoardGameEngine.Rules.Application.Movement.Interfaces;
 using ThunderbirdsBoardGameEngine.Rules.Application.Validators;
 using ThunderbirdsBoardGameEngine.Rules.Domain.Movement;
