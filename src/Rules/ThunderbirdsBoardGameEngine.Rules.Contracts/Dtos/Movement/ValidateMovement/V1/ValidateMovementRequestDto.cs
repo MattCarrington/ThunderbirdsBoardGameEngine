@@ -14,5 +14,10 @@
         /// Gets the unique key identifying the destination location of the movement action.
         /// </summary>
         public required string DestinationLocation { get; init; }
+
+        /// <summary>
+        /// Gets the collection of unique keys for the Event Cards that are currently active.
+        /// </summary>
+        public IReadOnlyCollection<string> ActiveEventCardKeys { get; init; } = [];
     }
 }
