@@ -8,7 +8,7 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Readers
     {
         public List<CharacterInput> ReadFrom(IXLWorksheet worksheet)
         {
-            var table = ExcelWorksheetTable.From(worksheet);
+            var table = ExcelWorksheetTableHelper.From(worksheet);
             var columnMap = table.Columns;
 
             var characters = new List<CharacterInput>();

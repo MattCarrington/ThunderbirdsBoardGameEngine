@@ -3,9 +3,9 @@ using ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Compilation;
 
 namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Helpers
 {
-    internal sealed class ExcelWorksheetTable
+    public sealed class ExcelWorksheetTableHelper
     {
-        private ExcelWorksheetTable(
+        private ExcelWorksheetTableHelper(
             ExcelMappingHelper columns,
             IReadOnlyList<IXLRow> dataRows)
         {
@@ -17,7 +17,7 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Helpers
 
         public IReadOnlyList<IXLRow> DataRows { get; }
 
-        public static ExcelWorksheetTable From(IXLWorksheet worksheet)
+        public static ExcelWorksheetTableHelper From(IXLWorksheet worksheet)
         {
             ArgumentNullException.ThrowIfNull(worksheet);
 
@@ -33,7 +33,7 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Helpers
                     ? []
                     : worksheet.Rows(firstDataRowNumber, lastUsedRowNumber.Value).ToList();
 
-            return new ExcelWorksheetTable(
+            return new ExcelWorksheetTableHelper(
                 new ExcelMappingHelper(headerRow),
                 dataRows);
         }

@@ -8,7 +8,7 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Readers
     {
         public List<LocationInput> ReadFrom(IXLWorksheet worksheet)
         {
-            var table = ExcelWorksheetTable.From(worksheet);
+            var table = ExcelWorksheetTableHelper.From(worksheet);
             var columnMap = table.Columns;
 
             var locations = new List<LocationInput>();
