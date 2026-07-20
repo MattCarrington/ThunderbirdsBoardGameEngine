@@ -4,7 +4,7 @@ using Xunit;
 
 namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.Movement
 {
-    public class MovementSpeedModiferSourceRegistryTests
+    public class MovementSpeedModifierSourceRegistryTests
     {
         private static CardCode TestCardCode1 => new("test-1");
 
@@ -33,7 +33,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.Movement
             // Arrange
             var registry = CreateRegistry();
 
-            var cardCode = new CardCode("non-existant-card");
+            var cardCode = new CardCode("non-existent-card");
 
             // Act
             var result = registry.TryGetEventCard(cardCode, out var source);
