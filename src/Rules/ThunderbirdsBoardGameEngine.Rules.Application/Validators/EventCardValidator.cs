@@ -19,7 +19,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Application.Validators
             {
                 if (!_lookup.Exists(card))
                 {
-                    throw new ReferenceDataNotFoundException("Event Card", nameof(card));
+                    throw new ReferenceDataNotFoundException("Event Card", card.Value);
                 }
             }
         }
