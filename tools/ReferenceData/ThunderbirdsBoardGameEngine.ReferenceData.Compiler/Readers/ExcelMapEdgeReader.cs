@@ -8,17 +8,12 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Readers
     {
         public List<MapEdgeInput> ReadFrom(IXLWorksheet worksheet)
         {
-            var headerRow = worksheet.FirstRowUsed();
-            var columnMap = new ExcelMappingHelper(headerRow);
+            var table = ExcelWorksheetTable.From(worksheet);
+            var columnMap = table.Columns;
 
             var edges = new List<MapEdgeInput>();
 
-            var firstDataRow = headerRow.RowNumber() + 1;
-            var lastRow = worksheet.LastRowUsed().RowNumber();
-
-            var rows = worksheet.Rows(firstDataRow, lastRow);
-
-            foreach (var row in rows)
+            foreach (var row in table.DataRows)
             {
                 var edge1 = row.Cell(columnMap["Edge 1"]).GetString();
                 var edge2 = row.Cell(columnMap["Edge 2"]).GetString();

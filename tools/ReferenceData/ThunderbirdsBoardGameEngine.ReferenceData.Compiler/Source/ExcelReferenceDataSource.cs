@@ -26,14 +26,14 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Source
         {
             using var workbook = new XLWorkbook(_path);
 
-            var disasters = _disasterReader.ReadFrom(workbook.Worksheet("Disaster Cards"));
-            var locations = _locationReader.ReadFrom(workbook.Worksheet("Locations"));
-            var characters = _characterReader.ReadFrom(workbook.Worksheet("Characters"));
-            var thunderbirds = _thunderbirdReader.ReadFrom(workbook.Worksheet("Thunderbirds"));
-            var podVehicles = _podVehicleReader.ReadFrom(workbook.Worksheet("Pod Vehicles"));
-            var mapEdges = _mapEdgeReader.ReadFrom(workbook.Worksheet("Map Edges"));
-            var fabCards = _fabCardReader.ReadFrom(workbook.Worksheet("F.A.B. Cards"));
-            var eventCards = _eventCardReader.ReadFrom(workbook.Worksheet("Event Cards"));
+            var disasters = _disasterReader.ReadFrom(GetRequiredWorksheet(workbook, "Disaster Cards"));
+            var locations = _locationReader.ReadFrom(GetRequiredWorksheet(workbook, "Locations"));
+            var characters = _characterReader.ReadFrom(GetRequiredWorksheet(workbook, "Characters"));
+            var thunderbirds = _thunderbirdReader.ReadFrom(GetRequiredWorksheet(workbook, "Thunderbirds"));
+            var podVehicles = _podVehicleReader.ReadFrom(GetRequiredWorksheet(workbook, "Pod Vehicles"));
+            var mapEdges = _mapEdgeReader.ReadFrom(GetRequiredWorksheet(workbook, "Map Edges"));
+            var fabCards = _fabCardReader.ReadFrom(GetRequiredWorksheet(workbook, "F.A.B. Cards"));
+            var eventCards = _eventCardReader.ReadFrom(GetRequiredWorksheet(workbook, "Event Cards"));
 
             return new CompilationContext
             {
@@ -46,6 +46,19 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Source
                 FabCards = fabCards,
                 EventCards = eventCards
             };
+        }
+
+        private static IXLWorksheet GetRequiredWorksheet(
+            IXLWorkbook workbook,
+            string worksheetName)
+        {
+            if (workbook.TryGetWorksheet(worksheetName, out var worksheet))
+            {
+                return worksheet;
+            }
+
+            throw new ReferenceDataCompilationException(
+                $"Required worksheet '{worksheetName}' was not found.");
         }
     }
 }
