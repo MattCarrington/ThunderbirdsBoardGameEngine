@@ -1,4 +1,4 @@
-using NSubstitute;
+using NSubstitute;
 using ThunderbirdsBoardGameEngine.ReferenceData.Core.Enums;
 using ThunderbirdsBoardGameEngine.ReferenceData.Core.Identities;
 using ThunderbirdsBoardGameEngine.Rules.Domain.Movement;
