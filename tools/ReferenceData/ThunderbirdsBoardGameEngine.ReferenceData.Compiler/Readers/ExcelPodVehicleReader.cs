@@ -8,17 +8,12 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Readers
     {
         public List<PodVehicleInput> ReadFrom(IXLWorksheet worksheet)
         {
-            var headerRow = worksheet.FirstRowUsed();
-            var columnMap = new ExcelMappingHelper(headerRow);
+            var table = ExcelWorksheetTableHelper.From(worksheet);
+            var columnMap = table.Columns;
 
             var podVehicles = new List<PodVehicleInput>();
 
-            var firstDataRow = headerRow.RowNumber() + 1;
-            var lastRow = worksheet.LastRowUsed().RowNumber();
-
-            var rows = worksheet.Rows(firstDataRow, lastRow);
-
-            foreach (var row in rows)
+            foreach (var row in table.DataRows)
             {
                 var name = row.Cell(columnMap["Name"]).GetString();
 
