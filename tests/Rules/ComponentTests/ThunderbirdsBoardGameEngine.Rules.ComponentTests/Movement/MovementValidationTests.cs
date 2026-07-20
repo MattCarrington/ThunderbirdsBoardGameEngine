@@ -24,10 +24,10 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Movement
             // Arrange
             var request = new ValidateMovementQuery
             (
-                Thunderbird: new ThunderbirdCode(thunderbird),
-                Start: new LocationCode("Europe"),
-                Destination: new LocationCode("North America"),
-                EventCards: Array.Empty<CardCode>()
+                ThunderbirdCode: new ThunderbirdCode(thunderbird),
+                StartLocationCode: new LocationCode("Europe"),
+                DestinationLocationCode: new LocationCode("North America"),
+                ActiveEventCardCodes: Array.Empty<CardCode>()
             );
 
             var mediator = CreateMediator();
@@ -47,10 +47,10 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Movement
             // Arrange
             var request = new ValidateMovementQuery
             (
-                Thunderbird: new ThunderbirdCode("thunderbird-3"),
-                Start: new LocationCode("Moon"),
-                Destination: new LocationCode("Pacific"),
-                EventCards: Array.Empty<CardCode>()
+                ThunderbirdCode: new ThunderbirdCode("thunderbird-3"),
+                StartLocationCode: new LocationCode("Moon"),
+                DestinationLocationCode: new LocationCode("Pacific"),
+                ActiveEventCardCodes: Array.Empty<CardCode>()
             );
 
             var mediator = CreateMediator();
@@ -70,10 +70,10 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Movement
             // Arrange
             var request = new ValidateMovementQuery
             (
-                Thunderbird: new ThunderbirdCode("thunderbird-1"),
-                Start: new LocationCode("Europe"),
-                Destination: new LocationCode("North Pole"),
-                EventCards: Array.Empty<CardCode>()
+                ThunderbirdCode: new ThunderbirdCode("thunderbird-1"),
+                StartLocationCode: new LocationCode("Europe"),
+                DestinationLocationCode: new LocationCode("North Pole"),
+                ActiveEventCardCodes: Array.Empty<CardCode>()
             );
 
             var mediator = CreateMediator();
@@ -88,10 +88,10 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Movement
             // Arrange
             var request = new ValidateMovementQuery
             (
-                Thunderbird: new ThunderbirdCode("thunderbird-1"),
-                Start: new LocationCode("Atlantis"),
-                Destination: new LocationCode("North America"),
-                EventCards: Array.Empty<CardCode>()
+                ThunderbirdCode: new ThunderbirdCode("thunderbird-1"),
+                StartLocationCode: new LocationCode("Atlantis"),
+                DestinationLocationCode: new LocationCode("North America"),
+                ActiveEventCardCodes: Array.Empty<CardCode>()
             );
 
             var mediator = CreateMediator();
@@ -106,10 +106,10 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Movement
             // Arrange
             var request = new ValidateMovementQuery
             (
-                Thunderbird: new ThunderbirdCode("thunderbird-x"),
-                Start: new LocationCode("Europe"),
-                Destination: new LocationCode("North America"),
-                EventCards: Array.Empty<CardCode>()
+                ThunderbirdCode: new ThunderbirdCode("thunderbird-x"),
+                StartLocationCode: new LocationCode("Europe"),
+                DestinationLocationCode: new LocationCode("North America"),
+                ActiveEventCardCodes: Array.Empty<CardCode>()
             );
 
             var mediator = CreateMediator();
@@ -127,10 +127,10 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Movement
             // Arrange
             var request = new ValidateMovementQuery
             (
-                Thunderbird: new ThunderbirdCode(thunderbird),
-                Start: new LocationCode("Europe"),
-                Destination: new LocationCode("Space"),
-                EventCards: Array.Empty<CardCode>()
+                ThunderbirdCode: new ThunderbirdCode(thunderbird),
+                StartLocationCode: new LocationCode("Europe"),
+                DestinationLocationCode: new LocationCode("Space"),
+                ActiveEventCardCodes: Array.Empty<CardCode>()
             );
 
             var mediator = CreateMediator();
@@ -148,10 +148,10 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Movement
             // Arrange
             var request = new ValidateMovementQuery
             (
-                Thunderbird: new ThunderbirdCode("thunderbird-3"),
-                Start: new LocationCode("Space"),
-                Destination: new LocationCode("Europe"),
-                EventCards: Array.Empty<CardCode>()
+                ThunderbirdCode: new ThunderbirdCode("thunderbird-3"),
+                StartLocationCode: new LocationCode("Space"),
+                DestinationLocationCode: new LocationCode("Europe"),
+                ActiveEventCardCodes: Array.Empty<CardCode>()
             );
 
             var mediator = CreateMediator();
@@ -169,10 +169,10 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Movement
             // Arrange
             var request = new ValidateMovementQuery
             (
-                Thunderbird: new ThunderbirdCode("thunderbird-5"),
-                Start: new LocationCode("Moon"),
-                Destination: new LocationCode("Sun"),
-                EventCards: Array.Empty<CardCode>()
+                ThunderbirdCode: new ThunderbirdCode("thunderbird-5"),
+                StartLocationCode: new LocationCode("Moon"),
+                DestinationLocationCode: new LocationCode("Sun"),
+                ActiveEventCardCodes: Array.Empty<CardCode>()
             );
 
             var mediator = CreateMediator();
@@ -190,10 +190,10 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Movement
             // Arrange
             var request = new ValidateMovementQuery
             (
-                Thunderbird: new ThunderbirdCode("thunderbird-3"),
-                Start: new LocationCode("Pacific"),
-                Destination: new LocationCode("Moon"),
-                EventCards: [KnownEventCardCodes.RocketMalfunction]
+                ThunderbirdCode: new ThunderbirdCode("thunderbird-3"),
+                StartLocationCode: new LocationCode("Pacific"),
+                DestinationLocationCode: new LocationCode("Moon"),
+                ActiveEventCardCodes: [KnownEventCardCodes.RocketMalfunction]
             );
 
             var mediator = CreateMediator();
@@ -217,10 +217,10 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Movement
             // Arrange
             var request = new ValidateMovementQuery
             (
-                Thunderbird: new ThunderbirdCode("thunderbird-2"),
-                Start: new LocationCode("Europe"),
-                Destination: new LocationCode("North America"),
-                EventCards: [KnownEventCardCodes.AttackOfTheZombites]
+                ThunderbirdCode: new ThunderbirdCode("thunderbird-2"),
+                StartLocationCode: new LocationCode("Europe"),
+                DestinationLocationCode: new LocationCode("North America"),
+                ActiveEventCardCodes: [KnownEventCardCodes.AttackOfTheZombites]
             );
 
             var mediator = CreateMediator();
@@ -242,10 +242,10 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Movement
             // Arrange
             var request = new ValidateMovementQuery
             (
-                Thunderbird: new ThunderbirdCode("thunderbird-1"),
-                Start: new LocationCode("Europe"),
-                Destination: new LocationCode("North America"),
-                EventCards: [new CardCode("explosion-on-tracy-island")]
+                ThunderbirdCode: new ThunderbirdCode("thunderbird-1"),
+                StartLocationCode: new LocationCode("Europe"),
+                DestinationLocationCode: new LocationCode("North America"),
+                ActiveEventCardCodes: [new CardCode("explosion-on-tracy-island")]
             );
 
             var mediator = CreateMediator();
@@ -269,10 +269,10 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Movement
             // Arrange
             var request = new ValidateMovementQuery
             (
-                Thunderbird: new ThunderbirdCode(thunderbirdCode),
-                Start: new LocationCode("Europe"),
-                Destination: new LocationCode("North America"),
-                EventCards: [KnownEventCardCodes.AttackOfTheZombites, KnownEventCardCodes.UsnSentinelMissileStrike, KnownEventCardCodes.RocketMalfunction]
+                ThunderbirdCode: new ThunderbirdCode(thunderbirdCode),
+                StartLocationCode: new LocationCode("Europe"),
+                DestinationLocationCode: new LocationCode("North America"),
+                ActiveEventCardCodes: [KnownEventCardCodes.AttackOfTheZombites, KnownEventCardCodes.UsnSentinelMissileStrike, KnownEventCardCodes.RocketMalfunction]
             );
 
             var mediator = CreateMediator();
@@ -296,10 +296,10 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Movement
             // Arrange
             var request = new ValidateMovementQuery
             (
-                Thunderbird: new ThunderbirdCode("thunderbird-1"),
-                Start: new LocationCode("Europe"),
-                Destination: new LocationCode("North America"),
-                EventCards: [new CardCode("non-existent-event-card")]
+                ThunderbirdCode: new ThunderbirdCode("thunderbird-1"),
+                StartLocationCode: new LocationCode("Europe"),
+                DestinationLocationCode: new LocationCode("North America"),
+                ActiveEventCardCodes: [new CardCode("non-existent-event-card")]
             );
 
             var mediator = CreateMediator();

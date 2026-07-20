@@ -24,9 +24,10 @@ namespace ThunderbirdsBoardGameEngine.Api.UnitTests.Mappers.Rules.V1
             var result = dto.ToQuery("thunderbird4");
 
             // Assert
-            Assert.Equal(new ThunderbirdCode("thunderbird4"), result.Thunderbird);
-            Assert.Equal(new LocationCode("location1"), result.Start);
-            Assert.Equal(new LocationCode("location2"), result.Destination);
+            Assert.Equal(new ThunderbirdCode("thunderbird4"), result.ThunderbirdCode);
+            Assert.Equal(new LocationCode("location1"), result.StartLocationCode);
+            Assert.Equal(new LocationCode("location2"), result.DestinationLocationCode);
+            Assert.Empty(result.ActiveEventCardCodes);
         }
 
         [Theory]
@@ -59,6 +60,43 @@ namespace ThunderbirdsBoardGameEngine.Api.UnitTests.Mappers.Rules.V1
             // Act & Assert
             var ex = Assert.Throws<BadRequestException>(() => dto.ToQuery("thunderbird4"));
             Assert.Equal("Destination location must be provided.", ex.Message);
+        }
+
+        [Fact]
+        public void ToQuery_OptionalActiveEventCardKeysIncluded_ReturnsExpectedQuery()
+        {
+            // Arrange
+            var dto = new ValidateMovementRequestDto
+            {
+                StartLocation = "location1",
+                DestinationLocation = "location2",
+                ActiveEventCardKeys = ["card1", "card2"]
+            };
+
+            // Act
+            var result = dto.ToQuery("thunderbird4");
+
+            // Assert
+            Assert.Equal(new ThunderbirdCode("thunderbird4"), result.ThunderbirdCode);
+            Assert.Equal(new LocationCode("location1"), result.StartLocationCode);
+            Assert.Equal(new LocationCode("location2"), result.DestinationLocationCode);
+            Assert.Equal(2, result.ActiveEventCardCodes.Count);
+            Assert.Equal(dto.ActiveEventCardKeys.Select(c => new CardCode(c)), result.ActiveEventCardCodes);
+        }
+
+        [Fact]
+        public void ToQuery_ActiveEventCardKeyNull_ThrowsBadRequestException()
+        {
+            // Arrange
+            var dto = new ValidateMovementRequestDto
+            {
+                StartLocation = "location1",
+                DestinationLocation = "location2",
+                ActiveEventCardKeys = null
+            };
+            // Act & Assert
+            var ex = Assert.Throws<BadRequestException>(() => dto.ToQuery("thunderbird4"));
+            Assert.Equal("ActiveEventCardKeys cannot be null.", ex.Message);
         }
 
         [Fact]

@@ -1,4 +1,5 @@
 ﻿using ThunderbirdsBoardGameEngine.Api.Exceptions;
+using ThunderbirdsBoardGameEngine.Api.Validators;
 using ThunderbirdsBoardGameEngine.ReferenceData.Core.Identities;
 using ThunderbirdsBoardGameEngine.Rules.Application.Movement.MapTraversal;
 using ThunderbirdsBoardGameEngine.Rules.Contracts.Dtos.Movement.ValidateMovement.V1;
@@ -9,6 +10,8 @@ namespace ThunderbirdsBoardGameEngine.Api.Mappers.Rules.V1
     {
         public static ValidateMovementQuery ToQuery(this ValidateMovementRequestDto request, string thunderbirdCode)
         {
+
+
             if (string.IsNullOrWhiteSpace(request.StartLocation))
             {
                 throw new BadRequestException("Start location must be provided.");
@@ -19,12 +22,14 @@ namespace ThunderbirdsBoardGameEngine.Api.Mappers.Rules.V1
                 throw new BadRequestException("Destination location must be provided.");
             }
 
+            CollectionMappingValidator.ValidateStringCollection(request.ActiveEventCardKeys, nameof(request.ActiveEventCardKeys));
+
             return new ValidateMovementQuery
             (
-                Thunderbird: new ThunderbirdCode(thunderbirdCode),
-                Start: new LocationCode(request.StartLocation),
-                Destination: new LocationCode(request.DestinationLocation),
-                EventCards: Array.Empty<CardCode>()  // TODO: Populate EventCards
+                ThunderbirdCode: new ThunderbirdCode(thunderbirdCode),
+                StartLocationCode: new LocationCode(request.StartLocation),
+                DestinationLocationCode: new LocationCode(request.DestinationLocation),
+                ActiveEventCardCodes: request.ActiveEventCardKeys.Select(c => new CardCode(c)).ToList()
             );
         }
 

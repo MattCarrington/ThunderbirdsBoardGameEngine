@@ -16,10 +16,10 @@ namespace ThunderbirdsBoardGameEngine.Rules.Application.Movement.MapTraversal
         public Task<ValidateMovementResponse> Handle(ValidateMovementQuery query, CancellationToken cancellationToken)
         {
             var request = new MovementRequest(
-                Thunderbird: query.Thunderbird,
-                Start: query.Start,
-                Destination: query.Destination,
-                ActiveEventCards: query.EventCards
+                Thunderbird: query.ThunderbirdCode,
+                Start: query.StartLocationCode,
+                Destination: query.DestinationLocationCode,
+                ActiveEventCards: query.ActiveEventCardCodes
             );
 
             var movementResult = _validateMovementResolutionService.ResolveMovementValidation(request);
