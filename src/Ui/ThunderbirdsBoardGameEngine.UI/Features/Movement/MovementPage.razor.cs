@@ -58,7 +58,7 @@ namespace ThunderbirdsBoardGameEngine.UI.Features.Movement
 
             try
             {
-                _validationResult = await MovementService.ValidateMovementAsync(_thunderbirdCode!, _startLocationCode!, _destinationCode!);
+                _validationResult = await MovementService.ValidateMovementAsync(_thunderbirdCode!, _startLocationCode!, _destinationCode!, _selectedEventCardKeys.ToList());
 
                 _validationFailed = _validationResult is null;
             }

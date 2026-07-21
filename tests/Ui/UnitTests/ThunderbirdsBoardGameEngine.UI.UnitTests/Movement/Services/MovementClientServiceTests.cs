@@ -49,7 +49,7 @@ namespace ThunderbirdsBoardGameEngine.UI.UnitTests.Movement.Services
             var service = CreateService(movementClient);
 
             // Act
-            var result = await service.ValidateMovementAsync(ThunderbirdCode, StartLocationCode, DestinationLocationCode);
+            var result = await service.ValidateMovementAsync(ThunderbirdCode, StartLocationCode, DestinationLocationCode, Array.Empty<string>());
 
             // Assert
             Assert.NotNull(result);
@@ -78,7 +78,7 @@ namespace ThunderbirdsBoardGameEngine.UI.UnitTests.Movement.Services
             var service = CreateService(movementClient);
 
             // Act
-            var result = await service.ValidateMovementAsync(ThunderbirdCode, StartLocationCode, DestinationLocationCode);
+            var result = await service.ValidateMovementAsync(ThunderbirdCode, StartLocationCode, DestinationLocationCode, Array.Empty<string>());
 
             // Assert
             Assert.Null(result);
