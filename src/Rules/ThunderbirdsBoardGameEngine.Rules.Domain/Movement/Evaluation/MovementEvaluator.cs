@@ -16,7 +16,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.Movement.Evaluation
             _actionPointCalculator = actionPointCalculator ?? throw new ArgumentNullException(nameof(actionPointCalculator));
         }
 
-        public MovementEvaluationResult Evaluate(MovementInput input)
+        public MovementEvaluationResult Evaluate(MovementEvaluationInput input)
         {
             if (input.Thunderbird.TopSpeed <= 0)
             {

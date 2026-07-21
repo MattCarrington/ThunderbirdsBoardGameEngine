@@ -2,7 +2,7 @@
 
 namespace ThunderbirdsBoardGameEngine.Rules.Domain.Movement.Evaluation
 {
-    public record MovementResponse(
+    public record ValidateMovementResult(
         bool IsValid,
         int SpacesTravelled,
         IReadOnlyCollection<LocationCode> Route,

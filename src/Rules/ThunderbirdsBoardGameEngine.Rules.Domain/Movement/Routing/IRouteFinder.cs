@@ -4,6 +4,6 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.Movement.Routing
 {
     public interface IRouteFinder
     {
-        RouteResult? FindShortestRoute(MovementInput request);
+        RouteResult? FindShortestRoute(MovementEvaluationInput request);
     }
 }

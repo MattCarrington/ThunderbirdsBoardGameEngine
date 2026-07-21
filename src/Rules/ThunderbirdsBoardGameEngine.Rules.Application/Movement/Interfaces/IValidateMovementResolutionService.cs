@@ -4,6 +4,6 @@ namespace ThunderbirdsBoardGameEngine.Rules.Application.Movement.Interfaces
 {
     public interface IValidateMovementResolutionService
     {
-        MovementResponse ResolveMovementValidation(MovementRequest request);
+        ValidateMovementResult ResolveMovementValidation(ValidateMovementInput request);
     }
 }

@@ -4,7 +4,7 @@ using ThunderbirdsBoardGameEngine.Rules.Domain.Movement.Topology;
 
 namespace ThunderbirdsBoardGameEngine.Rules.Domain.Movement.Evaluation
 {
-    public record MovementInput(
+    public record MovementEvaluationInput(
         ThunderbirdContribution Thunderbird,
         Topography Topography,
         LocationCode Start,

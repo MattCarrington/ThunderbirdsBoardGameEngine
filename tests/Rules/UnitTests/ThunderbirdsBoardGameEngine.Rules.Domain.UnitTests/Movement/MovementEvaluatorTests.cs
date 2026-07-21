@@ -21,7 +21,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.Movement
             var route = new[] { new LocationCode("A"), new LocationCode("C"), new LocationCode("B") };
 
             var routeFinder = Substitute.For<IRouteFinder>();
-            routeFinder.FindShortestRoute(Arg.Any<MovementInput>()).Returns(new RouteResult
+            routeFinder.FindShortestRoute(Arg.Any<MovementEvaluationInput>()).Returns(new RouteResult
             (
                 Route: route.ToList(),
                 SpacesTravelled: 2
@@ -48,7 +48,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.Movement
             var input = CreateMovementInput(3);
 
             var routeFinder = Substitute.For<IRouteFinder>();
-            routeFinder.FindShortestRoute(Arg.Any<MovementInput>()).Returns((RouteResult?)null);
+            routeFinder.FindShortestRoute(Arg.Any<MovementEvaluationInput>()).Returns((RouteResult?)null);
 
             var movementEvaluator = CreateMovementEvaluator(routeFinder);
 
@@ -118,14 +118,14 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.Movement
             Assert.Single(result.Messages);
         }
 
-        private static MovementInput CreateMovementInput(int topSpeed)
+        private static MovementEvaluationInput CreateMovementInput(int topSpeed)
         {
             return CreateMovementInput(topSpeed, Enumerable.Empty<CardCode>());
         }
 
-        private static MovementInput CreateMovementInput(int topSpeed, IEnumerable<CardCode> eventCards)
+        private static MovementEvaluationInput CreateMovementInput(int topSpeed, IEnumerable<CardCode> eventCards)
         {
-            return new MovementInput(
+            return new MovementEvaluationInput(
                 Thunderbird: new ThunderbirdContribution(new("thunderbird"), MovementDomain.Earth, topSpeed),
                 Topography: new Topography([]),
                 Start: new LocationCode("A"),
@@ -147,7 +147,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.Movement
             var route = new[] { new LocationCode("A"), new LocationCode("B"), new LocationCode("C") };
 
             var routeFinder = Substitute.For<IRouteFinder>();
-            routeFinder.FindShortestRoute(Arg.Any<MovementInput>()).Returns(new RouteResult
+            routeFinder.FindShortestRoute(Arg.Any<MovementEvaluationInput>()).Returns(new RouteResult
             (
                 Route: route.ToList(),
                 SpacesTravelled: 2

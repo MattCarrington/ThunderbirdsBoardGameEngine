@@ -5,7 +5,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.Movement.Routing
 {
     public sealed class BreadthFirstRouteFinder : IRouteFinder
     {
-        public RouteResult? FindShortestRoute(MovementInput request)
+        public RouteResult? FindShortestRoute(MovementEvaluationInput request)
         {
             var queue = new Queue<LocationCode>();
             var visited = new HashSet<LocationCode> { request.Start };

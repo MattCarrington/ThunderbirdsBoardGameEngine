@@ -27,7 +27,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Application.Movement.MapTraversal
             _movementEvaluator = movementEvaluator ?? throw new ArgumentNullException(nameof(movementEvaluator));
         }
 
-        public MovementResponse ResolveMovementValidation(MovementRequest request)
+        public ValidateMovementResult ResolveMovementValidation(ValidateMovementInput request)
         {
             var thunderbird = _thunderbirdsDefinitionLookup.GetThunderbirdMovementContribution(request.Thunderbird);
 
@@ -51,11 +51,11 @@ namespace ThunderbirdsBoardGameEngine.Rules.Application.Movement.MapTraversal
 
             _eventCardValidator.Validate(request.ActiveEventCards);
 
-            var input = new MovementInput(thunderbird, topography, request.Start, request.Destination, request.ActiveEventCards);
+            var input = new MovementEvaluationInput(thunderbird, topography, request.Start, request.Destination, request.ActiveEventCards);
 
             var evaluationResult = _movementEvaluator.Evaluate(input);
 
-            return new MovementResponse(
+            return new ValidateMovementResult(
                 IsValid: evaluationResult.IsMoveValid,
                 SpacesTravelled: evaluationResult.SpacesTravelled,
                 Route: evaluationResult.Route,
