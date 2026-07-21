@@ -11,7 +11,9 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Features.Movement.Compon
         public void MovementResultDetailShouldRenderCorrectlyWhenResultIsValid()
         {
             // Arrange
-            var movementResult = CreateMovementResultViewModel(isValid: true);
+            var messages = Array.Empty<string>();
+
+            var movementResult = CreateMovementResultViewModel(isValid: true, messages: messages);
 
             // Act
             var cut = Render<MovementResultDetail>(parameters => parameters
@@ -32,15 +34,39 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Features.Movement.Compon
             Assert.Contains("A4", route.TextContent);
             Assert.Contains("A5", route.TextContent);
 
+            var modifiers = cut.FindAll("[data-testid='modifiers']");
+            Assert.Empty(modifiers);
+
             var validationFailed = cut.FindAll("[data-testid='validation-failure']");
             Assert.Empty(validationFailed);
+        }
+
+        [Fact]
+        public void MovementResultDetailShouldRenderCorrectlyWhenResultIsValidWithMultipleMessages()
+        {
+            // Arrange
+            var messages = new List<string> { "Movement successful!", "No obstacles encountered." };
+
+            var movementResult = CreateMovementResultViewModel(isValid: true, messages: messages);
+
+            // Act
+            var cut = Render<MovementResultDetail>(parameters => parameters
+                .Add(p => p.MovementResult, movementResult)
+            );
+
+            // Assert
+            var modifiers = cut.Find("[data-testid='modifiers']");
+            Assert.Contains("Movement successful!", modifiers.TextContent);
+            Assert.Contains("No obstacles encountered.", modifiers.TextContent);
         }
 
         [Fact]
         public void MovementResultDetailShouldRenderCorrectlyWhenResultIsInvalid()
         {
             // Arrange
-            var movementResult = CreateMovementResultViewModel(isValid: false);
+            var messages = new List<string> { "Movement failed due to invalid route." };
+
+            var movementResult = CreateMovementResultViewModel(isValid: false, messages: messages);
 
             // Act
             var cut = Render<MovementResultDetail>(parameters => parameters
@@ -56,7 +82,7 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Features.Movement.Compon
 
         }
 
-        private static MovementResultViewModel CreateMovementResultViewModel(bool isValid)
+        private static MovementResultViewModel CreateMovementResultViewModel(bool isValid, IReadOnlyList<string> messages)
         {
             return new MovementResultViewModel
             (
@@ -65,7 +91,7 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Features.Movement.Compon
                 SpacesTravelled: 5,
                 TopSpeed: 2,
                 Route: ["A1", "A2", "A3", "A4", "A5"],
-                Messages: isValid ? ["Movement successful!"] : ["Movement failed due to invalid route."]
+                Messages: messages
             );
         }
     }
