@@ -13,10 +13,14 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Fixtures
         public IMovementClientService MovementService { get; }
             = Substitute.For<IMovementClientService>();
 
+        public IEventCardMovementService EventCardMovementService { get; }
+            = Substitute.For<IEventCardMovementService>();
+
         public MovementPageTestContext(BunitContext context)
         {
             context.Services.AddSingleton(ThunderbirdService);
             context.Services.AddSingleton(MovementService);
+            context.Services.AddSingleton(EventCardMovementService);
         }
     }
 }

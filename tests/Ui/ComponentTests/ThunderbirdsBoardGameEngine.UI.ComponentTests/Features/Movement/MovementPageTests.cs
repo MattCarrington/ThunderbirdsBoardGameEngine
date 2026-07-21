@@ -3,6 +3,7 @@ using NSubstitute;
 using ThunderbirdsBoardGameEngine.UI.ComponentTests.Fixtures;
 using ThunderbirdsBoardGameEngine.UI.Features.Movement;
 using ThunderbirdsBoardGameEngine.UI.Features.Movement.Models;
+using ThunderbirdsBoardGameEngine.UI.Features.Shared.ViewModels;
 using Xunit;
 
 namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Features.Movement
@@ -238,6 +239,7 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Features.Movement
 
             context.ThunderbirdService.GetAllMobileVehicles().Returns(CreateThunderbirdMovementOptions());
             context.MovementService.GetAccessibleLocationsAsync(Arg.Any<string>()).Returns(CreateMovementLocationOptions());
+            context.EventCardMovementService.GetSpeedModificationEventCards().Returns(CreateSpeedEventCardModifiers());
 
             return context;
         }
@@ -257,6 +259,15 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Features.Movement
             [
                 new(Key: "L1", DisplayName: "Location 1"),
                 new(Key: "L2", DisplayName: "Location 2"),
+            ];
+        }
+
+        private static IReadOnlyList<CardModifierViewModel> CreateSpeedEventCardModifiers()
+        {
+            return
+            [
+                new(Key: "EC1", DisplayName: "Event Card 1"),
+                new(Key: "EC2", DisplayName: "Event Card 2"),
             ];
         }
     }

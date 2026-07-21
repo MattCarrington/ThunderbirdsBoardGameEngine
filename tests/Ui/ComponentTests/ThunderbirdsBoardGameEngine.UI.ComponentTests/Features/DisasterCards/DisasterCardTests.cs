@@ -4,6 +4,7 @@ using ThunderbirdsBoardGameEngine.Rules.Contracts.Dtos.Rescue.CalculateRescueTar
 using ThunderbirdsBoardGameEngine.UI.ComponentTests.Fixtures;
 using ThunderbirdsBoardGameEngine.UI.Features.DisasterCards;
 using ThunderbirdsBoardGameEngine.UI.Features.DisasterCards.ViewModels;
+using ThunderbirdsBoardGameEngine.UI.Features.Shared.ViewModels;
 using Xunit;
 
 namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Features.DisasterCards

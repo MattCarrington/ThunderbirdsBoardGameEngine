@@ -1,9 +1,9 @@
 ﻿using Bunit;
-using ThunderbirdsBoardGameEngine.UI.Features.DisasterCards.Components;
-using ThunderbirdsBoardGameEngine.UI.Features.DisasterCards.ViewModels;
+using ThunderbirdsBoardGameEngine.UI.Features.Shared.Components;
+using ThunderbirdsBoardGameEngine.UI.Features.Shared.ViewModels;
 using Xunit;
 
-namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Features.DisasterCards.Components
+namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Features.Shared.Components
 {
     public class EventCardListTests : BunitContext
     {
