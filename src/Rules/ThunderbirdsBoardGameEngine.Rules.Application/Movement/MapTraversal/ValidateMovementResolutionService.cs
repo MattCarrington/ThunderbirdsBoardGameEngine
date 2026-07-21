@@ -1,7 +1,8 @@
 using ThunderbirdsBoardGameEngine.Rules.Application.Exceptions;
 using ThunderbirdsBoardGameEngine.Rules.Application.Movement.Interfaces;
 using ThunderbirdsBoardGameEngine.Rules.Application.Validators;
-using ThunderbirdsBoardGameEngine.Rules.Domain.Movement;
+using ThunderbirdsBoardGameEngine.Rules.Domain.Movement.Evaluation;
+using ThunderbirdsBoardGameEngine.Rules.Domain.Movement.Topology;
 
 namespace ThunderbirdsBoardGameEngine.Rules.Application.Movement.MapTraversal
 {

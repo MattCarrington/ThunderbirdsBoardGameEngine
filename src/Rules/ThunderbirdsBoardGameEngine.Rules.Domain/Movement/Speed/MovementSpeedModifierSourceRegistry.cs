@@ -2,7 +2,7 @@
 using System.Diagnostics.CodeAnalysis;
 using ThunderbirdsBoardGameEngine.ReferenceData.Core.Identities;
 
-namespace ThunderbirdsBoardGameEngine.Rules.Domain.Movement
+namespace ThunderbirdsBoardGameEngine.Rules.Domain.Movement.Speed
 {
     public sealed class MovementSpeedModifierSourceRegistry : IMovementSpeedModifierSourceRegistry
     {

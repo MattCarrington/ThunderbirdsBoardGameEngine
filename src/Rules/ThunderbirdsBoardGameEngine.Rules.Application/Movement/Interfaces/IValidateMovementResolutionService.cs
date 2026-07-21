@@ -1,4 +1,4 @@
-﻿using ThunderbirdsBoardGameEngine.Rules.Domain.Movement;
+﻿using ThunderbirdsBoardGameEngine.Rules.Domain.Movement.Evaluation;
 
 namespace ThunderbirdsBoardGameEngine.Rules.Application.Movement.Interfaces
 {

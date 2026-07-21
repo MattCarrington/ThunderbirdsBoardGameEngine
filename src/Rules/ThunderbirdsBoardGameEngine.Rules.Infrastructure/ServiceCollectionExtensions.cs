@@ -6,7 +6,9 @@ using ThunderbirdsBoardGameEngine.Rules.Application.Rescue.CalculateRescueTarget
 using ThunderbirdsBoardGameEngine.Rules.Application.Rescue.Interfaces;
 using ThunderbirdsBoardGameEngine.Rules.Application.Validators;
 using ThunderbirdsBoardGameEngine.Rules.Domain.EventCards;
-using ThunderbirdsBoardGameEngine.Rules.Domain.Movement;
+using ThunderbirdsBoardGameEngine.Rules.Domain.Movement.Evaluation;
+using ThunderbirdsBoardGameEngine.Rules.Domain.Movement.Routing;
+using ThunderbirdsBoardGameEngine.Rules.Domain.Movement.Speed;
 using ThunderbirdsBoardGameEngine.Rules.Domain.Rescue;
 using ThunderbirdsBoardGameEngine.Rules.Infrastructure.Lookups;
 using ThunderbirdsBoardGameEngine.Rules.Infrastructure.Registries;

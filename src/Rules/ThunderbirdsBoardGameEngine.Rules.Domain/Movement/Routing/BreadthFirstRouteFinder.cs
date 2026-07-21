@@ -1,6 +1,7 @@
 ﻿using ThunderbirdsBoardGameEngine.ReferenceData.Core.Identities;
+using ThunderbirdsBoardGameEngine.Rules.Domain.Movement.Evaluation;
 
-namespace ThunderbirdsBoardGameEngine.Rules.Domain.Movement
+namespace ThunderbirdsBoardGameEngine.Rules.Domain.Movement.Routing
 {
     public sealed class BreadthFirstRouteFinder : IRouteFinder
     {

@@ -1,4 +1,4 @@
-﻿using ThunderbirdsBoardGameEngine.Rules.Domain.Movement;
+﻿using ThunderbirdsBoardGameEngine.Rules.Domain.Movement.Evaluation;
 using Xunit;
 
 namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.Movement

@@ -1,5 +1,5 @@
 ﻿using ThunderbirdsBoardGameEngine.ReferenceData.Core.Identities;
-using ThunderbirdsBoardGameEngine.Rules.Domain.Movement;
+using ThunderbirdsBoardGameEngine.Rules.Domain.Movement.Speed;
 using Xunit;
 
 namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.Movement

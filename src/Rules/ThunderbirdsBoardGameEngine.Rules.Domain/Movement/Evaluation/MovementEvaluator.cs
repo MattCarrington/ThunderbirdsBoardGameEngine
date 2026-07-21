@@ -1,4 +1,7 @@
-﻿namespace ThunderbirdsBoardGameEngine.Rules.Domain.Movement
+﻿using ThunderbirdsBoardGameEngine.Rules.Domain.Movement.Routing;
+using ThunderbirdsBoardGameEngine.Rules.Domain.Movement.Speed;
+
+namespace ThunderbirdsBoardGameEngine.Rules.Domain.Movement.Evaluation
 {
     public sealed class MovementEvaluator
     {
