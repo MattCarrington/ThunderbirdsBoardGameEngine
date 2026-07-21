@@ -11,6 +11,13 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.Movement.Speed
         public MovementSpeedModifierSourceRegistry(
             IEnumerable<IMovementSpeedModifierSource> sources)
         {
+            ArgumentNullException.ThrowIfNull(sources, nameof(sources));
+
+            if (sources.Any(source => source == null))
+            {
+                throw new ArgumentException("Movement speed modifier sources cannot contain null values.", nameof(sources));
+            }
+
             _sources = sources.ToFrozenDictionary(x => x.EventCardCode);
         }
 
