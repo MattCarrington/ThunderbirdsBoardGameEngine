@@ -6,7 +6,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.Movement.Evaluation
         bool IsMoveValid,
         IReadOnlyCollection<LocationCode> Route,
         int SpacesTravelled,
-        int TopSpeed,
+        int? TopSpeed,
         int ActionPointCost,
         IReadOnlyCollection<string> Messages)
     {
@@ -17,7 +17,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.Movement.Evaluation
                 IsMoveValid: false,
                 Route: Array.Empty<LocationCode>(),
                 SpacesTravelled: 0,
-                TopSpeed: 0,
+                TopSpeed: null,
                 ActionPointCost: 0,
                 Messages: new[] { message });
         }

@@ -50,7 +50,8 @@ namespace ThunderbirdsBoardGameEngine.Rules.Client.ComponentTests.Clients.V1
                 IsValid = true,
                 ActionPointCost = 2,
                 SpacesTravelled = 3,
-                TopSpeed = 5,
+                ThunderbirdTopSpeed = 5,
+                EffectiveTopSpeed = 4,
                 Route = ["europe", "middle-east", "asia"],
                 Messages = ["Movement is valid."]
             };
@@ -73,7 +74,8 @@ namespace ThunderbirdsBoardGameEngine.Rules.Client.ComponentTests.Clients.V1
             Assert.Equal(dto.IsValid, result.IsValid);
             Assert.Equal(dto.ActionPointCost, result.ActionPointCost);
             Assert.Equal(dto.SpacesTravelled, result.SpacesTravelled);
-            Assert.Equal(dto.TopSpeed, result.TopSpeed);
+            Assert.Equal(dto.ThunderbirdTopSpeed, result.ThunderbirdTopSpeed);
+            Assert.Equal(dto.EffectiveTopSpeed, result.EffectiveTopSpeed);
             Assert.Equal(dto.Route, result.Route);
             Assert.Equal(dto.Messages, result.Messages);
         }

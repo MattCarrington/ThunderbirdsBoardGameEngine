@@ -110,7 +110,8 @@ namespace ThunderbirdsBoardGameEngine.Api.UnitTests.Mappers.Rules.V1
                 SpacesTravelled: 2,
                 Messages: ["Move successful."],
                 Route: [new LocationCode("location1"), new LocationCode("location2")],
-                TopSpeed: 5
+                EffectiveTopSpeed: 4,
+                ThunderbirdTopSpeed: 5
             );
 
             // Act
@@ -121,7 +122,7 @@ namespace ThunderbirdsBoardGameEngine.Api.UnitTests.Mappers.Rules.V1
             Assert.Equal(3, result.ActionPointCost);
             Assert.Equal(2, result.SpacesTravelled);
             Assert.Equal(2, result.Route.Count);
-            Assert.Equal(5, result.TopSpeed);
+            Assert.Equal(5, result.ThunderbirdTopSpeed);
 
             var message = Assert.Single(result.Messages);
             Assert.Equal("Move successful.", message);

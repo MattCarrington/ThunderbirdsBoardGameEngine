@@ -59,7 +59,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.Movement
             Assert.False(result.IsMoveValid);
             Assert.Empty(result.Route);
             Assert.Equal(0, result.SpacesTravelled);
-            Assert.Equal(0, result.TopSpeed);
+            Assert.Null(result.TopSpeed);
             Assert.Equal(0, result.ActionPointCost);
             Assert.Single(result.Messages);
             Assert.Equal("No route found from A to B for thunderbird.", result.Messages.First());
@@ -82,7 +82,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.Movement
             Assert.False(result.IsMoveValid);
             Assert.Empty(result.Route);
             Assert.Equal(0, result.SpacesTravelled);
-            Assert.Equal(0, result.TopSpeed);
+            Assert.Null(result.TopSpeed);
             Assert.Equal(0, result.ActionPointCost);
             Assert.Single(result.Messages);
             Assert.Equal("thunderbird cannot move.", result.Messages.First());

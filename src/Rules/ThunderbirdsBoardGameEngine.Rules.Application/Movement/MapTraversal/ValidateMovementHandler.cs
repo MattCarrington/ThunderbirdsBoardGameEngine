@@ -30,7 +30,8 @@ namespace ThunderbirdsBoardGameEngine.Rules.Application.Movement.MapTraversal
                     SpacesTravelled: movementResult.SpacesTravelled,
                     Route: movementResult.Route,
                     ActionPointCost: movementResult.ActionPointCost,
-                    TopSpeed: movementResult.TopSpeed,
+                    EffectiveTopSpeed: movementResult.EffectiveTopSpeed,
+                    ThunderbirdTopSpeed: movementResult.ThunderbirdTopSpeed,
                     Messages: movementResult.Messages
                 )
             );

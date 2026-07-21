@@ -42,7 +42,8 @@ namespace ThunderbirdsBoardGameEngine.Api.Mappers.Rules.V1
                 SpacesTravelled = response.SpacesTravelled,
                 Messages = response.Messages.ToList(),
                 Route = response.Route.Select(locationCode => locationCode.Value).ToList(),
-                TopSpeed = response.TopSpeed
+                ThunderbirdTopSpeed = response.ThunderbirdTopSpeed,
+                EffectiveTopSpeed = response.EffectiveTopSpeed
             };
         }
     }

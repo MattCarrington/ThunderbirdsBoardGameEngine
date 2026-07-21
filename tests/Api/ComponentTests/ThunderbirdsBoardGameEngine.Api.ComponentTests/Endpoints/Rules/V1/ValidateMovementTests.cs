@@ -45,7 +45,8 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints.Rules.V1
             Assert.Equal(3, result.SpacesTravelled);
             Assert.NotEmpty(result.Route);
             Assert.Equal(2, result.ActionPointCost);
-            Assert.Equal(2, result.TopSpeed);
+            Assert.Equal(2, result.ThunderbirdTopSpeed);
+            Assert.Equal(2, result.EffectiveTopSpeed);
             Assert.Empty(result.Messages);
         }
 
@@ -75,7 +76,8 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints.Rules.V1
             Assert.Equal(0, result.SpacesTravelled);
             Assert.Empty(result.Route);
             Assert.Equal(0, result.ActionPointCost);
-            Assert.Equal(2, result.TopSpeed);
+            Assert.Equal(2, result.ThunderbirdTopSpeed);
+            Assert.Null(result.EffectiveTopSpeed);
 
             var message = Assert.Single(result.Messages);
             Assert.Contains("No route found", message);

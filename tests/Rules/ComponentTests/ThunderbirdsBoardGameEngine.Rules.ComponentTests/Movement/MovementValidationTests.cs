@@ -205,7 +205,8 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Movement
             Assert.True(result.IsValid);
             Assert.Equal(2, result.SpacesTravelled);
             Assert.Equal(2, result.ActionPointCost);
-            Assert.Equal(1, result.TopSpeed);
+            Assert.Equal(1, result.EffectiveTopSpeed);
+            Assert.Equal(3, result.ThunderbirdTopSpeed);
 
             var message = Assert.Single(result.Messages);
             Assert.Equal("Rocket Malfunction: Thunderbird 3's top speed is reduced to 1.", message);
@@ -232,7 +233,8 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Movement
             Assert.True(result.IsValid);
             Assert.Equal(2, result.SpacesTravelled);
             Assert.Equal(1, result.ActionPointCost);
-            Assert.Equal(2, result.TopSpeed);
+            Assert.Equal(2, result.EffectiveTopSpeed);
+            Assert.Equal(2, result.ThunderbirdTopSpeed);
             Assert.Empty(result.Messages);
         }
 
@@ -257,14 +259,15 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Movement
             Assert.True(result.IsValid);
             Assert.Equal(2, result.SpacesTravelled);
             Assert.Equal(1, result.ActionPointCost);
-            Assert.Equal(3, result.TopSpeed);
+            Assert.Equal(3, result.ThunderbirdTopSpeed);
+            Assert.Equal(3, result.EffectiveTopSpeed);
             Assert.Empty(result.Messages);
         }
 
         [Theory]
-        [InlineData("thunderbird-1", "Attack of the Zombites: Thunderbird 1's top speed is reduced to 1.")]
-        [InlineData("thunderbird-2", "USN Sentinel Missile Strike: Thunderbird 2's top speed is reduced to 1.")]
-        public async Task MovementCanOnlyBeAffectedByOneEventCard(string thunderbirdCode, string expectedMessage)
+        [InlineData("thunderbird-1", "Attack of the Zombites: Thunderbird 1's top speed is reduced to 1.", 3)]
+        [InlineData("thunderbird-2", "USN Sentinel Missile Strike: Thunderbird 2's top speed is reduced to 1.", 2)]
+        public async Task MovementCanOnlyBeAffectedByOneEventCard(string thunderbirdCode, string expectedMessage, int baseSpeed)
         {
             // Arrange
             var request = new ValidateMovementQuery
@@ -284,7 +287,8 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Movement
             Assert.True(result.IsValid);
             Assert.Equal(2, result.SpacesTravelled);
             Assert.Equal(2, result.ActionPointCost);
-            Assert.Equal(1, result.TopSpeed);
+            Assert.Equal(1, result.EffectiveTopSpeed);
+            Assert.Equal(baseSpeed, result.ThunderbirdTopSpeed);
 
             var message = Assert.Single(result.Messages);
             Assert.Equal(expectedMessage, message);

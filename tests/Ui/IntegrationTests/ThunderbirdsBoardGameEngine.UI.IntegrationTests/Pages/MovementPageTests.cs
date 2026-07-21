@@ -108,7 +108,8 @@ namespace ThunderbirdsBoardGameEngine.UI.IntegrationTests.Pages
                 IsValid = true,
                 ActionPointCost = 1,
                 SpacesTravelled = 1,
-                TopSpeed = 1,
+                ThunderbirdTopSpeed = 1,
+                EffectiveTopSpeed = 1,
                 Route = ["Location A", "Location B", "Location C"],
                 Messages = []
             };
@@ -146,7 +147,8 @@ namespace ThunderbirdsBoardGameEngine.UI.IntegrationTests.Pages
                 IsValid = false,
                 ActionPointCost = 0,
                 SpacesTravelled = 0,
-                TopSpeed = 0,
+                ThunderbirdTopSpeed = 0,
+                EffectiveTopSpeed = 0,
                 Route = [],
                 Messages = ["No route found between asia and europe for thunderbird-3"]
             };

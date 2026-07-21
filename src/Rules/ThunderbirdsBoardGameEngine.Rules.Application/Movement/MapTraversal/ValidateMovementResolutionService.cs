@@ -60,7 +60,8 @@ namespace ThunderbirdsBoardGameEngine.Rules.Application.Movement.MapTraversal
                 SpacesTravelled: evaluationResult.SpacesTravelled,
                 Route: evaluationResult.Route,
                 ActionPointCost: evaluationResult.ActionPointCost,
-                TopSpeed: evaluationResult.TopSpeed,
+                EffectiveTopSpeed: evaluationResult.TopSpeed,
+                ThunderbirdTopSpeed: thunderbird.TopSpeed,
                 Messages: evaluationResult.Messages);
         }
     }

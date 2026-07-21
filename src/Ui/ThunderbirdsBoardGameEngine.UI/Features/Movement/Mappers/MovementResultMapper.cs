@@ -20,7 +20,7 @@ namespace ThunderbirdsBoardGameEngine.UI.Features.Movement.Mappers
                 response.IsValid,
                 response.ActionPointCost,
                 response.SpacesTravelled,
-                response.TopSpeed,
+                response.EffectiveTopSpeed ?? 0,
                 response.Route
                     .Select(c => _catalog.TryGetByCode(new LocationCode(c), out var location) ? location.DisplayName : c)
                     .ToList(),
