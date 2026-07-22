@@ -168,6 +168,7 @@ run_success_test() {
 run_failure_test() {
   local name="$1"
   local scenario="$2"
+  local git_ref="${3:-refs/heads/main}"
   local output_file="$TEST_ROOT/output-$PASSED"
 
   if PATH="$MOCK_BIN:$PATH" \
@@ -177,7 +178,7 @@ run_failure_test() {
     PACKAGE_ID="Example.Package" \
     OWNER="example" \
     GITHUB_TOKEN="test-token" \
-    GITHUB_REF="refs/heads/main" \
+    GITHUB_REF="$git_ref" \
     GITHUB_RUN_NUMBER="42" \
     GITHUB_OUTPUT="$output_file" \
     bash "$COMPUTE_PACKAGE_VERSION_SCRIPT" >/dev/null 2>&1; then
@@ -191,10 +192,11 @@ run_failure_test() {
 
 run_success_test "missing package permits stable publish" "not-found" "refs/heads/main" "1.2.3" "true"
 run_success_test "missing package permits beta publish" "not-found" "refs/heads/feature/package" "1.2.3-beta.42" "true"
-run_success_test "stable version on first page skips publish" "stable-first-page" "refs/heads/main" "" "false"
-run_success_test "pagination finds stable version" "stable-second-page" "refs/heads/main" "" "false"
+run_success_test "stable version on main skips publish" "stable-first-page" "refs/heads/main" "1.2.3" "false"
+run_success_test "pagination finds stable version" "stable-second-page" "refs/heads/main" "1.2.3" "false"
 run_success_test "exhausted versions permit publish" "no-stable" "refs/heads/main" "1.2.3" "true"
 run_failure_test "unexpected API status fails" "api-error"
 run_failure_test "pagination safety cap fails" "max-pages"
+run_failure_test "closed release line rejects another beta" "stable-first-page" "refs/heads/feature/package"
 
 echo "All $PASSED compute-package-version tests passed."

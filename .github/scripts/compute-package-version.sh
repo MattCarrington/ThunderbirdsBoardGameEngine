@@ -58,8 +58,15 @@ fi
 
 if [ "$STABLE_EXISTS" = true ]; then
   echo "Stable version $BASE_VERSION already exists."
-  echo "Version line is closed. Do not publish."
-  echo "version=" >> "$GITHUB_OUTPUT"
+
+  if [ "$GITHUB_REF" != "refs/heads/main" ]; then
+    echo "ERROR: The release line for $PACKAGE_ID $BASE_VERSION is closed." >&2
+    echo "Increment the package version manually before publishing another prerelease." >&2
+    exit 1
+  fi
+
+  echo "Stable package already published. Skipping this idempotent main-branch publish."
+  echo "version=$BASE_VERSION" >> "$GITHUB_OUTPUT"
   echo "should_publish=false" >> "$GITHUB_OUTPUT"
   exit 0
 fi
