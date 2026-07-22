@@ -132,6 +132,7 @@ run_success_test() {
   local git_ref="$3"
   local expected_version="$4"
   local expected_should_publish="$5"
+  local default_branch="${6:-main}"
   local output_file="$TEST_ROOT/output-$PASSED"
 
   PATH="$MOCK_BIN:$PATH" \
@@ -143,6 +144,7 @@ run_success_test() {
     GITHUB_TOKEN="test-token" \
     GITHUB_REF="$git_ref" \
     GITHUB_RUN_NUMBER="42" \
+    DEFAULT_BRANCH="$default_branch" \
     GITHUB_OUTPUT="$output_file" \
     bash "$COMPUTE_PACKAGE_VERSION_SCRIPT" >/dev/null
 
@@ -169,6 +171,7 @@ run_failure_test() {
   local name="$1"
   local scenario="$2"
   local git_ref="${3:-refs/heads/main}"
+  local default_branch="${4:-main}"
   local output_file="$TEST_ROOT/output-$PASSED"
 
   if PATH="$MOCK_BIN:$PATH" \
@@ -180,6 +183,7 @@ run_failure_test() {
     GITHUB_TOKEN="test-token" \
     GITHUB_REF="$git_ref" \
     GITHUB_RUN_NUMBER="42" \
+    DEFAULT_BRANCH="$default_branch" \
     GITHUB_OUTPUT="$output_file" \
     bash "$COMPUTE_PACKAGE_VERSION_SCRIPT" >/dev/null 2>&1; then
     echo "FAIL: $name: expected the script to fail" >&2
@@ -198,5 +202,9 @@ run_success_test "exhausted versions permit publish" "no-stable" "refs/heads/mai
 run_failure_test "unexpected API status fails" "api-error"
 run_failure_test "pagination safety cap fails" "max-pages"
 run_failure_test "closed release line rejects another beta" "stable-first-page" "refs/heads/feature/package"
+run_success_test "custom default branch publishes stable" "not-found" "refs/heads/trunk" "1.2.3" "true" "trunk"
+run_success_test "custom default branch feature publishes beta" "not-found" "refs/heads/feature/package" "1.2.3-beta.42" "true" "trunk"
+run_success_test "custom default branch skips existing stable" "stable-first-page" "refs/heads/trunk" "1.2.3" "false" "trunk"
+run_failure_test "custom default branch rejects closed beta" "stable-first-page" "refs/heads/feature/package" "trunk"
 
 echo "All $PASSED compute-package-version tests passed."

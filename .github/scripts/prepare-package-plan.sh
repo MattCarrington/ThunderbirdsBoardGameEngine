@@ -16,6 +16,8 @@ required_env "GITHUB_TOKEN"
 required_env "GITHUB_REF"
 required_env "GITHUB_RUN_NUMBER"
 
+DEFAULT_BRANCH="${DEFAULT_BRANCH:-main}"
+
 SCRIPT_DIRECTORY=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 VERSION_SCRIPT="$SCRIPT_DIRECTORY/compute-package-version.sh"
 WORK_DIR=$(mktemp -d)
