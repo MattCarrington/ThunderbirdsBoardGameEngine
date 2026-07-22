@@ -2,86 +2,105 @@ name: Release .NET Packages
 
 on:
   workflow_call:
+    inputs:
+      before_sha:
+        description: Commit before this push
+        required: false
+        default: ""
+        type: string
+      default_branch:
+        description: Repository default branch
+        required: false
+        default: main
+        type: string
 
 jobs:
-  package-matrix:
+  packages:
     runs-on: ubuntu-latest
-    outputs:
-      packages: ${{ steps.packages.outputs.packages }}
+    permissions:
+      contents: read
+      packages: write
 
     steps:
-      - name: Define packages
-        id: packages
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Determine changed files
+        id: changes
+        shell: bash
+        env:
+          BEFORE_SHA: ${{ inputs.before_sha }}
+          DEFAULT_BRANCH: ${{ inputs.default_branch }}
         run: |
-          {
-            echo 'packages<<JSON'
-            cat <<'JSON'
-          [
-            {
-              "name": "Client.Core",
-              "project_path": "src/Common/ThunderbirdsBoardGameEngine.Client.Core/ThunderbirdsBoardGameEngine.Client.Core.csproj",
-              "package_id": "ThunderbirdsBoardGameEngine.Client.Core"
-            },
-            {
-              "name": "ReferenceData.Core",
-              "project_path": "src/ReferenceData/ThunderbirdsBoardGameEngine.ReferenceData.Core/ThunderbirdsBoardGameEngine.ReferenceData.Core.csproj",
-              "package_id": "ThunderbirdsBoardGameEngine.ReferenceData.Core"
-            },
-            {
-              "name": "ReferenceData.Runtime",
-              "project_path": "src/ReferenceData/ThunderbirdsBoardGameEngine.ReferenceData.Runtime/ThunderbirdsBoardGameEngine.ReferenceData.Runtime.csproj",
-              "package_id": "ThunderbirdsBoardGameEngine.ReferenceData.Runtime"
-            },
-            {
-              "name": "Rules.Contracts",
-              "project_path": "src/Rules/ThunderbirdsBoardGameEngine.Rules.Contracts/ThunderbirdsBoardGameEngine.Rules.Contracts.csproj",
-              "package_id": "ThunderbirdsBoardGameEngine.Rules.Contracts"
-            },
-            {
-              "name": "Rules.Client",
-              "project_path": "src/Rules/ThunderbirdsBoardGameEngine.Rules.Client/ThunderbirdsBoardGameEngine.Rules.Client.csproj",
-              "package_id": "ThunderbirdsBoardGameEngine.Rules.Client"
-            },
-            {
-              "name": "WireMock.Hosting",
-              "project_path": "tools/Common/ThunderbirdsBoardGameEngine.WireMock.Hosting/ThunderbirdsBoardGameEngine.WireMock.Hosting.csproj",
-              "package_id": "ThunderbirdsBoardGameEngine.WireMock.Hosting"
-            },
-            {
-              "name": "Rules.WireMock",
-              "project_path": "tools/Rules/ThunderbirdsBoardGameEngine.Rules.WireMock/ThunderbirdsBoardGameEngine.Rules.WireMock.csproj",
-              "package_id": "ThunderbirdsBoardGameEngine.Rules.WireMock"
-            }
-          ]
-          JSON
-            echo 'JSON'
-          } >> "$GITHUB_OUTPUT"
+          set -euo pipefail
 
-  publish-packages:
-    strategy:
-      matrix:
-        package: ${{ fromJSON(needs.package-matrix.outputs.packages) }}
+          if [ "$GITHUB_REF" = "refs/heads/$DEFAULT_BRANCH" ]; then
+            if [ -z "$BEFORE_SHA" ] || [[ "$BEFORE_SHA" =~ ^0+$ ]]; then
+              git diff-tree --no-commit-id --name-only -r HEAD > changed-files.txt
+              git show --format= --unified=0 HEAD -- Directory.Packages.props > package-props.diff
+            else
+              git diff --name-only "$BEFORE_SHA" HEAD > changed-files.txt
+              git diff --unified=0 "$BEFORE_SHA" HEAD -- Directory.Packages.props > package-props.diff
+            fi
+          else
+            git fetch --no-tags origin "$DEFAULT_BRANCH"
+            merge_base=$(git merge-base HEAD "origin/$DEFAULT_BRANCH")
+            git diff --name-only "$merge_base" HEAD > changed-files.txt
+            git diff --unified=0 "$merge_base" HEAD -- Directory.Packages.props > package-props.diff
+          fi
 
-    name: Package -> ${{ matrix.package.name }}
-    uses: ./.github/workflows/package-lifecycle.yml
-    with:
-      project_path: ${{ matrix.package.project_path }}
-      package_id: ${{ matrix.package.package_id }}
-    secrets: inherit
-    needs:
-      - package-matrix
+          echo "Changed files:"
+          cat changed-files.txt
 
-  validate-packages:
-    strategy:
-      matrix:
-        package: ${{ fromJSON(needs.package-matrix.outputs.packages) }}
+      - name: Compute package publish plan
+        id: package-plan
+        shell: bash
+        env:
+          CHANGED_FILES_PATH: changed-files.txt
+          PACKAGE_PROPS_DIFF_PATH: package-props.diff
+        run: python3 ./.github/scripts/compute-package-plan.py
 
-    name: Validate Package -> ${{ matrix.package.name }}
-    uses: ./.github/workflows/validate-package-consumption.yml
-    with:
-      project_path: ${{ matrix.package.project_path }}
-      package_id: ${{ matrix.package.package_id }}
-    secrets: inherit
-    needs:
-      - package-matrix
-      - publish-packages
+      - name: Setup .NET
+        if: steps.package-plan.outputs.has_packages == 'true'
+        uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Install jq
+        if: steps.package-plan.outputs.has_packages == 'true'
+        run: sudo apt-get update && sudo apt-get install -y jq
+
+      - name: Authenticate GitHub Packages
+        if: steps.package-plan.outputs.has_packages == 'true'
+        uses: ./.github/actions/authenticate-github-packages
+        with:
+          username: ${{ github.actor }}
+          token: ${{ github.token }}
+
+      - name: Prepare package versions
+        if: steps.package-plan.outputs.has_packages == 'true'
+        id: prepared-plan
+        shell: bash
+        env:
+          PACKAGE_PLAN: ${{ steps.package-plan.outputs.plan }}
+          OWNER: ${{ github.repository_owner }}
+          GITHUB_TOKEN: ${{ github.token }}
+          DEFAULT_BRANCH: ${{ inputs.default_branch }}
+        run: bash ./.github/scripts/prepare-package-plan.sh
+
+      - name: Pack and publish selected packages
+        if: steps.package-plan.outputs.has_packages == 'true'
+        shell: bash
+        env:
+          PACKAGE_PLAN: ${{ steps.prepared-plan.outputs.plan }}
+          GITHUB_TOKEN: ${{ github.token }}
+        run: bash ./.github/scripts/publish-package-plan.sh
+
+      - name: Validate exact published packages
+        if: steps.package-plan.outputs.has_packages == 'true'
+        shell: bash
+        env:
+          PACKAGE_PLAN: ${{ steps.prepared-plan.outputs.plan }}
+          GITHUB_TOKEN: ${{ github.token }}
+        run: bash ./.github/scripts/validate-package-plan.sh

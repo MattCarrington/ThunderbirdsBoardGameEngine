@@ -3,6 +3,8 @@
 set -euo pipefail
 
 BASE_VERSION=$(dotnet msbuild "$PROJECT_PATH" -getProperty:Version -nologo)
+DEFAULT_BRANCH="${DEFAULT_BRANCH:-main}"
+RELEASE_REF="refs/heads/${DEFAULT_BRANCH}"
 
 echo "Base version from csproj: $BASE_VERSION"
 echo "Package ID: $PACKAGE_ID"
@@ -58,8 +60,15 @@ fi
 
 if [ "$STABLE_EXISTS" = true ]; then
   echo "Stable version $BASE_VERSION already exists."
-  echo "Version line is closed. Do not publish."
-  echo "version=" >> "$GITHUB_OUTPUT"
+
+  if [ "$GITHUB_REF" != "$RELEASE_REF" ]; then
+    echo "ERROR: The release line for $PACKAGE_ID $BASE_VERSION is closed." >&2
+    echo "Increment the package version manually before publishing another prerelease." >&2
+    exit 1
+  fi
+
+  echo "Stable package already published. Skipping this idempotent main-branch publish."
+  echo "version=$BASE_VERSION" >> "$GITHUB_OUTPUT"
   echo "should_publish=false" >> "$GITHUB_OUTPUT"
   exit 0
 fi
@@ -67,7 +76,7 @@ fi
 echo "No stable version found. Publishing allowed."
 echo "should_publish=true" >> "$GITHUB_OUTPUT"
 
-if [ "$GITHUB_REF" = "refs/heads/main" ]; then
+if [ "$GITHUB_REF" = "$RELEASE_REF" ]; then
   FINAL_VERSION="$BASE_VERSION"
   echo "main branch — stable version $FINAL_VERSION"
 else
