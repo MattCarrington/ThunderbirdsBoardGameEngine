@@ -82,6 +82,7 @@ jobs:
           PACKAGE_PLAN: ${{ steps.package-plan.outputs.plan }}
           OWNER: ${{ github.repository_owner }}
           GITHUB_TOKEN: ${{ github.token }}
+          DEFAULT_BRANCH: ${{ inputs.default_branch }}
         run: bash ./.github/scripts/prepare-package-plan.sh
 
       - name: Pack and publish selected packages
