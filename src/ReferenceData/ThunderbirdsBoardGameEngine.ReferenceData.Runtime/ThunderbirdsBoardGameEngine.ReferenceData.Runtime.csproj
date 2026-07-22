@@ -3,7 +3,7 @@
   <PropertyGroup>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
     <PackageId>ThunderbirdsBoardGameEngine.ReferenceData.Runtime</PackageId>
-    <Version>1.3.0</Version>
+    <Version>1.4.0</Version>
     <Authors>Matthew Carrington</Authors>
     <Description>Static runtime reference data for the Thunderbirds Board Game Engine</Description>
     <PackageReadmeFile>Readme.md</PackageReadmeFile>
