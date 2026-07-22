@@ -29,7 +29,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.Movement
 
             // Act
             var found = registry.TryGetEventCard(new CardCode("missing"), out var result);
-            
+
             // Assert
             Assert.False(found);
             Assert.Null(result);

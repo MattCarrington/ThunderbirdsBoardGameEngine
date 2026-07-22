@@ -9,6 +9,7 @@ using ThunderbirdsBoardGameEngine.Rules.Domain.EventCards;
 using ThunderbirdsBoardGameEngine.Rules.Domain.Movement.Evaluation;
 using ThunderbirdsBoardGameEngine.Rules.Domain.Movement.Routing;
 using ThunderbirdsBoardGameEngine.Rules.Domain.Movement.Speed;
+using ThunderbirdsBoardGameEngine.Rules.Domain.Movement.Topology;
 using ThunderbirdsBoardGameEngine.Rules.Domain.Rescue;
 using ThunderbirdsBoardGameEngine.Rules.Infrastructure.Lookups;
 using ThunderbirdsBoardGameEngine.Rules.Infrastructure.Registries;
@@ -47,6 +48,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Infrastructure
 
             RegisterMovementServices(services);
             RegisterMovementSpeedModifierSources(services);
+            RegisterMovementTopologyModifierSources(services);
 
             return services;
         }
@@ -65,6 +67,12 @@ namespace ThunderbirdsBoardGameEngine.Rules.Infrastructure
             services.AddSingleton<IMovementSpeedModifierSource, AttackOfTheZombites>();
             services.AddSingleton<IMovementSpeedModifierSource, UsnSentinelMissileStrike>();
             services.AddSingleton<IMovementSpeedModifierSource, RocketMalfunction>();
+        }
+
+        private static void RegisterMovementTopologyModifierSources(IServiceCollection services)
+        {
+            services.AddSingleton<IMovementTopologyModifierSourceRegistry, MovementTopologyModifierSourceRegistry>();
+            services.AddSingleton<IMovementTopologyModifierSource, IcelandicVolcanoEruption>();
         }
     }
 }
