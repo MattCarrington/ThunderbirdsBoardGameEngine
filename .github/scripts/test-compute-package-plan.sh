@@ -14,12 +14,16 @@ run_test() {
   local name="$1"
   local changed_files="$2"
   local expected="$3"
+  local package_props_diff="${4:-}"
   local changed_file="$TEST_ROOT/changed-$PASSED.txt"
+  local package_diff_file="$TEST_ROOT/package-diff-$PASSED.txt"
   local output_file="$TEST_ROOT/output-$PASSED.txt"
 
   printf '%s\n' "$changed_files" > "$changed_file"
+  printf '%s\n' "$package_props_diff" > "$package_diff_file"
 
   CHANGED_FILES_PATH="$changed_file" \
+    PACKAGE_PROPS_DIFF_PATH="$package_diff_file" \
     GITHUB_OUTPUT="$output_file" \
     "$PYTHON_COMMAND" "$PLANNER" >/dev/null
 
@@ -69,6 +73,35 @@ run_test \
   "ReferenceData.Runtime selects only itself" \
   "src/ReferenceData/ThunderbirdsBoardGameEngine.ReferenceData.Runtime/Runtime.cs" \
   '["ThunderbirdsBoardGameEngine.ReferenceData.Runtime"]'
+
+run_test \
+  "ReferenceData readme selects Runtime" \
+  "src/ReferenceData/Readme.md" \
+  '["ThunderbirdsBoardGameEngine.ReferenceData.Runtime"]'
+
+run_test \
+  "Rules.Client dependency selects Rules.Client" \
+  "Directory.Packages.props" \
+  '["ThunderbirdsBoardGameEngine.Rules.Client"]' \
+  '+    <PackageVersion Include="Microsoft.Extensions.Http" Version="8.0.2" />'
+
+run_test \
+  "Client.Core dependency propagates to Rules.Client" \
+  "Directory.Packages.props" \
+  '["ThunderbirdsBoardGameEngine.Client.Core","ThunderbirdsBoardGameEngine.Rules.Client"]' \
+  '+    <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="8.0.2" />'
+
+run_test \
+  "WireMock.Hosting dependency propagates to Rules.WireMock" \
+  "Directory.Packages.props" \
+  '["ThunderbirdsBoardGameEngine.WireMock.Hosting","ThunderbirdsBoardGameEngine.Rules.WireMock"]' \
+  '+    <PackageVersion Include="WireMock.Net" Version="1.20.0" />'
+
+run_test \
+  "Test-only dependency selects no packages" \
+  "Directory.Packages.props" \
+  '[]' \
+  '+    <PackageVersion Include="xunit.v3" Version="3.3.0" />'
 
 run_test \
   "Unrelated changes select no packages" \

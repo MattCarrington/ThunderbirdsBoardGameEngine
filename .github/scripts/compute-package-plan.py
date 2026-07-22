@@ -3,6 +3,7 @@
 import json
 import os
 from pathlib import Path
+import re
 import sys
 
 
@@ -29,16 +30,46 @@ elif changed_files_value is not None:
 else:
     fail("CHANGED_FILES or CHANGED_FILES_PATH must be set")
 
+package_props_changed = "Directory.Packages.props" in changed_files
+package_props_diff_path = os.environ.get("PACKAGE_PROPS_DIFF_PATH")
+package_props_diff_value = os.environ.get("PACKAGE_PROPS_DIFF")
+
+if package_props_diff_path:
+    package_props_diff = Path(package_props_diff_path).read_text(encoding="utf-8")
+elif package_props_diff_value is not None:
+    package_props_diff = package_props_diff_value
+elif package_props_changed:
+    fail("PACKAGE_PROPS_DIFF or PACKAGE_PROPS_DIFF_PATH must be set when Directory.Packages.props changes")
+else:
+    package_props_diff = ""
+
+package_version_pattern = re.compile(
+    r'<PackageVersion\s+(?:Include|Update)="([^"]+)"', re.IGNORECASE
+)
+changed_central_packages = {
+    match.group(1).casefold()
+    for line in package_props_diff.splitlines()
+    if line.startswith(("+", "-")) and not line.startswith(("+++", "---"))
+    for match in package_version_pattern.finditer(line)
+}
+
 with catalog_path.open(encoding="utf-8") as catalog_file:
     catalog = json.load(catalog_file)
 
 selected = {
     package["package_id"]
     for package in catalog
-    if any(
-        changed_file == package["source_path"]
-        or changed_file.startswith(f'{package["source_path"]}/')
-        for changed_file in changed_files
+    if (
+        any(
+            changed_file == source_path
+            or changed_file.startswith(f"{source_path}/")
+            for changed_file in changed_files
+            for source_path in package["source_paths"]
+        )
+        or any(
+            central_package.casefold() in changed_central_packages
+            for central_package in package["central_packages"]
+        )
     )
 }
 
