@@ -10,7 +10,7 @@ namespace ThunderbirdsBoardGameEngine.UI.Features.Movement.Services
             return
             [
                 new CardModifierViewModel("attack-of-the-zombites", "Attack of the Zombites"),
-                new CardModifierViewModel("usn-sentinel-missile-strike", "USN Sentinel Missile"),
+                new CardModifierViewModel("usn-sentinel-missile-strike", "USN Sentinel Missile Strike"),
                 new CardModifierViewModel("rocket-malfunction", "Rocket Malfunction")
             ];
         }
