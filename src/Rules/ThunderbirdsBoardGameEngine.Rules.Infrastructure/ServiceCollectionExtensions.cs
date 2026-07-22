@@ -71,6 +71,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Infrastructure
 
         private static void RegisterMovementTopologyModifierSources(IServiceCollection services)
         {
+            services.AddSingleton<IEffectiveTopographyResolver, EffectiveTopographyResolver>();
             services.AddSingleton<IMovementTopologyModifierSourceRegistry, MovementTopologyModifierSourceRegistry>();
             services.AddSingleton<IMovementTopologyModifierSource, IcelandicVolcanoEruption>();
         }
