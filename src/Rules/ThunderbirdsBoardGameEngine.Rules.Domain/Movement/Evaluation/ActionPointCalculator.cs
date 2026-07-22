@@ -1,4 +1,4 @@
-﻿namespace ThunderbirdsBoardGameEngine.Rules.Domain.Movement
+﻿namespace ThunderbirdsBoardGameEngine.Rules.Domain.Movement.Evaluation
 {
     public class ActionPointCalculator
     {

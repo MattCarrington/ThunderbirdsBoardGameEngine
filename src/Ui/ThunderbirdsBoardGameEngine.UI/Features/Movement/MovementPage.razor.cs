@@ -2,6 +2,7 @@
 using ThunderbirdsBoardGameEngine.ReferenceData.Core.Identities;
 using ThunderbirdsBoardGameEngine.UI.Features.Movement.Interfaces;
 using ThunderbirdsBoardGameEngine.UI.Features.Movement.Models;
+using ThunderbirdsBoardGameEngine.UI.Features.Shared.ViewModels;
 
 namespace ThunderbirdsBoardGameEngine.UI.Features.Movement
 {
@@ -13,12 +14,18 @@ namespace ThunderbirdsBoardGameEngine.UI.Features.Movement
         [Inject]
         public IMovementClientService MovementService { get; set; } = null!;
 
+        [Inject]
+        public IEventCardMovementService EventCardMovementService { get; set; } = null!;
+
         private IReadOnlyList<ThunderbirdMovementOptions> _mobileThunderbirds = Array.Empty<ThunderbirdMovementOptions>();
         private IReadOnlyList<MovementLocationOptions> _movementLocations = Array.Empty<MovementLocationOptions>();
+        private IReadOnlyList<CardModifierViewModel> _eventCardModifiers = Array.Empty<CardModifierViewModel>();
 
         private string? _thunderbirdCode = string.Empty;
         private string? _startLocationCode = string.Empty;
         private string? _destinationCode = string.Empty;
+
+        private HashSet<string> _selectedEventCardKeys = new();
 
         private MovementResultViewModel? _validationResult;
         private bool _isValidating = false;
@@ -33,6 +40,7 @@ namespace ThunderbirdsBoardGameEngine.UI.Features.Movement
         protected override void OnInitialized()
         {
             _mobileThunderbirds = ThunderbirdService.GetAllMobileVehicles();
+            _eventCardModifiers = EventCardMovementService.GetSpeedModificationEventCards();
         }
 
         private async Task ValidateMovement()
@@ -50,7 +58,7 @@ namespace ThunderbirdsBoardGameEngine.UI.Features.Movement
 
             try
             {
-                _validationResult = await MovementService.ValidateMovementAsync(_thunderbirdCode!, _startLocationCode!, _destinationCode!);
+                _validationResult = await MovementService.ValidateMovementAsync(_thunderbirdCode!, _startLocationCode!, _destinationCode!, _selectedEventCardKeys.ToList());
 
                 _validationFailed = _validationResult is null;
             }
@@ -108,6 +116,20 @@ namespace ThunderbirdsBoardGameEngine.UI.Features.Movement
         {
             _validationResult = null;
             _validationFailed = false;
+        }
+
+        private void OnEventCardChanged(EventCardChanged change)
+        {
+            if (change.Selected)
+            {
+                _selectedEventCardKeys.Add(change.Key);
+            }
+            else
+            {
+                _selectedEventCardKeys.Remove(change.Key);
+            }
+
+            ClearValidationState();
         }
     }
 }

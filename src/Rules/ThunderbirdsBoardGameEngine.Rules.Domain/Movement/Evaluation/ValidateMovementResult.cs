@@ -1,12 +1,13 @@
 ﻿using ThunderbirdsBoardGameEngine.ReferenceData.Core.Identities;
 
-namespace ThunderbirdsBoardGameEngine.Rules.Domain.Movement
+namespace ThunderbirdsBoardGameEngine.Rules.Domain.Movement.Evaluation
 {
-    public record MovementResponse(
+    public record ValidateMovementResult(
         bool IsValid,
         int SpacesTravelled,
         IReadOnlyCollection<LocationCode> Route,
         int ActionPointCost,
-        int TopSpeed,
+        int? EffectiveTopSpeed,
+        int ThunderbirdTopSpeed,
         IReadOnlyCollection<string> Messages);
 }

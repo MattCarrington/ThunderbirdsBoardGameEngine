@@ -1,6 +1,8 @@
-﻿using ThunderbirdsBoardGameEngine.Rules.Application.Exceptions;
+using ThunderbirdsBoardGameEngine.Rules.Application.Exceptions;
 using ThunderbirdsBoardGameEngine.Rules.Application.Movement.Interfaces;
-using ThunderbirdsBoardGameEngine.Rules.Domain.Movement;
+using ThunderbirdsBoardGameEngine.Rules.Application.Validators;
+using ThunderbirdsBoardGameEngine.Rules.Domain.Movement.Evaluation;
+using ThunderbirdsBoardGameEngine.Rules.Domain.Movement.Topology;
 
 namespace ThunderbirdsBoardGameEngine.Rules.Application.Movement.MapTraversal
 {
@@ -9,20 +11,23 @@ namespace ThunderbirdsBoardGameEngine.Rules.Application.Movement.MapTraversal
         private readonly IThunderbirdsDefinitionLookup _thunderbirdsDefinitionLookup;
         private readonly ILocationDefinitionLookup _locationDefinitionLookup;
         private readonly IMapEdgeDefinitionLookup _edgeDefinitionLookup;
+        private readonly IEventCardValidator _eventCardValidator;
         private readonly MovementEvaluator _movementEvaluator;
 
         public ValidateMovementResolutionService(IThunderbirdsDefinitionLookup thunderbirdsDefinitionLookup,
             ILocationDefinitionLookup locationDefinitionLookup,
             IMapEdgeDefinitionLookup edgeDefinitionLookup,
+            IEventCardValidator eventCardValidator,
             MovementEvaluator movementEvaluator)
         {
             _thunderbirdsDefinitionLookup = thunderbirdsDefinitionLookup ?? throw new ArgumentNullException(nameof(thunderbirdsDefinitionLookup));
             _locationDefinitionLookup = locationDefinitionLookup ?? throw new ArgumentNullException(nameof(locationDefinitionLookup));
             _edgeDefinitionLookup = edgeDefinitionLookup ?? throw new ArgumentNullException(nameof(edgeDefinitionLookup));
+            _eventCardValidator = eventCardValidator ?? throw new ArgumentNullException(nameof(eventCardValidator));
             _movementEvaluator = movementEvaluator ?? throw new ArgumentNullException(nameof(movementEvaluator));
         }
 
-        public MovementResponse ResolveMovementValidation(MovementRequest request)
+        public ValidateMovementResult ResolveMovementValidation(ValidateMovementInput request)
         {
             var thunderbird = _thunderbirdsDefinitionLookup.GetThunderbirdMovementContribution(request.Thunderbird);
 
@@ -44,16 +49,19 @@ namespace ThunderbirdsBoardGameEngine.Rules.Application.Movement.MapTraversal
 
             var topography = new Topography(edges);
 
-            var input = new MovementInput(thunderbird, topography, request.Start, request.Destination);
+            _eventCardValidator.Validate(request.ActiveEventCards);
+
+            var input = new MovementEvaluationInput(thunderbird, topography, request.Start, request.Destination, request.ActiveEventCards);
 
             var evaluationResult = _movementEvaluator.Evaluate(input);
 
-            return new MovementResponse(
+            return new ValidateMovementResult(
                 IsValid: evaluationResult.IsMoveValid,
                 SpacesTravelled: evaluationResult.SpacesTravelled,
                 Route: evaluationResult.Route,
                 ActionPointCost: evaluationResult.ActionPointCost,
-                TopSpeed: thunderbird.TopSpeed,
+                EffectiveTopSpeed: evaluationResult.TopSpeed,
+                ThunderbirdTopSpeed: thunderbird.TopSpeed,
                 Messages: evaluationResult.Messages);
         }
     }

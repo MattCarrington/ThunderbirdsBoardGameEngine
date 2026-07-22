@@ -7,6 +7,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Application.Movement.MapTraversal
         int SpacesTravelled,
         IReadOnlyCollection<LocationCode> Route,
         int ActionPointCost,
-        int TopSpeed,
+        int? EffectiveTopSpeed,
+        int ThunderbirdTopSpeed,
         IReadOnlyCollection<string> Messages);
 }

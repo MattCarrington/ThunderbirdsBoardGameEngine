@@ -1,6 +1,6 @@
 ﻿using MediatR;
 using ThunderbirdsBoardGameEngine.Rules.Application.Movement.Interfaces;
-using ThunderbirdsBoardGameEngine.Rules.Domain.Movement;
+using ThunderbirdsBoardGameEngine.Rules.Domain.Movement.Evaluation;
 
 namespace ThunderbirdsBoardGameEngine.Rules.Application.Movement.MapTraversal
 {
@@ -15,10 +15,11 @@ namespace ThunderbirdsBoardGameEngine.Rules.Application.Movement.MapTraversal
 
         public Task<ValidateMovementResponse> Handle(ValidateMovementQuery query, CancellationToken cancellationToken)
         {
-            var request = new MovementRequest(
-                Thunderbird: query.Thunderbird,
-                Start: query.Start,
-                Destination: query.Destination
+            var request = new ValidateMovementInput(
+                Thunderbird: query.ThunderbirdCode,
+                Start: query.StartLocationCode,
+                Destination: query.DestinationLocationCode,
+                ActiveEventCards: query.ActiveEventCardCodes
             );
 
             var movementResult = _validateMovementResolutionService.ResolveMovementValidation(request);
@@ -29,7 +30,8 @@ namespace ThunderbirdsBoardGameEngine.Rules.Application.Movement.MapTraversal
                     SpacesTravelled: movementResult.SpacesTravelled,
                     Route: movementResult.Route,
                     ActionPointCost: movementResult.ActionPointCost,
-                    TopSpeed: movementResult.TopSpeed,
+                    EffectiveTopSpeed: movementResult.EffectiveTopSpeed,
+                    ThunderbirdTopSpeed: movementResult.ThunderbirdTopSpeed,
                     Messages: movementResult.Messages
                 )
             );

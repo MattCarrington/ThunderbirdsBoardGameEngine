@@ -1,4 +1,5 @@
 ﻿using ThunderbirdsBoardGameEngine.Api.Exceptions;
+using ThunderbirdsBoardGameEngine.Api.Validators;
 using ThunderbirdsBoardGameEngine.ReferenceData.Core.Identities;
 using ThunderbirdsBoardGameEngine.Rules.Application.Rescue.CalculateRescueTarget;
 using ThunderbirdsBoardGameEngine.Rules.Contracts.Dtos.Rescue.CalculateRescueTarget.V1;
@@ -15,9 +16,9 @@ namespace ThunderbirdsBoardGameEngine.Api.Mappers.Rules.V1
                 throw new BadRequestException("Performing character key must be provided.");
             }
 
-            ValidateOptionalStringList(request.PresentDisasterBonusKeys, nameof(request.PresentDisasterBonusKeys));
-            ValidateOptionalStringList(request.PlayedFabCardKeys, nameof(request.PlayedFabCardKeys));
-            ValidateOptionalStringList(request.ActiveEventCardKeys, nameof(request.ActiveEventCardKeys));
+            CollectionMappingValidator.ValidateStringCollection(request.PresentDisasterBonusKeys, nameof(request.PresentDisasterBonusKeys));
+            CollectionMappingValidator.ValidateStringCollection(request.PlayedFabCardKeys, nameof(request.PlayedFabCardKeys));
+            CollectionMappingValidator.ValidateStringCollection(request.ActiveEventCardKeys, nameof(request.ActiveEventCardKeys));
 
             return new CalculateRescueTargetQuery
             (
@@ -59,19 +60,6 @@ namespace ThunderbirdsBoardGameEngine.Api.Mappers.Rules.V1
                 SourceType.EventCard => "event-card",
                 _ => throw new InvalidOperationException($"Unhandled SourceType '{sourceType}'")
             };
-        }
-
-        private static void ValidateOptionalStringList(IEnumerable<string> list, string propertyName)
-        {
-            if (list is null)
-            {
-                throw new BadRequestException($"{propertyName} cannot be null.");
-            }
-
-            if (list.Any(string.IsNullOrWhiteSpace))
-            {
-                throw new BadRequestException($"{propertyName} cannot contain null or whitespace values.");
-            }
         }
     }
 }

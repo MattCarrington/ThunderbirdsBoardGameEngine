@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using ThunderbirdsBoardGameEngine.ReferenceData.Core.Enums;
 using ThunderbirdsBoardGameEngine.ReferenceData.Core.Identities;
+using ThunderbirdsBoardGameEngine.ReferenceData.Core.KnownIdentities;
 using ThunderbirdsBoardGameEngine.ReferenceData.Core.Model;
 using ThunderbirdsBoardGameEngine.ReferenceData.Runtime.Interfaces;
 using ThunderbirdsBoardGameEngine.Rules.Application.Exceptions;
@@ -23,9 +24,10 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Movement
             // Arrange
             var request = new ValidateMovementQuery
             (
-                Thunderbird: new ThunderbirdCode(thunderbird),
-                Start: new LocationCode("Europe"),
-                Destination: new LocationCode("North America")
+                ThunderbirdCode: new ThunderbirdCode(thunderbird),
+                StartLocationCode: new LocationCode("Europe"),
+                DestinationLocationCode: new LocationCode("North America"),
+                ActiveEventCardCodes: Array.Empty<CardCode>()
             );
 
             var mediator = CreateMediator();
@@ -45,9 +47,10 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Movement
             // Arrange
             var request = new ValidateMovementQuery
             (
-                Thunderbird: new ThunderbirdCode("thunderbird-3"),
-                Start: new LocationCode("Moon"),
-                Destination: new LocationCode("Pacific")
+                ThunderbirdCode: new ThunderbirdCode("thunderbird-3"),
+                StartLocationCode: new LocationCode("Moon"),
+                DestinationLocationCode: new LocationCode("Pacific"),
+                ActiveEventCardCodes: Array.Empty<CardCode>()
             );
 
             var mediator = CreateMediator();
@@ -67,9 +70,10 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Movement
             // Arrange
             var request = new ValidateMovementQuery
             (
-                Thunderbird: new ThunderbirdCode("thunderbird-1"),
-                Start: new LocationCode("Europe"),
-                Destination: new LocationCode("North Pole")
+                ThunderbirdCode: new ThunderbirdCode("thunderbird-1"),
+                StartLocationCode: new LocationCode("Europe"),
+                DestinationLocationCode: new LocationCode("North Pole"),
+                ActiveEventCardCodes: Array.Empty<CardCode>()
             );
 
             var mediator = CreateMediator();
@@ -84,9 +88,10 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Movement
             // Arrange
             var request = new ValidateMovementQuery
             (
-                Thunderbird: new ThunderbirdCode("thunderbird-1"),
-                Start: new LocationCode("Atlantis"),
-                Destination: new LocationCode("North America")
+                ThunderbirdCode: new ThunderbirdCode("thunderbird-1"),
+                StartLocationCode: new LocationCode("Atlantis"),
+                DestinationLocationCode: new LocationCode("North America"),
+                ActiveEventCardCodes: Array.Empty<CardCode>()
             );
 
             var mediator = CreateMediator();
@@ -101,9 +106,10 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Movement
             // Arrange
             var request = new ValidateMovementQuery
             (
-                Thunderbird: new ThunderbirdCode("thunderbird-x"),
-                Start: new LocationCode("Europe"),
-                Destination: new LocationCode("North America")
+                ThunderbirdCode: new ThunderbirdCode("thunderbird-x"),
+                StartLocationCode: new LocationCode("Europe"),
+                DestinationLocationCode: new LocationCode("North America"),
+                ActiveEventCardCodes: Array.Empty<CardCode>()
             );
 
             var mediator = CreateMediator();
@@ -121,9 +127,10 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Movement
             // Arrange
             var request = new ValidateMovementQuery
             (
-                Thunderbird: new ThunderbirdCode(thunderbird),
-                Start: new LocationCode("Europe"),
-                Destination: new LocationCode("Space")
+                ThunderbirdCode: new ThunderbirdCode(thunderbird),
+                StartLocationCode: new LocationCode("Europe"),
+                DestinationLocationCode: new LocationCode("Space"),
+                ActiveEventCardCodes: Array.Empty<CardCode>()
             );
 
             var mediator = CreateMediator();
@@ -141,9 +148,10 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Movement
             // Arrange
             var request = new ValidateMovementQuery
             (
-                Thunderbird: new ThunderbirdCode("thunderbird-3"),
-                Start: new LocationCode("Space"),
-                Destination: new LocationCode("Europe")
+                ThunderbirdCode: new ThunderbirdCode("thunderbird-3"),
+                StartLocationCode: new LocationCode("Space"),
+                DestinationLocationCode: new LocationCode("Europe"),
+                ActiveEventCardCodes: Array.Empty<CardCode>()
             );
 
             var mediator = CreateMediator();
@@ -161,10 +169,12 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Movement
             // Arrange
             var request = new ValidateMovementQuery
             (
-                Thunderbird: new ThunderbirdCode("thunderbird-5"),
-                Start: new LocationCode("Moon"),
-                Destination: new LocationCode("Sun")
+                ThunderbirdCode: new ThunderbirdCode("thunderbird-5"),
+                StartLocationCode: new LocationCode("Moon"),
+                DestinationLocationCode: new LocationCode("Sun"),
+                ActiveEventCardCodes: Array.Empty<CardCode>()
             );
+
             var mediator = CreateMediator();
 
             // Act
@@ -174,16 +184,146 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Movement
             Assert.False(result.IsValid);
         }
 
+        [Fact]
+        public async Task MovementShouldBeRestrictedDueToActiveEventCard()
+        {
+            // Arrange
+            var request = new ValidateMovementQuery
+            (
+                ThunderbirdCode: new ThunderbirdCode("thunderbird-3"),
+                StartLocationCode: new LocationCode("Pacific"),
+                DestinationLocationCode: new LocationCode("Moon"),
+                ActiveEventCardCodes: [KnownEventCardCodes.RocketMalfunction]
+            );
+
+            var mediator = CreateMediator();
+
+            // Act
+            var result = await mediator.Send(request, CancellationToken.None);
+
+            // Assert
+            Assert.True(result.IsValid);
+            Assert.Equal(2, result.SpacesTravelled);
+            Assert.Equal(2, result.ActionPointCost);
+            Assert.Equal(1, result.EffectiveTopSpeed);
+            Assert.Equal(3, result.ThunderbirdTopSpeed);
+
+            var message = Assert.Single(result.Messages);
+            Assert.Equal("Rocket Malfunction: Thunderbird 3's top speed is reduced to 1.", message);
+        }
+
+        [Fact]
+        public async Task MovementShouldNotBeRestrictedDueToEventCardNotApplyingToThunderbird()
+        {
+            // Arrange
+            var request = new ValidateMovementQuery
+            (
+                ThunderbirdCode: new ThunderbirdCode("thunderbird-2"),
+                StartLocationCode: new LocationCode("Europe"),
+                DestinationLocationCode: new LocationCode("North America"),
+                ActiveEventCardCodes: [KnownEventCardCodes.AttackOfTheZombites]
+            );
+
+            var mediator = CreateMediator();
+
+            // Act
+            var result = await mediator.Send(request, CancellationToken.None);
+
+            // Assert
+            Assert.True(result.IsValid);
+            Assert.Equal(2, result.SpacesTravelled);
+            Assert.Equal(1, result.ActionPointCost);
+            Assert.Equal(2, result.EffectiveTopSpeed);
+            Assert.Equal(2, result.ThunderbirdTopSpeed);
+            Assert.Empty(result.Messages);
+        }
+
+        [Fact]
+        public async Task MovementShouldNotBeRestrictedAsEventCardDoesNotAffectMovement()
+        {
+            // Arrange
+            var request = new ValidateMovementQuery
+            (
+                ThunderbirdCode: new ThunderbirdCode("thunderbird-1"),
+                StartLocationCode: new LocationCode("Europe"),
+                DestinationLocationCode: new LocationCode("North America"),
+                ActiveEventCardCodes: [new CardCode("explosion-on-tracy-island")]
+            );
+
+            var mediator = CreateMediator();
+
+            // Act
+            var result = await mediator.Send(request, CancellationToken.None);
+
+            // Assert
+            Assert.True(result.IsValid);
+            Assert.Equal(2, result.SpacesTravelled);
+            Assert.Equal(1, result.ActionPointCost);
+            Assert.Equal(3, result.ThunderbirdTopSpeed);
+            Assert.Equal(3, result.EffectiveTopSpeed);
+            Assert.Empty(result.Messages);
+        }
+
+        [Theory]
+        [InlineData("thunderbird-1", "Attack of the Zombites: Thunderbird 1's top speed is reduced to 1.", 3)]
+        [InlineData("thunderbird-2", "USN Sentinel Missile Strike: Thunderbird 2's top speed is reduced to 1.", 2)]
+        public async Task MovementCanOnlyBeAffectedByOneEventCard(string thunderbirdCode, string expectedMessage, int baseSpeed)
+        {
+            // Arrange
+            var request = new ValidateMovementQuery
+            (
+                ThunderbirdCode: new ThunderbirdCode(thunderbirdCode),
+                StartLocationCode: new LocationCode("Europe"),
+                DestinationLocationCode: new LocationCode("North America"),
+                ActiveEventCardCodes: [KnownEventCardCodes.AttackOfTheZombites, KnownEventCardCodes.UsnSentinelMissileStrike, KnownEventCardCodes.RocketMalfunction]
+            );
+
+            var mediator = CreateMediator();
+
+            // Act
+            var result = await mediator.Send(request, CancellationToken.None);
+
+            // Assert
+            Assert.True(result.IsValid);
+            Assert.Equal(2, result.SpacesTravelled);
+            Assert.Equal(2, result.ActionPointCost);
+            Assert.Equal(1, result.EffectiveTopSpeed);
+            Assert.Equal(baseSpeed, result.ThunderbirdTopSpeed);
+
+            var message = Assert.Single(result.Messages);
+            Assert.Equal(expectedMessage, message);
+        }
+
+        [Fact]
+        public async Task ThrowsInvalidReferenceDataNotFoundExceptionWhenEventCardDoesNotExist()
+        {
+            // Arrange
+            var request = new ValidateMovementQuery
+            (
+                ThunderbirdCode: new ThunderbirdCode("thunderbird-1"),
+                StartLocationCode: new LocationCode("Europe"),
+                DestinationLocationCode: new LocationCode("North America"),
+                ActiveEventCardCodes: [new CardCode("non-existent-event-card")]
+            );
+
+            var mediator = CreateMediator();
+
+            // Act & Assert
+            await Assert.ThrowsAsync<ReferenceDataNotFoundException>(() => mediator.Send(request, CancellationToken.None));
+        }
+
         private static IMediator CreateMediator()
         {
             var edges = CreateEdges();
             var locations = CreateLocations();
             var thunderbirds = CreateThunderbirds();
+            var eventCards = CreateEventCards();
 
             var services = new ServiceCollection();
             services.AddSingleton<IMapEdgeDefinitionCatalog>(edges);
             services.AddSingleton<ILocationDefinitionCatalog>(locations);
             services.AddSingleton<IThunderbirdDefinitionCatalog>(thunderbirds);
+            services.AddSingleton<IEventCardDefinitionCatalog>(eventCards);
             services.AddRules();
 
             var sp = services.BuildServiceProvider();
@@ -256,7 +396,18 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Movement
             var thunderbird3 = new ReferenceThunderbirdDefinition(new ThunderbirdCode("thunderbird-3"), "Thunderbird 3", MovementDomain.Space, 3);
             var thunderbird4 = new ReferenceThunderbirdDefinition(new ThunderbirdCode("thunderbird-4"), "Thunderbird 4", MovementDomain.Earth, 1);
             var thunderbird5 = new ReferenceThunderbirdDefinition(new ThunderbirdCode("thunderbird-5"), "Thunderbird 5", MovementDomain.Space, 0);
+
             return new FakeThunderbirdDefinitionCatalog(thunderbird1, thunderbird2, thunderbird3, thunderbird4, thunderbird5);
+        }
+
+        private static FakeEventCardDefinitionCatalog CreateEventCards()
+        {
+            var attackOfTheZombites = new ReferenceEventCardDefinition(KnownEventCardCodes.AttackOfTheZombites, "Attack of the Zombites");
+            var usnSentinelMissileStrike = new ReferenceEventCardDefinition(KnownEventCardCodes.UsnSentinelMissileStrike, "USN Sentinel Missile Strike");
+            var rocketMalfunction = new ReferenceEventCardDefinition(KnownEventCardCodes.RocketMalfunction, "Rocket Malfunction");
+            var explosionOnTracyIsland = new ReferenceEventCardDefinition(new CardCode("explosion-on-tracy-island"), "Explosion on Tracy Island");
+
+            return new FakeEventCardDefinitionCatalog(attackOfTheZombites, usnSentinelMissileStrike, rocketMalfunction, explosionOnTracyIsland);
         }
     }
 }

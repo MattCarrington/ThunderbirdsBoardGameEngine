@@ -1,12 +1,12 @@
 ﻿using ThunderbirdsBoardGameEngine.ReferenceData.Core.Identities;
 
-namespace ThunderbirdsBoardGameEngine.Rules.Domain.Movement
+namespace ThunderbirdsBoardGameEngine.Rules.Domain.Movement.Evaluation
 {
     public sealed record MovementEvaluationResult(
         bool IsMoveValid,
         IReadOnlyCollection<LocationCode> Route,
         int SpacesTravelled,
-        int TopSpeed,
+        int? TopSpeed,
         int ActionPointCost,
         IReadOnlyCollection<string> Messages)
     {
@@ -17,7 +17,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.Movement
                 IsMoveValid: false,
                 Route: Array.Empty<LocationCode>(),
                 SpacesTravelled: 0,
-                TopSpeed: 0,
+                TopSpeed: null,
                 ActionPointCost: 0,
                 Messages: new[] { message });
         }
@@ -26,7 +26,8 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.Movement
             IReadOnlyCollection<LocationCode> route,
             int spacesTravelled,
             int topSpeed,
-            int actionPointCost)
+            int actionPointCost,
+            IReadOnlyCollection<string> messages)
         {
             return new(
                 IsMoveValid: true,
@@ -34,7 +35,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.Movement
                 SpacesTravelled: spacesTravelled,
                 TopSpeed: topSpeed,
                 ActionPointCost: actionPointCost,
-                Messages: Array.Empty<string>());
+                Messages: messages);
         }
     }
 }

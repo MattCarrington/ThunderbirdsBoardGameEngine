@@ -12,6 +12,16 @@
                 <li>@location</li>
             }
         </ul>
+        @if (MovementResult.Messages.Any())
+        {
+            <p><strong>Movement Modifiers:</strong></p>
+            <ul data-testid="modifiers">
+                @foreach (var message in MovementResult.Messages)
+                {
+                    <li>@message</li>
+                }
+            </ul>
+        }
     </div>
 }
 else

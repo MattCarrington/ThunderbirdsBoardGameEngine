@@ -24,12 +24,14 @@ namespace ThunderbirdsBoardGameEngine.UI.Features.Movement.Services
         public async Task<MovementResultViewModel?> ValidateMovementAsync(
             string thunderbirdCode,
             string startLocationCode,
-            string destinationLocationCode)
+            string destinationLocationCode,
+            IReadOnlyList<string> activeEventCardKeys)
         {
             var request = new ValidateMovementRequestDto
             {
                 StartLocation = startLocationCode,
-                DestinationLocation = destinationLocationCode
+                DestinationLocation = destinationLocationCode,
+                ActiveEventCardKeys = activeEventCardKeys
             };
 
             var result = await _client.ValidateMovementAsync(thunderbirdCode, request);

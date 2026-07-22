@@ -24,7 +24,12 @@
         /// <summary>
         /// Gets the top speed of the vehicle performing the movement action.
         /// </summary>
-        public required int TopSpeed { get; init; }
+        public required int ThunderbirdTopSpeed { get; init; }
+
+        /// <summary>
+        /// Gets the effective top speed of the vehicle after applying any movement modifiers from event cards or other game effects.
+        /// </summary>
+        public required int? EffectiveTopSpeed { get; init; }
 
         /// <summary>
         /// Gets the route taken during the movement action, represented as a collection of location keys.

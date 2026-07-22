@@ -1,7 +1,7 @@
 ﻿using ThunderbirdsBoardGameEngine.ReferenceData.Core.Enums;
 using ThunderbirdsBoardGameEngine.ReferenceData.Core.Identities;
 
-namespace ThunderbirdsBoardGameEngine.Rules.Domain.Movement
+namespace ThunderbirdsBoardGameEngine.Rules.Domain.Movement.Contributions
 {
     public sealed record ThunderbirdContribution(ThunderbirdCode Key, MovementDomain TraversalDomain, int TopSpeed);
 }

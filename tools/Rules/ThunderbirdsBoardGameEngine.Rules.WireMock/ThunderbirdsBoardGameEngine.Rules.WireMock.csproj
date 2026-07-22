@@ -3,7 +3,7 @@
   <PropertyGroup>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
     <PackageId>ThunderbirdsBoardGameEngine.Rules.WireMock</PackageId>
-    <Version>0.5.1</Version>
+    <Version>0.6.0</Version>
     <Authors>Matthew Carrington</Authors>
     <Description>WireMock.NET stubs and mock server setup for the Rules bounded context of ThunderbirdsBoardGameEngine.</Description>
     <RepositoryUrl>https://github.com/MattCarrington/ThunderbirdsBoardGameEngine</RepositoryUrl>

@@ -1,7 +1,11 @@
-﻿using NSubstitute;
+using NSubstitute;
 using ThunderbirdsBoardGameEngine.ReferenceData.Core.Enums;
 using ThunderbirdsBoardGameEngine.ReferenceData.Core.Identities;
-using ThunderbirdsBoardGameEngine.Rules.Domain.Movement;
+using ThunderbirdsBoardGameEngine.Rules.Domain.Movement.Contributions;
+using ThunderbirdsBoardGameEngine.Rules.Domain.Movement.Evaluation;
+using ThunderbirdsBoardGameEngine.Rules.Domain.Movement.Routing;
+using ThunderbirdsBoardGameEngine.Rules.Domain.Movement.Speed;
+using ThunderbirdsBoardGameEngine.Rules.Domain.Movement.Topology;
 using Xunit;
 
 namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.Movement
@@ -17,7 +21,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.Movement
             var route = new[] { new LocationCode("A"), new LocationCode("C"), new LocationCode("B") };
 
             var routeFinder = Substitute.For<IRouteFinder>();
-            routeFinder.FindShortestRoute(Arg.Any<MovementInput>()).Returns(new RouteResult
+            routeFinder.FindShortestRoute(Arg.Any<MovementEvaluationInput>()).Returns(new RouteResult
             (
                 Route: route.ToList(),
                 SpacesTravelled: 2
@@ -44,7 +48,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.Movement
             var input = CreateMovementInput(3);
 
             var routeFinder = Substitute.For<IRouteFinder>();
-            routeFinder.FindShortestRoute(Arg.Any<MovementInput>()).Returns((RouteResult?)null);
+            routeFinder.FindShortestRoute(Arg.Any<MovementEvaluationInput>()).Returns((RouteResult?)null);
 
             var movementEvaluator = CreateMovementEvaluator(routeFinder);
 
@@ -55,7 +59,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.Movement
             Assert.False(result.IsMoveValid);
             Assert.Empty(result.Route);
             Assert.Equal(0, result.SpacesTravelled);
-            Assert.Equal(0, result.TopSpeed);
+            Assert.Null(result.TopSpeed);
             Assert.Equal(0, result.ActionPointCost);
             Assert.Single(result.Messages);
             Assert.Equal("No route found from A to B for thunderbird.", result.Messages.First());
@@ -78,27 +82,99 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.Movement
             Assert.False(result.IsMoveValid);
             Assert.Empty(result.Route);
             Assert.Equal(0, result.SpacesTravelled);
-            Assert.Equal(0, result.TopSpeed);
+            Assert.Null(result.TopSpeed);
             Assert.Equal(0, result.ActionPointCost);
             Assert.Single(result.Messages);
             Assert.Equal("thunderbird cannot move.", result.Messages.First());
         }
 
-        private static MovementInput CreateMovementInput(int topSpeed)
+        [Fact]
+        public void Evaluate_WhenEventCardAppliesModifier_ReturnsValidMoveWithModifiedTopSpeed()
         {
-            return new MovementInput(
+            // Arrange
+            var eventCardCode = new CardCode("event-card");
+
+            var input = CreateMovementInput(3, new[] { eventCardCode });
+
+            var testModifierSource = new TestMovementSpeedModifierSource(eventCardCode);
+
+            var registry = Substitute.For<IMovementSpeedModifierSourceRegistry>();
+            registry.TryGetEventCard(eventCardCode, out Arg.Any<IMovementSpeedModifierSource?>())
+                .Returns(x =>
+                {
+                    x[1] = testModifierSource;
+                    return true;
+                });
+
+            var movementEvaluator = CreateMovementEvaluator(registry);
+
+            // Act
+            var result = movementEvaluator.Evaluate(input);
+
+            // Assert
+            Assert.True(result.IsMoveValid);
+            Assert.Equal(1, result.TopSpeed);
+            Assert.Equal(2, result.ActionPointCost);
+            Assert.Single(result.Messages);
+        }
+
+        private static MovementEvaluationInput CreateMovementInput(int topSpeed)
+        {
+            return CreateMovementInput(topSpeed, Enumerable.Empty<CardCode>());
+        }
+
+        private static MovementEvaluationInput CreateMovementInput(int topSpeed, IEnumerable<CardCode> eventCards)
+        {
+            return new MovementEvaluationInput(
                 Thunderbird: new ThunderbirdContribution(new("thunderbird"), MovementDomain.Earth, topSpeed),
                 Topography: new Topography([]),
                 Start: new LocationCode("A"),
-                Destination: new LocationCode("B")
+                Destination: new LocationCode("B"),
+                EventCards: eventCards.ToList()
             );
-
         }
 
         private static MovementEvaluator CreateMovementEvaluator(IRouteFinder routeFinder)
         {
+            var registry = Substitute.For<IMovementSpeedModifierSourceRegistry>();
+            registry.TryGetEventCard(Arg.Any<CardCode>(), out Arg.Any<IMovementSpeedModifierSource?>()).Returns(false);
+
+            return CreateMovementEvaluator(routeFinder, registry);
+        }
+
+        private static MovementEvaluator CreateMovementEvaluator(IMovementSpeedModifierSourceRegistry registry)
+        {
+            var route = new[] { new LocationCode("A"), new LocationCode("B"), new LocationCode("C") };
+
+            var routeFinder = Substitute.For<IRouteFinder>();
+            routeFinder.FindShortestRoute(Arg.Any<MovementEvaluationInput>()).Returns(new RouteResult
+            (
+                Route: route.ToList(),
+                SpacesTravelled: 2
+            ));
+
+            return CreateMovementEvaluator(routeFinder, registry);
+        }
+
+        private static MovementEvaluator CreateMovementEvaluator(IRouteFinder routeFinder, IMovementSpeedModifierSourceRegistry registry)
+        {
             var actionPointCalculator = new ActionPointCalculator();
-            return new MovementEvaluator(routeFinder, actionPointCalculator);
+            return new MovementEvaluator(routeFinder, registry, actionPointCalculator);
+        }
+
+        private class TestMovementSpeedModifierSource : IMovementSpeedModifierSource
+        {
+            public TestMovementSpeedModifierSource(CardCode cardCode)
+            {
+                EventCardCode = cardCode;
+            }
+
+            public CardCode EventCardCode { get; }
+
+            public AppliedMovementSpeedModifier? ApplyMovementModifier(ThunderbirdCode input)
+            {
+                return new AppliedMovementSpeedModifier(EventCardCode, 1, "Test modifier applied.");
+            }
         }
     }
 }

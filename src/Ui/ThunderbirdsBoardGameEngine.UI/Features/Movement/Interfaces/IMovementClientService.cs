@@ -5,7 +5,7 @@ namespace ThunderbirdsBoardGameEngine.UI.Features.Movement.Interfaces
 {
     public interface IMovementClientService
     {
-        Task<MovementResultViewModel?> ValidateMovementAsync(string thunderbirdCode, string startLocationCode, string destinationLocationCode);
+        Task<MovementResultViewModel?> ValidateMovementAsync(string thunderbirdCode, string startLocationCode, string destinationLocationCode, IReadOnlyList<string> eventCards);
 
         Task<IReadOnlyList<MovementLocationOptions>> GetAccessibleLocationsAsync(string thunderbirdCode);
     }

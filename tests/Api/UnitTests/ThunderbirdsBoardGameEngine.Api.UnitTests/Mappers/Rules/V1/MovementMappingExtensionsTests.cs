@@ -24,9 +24,10 @@ namespace ThunderbirdsBoardGameEngine.Api.UnitTests.Mappers.Rules.V1
             var result = dto.ToQuery("thunderbird4");
 
             // Assert
-            Assert.Equal(new ThunderbirdCode("thunderbird4"), result.Thunderbird);
-            Assert.Equal(new LocationCode("location1"), result.Start);
-            Assert.Equal(new LocationCode("location2"), result.Destination);
+            Assert.Equal(new ThunderbirdCode("thunderbird4"), result.ThunderbirdCode);
+            Assert.Equal(new LocationCode("location1"), result.StartLocationCode);
+            Assert.Equal(new LocationCode("location2"), result.DestinationLocationCode);
+            Assert.Empty(result.ActiveEventCardCodes);
         }
 
         [Theory]
@@ -62,6 +63,43 @@ namespace ThunderbirdsBoardGameEngine.Api.UnitTests.Mappers.Rules.V1
         }
 
         [Fact]
+        public void ToQuery_OptionalActiveEventCardKeysIncluded_ReturnsExpectedQuery()
+        {
+            // Arrange
+            var dto = new ValidateMovementRequestDto
+            {
+                StartLocation = "location1",
+                DestinationLocation = "location2",
+                ActiveEventCardKeys = ["card1", "card2"]
+            };
+
+            // Act
+            var result = dto.ToQuery("thunderbird4");
+
+            // Assert
+            Assert.Equal(new ThunderbirdCode("thunderbird4"), result.ThunderbirdCode);
+            Assert.Equal(new LocationCode("location1"), result.StartLocationCode);
+            Assert.Equal(new LocationCode("location2"), result.DestinationLocationCode);
+            Assert.Equal(2, result.ActiveEventCardCodes.Count);
+            Assert.Equal(dto.ActiveEventCardKeys.Select(c => new CardCode(c)), result.ActiveEventCardCodes);
+        }
+
+        [Fact]
+        public void ToQuery_ActiveEventCardKeyNull_ThrowsBadRequestException()
+        {
+            // Arrange
+            var dto = new ValidateMovementRequestDto
+            {
+                StartLocation = "location1",
+                DestinationLocation = "location2",
+                ActiveEventCardKeys = null
+            };
+            // Act & Assert
+            var ex = Assert.Throws<BadRequestException>(() => dto.ToQuery("thunderbird4"));
+            Assert.Equal("ActiveEventCardKeys cannot be null.", ex.Message);
+        }
+
+        [Fact]
         public void ToDto_ValidResponse_ReturnsExpectedDto()
         {
             // Arrange
@@ -72,7 +110,8 @@ namespace ThunderbirdsBoardGameEngine.Api.UnitTests.Mappers.Rules.V1
                 SpacesTravelled: 2,
                 Messages: ["Move successful."],
                 Route: [new LocationCode("location1"), new LocationCode("location2")],
-                TopSpeed: 5
+                EffectiveTopSpeed: 4,
+                ThunderbirdTopSpeed: 5
             );
 
             // Act
@@ -83,7 +122,7 @@ namespace ThunderbirdsBoardGameEngine.Api.UnitTests.Mappers.Rules.V1
             Assert.Equal(3, result.ActionPointCost);
             Assert.Equal(2, result.SpacesTravelled);
             Assert.Equal(2, result.Route.Count);
-            Assert.Equal(5, result.TopSpeed);
+            Assert.Equal(5, result.ThunderbirdTopSpeed);
 
             var message = Assert.Single(result.Messages);
             Assert.Equal("Move successful.", message);

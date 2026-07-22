@@ -3,6 +3,7 @@ using NSubstitute;
 using ThunderbirdsBoardGameEngine.UI.ComponentTests.Fixtures;
 using ThunderbirdsBoardGameEngine.UI.Features.Movement;
 using ThunderbirdsBoardGameEngine.UI.Features.Movement.Models;
+using ThunderbirdsBoardGameEngine.UI.Features.Shared.ViewModels;
 using Xunit;
 
 namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Features.Movement
@@ -132,8 +133,8 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Features.Movement
             await context.MovementService.Received(1).ValidateMovementAsync(
                 Arg.Is<string>(x => x == "TB2"),
                 Arg.Is<string>(x => x == "L1"),
-                Arg.Is<string>(x => x == "L2")
-            );
+                Arg.Is<string>(x => x == "L2"),
+                Arg.Is<IReadOnlyList<string>>(x => x.Count == 0));
         }
 
         [Fact]
@@ -150,7 +151,7 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Features.Movement
 
             var context = CreateTestContext();
 
-            context.MovementService.ValidateMovementAsync(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>())
+            context.MovementService.ValidateMovementAsync(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(), Arg.Any<IReadOnlyList<string>>())
                 .Returns(response);
 
             var cut = Render<MovementPage>();
@@ -175,7 +176,7 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Features.Movement
             // Arrange
             var context = CreateTestContext();
 
-            context.MovementService.ValidateMovementAsync(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>())
+            context.MovementService.ValidateMovementAsync(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(), Arg.Any<IReadOnlyList<string>>())
                 .Returns((MovementResultViewModel?)null);
 
             var cut = Render<MovementPage>();
@@ -238,6 +239,7 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Features.Movement
 
             context.ThunderbirdService.GetAllMobileVehicles().Returns(CreateThunderbirdMovementOptions());
             context.MovementService.GetAccessibleLocationsAsync(Arg.Any<string>()).Returns(CreateMovementLocationOptions());
+            context.EventCardMovementService.GetSpeedModificationEventCards().Returns(CreateSpeedEventCardModifiers());
 
             return context;
         }
@@ -257,6 +259,15 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Features.Movement
             [
                 new(Key: "L1", DisplayName: "Location 1"),
                 new(Key: "L2", DisplayName: "Location 2"),
+            ];
+        }
+
+        private static IReadOnlyList<CardModifierViewModel> CreateSpeedEventCardModifiers()
+        {
+            return
+            [
+                new(Key: "EC1", DisplayName: "Event Card 1"),
+                new(Key: "EC2", DisplayName: "Event Card 2"),
             ];
         }
     }

@@ -1,6 +1,6 @@
 ﻿using MediatR;
 using ThunderbirdsBoardGameEngine.Rules.Application.Movement.Interfaces;
-using ThunderbirdsBoardGameEngine.Rules.Domain.Movement;
+using ThunderbirdsBoardGameEngine.Rules.Domain.Movement.Topology;
 
 namespace ThunderbirdsBoardGameEngine.Rules.Application.Movement.AccessibleLocations
 {

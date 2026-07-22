@@ -1,5 +1,7 @@
 ﻿@page "/movement"
 @using ThunderbirdsBoardGameEngine.UI.Features.Movement.Components
+@using ThunderbirdsBoardGameEngine.UI.Features.Shared.Components
+@using ThunderbirdsBoardGameEngine.UI.Features.Shared.ViewModels
 
 <h3>Movement</h3>
 
@@ -23,6 +25,10 @@
                       SelectedLocationKey="_destinationCode"
                       SelectedLocationKeyChanged="OnDestinationChanged"
                       @key="@($"destination-{_thunderbirdCode}")" />
+
+    <EventCardList EventCards="@_eventCardModifiers"
+                       SelectedEventCards="@_selectedEventCardKeys"
+                       EventCardChanged="OnEventCardChanged" />
 
     <button class="btn btn-primary mt-3"
             data-testid="calculate-button"

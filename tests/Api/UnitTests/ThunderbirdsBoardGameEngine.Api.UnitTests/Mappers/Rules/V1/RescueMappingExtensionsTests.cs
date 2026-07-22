@@ -129,50 +129,6 @@ namespace ThunderbirdsBoardGameEngine.Api.UnitTests.Mappers.Rules.V1
             Assert.Throws<BadRequestException>(() => dto.ToQuery(ValidDisasterCardCode.ToString()));
         }
 
-        [Theory]
-        [ClassData(typeof(NullOrWhitespaceStringData))]
-        public void ToQuery_PresentDisasterBonusKeysContainsNullOrWhiteSpace_ThrowsBadRequestException(string? key)
-        {
-            var dto = new CalculateRescueTargetRequestDto
-            {
-                PresentDisasterBonusKeys = ["character:alan", "thunderbird:thunderbird4", key],
-                PerformingCharacterKey = "alan"
-            };
-
-            // Act & Assert
-            Assert.Throws<BadRequestException>(() => dto.ToQuery(ValidDisasterCardCode.ToString()));
-        }
-
-        [Theory]
-        [ClassData(typeof(NullOrWhitespaceStringData))]
-        public void ToQuery_PlayedFabCardsContainsNullOrWhiteSpace_ThrowsBadRequestException(string? card)
-        {
-            var dto = new CalculateRescueTargetRequestDto
-            {
-                PresentDisasterBonusKeys = ["character:alan", "thunderbird:thunderbird4"],
-                PerformingCharacterKey = "alan",
-                PlayedFabCardKeys = ["fab1", card]
-            };
-
-            // Act & Assert
-            Assert.Throws<BadRequestException>(() => dto.ToQuery(ValidDisasterCardCode.ToString()));
-        }
-
-        [Theory]
-        [ClassData(typeof(NullOrWhitespaceStringData))]
-        public void ToQuery_ActiveEventCardsContainsNullOrWhiteSpace_ThrowsBadRequestException(string? card)
-        {
-            var dto = new CalculateRescueTargetRequestDto
-            {
-                PresentDisasterBonusKeys = ["character:alan", "thunderbird:thunderbird4"],
-                PerformingCharacterKey = "alan",
-                ActiveEventCardKeys = ["event1", card]
-            };
-
-            // Act & Assert
-            Assert.Throws<BadRequestException>(() => dto.ToQuery(ValidDisasterCardCode.ToString()));
-        }
-
         [Fact]
         public void ToQuery_PresentDisasterBonusKeysNull_ThrowsBadRequestException()
         {

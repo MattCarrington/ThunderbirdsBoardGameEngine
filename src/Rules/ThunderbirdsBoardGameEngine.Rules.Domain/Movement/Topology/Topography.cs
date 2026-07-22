@@ -2,7 +2,7 @@
 using ThunderbirdsBoardGameEngine.ReferenceData.Core.Identities;
 using ThunderbirdsBoardGameEngine.ReferenceData.Core.Model;
 
-namespace ThunderbirdsBoardGameEngine.Rules.Domain.Movement
+namespace ThunderbirdsBoardGameEngine.Rules.Domain.Movement.Topology
 {
     public sealed record Topography(
         IReadOnlyCollection<ReferenceMapEdgeDefinition> Edges)

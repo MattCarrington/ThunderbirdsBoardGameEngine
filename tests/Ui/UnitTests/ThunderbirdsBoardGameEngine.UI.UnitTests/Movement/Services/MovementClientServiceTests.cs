@@ -32,7 +32,8 @@ namespace ThunderbirdsBoardGameEngine.UI.UnitTests.Movement.Services
                 Route = ["LOC001", "LOC002"],
                 ActionPointCost = 2,
                 SpacesTravelled = 1,
-                TopSpeed = 3,
+                EffectiveTopSpeed = 4,
+                ThunderbirdTopSpeed = 3,
                 Messages = ["Movement is valid."]
             };
 
@@ -49,7 +50,7 @@ namespace ThunderbirdsBoardGameEngine.UI.UnitTests.Movement.Services
             var service = CreateService(movementClient);
 
             // Act
-            var result = await service.ValidateMovementAsync(ThunderbirdCode, StartLocationCode, DestinationLocationCode);
+            var result = await service.ValidateMovementAsync(ThunderbirdCode, StartLocationCode, DestinationLocationCode, Array.Empty<string>());
 
             // Assert
             Assert.NotNull(result);
@@ -57,7 +58,7 @@ namespace ThunderbirdsBoardGameEngine.UI.UnitTests.Movement.Services
             Assert.NotEmpty(result.Route);
             Assert.Equal(expectedResponse.ActionPointCost, result.ActionPointCost);
             Assert.Equal(expectedResponse.SpacesTravelled, result.SpacesTravelled);
-            Assert.Equal(expectedResponse.TopSpeed, result.TopSpeed);
+            Assert.Equal(expectedResponse.EffectiveTopSpeed, result.TopSpeed);
             Assert.Equal(expectedResponse.Messages, result.Messages);
         }
 
@@ -78,7 +79,7 @@ namespace ThunderbirdsBoardGameEngine.UI.UnitTests.Movement.Services
             var service = CreateService(movementClient);
 
             // Act
-            var result = await service.ValidateMovementAsync(ThunderbirdCode, StartLocationCode, DestinationLocationCode);
+            var result = await service.ValidateMovementAsync(ThunderbirdCode, StartLocationCode, DestinationLocationCode, Array.Empty<string>());
 
             // Assert
             Assert.Null(result);
