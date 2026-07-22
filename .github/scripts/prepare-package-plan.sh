@@ -36,6 +36,7 @@ while IFS= read -r package; do
     GITHUB_TOKEN="$GITHUB_TOKEN" \
     GITHUB_REF="$GITHUB_REF" \
     GITHUB_RUN_NUMBER="$GITHUB_RUN_NUMBER" \
+    DEFAULT_BRANCH="${DEFAULT_BRANCH:-main}" \
     GITHUB_OUTPUT="$package_output" \
     bash "$VERSION_SCRIPT"
 
