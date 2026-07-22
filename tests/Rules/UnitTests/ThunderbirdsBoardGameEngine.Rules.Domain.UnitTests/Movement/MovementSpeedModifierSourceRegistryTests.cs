@@ -43,6 +43,31 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.Movement
             Assert.Null(source);
         }
 
+        [Fact]
+        public void Constructor_WhenSourcesContainNull_ShouldThrowArgumentException()
+        {
+            // Arrange
+            var sources = new List<IMovementSpeedModifierSource>
+            {
+                new TestRegistrySource1(),
+                null!, // Intentionally adding a null source
+                new TestRegistrySource2(),
+            };
+
+            // Act & Assert
+            Assert.Throws<ArgumentException>(() => new MovementSpeedModifierSourceRegistry(sources));
+        }
+
+        [Fact]
+        public void Constructor_WhenSourcesNull_ShouldThrowArgumentNullException()
+        {
+            // Arrange
+            List<IMovementSpeedModifierSource> sources = null!;
+
+            // Act & Assert
+            Assert.Throws<ArgumentNullException>(() => new MovementSpeedModifierSourceRegistry(sources));
+        }
+
         private static MovementSpeedModifierSourceRegistry CreateRegistry()
         {
             var sources = new List<IMovementSpeedModifierSource>
