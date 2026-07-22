@@ -1,0 +1,57 @@
+[
+  {
+    "name": "Client.Core",
+    "package_id": "ThunderbirdsBoardGameEngine.Client.Core",
+    "project_path": "src/Common/ThunderbirdsBoardGameEngine.Client.Core/ThunderbirdsBoardGameEngine.Client.Core.csproj",
+    "source_path": "src/Common/ThunderbirdsBoardGameEngine.Client.Core",
+    "dependencies": []
+  },
+  {
+    "name": "ReferenceData.Core",
+    "package_id": "ThunderbirdsBoardGameEngine.ReferenceData.Core",
+    "project_path": "src/ReferenceData/ThunderbirdsBoardGameEngine.ReferenceData.Core/ThunderbirdsBoardGameEngine.ReferenceData.Core.csproj",
+    "source_path": "src/ReferenceData/ThunderbirdsBoardGameEngine.ReferenceData.Core",
+    "dependencies": []
+  },
+  {
+    "name": "ReferenceData.Runtime",
+    "package_id": "ThunderbirdsBoardGameEngine.ReferenceData.Runtime",
+    "project_path": "src/ReferenceData/ThunderbirdsBoardGameEngine.ReferenceData.Runtime/ThunderbirdsBoardGameEngine.ReferenceData.Runtime.csproj",
+    "source_path": "src/ReferenceData/ThunderbirdsBoardGameEngine.ReferenceData.Runtime",
+    "dependencies": ["ThunderbirdsBoardGameEngine.ReferenceData.Core"]
+  },
+  {
+    "name": "Rules.Contracts",
+    "package_id": "ThunderbirdsBoardGameEngine.Rules.Contracts",
+    "project_path": "src/Rules/ThunderbirdsBoardGameEngine.Rules.Contracts/ThunderbirdsBoardGameEngine.Rules.Contracts.csproj",
+    "source_path": "src/Rules/ThunderbirdsBoardGameEngine.Rules.Contracts",
+    "dependencies": []
+  },
+  {
+    "name": "Rules.Client",
+    "package_id": "ThunderbirdsBoardGameEngine.Rules.Client",
+    "project_path": "src/Rules/ThunderbirdsBoardGameEngine.Rules.Client/ThunderbirdsBoardGameEngine.Rules.Client.csproj",
+    "source_path": "src/Rules/ThunderbirdsBoardGameEngine.Rules.Client",
+    "dependencies": [
+      "ThunderbirdsBoardGameEngine.Client.Core",
+      "ThunderbirdsBoardGameEngine.Rules.Contracts"
+    ]
+  },
+  {
+    "name": "WireMock.Hosting",
+    "package_id": "ThunderbirdsBoardGameEngine.WireMock.Hosting",
+    "project_path": "tools/Common/ThunderbirdsBoardGameEngine.WireMock.Hosting/ThunderbirdsBoardGameEngine.WireMock.Hosting.csproj",
+    "source_path": "tools/Common/ThunderbirdsBoardGameEngine.WireMock.Hosting",
+    "dependencies": []
+  },
+  {
+    "name": "Rules.WireMock",
+    "package_id": "ThunderbirdsBoardGameEngine.Rules.WireMock",
+    "project_path": "tools/Rules/ThunderbirdsBoardGameEngine.Rules.WireMock/ThunderbirdsBoardGameEngine.Rules.WireMock.csproj",
+    "source_path": "tools/Rules/ThunderbirdsBoardGameEngine.Rules.WireMock",
+    "dependencies": [
+      "ThunderbirdsBoardGameEngine.Rules.Contracts",
+      "ThunderbirdsBoardGameEngine.WireMock.Hosting"
+    ]
+  }
+]
