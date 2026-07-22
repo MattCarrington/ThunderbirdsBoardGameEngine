@@ -14,5 +14,13 @@ namespace ThunderbirdsBoardGameEngine.UI.Features.Movement.Services
                 new CardModifierViewModel("rocket-malfunction", "Rocket Malfunction")
             ];
         }
+
+        public IReadOnlyList<CardModifierViewModel> GetBlockedMovementEventCards()
+        {
+            return
+            [
+                new CardModifierViewModel("icelandic-volcano-eruption", "Icelandic Volcano Eruption")
+            ];
+        }
     }
 }
