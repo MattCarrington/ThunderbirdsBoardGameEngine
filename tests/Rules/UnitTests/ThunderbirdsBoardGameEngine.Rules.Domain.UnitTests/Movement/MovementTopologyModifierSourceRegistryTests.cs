@@ -14,7 +14,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.Movement
             var registry = new MovementTopologyModifierSourceRegistry([source]);
 
             // Act
-            var found = registry.TryGetEventCard(source.EventCardCode, out var result);
+            var found = registry.TryGetEventCard(source.CardCode, out var result);
 
             // Assert
             Assert.True(found);
@@ -57,14 +57,14 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.Movement
         {
             public TestSource(CardCode eventCardCode)
             {
-                EventCardCode = eventCardCode;
+                CardCode = eventCardCode;
             }
 
-            public CardCode EventCardCode { get; }
+            public CardCode CardCode { get; }
 
             public AppliedMovementTopologyModifier ApplyMovementModifier()
             {
-                return new AppliedMovementTopologyModifier(EventCardCode, [], "Test");
+                return new AppliedMovementTopologyModifier(CardCode, [], "Test");
             }
         }
     }

@@ -6,12 +6,12 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.EventCards
 {
     public sealed class IcelandicVolcanoEruption : IMovementTopologyModifierSource
     {
-        public CardCode EventCardCode => KnownEventCardCodes.IcelandicVolcanoEruption;
+        public CardCode CardCode => KnownEventCardCodes.IcelandicVolcanoEruption;
 
         public AppliedMovementTopologyModifier ApplyMovementModifier()
         {
             return new AppliedMovementTopologyModifier(
-                Card: EventCardCode,
+                Card: CardCode,
                 BlockedEdges:
                 [
                     new(new LocationCode("europe"), new LocationCode("north-atlantic")),

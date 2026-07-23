@@ -17,7 +17,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.Movement.Topology
                 throw new ArgumentException("Movement topology modifier sources cannot contain null values.", nameof(sources));
             }
 
-            _sources = sources.ToFrozenDictionary(source => source.EventCardCode);
+            _sources = sources.ToFrozenDictionary(source => source.CardCode);
         }
 
         public bool TryGetEventCard(

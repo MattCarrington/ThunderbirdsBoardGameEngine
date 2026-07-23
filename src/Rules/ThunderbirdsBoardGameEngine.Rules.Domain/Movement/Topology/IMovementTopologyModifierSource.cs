@@ -2,10 +2,8 @@ using ThunderbirdsBoardGameEngine.ReferenceData.Core.Identities;
 
 namespace ThunderbirdsBoardGameEngine.Rules.Domain.Movement.Topology
 {
-    public interface IMovementTopologyModifierSource
+    public interface IMovementTopologyModifierSource : ICardSource
     {
-        CardCode EventCardCode { get; }
-
         AppliedMovementTopologyModifier ApplyMovementModifier();
     }
 }
