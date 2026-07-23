@@ -2,10 +2,8 @@
 
 namespace ThunderbirdsBoardGameEngine.Rules.Domain.Movement.Speed
 {
-    public interface IMovementSpeedModifierSource
+    public interface IMovementSpeedModifierSource : ICardSource
     {
-        CardCode EventCardCode { get; }
-
         AppliedMovementSpeedModifier? ApplyMovementModifier(ThunderbirdCode input);
     }
 }

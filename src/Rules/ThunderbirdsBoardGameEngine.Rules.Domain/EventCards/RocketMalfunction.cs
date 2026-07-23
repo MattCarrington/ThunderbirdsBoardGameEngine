@@ -6,7 +6,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.EventCards
 {
     public sealed class RocketMalfunction : IMovementSpeedModifierSource
     {
-        public CardCode EventCardCode => KnownEventCardCodes.RocketMalfunction;
+        public CardCode CardCode => KnownEventCardCodes.RocketMalfunction;
 
         public AppliedMovementSpeedModifier? ApplyMovementModifier(ThunderbirdCode input)
         {

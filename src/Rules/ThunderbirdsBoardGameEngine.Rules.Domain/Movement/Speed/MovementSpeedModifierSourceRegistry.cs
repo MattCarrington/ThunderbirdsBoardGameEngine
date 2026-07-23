@@ -18,7 +18,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.Movement.Speed
                 throw new ArgumentException("Movement speed modifier sources cannot contain null values.", nameof(sources));
             }
 
-            _sources = sources.ToFrozenDictionary(x => x.EventCardCode);
+            _sources = sources.ToFrozenDictionary(x => x.CardCode);
         }
 
         public bool TryGetEventCard(
