@@ -47,15 +47,20 @@ namespace ThunderbirdsBoardGameEngine.Rules.Infrastructure
             RegisterMovementServices(services);
             RegisterMovementSpeedModifierSources(services);
             RegisterMovementTopologyModifierSources(services);
-            RegisterEventCardModifierSources(services);
 
             return services;
         }
 
         private static void RegisterRescueServices(IServiceCollection services)
         {
-            services.AddSingleton<ICalculateRescueTargetResolutionService, CalculateRescueTargetResolutionService>();
             services.AddSingleton<RescueTargetCalculator>();
+            services.AddSingleton<ICalculateRescueTargetResolutionService, CalculateRescueTargetResolutionService>();
+            services.AddSingleton<ICardBonusModifierSourceRegistry, CardBonusModifierSourceRegistry>();
+            services.AddSingleton<ICardRescueModifierSource, TheHoodInterferes>();
+            services.AddSingleton<ICardRescueModifierSource, AstronautSpacewalk>();
+            services.AddSingleton<ICardRescueModifierSource, PersonalHoverjet>();
+            services.AddSingleton<ICardRescueModifierSource, RemoteControlHoverCamera>();
+            services.AddSingleton<ICardRescueModifierSource, UnderwaterSealingUnit>();
         }
 
         private static void RegisterMovementServices(IServiceCollection services)
@@ -79,16 +84,6 @@ namespace ThunderbirdsBoardGameEngine.Rules.Infrastructure
             services.AddSingleton<IEffectiveTopographyResolver, EffectiveTopographyResolver>();
             services.AddSingleton<IMovementTopologyModifierSourceRegistry, MovementTopologyModifierSourceRegistry>();
             services.AddSingleton<IMovementTopologyModifierSource, IcelandicVolcanoEruption>();
-        }
-
-        private static void RegisterEventCardModifierSources(IServiceCollection services)
-        {
-            services.AddSingleton<ICardBonusModifierSourceRegistry, CardBonusModifierSourceRegistry>();
-            services.AddSingleton<ICardRescueModifierSource, TheHoodInterferes>();
-            services.AddSingleton<ICardRescueModifierSource, AstronautSpacewalk>();
-            services.AddSingleton<ICardRescueModifierSource, PersonalHoverjet>();
-            services.AddSingleton<ICardRescueModifierSource, RemoteControlHoverCamera>();
-            services.AddSingleton<ICardRescueModifierSource, UnderwaterSealingUnit>();
         }
     }
 }
