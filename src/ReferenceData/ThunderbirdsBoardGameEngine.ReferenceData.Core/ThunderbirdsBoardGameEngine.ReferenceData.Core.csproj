@@ -4,7 +4,7 @@
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
     <PackageId>ThunderbirdsBoardGameEngine.ReferenceData.Core</PackageId>
     <Title>ThunderbirdsBoardGameEngine.ReferenceData.Core</Title>
-    <Version>1.3.0</Version>
+    <Version>1.4.0</Version>
     <Authors>Matthew Carrington</Authors>
     <Description>Core reference data for the Thunderbirds Board Game Engine</Description>
     <RepositoryUrl>https://github.com/MattCarrington/ThunderbirdsBoardGameEngine</RepositoryUrl>

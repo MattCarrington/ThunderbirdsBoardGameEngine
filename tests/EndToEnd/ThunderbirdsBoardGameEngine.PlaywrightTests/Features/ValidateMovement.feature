@@ -8,5 +8,6 @@ Scenario: Player can validate movement route is valid
 	Given "Thunderbird 4" is selected
 	And "Europe" is selected as the start location
 	And "South Pacific" is selected as the destination
+	And "Icelandic Volcano Eruption" is selected as the event
 	When the movement is validated
 	Then the validation success result should be displayed

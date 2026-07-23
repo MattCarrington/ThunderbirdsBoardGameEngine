@@ -1,18 +1,25 @@
 ﻿using ThunderbirdsBoardGameEngine.Rules.Domain.Movement.Routing;
 using ThunderbirdsBoardGameEngine.Rules.Domain.Movement.Speed;
+using ThunderbirdsBoardGameEngine.Rules.Domain.Movement.Topology;
 
 namespace ThunderbirdsBoardGameEngine.Rules.Domain.Movement.Evaluation
 {
     public sealed class MovementEvaluator
     {
         private readonly IRouteFinder _routeFinder;
-        private readonly IMovementSpeedModifierSourceRegistry _registry;
+        private readonly IMovementSpeedModifierSourceRegistry _speedRegistry;
+        private readonly IEffectiveTopographyResolver _topographyResolver;
         private readonly ActionPointCalculator _actionPointCalculator;
 
-        public MovementEvaluator(IRouteFinder routeFinder, IMovementSpeedModifierSourceRegistry registry, ActionPointCalculator actionPointCalculator)
+        public MovementEvaluator(
+            IRouteFinder routeFinder,
+            IMovementSpeedModifierSourceRegistry speedRegistry,
+            IEffectiveTopographyResolver topographyResolver,
+            ActionPointCalculator actionPointCalculator)
         {
             _routeFinder = routeFinder ?? throw new ArgumentNullException(nameof(routeFinder));
-            _registry = registry ?? throw new ArgumentNullException(nameof(registry));
+            _speedRegistry = speedRegistry ?? throw new ArgumentNullException(nameof(speedRegistry));
+            _topographyResolver = topographyResolver ?? throw new ArgumentNullException(nameof(topographyResolver));
             _actionPointCalculator = actionPointCalculator ?? throw new ArgumentNullException(nameof(actionPointCalculator));
         }
 
@@ -24,7 +31,10 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.Movement.Evaluation
                     $"{input.Thunderbird.Key.Value} cannot move.");
             }
 
-            var route = _routeFinder.FindShortestRoute(input);
+            var effectiveTopography = _topographyResolver.Resolve(input.Topography, input.EventCards);
+            var routeInput = input with { Topography = effectiveTopography.Value };
+
+            var route = _routeFinder.FindShortestRoute(routeInput);
 
             if (route is null)
             {
@@ -36,7 +46,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.Movement.Evaluation
 
             foreach (var eventCard in input.EventCards)
             {
-                if (!_registry.TryGetEventCard(eventCard, out var source))
+                if (!_speedRegistry.TryGetEventCard(eventCard, out var source))
                 {
                     continue;
                 }
@@ -60,9 +70,11 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.Movement.Evaluation
                 spacesTravelled: route.SpacesTravelled,
                 topSpeed: effectiveTopSpeed,
                 actionPointCost: actionPointCost,
-                messages: applicableModifier is null
-                    ? []
-                    : [applicableModifier.Message]);
+                messages:
+                [
+                    .. effectiveTopography.Messages,
+                    .. applicableModifier is null ? [] : new[] { applicableModifier.Message }
+                ]);
         }
     }
 }

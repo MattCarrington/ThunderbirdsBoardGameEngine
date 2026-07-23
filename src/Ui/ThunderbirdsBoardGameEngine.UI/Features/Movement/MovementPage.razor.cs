@@ -40,7 +40,11 @@ namespace ThunderbirdsBoardGameEngine.UI.Features.Movement
         protected override void OnInitialized()
         {
             _mobileThunderbirds = ThunderbirdService.GetAllMobileVehicles();
-            _eventCardModifiers = EventCardMovementService.GetSpeedModificationEventCards();
+
+            var speedModifiers = EventCardMovementService.GetSpeedModificationEventCards() ?? Array.Empty<CardModifierViewModel>();
+            var blockedMovementModifiers = EventCardMovementService.GetBlockedMovementEventCards() ?? Array.Empty<CardModifierViewModel>();
+
+            _eventCardModifiers = speedModifiers.Concat(blockedMovementModifiers).ToList();
         }
 
         private async Task ValidateMovement()

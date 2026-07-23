@@ -264,6 +264,66 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Movement
             Assert.Empty(result.Messages);
         }
 
+        [Fact]
+        public async Task MovementShouldTakeAlternativeRouteWhenIcelandicVolcanoEruptionBlocksDirectEdge()
+        {
+            // Arrange
+            var request = new ValidateMovementQuery
+            (
+                ThunderbirdCode: KnownThunderbirdCodes.Thunderbird2,
+                StartLocationCode: new LocationCode("europe"),
+                DestinationLocationCode: new LocationCode("north-atlantic"),
+                ActiveEventCardCodes: [KnownEventCardCodes.IcelandicVolcanoEruption]
+            );
+
+            var mediator = CreateIcelandicVolcanoEruptionMediator();
+
+            // Act
+            var result = await mediator.Send(request, CancellationToken.None);
+
+            // Assert
+            Assert.True(result.IsValid);
+            Assert.Equal(4, result.SpacesTravelled);
+            Assert.Equal(
+                ["europe", "asia", "north-pacific", "north-america", "north-atlantic"],
+                result.Route.Select(location => location.Value));
+            Assert.Contains(result.Messages, message => message.Contains("Icelandic Volcano Eruption"));
+        }
+
+        [Fact]
+        public async Task MovementShouldApplyTopologyAndSpeedModifiersFromDifferentEventCards()
+        {
+            // Arrange
+            var request = new ValidateMovementQuery
+            (
+                ThunderbirdCode: KnownThunderbirdCodes.Thunderbird2,
+                StartLocationCode: new LocationCode("europe"),
+                DestinationLocationCode: new LocationCode("north-atlantic"),
+                ActiveEventCardCodes:
+                [
+                    KnownEventCardCodes.IcelandicVolcanoEruption,
+                    KnownEventCardCodes.UsnSentinelMissileStrike
+                ]
+            );
+
+            var mediator = CreateIcelandicVolcanoEruptionMediator();
+
+            // Act
+            var result = await mediator.Send(request, CancellationToken.None);
+
+            // Assert
+            Assert.True(result.IsValid);
+            Assert.Equal(4, result.SpacesTravelled);
+            Assert.Equal(2, result.ThunderbirdTopSpeed);
+            Assert.Equal(1, result.EffectiveTopSpeed);
+            Assert.Equal(4, result.ActionPointCost);
+            Assert.Equal(
+                ["europe", "asia", "north-pacific", "north-america", "north-atlantic"],
+                result.Route.Select(location => location.Value));
+            Assert.Contains(result.Messages, message => message.Contains("Icelandic Volcano Eruption"));
+            Assert.Contains(result.Messages, message => message.Contains("USN Sentinel Missile Strike"));
+        }
+
         [Theory]
         [InlineData("thunderbird-1", "Attack of the Zombites: Thunderbird 1's top speed is reduced to 1.", 3)]
         [InlineData("thunderbird-2", "USN Sentinel Missile Strike: Thunderbird 2's top speed is reduced to 1.", 2)]
@@ -328,6 +388,42 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Movement
 
             var sp = services.BuildServiceProvider();
             return sp.GetRequiredService<IMediator>();
+        }
+
+        private static IMediator CreateIcelandicVolcanoEruptionMediator()
+        {
+            var europe = new LocationCode("europe");
+            var asia = new LocationCode("asia");
+            var northPacific = new LocationCode("north-pacific");
+            var northAmerica = new LocationCode("north-america");
+            var northAtlantic = new LocationCode("north-atlantic");
+
+            var edges = new FakeMapEdgeDefinitionCatalog(
+                new ReferenceMapEdgeDefinition(europe, northAtlantic, MovementDomain.Earth),
+                new ReferenceMapEdgeDefinition(europe, asia, MovementDomain.Earth),
+                new ReferenceMapEdgeDefinition(asia, northPacific, MovementDomain.Earth),
+                new ReferenceMapEdgeDefinition(northPacific, northAmerica, MovementDomain.Earth),
+                new ReferenceMapEdgeDefinition(northAmerica, northAtlantic, MovementDomain.Earth));
+
+            var locations = new FakeLocationDefinitionCatalog(
+                new ReferenceLocationDefinition(europe, "Europe", MovementDomain.Earth),
+                new ReferenceLocationDefinition(asia, "Asia", MovementDomain.Earth),
+                new ReferenceLocationDefinition(northPacific, "North Pacific", MovementDomain.Earth),
+                new ReferenceLocationDefinition(northAmerica, "North America", MovementDomain.Earth),
+                new ReferenceLocationDefinition(northAtlantic, "North Atlantic", MovementDomain.Earth));
+
+            var eventCards = new FakeEventCardDefinitionCatalog(
+                new ReferenceEventCardDefinition(KnownEventCardCodes.IcelandicVolcanoEruption, "Icelandic Volcano Eruption"),
+                new ReferenceEventCardDefinition(KnownEventCardCodes.UsnSentinelMissileStrike, "USN Sentinel Missile Strike"));
+
+            var services = new ServiceCollection();
+            services.AddSingleton<IMapEdgeDefinitionCatalog>(edges);
+            services.AddSingleton<ILocationDefinitionCatalog>(locations);
+            services.AddSingleton<IThunderbirdDefinitionCatalog>(CreateThunderbirds());
+            services.AddSingleton<IEventCardDefinitionCatalog>(eventCards);
+            services.AddRules();
+
+            return services.BuildServiceProvider().GetRequiredService<IMediator>();
         }
 
         private static FakeMapEdgeDefinitionCatalog CreateEdges()

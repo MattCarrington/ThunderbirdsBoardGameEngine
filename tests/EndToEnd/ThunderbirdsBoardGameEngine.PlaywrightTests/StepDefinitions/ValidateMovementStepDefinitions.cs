@@ -32,6 +32,12 @@ namespace ThunderbirdsBoardGameEngine.PlaywrightTests.StepDefinitions
             await _page.SelectDestinationAsync(location);
         }
 
+        [Given("{string} is selected as the event")]
+        public async Task GivenIsSelectedAsTheEvent(string eventName)
+        {
+            await _page.MarkEventCardCheckboxAsync(eventName);
+        }
+
         [When("the movement is validated")]
         public async Task WhenTheMovementIsValidated()
         {

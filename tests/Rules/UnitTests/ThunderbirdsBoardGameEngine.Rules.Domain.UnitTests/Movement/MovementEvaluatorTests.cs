@@ -156,10 +156,21 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.Movement
             return CreateMovementEvaluator(routeFinder, registry);
         }
 
-        private static MovementEvaluator CreateMovementEvaluator(IRouteFinder routeFinder, IMovementSpeedModifierSourceRegistry registry)
+        private static MovementEvaluator CreateMovementEvaluator(
+            IRouteFinder routeFinder,
+            IMovementSpeedModifierSourceRegistry registry,
+            IEffectiveTopographyResolver? topologyResolver = null)
         {
             var actionPointCalculator = new ActionPointCalculator();
-            return new MovementEvaluator(routeFinder, registry, actionPointCalculator);
+            if (topologyResolver is null)
+            {
+                topologyResolver = Substitute.For<IEffectiveTopographyResolver>();
+                topologyResolver
+                    .Resolve(Arg.Any<Topography>(), Arg.Any<IReadOnlyCollection<CardCode>>())
+                    .Returns(callInfo => new EffectiveTopography(callInfo.ArgAt<Topography>(0), []));
+            }
+
+            return new MovementEvaluator(routeFinder, registry, topologyResolver, actionPointCalculator);
         }
 
         private class TestMovementSpeedModifierSource : IMovementSpeedModifierSource

@@ -9,5 +9,7 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Core.KnownIdentities
         public static readonly CardCode UsnSentinelMissileStrike = new("usn-sentinel-missile-strike");
 
         public static readonly CardCode RocketMalfunction = new("rocket-malfunction");
+
+        public static readonly CardCode IcelandicVolcanoEruption = new("icelandic-volcano-eruption");
     }
 }
