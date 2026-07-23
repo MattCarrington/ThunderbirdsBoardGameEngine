@@ -11,5 +11,7 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Core.KnownIdentities
         public static readonly CardCode RocketMalfunction = new("rocket-malfunction");
 
         public static readonly CardCode IcelandicVolcanoEruption = new("icelandic-volcano-eruption");
+
+        public static readonly CardCode TheHoodInterferes = new("the-hood-interferes");
     }
 }
