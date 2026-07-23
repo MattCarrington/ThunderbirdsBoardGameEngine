@@ -1,10 +1,11 @@
-﻿using ThunderbirdsBoardGameEngine.ReferenceData.Core.Identities;
+﻿using System.Collections.Frozen;
+using ThunderbirdsBoardGameEngine.ReferenceData.Core.Identities;
 
 namespace ThunderbirdsBoardGameEngine.Rules.Domain.Rescue
 {
     public class CardBonusModifierSourceRegistry : ICardBonusModifierSourceRegistry
     {
-        private readonly Dictionary<CardCode, ICardRescueModifierSource> _registry;
+        private readonly FrozenDictionary<CardCode, ICardRescueModifierSource> _registry;
 
         public CardBonusModifierSourceRegistry(IEnumerable<ICardRescueModifierSource> sources)
         {
@@ -15,10 +16,10 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.Rescue
                 throw new ArgumentException("Card rescue modifier sources cannot contain null values.", nameof(sources));
             }
 
-            _registry = sources.ToDictionary(source => source.CardCode);
+            _registry = sources.ToFrozenDictionary(source => source.CardCode);
         }
 
-        public bool TryGetBonusModifierSource(CardCode cardCode, out ICardRescueModifierSource source)
+        public bool TryGetCard(CardCode cardCode, out ICardRescueModifierSource source)
         {
             return _registry.TryGetValue(cardCode, out source!);
         }

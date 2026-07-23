@@ -65,7 +65,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Application.Rescue.CalculateRescueTa
 
             foreach (var cardCode in cardCodes)
             {
-                if (_bonusModifierSourceRegistry.TryGetBonusModifierSource(cardCode, out var source))
+                if (_bonusModifierSourceRegistry.TryGetCard(cardCode, out var source))
                 {
                     sources.Add(source);
                 }

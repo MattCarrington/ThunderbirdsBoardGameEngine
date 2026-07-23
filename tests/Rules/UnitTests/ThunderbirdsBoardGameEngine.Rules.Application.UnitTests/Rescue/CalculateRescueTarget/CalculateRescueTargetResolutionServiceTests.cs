@@ -75,7 +75,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Application.UnitTests.Rescue.Calcula
             // Assert
             fabCardCatalogLookup.DidNotReceiveWithAnyArgs().Exists(Arg.Any<CardCode>());
             eventCardCatalogLookup.DidNotReceiveWithAnyArgs().Exists(Arg.Any<CardCode>());
-            bonusModifierSourceRegistry.DidNotReceiveWithAnyArgs().TryGetBonusModifierSource(Arg.Any<CardCode>(), out Arg.Any<ICardRescueModifierSource>());
+            bonusModifierSourceRegistry.DidNotReceiveWithAnyArgs().TryGetCard(Arg.Any<CardCode>(), out Arg.Any<ICardRescueModifierSource>());
         }
 
         [Fact]
@@ -100,11 +100,11 @@ namespace ThunderbirdsBoardGameEngine.Rules.Application.UnitTests.Rescue.Calcula
             service.ResolveRescueCalculation(request);
 
             // Assert
-            bonusModifierSourceRegistry.Received(1).TryGetBonusModifierSource(
+            bonusModifierSourceRegistry.Received(1).TryGetCard(
                 Arg.Is(ValidFabCard),
                 out Arg.Any<ICardRescueModifierSource>());
 
-            bonusModifierSourceRegistry.Received(1).TryGetBonusModifierSource(
+            bonusModifierSourceRegistry.Received(1).TryGetCard(
                 Arg.Is(ValidEventCard),
                 out Arg.Any<ICardRescueModifierSource>());
         }
@@ -136,7 +136,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Application.UnitTests.Rescue.Calcula
 
             var bonusModifierSourceRegistry = Substitute.For<ICardBonusModifierSourceRegistry>();
             bonusModifierSourceRegistry
-                .TryGetBonusModifierSource(
+                .TryGetCard(
                     Arg.Is(ValidFabCard),
                     out Arg.Any<ICardRescueModifierSource>())
                 .Returns(callInfo =>
@@ -175,7 +175,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Application.UnitTests.Rescue.Calcula
             eventCardCatalogLookup.Exists(Arg.Is(ValidEventCard)).Returns(true);
 
             var bonusModifierSourceRegistry = Substitute.For<ICardBonusModifierSourceRegistry>();
-            bonusModifierSourceRegistry.TryGetBonusModifierSource(Arg.Any<CardCode>(), out Arg.Any<ICardRescueModifierSource>()).Returns(false);
+            bonusModifierSourceRegistry.TryGetCard(Arg.Any<CardCode>(), out Arg.Any<ICardRescueModifierSource>()).Returns(false);
 
             var service = CreateService(fabCardCatalogLookup, eventCardCatalogLookup, bonusModifierSourceRegistry);
 
