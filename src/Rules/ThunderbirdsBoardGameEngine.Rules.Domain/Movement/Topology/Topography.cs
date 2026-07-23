@@ -29,6 +29,10 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.Movement.Topology
             ArgumentNullException.ThrowIfNull(blockedEdges, nameof(blockedEdges));
 
             var blocked = blockedEdges.ToList();
+            if (blocked.Count == 0)
+            {
+                return this;
+            }
 
             return new Topography(
                 Edges.Where(edge => !blocked.Any(blockedEdge => blockedEdge.Matches(edge))).ToList());

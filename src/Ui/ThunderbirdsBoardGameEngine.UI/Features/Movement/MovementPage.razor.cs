@@ -41,8 +41,8 @@ namespace ThunderbirdsBoardGameEngine.UI.Features.Movement
         {
             _mobileThunderbirds = ThunderbirdService.GetAllMobileVehicles();
 
-            var speedModifiers = EventCardMovementService.GetSpeedModificationEventCards();
-            var blockedMovementModifiers = EventCardMovementService.GetBlockedMovementEventCards();
+            var speedModifiers = EventCardMovementService.GetSpeedModificationEventCards() ?? Array.Empty<CardModifierViewModel>();
+            var blockedMovementModifiers = EventCardMovementService.GetBlockedMovementEventCards() ?? Array.Empty<CardModifierViewModel>();
 
             _eventCardModifiers = speedModifiers.Concat(blockedMovementModifiers).ToList();
         }
