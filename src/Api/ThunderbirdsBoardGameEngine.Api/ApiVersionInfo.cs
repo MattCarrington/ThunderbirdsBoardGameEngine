@@ -2,6 +2,6 @@
 {
     public static class ApiVersionInfo
     {
-        public const string RulesVersion = "0.7.0";
+        public const string RulesVersion = "0.8.0";
     }
 }
