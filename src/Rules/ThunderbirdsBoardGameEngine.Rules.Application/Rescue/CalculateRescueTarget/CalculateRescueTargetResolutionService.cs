@@ -10,7 +10,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Application.Rescue.CalculateRescueTa
         private readonly ICharacterCatalogLookup _characterCatalogLookup;
         private readonly IFabCardCatalogLookup _fabCardCatalogLookup;
         private readonly IEventCardCatalogLookup _eventCardCatalogLookup;
-        private readonly IBonusModifierSourceRegistry _bonusModifierSourceRegistry;
+        private readonly ICardBonusModifierSourceRegistry _bonusModifierSourceRegistry;
         private readonly RescueTargetCalculator _rescueTargetCalculator;
 
         public CalculateRescueTargetResolutionService(
@@ -18,7 +18,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Application.Rescue.CalculateRescueTa
             ICharacterCatalogLookup characterCatalogLookup,
             IFabCardCatalogLookup fabCardCatalogLookup,
             IEventCardCatalogLookup eventCardCatalogLookup,
-            IBonusModifierSourceRegistry bonusModifierSourceRegistry,
+            ICardBonusModifierSourceRegistry bonusModifierSourceRegistry,
             RescueTargetCalculator rescueTargetCalculator)
         {
             _disasterCatalogLookup = disasterCatalogLookup ?? throw new ArgumentNullException(nameof(disasterCatalogLookup));

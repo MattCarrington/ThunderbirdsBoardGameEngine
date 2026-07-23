@@ -26,7 +26,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Application.UnitTests.Rescue.Calcula
             fabCardCatalogLookup.Exists(Arg.Any<CardCode>()).Returns(false);
 
             var eventCardCatalogLookup = Substitute.For<IEventCardCatalogLookup>();
-            var bonusModifierSourceRegistry = Substitute.For<IBonusModifierSourceRegistry>();
+            var bonusModifierSourceRegistry = Substitute.For<ICardBonusModifierSourceRegistry>();
 
             var service = CreateService(fabCardCatalogLookup, eventCardCatalogLookup, bonusModifierSourceRegistry);
 
@@ -47,7 +47,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Application.UnitTests.Rescue.Calcula
             var eventCardCatalogLookup = Substitute.For<IEventCardCatalogLookup>();
             eventCardCatalogLookup.Exists(Arg.Any<CardCode>()).Returns(false);
 
-            var bonusModifierSourceRegistry = Substitute.For<IBonusModifierSourceRegistry>();
+            var bonusModifierSourceRegistry = Substitute.For<ICardBonusModifierSourceRegistry>();
 
             var service = CreateService(fabCardCatalogLookup, eventCardCatalogLookup, bonusModifierSourceRegistry);
 
@@ -65,7 +65,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Application.UnitTests.Rescue.Calcula
 
             var fabCardCatalogLookup = Substitute.For<IFabCardCatalogLookup>();
             var eventCardCatalogLookup = Substitute.For<IEventCardCatalogLookup>();
-            var bonusModifierSourceRegistry = Substitute.For<IBonusModifierSourceRegistry>();
+            var bonusModifierSourceRegistry = Substitute.For<ICardBonusModifierSourceRegistry>();
 
             var service = CreateService(fabCardCatalogLookup, eventCardCatalogLookup, bonusModifierSourceRegistry);
 
@@ -75,7 +75,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Application.UnitTests.Rescue.Calcula
             // Assert
             fabCardCatalogLookup.DidNotReceiveWithAnyArgs().Exists(Arg.Any<CardCode>());
             eventCardCatalogLookup.DidNotReceiveWithAnyArgs().Exists(Arg.Any<CardCode>());
-            bonusModifierSourceRegistry.DidNotReceiveWithAnyArgs().TryGetBonusModifierSource(Arg.Any<CardCode>(), out Arg.Any<IRescueModifierSource>());
+            bonusModifierSourceRegistry.DidNotReceiveWithAnyArgs().TryGetBonusModifierSource(Arg.Any<CardCode>(), out Arg.Any<ICardRescueModifierSource>());
         }
 
         [Fact]
@@ -92,7 +92,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Application.UnitTests.Rescue.Calcula
             var eventCardCatalogLookup = Substitute.For<IEventCardCatalogLookup>();
             eventCardCatalogLookup.Exists(Arg.Is(ValidEventCard)).Returns(true);
 
-            var bonusModifierSourceRegistry = Substitute.For<IBonusModifierSourceRegistry>();
+            var bonusModifierSourceRegistry = Substitute.For<ICardBonusModifierSourceRegistry>();
 
             var service = CreateService(fabCardCatalogLookup, eventCardCatalogLookup, bonusModifierSourceRegistry);
 
@@ -102,11 +102,11 @@ namespace ThunderbirdsBoardGameEngine.Rules.Application.UnitTests.Rescue.Calcula
             // Assert
             bonusModifierSourceRegistry.Received(1).TryGetBonusModifierSource(
                 Arg.Is(ValidFabCard),
-                out Arg.Any<IRescueModifierSource>());
+                out Arg.Any<ICardRescueModifierSource>());
 
             bonusModifierSourceRegistry.Received(1).TryGetBonusModifierSource(
                 Arg.Is(ValidEventCard),
-                out Arg.Any<IRescueModifierSource>());
+                out Arg.Any<ICardRescueModifierSource>());
         }
 
         [Fact]
@@ -122,7 +122,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Application.UnitTests.Rescue.Calcula
             var eventCardCatalogLookup = Substitute.For<IEventCardCatalogLookup>();
             eventCardCatalogLookup.Exists(Arg.Is(ValidEventCard)).Returns(true);
 
-            var modifierSource = Substitute.For<IRescueModifierSource>();
+            var modifierSource = Substitute.For<ICardRescueModifierSource>();
             modifierSource
                 .ApplyRescueModifier(Arg.Any<RescueCalculationInput>())
                 .Returns([
@@ -134,11 +134,11 @@ namespace ThunderbirdsBoardGameEngine.Rules.Application.UnitTests.Rescue.Calcula
                     }
                 ]);
 
-            var bonusModifierSourceRegistry = Substitute.For<IBonusModifierSourceRegistry>();
+            var bonusModifierSourceRegistry = Substitute.For<ICardBonusModifierSourceRegistry>();
             bonusModifierSourceRegistry
                 .TryGetBonusModifierSource(
                     Arg.Is(ValidFabCard),
-                    out Arg.Any<IRescueModifierSource>())
+                    out Arg.Any<ICardRescueModifierSource>())
                 .Returns(callInfo =>
                 {
                     callInfo[1] = modifierSource;
@@ -174,8 +174,8 @@ namespace ThunderbirdsBoardGameEngine.Rules.Application.UnitTests.Rescue.Calcula
             var eventCardCatalogLookup = Substitute.For<IEventCardCatalogLookup>();
             eventCardCatalogLookup.Exists(Arg.Is(ValidEventCard)).Returns(true);
 
-            var bonusModifierSourceRegistry = Substitute.For<IBonusModifierSourceRegistry>();
-            bonusModifierSourceRegistry.TryGetBonusModifierSource(Arg.Any<CardCode>(), out Arg.Any<IRescueModifierSource>()).Returns(false);
+            var bonusModifierSourceRegistry = Substitute.For<ICardBonusModifierSourceRegistry>();
+            bonusModifierSourceRegistry.TryGetBonusModifierSource(Arg.Any<CardCode>(), out Arg.Any<ICardRescueModifierSource>()).Returns(false);
 
             var service = CreateService(fabCardCatalogLookup, eventCardCatalogLookup, bonusModifierSourceRegistry);
 
@@ -200,7 +200,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Application.UnitTests.Rescue.Calcula
         private static CalculateRescueTargetResolutionService CreateService(
             IFabCardCatalogLookup fabCardCatalogLookup,
             IEventCardCatalogLookup eventCardCatalogLookup,
-            IBonusModifierSourceRegistry bonusModifierSourceRegistry)
+            ICardBonusModifierSourceRegistry bonusModifierSourceRegistry)
         {
             var disaster = new DisasterContribution(
                 difficultyNumber: 5,

@@ -6,6 +6,7 @@ using ThunderbirdsBoardGameEngine.Rules.Application.Rescue.CalculateRescueTarget
 using ThunderbirdsBoardGameEngine.Rules.Application.Rescue.Interfaces;
 using ThunderbirdsBoardGameEngine.Rules.Application.Validators;
 using ThunderbirdsBoardGameEngine.Rules.Domain.EventCards;
+using ThunderbirdsBoardGameEngine.Rules.Domain.FabCards;
 using ThunderbirdsBoardGameEngine.Rules.Domain.Movement.Evaluation;
 using ThunderbirdsBoardGameEngine.Rules.Domain.Movement.Routing;
 using ThunderbirdsBoardGameEngine.Rules.Domain.Movement.Speed;
@@ -49,6 +50,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Infrastructure
             RegisterMovementServices(services);
             RegisterMovementSpeedModifierSources(services);
             RegisterMovementTopologyModifierSources(services);
+            RegisterEventCardModifierSources(services);
 
             return services;
         }
@@ -74,6 +76,16 @@ namespace ThunderbirdsBoardGameEngine.Rules.Infrastructure
             services.AddSingleton<IEffectiveTopographyResolver, EffectiveTopographyResolver>();
             services.AddSingleton<IMovementTopologyModifierSourceRegistry, MovementTopologyModifierSourceRegistry>();
             services.AddSingleton<IMovementTopologyModifierSource, IcelandicVolcanoEruption>();
+        }
+
+        private static void RegisterEventCardModifierSources(IServiceCollection services)
+        {
+            services.AddSingleton<ICardBonusModifierSourceRegistry, CardBonusModifierSourceRegistry>();
+            services.AddSingleton<ICardRescueModifierSource, TheHoodInterferes>();
+            services.AddSingleton<ICardRescueModifierSource, AstronautSpacewalk>();
+            services.AddSingleton<ICardRescueModifierSource, PersonalHoverjet>();
+            services.AddSingleton<ICardRescueModifierSource, RemoteControlHoverCamera>();
+            services.AddSingleton<ICardRescueModifierSource, UnderwaterSealingUnit>();
         }
     }
 }
