@@ -44,6 +44,18 @@ namespace ThunderbirdsBoardGameEngine.PlaywrightTests.Pages
             await DestinationDropdown.SelectOptionAsync(new SelectOptionValue { Label = locationName });
         }
 
+        public async Task MarkEventCardCheckboxAsync(string cardName)
+        {
+            var checkbox = Page.GetByLabel(cardName);
+
+            await checkbox.WaitForAsync();
+
+            if (!await checkbox.IsCheckedAsync())
+            {
+                await checkbox.CheckAsync();
+            }
+        }
+
         public async Task ClickCalculateButton()
         {
             var button = Page.GetByTestId("calculate-button");
