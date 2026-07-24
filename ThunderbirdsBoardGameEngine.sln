@@ -78,6 +78,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{A6D0E6A7-3B5B-4A8D-9F1E-6D66B7D2C3E1}"
 	ProjectSection(SolutionItems) = preProject
 		Directory.Build.props = Directory.Build.props
+		Directory.Build.props = Directory.Build.props
 		Directory.Packages.props = Directory.Packages.props
 	EndProjectSection
 EndProject
@@ -102,6 +103,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThunderbirdsBoardGameEngine.Client.Core", "src\Common\ThunderbirdsBoardGameEngine.Client.Core\ThunderbirdsBoardGameEngine.Client.Core.csproj", "{929BF3DA-25C4-4AF1-5F31-B1491DB3A3AE}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThunderbirdsBoardGameEngine.Client.Core.UnitTests", "tests\Common\ThunderbirdsBoardGameEngine.Client.Core.UnitTests\ThunderbirdsBoardGameEngine.Client.Core.UnitTests.csproj", "{8489A72F-BD66-7C66-AAF7-737EC146E96D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThunderbirdsBoardGameEngine.GameState.Domain", "src\GameState\ThunderbirdsBoardGameEngine.GameState.Domain\ThunderbirdsBoardGameEngine.GameState.Domain.csproj", "{38AC2D36-B43B-402E-B8DB-53EFD49223BC}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThunderbirdsBoardGameEngine.TestUtils.WireMock.xUnit", "tests\Common\ThunderbirdsBoardGameEngine.TestUtils.WireMock.xUnit\ThunderbirdsBoardGameEngine.TestUtils.WireMock.xUnit.csproj", "{0286B7EC-2DC5-4B79-B2D6-484F878A4229}"
 EndProject
@@ -559,6 +562,18 @@ Global
 		{8489A72F-BD66-7C66-AAF7-737EC146E96D}.Release|x64.Build.0 = Release|Any CPU
 		{8489A72F-BD66-7C66-AAF7-737EC146E96D}.Release|x86.ActiveCfg = Release|Any CPU
 		{8489A72F-BD66-7C66-AAF7-737EC146E96D}.Release|x86.Build.0 = Release|Any CPU
+		{38AC2D36-B43B-402E-B8DB-53EFD49223BC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{38AC2D36-B43B-402E-B8DB-53EFD49223BC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{38AC2D36-B43B-402E-B8DB-53EFD49223BC}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{38AC2D36-B43B-402E-B8DB-53EFD49223BC}.Debug|x64.Build.0 = Debug|Any CPU
+		{38AC2D36-B43B-402E-B8DB-53EFD49223BC}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{38AC2D36-B43B-402E-B8DB-53EFD49223BC}.Debug|x86.Build.0 = Debug|Any CPU
+		{38AC2D36-B43B-402E-B8DB-53EFD49223BC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{38AC2D36-B43B-402E-B8DB-53EFD49223BC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{38AC2D36-B43B-402E-B8DB-53EFD49223BC}.Release|x64.ActiveCfg = Release|Any CPU
+		{38AC2D36-B43B-402E-B8DB-53EFD49223BC}.Release|x64.Build.0 = Release|Any CPU
+		{38AC2D36-B43B-402E-B8DB-53EFD49223BC}.Release|x86.ActiveCfg = Release|Any CPU
+		{38AC2D36-B43B-402E-B8DB-53EFD49223BC}.Release|x86.Build.0 = Release|Any CPU
 		{0286B7EC-2DC5-4B79-B2D6-484F878A4229}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{0286B7EC-2DC5-4B79-B2D6-484F878A4229}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0286B7EC-2DC5-4B79-B2D6-484F878A4229}.Debug|x64.ActiveCfg = Debug|Any CPU
