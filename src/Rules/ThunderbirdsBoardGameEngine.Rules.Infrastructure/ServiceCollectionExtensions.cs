@@ -55,6 +55,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Infrastructure
         {
             services.AddSingleton<RescueTargetCalculator>();
             services.AddSingleton<ICalculateRescueTargetResolutionService, CalculateRescueTargetResolutionService>();
+
             services.AddSingleton<ICardBonusModifierSourceRegistry, CardBonusModifierSourceRegistry>();
             services.AddSingleton<ICardRescueModifierSource, TheHoodInterferes>();
             services.AddSingleton<ICardRescueModifierSource, AstronautSpacewalk>();
