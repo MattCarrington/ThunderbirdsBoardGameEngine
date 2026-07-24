@@ -1,5 +1,4 @@
 using ThunderbirdsBoardGameEngine.ReferenceData.Core.Identities;
-using ThunderbirdsBoardGameEngine.Rules.Domain.Movement.Topology;
 using ThunderbirdsBoardGameEngine.Rules.Domain.Rescue;
 using Xunit;
 
