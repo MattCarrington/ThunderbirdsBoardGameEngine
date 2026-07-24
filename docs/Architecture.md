@@ -1,5 +1,12 @@
 # Architecture Overview
 
+> This document describes the currently implemented production architecture.
+> The planned persisted GameState vertical slice is specified in
+> [Persisted Game Dashboard](features/persisted-game-dashboard.md), with its
+> domain model and accepted architecture decisions under
+> [GameState Domain](domain/game-state.md) and
+> [architecture/decisions](architecture/decisions).
+
 ## Deployment shape
 
 The application is deployed as a **single Docker image** containing both the
