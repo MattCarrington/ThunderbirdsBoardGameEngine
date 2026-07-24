@@ -15,7 +15,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.FabCards
             {
                 yield return new AppliedRescueModifier
                 {
-                    Key = "underwater-sealing-unit",
+                    Key = CardCode.Value,
                     Value = 3,
                     SourceType = SourceType.FabCard
                 };
