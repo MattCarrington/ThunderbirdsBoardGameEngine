@@ -7,7 +7,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.Rescue
     public class CardBonusModifierSourceRegistryTests
     {
         [Fact]
-        public void TryGetEventCard_WhenSourceExists_ReturnsSource()
+        public void TryGetCard_WhenSourceExists_ReturnsSource()
         {
             // Arrange
             var source = new TestSource(new CardCode("test-card"));
@@ -22,7 +22,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.Rescue
         }
 
         [Fact]
-        public void TryGetEventCard_WhenSourceDoesNotExist_ReturnsFalseAndNull()
+        public void TryGetCard_WhenSourceDoesNotExist_ReturnsFalseAndNull()
         {
             // Arrange
             var registry = new CardBonusModifierSourceRegistry([]);
