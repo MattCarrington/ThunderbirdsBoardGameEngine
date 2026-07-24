@@ -177,14 +177,14 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.Movement
         {
             public TestMovementSpeedModifierSource(CardCode cardCode)
             {
-                EventCardCode = cardCode;
+                CardCode = cardCode;
             }
 
-            public CardCode EventCardCode { get; }
+            public CardCode CardCode { get; }
 
             public AppliedMovementSpeedModifier? ApplyMovementModifier(ThunderbirdCode input)
             {
-                return new AppliedMovementSpeedModifier(EventCardCode, 1, "Test modifier applied.");
+                return new AppliedMovementSpeedModifier(CardCode, 1, "Test modifier applied.");
             }
         }
     }

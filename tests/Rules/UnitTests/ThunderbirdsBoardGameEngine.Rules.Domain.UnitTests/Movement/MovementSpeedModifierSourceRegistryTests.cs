@@ -24,7 +24,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.Movement
             // Assert
             Assert.True(result);
             Assert.NotNull(source);
-            Assert.Equal(cardCode, source.EventCardCode);
+            Assert.Equal(cardCode, source.CardCode);
         }
 
         [Fact]
@@ -81,27 +81,27 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.Movement
 
         private class TestRegistrySource1 : IMovementSpeedModifierSource
         {
-            public CardCode EventCardCode => TestCardCode1;
+            public CardCode CardCode => TestCardCode1;
 
             public AppliedMovementSpeedModifier? ApplyMovementModifier(ThunderbirdCode input)
             {
                 return new AppliedMovementSpeedModifier(
-                    Card: EventCardCode,
+                    Card: CardCode,
                     EffectiveTopSpeed: 100,
-                    Message: $"{EventCardCode} applied");
+                    Message: $"{CardCode} applied");
             }
         }
 
         private class TestRegistrySource2 : IMovementSpeedModifierSource
         {
-            public CardCode EventCardCode => TestCardCode2;
+            public CardCode CardCode => TestCardCode2;
 
             public AppliedMovementSpeedModifier? ApplyMovementModifier(ThunderbirdCode input)
             {
                 return new AppliedMovementSpeedModifier(
-                    Card: EventCardCode,
+                    Card: CardCode,
                     EffectiveTopSpeed: 1,
-                    Message: $"{EventCardCode} applied");
+                    Message: $"{CardCode} applied");
             }
         }
     }

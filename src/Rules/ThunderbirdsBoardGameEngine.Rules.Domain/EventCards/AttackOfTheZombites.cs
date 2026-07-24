@@ -6,7 +6,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.EventCards
 {
     public sealed class AttackOfTheZombites : IMovementSpeedModifierSource
     {
-        public CardCode EventCardCode => KnownEventCardCodes.AttackOfTheZombites;
+        public CardCode CardCode => KnownEventCardCodes.AttackOfTheZombites;
 
         public AppliedMovementSpeedModifier? ApplyMovementModifier(ThunderbirdCode input)
         {

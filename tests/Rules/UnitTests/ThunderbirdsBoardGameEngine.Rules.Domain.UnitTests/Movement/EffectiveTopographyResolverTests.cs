@@ -72,16 +72,16 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.Movement
 
             public TestSource(CardCode eventCardCode, BlockedMovementEdge blockedEdge, string message)
             {
-                EventCardCode = eventCardCode;
+                CardCode = eventCardCode;
                 _blockedEdge = blockedEdge;
                 _message = message;
             }
 
-            public CardCode EventCardCode { get; }
+            public CardCode CardCode { get; }
 
             public AppliedMovementTopologyModifier ApplyMovementModifier()
             {
-                return new AppliedMovementTopologyModifier(EventCardCode, [_blockedEdge], _message);
+                return new AppliedMovementTopologyModifier(CardCode, [_blockedEdge], _message);
             }
         }
     }

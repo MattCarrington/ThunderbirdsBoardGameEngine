@@ -6,13 +6,13 @@ using ThunderbirdsBoardGameEngine.Rules.Application.Rescue.CalculateRescueTarget
 using ThunderbirdsBoardGameEngine.Rules.Application.Rescue.Interfaces;
 using ThunderbirdsBoardGameEngine.Rules.Application.Validators;
 using ThunderbirdsBoardGameEngine.Rules.Domain.EventCards;
+using ThunderbirdsBoardGameEngine.Rules.Domain.FabCards;
 using ThunderbirdsBoardGameEngine.Rules.Domain.Movement.Evaluation;
 using ThunderbirdsBoardGameEngine.Rules.Domain.Movement.Routing;
 using ThunderbirdsBoardGameEngine.Rules.Domain.Movement.Speed;
 using ThunderbirdsBoardGameEngine.Rules.Domain.Movement.Topology;
 using ThunderbirdsBoardGameEngine.Rules.Domain.Rescue;
 using ThunderbirdsBoardGameEngine.Rules.Infrastructure.Lookups;
-using ThunderbirdsBoardGameEngine.Rules.Infrastructure.Registries;
 
 namespace ThunderbirdsBoardGameEngine.Rules.Infrastructure
 {
@@ -33,9 +33,6 @@ namespace ThunderbirdsBoardGameEngine.Rules.Infrastructure
         {
             services.AddMediatR(typeof(CalculateRescueTargetHandler).Assembly);
 
-            services.AddSingleton<RescueTargetCalculator>();
-
-            services.AddSingleton<ICalculateRescueTargetResolutionService, CalculateRescueTargetResolutionService>();
             services.AddSingleton<IDisasterCatalogLookup, ReferenceDisasterCatalogLookup>();
             services.AddSingleton<ICharacterCatalogLookup, ReferenceCharacterCatalogLookup>();
             services.AddSingleton<ILocationDefinitionLookup, ReferenceLocationDefinitionLookup>();
@@ -43,14 +40,28 @@ namespace ThunderbirdsBoardGameEngine.Rules.Infrastructure
             services.AddSingleton<IThunderbirdsDefinitionLookup, ReferenceThunderbirdsDefinitionLookup>();
             services.AddSingleton<IFabCardCatalogLookup, ReferenceFabCardCatalogLookup>();
             services.AddSingleton<IEventCardCatalogLookup, ReferenceEventCardCatalogLookup>();
-            services.AddSingleton<IBonusModifierSourceRegistry, BonusModifierSourceRegistry>();
+
             services.AddSingleton<IEventCardValidator, EventCardValidator>();
 
+            RegisterRescueServices(services);
             RegisterMovementServices(services);
             RegisterMovementSpeedModifierSources(services);
             RegisterMovementTopologyModifierSources(services);
 
             return services;
+        }
+
+        private static void RegisterRescueServices(IServiceCollection services)
+        {
+            services.AddSingleton<RescueTargetCalculator>();
+            services.AddSingleton<ICalculateRescueTargetResolutionService, CalculateRescueTargetResolutionService>();
+
+            services.AddSingleton<ICardBonusModifierSourceRegistry, CardBonusModifierSourceRegistry>();
+            services.AddSingleton<ICardRescueModifierSource, TheHoodInterferes>();
+            services.AddSingleton<ICardRescueModifierSource, AstronautSpacewalk>();
+            services.AddSingleton<ICardRescueModifierSource, PersonalHoverjet>();
+            services.AddSingleton<ICardRescueModifierSource, RemoteControlHoverCamera>();
+            services.AddSingleton<ICardRescueModifierSource, UnderwaterSealingUnit>();
         }
 
         private static void RegisterMovementServices(IServiceCollection services)
