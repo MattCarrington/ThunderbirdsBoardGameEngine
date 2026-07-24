@@ -55,9 +55,9 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.Rescue
 
         private sealed class TestSource : ICardRescueModifierSource
         {
-            public TestSource(CardCode eventCardCode)
+            public TestSource(CardCode cardCode)
             {
-                CardCode = eventCardCode;
+                CardCode = cardCode;
             }
 
             public CardCode CardCode { get; }
