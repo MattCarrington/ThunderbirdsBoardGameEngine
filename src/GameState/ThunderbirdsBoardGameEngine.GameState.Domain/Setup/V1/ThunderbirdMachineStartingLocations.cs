@@ -5,7 +5,7 @@ namespace ThunderbirdsBoardGameEngine.GameState.Domain.Setup.V1
 {
     public sealed class ThunderbirdMachineStartingLocations
     {
-        public static IDictionary<ThunderbirdCode, LocationCode> GetStartingLocations()
+        public static IReadOnlyDictionary<ThunderbirdCode, LocationCode> GetStartingLocations()
         {
             return new Dictionary<ThunderbirdCode, LocationCode>
             {
