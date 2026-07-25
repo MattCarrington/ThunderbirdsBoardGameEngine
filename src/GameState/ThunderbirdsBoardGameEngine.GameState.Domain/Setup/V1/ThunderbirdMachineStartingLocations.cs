@@ -1,7 +1,7 @@
 ﻿using ThunderbirdsBoardGameEngine.ReferenceData.Core.Identities;
 using ThunderbirdsBoardGameEngine.ReferenceData.Core.KnownIdentities;
 
-namespace ThunderbirdsBoardGameEngine.GameState.Domain.Setup
+namespace ThunderbirdsBoardGameEngine.GameState.Domain.Setup.V1
 {
     public sealed class ThunderbirdMachineStartingLocations
     {

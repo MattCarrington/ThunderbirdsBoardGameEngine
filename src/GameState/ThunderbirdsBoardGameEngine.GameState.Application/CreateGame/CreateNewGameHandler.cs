@@ -1,5 +1,5 @@
 ﻿using MediatR;
-using ThunderbirdsBoardGameEngine.GameState.Domain.Setup;
+using ThunderbirdsBoardGameEngine.GameState.Domain.Setup.V1;
 
 namespace ThunderbirdsBoardGameEngine.GameState.Application.CreateGame
 {
@@ -16,7 +16,7 @@ namespace ThunderbirdsBoardGameEngine.GameState.Application.CreateGame
 
         public async Task<CreateNewGameResult> Handle(CreateNewGameCommand request, CancellationToken cancellationToken)
         {
-            var game = _gameFactory.Create(Guid.NewGuid(), DateTimeOffset.UtcNow, "TODO");  // TODO: Replace "TODO" with the actual setup version
+            var game = _gameFactory.Create(Guid.NewGuid(), DateTimeOffset.UtcNow);  // TODO: Replace "TODO" with the actual setup version
 
             await _gameRepository.SaveGameSession(game, cancellationToken);
 
