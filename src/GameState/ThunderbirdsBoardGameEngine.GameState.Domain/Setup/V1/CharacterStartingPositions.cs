@@ -5,7 +5,7 @@ namespace ThunderbirdsBoardGameEngine.GameState.Domain.Setup.V1
 {
     public sealed class CharacterStartingPositions
     {
-        public static IDictionary<CharacterCode, ThunderbirdCode> GetStartingPositions()
+        public static IReadOnlyDictionary<CharacterCode, ThunderbirdCode> GetStartingPositions()
         {
             return new Dictionary<CharacterCode, ThunderbirdCode>
             {
