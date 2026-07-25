@@ -38,8 +38,6 @@ namespace ThunderbirdsBoardGameEngine.GameState.Domain
             IDictionary<ThunderbirdCode, LocationCode> machines,
             IDictionary<CharacterCode, ThunderbirdCode> characters)
         {
-            var characterStates = characters.ToArray();
-
             return new Game(
                 id,
                 createdAtUtc,
