@@ -376,12 +376,11 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Movement
 
         private static IMediator CreateMediator()
         {
-            var locations = CreateLocations();
             var thunderbirds = CreateThunderbirds();
             var eventCards = CreateEventCards();
 
             var services = new ServiceCollection();
-            services.AddSingleton<ILocationDefinitionCatalog>(locations);
+
             services.AddSingleton<IThunderbirdDefinitionCatalog>(thunderbirds);
             services.AddSingleton<IEventCardDefinitionCatalog>(eventCards);
             services.AddRules();
@@ -389,23 +388,6 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Movement
 
             var sp = services.BuildServiceProvider();
             return sp.GetRequiredService<IMediator>();
-        }
-
-        private static FakeLocationDefinitionCatalog CreateLocations()
-        {
-            var europe = new ReferenceLocationDefinition(new LocationCode("europe"), "Europe", MovementDomain.Earth);
-            var asia = new ReferenceLocationDefinition(new LocationCode("asia"), "Asia", MovementDomain.Earth);
-            var northAmerica = new ReferenceLocationDefinition(new LocationCode("north-america"), "North America", MovementDomain.Earth);
-            var southAmerica = new ReferenceLocationDefinition(new LocationCode("south-america"), "South America", MovementDomain.Earth);
-            var atlantic = new ReferenceLocationDefinition(new LocationCode("north-atlantic"), "Atlantic Ocean", MovementDomain.Earth);
-            var pacific = new ReferenceLocationDefinition(new LocationCode("pacific"), "Pacific Ocean", MovementDomain.Earth);
-            var australia = new ReferenceLocationDefinition(new LocationCode("australia"), "Australia", MovementDomain.Earth);
-            var africa = new ReferenceLocationDefinition(new LocationCode("africa"), "Africa", MovementDomain.Earth);
-            var space = new ReferenceLocationDefinition(new LocationCode("space"), "Space", MovementDomain.Space);
-            var moon = new ReferenceLocationDefinition(new LocationCode("moon"), "Moon", MovementDomain.Space);
-            var sun = new ReferenceLocationDefinition(new LocationCode("sun"), "Sun", MovementDomain.Space);
-
-            return new FakeLocationDefinitionCatalog(europe, asia, northAmerica, southAmerica, atlantic, pacific, australia, africa, space, moon, sun);
         }
 
         private static FakeThunderbirdDefinitionCatalog CreateThunderbirds()
