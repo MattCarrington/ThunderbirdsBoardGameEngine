@@ -76,7 +76,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Movement
             var thunderbirds = CreateThunderbirds();
 
             var services = new ServiceCollection();
-            services.AddSingleton<IThunderbirdDefinitionCatalog>(thunderbirds);
+
             services.AddRules();
             services.AddFakeCatalogs();
 

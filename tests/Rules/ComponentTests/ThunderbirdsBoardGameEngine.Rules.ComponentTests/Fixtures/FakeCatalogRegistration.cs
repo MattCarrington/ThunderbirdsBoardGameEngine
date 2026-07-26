@@ -9,9 +9,11 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Fixtures
         public static IServiceCollection AddFakeCatalogs(this IServiceCollection services)
         {
             var locations = LocationsTestData.CreateLocations();
+            var thunderbirds = ThunderbirdsTestData.CreateThunderbirds();
             var edges = EdgesTestData.CreateEdges();
 
             services.AddSingleton<ILocationDefinitionCatalog>(locations);
+            services.AddSingleton<IThunderbirdDefinitionCatalog>(thunderbirds);
             services.AddSingleton<IMapEdgeDefinitionCatalog>(edges);
 
             return services;
