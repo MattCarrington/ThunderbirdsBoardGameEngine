@@ -376,27 +376,13 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Movement
 
         private static IMediator CreateMediator()
         {
-            var eventCards = CreateEventCards();
-
             var services = new ServiceCollection();
 
-            services.AddSingleton<IEventCardDefinitionCatalog>(eventCards);
             services.AddRules();
             services.AddFakeCatalogs();
 
             var sp = services.BuildServiceProvider();
             return sp.GetRequiredService<IMediator>();
-        }
-
-        private static FakeEventCardDefinitionCatalog CreateEventCards()
-        {
-            var attackOfTheZombites = new ReferenceEventCardDefinition(KnownEventCardCodes.AttackOfTheZombites, "Attack of the Zombites");
-            var usnSentinelMissileStrike = new ReferenceEventCardDefinition(KnownEventCardCodes.UsnSentinelMissileStrike, "USN Sentinel Missile Strike");
-            var rocketMalfunction = new ReferenceEventCardDefinition(KnownEventCardCodes.RocketMalfunction, "Rocket Malfunction");
-            var icelandicVolcanoEruption = new ReferenceEventCardDefinition(KnownEventCardCodes.IcelandicVolcanoEruption, "Icelandic Volcano Eruption");
-            var explosionOnTracyIsland = new ReferenceEventCardDefinition(new CardCode("explosion-on-tracy-island"), "Explosion on Tracy Island");
-
-            return new FakeEventCardDefinitionCatalog(attackOfTheZombites, usnSentinelMissileStrike, rocketMalfunction, icelandicVolcanoEruption, explosionOnTracyIsland);
         }
     }
 }

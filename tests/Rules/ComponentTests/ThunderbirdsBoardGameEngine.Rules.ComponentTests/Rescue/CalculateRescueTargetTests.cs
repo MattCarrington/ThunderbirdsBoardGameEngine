@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using ThunderbirdsBoardGameEngine.ReferenceData.Core.Enums;
 using ThunderbirdsBoardGameEngine.ReferenceData.Core.Identities;
+using ThunderbirdsBoardGameEngine.ReferenceData.Core.KnownIdentities;
 using ThunderbirdsBoardGameEngine.ReferenceData.Core.Model;
 using ThunderbirdsBoardGameEngine.ReferenceData.Runtime.Interfaces;
 using ThunderbirdsBoardGameEngine.Rules.Application.Rescue.CalculateRescueTarget;
@@ -112,7 +113,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Rescue
                 PresentDisasterBonusKeys: [],
                 PlayedFabCardCodes:
                 [
-                    new CardCode("underwater-sealing-unit")
+                    KnownFabCardCodes.UnderwaterSealingUnit
                 ],
                 ActiveEventCardCodes: []
             );
@@ -144,7 +145,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Rescue
                 PlayedFabCardCodes: [],
                 ActiveEventCardCodes:
                 [
-                    new CardCode("the-hood-interferes")
+                    KnownEventCardCodes.TheHoodInterferes
                 ]
             );
 
@@ -179,11 +180,11 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Rescue
                 ],
                 PlayedFabCardCodes:
                 [
-                    new CardCode("underwater-sealing-unit")
+                    KnownFabCardCodes.UnderwaterSealingUnit
                 ],
                 ActiveEventCardCodes:
                 [
-                    new CardCode("the-hood-interferes")
+                    KnownEventCardCodes.TheHoodInterferes
                 ]
             );
 
@@ -287,8 +288,8 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Rescue
                 PresentDisasterBonusKeys: [],
                 PlayedFabCardCodes:
                 [
-                    new CardCode("underwater-sealing-unit"),
-                    new CardCode("underwater-sealing-unit")
+                    KnownFabCardCodes.UnderwaterSealingUnit,
+                    KnownFabCardCodes.UnderwaterSealingUnit
                 ],
                 ActiveEventCardCodes: []
             );
@@ -315,8 +316,8 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Rescue
                 PlayedFabCardCodes: [],
                 ActiveEventCardCodes:
                 [
-                    new CardCode("the-hood-interferes"),
-                    new CardCode("the-hood-interferes")
+                    KnownEventCardCodes.TheHoodInterferes,
+                    KnownEventCardCodes.TheHoodInterferes
                 ]
             );
 
@@ -333,48 +334,13 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Rescue
 
         private static IMediator CreateMediator()
         {
-            var fabCards = CreateFabCardsCatalog();
-            var eventCards = CreateEventCardsCatalog();
-
             var services = new ServiceCollection();
 
-            services.AddSingleton<IFabCardDefinitionCatalog>(fabCards);
-            services.AddSingleton<IEventCardDefinitionCatalog>(eventCards);
             services.AddRules();
             services.AddFakeCatalogs();
 
             var sp = services.BuildServiceProvider();
             return sp.GetRequiredService<IMediator>();
-        }
-
-        private static FakeFabCardDefinitionCatalog CreateFabCardsCatalog()
-        {
-            var underwaterSealingUnit = new ReferenceFabCardDefinition(
-                code: new CardCode("underwater-sealing-unit"),
-                displayName: "Underwater Sealing Unit"
-            );
-
-            var jeffsOrders = new ReferenceFabCardDefinition(
-                code: new CardCode("jeff-s-orders"),
-                displayName: "Jeff's Orders"
-            );
-
-            return new FakeFabCardDefinitionCatalog(underwaterSealingUnit, jeffsOrders);
-        }
-
-        private static FakeEventCardDefinitionCatalog CreateEventCardsCatalog()
-        {
-            var theHoodInterferes = new ReferenceEventCardDefinition(
-                code: new CardCode("the-hood-interferes"),
-                displayName: "The Hood Interferes"
-            );
-
-            var explosionOnTracyIsland = new ReferenceEventCardDefinition(
-                code: new CardCode("explosion-on-tracy-island"),
-                displayName: "Explosion on Tracy Island"
-            );
-
-            return new FakeEventCardDefinitionCatalog(theHoodInterferes, explosionOnTracyIsland);
         }
     }
 }
