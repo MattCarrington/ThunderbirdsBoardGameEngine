@@ -333,13 +333,11 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Rescue
 
         private static IMediator CreateMediator()
         {
-            var characters = CreateCharacterCatalog();
             var fabCards = CreateFabCardsCatalog();
             var eventCards = CreateEventCardsCatalog();
 
             var services = new ServiceCollection();
 
-            services.AddSingleton<ICharacterDefinitionCatalog>(characters);
             services.AddSingleton<IFabCardDefinitionCatalog>(fabCards);
             services.AddSingleton<IEventCardDefinitionCatalog>(eventCards);
             services.AddRules();
@@ -347,36 +345,6 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Rescue
 
             var sp = services.BuildServiceProvider();
             return sp.GetRequiredService<IMediator>();
-        }
-
-        private static FakeCharacterDefinitionCatalog CreateCharacterCatalog()
-        {
-            var scott = new ReferenceCharacterDefinition(
-                code: new CharacterCode("scott"),
-                displayName: "Scott",
-                rescueBonus: new ReferenceCharacterRescueBonus(
-                   rescueType: RescueType.Air,
-                   value: 2
-                )
-            );
-            var virgil = new ReferenceCharacterDefinition(
-                code: new CharacterCode("virgil"),
-                displayName: "Virgil",
-                rescueBonus: new ReferenceCharacterRescueBonus(
-                   rescueType: RescueType.Land,
-                   value: 2
-                )
-            );
-            var gordon = new ReferenceCharacterDefinition(
-                code: new CharacterCode("gordon"),
-                displayName: "Gordon",
-                rescueBonus: new ReferenceCharacterRescueBonus(
-                   rescueType: RescueType.Sea,
-                   value: 3
-                )
-            );
-
-            return new FakeCharacterDefinitionCatalog(scott, virgil, gordon);
         }
 
         private static FakeFabCardDefinitionCatalog CreateFabCardsCatalog()
