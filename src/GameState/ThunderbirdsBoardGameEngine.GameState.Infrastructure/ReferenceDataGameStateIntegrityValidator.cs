@@ -23,13 +23,20 @@ namespace ThunderbirdsBoardGameEngine.GameState.Infrastructure
 
         public void Validate(Game game)
         {
+            ArgumentNullException.ThrowIfNull(game, nameof(game));
+
+            if (game.Id == Guid.Empty)
+            {
+                throw new InvalidOperationException("Game ID cannot be empty.");
+            }
+
             ValidateThunderbirdMachines(game.Machines);
             ValidateCharacters(game.Characters);
         }
 
         private void ValidateCharacters(IReadOnlyDictionary<CharacterCode, ThunderbirdCode> characterState)
         {
-            if (characterState.Count != _characterCatalog.GetAll().Count())
+            if (characterState.Count != _characterCatalog.GetAll().Length)
             {
                 throw new InvalidOperationException("Character count does not match reference data.");
             }
@@ -49,7 +56,7 @@ namespace ThunderbirdsBoardGameEngine.GameState.Infrastructure
 
         private void ValidateThunderbirdMachines(IReadOnlyDictionary<ThunderbirdCode, LocationCode> thunderbirdState)
         {
-            if (thunderbirdState.Count != _thunderbirdCatalog.GetAll().Count())
+            if (thunderbirdState.Count != _thunderbirdCatalog.GetAll().Length)
             {
                 throw new InvalidOperationException("Thunderbird count does not match reference data.");
             }
