@@ -73,8 +73,6 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Movement
 
         private static IMediator CreateMediator()
         {
-            var thunderbirds = CreateThunderbirds();
-
             var services = new ServiceCollection();
 
             services.AddRules();
@@ -82,17 +80,6 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Movement
 
             var sp = services.BuildServiceProvider();
             return sp.GetRequiredService<IMediator>();
-        }
-
-        private static FakeThunderbirdDefinitionCatalog CreateThunderbirds()
-        {
-            var thunderbird1 = new ReferenceThunderbirdDefinition(new ThunderbirdCode("thunderbird-1"), "Thunderbird 1", MovementDomain.Earth, 3);
-            var thunderbird2 = new ReferenceThunderbirdDefinition(new ThunderbirdCode("thunderbird-2"), "Thunderbird 2", MovementDomain.Earth, 2);
-            var thunderbird3 = new ReferenceThunderbirdDefinition(new ThunderbirdCode("thunderbird-3"), "Thunderbird 3", MovementDomain.Space, 3);
-            var thunderbird4 = new ReferenceThunderbirdDefinition(new ThunderbirdCode("thunderbird-4"), "Thunderbird 4", MovementDomain.Earth, 1);
-            var thunderbird5 = new ReferenceThunderbirdDefinition(new ThunderbirdCode("thunderbird-5"), "Thunderbird 5", MovementDomain.Space, 0);
-
-            return new FakeThunderbirdDefinitionCatalog(thunderbird1, thunderbird2, thunderbird3, thunderbird4, thunderbird5);
         }
     }
 }
