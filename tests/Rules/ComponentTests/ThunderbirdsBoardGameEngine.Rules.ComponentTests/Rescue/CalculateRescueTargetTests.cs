@@ -7,6 +7,8 @@ using ThunderbirdsBoardGameEngine.ReferenceData.Runtime.Interfaces;
 using ThunderbirdsBoardGameEngine.Rules.Application.Rescue.CalculateRescueTarget;
 using ThunderbirdsBoardGameEngine.Rules.Application.Rescue.Exceptions;
 using ThunderbirdsBoardGameEngine.Rules.ComponentTests.Fakes;
+using ThunderbirdsBoardGameEngine.Rules.ComponentTests.Fixtures;
+using ThunderbirdsBoardGameEngine.Rules.ComponentTests.TestData;
 using ThunderbirdsBoardGameEngine.Rules.Domain.Rescue;
 using ThunderbirdsBoardGameEngine.Rules.Infrastructure;
 using Xunit;
@@ -21,7 +23,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Rescue
             // Arrange
             var request = new CalculateRescueTargetQuery
             (
-                DisasterCardCode: new CardCode("pit-of-peril"),
+                DisasterCardCode: TestDisasterCodes.SunProbe,
                 PerformingCharacter: new CharacterCode("scott"),
                 PresentDisasterBonusKeys: [],
                 PlayedFabCardCodes: [],
@@ -45,7 +47,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Rescue
             // Arrange
             var request = new CalculateRescueTargetQuery
             (
-                DisasterCardCode: new CardCode("sun-probe"),
+                DisasterCardCode: TestDisasterCodes.SunProbe,
                 PerformingCharacter: new CharacterCode("scott"),
                 PresentDisasterBonusKeys:
                 [
@@ -75,7 +77,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Rescue
             // Arrange
             var request = new CalculateRescueTargetQuery
             (
-                DisasterCardCode: new CardCode("pit-of-peril"),
+                DisasterCardCode: TestDisasterCodes.PitOfPeril,
                 PerformingCharacter: new CharacterCode("virgil"),
                 PresentDisasterBonusKeys:
                 [
@@ -105,7 +107,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Rescue
             // Arrange
             var request = new CalculateRescueTargetQuery
             (
-                DisasterCardCode: new CardCode("terror-in-new-york-city"),
+                DisasterCardCode: TestDisasterCodes.TerrorInNewYorkCity,
                 PerformingCharacter: new CharacterCode("scott"),
                 PresentDisasterBonusKeys: [],
                 PlayedFabCardCodes:
@@ -136,7 +138,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Rescue
             // Arrange
             var request = new CalculateRescueTargetQuery
             (
-                DisasterCardCode: new CardCode("pit-of-peril"),
+                DisasterCardCode: TestDisasterCodes.PitOfPeril,
                 PerformingCharacter: new CharacterCode("gordon"),
                 PresentDisasterBonusKeys: [],
                 PlayedFabCardCodes: [],
@@ -167,7 +169,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Rescue
             // Arrange
             var request = new CalculateRescueTargetQuery
             (
-                DisasterCardCode: new CardCode("terror-in-new-york-city"),
+                DisasterCardCode: TestDisasterCodes.TerrorInNewYorkCity,
                 PerformingCharacter: new CharacterCode("gordon"),
                 PresentDisasterBonusKeys:
                 [
@@ -208,7 +210,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Rescue
             // Arrange
             var request = new CalculateRescueTargetQuery
             (
-                DisasterCardCode: new CardCode("terror-in-new-york-city"),
+                DisasterCardCode: TestDisasterCodes.TerrorInNewYorkCity,
                 PerformingCharacter: new CharacterCode("gordon"),
                 PresentDisasterBonusKeys: [],
                 PlayedFabCardCodes:
@@ -230,7 +232,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Rescue
             // Arrange
             var request = new CalculateRescueTargetQuery
             (
-                DisasterCardCode: new CardCode("terror-in-new-york-city"),
+                DisasterCardCode: TestDisasterCodes.TerrorInNewYorkCity,
                 PerformingCharacter: new CharacterCode("gordon"),
                 PresentDisasterBonusKeys: [],
                 PlayedFabCardCodes: [],
@@ -251,7 +253,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Rescue
         {
             var request = new CalculateRescueTargetQuery
             (
-                DisasterCardCode: new CardCode("terror-in-new-york-city"),
+                DisasterCardCode: TestDisasterCodes.TerrorInNewYorkCity,
                 PerformingCharacter: new CharacterCode("virgil"),
                 PresentDisasterBonusKeys: [],
                 PlayedFabCardCodes:
@@ -280,7 +282,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Rescue
         {
             var request = new CalculateRescueTargetQuery
             (
-                DisasterCardCode: new CardCode("terror-in-new-york-city"),
+                DisasterCardCode: TestDisasterCodes.TerrorInNewYorkCity,
                 PerformingCharacter: new CharacterCode("virgil"),
                 PresentDisasterBonusKeys: [],
                 PlayedFabCardCodes:
@@ -307,7 +309,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Rescue
         {
             var request = new CalculateRescueTargetQuery
             (
-                DisasterCardCode: new CardCode("pit-of-peril"),
+                DisasterCardCode: TestDisasterCodes.PitOfPeril,
                 PerformingCharacter: new CharacterCode("gordon"),
                 PresentDisasterBonusKeys: [],
                 PlayedFabCardCodes: [],
@@ -331,80 +333,20 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Rescue
 
         private static IMediator CreateMediator()
         {
-            var disasters = CreateDisasterCatalog();
             var characters = CreateCharacterCatalog();
             var fabCards = CreateFabCardsCatalog();
             var eventCards = CreateEventCardsCatalog();
 
             var services = new ServiceCollection();
-            services.AddSingleton<IDisasterDefinitionCatalog>(disasters);
+
             services.AddSingleton<ICharacterDefinitionCatalog>(characters);
             services.AddSingleton<IFabCardDefinitionCatalog>(fabCards);
             services.AddSingleton<IEventCardDefinitionCatalog>(eventCards);
             services.AddRules();
+            services.AddFakeCatalogs();
 
             var sp = services.BuildServiceProvider();
             return sp.GetRequiredService<IMediator>();
-        }
-
-        private static FakeDisasterDefinitionCatalog CreateDisasterCatalog()
-        {
-            var sunProbe = new ReferenceDisasterDefinition(
-                code: new CardCode("sun-probe"),
-                displayName: "Sun Probe",
-                difficultyNumber: 11,
-                rescueType: RescueType.Space,
-                location: new LocationCode("the-sun"),
-                bonuses: [
-                    new ReferenceDisasterBonus(new DisasterBonusKey("scott"), 2, null),
-                    new ReferenceDisasterBonus(new DisasterBonusKey("virgil"), 2, new LocationCode("asia")),
-                    new ReferenceDisasterBonus(new DisasterBonusKey("transmitter-truck"), 3, new LocationCode("asia"))
-                ],
-                rewards:
-                [
-                    new ReferenceDisasterReward.PlayerChoice(),
-                    new ReferenceDisasterReward.SpecificToken(BonusToken.Logistics)
-                ]
-            );
-            var pitOfPeril = new ReferenceDisasterDefinition(
-                code: new CardCode("pit-of-peril"),
-                displayName: "Pit of Peril",
-                difficultyNumber: 11,
-                location: new LocationCode("africa"),
-                rescueType: RescueType.Land,
-                bonuses:
-                [
-                    new ReferenceDisasterBonus(new DisasterBonusKey("scott"), 2, null),
-                    new ReferenceDisasterBonus(new DisasterBonusKey("mole"), 3, null),
-                    new ReferenceDisasterBonus(new DisasterBonusKey("recovery-vehicles"), 2, null)
-                ],
-                rewards:
-                [
-                    new ReferenceDisasterReward.PlayerChoice(),
-                    new ReferenceDisasterReward.SpecificToken(BonusToken.Determination)
-                ]
-            );
-
-            var terrorInNewYorkCity = new ReferenceDisasterDefinition(
-                code: new CardCode("terror-in-new-york-city"),
-                displayName: "Terror in New York City",
-                difficultyNumber: 11,
-                location: new LocationCode("north-america"),
-                rescueType: RescueType.Sea,
-                bonuses:
-                [
-                    new ReferenceDisasterBonus(new DisasterBonusKey("thunderbird-4"), 2, null),
-                    new ReferenceDisasterBonus(new DisasterBonusKey("virgil"), 2, null),
-                    new ReferenceDisasterBonus(new DisasterBonusKey("firefly"), 3, null)
-                ],
-                rewards:
-                [
-                    new ReferenceDisasterReward.PlayerChoice(),
-                    new ReferenceDisasterReward.SpecificToken(BonusToken.Teamwork)
-                ]
-            );
-
-            return new FakeDisasterDefinitionCatalog(sunProbe, pitOfPeril, terrorInNewYorkCity);
         }
 
         private static FakeCharacterDefinitionCatalog CreateCharacterCatalog()

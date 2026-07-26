@@ -10,10 +10,12 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Fixtures
         {
             var locations = LocationsTestData.CreateLocations();
             var thunderbirds = ThunderbirdsTestData.CreateThunderbirds();
+            var disasters = DisasterCardsTestData.CreateDisasterCatalog();
             var edges = EdgesTestData.CreateEdges();
 
             services.AddSingleton<ILocationDefinitionCatalog>(locations);
             services.AddSingleton<IThunderbirdDefinitionCatalog>(thunderbirds);
+            services.AddSingleton<IDisasterDefinitionCatalog>(disasters);
             services.AddSingleton<IMapEdgeDefinitionCatalog>(edges);
 
             return services;
