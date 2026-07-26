@@ -6,7 +6,7 @@ using ThunderbirdsBoardGameEngine.ReferenceData.Core.Model;
 using ThunderbirdsBoardGameEngine.ReferenceData.Runtime.Interfaces;
 using ThunderbirdsBoardGameEngine.Rules.Application.Movement.AccessibleLocations;
 using ThunderbirdsBoardGameEngine.Rules.ComponentTests.Fakes;
-using ThunderbirdsBoardGameEngine.Rules.ComponentTests.Fixture;
+using ThunderbirdsBoardGameEngine.Rules.ComponentTests.Fixtures;
 using ThunderbirdsBoardGameEngine.Rules.ComponentTests.TestData;
 using ThunderbirdsBoardGameEngine.Rules.Infrastructure;
 using Xunit;

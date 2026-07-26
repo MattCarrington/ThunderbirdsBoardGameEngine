@@ -2,7 +2,7 @@
 using ThunderbirdsBoardGameEngine.ReferenceData.Runtime.Interfaces;
 using ThunderbirdsBoardGameEngine.Rules.ComponentTests.TestData;
 
-namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Fixture
+namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Fixtures
 {
     public static class FakeCatalogRegistration
     {
