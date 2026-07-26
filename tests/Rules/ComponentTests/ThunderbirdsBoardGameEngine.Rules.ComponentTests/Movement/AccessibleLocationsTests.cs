@@ -37,7 +37,8 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Movement
                 TestLocationCodes.NorthAmerica,
                 TestLocationCodes.SouthAmerica,
                 TestLocationCodes.NorthAtlantic,
-                TestLocationCodes.SouthPacific
+                TestLocationCodes.SouthPacific,
+                TestLocationCodes.SouthAtlantic
             };
 
             Assert.NotNull(result);

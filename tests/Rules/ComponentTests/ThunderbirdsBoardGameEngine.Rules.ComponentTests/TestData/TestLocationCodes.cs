@@ -18,6 +18,8 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.TestData
 
         public static LocationCode NorthAtlantic => new("north-atlantic");
 
+        public static LocationCode SouthAtlantic => new("south-atlantic");
+
         public static LocationCode SouthPacific => new("south-pacific");
 
         public static LocationCode GeoStationaryOrbit => new("geo-stationary-orbit");
