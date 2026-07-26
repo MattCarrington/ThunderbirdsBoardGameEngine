@@ -35,8 +35,6 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.TestData
                 africaToAustralia,
                 northAmericaToSouthAmerica,
                 pacificToAsia,
-                asiaToAustralia,
-                northAmericaToSouthAmerica,
                 atlanticToEurope,
                 atlanticToAfrica,
                 atlanticToNorthAmerica,
