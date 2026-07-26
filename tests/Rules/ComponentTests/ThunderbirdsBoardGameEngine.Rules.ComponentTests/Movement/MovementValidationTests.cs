@@ -50,8 +50,8 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Movement
             var request = new ValidateMovementQuery
             (
                 ThunderbirdCode: new ThunderbirdCode("thunderbird-3"),
-                StartLocationCode: TestLocationCodes.Moon,
-                DestinationLocationCode: TestLocationCodes.Pacific,
+                StartLocationCode: TestLocationCodes.TheMoon,
+                DestinationLocationCode: TestLocationCodes.SouthPacific,
                 ActiveEventCardCodes: Array.Empty<CardCode>()
             );
 
@@ -131,7 +131,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Movement
             (
                 ThunderbirdCode: new ThunderbirdCode(thunderbird),
                 StartLocationCode: TestLocationCodes.Europe,
-                DestinationLocationCode: TestLocationCodes.Space,
+                DestinationLocationCode: TestLocationCodes.GeoStationaryOrbit,
                 ActiveEventCardCodes: Array.Empty<CardCode>()
             );
 
@@ -151,7 +151,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Movement
             var request = new ValidateMovementQuery
             (
                 ThunderbirdCode: new ThunderbirdCode("thunderbird-3"),
-                StartLocationCode: TestLocationCodes.Space,
+                StartLocationCode: TestLocationCodes.GeoStationaryOrbit,
                 DestinationLocationCode: TestLocationCodes.Europe,
                 ActiveEventCardCodes: Array.Empty<CardCode>()
             );
@@ -172,8 +172,8 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Movement
             var request = new ValidateMovementQuery
             (
                 ThunderbirdCode: new ThunderbirdCode("thunderbird-5"),
-                StartLocationCode: TestLocationCodes.Moon,
-                DestinationLocationCode: TestLocationCodes.Sun,
+                StartLocationCode: TestLocationCodes.TheMoon,
+                DestinationLocationCode: TestLocationCodes.TheSun,
                 ActiveEventCardCodes: Array.Empty<CardCode>()
             );
 
@@ -193,8 +193,8 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Movement
             var request = new ValidateMovementQuery
             (
                 ThunderbirdCode: new ThunderbirdCode("thunderbird-3"),
-                StartLocationCode: TestLocationCodes.Pacific,
-                DestinationLocationCode: TestLocationCodes.Moon,
+                StartLocationCode: TestLocationCodes.SouthPacific,
+                DestinationLocationCode: TestLocationCodes.TheMoon,
                 ActiveEventCardCodes: [KnownEventCardCodes.RocketMalfunction]
             );
 
@@ -287,7 +287,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Movement
             Assert.True(result.IsValid);
             Assert.Equal(4, result.SpacesTravelled);
             Assert.Equal(
-                ["europe", "asia", "pacific", "north-america", "north-atlantic"],
+                ["europe", "asia", "south-pacific", "north-america", "north-atlantic"],
                 result.Route.Select(location => location.Value));
             Assert.Contains(result.Messages, message => message.Contains("Icelandic Volcano Eruption"));
         }
@@ -320,7 +320,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Movement
             Assert.Equal(1, result.EffectiveTopSpeed);
             Assert.Equal(4, result.ActionPointCost);
             Assert.Equal(
-                ["europe", "asia", "pacific", "north-america", "north-atlantic"],
+                ["europe", "asia", "south-pacific", "north-america", "north-atlantic"],
                 result.Route.Select(location => location.Value));
             Assert.Contains(result.Messages, message => message.Contains("Icelandic Volcano Eruption"));
             Assert.Contains(result.Messages, message => message.Contains("USN Sentinel Missile Strike"));

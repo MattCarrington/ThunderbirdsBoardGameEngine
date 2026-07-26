@@ -19,13 +19,13 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.TestData
             var atlanticToAfrica = new ReferenceMapEdgeDefinition(TestLocationCodes.NorthAtlantic, TestLocationCodes.Africa, MovementDomain.Earth);
             var atlanticToNorthAmerica = new ReferenceMapEdgeDefinition(TestLocationCodes.NorthAtlantic, TestLocationCodes.NorthAmerica, MovementDomain.Earth);
             var atlanticToSouthAmerica = new ReferenceMapEdgeDefinition(TestLocationCodes.NorthAtlantic, TestLocationCodes.SouthAmerica, MovementDomain.Earth);
-            var pacificToAustralia = new ReferenceMapEdgeDefinition(TestLocationCodes.Pacific, TestLocationCodes.Australia, MovementDomain.Earth);
-            var pacificToAsia = new ReferenceMapEdgeDefinition(TestLocationCodes.Asia, TestLocationCodes.Pacific, MovementDomain.Earth);
-            var pacificToNorthAmerica = new ReferenceMapEdgeDefinition(TestLocationCodes.Pacific, TestLocationCodes.NorthAmerica, MovementDomain.Earth);
-            var pacificToSouthAmerica = new ReferenceMapEdgeDefinition(TestLocationCodes.Pacific, TestLocationCodes.SouthAmerica, MovementDomain.Earth);
-            var pacificToSpace = new ReferenceMapEdgeDefinition(TestLocationCodes.Pacific, TestLocationCodes.Space, MovementDomain.Space);
-            var spaceToMoon = new ReferenceMapEdgeDefinition(TestLocationCodes.Space, TestLocationCodes.Moon, MovementDomain.Space);
-            var spaceToSun = new ReferenceMapEdgeDefinition(TestLocationCodes.Space, TestLocationCodes.Sun, MovementDomain.Space);
+            var pacificToAustralia = new ReferenceMapEdgeDefinition(TestLocationCodes.SouthPacific, TestLocationCodes.Australia, MovementDomain.Earth);
+            var pacificToAsia = new ReferenceMapEdgeDefinition(TestLocationCodes.Asia, TestLocationCodes.SouthPacific, MovementDomain.Earth);
+            var pacificToNorthAmerica = new ReferenceMapEdgeDefinition(TestLocationCodes.SouthPacific, TestLocationCodes.NorthAmerica, MovementDomain.Earth);
+            var pacificToSouthAmerica = new ReferenceMapEdgeDefinition(TestLocationCodes.SouthPacific, TestLocationCodes.SouthAmerica, MovementDomain.Earth);
+            var pacificToSpace = new ReferenceMapEdgeDefinition(TestLocationCodes.SouthPacific, TestLocationCodes.GeoStationaryOrbit, MovementDomain.Space);
+            var spaceToMoon = new ReferenceMapEdgeDefinition(TestLocationCodes.GeoStationaryOrbit, TestLocationCodes.TheMoon, MovementDomain.Space);
+            var spaceToSun = new ReferenceMapEdgeDefinition(TestLocationCodes.GeoStationaryOrbit, TestLocationCodes.TheSun, MovementDomain.Space);
 
             return new FakeMapEdgeDefinitionCatalog(
                 europeToAsia,

@@ -14,7 +14,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.TestData
                 displayName: "Sun Probe",
                 difficultyNumber: 11,
                 rescueType: RescueType.Space,
-                location: TestLocationCodes.Sun,
+                location: TestLocationCodes.TheSun,
                 bonuses: [
                     new ReferenceDisasterBonus(new DisasterBonusKey("scott"), 2, null),
                     new ReferenceDisasterBonus(new DisasterBonusKey("virgil"), 2, TestLocationCodes.Asia),

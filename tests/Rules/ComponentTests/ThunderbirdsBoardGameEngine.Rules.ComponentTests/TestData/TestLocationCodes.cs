@@ -18,12 +18,12 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.TestData
 
         public static LocationCode NorthAtlantic => new("north-atlantic");
 
-        public static LocationCode Pacific => new("pacific");
+        public static LocationCode SouthPacific => new("south-pacific");
 
-        public static LocationCode Space => new("space");
+        public static LocationCode GeoStationaryOrbit => new("geo-stationary-orbit");
 
-        public static LocationCode Moon => new("moon");
+        public static LocationCode TheMoon => new("the-moon");
 
-        public static LocationCode Sun => new("sun");
+        public static LocationCode TheSun => new("the-sun");
     }
 }

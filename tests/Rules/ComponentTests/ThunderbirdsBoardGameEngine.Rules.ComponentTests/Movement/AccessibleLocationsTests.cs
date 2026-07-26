@@ -37,7 +37,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Movement
                 TestLocationCodes.NorthAmerica,
                 TestLocationCodes.SouthAmerica,
                 TestLocationCodes.NorthAtlantic,
-                TestLocationCodes.Pacific
+                TestLocationCodes.SouthPacific
             };
 
             Assert.NotNull(result);
@@ -60,10 +60,10 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Movement
             // Assert
             var expectedLocations = new[]
             {
-                TestLocationCodes.Space,
-                TestLocationCodes.Moon,
-                TestLocationCodes.Sun,
-                TestLocationCodes.Pacific
+                TestLocationCodes.GeoStationaryOrbit,
+                TestLocationCodes.TheMoon,
+                TestLocationCodes.TheSun,
+                TestLocationCodes.SouthPacific
             };
 
             Assert.NotNull(result);
