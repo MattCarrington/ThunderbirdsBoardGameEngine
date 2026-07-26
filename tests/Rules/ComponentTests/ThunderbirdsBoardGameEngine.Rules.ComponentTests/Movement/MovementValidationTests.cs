@@ -8,6 +8,8 @@ using ThunderbirdsBoardGameEngine.ReferenceData.Runtime.Interfaces;
 using ThunderbirdsBoardGameEngine.Rules.Application.Exceptions;
 using ThunderbirdsBoardGameEngine.Rules.Application.Movement.MapTraversal;
 using ThunderbirdsBoardGameEngine.Rules.ComponentTests.Fakes;
+using ThunderbirdsBoardGameEngine.Rules.ComponentTests.Fixture;
+using ThunderbirdsBoardGameEngine.Rules.ComponentTests.TestData;
 using ThunderbirdsBoardGameEngine.Rules.Infrastructure;
 using Xunit;
 
@@ -25,8 +27,8 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Movement
             var request = new ValidateMovementQuery
             (
                 ThunderbirdCode: new ThunderbirdCode(thunderbird),
-                StartLocationCode: new LocationCode("Europe"),
-                DestinationLocationCode: new LocationCode("North America"),
+                StartLocationCode: TestLocationCodes.Europe,
+                DestinationLocationCode: TestLocationCodes.NorthAmerica,
                 ActiveEventCardCodes: Array.Empty<CardCode>()
             );
 
@@ -48,8 +50,8 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Movement
             var request = new ValidateMovementQuery
             (
                 ThunderbirdCode: new ThunderbirdCode("thunderbird-3"),
-                StartLocationCode: new LocationCode("Moon"),
-                DestinationLocationCode: new LocationCode("Pacific"),
+                StartLocationCode: TestLocationCodes.Moon,
+                DestinationLocationCode: TestLocationCodes.Pacific,
                 ActiveEventCardCodes: Array.Empty<CardCode>()
             );
 
@@ -71,7 +73,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Movement
             var request = new ValidateMovementQuery
             (
                 ThunderbirdCode: new ThunderbirdCode("thunderbird-1"),
-                StartLocationCode: new LocationCode("Europe"),
+                StartLocationCode: TestLocationCodes.Europe,
                 DestinationLocationCode: new LocationCode("North Pole"),
                 ActiveEventCardCodes: Array.Empty<CardCode>()
             );
@@ -90,7 +92,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Movement
             (
                 ThunderbirdCode: new ThunderbirdCode("thunderbird-1"),
                 StartLocationCode: new LocationCode("Atlantis"),
-                DestinationLocationCode: new LocationCode("North America"),
+                DestinationLocationCode: TestLocationCodes.NorthAmerica,
                 ActiveEventCardCodes: Array.Empty<CardCode>()
             );
 
@@ -107,8 +109,8 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Movement
             var request = new ValidateMovementQuery
             (
                 ThunderbirdCode: new ThunderbirdCode("thunderbird-x"),
-                StartLocationCode: new LocationCode("Europe"),
-                DestinationLocationCode: new LocationCode("North America"),
+                StartLocationCode: TestLocationCodes.Europe,
+                DestinationLocationCode: TestLocationCodes.NorthAmerica,
                 ActiveEventCardCodes: Array.Empty<CardCode>()
             );
 
@@ -128,8 +130,8 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Movement
             var request = new ValidateMovementQuery
             (
                 ThunderbirdCode: new ThunderbirdCode(thunderbird),
-                StartLocationCode: new LocationCode("Europe"),
-                DestinationLocationCode: new LocationCode("Space"),
+                StartLocationCode: TestLocationCodes.Europe,
+                DestinationLocationCode: TestLocationCodes.Space,
                 ActiveEventCardCodes: Array.Empty<CardCode>()
             );
 
@@ -149,8 +151,8 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Movement
             var request = new ValidateMovementQuery
             (
                 ThunderbirdCode: new ThunderbirdCode("thunderbird-3"),
-                StartLocationCode: new LocationCode("Space"),
-                DestinationLocationCode: new LocationCode("Europe"),
+                StartLocationCode: TestLocationCodes.Space,
+                DestinationLocationCode: TestLocationCodes.Europe,
                 ActiveEventCardCodes: Array.Empty<CardCode>()
             );
 
@@ -170,8 +172,8 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Movement
             var request = new ValidateMovementQuery
             (
                 ThunderbirdCode: new ThunderbirdCode("thunderbird-5"),
-                StartLocationCode: new LocationCode("Moon"),
-                DestinationLocationCode: new LocationCode("Sun"),
+                StartLocationCode: TestLocationCodes.Moon,
+                DestinationLocationCode: TestLocationCodes.Sun,
                 ActiveEventCardCodes: Array.Empty<CardCode>()
             );
 
@@ -191,8 +193,8 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Movement
             var request = new ValidateMovementQuery
             (
                 ThunderbirdCode: new ThunderbirdCode("thunderbird-3"),
-                StartLocationCode: new LocationCode("Pacific"),
-                DestinationLocationCode: new LocationCode("Moon"),
+                StartLocationCode: TestLocationCodes.Pacific,
+                DestinationLocationCode: TestLocationCodes.Moon,
                 ActiveEventCardCodes: [KnownEventCardCodes.RocketMalfunction]
             );
 
@@ -219,8 +221,8 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Movement
             var request = new ValidateMovementQuery
             (
                 ThunderbirdCode: new ThunderbirdCode("thunderbird-2"),
-                StartLocationCode: new LocationCode("Europe"),
-                DestinationLocationCode: new LocationCode("North America"),
+                StartLocationCode: TestLocationCodes.Europe,
+                DestinationLocationCode: TestLocationCodes.NorthAmerica,
                 ActiveEventCardCodes: [KnownEventCardCodes.AttackOfTheZombites]
             );
 
@@ -245,8 +247,8 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Movement
             var request = new ValidateMovementQuery
             (
                 ThunderbirdCode: new ThunderbirdCode("thunderbird-1"),
-                StartLocationCode: new LocationCode("Europe"),
-                DestinationLocationCode: new LocationCode("North America"),
+                StartLocationCode: TestLocationCodes.Europe,
+                DestinationLocationCode: TestLocationCodes.NorthAmerica,
                 ActiveEventCardCodes: [new CardCode("explosion-on-tracy-island")]
             );
 
@@ -271,12 +273,12 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Movement
             var request = new ValidateMovementQuery
             (
                 ThunderbirdCode: KnownThunderbirdCodes.Thunderbird2,
-                StartLocationCode: new LocationCode("europe"),
-                DestinationLocationCode: new LocationCode("north-atlantic"),
+                StartLocationCode: TestLocationCodes.Europe,
+                DestinationLocationCode: TestLocationCodes.NorthAtlantic,
                 ActiveEventCardCodes: [KnownEventCardCodes.IcelandicVolcanoEruption]
             );
 
-            var mediator = CreateIcelandicVolcanoEruptionMediator();
+            var mediator = CreateMediator();
 
             // Act
             var result = await mediator.Send(request, CancellationToken.None);
@@ -285,7 +287,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Movement
             Assert.True(result.IsValid);
             Assert.Equal(4, result.SpacesTravelled);
             Assert.Equal(
-                ["europe", "asia", "north-pacific", "north-america", "north-atlantic"],
+                ["europe", "asia", "pacific", "north-america", "north-atlantic"],
                 result.Route.Select(location => location.Value));
             Assert.Contains(result.Messages, message => message.Contains("Icelandic Volcano Eruption"));
         }
@@ -297,8 +299,8 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Movement
             var request = new ValidateMovementQuery
             (
                 ThunderbirdCode: KnownThunderbirdCodes.Thunderbird2,
-                StartLocationCode: new LocationCode("europe"),
-                DestinationLocationCode: new LocationCode("north-atlantic"),
+                StartLocationCode: TestLocationCodes.Europe,
+                DestinationLocationCode: TestLocationCodes.NorthAtlantic,
                 ActiveEventCardCodes:
                 [
                     KnownEventCardCodes.IcelandicVolcanoEruption,
@@ -306,7 +308,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Movement
                 ]
             );
 
-            var mediator = CreateIcelandicVolcanoEruptionMediator();
+            var mediator = CreateMediator();
 
             // Act
             var result = await mediator.Send(request, CancellationToken.None);
@@ -318,7 +320,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Movement
             Assert.Equal(1, result.EffectiveTopSpeed);
             Assert.Equal(4, result.ActionPointCost);
             Assert.Equal(
-                ["europe", "asia", "north-pacific", "north-america", "north-atlantic"],
+                ["europe", "asia", "pacific", "north-america", "north-atlantic"],
                 result.Route.Select(location => location.Value));
             Assert.Contains(result.Messages, message => message.Contains("Icelandic Volcano Eruption"));
             Assert.Contains(result.Messages, message => message.Contains("USN Sentinel Missile Strike"));
@@ -333,8 +335,8 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Movement
             var request = new ValidateMovementQuery
             (
                 ThunderbirdCode: new ThunderbirdCode(thunderbirdCode),
-                StartLocationCode: new LocationCode("Europe"),
-                DestinationLocationCode: new LocationCode("North America"),
+                StartLocationCode: TestLocationCodes.Europe,
+                DestinationLocationCode: TestLocationCodes.NorthAmerica,
                 ActiveEventCardCodes: [KnownEventCardCodes.AttackOfTheZombites, KnownEventCardCodes.UsnSentinelMissileStrike, KnownEventCardCodes.RocketMalfunction]
             );
 
@@ -361,8 +363,8 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Movement
             var request = new ValidateMovementQuery
             (
                 ThunderbirdCode: new ThunderbirdCode("thunderbird-1"),
-                StartLocationCode: new LocationCode("Europe"),
-                DestinationLocationCode: new LocationCode("North America"),
+                StartLocationCode: TestLocationCodes.Europe,
+                DestinationLocationCode: TestLocationCodes.NorthAmerica,
                 ActiveEventCardCodes: [new CardCode("non-existent-event-card")]
             );
 
@@ -374,113 +376,34 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Movement
 
         private static IMediator CreateMediator()
         {
-            var edges = CreateEdges();
             var locations = CreateLocations();
             var thunderbirds = CreateThunderbirds();
             var eventCards = CreateEventCards();
 
             var services = new ServiceCollection();
-            services.AddSingleton<IMapEdgeDefinitionCatalog>(edges);
             services.AddSingleton<ILocationDefinitionCatalog>(locations);
             services.AddSingleton<IThunderbirdDefinitionCatalog>(thunderbirds);
             services.AddSingleton<IEventCardDefinitionCatalog>(eventCards);
             services.AddRules();
+            services.AddFakeCatalogs();
 
             var sp = services.BuildServiceProvider();
             return sp.GetRequiredService<IMediator>();
         }
 
-        private static IMediator CreateIcelandicVolcanoEruptionMediator()
-        {
-            var europe = new LocationCode("europe");
-            var asia = new LocationCode("asia");
-            var northPacific = new LocationCode("north-pacific");
-            var northAmerica = new LocationCode("north-america");
-            var northAtlantic = new LocationCode("north-atlantic");
-
-            var edges = new FakeMapEdgeDefinitionCatalog(
-                new ReferenceMapEdgeDefinition(europe, northAtlantic, MovementDomain.Earth),
-                new ReferenceMapEdgeDefinition(europe, asia, MovementDomain.Earth),
-                new ReferenceMapEdgeDefinition(asia, northPacific, MovementDomain.Earth),
-                new ReferenceMapEdgeDefinition(northPacific, northAmerica, MovementDomain.Earth),
-                new ReferenceMapEdgeDefinition(northAmerica, northAtlantic, MovementDomain.Earth));
-
-            var locations = new FakeLocationDefinitionCatalog(
-                new ReferenceLocationDefinition(europe, "Europe", MovementDomain.Earth),
-                new ReferenceLocationDefinition(asia, "Asia", MovementDomain.Earth),
-                new ReferenceLocationDefinition(northPacific, "North Pacific", MovementDomain.Earth),
-                new ReferenceLocationDefinition(northAmerica, "North America", MovementDomain.Earth),
-                new ReferenceLocationDefinition(northAtlantic, "North Atlantic", MovementDomain.Earth));
-
-            var eventCards = new FakeEventCardDefinitionCatalog(
-                new ReferenceEventCardDefinition(KnownEventCardCodes.IcelandicVolcanoEruption, "Icelandic Volcano Eruption"),
-                new ReferenceEventCardDefinition(KnownEventCardCodes.UsnSentinelMissileStrike, "USN Sentinel Missile Strike"));
-
-            var services = new ServiceCollection();
-            services.AddSingleton<IMapEdgeDefinitionCatalog>(edges);
-            services.AddSingleton<ILocationDefinitionCatalog>(locations);
-            services.AddSingleton<IThunderbirdDefinitionCatalog>(CreateThunderbirds());
-            services.AddSingleton<IEventCardDefinitionCatalog>(eventCards);
-            services.AddRules();
-
-            return services.BuildServiceProvider().GetRequiredService<IMediator>();
-        }
-
-        private static FakeMapEdgeDefinitionCatalog CreateEdges()
-        {
-            var europeToAsia = new ReferenceMapEdgeDefinition(new LocationCode("Europe"), new LocationCode("Asia"), MovementDomain.Earth);
-            var europeToAfrica = new ReferenceMapEdgeDefinition(new LocationCode("Europe"), new LocationCode("Africa"), MovementDomain.Earth);
-            var asiaToAfrica = new ReferenceMapEdgeDefinition(new LocationCode("Asia"), new LocationCode("Africa"), MovementDomain.Earth);
-            var asiaToAustralia = new ReferenceMapEdgeDefinition(new LocationCode("Asia"), new LocationCode("Australia"), MovementDomain.Earth);
-            var africaToAustralia = new ReferenceMapEdgeDefinition(new LocationCode("Africa"), new LocationCode("Australia"), MovementDomain.Earth);
-            var northAmericaToSouthAmerica = new ReferenceMapEdgeDefinition(new LocationCode("North America"), new LocationCode("South America"), MovementDomain.Earth);
-            var atlanticToEurope = new ReferenceMapEdgeDefinition(new LocationCode("Atlantic"), new LocationCode("Europe"), MovementDomain.Earth);
-            var atlanticToAfrica = new ReferenceMapEdgeDefinition(new LocationCode("Atlantic"), new LocationCode("Africa"), MovementDomain.Earth);
-            var atlanticToNorthAmerica = new ReferenceMapEdgeDefinition(new LocationCode("Atlantic"), new LocationCode("North America"), MovementDomain.Earth);
-            var atlanticToSouthAmerica = new ReferenceMapEdgeDefinition(new LocationCode("Atlantic"), new LocationCode("South America"), MovementDomain.Earth);
-            var pacificToAustralia = new ReferenceMapEdgeDefinition(new LocationCode("Pacific"), new LocationCode("Australia"), MovementDomain.Earth);
-            var pacificToAsia = new ReferenceMapEdgeDefinition(new LocationCode("Asia"), new LocationCode("Pacific"), MovementDomain.Earth);
-            var pacificToNorthAmerica = new ReferenceMapEdgeDefinition(new LocationCode("Pacific"), new LocationCode("North America"), MovementDomain.Earth);
-            var pacificToSouthAmerica = new ReferenceMapEdgeDefinition(new LocationCode("Pacific"), new LocationCode("South America"), MovementDomain.Earth);
-            var pacificToSpace = new ReferenceMapEdgeDefinition(new LocationCode("Pacific"), new LocationCode("Space"), MovementDomain.Space);
-            var spaceToMoon = new ReferenceMapEdgeDefinition(new LocationCode("Space"), new LocationCode("Moon"), MovementDomain.Space);
-            var spaceToSun = new ReferenceMapEdgeDefinition(new LocationCode("Space"), new LocationCode("Sun"), MovementDomain.Space);
-
-            return new FakeMapEdgeDefinitionCatalog(
-                europeToAsia,
-                europeToAfrica,
-                asiaToAfrica,
-                asiaToAustralia,
-                africaToAustralia,
-                northAmericaToSouthAmerica,
-                pacificToAsia,
-                asiaToAustralia,
-                northAmericaToSouthAmerica,
-                atlanticToEurope,
-                atlanticToAfrica,
-                atlanticToNorthAmerica,
-                atlanticToSouthAmerica,
-                pacificToAustralia,
-                pacificToNorthAmerica,
-                pacificToSouthAmerica,
-                pacificToSpace,
-                spaceToMoon,
-                spaceToSun);
-        }
-
         private static FakeLocationDefinitionCatalog CreateLocations()
         {
-            var europe = new ReferenceLocationDefinition(new LocationCode("Europe"), "Europe", MovementDomain.Earth);
-            var asia = new ReferenceLocationDefinition(new LocationCode("Asia"), "Asia", MovementDomain.Earth);
-            var northAmerica = new ReferenceLocationDefinition(new LocationCode("North America"), "North America", MovementDomain.Earth);
-            var southAmerica = new ReferenceLocationDefinition(new LocationCode("South America"), "South America", MovementDomain.Earth);
-            var atlantic = new ReferenceLocationDefinition(new LocationCode("Atlantic"), "Atlantic Ocean", MovementDomain.Earth);
-            var pacific = new ReferenceLocationDefinition(new LocationCode("Pacific"), "Pacific Ocean", MovementDomain.Earth);
-            var australia = new ReferenceLocationDefinition(new LocationCode("Australia"), "Australia", MovementDomain.Earth);
-            var africa = new ReferenceLocationDefinition(new LocationCode("Africa"), "Africa", MovementDomain.Earth);
-            var space = new ReferenceLocationDefinition(new LocationCode("Space"), "Space", MovementDomain.Space);
-            var moon = new ReferenceLocationDefinition(new LocationCode("Moon"), "Moon", MovementDomain.Space);
-            var sun = new ReferenceLocationDefinition(new LocationCode("Sun"), "Sun", MovementDomain.Space);
+            var europe = new ReferenceLocationDefinition(new LocationCode("europe"), "Europe", MovementDomain.Earth);
+            var asia = new ReferenceLocationDefinition(new LocationCode("asia"), "Asia", MovementDomain.Earth);
+            var northAmerica = new ReferenceLocationDefinition(new LocationCode("north-america"), "North America", MovementDomain.Earth);
+            var southAmerica = new ReferenceLocationDefinition(new LocationCode("south-america"), "South America", MovementDomain.Earth);
+            var atlantic = new ReferenceLocationDefinition(new LocationCode("north-atlantic"), "Atlantic Ocean", MovementDomain.Earth);
+            var pacific = new ReferenceLocationDefinition(new LocationCode("pacific"), "Pacific Ocean", MovementDomain.Earth);
+            var australia = new ReferenceLocationDefinition(new LocationCode("australia"), "Australia", MovementDomain.Earth);
+            var africa = new ReferenceLocationDefinition(new LocationCode("africa"), "Africa", MovementDomain.Earth);
+            var space = new ReferenceLocationDefinition(new LocationCode("space"), "Space", MovementDomain.Space);
+            var moon = new ReferenceLocationDefinition(new LocationCode("moon"), "Moon", MovementDomain.Space);
+            var sun = new ReferenceLocationDefinition(new LocationCode("sun"), "Sun", MovementDomain.Space);
 
             return new FakeLocationDefinitionCatalog(europe, asia, northAmerica, southAmerica, atlantic, pacific, australia, africa, space, moon, sun);
         }
@@ -501,9 +424,10 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Movement
             var attackOfTheZombites = new ReferenceEventCardDefinition(KnownEventCardCodes.AttackOfTheZombites, "Attack of the Zombites");
             var usnSentinelMissileStrike = new ReferenceEventCardDefinition(KnownEventCardCodes.UsnSentinelMissileStrike, "USN Sentinel Missile Strike");
             var rocketMalfunction = new ReferenceEventCardDefinition(KnownEventCardCodes.RocketMalfunction, "Rocket Malfunction");
+            var icelandicVolcanoEruption = new ReferenceEventCardDefinition(KnownEventCardCodes.IcelandicVolcanoEruption, "Icelandic Volcano Eruption");
             var explosionOnTracyIsland = new ReferenceEventCardDefinition(new CardCode("explosion-on-tracy-island"), "Explosion on Tracy Island");
 
-            return new FakeEventCardDefinitionCatalog(attackOfTheZombites, usnSentinelMissileStrike, rocketMalfunction, explosionOnTracyIsland);
+            return new FakeEventCardDefinitionCatalog(attackOfTheZombites, usnSentinelMissileStrike, rocketMalfunction, icelandicVolcanoEruption, explosionOnTracyIsland);
         }
     }
 }

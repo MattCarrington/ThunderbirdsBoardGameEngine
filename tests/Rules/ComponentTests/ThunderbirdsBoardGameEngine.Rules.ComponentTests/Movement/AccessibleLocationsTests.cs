@@ -6,6 +6,8 @@ using ThunderbirdsBoardGameEngine.ReferenceData.Core.Model;
 using ThunderbirdsBoardGameEngine.ReferenceData.Runtime.Interfaces;
 using ThunderbirdsBoardGameEngine.Rules.Application.Movement.AccessibleLocations;
 using ThunderbirdsBoardGameEngine.Rules.ComponentTests.Fakes;
+using ThunderbirdsBoardGameEngine.Rules.ComponentTests.Fixture;
+using ThunderbirdsBoardGameEngine.Rules.ComponentTests.TestData;
 using ThunderbirdsBoardGameEngine.Rules.Infrastructure;
 using Xunit;
 
@@ -28,14 +30,14 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Movement
             // Assert
             var expectedLocations = new[]
             {
-                new LocationCode("Europe"),
-                new LocationCode("Asia"),
-                new LocationCode("Africa"),
-                new LocationCode("Australia"),
-                new LocationCode("North America"),
-                new LocationCode("South America"),
-                new LocationCode("Atlantic"),
-                new LocationCode("Pacific")
+                TestLocationCodes.Europe,
+                TestLocationCodes.Asia,
+                TestLocationCodes.Africa,
+                TestLocationCodes.Australia,
+                TestLocationCodes.NorthAmerica,
+                TestLocationCodes.SouthAmerica,
+                TestLocationCodes.NorthAtlantic,
+                TestLocationCodes.Pacific
             };
 
             Assert.NotNull(result);
@@ -58,10 +60,10 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Movement
             // Assert
             var expectedLocations = new[]
             {
-                new LocationCode("Space"),
-                new LocationCode("Moon"),
-                new LocationCode("Sun"),
-                new LocationCode("Pacific")
+                TestLocationCodes.Space,
+                TestLocationCodes.Moon,
+                TestLocationCodes.Sun,
+                TestLocationCodes.Pacific
             };
 
             Assert.NotNull(result);
@@ -71,58 +73,15 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Movement
 
         private static IMediator CreateMediator()
         {
-            var edges = CreateEdges();
             var thunderbirds = CreateThunderbirds();
 
             var services = new ServiceCollection();
-            services.AddSingleton<IMapEdgeDefinitionCatalog>(edges);
             services.AddSingleton<IThunderbirdDefinitionCatalog>(thunderbirds);
             services.AddRules();
+            services.AddFakeCatalogs();
 
             var sp = services.BuildServiceProvider();
             return sp.GetRequiredService<IMediator>();
-        }
-
-        private static FakeMapEdgeDefinitionCatalog CreateEdges()
-        {
-            var europeToAsia = new ReferenceMapEdgeDefinition(new LocationCode("Europe"), new LocationCode("Asia"), MovementDomain.Earth);
-            var europeToAfrica = new ReferenceMapEdgeDefinition(new LocationCode("Europe"), new LocationCode("Africa"), MovementDomain.Earth);
-            var asiaToAfrica = new ReferenceMapEdgeDefinition(new LocationCode("Asia"), new LocationCode("Africa"), MovementDomain.Earth);
-            var asiaToAustralia = new ReferenceMapEdgeDefinition(new LocationCode("Asia"), new LocationCode("Australia"), MovementDomain.Earth);
-            var africaToAustralia = new ReferenceMapEdgeDefinition(new LocationCode("Africa"), new LocationCode("Australia"), MovementDomain.Earth);
-            var northAmericaToSouthAmerica = new ReferenceMapEdgeDefinition(new LocationCode("North America"), new LocationCode("South America"), MovementDomain.Earth);
-            var atlanticToEurope = new ReferenceMapEdgeDefinition(new LocationCode("Atlantic"), new LocationCode("Europe"), MovementDomain.Earth);
-            var atlanticToAfrica = new ReferenceMapEdgeDefinition(new LocationCode("Atlantic"), new LocationCode("Africa"), MovementDomain.Earth);
-            var atlanticToNorthAmerica = new ReferenceMapEdgeDefinition(new LocationCode("Atlantic"), new LocationCode("North America"), MovementDomain.Earth);
-            var atlanticToSouthAmerica = new ReferenceMapEdgeDefinition(new LocationCode("Atlantic"), new LocationCode("South America"), MovementDomain.Earth);
-            var pacificToAustralia = new ReferenceMapEdgeDefinition(new LocationCode("Pacific"), new LocationCode("Australia"), MovementDomain.Earth);
-            var pacificToAsia = new ReferenceMapEdgeDefinition(new LocationCode("Asia"), new LocationCode("Pacific"), MovementDomain.Earth);
-            var pacificToNorthAmerica = new ReferenceMapEdgeDefinition(new LocationCode("Pacific"), new LocationCode("North America"), MovementDomain.Earth);
-            var pacificToSouthAmerica = new ReferenceMapEdgeDefinition(new LocationCode("Pacific"), new LocationCode("South America"), MovementDomain.Earth);
-            var pacificToSpace = new ReferenceMapEdgeDefinition(new LocationCode("Pacific"), new LocationCode("Space"), MovementDomain.Space);
-            var spaceToMoon = new ReferenceMapEdgeDefinition(new LocationCode("Space"), new LocationCode("Moon"), MovementDomain.Space);
-            var spaceToSun = new ReferenceMapEdgeDefinition(new LocationCode("Space"), new LocationCode("Sun"), MovementDomain.Space);
-
-            return new FakeMapEdgeDefinitionCatalog(
-                europeToAsia,
-                europeToAfrica,
-                asiaToAfrica,
-                asiaToAustralia,
-                africaToAustralia,
-                northAmericaToSouthAmerica,
-                pacificToAsia,
-                asiaToAustralia,
-                northAmericaToSouthAmerica,
-                atlanticToEurope,
-                atlanticToAfrica,
-                atlanticToNorthAmerica,
-                atlanticToSouthAmerica,
-                pacificToAustralia,
-                pacificToNorthAmerica,
-                pacificToSouthAmerica,
-                pacificToSpace,
-                spaceToMoon,
-                spaceToSun);
         }
 
         private static FakeThunderbirdDefinitionCatalog CreateThunderbirds()
