@@ -47,11 +47,11 @@ namespace ThunderbirdsBoardGameEngine.GameState.Infrastructure
                     "Game characters do not match reference data.");
             }
 
-            foreach (var character in characterState)
+            foreach (var thunderbirdMachine in characterState.Values)
             {
-                if (!_thunderbirdCatalog.TryGetByCode(character.Value, out _))
+                if (!_thunderbirdCatalog.TryGetByCode(thunderbirdMachine, out _))
                 {
-                    throw new InvalidOperationException($"Thunderbird {character.Value} does not exist in reference data.");
+                    throw new InvalidOperationException($"Thunderbird {thunderbirdMachine.Value} does not exist in reference data.");
                 }
             }
         }
@@ -69,11 +69,11 @@ namespace ThunderbirdsBoardGameEngine.GameState.Infrastructure
                     "Game thunderbirds do not match reference data.");
             }
 
-            foreach (var thunderbird in thunderbirdState)
+            foreach (var location in thunderbirdState.Values)
             {
-                if (!_locationCatalog.Exists(thunderbird.Value))
+                if (!_locationCatalog.Exists(location))
                 {
-                    throw new InvalidOperationException($"Location {thunderbird.Value} does not exist in reference data.");
+                    throw new InvalidOperationException($"Location {location.Value} does not exist in reference data.");
                 }
             }
         }
