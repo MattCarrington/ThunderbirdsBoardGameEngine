@@ -36,17 +36,19 @@ namespace ThunderbirdsBoardGameEngine.GameState.Infrastructure
 
         private void ValidateCharacters(IReadOnlyDictionary<CharacterCode, ThunderbirdCode> characterState)
         {
-            if (characterState.Count != _characterCatalog.GetAll().Length)
+            var expectedCharacterCodes = _characterCatalog
+                .GetAll()
+                .Select(character => character.Code)
+                .ToHashSet();
+
+            if (!expectedCharacterCodes.SetEquals(characterState.Keys))
             {
-                throw new InvalidOperationException("Character count does not match reference data.");
+                throw new InvalidOperationException(
+                    "Game characters do not match reference data.");
             }
 
             foreach (var character in characterState)
             {
-                if (_characterCatalog.GetByCode(character.Key) == null) //  TODO: Consider adding TryGetByCode instead of GetByCode to avoid potential exceptions
-                {
-                    throw new InvalidOperationException($"Character {character.Key} does not exist in reference data.");
-                }
                 if (!_thunderbirdCatalog.TryGetByCode(character.Value, out _))
                 {
                     throw new InvalidOperationException($"Thunderbird {character.Value} does not exist in reference data.");
@@ -56,18 +58,19 @@ namespace ThunderbirdsBoardGameEngine.GameState.Infrastructure
 
         private void ValidateThunderbirdMachines(IReadOnlyDictionary<ThunderbirdCode, LocationCode> thunderbirdState)
         {
-            if (thunderbirdState.Count != _thunderbirdCatalog.GetAll().Length)
+            var expectedThunderbirdCodes = _thunderbirdCatalog
+                .GetAll()
+                .Select(thunderbird => thunderbird.Code)
+                .ToHashSet();
+
+            if (!expectedThunderbirdCodes.SetEquals(thunderbirdState.Keys))
             {
-                throw new InvalidOperationException("Thunderbird count does not match reference data.");
+                throw new InvalidOperationException(
+                    "Game thunderbirds do not match reference data.");
             }
 
             foreach (var thunderbird in thunderbirdState)
             {
-                if (!_thunderbirdCatalog.TryGetByCode(thunderbird.Key, out _))
-                {
-                    throw new InvalidOperationException($"Thunderbird {thunderbird.Key} does not exist in reference data.");
-                }
-
                 if (!_locationCatalog.Exists(thunderbird.Value))
                 {
                     throw new InvalidOperationException($"Location {thunderbird.Value} does not exist in reference data.");
