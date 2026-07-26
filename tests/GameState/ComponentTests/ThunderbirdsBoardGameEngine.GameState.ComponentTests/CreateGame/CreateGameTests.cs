@@ -15,9 +15,10 @@ namespace ThunderbirdsBoardGameEngine.GameState.ComponentTests.CreateGame
             // Arrange
             var factory = new StandardGameSetupFactory();
 
+            var integrityValidator = Substitute.For<IGameStateIntegrityValidator>();
             var repository = Substitute.For<IGameRepository>();
 
-            var createGameHandler = new CreateNewGameHandler(factory, repository);
+            var createGameHandler = new CreateNewGameHandler(factory, integrityValidator, repository);
 
             var command = new CreateNewGameCommand();
 
