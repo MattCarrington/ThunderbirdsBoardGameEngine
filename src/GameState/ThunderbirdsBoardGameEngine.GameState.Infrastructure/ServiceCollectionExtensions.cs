@@ -8,6 +8,7 @@ using ThunderbirdsBoardGameEngine.GameState.Application.CreateGame;
 using ThunderbirdsBoardGameEngine.GameState.Domain.Setup.V1;
 using ThunderbirdsBoardGameEngine.GameState.Infrastructure.GameStateIntegrity;
 using ThunderbirdsBoardGameEngine.GameState.Infrastructure.Persistence;
+using ThunderbirdsBoardGameEngine.GameState.Infrastructure.Persistence.Configuration;
 
 namespace ThunderbirdsBoardGameEngine.GameState.Infrastructure
 {
