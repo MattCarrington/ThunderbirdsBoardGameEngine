@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using ThunderbirdsBoardGameEngine.GameState.Infrastructure.Persistence.Records;
 
-namespace ThunderbirdsBoardGameEngine.GameState.Infrastructure.Persistence.Configuration
+namespace ThunderbirdsBoardGameEngine.GameState.Infrastructure.Persistence.RecordConfiguration
 {
     internal sealed class ThunderbirdMachineStateRecordConfiguration : IEntityTypeConfiguration<ThunderbirdMachineStateRecord>
     {

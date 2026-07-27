@@ -1,4 +1,4 @@
-﻿namespace ThunderbirdsBoardGameEngine.GameState.Infrastructure
+﻿namespace ThunderbirdsBoardGameEngine.GameState.Infrastructure.Persistence.Configuration
 {
     public sealed class GameStatePersistenceOptions
     {

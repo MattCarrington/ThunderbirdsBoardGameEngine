@@ -13,6 +13,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\src\GameState\ThunderbirdsBoardGameEngine.GameState.Infrastructure\ThunderbirdsBoardGameEngine.GameState.Infrastructure.csproj" />
     <ProjectReference Include="..\..\..\..\src\ReferenceData\ThunderbirdsBoardGameEngine.ReferenceData.Runtime\ThunderbirdsBoardGameEngine.ReferenceData.Runtime.csproj" />
+    <ProjectReference Include="..\..\..\Common\ThunderbirdsBoardGameEngine.TestUtils.xUnit\ThunderbirdsBoardGameEngine.TestUtils.xUnit.csproj" />
   </ItemGroup>
 
 </Project>
