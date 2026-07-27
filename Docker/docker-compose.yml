@@ -22,3 +22,5 @@ services:
       POSTGRES_PASSWORD: ${GAME_STATE_DB_PASSWORD}
     volumes:
       - game-state-data:/var/lib/postgresql/data
+volumes:
+  game-state-data:
