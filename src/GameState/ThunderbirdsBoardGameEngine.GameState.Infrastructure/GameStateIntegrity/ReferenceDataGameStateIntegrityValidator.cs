@@ -3,7 +3,7 @@ using ThunderbirdsBoardGameEngine.GameState.Domain;
 using ThunderbirdsBoardGameEngine.ReferenceData.Core.Identities;
 using ThunderbirdsBoardGameEngine.ReferenceData.Runtime.Interfaces;
 
-namespace ThunderbirdsBoardGameEngine.GameState.Infrastructure
+namespace ThunderbirdsBoardGameEngine.GameState.Infrastructure.GameStateIntegrity
 {
     internal class ReferenceDataGameStateIntegrityValidator : IGameStateIntegrityValidator
     {

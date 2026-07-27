@@ -1,6 +1,7 @@
 ﻿using NSubstitute;
 using System.Collections.Immutable;
 using ThunderbirdsBoardGameEngine.GameState.Domain;
+using ThunderbirdsBoardGameEngine.GameState.Infrastructure.GameStateIntegrity;
 using ThunderbirdsBoardGameEngine.ReferenceData.Core.Enums;
 using ThunderbirdsBoardGameEngine.ReferenceData.Core.Identities;
 using ThunderbirdsBoardGameEngine.ReferenceData.Core.Model;
