@@ -14,3 +14,11 @@ services:
       timeout: 3s
       retries: 20
       start_period: 10s
+  game-state-db:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: thunderbirds_game_state
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${GAME_STATE_DB_PASSWORD}
+    volumes:
+      - game-state-data:/var/lib/postgresql/data

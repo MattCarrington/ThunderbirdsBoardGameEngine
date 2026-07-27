@@ -19,6 +19,9 @@ COPY ["src/Rules/ThunderbirdsBoardGameEngine.Rules.Application/ThunderbirdsBoard
 COPY ["src/Rules/ThunderbirdsBoardGameEngine.Rules.Infrastructure/ThunderbirdsBoardGameEngine.Rules.Infrastructure.csproj", "Rules/ThunderbirdsBoardGameEngine.Rules.Infrastructure/"]
 COPY ["src/Rules/ThunderbirdsBoardGameEngine.Rules.Contracts/ThunderbirdsBoardGameEngine.Rules.Contracts.csproj", "Rules/ThunderbirdsBoardGameEngine.Rules.Contracts/"]
 COPY ["src/Rules/ThunderbirdsBoardGameEngine.Rules.Domain/ThunderbirdsBoardGameEngine.Rules.Domain.csproj", "Rules/ThunderbirdsBoardGameEngine.Rules.Domain/"]
+COPY ["src/GameState/ThunderbirdsBoardGameEngine.GameState.Application/ThunderbirdsBoardGameEngine.GameState.Application.csproj", "GameState/ThunderbirdsBoardGameEngine.GameState.Application/"]
+COPY ["src/GameState/ThunderbirdsBoardGameEngine.GameState.Infrastructure/ThunderbirdsBoardGameEngine.GameState.Infrastructure.csproj", "GameState/ThunderbirdsBoardGameEngine.GameState.Infrastructure/"]
+COPY ["src/GameState/ThunderbirdsBoardGameEngine.GameState.Domain/ThunderbirdsBoardGameEngine.GameState.Domain.csproj", "GameState/ThunderbirdsBoardGameEngine.GameState.Domain/"]
 
 COPY ["src/Ui/ThunderbirdsBoardGameEngine.UI/ThunderbirdsBoardGameEngine.UI.csproj", "Ui/ThunderbirdsBoardGameEngine.UI/"]
 COPY ["src/Rules/ThunderbirdsBoardGameEngine.Rules.Client/ThunderbirdsBoardGameEngine.Rules.Client.csproj", "Rules/ThunderbirdsBoardGameEngine.Rules.Client/"]
