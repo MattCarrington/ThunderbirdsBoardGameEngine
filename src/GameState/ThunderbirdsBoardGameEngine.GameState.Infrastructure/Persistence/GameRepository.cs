@@ -1,4 +1,5 @@
-﻿using ThunderbirdsBoardGameEngine.GameState.Application;
+﻿using Microsoft.EntityFrameworkCore;
+using ThunderbirdsBoardGameEngine.GameState.Application;
 using ThunderbirdsBoardGameEngine.GameState.Domain;
 
 namespace ThunderbirdsBoardGameEngine.GameState.Infrastructure.Persistence
@@ -22,6 +23,16 @@ namespace ThunderbirdsBoardGameEngine.GameState.Infrastructure.Persistence
 
             await _dbContext.AddAsync(gameRecord, cancellationToken);
             await _dbContext.SaveChangesAsync(cancellationToken);
+        }
+
+        public async Task<Game> GetGameSessionById(Guid gameId, CancellationToken cancellationToken)
+        {
+            var gameRecord = await _dbContext.Games.FirstOrDefaultAsync(g => g.Id == gameId, cancellationToken)
+                ?? throw new InvalidOperationException($"Game with ID {gameId} not found.");
+
+            var game = _mapper.MapToGame(gameRecord);
+
+            return game;
         }
     }
 }

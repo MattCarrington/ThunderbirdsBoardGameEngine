@@ -2,7 +2,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using ThunderbirdsBoardGameEngine.GameState.Application;
 using ThunderbirdsBoardGameEngine.GameState.Application.CreateGame;
-using ThunderbirdsBoardGameEngine.GameState.Domain;
 using ThunderbirdsBoardGameEngine.GameState.Infrastructure;
 using ThunderbirdsBoardGameEngine.ReferenceData.Core.KnownIdentities;
 using ThunderbirdsBoardGameEngine.TestUtils.ReferenceData.Fixtures;
@@ -50,17 +49,6 @@ namespace ThunderbirdsBoardGameEngine.GameState.ComponentTests.CreateGame
             Assert.Equal(result.GameSession.Characters[KnownCharacterCodes.Gordon], KnownThunderbirdCodes.Thunderbird4);
             Assert.Equal(result.GameSession.Characters[KnownCharacterCodes.John], KnownThunderbirdCodes.Thunderbird5);
             Assert.Equal(result.GameSession.Characters[KnownCharacterCodes.LadyPenelope], KnownThunderbirdCodes.Fab1);
-        }
-    }
-
-    public class InMemoryGameRepository : IGameRepository
-    {
-        private readonly Dictionary<Guid, Game> _games = new();
-
-        public Task SaveGameSession(Game gameSession, CancellationToken cancellationToken)
-        {
-            _games[gameSession.Id] = gameSession;
-            return Task.CompletedTask;
         }
     }
 }

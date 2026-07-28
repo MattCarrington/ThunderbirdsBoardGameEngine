@@ -1,5 +1,8 @@
-﻿using ThunderbirdsBoardGameEngine.GameState.Domain;
+﻿using System.Collections.Frozen;
+using System.Collections.Immutable;
+using ThunderbirdsBoardGameEngine.GameState.Domain;
 using ThunderbirdsBoardGameEngine.GameState.Infrastructure.Persistence.Records;
+using ThunderbirdsBoardGameEngine.ReferenceData.Core.Identities;
 
 namespace ThunderbirdsBoardGameEngine.GameState.Infrastructure.Persistence
 {
@@ -27,6 +30,23 @@ namespace ThunderbirdsBoardGameEngine.GameState.Infrastructure.Persistence
             };
 
             return gameRecord;
+        }
+
+        public Game MapToGame(GameRecord gameRecord)
+        {
+            var characters = gameRecord.CharacterStates
+                .ToDictionary(
+                    cs => new CharacterCode(cs.CharacterCode),
+                    cs => new ThunderbirdCode(cs.ThunderbirdCode));
+
+            var machines = gameRecord.ThunderbirdMachineStates
+                .ToDictionary(
+                    ms => new ThunderbirdCode(ms.ThunderbirdCode),
+                    ms => new LocationCode(ms.LocationCode));
+
+            var game = Game.Create(gameRecord.Id, gameRecord.CreatedAtUtc, gameRecord.SetupVersion, machines, characters);
+
+            return game;
         }
     }
 }
