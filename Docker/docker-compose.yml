@@ -22,5 +22,8 @@ services:
       POSTGRES_PASSWORD: ${GAME_STATE_DB_PASSWORD}
     volumes:
       - game-state-data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
 volumes:
   game-state-data:
+    
