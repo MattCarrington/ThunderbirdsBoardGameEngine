@@ -1,6 +1,6 @@
 ﻿using ThunderbirdsBoardGameEngine.ReferenceData.Core.Identities;
 
-namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.TestData
+namespace ThunderbirdsBoardGameEngine.TestUtils.ReferenceData.TestData
 {
     public static class TestDisasterCodes
     {

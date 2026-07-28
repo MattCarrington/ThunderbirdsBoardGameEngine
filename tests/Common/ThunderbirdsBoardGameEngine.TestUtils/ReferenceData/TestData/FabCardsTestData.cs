@@ -1,9 +1,9 @@
 ﻿using ThunderbirdsBoardGameEngine.ReferenceData.Core.Identities;
 using ThunderbirdsBoardGameEngine.ReferenceData.Core.KnownIdentities;
 using ThunderbirdsBoardGameEngine.ReferenceData.Core.Model;
-using ThunderbirdsBoardGameEngine.Rules.ComponentTests.Fakes;
+using ThunderbirdsBoardGameEngine.TestUtils.ReferenceData.Fakes;
 
-namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.TestData
+namespace ThunderbirdsBoardGameEngine.TestUtils.ReferenceData.TestData
 {
     public class FabCardsTestData
     {

@@ -1,9 +1,9 @@
 ﻿using ThunderbirdsBoardGameEngine.ReferenceData.Core.Enums;
 using ThunderbirdsBoardGameEngine.ReferenceData.Core.KnownIdentities;
 using ThunderbirdsBoardGameEngine.ReferenceData.Core.Model;
-using ThunderbirdsBoardGameEngine.Rules.ComponentTests.Fakes;
+using ThunderbirdsBoardGameEngine.TestUtils.ReferenceData.Fakes;
 
-namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.TestData
+namespace ThunderbirdsBoardGameEngine.TestUtils.ReferenceData.TestData
 {
     public class ThunderbirdsTestData
     {
@@ -14,8 +14,9 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.TestData
             var thunderbird3 = new ReferenceThunderbirdDefinition(KnownThunderbirdCodes.Thunderbird3, "Thunderbird 3", MovementDomain.Space, 3);
             var thunderbird4 = new ReferenceThunderbirdDefinition(KnownThunderbirdCodes.Thunderbird4, "Thunderbird 4", MovementDomain.Earth, 1);
             var thunderbird5 = new ReferenceThunderbirdDefinition(KnownThunderbirdCodes.Thunderbird5, "Thunderbird 5", MovementDomain.Space, 0);
+            var fab1 = new ReferenceThunderbirdDefinition(KnownThunderbirdCodes.Fab1, "FAB 1", MovementDomain.Earth, 1);
 
-            return new FakeThunderbirdDefinitionCatalog(thunderbird1, thunderbird2, thunderbird3, thunderbird4, thunderbird5);
+            return new FakeThunderbirdDefinitionCatalog(thunderbird1, thunderbird2, thunderbird3, thunderbird4, thunderbird5, fab1);
         }
     }
 }

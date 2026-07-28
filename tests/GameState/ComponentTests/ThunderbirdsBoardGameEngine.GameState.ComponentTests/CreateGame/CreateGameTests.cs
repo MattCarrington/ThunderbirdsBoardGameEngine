@@ -1,8 +1,11 @@
-﻿using NSubstitute;
+﻿using MediatR;
+using Microsoft.Extensions.DependencyInjection;
 using ThunderbirdsBoardGameEngine.GameState.Application;
 using ThunderbirdsBoardGameEngine.GameState.Application.CreateGame;
-using ThunderbirdsBoardGameEngine.GameState.Domain.Setup.V1;
+using ThunderbirdsBoardGameEngine.GameState.Domain;
+using ThunderbirdsBoardGameEngine.GameState.Infrastructure;
 using ThunderbirdsBoardGameEngine.ReferenceData.Core.KnownIdentities;
+using ThunderbirdsBoardGameEngine.TestUtils.ReferenceData.Fixtures;
 using Xunit;
 
 namespace ThunderbirdsBoardGameEngine.GameState.ComponentTests.CreateGame
@@ -13,17 +16,20 @@ namespace ThunderbirdsBoardGameEngine.GameState.ComponentTests.CreateGame
         public async Task CanCreateValidNewGameAsync()
         {
             // Arrange
-            var factory = new StandardGameSetupFactory();
+            var services = new ServiceCollection();
+            services.AddGameState();
+            services.AddGameStateIntegrity();
+            services.AddSingleton<IGameRepository, InMemoryGameRepository>();
+            services.AddFakeCatalogs();
 
-            var integrityValidator = Substitute.For<IGameStateIntegrityValidator>();
-            var repository = Substitute.For<IGameRepository>();
+            var sp = services.BuildServiceProvider();
 
-            var createGameHandler = new CreateNewGameHandler(factory, integrityValidator, repository);
+            var mediator = sp.GetRequiredService<IMediator>();
 
             var command = new CreateNewGameCommand();
 
             // Act
-            var result = await createGameHandler.Handle(command, CancellationToken.None);
+            var result = await mediator.Send(command, CancellationToken.None);
 
             // Assert
             Assert.NotNull(result);
@@ -44,6 +50,17 @@ namespace ThunderbirdsBoardGameEngine.GameState.ComponentTests.CreateGame
             Assert.Equal(result.GameSession.Characters[KnownCharacterCodes.Gordon], KnownThunderbirdCodes.Thunderbird4);
             Assert.Equal(result.GameSession.Characters[KnownCharacterCodes.John], KnownThunderbirdCodes.Thunderbird5);
             Assert.Equal(result.GameSession.Characters[KnownCharacterCodes.LadyPenelope], KnownThunderbirdCodes.Fab1);
+        }
+    }
+
+    public class InMemoryGameRepository : IGameRepository
+    {
+        private readonly Dictionary<Guid, Game> _games = new();
+
+        public Task SaveGameSession(Game gameSession, CancellationToken cancellationToken)
+        {
+            _games[gameSession.Id] = gameSession;
+            return Task.CompletedTask;
         }
     }
 }

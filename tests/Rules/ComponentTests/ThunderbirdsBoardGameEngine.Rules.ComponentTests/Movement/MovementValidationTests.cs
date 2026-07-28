@@ -1,16 +1,12 @@
 ﻿using MediatR;
 using Microsoft.Extensions.DependencyInjection;
-using ThunderbirdsBoardGameEngine.ReferenceData.Core.Enums;
 using ThunderbirdsBoardGameEngine.ReferenceData.Core.Identities;
 using ThunderbirdsBoardGameEngine.ReferenceData.Core.KnownIdentities;
-using ThunderbirdsBoardGameEngine.ReferenceData.Core.Model;
-using ThunderbirdsBoardGameEngine.ReferenceData.Runtime.Interfaces;
 using ThunderbirdsBoardGameEngine.Rules.Application.Exceptions;
 using ThunderbirdsBoardGameEngine.Rules.Application.Movement.MapTraversal;
-using ThunderbirdsBoardGameEngine.Rules.ComponentTests.Fakes;
-using ThunderbirdsBoardGameEngine.Rules.ComponentTests.Fixtures;
-using ThunderbirdsBoardGameEngine.Rules.ComponentTests.TestData;
 using ThunderbirdsBoardGameEngine.Rules.Infrastructure;
+using ThunderbirdsBoardGameEngine.TestUtils.ReferenceData.Fixtures;
+using ThunderbirdsBoardGameEngine.TestUtils.ReferenceData.TestData;
 using Xunit;
 
 namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Movement
