@@ -5,7 +5,7 @@ using ThunderbirdsBoardGameEngine.ReferenceData.Core.Identities;
 using ThunderbirdsBoardGameEngine.ReferenceData.Core.Model;
 using ThunderbirdsBoardGameEngine.ReferenceData.Runtime.Interfaces;
 
-namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Fakes
+namespace ThunderbirdsBoardGameEngine.TestUtils.ReferenceData.Fakes
 {
     public class FakeThunderbirdDefinitionCatalog : IThunderbirdDefinitionCatalog
     {
