@@ -60,5 +60,20 @@ namespace ThunderbirdsBoardGameEngine.GameState.Domain
                 machines,
                 characters);
         }
+
+        public static Game Restore(
+            Guid id,
+            DateTimeOffset createdAtUtc,
+            string setupVersion,
+            IReadOnlyDictionary<ThunderbirdCode, LocationCode> machines,
+            IReadOnlyDictionary<CharacterCode, ThunderbirdCode> characters)
+        {
+            return new Game(
+                id,
+                createdAtUtc,
+                setupVersion,
+                machines,
+                characters);
+        }
     }
 }
