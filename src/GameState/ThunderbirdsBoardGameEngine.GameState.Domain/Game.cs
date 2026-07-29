@@ -76,9 +76,7 @@ namespace ThunderbirdsBoardGameEngine.GameState.Domain
                 characters);
         }
 
-        public void MoveThunderbirdMachine(
-            ThunderbirdCode machineCode,
-            LocationCode newLocation)
+        public void MoveThunderbirdMachine(ThunderbirdCode machineCode, LocationCode newLocation)
         {
             if (!_machinesState.ContainsKey(machineCode))
             {
@@ -88,6 +86,18 @@ namespace ThunderbirdsBoardGameEngine.GameState.Domain
             }
 
             _machinesState[machineCode] = newLocation;
+        }
+
+        public LocationCode GetThunderbirdMachineLocation(ThunderbirdCode machineCode)
+        {
+            if (!_machinesState.TryGetValue(machineCode, out var location))
+            {
+                throw new ArgumentException(    // TODO: Decide on exception type across game state
+                    $"Machine code '{machineCode}' does not exist in the game state.",
+                    nameof(machineCode));
+            }
+
+            return location;
         }
     }
 }
