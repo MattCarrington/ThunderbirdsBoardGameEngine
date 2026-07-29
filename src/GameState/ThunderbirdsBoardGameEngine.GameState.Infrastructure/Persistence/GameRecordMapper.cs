@@ -42,7 +42,7 @@ namespace ThunderbirdsBoardGameEngine.GameState.Infrastructure.Persistence
                     ms => new ThunderbirdCode(ms.ThunderbirdCode),
                     ms => new LocationCode(ms.LocationCode));
 
-            var game = Game.Create(gameRecord.Id, gameRecord.CreatedAtUtc, gameRecord.SetupVersion, machines, characters);
+            var game = Game.Restore(gameRecord.Id, gameRecord.CreatedAtUtc, gameRecord.SetupVersion, machines, characters);
 
             return game;
         }

@@ -27,12 +27,16 @@ namespace ThunderbirdsBoardGameEngine.GameState.Infrastructure.Persistence
 
         public async Task<Game> GetGameSessionById(Guid gameId, CancellationToken cancellationToken)
         {
-            var gameRecord = await _dbContext.Games.FirstOrDefaultAsync(g => g.Id == gameId, cancellationToken)
-                ?? throw new InvalidOperationException($"Game with ID {gameId} not found.");
+            var game = await _dbContext.Games
+                .AsNoTracking()
+                .AsSplitQuery()
+                .Include(game => game.CharacterStates)
+                .Include(game => game.ThunderbirdMachineStates)
+                .SingleOrDefaultAsync(
+                    game => game.Id == gameId,
+                    cancellationToken);
 
-            var game = _mapper.MapToGame(gameRecord);
-
-            return game;
+            return game is null ? null : _mapper.MapToGame(game);
         }
     }
 }

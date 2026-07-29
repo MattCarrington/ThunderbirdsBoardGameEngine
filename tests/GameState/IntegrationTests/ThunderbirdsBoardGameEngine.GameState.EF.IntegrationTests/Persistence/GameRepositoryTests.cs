@@ -23,6 +23,7 @@ public sealed class GameRepositoryTests
             0,
             0,
             TimeSpan.Zero);
+
         var game = new StandardGameSetupFactory()
             .Create(Guid.NewGuid(), createdAtUtc);
 
@@ -91,6 +92,102 @@ public sealed class GameRepositoryTests
         {
             await DeleteGame(options, game.Id);
         }
+    }
+
+    [Fact]
+    public async Task CreateAndGet_ShouldRoundTripCompleteGame()
+    {
+        // Arrange
+        var options = CreateDbContextOptions();
+        var createdAtUtc = new DateTimeOffset(
+            2026,
+            7,
+            28,
+            12,
+            0,
+            0,
+            TimeSpan.Zero);
+
+        var game = new StandardGameSetupFactory()
+            .Create(Guid.NewGuid(), createdAtUtc);
+
+        try
+        {
+            await using (var writeContext = new GameStateDbContext(options))
+            {
+                var repository = new GameRepository(
+                    writeContext,
+                    new GameRecordMapper());
+
+                await repository.CreateNewGameSession(
+                    game,
+                    TestContext.Current.CancellationToken);
+            }
+
+            await using var readContext = new GameStateDbContext(options);
+
+            var repositoryToRestore = new GameRepository(
+                readContext,
+                new GameRecordMapper());
+
+            // Act
+            var restoredGame = await repositoryToRestore.GetGameSessionById(
+                game.Id,
+                TestContext.Current.CancellationToken);
+
+            // Assert
+            Assert.Equal(game.Id, restoredGame.Id);
+            Assert.Equal(game.CreatedAtUtc, restoredGame.CreatedAtUtc);
+            Assert.Equal(game.SetupVersion, restoredGame.SetupVersion);
+            Assert.Equal(game.Machines.Count, restoredGame.Machines.Count);
+
+            foreach (var expectedMachine in game.Machines)
+            {
+                Assert.True(
+                    restoredGame.Machines.TryGetValue(
+                        expectedMachine.Key,
+                        out var restoredLocation));
+                Assert.Equal(expectedMachine.Value, restoredLocation);
+
+            }
+            Assert.Equal(game.Characters.Count, restoredGame.Characters.Count);
+
+            foreach (var expectedCharacter in game.Characters)
+            {
+                Assert.True(
+                    restoredGame.Characters.TryGetValue(
+                        expectedCharacter.Key,
+                        out var restoredThunderbird));
+                Assert.Equal(expectedCharacter.Value, restoredThunderbird);
+            }
+        }
+        finally
+        {
+            await DeleteGame(options, game.Id);
+        }
+    }
+
+    [Fact]
+    public async Task GetGameSessionById_ShouldReturnNullForNonExistentGame()
+    {
+        // Arrange
+        var options = CreateDbContextOptions();
+
+        var nonExistentGameId = Guid.NewGuid();
+
+        await using var context = new GameStateDbContext(options);
+
+        var repository = new GameRepository(
+            context,
+            new GameRecordMapper());
+
+        // Act
+        var result = await repository.GetGameSessionById(
+            nonExistentGameId,
+            TestContext.Current.CancellationToken);
+
+        // Assert
+        Assert.Null(result);
     }
 
     private static DbContextOptions<GameStateDbContext>
