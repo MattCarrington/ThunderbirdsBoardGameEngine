@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using ThunderbirdsBoardGameEngine.GameState.Domain.Setup.V1;
 using ThunderbirdsBoardGameEngine.GameState.Infrastructure.Persistence;
+using ThunderbirdsBoardGameEngine.ReferenceData.Core.KnownIdentities;
 using Xunit;
 
 namespace ThunderbirdsBoardGameEngine.GameState.EF.IntegrationTests.Persistence;
@@ -188,6 +189,109 @@ public sealed class GameRepositoryTests
 
         // Assert
         Assert.Null(result);
+    }
+
+    [Fact]
+    public async Task UpdateGameSession_ShouldPersistMovedThunderbird()
+    {
+        var options = CreateDbContextOptions();
+        var game = new StandardGameSetupFactory().Create(
+            Guid.NewGuid(),
+            new DateTimeOffset(
+                2026, 7, 29, 12, 0, 0, TimeSpan.Zero));
+
+        var destination = KnownLocationCodes.Europe;
+
+        try
+        {
+            await using (var createContext =
+                         new GameStateDbContext(options))
+            {
+                var repository = new GameRepository(
+                    createContext,
+                    new GameRecordMapper());
+
+                await repository.CreateNewGameSession(
+                    game,
+                    TestContext.Current.CancellationToken);
+            }
+
+            await using (var updateContext =
+                         new GameStateDbContext(options))
+            {
+                var repository = new GameRepository(
+                    updateContext,
+                    new GameRecordMapper());
+
+                var gameToUpdate =
+                    await repository.GetGameSessionById(
+                        game.Id,
+                        TestContext.Current.CancellationToken);
+
+                Assert.NotNull(gameToUpdate);
+
+                gameToUpdate.MoveThunderbirdMachine(
+                    KnownThunderbirdCodes.Thunderbird1,
+                    destination);
+
+                await repository.UpdateGameSession(
+                    gameToUpdate,
+                    TestContext.Current.CancellationToken);
+            }
+
+            await using var verificationContext =
+                new GameStateDbContext(options);
+
+            var verificationRepository = new GameRepository(
+                verificationContext,
+                new GameRecordMapper());
+
+            var restoredGame =
+                await verificationRepository.GetGameSessionById(
+                    game.Id,
+                    TestContext.Current.CancellationToken);
+
+            Assert.NotNull(restoredGame);
+
+            Assert.Equal(
+                destination,
+                restoredGame.Machines[
+                    KnownThunderbirdCodes.Thunderbird1]);
+
+            Assert.Equal(game.Characters, restoredGame.Characters);
+            Assert.Equal(game.CreatedAtUtc, restoredGame.CreatedAtUtc);
+            Assert.Equal(game.SetupVersion, restoredGame.SetupVersion);
+        }
+        finally
+        {
+            await DeleteGame(options, game.Id);
+        }
+    }
+
+    [Fact]
+    public async Task UpdateSession_ShouldThrowWhenGameDoesNotExist()
+    {
+        // Arrange
+        var options = CreateDbContextOptions();
+
+        var nonExistentGameId = Guid.NewGuid();
+
+        await using var context = new GameStateDbContext(options);
+
+        var repository = new GameRepository(
+            context,
+            new GameRecordMapper());
+
+        var nonExistentGame = new StandardGameSetupFactory()
+            .Create(nonExistentGameId, DateTimeOffset.UtcNow);
+
+        // Act & Assert
+        await Assert.ThrowsAsync<DbUpdateConcurrencyException>(async () =>
+        {
+            await repository.UpdateGameSession(
+                nonExistentGame,
+                TestContext.Current.CancellationToken);
+        });
     }
 
     private static DbContextOptions<GameStateDbContext>
