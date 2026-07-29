@@ -37,6 +37,7 @@ namespace ThunderbirdsBoardGameEngine.Api
             builder.Services.AddGameState();
             builder.Services.AddGameStateIntegrity();
             builder.Services.AddGameStatePersistence(builder.Configuration);
+            builder.Services.AddGameStateRulesGateway();
             builder.Services.AddApiServices(builder.Configuration);
 
             builder.Services.AddAuthorization();
