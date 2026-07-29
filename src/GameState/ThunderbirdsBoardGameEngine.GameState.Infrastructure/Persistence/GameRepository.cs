@@ -27,7 +27,7 @@ namespace ThunderbirdsBoardGameEngine.GameState.Infrastructure.Persistence
             await _dbContext.SaveChangesAsync(cancellationToken);
         }
 
-        public async Task<Game> GetGameSessionById(Guid gameId, CancellationToken cancellationToken)
+        public async Task<Game?> GetGameSessionById(Guid gameId, CancellationToken cancellationToken)
         {
             var game = await _dbContext.Games
                 .AsNoTracking()
