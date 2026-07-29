@@ -24,5 +24,10 @@ namespace ThunderbirdsBoardGameEngine.GameState.ComponentTests
 
             return Task.FromResult(game);
         }
+
+        public Task UpdateGameSession(Game game, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
