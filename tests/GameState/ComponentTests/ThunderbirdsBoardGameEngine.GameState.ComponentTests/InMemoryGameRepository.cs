@@ -12,7 +12,7 @@ namespace ThunderbirdsBoardGameEngine.GameState.ComponentTests
             throw new NotImplementedException();
         }
 
-        public Task SaveGameSession(Game gameSession, CancellationToken cancellationToken)
+        public Task CreateNewGameSession(Game gameSession, CancellationToken cancellationToken)
         {
             _games[gameSession.Id] = gameSession;
             return Task.CompletedTask;

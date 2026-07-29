@@ -29,7 +29,7 @@ namespace ThunderbirdsBoardGameEngine.GameState.Application.UnitTests.CreateGame
                 .Validate(Arg.Any<Game>());
 
             await repository.Received(1)
-                .SaveGameSession(
+                .CreateNewGameSession(
                     Arg.Any<Game>(),
                     Arg.Any<CancellationToken>());
 
@@ -78,7 +78,7 @@ namespace ThunderbirdsBoardGameEngine.GameState.Application.UnitTests.CreateGame
                 .Validate(Arg.Any<Game>());
 
             await repository.DidNotReceive()
-                .SaveGameSession(
+                .CreateNewGameSession(
                     Arg.Any<Game>(),
                     Arg.Any<CancellationToken>());
         }

@@ -35,7 +35,7 @@ public sealed class GameRepositoryTests
                     new GameRecordMapper());
 
                 // Act
-                await repository.SaveGameSession(
+                await repository.CreateNewGameSession(
                     game,
                     TestContext.Current.CancellationToken);
             }
