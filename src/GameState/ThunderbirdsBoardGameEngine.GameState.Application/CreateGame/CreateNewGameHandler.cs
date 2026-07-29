@@ -22,7 +22,7 @@ namespace ThunderbirdsBoardGameEngine.GameState.Application.CreateGame
 
             _gameStateIntegrityValidator.Validate(game);
 
-            await _gameRepository.SaveGameSession(game, cancellationToken);
+            await _gameRepository.CreateNewGameSession(game, cancellationToken);
 
             return new CreateNewGameResult(game);
         }

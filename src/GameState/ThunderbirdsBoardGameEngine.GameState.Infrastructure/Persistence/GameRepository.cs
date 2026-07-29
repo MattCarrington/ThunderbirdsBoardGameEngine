@@ -15,7 +15,7 @@ namespace ThunderbirdsBoardGameEngine.GameState.Infrastructure.Persistence
             _mapper = mapper;
         }
 
-        public async Task SaveGameSession(Game game, CancellationToken cancellationToken)
+        public async Task CreateNewGameSession(Game game, CancellationToken cancellationToken)
         {
             ArgumentNullException.ThrowIfNull(game, nameof(game));
 
