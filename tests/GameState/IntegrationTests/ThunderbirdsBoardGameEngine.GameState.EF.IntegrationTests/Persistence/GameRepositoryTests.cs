@@ -11,22 +11,23 @@ public sealed class GameRepositoryTests
     private const string ConnectionStringEnvironmentVariable =
         "GAME_STATE_TEST_CONNECTION_STRING";
 
+    private static readonly DateTimeOffset CreatedAtUtc = new(
+        2026,
+        7,
+        28,
+        12,
+        0,
+        0,
+        TimeSpan.Zero);
+
     [Fact]
     public async Task SaveGameSession_ShouldPersistCompleteGame()
     {
         // Arrange
         var options = CreateDbContextOptions();
-        var createdAtUtc = new DateTimeOffset(
-            2026,
-            7,
-            28,
-            12,
-            0,
-            0,
-            TimeSpan.Zero);
 
         var game = new StandardGameSetupFactory()
-            .Create(Guid.NewGuid(), createdAtUtc);
+            .Create(Guid.NewGuid(), CreatedAtUtc);
 
         try
         {
@@ -100,17 +101,9 @@ public sealed class GameRepositoryTests
     {
         // Arrange
         var options = CreateDbContextOptions();
-        var createdAtUtc = new DateTimeOffset(
-            2026,
-            7,
-            28,
-            12,
-            0,
-            0,
-            TimeSpan.Zero);
 
         var game = new StandardGameSetupFactory()
-            .Create(Guid.NewGuid(), createdAtUtc);
+            .Create(Guid.NewGuid(), CreatedAtUtc);
 
         try
         {
@@ -197,8 +190,7 @@ public sealed class GameRepositoryTests
         var options = CreateDbContextOptions();
         var game = new StandardGameSetupFactory().Create(
             Guid.NewGuid(),
-            new DateTimeOffset(
-                2026, 7, 29, 12, 0, 0, TimeSpan.Zero));
+            CreatedAtUtc);
 
         var destination = KnownLocationCodes.Europe;
 
@@ -283,7 +275,7 @@ public sealed class GameRepositoryTests
             new GameRecordMapper());
 
         var nonExistentGame = new StandardGameSetupFactory()
-            .Create(nonExistentGameId, DateTimeOffset.UtcNow);
+            .Create(nonExistentGameId, CreatedAtUtc);
 
         // Act & Assert
         await Assert.ThrowsAsync<DbUpdateConcurrencyException>(async () =>
