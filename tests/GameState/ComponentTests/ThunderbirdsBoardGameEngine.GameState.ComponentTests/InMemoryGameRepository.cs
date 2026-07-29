@@ -13,7 +13,7 @@ namespace ThunderbirdsBoardGameEngine.GameState.ComponentTests
             return Task.CompletedTask;
         }
 
-        public Task<Game> GetGameSessionById(Guid gameId, CancellationToken cancellationToken)
+        public Task<Game?> GetGameSessionById(Guid gameId, CancellationToken cancellationToken)
         {
             _games.TryGetValue(gameId, out var game);
 

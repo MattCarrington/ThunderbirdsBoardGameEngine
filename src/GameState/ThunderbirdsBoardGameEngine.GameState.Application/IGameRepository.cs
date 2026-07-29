@@ -6,7 +6,7 @@ namespace ThunderbirdsBoardGameEngine.GameState.Application
     {
         Task CreateNewGameSession(Game game, CancellationToken cancellationToken);
 
-        Task<Game> GetGameSessionById(Guid gameId, CancellationToken cancellationToken);
+        Task<Game?> GetGameSessionById(Guid gameId, CancellationToken cancellationToken);
 
         Task UpdateGameSession(Game game, CancellationToken cancellationToken);
     }
