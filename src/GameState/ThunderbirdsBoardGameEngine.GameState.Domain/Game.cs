@@ -75,5 +75,19 @@ namespace ThunderbirdsBoardGameEngine.GameState.Domain
                 machines,
                 characters);
         }
+
+        public void MoveThunderbirdMachine(
+            ThunderbirdCode machineCode,
+            LocationCode newLocation)
+        {
+            if (!_machinesState.ContainsKey(machineCode))
+            {
+                throw new ArgumentException(
+                    $"Machine code '{machineCode}' does not exist in the game state.",
+                    nameof(machineCode));
+            }
+
+            _machinesState[machineCode] = newLocation;
+        }
     }
 }
