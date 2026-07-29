@@ -6,6 +6,7 @@ using ThunderbirdsBoardGameEngine.GameState.Application;
 using ThunderbirdsBoardGameEngine.GameState.Infrastructure.GameStateIntegrity;
 using ThunderbirdsBoardGameEngine.GameState.Infrastructure.Persistence;
 using ThunderbirdsBoardGameEngine.GameState.Infrastructure.Persistence.Configuration;
+using ThunderbirdsBoardGameEngine.GameState.Infrastructure.RulesValidation;
 
 namespace ThunderbirdsBoardGameEngine.GameState.Infrastructure
 {
@@ -38,6 +39,12 @@ namespace ThunderbirdsBoardGameEngine.GameState.Infrastructure
         {
             services.AddSingleton<IGameStateIntegrityValidator, ReferenceDataGameStateIntegrityValidator>();
 
+            return services;
+        }
+
+        public static IServiceCollection AddGameStateRulesGateway(this IServiceCollection services)
+        {
+            services.AddSingleton<IValidateMovementGateway, ValidateMovementGateway>();
             return services;
         }
     }

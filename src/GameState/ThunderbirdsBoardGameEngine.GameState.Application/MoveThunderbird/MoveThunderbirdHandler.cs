@@ -6,10 +6,10 @@ namespace ThunderbirdsBoardGameEngine.GameState.Application.MoveThunderbird
     internal sealed class MoveThunderbirdHandler : IRequestHandler<MoveThunderbirdCommand, MoveThunderbirdResult>
     {
         private readonly IGameRepository _gameRepository;
-        private readonly IThunderbirdMovementGateway _movementGateway;
+        private readonly IValidateMovementGateway _movementGateway;
         private readonly IGameStateIntegrityValidator _gameStateIntegrityValidator;
 
-        public MoveThunderbirdHandler(IGameRepository gameRepository, IThunderbirdMovementGateway movementGateway, IGameStateIntegrityValidator gameStateIntegrityValidator)
+        public MoveThunderbirdHandler(IGameRepository gameRepository, IValidateMovementGateway movementGateway, IGameStateIntegrityValidator gameStateIntegrityValidator)
         {
             _gameRepository = gameRepository;
             _movementGateway = movementGateway;

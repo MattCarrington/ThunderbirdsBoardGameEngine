@@ -1,4 +1,4 @@
-﻿namespace ThunderbirdsBoardGameEngine.GameState.Domain.Movement
+﻿namespace ThunderbirdsBoardGameEngine.GameState.Application.MoveThunderbird
 {
-    public sealed record ValidateMovementDecision(bool IsValid, IList<string> Messages);
+    public sealed record ValidateMovementDecision(bool IsValid, IReadOnlyCollection<string> Messages);
 }
