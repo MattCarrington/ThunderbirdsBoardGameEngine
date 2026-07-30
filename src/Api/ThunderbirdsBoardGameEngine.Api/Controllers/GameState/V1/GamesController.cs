@@ -3,10 +3,11 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
+using ThunderbirdsBoardGameEngine.Api.Mappers.GameState.V1;
 using ThunderbirdsBoardGameEngine.GameState.Application.CreateGame;
 using ThunderbirdsBoardGameEngine.GameState.Application.GetGame;
 using ThunderbirdsBoardGameEngine.GameState.Application.MoveThunderbird;
-using ThunderbirdsBoardGameEngine.GameState.Contracts.Dtos.ThunderbirdMachines.V1;
+using ThunderbirdsBoardGameEngine.GameState.Contracts.Dtos.V1.ThunderbirdMachines;
 using ThunderbirdsBoardGameEngine.ReferenceData.Core.Identities;
 
 namespace ThunderbirdsBoardGameEngine.Api.Controllers.GameState.V1
@@ -30,7 +31,7 @@ namespace ThunderbirdsBoardGameEngine.Api.Controllers.GameState.V1
         {
             var result = await _mediator.Send(new CreateNewGameCommand());
 
-            return Ok(result);
+            return Ok(result.GameSession.ToDto());  // TODO: Return CreatedAtAction with the location of the new game resource
         }
 
         [HttpGet("{gameId:guid}")]
@@ -38,7 +39,7 @@ namespace ThunderbirdsBoardGameEngine.Api.Controllers.GameState.V1
         {
             var result = await _mediator.Send(new GetGameQuery(gameId));
 
-            return Ok(result);
+            return Ok(result.GameSession.ToDto());
         }
 
         [HttpPost("{gameId:guid}/thunderbird-machines/{thunderbirdCode:string}/move")]
@@ -48,7 +49,7 @@ namespace ThunderbirdsBoardGameEngine.Api.Controllers.GameState.V1
 
             var result = await _mediator.Send(command);
 
-            return Ok(result);
+            return Ok(result.GameSession.ToDto());
         }
     }
 }
