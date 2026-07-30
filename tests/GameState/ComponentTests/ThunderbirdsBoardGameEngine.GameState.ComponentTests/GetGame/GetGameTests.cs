@@ -1,7 +1,5 @@
-﻿using MediatR;
-using Microsoft.Extensions.DependencyInjection;
-using ThunderbirdsBoardGameEngine.GameState.Application;
-using ThunderbirdsBoardGameEngine.GameState.Application.GetGame;
+﻿using ThunderbirdsBoardGameEngine.GameState.Application.GetGame;
+using ThunderbirdsBoardGameEngine.GameState.ComponentTests.Helpers;
 using ThunderbirdsBoardGameEngine.GameState.Domain;
 using ThunderbirdsBoardGameEngine.ReferenceData.Core.Identities;
 using ThunderbirdsBoardGameEngine.ReferenceData.Core.KnownIdentities;
@@ -15,7 +13,7 @@ namespace ThunderbirdsBoardGameEngine.GameState.ComponentTests.GetGame
         public async Task CanGetGameByIdAsync()
         {
             // Arrange
-            var repository = new InMemoryGameRepository();
+            await using var testHost = GameStateTestHost.CreateBuilder().Build();
 
             var gameId = Guid.NewGuid();
 
@@ -35,30 +33,17 @@ namespace ThunderbirdsBoardGameEngine.GameState.ComponentTests.GetGame
                 }
             );
 
-            await repository.CreateNewGameSession(game, TestContext.Current.CancellationToken);
-
-            var mediator = CreateMediator(repository);
+            await testHost.Repository.CreateNewGameSession(game, TestContext.Current.CancellationToken);
 
             var command = new GetGameQuery(gameId);
 
             // Act
-            var result = await mediator.Send(command, TestContext.Current.CancellationToken);
+            var result = await testHost.Mediator.Send(command, TestContext.Current.CancellationToken);
 
             // Assert
             Assert.NotNull(result);
             Assert.Equal(gameId, result.GameSession.Id);
             Assert.Same(game, result.GameSession);
-        }
-
-        private static IMediator CreateMediator(IGameRepository repository)
-        {
-            var services = new ServiceCollection();
-            services.AddGameState();
-            services.AddSingleton(repository);
-
-            var sp = services.BuildServiceProvider();
-
-            return sp.GetRequiredService<IMediator>();
         }
     }
 }

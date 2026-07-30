@@ -1,10 +1,6 @@
-﻿using MediatR;
-using Microsoft.Extensions.DependencyInjection;
-using ThunderbirdsBoardGameEngine.GameState.Application;
-using ThunderbirdsBoardGameEngine.GameState.Application.CreateGame;
-using ThunderbirdsBoardGameEngine.GameState.Infrastructure;
+﻿using ThunderbirdsBoardGameEngine.GameState.Application.CreateGame;
+using ThunderbirdsBoardGameEngine.GameState.ComponentTests.Helpers;
 using ThunderbirdsBoardGameEngine.ReferenceData.Core.KnownIdentities;
-using ThunderbirdsBoardGameEngine.TestUtils.ReferenceData.Fixtures;
 using Xunit;
 
 namespace ThunderbirdsBoardGameEngine.GameState.ComponentTests.CreateGame
@@ -15,20 +11,12 @@ namespace ThunderbirdsBoardGameEngine.GameState.ComponentTests.CreateGame
         public async Task CanCreateValidNewGameAsync()
         {
             // Arrange
-            var services = new ServiceCollection();
-            services.AddGameState();
-            services.AddGameStateIntegrity();
-            services.AddSingleton<IGameRepository, InMemoryGameRepository>();
-            services.AddFakeCatalogs();
-
-            var sp = services.BuildServiceProvider();
-
-            var mediator = sp.GetRequiredService<IMediator>();
+            await using var testHost = GameStateTestHost.CreateBuilder().Build();
 
             var command = new CreateNewGameCommand();
 
             // Act
-            var result = await mediator.Send(command, CancellationToken.None);
+            var result = await testHost.Mediator.Send(command, CancellationToken.None);
 
             // Assert
             Assert.NotNull(result);
