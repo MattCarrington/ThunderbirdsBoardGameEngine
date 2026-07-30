@@ -27,6 +27,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\GameState\ThunderbirdsBoardGameEngine.GameState.Application\ThunderbirdsBoardGameEngine.GameState.Application.csproj" />
+    <ProjectReference Include="..\..\GameState\ThunderbirdsBoardGameEngine.GameState.Contracts\ThunderbirdsBoardGameEngine.GameState.Contracts.csproj" />
     <ProjectReference Include="..\..\GameState\ThunderbirdsBoardGameEngine.GameState.Infrastructure\ThunderbirdsBoardGameEngine.GameState.Infrastructure.csproj" />
     <ProjectReference Include="..\..\Rules\ThunderbirdsBoardGameEngine.Rules.Application\ThunderbirdsBoardGameEngine.Rules.Application.csproj" />
     <ProjectReference Include="..\..\Rules\ThunderbirdsBoardGameEngine.Rules.Contracts\ThunderbirdsBoardGameEngine.Rules.Contracts.csproj" />

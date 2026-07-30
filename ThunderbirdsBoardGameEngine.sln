@@ -118,6 +118,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThunderbirdsBoardGameEngine
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThunderbirdsBoardGameEngine.GameState.EF.IntegrationTests", "tests\GameState\IntegrationTests\ThunderbirdsBoardGameEngine.GameState.EF.IntegrationTests\ThunderbirdsBoardGameEngine.GameState.EF.IntegrationTests.csproj", "{5D566CE7-F60F-42C4-B790-23DA1683259A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThunderbirdsBoardGameEngine.GameState.Contracts", "src\GameState\ThunderbirdsBoardGameEngine.GameState.Contracts\ThunderbirdsBoardGameEngine.GameState.Contracts.csproj", "{D9B6A295-5FE5-44BF-9FA3-B187DC67803E}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThunderbirdsBoardGameEngine.TestUtils.WireMock.xUnit", "tests\Common\ThunderbirdsBoardGameEngine.TestUtils.WireMock.xUnit\ThunderbirdsBoardGameEngine.TestUtils.WireMock.xUnit.csproj", "{0286B7EC-2DC5-4B79-B2D6-484F878A4229}"
 EndProject
 Global
@@ -658,6 +660,18 @@ Global
 		{5D566CE7-F60F-42C4-B790-23DA1683259A}.Release|x64.Build.0 = Release|Any CPU
 		{5D566CE7-F60F-42C4-B790-23DA1683259A}.Release|x86.ActiveCfg = Release|Any CPU
 		{5D566CE7-F60F-42C4-B790-23DA1683259A}.Release|x86.Build.0 = Release|Any CPU
+		{D9B6A295-5FE5-44BF-9FA3-B187DC67803E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D9B6A295-5FE5-44BF-9FA3-B187DC67803E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D9B6A295-5FE5-44BF-9FA3-B187DC67803E}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{D9B6A295-5FE5-44BF-9FA3-B187DC67803E}.Debug|x64.Build.0 = Debug|Any CPU
+		{D9B6A295-5FE5-44BF-9FA3-B187DC67803E}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{D9B6A295-5FE5-44BF-9FA3-B187DC67803E}.Debug|x86.Build.0 = Debug|Any CPU
+		{D9B6A295-5FE5-44BF-9FA3-B187DC67803E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D9B6A295-5FE5-44BF-9FA3-B187DC67803E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D9B6A295-5FE5-44BF-9FA3-B187DC67803E}.Release|x64.ActiveCfg = Release|Any CPU
+		{D9B6A295-5FE5-44BF-9FA3-B187DC67803E}.Release|x64.Build.0 = Release|Any CPU
+		{D9B6A295-5FE5-44BF-9FA3-B187DC67803E}.Release|x86.ActiveCfg = Release|Any CPU
+		{D9B6A295-5FE5-44BF-9FA3-B187DC67803E}.Release|x86.Build.0 = Release|Any CPU
 		{0286B7EC-2DC5-4B79-B2D6-484F878A4229}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{0286B7EC-2DC5-4B79-B2D6-484F878A4229}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0286B7EC-2DC5-4B79-B2D6-484F878A4229}.Debug|x64.ActiveCfg = Debug|Any CPU
