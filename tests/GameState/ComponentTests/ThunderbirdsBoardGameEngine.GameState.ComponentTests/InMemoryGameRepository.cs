@@ -27,7 +27,8 @@ namespace ThunderbirdsBoardGameEngine.GameState.ComponentTests
 
         public Task UpdateGameSession(Game game, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            _games[game.Id] = game;
+            return Task.CompletedTask;
         }
     }
 }
