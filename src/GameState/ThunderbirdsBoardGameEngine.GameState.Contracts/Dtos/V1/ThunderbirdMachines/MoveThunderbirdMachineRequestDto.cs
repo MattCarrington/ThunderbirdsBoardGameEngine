@@ -1,4 +1,4 @@
-﻿namespace ThunderbirdsBoardGameEngine.GameState.Contracts.Dtos.ThunderbirdMachines.V1
+﻿namespace ThunderbirdsBoardGameEngine.GameState.Contracts.Dtos.V1.ThunderbirdMachines
 {
     public record MoveThunderbirdMachineRequestDto
     {
