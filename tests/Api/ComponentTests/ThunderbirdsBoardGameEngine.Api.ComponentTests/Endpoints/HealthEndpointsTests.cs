@@ -1,13 +1,14 @@
 ﻿using Microsoft.AspNetCore.Mvc.Testing;
+using ThunderbirdsBoardGameEngine.Api.ComponentTests.Factories;
 using Xunit;
 
 namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints
 {
-    public class HealthEndpointsTests : IClassFixture<WebApplicationFactory<Program>>
+    public class HealthEndpointsTests : IClassFixture<ApiComponentWebApplicationFactory>
     {
         private readonly HttpClient _client;
 
-        public HealthEndpointsTests(WebApplicationFactory<Program> factory)
+        public HealthEndpointsTests(ApiComponentWebApplicationFactory factory)
         {
             _client = factory.CreateClient();
         }

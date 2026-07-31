@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using ThunderbirdsBoardGameEngine.GameState.Application;
 using ThunderbirdsBoardGameEngine.GameState.Infrastructure;
+using ThunderbirdsBoardGameEngine.TestUtils.GameState;
 using ThunderbirdsBoardGameEngine.TestUtils.ReferenceData.Fixtures;
 
 namespace ThunderbirdsBoardGameEngine.GameState.ComponentTests.Helpers

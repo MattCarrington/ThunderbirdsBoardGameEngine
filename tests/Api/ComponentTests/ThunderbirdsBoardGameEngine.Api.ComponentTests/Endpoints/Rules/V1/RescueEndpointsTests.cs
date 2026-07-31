@@ -2,13 +2,14 @@
 using Microsoft.AspNetCore.Mvc.Testing;
 using System.Net;
 using System.Net.Http.Json;
+using ThunderbirdsBoardGameEngine.Api.ComponentTests.Factories;
 using ThunderbirdsBoardGameEngine.Rules.Contracts.Dtos.Rescue.CalculateRescueTarget.V1;
 using ThunderbirdsBoardGameEngine.TestUtils.xUnit.Assertions;
 using Xunit;
 
 namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints.Rules.V1
 {
-    public class RescueEndpointsTests : IClassFixture<WebApplicationFactory<Program>>
+    public class RescueEndpointsTests : IClassFixture<ApiComponentWebApplicationFactory>
     {
         private readonly HttpClient _client;
 
@@ -27,7 +28,7 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints.Rules.V1
             PerformingCharacterKey = "gordon"
         };
 
-        public RescueEndpointsTests(WebApplicationFactory<Program> factory)
+        public RescueEndpointsTests(ApiComponentWebApplicationFactory factory)
         {
             _client = factory.CreateClient();
         }

@@ -7,9 +7,11 @@
   </ItemGroup>
 
 	<ItemGroup>
-    <ProjectReference Include="..\..\..\src\ReferenceData\ThunderbirdsBoardGameEngine.ReferenceData.Core\ThunderbirdsBoardGameEngine.ReferenceData.Core.csproj" />
-    <ProjectReference Include="..\..\..\src\ReferenceData\ThunderbirdsBoardGameEngine.ReferenceData.Runtime\ThunderbirdsBoardGameEngine.ReferenceData.Runtime.csproj" />
-    <ProjectReference Include="..\..\..\src\Rules\ThunderbirdsBoardGameEngine.Rules.Client\ThunderbirdsBoardGameEngine.Rules.Client.csproj" />
+	<ProjectReference Include="..\..\..\src\GameState\ThunderbirdsBoardGameEngine.GameState.Application\ThunderbirdsBoardGameEngine.GameState.Application.csproj" />
+	<ProjectReference Include="..\..\..\src\GameState\ThunderbirdsBoardGameEngine.GameState.Domain\ThunderbirdsBoardGameEngine.GameState.Domain.csproj" />
+	<ProjectReference Include="..\..\..\src\ReferenceData\ThunderbirdsBoardGameEngine.ReferenceData.Core\ThunderbirdsBoardGameEngine.ReferenceData.Core.csproj" />
+	<ProjectReference Include="..\..\..\src\ReferenceData\ThunderbirdsBoardGameEngine.ReferenceData.Runtime\ThunderbirdsBoardGameEngine.ReferenceData.Runtime.csproj" />
+	<ProjectReference Include="..\..\..\src\Rules\ThunderbirdsBoardGameEngine.Rules.Client\ThunderbirdsBoardGameEngine.Rules.Client.csproj" />
   </ItemGroup>
 	
 </Project>
