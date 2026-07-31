@@ -1,7 +1,7 @@
-﻿using ThunderbirdsBoardGameEngine.GameState.Application;
+using ThunderbirdsBoardGameEngine.GameState.Application;
 using ThunderbirdsBoardGameEngine.GameState.Domain;
 
-namespace ThunderbirdsBoardGameEngine.GameState.ComponentTests
+namespace ThunderbirdsBoardGameEngine.TestUtils.GameState
 {
     public class InMemoryGameRepository : IGameRepository
     {

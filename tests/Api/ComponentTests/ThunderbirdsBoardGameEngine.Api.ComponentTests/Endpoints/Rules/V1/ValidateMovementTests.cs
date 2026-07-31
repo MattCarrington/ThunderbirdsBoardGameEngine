@@ -2,19 +2,20 @@
 using Microsoft.AspNetCore.Mvc.Testing;
 using System.Net;
 using System.Net.Http.Json;
+using ThunderbirdsBoardGameEngine.Api.ComponentTests.Factories;
 using ThunderbirdsBoardGameEngine.Rules.Contracts.Dtos.Movement.ValidateMovement.V1;
 using ThunderbirdsBoardGameEngine.TestUtils.xUnit.Assertions;
 using Xunit;
 
 namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints.Rules.V1
 {
-    public class ValidateMovementTests : IClassFixture<WebApplicationFactory<Program>>
+    public class ValidateMovementTests : IClassFixture<ApiComponentWebApplicationFactory>
     {
         private readonly HttpClient _client;
 
         private const int ApiVersion = 1;
 
-        public ValidateMovementTests(WebApplicationFactory<Program> factory)
+        public ValidateMovementTests(ApiComponentWebApplicationFactory factory)
         {
             _client = factory.CreateClient();
         }

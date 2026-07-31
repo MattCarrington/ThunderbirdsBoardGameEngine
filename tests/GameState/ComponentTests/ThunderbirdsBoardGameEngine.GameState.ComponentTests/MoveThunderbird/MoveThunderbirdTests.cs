@@ -6,6 +6,7 @@ using ThunderbirdsBoardGameEngine.GameState.Domain;
 using ThunderbirdsBoardGameEngine.GameState.Domain.Setup.V1;
 using ThunderbirdsBoardGameEngine.ReferenceData.Core.Identities;
 using ThunderbirdsBoardGameEngine.ReferenceData.Core.KnownIdentities;
+using ThunderbirdsBoardGameEngine.TestUtils.GameState;
 using Xunit;
 
 namespace ThunderbirdsBoardGameEngine.GameState.ComponentTests.MoveThunderbird

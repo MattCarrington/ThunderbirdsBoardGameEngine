@@ -42,7 +42,7 @@ namespace ThunderbirdsBoardGameEngine.Api.Controllers.GameState.V1
             return Ok(result.GameSession.ToDto());
         }
 
-        [HttpPost("{gameId:guid}/thunderbird-machines/{thunderbirdCode:string}/move")]
+        [HttpPost("{gameId:guid}/thunderbird-machines/{thunderbirdCode}/move")]
         public async Task<IActionResult> MoveThunderbirdMachine([FromRoute] Guid gameId, [FromRoute] string thunderbirdCode, [FromBody] MoveThunderbirdMachineRequestDto request)
         {
             var command = new MoveThunderbirdCommand(gameId, new ThunderbirdCode(thunderbirdCode), new LocationCode(request.Destination));
