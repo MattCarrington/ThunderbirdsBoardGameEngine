@@ -17,11 +17,6 @@ namespace ThunderbirdsBoardGameEngine.TestUtils.GameState
         {
             _games.TryGetValue(gameId, out var game);
 
-            if (game is null)
-            {
-                throw new Exception("game not found");
-            }
-
             return Task.FromResult(game);
         }
 
