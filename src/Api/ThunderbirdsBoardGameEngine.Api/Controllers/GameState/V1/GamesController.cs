@@ -27,27 +27,31 @@ namespace ThunderbirdsBoardGameEngine.Api.Controllers.GameState.V1
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateGame()
+        public async Task<IActionResult> CreateGame(CancellationToken cancellationToken)
         {
-            var result = await _mediator.Send(new CreateNewGameCommand());
+            var result = await _mediator.Send(new CreateNewGameCommand(), cancellationToken);
 
             return Ok(result.GameSession.ToDto());  // TODO: Return CreatedAtAction with the location of the new game resource
         }
 
         [HttpGet("{gameId:guid}")]
-        public async Task<IActionResult> GetGame([FromRoute] Guid gameId)
+        public async Task<IActionResult> GetGame([FromRoute] Guid gameId, CancellationToken cancellationToken)
         {
-            var result = await _mediator.Send(new GetGameQuery(gameId));
+            var result = await _mediator.Send(new GetGameQuery(gameId), cancellationToken);
 
             return Ok(result.GameSession.ToDto());
         }
 
         [HttpPost("{gameId:guid}/thunderbird-machines/{thunderbirdCode}/move")]
-        public async Task<IActionResult> MoveThunderbirdMachine([FromRoute] Guid gameId, [FromRoute] string thunderbirdCode, [FromBody] MoveThunderbirdMachineRequestDto request)
+        public async Task<IActionResult> MoveThunderbirdMachine(
+            [FromRoute] Guid gameId,
+            [FromRoute] string thunderbirdCode,
+            [FromBody] MoveThunderbirdMachineRequestDto request,
+            CancellationToken cancellationToken)
         {
             var command = new MoveThunderbirdCommand(gameId, new ThunderbirdCode(thunderbirdCode), new LocationCode(request.Destination));
 
-            var result = await _mediator.Send(command);
+            var result = await _mediator.Send(command, cancellationToken);
 
             return Ok(result.GameSession.ToDto());
         }
