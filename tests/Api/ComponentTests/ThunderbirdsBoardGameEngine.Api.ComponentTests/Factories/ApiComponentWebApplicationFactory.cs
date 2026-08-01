@@ -16,8 +16,8 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Factories
         protected override void ConfigureWebHost(IWebHostBuilder builder)
         {
             builder.UseSetting(
-        "GameState:Persistence:ConnectionString",
-        "Host=localhost;Database=unused;Username=unused;Password=unused");
+                "GameState:Persistence:ConnectionString",
+                "Host=localhost;Database=unused;Username=unused;Password=unused");
 
             builder.ConfigureLogging(logging =>
             {
