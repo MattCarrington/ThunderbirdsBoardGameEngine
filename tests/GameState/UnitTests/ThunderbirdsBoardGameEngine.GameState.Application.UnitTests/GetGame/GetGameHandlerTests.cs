@@ -58,7 +58,9 @@ namespace ThunderbirdsBoardGameEngine.GameState.Application.UnitTests.GetGame
             var gameRespository = Substitute.For<IGameRepository>();
             gameRespository.GetGameSessionById(Arg.Any<Guid>(), Arg.Any<CancellationToken>()).Returns(game);
 
-            return new GetGameHandler(gameRespository);
+            var integrityValidator = Substitute.For<IGameStateIntegrityValidator>();
+
+            return new GetGameHandler(gameRespository, integrityValidator);
         }
     }
 }

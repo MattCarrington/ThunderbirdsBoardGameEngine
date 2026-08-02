@@ -21,6 +21,8 @@ namespace ThunderbirdsBoardGameEngine.GameState.Application.MoveThunderbird
             var game = await _gameRepository.GetGameSessionById(request.GameId, cancellationToken)
                 ?? throw new GameNotFoundException();
 
+            _gameStateIntegrityValidator.Validate(game);
+
             var origin = game.GetThunderbirdMachineLocation(request.Thunderbird);
 
             var decision = await _movementGateway.ValidateMovement(request.Thunderbird, origin, request.Destination, cancellationToken);
