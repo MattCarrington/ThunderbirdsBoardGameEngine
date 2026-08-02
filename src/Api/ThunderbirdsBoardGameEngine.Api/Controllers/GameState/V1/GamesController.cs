@@ -31,7 +31,7 @@ namespace ThunderbirdsBoardGameEngine.Api.Controllers.GameState.V1
         {
             var result = await _mediator.Send(new CreateNewGameCommand(), cancellationToken);
 
-            return Ok(result.GameSession.ToDto());  // TODO: Return CreatedAtAction with the location of the new game resource
+            return CreatedAtAction(nameof(GetGame), new { gameId = result.GameSession.Id }, result.GameSession.ToDto());
         }
 
         [HttpGet("{gameId:guid}")]
