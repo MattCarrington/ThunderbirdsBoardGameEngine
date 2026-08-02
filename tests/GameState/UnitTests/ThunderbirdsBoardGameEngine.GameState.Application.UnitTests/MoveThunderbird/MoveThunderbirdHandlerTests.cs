@@ -28,7 +28,7 @@ namespace ThunderbirdsBoardGameEngine.GameState.Application.UnitTests.MoveThunde
             // Act & Assert
             await Assert.ThrowsAsync<ThunderbirdMovementRejectedException>(() => handler.Handle(command, TestContext.Current.CancellationToken));
 
-            integrityValidator.DidNotReceive().Validate(Arg.Any<Game>());
+            integrityValidator.Received(1).Validate(Arg.Any<Game>());
             await repository.DidNotReceive().UpdateGameSession(Arg.Any<Game>(), Arg.Any<CancellationToken>());
         }
 
@@ -54,7 +54,7 @@ namespace ThunderbirdsBoardGameEngine.GameState.Application.UnitTests.MoveThunde
             // Assert
             Assert.NotNull(result);
 
-            integrityValidator.Received(1).Validate(game);
+            integrityValidator.Received(2).Validate(game);
             await repository.Received(1).UpdateGameSession(game, Arg.Any<CancellationToken>());
         }
 
