@@ -29,7 +29,7 @@ namespace ThunderbirdsBoardGameEngine.GameState.Application.MoveThunderbird
 
             if (!decision.IsValid)
             {
-                throw new ThunderbirdMovementRejectedException();
+                throw new ThunderbirdMovementRejectedException(decision.Messages);
             }
 
             game.MoveThunderbirdMachine(request.Thunderbird, request.Destination);
