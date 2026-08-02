@@ -19,7 +19,7 @@ namespace ThunderbirdsBoardGameEngine.GameState.Application.MoveThunderbird
         public async Task<MoveThunderbirdResult> Handle(MoveThunderbirdCommand request, CancellationToken cancellationToken)
         {
             var game = await _gameRepository.GetGameSessionById(request.GameId, cancellationToken)
-                ?? throw new InvalidOperationException($"Game session with ID {request.GameId} not found.");
+                ?? throw new GameNotFoundException();
 
             var origin = game.GetThunderbirdMachineLocation(request.Thunderbird);
 

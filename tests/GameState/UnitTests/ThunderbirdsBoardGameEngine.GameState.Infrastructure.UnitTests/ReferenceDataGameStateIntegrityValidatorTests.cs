@@ -1,5 +1,6 @@
 ﻿using NSubstitute;
 using System.Collections.Immutable;
+using ThunderbirdsBoardGameEngine.GameState.Application.Exceptions;
 using ThunderbirdsBoardGameEngine.GameState.Domain;
 using ThunderbirdsBoardGameEngine.GameState.Infrastructure.GameStateIntegrity;
 using ThunderbirdsBoardGameEngine.ReferenceData.Core.Enums;
@@ -44,11 +45,11 @@ namespace ThunderbirdsBoardGameEngine.GameState.Infrastructure.UnitTests
                 });
 
             // Act & Assert
-            Assert.Throws<InvalidOperationException>(() => validator.Validate(game));
+            Assert.Throws<InvalidGameStateException>(() => validator.Validate(game));
         }
 
         [Fact]
-        public void Validate_ShouldThrowInvalidOperationException_WhenCharacterCountGreaterThanReferenceData()
+        public void Validate_ShouldThrowInvalidGameStateException_WhenCharacterCountGreaterThanReferenceData()
         {
             // Arrange
             var validator = CreateValidator();
@@ -70,11 +71,11 @@ namespace ThunderbirdsBoardGameEngine.GameState.Infrastructure.UnitTests
                 });
 
             // Act & Assert
-            Assert.Throws<InvalidOperationException>(() => validator.Validate(game));
+            Assert.Throws<InvalidGameStateException>(() => validator.Validate(game));
         }
 
         [Fact]
-        public void Validate_ShouldThrowInvalidOperationException_WhenCharacterCountLessThanReferenceData()
+        public void Validate_ShouldThrowInvalidGameStateException_WhenCharacterCountLessThanReferenceData()
         {
             // Arrange
             var validator = CreateValidator();
@@ -94,11 +95,11 @@ namespace ThunderbirdsBoardGameEngine.GameState.Infrastructure.UnitTests
                 });
 
             // Act & Assert
-            Assert.Throws<InvalidOperationException>(() => validator.Validate(game));
+            Assert.Throws<InvalidGameStateException>(() => validator.Validate(game));
         }
 
         [Fact]
-        public void Validate_ShouldThrowInvalidOperationException_WhenThunderbirdCountGreaterThanReferenceData()
+        public void Validate_ShouldThrowInvalidGameStateException_WhenThunderbirdCountGreaterThanReferenceData()
         {
             // Arrange
             var validator = CreateValidator();
@@ -118,11 +119,11 @@ namespace ThunderbirdsBoardGameEngine.GameState.Infrastructure.UnitTests
                     { new("character-2"), new("thunderbird-2") }
                 });
             // Act & Assert
-            Assert.Throws<InvalidOperationException>(() => validator.Validate(game));
+            Assert.Throws<InvalidGameStateException>(() => validator.Validate(game));
         }
 
         [Fact]
-        public void Validate_ShouldThrowInvalidOperationException_WhenCharacterDoesNotExistInReferenceData()
+        public void Validate_ShouldThrowInvalidGameStateException_WhenCharacterDoesNotExistInReferenceData()
         {
             // Arrange
             var validator = CreateValidator();
@@ -143,11 +144,11 @@ namespace ThunderbirdsBoardGameEngine.GameState.Infrastructure.UnitTests
                 });
 
             // Act & Assert
-            Assert.Throws<InvalidOperationException>(() => validator.Validate(game));
+            Assert.Throws<InvalidGameStateException>(() => validator.Validate(game));
         }
 
         [Fact]
-        public void Validate_ShouldThrowInvalidOperationException_WhenCharacterAssignmentDoesNotExistInReferenceData()
+        public void Validate_ShouldThrowInvalidGameStateException_WhenCharacterAssignmentDoesNotExistInReferenceData()
         {
             // Arrange
             var validator = CreateValidator();
@@ -168,11 +169,11 @@ namespace ThunderbirdsBoardGameEngine.GameState.Infrastructure.UnitTests
                 });
 
             // Act & Assert
-            Assert.Throws<InvalidOperationException>(() => validator.Validate(game));
+            Assert.Throws<InvalidGameStateException>(() => validator.Validate(game));
         }
 
         [Fact]
-        public void Validate_ShouldThrowInvalidOperationException_WhenThunderbirdCountLessThanReferenceData()
+        public void Validate_ShouldThrowInvalidGameStateException_WhenThunderbirdCountLessThanReferenceData()
         {
             // Arrange
             var validator = CreateValidator();
@@ -190,11 +191,11 @@ namespace ThunderbirdsBoardGameEngine.GameState.Infrastructure.UnitTests
                     { new("character-2"), new("thunderbird-2") }
                 });
             // Act & Assert
-            Assert.Throws<InvalidOperationException>(() => validator.Validate(game));
+            Assert.Throws<InvalidGameStateException>(() => validator.Validate(game));
         }
 
         [Fact]
-        public void Validate_ShouldThrowInvalidOperationException_WhenThunderbirdLocationDoesNotExistInReferenceData()
+        public void Validate_ShouldThrowInvalidGameStateException_WhenThunderbirdLocationDoesNotExistInReferenceData()
         {
             // Arrange
             var validator = CreateValidator();
@@ -213,11 +214,11 @@ namespace ThunderbirdsBoardGameEngine.GameState.Infrastructure.UnitTests
                     { new("character-2"), new("thunderbird-2") }
                 });
             // Act & Assert
-            Assert.Throws<InvalidOperationException>(() => validator.Validate(game));
+            Assert.Throws<InvalidGameStateException>(() => validator.Validate(game));
         }
 
         [Fact]
-        public void Validate_ShouldThrowInvalidOperationException_WhenThunderbirdDoesNotExistInReferenceData()
+        public void Validate_ShouldThrowInvalidGameStateException_WhenThunderbirdDoesNotExistInReferenceData()
         {
             // Arrange
             var validator = CreateValidator();
@@ -236,7 +237,7 @@ namespace ThunderbirdsBoardGameEngine.GameState.Infrastructure.UnitTests
                     { new("character-2"), new("thunderbird-2") }
                 });
             // Act & Assert
-            Assert.Throws<InvalidOperationException>(() => validator.Validate(game));
+            Assert.Throws<InvalidGameStateException>(() => validator.Validate(game));
         }
 
         [Fact]

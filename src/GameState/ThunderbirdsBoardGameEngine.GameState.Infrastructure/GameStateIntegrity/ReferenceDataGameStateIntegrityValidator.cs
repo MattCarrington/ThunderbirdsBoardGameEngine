@@ -1,4 +1,5 @@
 ﻿using ThunderbirdsBoardGameEngine.GameState.Application;
+using ThunderbirdsBoardGameEngine.GameState.Application.Exceptions;
 using ThunderbirdsBoardGameEngine.GameState.Domain;
 using ThunderbirdsBoardGameEngine.ReferenceData.Core.Identities;
 using ThunderbirdsBoardGameEngine.ReferenceData.Runtime.Interfaces;
@@ -27,7 +28,7 @@ namespace ThunderbirdsBoardGameEngine.GameState.Infrastructure.GameStateIntegrit
 
             if (game.Id == Guid.Empty)
             {
-                throw new InvalidOperationException("Game ID cannot be empty.");
+                throw new InvalidGameStateException("Game ID cannot be empty.");
             }
 
             ValidateThunderbirdMachines(game.Machines);
@@ -43,7 +44,7 @@ namespace ThunderbirdsBoardGameEngine.GameState.Infrastructure.GameStateIntegrit
 
             if (!expectedCharacterCodes.SetEquals(characterState.Keys))
             {
-                throw new InvalidOperationException(
+                throw new InvalidGameStateException(
                     "Game characters do not match reference data.");
             }
 
@@ -51,7 +52,7 @@ namespace ThunderbirdsBoardGameEngine.GameState.Infrastructure.GameStateIntegrit
             {
                 if (!_thunderbirdCatalog.TryGetByCode(thunderbirdMachine, out _))
                 {
-                    throw new InvalidOperationException($"Thunderbird {thunderbirdMachine.Value} does not exist in reference data.");
+                    throw new InvalidGameStateException($"Thunderbird {thunderbirdMachine.Value} does not exist in reference data.");
                 }
             }
         }
@@ -65,7 +66,7 @@ namespace ThunderbirdsBoardGameEngine.GameState.Infrastructure.GameStateIntegrit
 
             if (!expectedThunderbirdCodes.SetEquals(thunderbirdState.Keys))
             {
-                throw new InvalidOperationException(
+                throw new InvalidGameStateException(
                     "Game thunderbirds do not match reference data.");
             }
 
@@ -73,7 +74,7 @@ namespace ThunderbirdsBoardGameEngine.GameState.Infrastructure.GameStateIntegrit
             {
                 if (!_locationCatalog.Exists(location))
                 {
-                    throw new InvalidOperationException($"Location {location.Value} does not exist in reference data.");
+                    throw new InvalidGameStateException($"Location {location.Value} does not exist in reference data.");
                 }
             }
         }

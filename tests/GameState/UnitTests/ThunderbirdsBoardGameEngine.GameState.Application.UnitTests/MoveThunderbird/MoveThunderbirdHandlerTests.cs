@@ -59,7 +59,7 @@ namespace ThunderbirdsBoardGameEngine.GameState.Application.UnitTests.MoveThunde
         }
 
         [Fact]
-        public async Task Handle_ShouldThrowInvalidOperationException_WhenGameSessionNotFound()
+        public async Task Handle_ShouldThrowGameNotFoundException_WhenGameSessionNotFound()
         {
             // Arrange
             var repository = CreateRepository(null!);
@@ -73,7 +73,7 @@ namespace ThunderbirdsBoardGameEngine.GameState.Application.UnitTests.MoveThunde
             var command = CreateCommand();
 
             // Act & Assert
-            await Assert.ThrowsAsync<InvalidOperationException>(() => handler.Handle(command, TestContext.Current.CancellationToken));
+            await Assert.ThrowsAsync<GameNotFoundException>(() => handler.Handle(command, TestContext.Current.CancellationToken));
 
             integrityValidator.DidNotReceive().Validate(Arg.Any<Game>());
             await repository.DidNotReceive().UpdateGameSession(Arg.Any<Game>(), Arg.Any<CancellationToken>());

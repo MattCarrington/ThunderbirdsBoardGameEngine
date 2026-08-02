@@ -1,4 +1,5 @@
 ﻿using NSubstitute;
+using ThunderbirdsBoardGameEngine.GameState.Application.Exceptions;
 using ThunderbirdsBoardGameEngine.GameState.Application.GetGame;
 using ThunderbirdsBoardGameEngine.GameState.Domain;
 using ThunderbirdsBoardGameEngine.ReferenceData.Core.Identities;
@@ -41,7 +42,7 @@ namespace ThunderbirdsBoardGameEngine.GameState.Application.UnitTests.GetGame
         }
 
         [Fact]
-        public async Task Handle_ShouldThrowException_WhenGameDoesNotExistAsync()
+        public async Task Handle_ShouldThrowGameNotFoundException_WhenGameDoesNotExistAsync()
         {
             // Arrange
             var gameId = Guid.NewGuid();
@@ -49,10 +50,10 @@ namespace ThunderbirdsBoardGameEngine.GameState.Application.UnitTests.GetGame
             var handler = CreateHandler(null!);
 
             // Act & Assert
-            await Assert.ThrowsAsync<KeyNotFoundException>(() => handler.Handle(new GetGameQuery(gameId), CancellationToken.None));
+            await Assert.ThrowsAsync<GameNotFoundException>(() => handler.Handle(new GetGameQuery(gameId), CancellationToken.None));
         }
 
-        private GetGameHandler CreateHandler(Game game)
+        private static GetGameHandler CreateHandler(Game game)
         {
             var gameRespository = Substitute.For<IGameRepository>();
             gameRespository.GetGameSessionById(Arg.Any<Guid>(), Arg.Any<CancellationToken>()).Returns(game);
