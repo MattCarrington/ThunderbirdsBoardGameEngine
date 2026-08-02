@@ -1,6 +1,13 @@
 ﻿namespace ThunderbirdsBoardGameEngine.GameState.Application.Exceptions
 {
-    public class ThunderbirdMovementRejectedException : Exception
+    public sealed class ThunderbirdMovementRejectedException : Exception
     {
+        public ThunderbirdMovementRejectedException(IReadOnlyCollection<string> reasons)
+            : base("Thunderbird Machine movement was rejected.")
+        {
+            Reasons = reasons.ToArray();
+        }
+
+        public IReadOnlyList<string> Reasons { get; }
     }
 }
