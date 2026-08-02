@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using ThunderbirdsBoardGameEngine.GameState.Application.Exceptions;
 
 namespace ThunderbirdsBoardGameEngine.GameState.Application.GetGame
 {
@@ -14,7 +15,7 @@ namespace ThunderbirdsBoardGameEngine.GameState.Application.GetGame
         public async Task<GetGameResponse> Handle(GetGameQuery request, CancellationToken cancellationToken)
         {
             var game = await _gameRepository.GetGameSessionById(request.GameId, cancellationToken)
-                ?? throw new KeyNotFoundException($"Game with ID {request.GameId} not found."); // TODO: Replace with a more specific exception type if needed.
+                ?? throw new GameNotFoundException();
 
             return new GetGameResponse(game);
         }

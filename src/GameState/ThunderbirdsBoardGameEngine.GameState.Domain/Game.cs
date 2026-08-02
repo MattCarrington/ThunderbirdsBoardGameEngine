@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using ThunderbirdsBoardGameEngine.GameState.Domain.Exceptions;
 using ThunderbirdsBoardGameEngine.ReferenceData.Core.Identities;
 
 namespace ThunderbirdsBoardGameEngine.GameState.Domain
@@ -80,9 +81,7 @@ namespace ThunderbirdsBoardGameEngine.GameState.Domain
         {
             if (!_machinesState.ContainsKey(machineCode))
             {
-                throw new ArgumentException(
-                    $"Machine code '{machineCode}' does not exist in the game state.",
-                    nameof(machineCode));
+                throw ThunderbirdMachineNotFoundException.Create(machineCode);
             }
 
             _machinesState[machineCode] = newLocation;
@@ -92,9 +91,7 @@ namespace ThunderbirdsBoardGameEngine.GameState.Domain
         {
             if (!_machinesState.TryGetValue(machineCode, out var location))
             {
-                throw new ArgumentException(    // TODO: Decide on exception type across game state
-                    $"Machine code '{machineCode}' does not exist in the game state.",
-                    nameof(machineCode));
+                throw ThunderbirdMachineNotFoundException.Create(machineCode);
             }
 
             return location;
