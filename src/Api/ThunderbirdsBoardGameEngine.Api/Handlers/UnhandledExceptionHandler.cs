@@ -20,10 +20,8 @@ namespace ThunderbirdsBoardGameEngine.Api.Handlers
         public async ValueTask<bool> TryHandleAsync(HttpContext httpContext, Exception exception, CancellationToken cancellationToken)
         {
             _logger.LogError(
-                exception,
-                "Unhandled exception occurred for request {Method} {Path}. TraceId = {TraceId}",
-                httpContext.Request.Method,
-                httpContext.Request.Path.Value,
+                "Unhandled exception of type {ExceptionType}. TraceId = {TraceId}",
+                exception.GetType().FullName,
                 httpContext.TraceIdentifier);
 
             var problemDetails = _problemDetailsFactory.CreateProblemDetails(
@@ -31,6 +29,8 @@ namespace ThunderbirdsBoardGameEngine.Api.Handlers
                 StatusCodes.Status500InternalServerError,
                 "An unexpected error occurred.",
                 ProblemTypes.Unexpected);
+
+            problemDetails.Instance = null;
 
             httpContext.Response.StatusCode = problemDetails.Status ?? StatusCodes.Status500InternalServerError;
 
