@@ -3,6 +3,7 @@
     public sealed class GameNotFoundException : Exception
     {
         public GameNotFoundException()
+            : base("Game not found.")
         {
         }
     }
