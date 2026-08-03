@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging.Abstractions;
 using NSubstitute;
+using System.Text.Json;
 using ThunderbirdsBoardGameEngine.Api.Error;
 using ThunderbirdsBoardGameEngine.Api.Handlers;
 using ThunderbirdsBoardGameEngine.Api.UnitTests.Fakes;
@@ -13,10 +14,12 @@ namespace ThunderbirdsBoardGameEngine.Api.UnitTests.Handlers
     public class ThunderbirdMovementRejectedExceptionHandlerTests
     {
         [Fact]
-        public async Task TryHandleAsync_WhenBadRequestException_ReturnsTrueAsync()
+        public async Task TryHandleAsync_WhenThunderbirdMovementRejectedException_ReturnsTrueAsync()
         {
             // Arrange
-            var exception = new ThunderbirdMovementRejectedException(["Invalid performing character key"]);
+            var message = "Thunderbird movement was rejected.";
+
+            var exception = new ThunderbirdMovementRejectedException([message]);
 
             var service = ExceptionHandlerHelper.CreateProblemsDetailService();
 
@@ -32,6 +35,11 @@ namespace ThunderbirdsBoardGameEngine.Api.UnitTests.Handlers
             Assert.Equal(StatusCodes.Status422UnprocessableEntity, body.Status);
             Assert.Equal("Thunderbird Machine movement was rejected.", body.Title);
             Assert.Equal(ProblemTypes.Unprocessable, body.Type);
+            Assert.Null(body.Instance);
+
+            var reasons = Assert.IsType<JsonElement>(body.Extensions["reasons"]);
+            Assert.Equal(message, reasons[0].GetString());
+
 
             await service.Received(1).WriteAsync(Arg.Any<ProblemDetailsContext>());
         }

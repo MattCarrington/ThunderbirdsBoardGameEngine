@@ -33,6 +33,7 @@ namespace ThunderbirdsBoardGameEngine.Api.UnitTests.Handlers
             Assert.Equal(StatusCodes.Status404NotFound, body.Status);
             Assert.Equal("Thunderbird Machine was not found.", body.Title);
             Assert.Equal(ProblemTypes.NotFound, body.Type);
+            Assert.Null(body.Instance);
 
             await service.Received(1).WriteAsync(Arg.Any<ProblemDetailsContext>());
         }
