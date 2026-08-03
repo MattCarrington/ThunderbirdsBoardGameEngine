@@ -2,6 +2,6 @@
 {
     public record MoveThunderbirdMachineRequestDto
     {
-        public string Destination { get; init; } = string.Empty;
+        public required string Destination { get; init; }
     }
 }
