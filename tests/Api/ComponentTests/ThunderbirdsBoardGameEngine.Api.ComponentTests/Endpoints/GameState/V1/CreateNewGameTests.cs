@@ -29,7 +29,7 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints.GameState.V1
             // Act
             using var response = await _httpClient.SendAsync(request, TestContext.Current.CancellationToken);
 
-            // Arrange
+            // Assert
             Assert.Equal(HttpStatusCode.Created, response.StatusCode);
 
             var result = await response.Content.ReadFromJsonAsync<GameStateResponseDto>(cancellationToken: TestContext.Current.CancellationToken);
