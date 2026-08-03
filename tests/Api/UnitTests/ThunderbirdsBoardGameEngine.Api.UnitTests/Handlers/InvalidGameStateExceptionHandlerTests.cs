@@ -32,6 +32,7 @@ namespace ThunderbirdsBoardGameEngine.Api.UnitTests.Handlers
             Assert.Equal(StatusCodes.Status500InternalServerError, body.Status);
             Assert.Equal("An unexpected error occurred.", body.Title);
             Assert.Equal(ProblemTypes.Unexpected, body.Type);
+            Assert.Null(body.Instance);
 
             await service.Received(1).WriteAsync(Arg.Any<ProblemDetailsContext>());
         }
