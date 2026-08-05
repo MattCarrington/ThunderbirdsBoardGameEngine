@@ -47,7 +47,7 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints.GameState.V1
                 Destination = "the-sun"
             };
 
-            var route = $"/api/games/{gameId}/thunderbird-machines/{thunderbirdCode.Value}/move";
+            var route = GameStateRoutes.MoveThunderbird(gameId, thunderbirdCode.Value);
 
             using var request = new HttpRequestMessage(HttpMethod.Post, route);
             request.Headers.Add("X-API-Version", ApiVersion.ToString());
@@ -85,7 +85,7 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints.GameState.V1
                 Destination = "the-sun"
             };
 
-            var route = $"/api/games/{gameId}/thunderbird-machines/{thunderbirdCode}/move";
+            var route = GameStateRoutes.MoveThunderbird(gameId, thunderbirdCode);
 
             using var request = new HttpRequestMessage(HttpMethod.Post, route);
             request.Headers.Add("X-API-Version", ApiVersion.ToString());
@@ -115,7 +115,7 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints.GameState.V1
                 Destination = "invalid-location"
             };
 
-            var route = $"/api/games/{gameId}/thunderbird-machines/{thunderbirdCode.Value}/move";
+            var route = GameStateRoutes.MoveThunderbird(gameId, thunderbirdCode.Value);
 
             using var request = new HttpRequestMessage(HttpMethod.Post, route);
             request.Headers.Add("X-API-Version", ApiVersion.ToString());
@@ -144,7 +144,7 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints.GameState.V1
                 Destination = "the-moon"
             };
 
-            var route = $"/api/games/{gameId}/thunderbird-machines/{thunderbirdCode.Value}/move";
+            var route = GameStateRoutes.MoveThunderbird(gameId, thunderbirdCode.Value);
 
             using var request = new HttpRequestMessage(HttpMethod.Post, route);
             request.Headers.Add("X-API-Version", ApiVersion.ToString());
@@ -191,7 +191,7 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints.GameState.V1
             {
                 Destination = "the-sun"
             };
-            var route = $"/api/games/{gameId}/thunderbird-machines/{thunderbirdCode.Value}/move";
+            var route = GameStateRoutes.MoveThunderbird(gameId, thunderbirdCode.Value);
 
             using var request = new HttpRequestMessage(HttpMethod.Post, route);
             request.Headers.Add("X-API-Version", ApiVersion.ToString());
@@ -217,7 +217,7 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints.GameState.V1
                 Destination = "the-sun"
             };
 
-            var route = $"/api/games/{gameId}/thunderbird-machines/{thunderbirdCode.Value}/move";
+            var route = GameStateRoutes.MoveThunderbird(gameId, thunderbirdCode.Value);
 
             using var request = new HttpRequestMessage(HttpMethod.Post, route);
             request.Headers.Add("X-API-Version", ApiVersion.ToString());
@@ -244,7 +244,7 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints.GameState.V1
 
             var dto = new { };  // Empty anonymous type to simulate missing destination
 
-            var route = $"/api/games/{gameId}/thunderbird-machines/{thunderbirdCode.Value}/move";
+            var route = GameStateRoutes.MoveThunderbird(gameId, thunderbirdCode.Value);
 
             using var request = new HttpRequestMessage(HttpMethod.Post, route);
             request.Headers.Add("X-API-Version", ApiVersion.ToString());
@@ -274,7 +274,7 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints.GameState.V1
                 destination = (string?)null
             };
 
-            var route = $"/api/games/{gameId}/thunderbird-machines/{thunderbirdCode.Value}/move";
+            var route = GameStateRoutes.MoveThunderbird(gameId, thunderbirdCode.Value);
 
             using var request = new HttpRequestMessage(HttpMethod.Post, route);
             request.Headers.Add("X-API-Version", ApiVersion.ToString());
@@ -305,7 +305,7 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints.GameState.V1
                 Destination = destination
             };
 
-            var route = $"/api/games/{gameId}/thunderbird-machines/{thunderbirdCode.Value}/move";
+            var route = GameStateRoutes.MoveThunderbird(gameId, thunderbirdCode.Value);
 
             using var request = new HttpRequestMessage(HttpMethod.Post, route);
             request.Headers.Add("X-API-Version", ApiVersion.ToString());
@@ -357,7 +357,7 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints.GameState.V1
                 Destination = "the-sun"
             };
 
-            var route = $"/api/games/{emptyGameId}/thunderbird-machines/{thunderbirdCode.Value}/move";
+            var route = GameStateRoutes.MoveThunderbird(emptyGameId, thunderbirdCode.Value);
 
             using var request = new HttpRequestMessage(HttpMethod.Post, route);
             request.Headers.Add("X-API-Version", ApiVersion.ToString());

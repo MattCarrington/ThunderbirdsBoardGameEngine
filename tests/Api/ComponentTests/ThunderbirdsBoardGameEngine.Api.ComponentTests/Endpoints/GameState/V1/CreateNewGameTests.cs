@@ -21,7 +21,7 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints.GameState.V1
         public async Task CanCreateNewGame()
         {
             // Arrange
-            var route = $"/api/games/";
+            var route = GameStateRoutes.CreateGame();
 
             using var request = new HttpRequestMessage(HttpMethod.Post, route);
             request.Headers.Add("X-API-Version", ApiVersion.ToString());
