@@ -1,4 +1,6 @@
-﻿using System.Net;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.DependencyModel;
+using System.Net;
 using System.Net.Http.Json;
 using System.Text.Json;
 using ThunderbirdsBoardGameEngine.Api.ComponentTests.Factories;
@@ -314,6 +316,60 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints.GameState.V1
 
             // Assert
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        }
+
+        [Fact]
+        public async Task InvalidGuidReturnsNotFound()
+        {
+            // Arrange
+            var invalidGameId = "not-a-guid";
+
+            var thunderbirdCode = KnownThunderbirdCodes.Thunderbird3;
+
+            var dto = new MoveThunderbirdMachineRequestDto
+            {
+                Destination = "the-sun"
+            };
+
+            var route = $"/api/games/{invalidGameId}/thunderbird-machines/{thunderbirdCode.Value}/move";
+
+            using var request = new HttpRequestMessage(HttpMethod.Post, route);
+            request.Headers.Add("X-API-Version", ApiVersion.ToString());
+            request.Content = JsonContent.Create(dto);
+
+            // Act
+            using var response = await _httpClient.SendAsync(request, TestContext.Current.CancellationToken);
+
+            // Assert
+            await ProblemDetailsAssertions.AssertNotFoundAsync(response, "Not Found");
+        }
+
+        [Fact]
+        public async Task EmptyGuidReturnsBadRequest()
+        {
+            // Arrange
+            var emptyGameId = Guid.Empty;
+
+            var thunderbirdCode = KnownThunderbirdCodes.Thunderbird3;
+
+            var dto = new MoveThunderbirdMachineRequestDto
+            {
+                Destination = "the-sun"
+            };
+
+            var route = $"/api/games/{emptyGameId}/thunderbird-machines/{thunderbirdCode.Value}/move";
+
+            using var request = new HttpRequestMessage(HttpMethod.Post, route);
+            request.Headers.Add("X-API-Version", ApiVersion.ToString());
+            request.Content = JsonContent.Create(dto);
+
+            // Act
+            using var response = await _httpClient.SendAsync(request, TestContext.Current.CancellationToken);
+
+            // Assert
+            var details = await ProblemDetailsAssertions.AssertBadRequestAsync(response, "Bad request.");
+
+            Assert.Equal("The provided GUID is empty.", details.Detail);
         }
     }
 }

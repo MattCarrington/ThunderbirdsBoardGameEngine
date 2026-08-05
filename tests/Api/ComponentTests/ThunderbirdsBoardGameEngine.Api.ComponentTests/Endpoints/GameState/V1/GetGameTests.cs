@@ -108,5 +108,43 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints.GameState.V1
             // Assert
             Assert.Equal(HttpStatusCode.InternalServerError, response.StatusCode);
         }
+
+        [Fact]
+        public async Task GetGameWithInvalidGuidReturnsNotFound()
+        {
+            // Arrange
+            var invalidGameId = "invalid-guid";
+
+            var route = $"/api/games/{invalidGameId}";
+
+            using var request = new HttpRequestMessage(HttpMethod.Get, route);
+            request.Headers.Add("X-API-Version", ApiVersion.ToString());
+
+            // Act
+            using var response = await _httpClient.SendAsync(request, TestContext.Current.CancellationToken);
+
+            // Assert
+            await ProblemDetailsAssertions.AssertNotFoundAsync(response, "Not Found");
+        }
+
+        [Fact]
+        public async Task GetGameWithEmptyGuidReturnsBadRequest()
+        {
+            // Arrange
+            var emptyGameId = Guid.Empty;
+
+            var route = $"/api/games/{emptyGameId}";
+
+            using var request = new HttpRequestMessage(HttpMethod.Get, route);
+            request.Headers.Add("X-API-Version", ApiVersion.ToString());
+            // Act
+
+            using var response = await _httpClient.SendAsync(request, TestContext.Current.CancellationToken);
+
+            // Assert
+            var details = await ProblemDetailsAssertions.AssertBadRequestAsync(response, "Bad request.");
+
+            Assert.Equal("The provided GUID is empty.", details.Detail);
+        }
     }
 }
