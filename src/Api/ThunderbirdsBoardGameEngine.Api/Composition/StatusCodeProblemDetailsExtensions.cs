@@ -17,7 +17,7 @@ public static class StatusCodeProblemDetailsExtensions
                 var pd = ctx.ProblemDetails;
 
                 // ensure common fields
-                pd.Instance ??= http.Request.Path;
+                pd.Instance = null;
                 pd.Extensions["traceId"] = Activity.Current?.Id ?? http.TraceIdentifier;
 
                 // if you have a docs catalog, set a stable type
