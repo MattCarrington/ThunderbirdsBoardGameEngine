@@ -10,6 +10,7 @@ using ThunderbirdsBoardGameEngine.GameState.Domain.Setup.V1;
 using ThunderbirdsBoardGameEngine.ReferenceData.Core.Identities;
 using ThunderbirdsBoardGameEngine.ReferenceData.Core.KnownIdentities;
 using ThunderbirdsBoardGameEngine.TestUtils.xUnit.Assertions;
+using ThunderbirdsBoardGameEngine.TestUtils.xUnit.ClassData;
 using Xunit;
 
 namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints.GameState.V1
@@ -269,6 +270,37 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints.GameState.V1
             var dto = new
             {
                 destination = (string?)null
+            };
+
+            var route = $"/api/games/{gameId}/thunderbird-machines/{thunderbirdCode.Value}/move";
+
+            using var request = new HttpRequestMessage(HttpMethod.Post, route);
+            request.Headers.Add("X-API-Version", ApiVersion.ToString());
+            request.Content = JsonContent.Create(dto);
+
+            // Act
+            using var response = await _httpClient.SendAsync(request, TestContext.Current.CancellationToken);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        }
+
+        [Theory]
+        [ClassData(typeof(WhiteSpaceStringData))]
+        public async Task WhiteSpaceDestinationInRequestDtoReturnsBadRequest(string destination)
+        {
+            // Arrange
+            var gameId = Guid.NewGuid();
+
+            var game = new StandardGameSetupFactory().Create(gameId, DateTimeOffset.UtcNow);
+
+            await _repository.CreateNewGameSession(game, TestContext.Current.CancellationToken);
+
+            var thunderbirdCode = KnownThunderbirdCodes.Thunderbird3;
+
+            var dto = new MoveThunderbirdMachineRequestDto
+            {
+                Destination = destination
             };
 
             var route = $"/api/games/{gameId}/thunderbird-machines/{thunderbirdCode.Value}/move";
