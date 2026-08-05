@@ -50,7 +50,7 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.CrossCutting
         {
             using var response = await _client.GetAsync("/health/live", TestContext.Current.CancellationToken);
 
-            Assert.DoesNotContain("no-store", response.Headers.CacheControl?.ToString() ?? string.Empty);
+            Assert.Contains("no-store", response.Headers.CacheControl?.ToString() ?? string.Empty);
 
             AssertHeader(response, "Referrer-Policy", "no-referrer");
         }
