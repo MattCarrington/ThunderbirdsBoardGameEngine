@@ -68,6 +68,8 @@ namespace ThunderbirdsBoardGameEngine.Api
                 app.UseHsts();
             }
 
+            app.UseCapabilitySecurityHeaders();
+
             app.UseApiExceptionHandling();
             app.UseApiProblemDetails();
 
