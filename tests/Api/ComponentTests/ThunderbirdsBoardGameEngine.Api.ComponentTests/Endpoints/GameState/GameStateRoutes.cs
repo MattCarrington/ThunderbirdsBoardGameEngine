@@ -16,7 +16,7 @@
 
         public static string MoveThunderbird(Guid gameId, string thunderbirdCode)
         {
-            return $"{Games}/{gameId}/thunderbird-machines/{thunderbirdCode}/move";
+            return $"{Games}/{gameId}/thunderbird-machines/{thunderbirdCode}/movements";
         }
     }
 }

@@ -45,7 +45,7 @@ namespace ThunderbirdsBoardGameEngine.Api.Controllers.GameState.V1
             return Ok(result.GameSession.ToDto());
         }
 
-        [HttpPost("{gameId:guid}/thunderbird-machines/{thunderbirdCode}/move")]
+        [HttpPost("{gameId:guid}/thunderbird-machines/{thunderbirdCode}/movements")]
         public async Task<IActionResult> MoveThunderbirdMachine(
             [FromRoute] Guid gameId,
             [FromRoute] string thunderbirdCode,

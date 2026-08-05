@@ -331,7 +331,7 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints.GameState.V1
                 Destination = "the-sun"
             };
 
-            var route = $"/api/games/{invalidGameId}/thunderbird-machines/{thunderbirdCode.Value}/move";
+            var route = $"/api/games/{invalidGameId}/thunderbird-machines/{thunderbirdCode.Value}/movements";
 
             using var request = new HttpRequestMessage(HttpMethod.Post, route);
             request.Headers.Add("X-API-Version", ApiVersion.ToString());
