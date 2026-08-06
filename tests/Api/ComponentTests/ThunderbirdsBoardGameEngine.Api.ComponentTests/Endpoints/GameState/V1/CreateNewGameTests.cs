@@ -34,6 +34,7 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints.GameState.V1
 
             var result = await response.Content.ReadFromJsonAsync<GameStateResponseDto>(cancellationToken: TestContext.Current.CancellationToken);
             Assert.NotNull(result);
+            Assert.True(result.GameId != Guid.Empty);
             Assert.NotNull(result.ThunderbirdMachines);
 
             var expectedLocation = GameStateRoutes.GetGame(result.GameId);
