@@ -1,4 +1,5 @@
 ﻿using System.Net;
+using ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints.GameState;
 using ThunderbirdsBoardGameEngine.Api.ComponentTests.Factories;
 using Xunit;
 
@@ -16,7 +17,9 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.CrossCutting
         [Fact]
         public async Task GameApiResponseDisablesCachingAndReferrers()
         {
-            using var request = new HttpRequestMessage(HttpMethod.Post, "/api/games");
+            var route = GameStateRoutes.CreateGame();
+
+            using var request = new HttpRequestMessage(HttpMethod.Post, route);
 
             request.Headers.Add("X-API-Version", "1");
 
@@ -34,7 +37,9 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.CrossCutting
         {
             var unknownGameId = Guid.NewGuid();
 
-            using var request = new HttpRequestMessage(HttpMethod.Get, $"/api/games/{unknownGameId}");
+            var route = GameStateRoutes.GetGame(unknownGameId);
+
+            using var request = new HttpRequestMessage(HttpMethod.Get, route);
 
             request.Headers.Add("X-API-Version", "1");
 
@@ -48,9 +53,15 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.CrossCutting
         [Fact]
         public async Task NonGameResponseDoesNotRequireNoStore()
         {
-            using var response = await _client.GetAsync("/health/live", TestContext.Current.CancellationToken);
+            var route = "/meta";    // Use the meta endpoint which is not part of the game API
 
-            Assert.Contains("no-store", response.Headers.CacheControl?.ToString() ?? string.Empty);
+            using var request = new HttpRequestMessage(HttpMethod.Get, route);
+
+            request.Headers.Add("X-API-Version", "1");
+
+            using var response = await _client.SendAsync(request, TestContext.Current.CancellationToken);
+
+            Assert.NotEqual(true, response.Headers.CacheControl?.NoStore);
 
             AssertHeader(response, "Referrer-Policy", "no-referrer");
         }
