@@ -32,6 +32,11 @@ namespace ThunderbirdsBoardGameEngine.GameState.Infrastructure
             services.AddScoped<IGameRepository, GameRepository>();
             services.AddSingleton<GameRecordMapper>();
 
+            services.AddHealthChecks()
+                .AddDbContextCheck<GameStateDbContext>(
+                    name: "game-state-database",
+                    tags: ["readiness"]);
+
             return services;
         }
 
