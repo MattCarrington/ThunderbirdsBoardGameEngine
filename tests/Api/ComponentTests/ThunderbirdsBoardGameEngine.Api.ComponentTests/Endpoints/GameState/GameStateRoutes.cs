@@ -1,6 +1,6 @@
 ﻿namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints.GameState
 {
-    public class GameStateRoutes
+    public static class GameStateRoutes
     {
         private const string Games = "/api/games";
 
