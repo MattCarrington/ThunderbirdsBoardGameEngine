@@ -4,6 +4,9 @@
       ASPNETCORE_ENVIRONMENT: Docker
       Catalog__DisasterCards__Json__FilePath: /app/Data/disaster-cards.json
       Catalog__Characters__Json__FilePath: /app/Data/characters.json
-      GameState__Persistence__ConnectionString: Host=localhost;Port=5432;Database=thunderbirds_game_state;Username=postgres;Password=${GAME_STATE_DB_PASSWORD}
+      GameState__Persistence__ConnectionString: Host=game-state-db;Port=5432;Database=thunderbirds_game_state;Username=postgres;Password=${GAME_STATE_DB_PASSWORD}
     ports:
       - "8080:8080"   # publish so the host (runner) can call localhost:8080
+  game-state-db-migrator:
+    environment:
+      GameState__Persistence__ConnectionString: Host=game-state-db;Port=5432;Database=thunderbirds_game_state;Username=postgres;Password=${GAME_STATE_DB_PASSWORD}

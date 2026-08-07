@@ -12,12 +12,11 @@ WORKDIR /src
 COPY ["Directory.Packages.props", "."]
 COPY ["Directory.Build.props", "."]
 COPY ["NuGet.config", "."]
-COPY ["tools/GameState/ThunderbirdsBoardGameEngine.GameState.EF.DatabaseMigrator/ThunderbirdsBoardGameEngine.GameState.EF.DatabaseMigrator.csproj", "tools/GameState/ThunderbirdsBoardGameEngine.GameState.EF.DatabaseMigrator/"]
-COPY ["src/ThunderbirdsBoardGameEngine.GameState.Infrastructure/ThunderbirdsBoardGameEngine.GameState.Infrastructure.csproj", "src/ThunderbirdsBoardGameEngine.GameState.Infrastructure/"]
-
-RUN dotnet restore "./tools/GameState/ThunderbirdsBoardGameEngine.GameState.EF.DatabaseMigrator/ThunderbirdsBoardGameEngine.GameState.EF.DatabaseMigrator.csproj"
+COPY ["src/GameState/ThunderbirdsBoardGameEngine.GameState.EF.DatabaseMigrator/ThunderbirdsBoardGameEngine.GameState.EF.DatabaseMigrator.csproj", "src/GameState/ThunderbirdsBoardGameEngine.GameState.EF.DatabaseMigrator/"]
+COPY ["src/GameState/ThunderbirdsBoardGameEngine.GameState.Infrastructure/ThunderbirdsBoardGameEngine.GameState.Infrastructure.csproj", "src/GameState/ThunderbirdsBoardGameEngine.GameState.Infrastructure/"]
+RUN dotnet restore "./src/GameState/ThunderbirdsBoardGameEngine.GameState.EF.DatabaseMigrator/ThunderbirdsBoardGameEngine.GameState.EF.DatabaseMigrator.csproj"
 COPY . .
-WORKDIR "/src/tools/GameState/ThunderbirdsBoardGameEngine.GameState.EF.DatabaseMigrator"
+WORKDIR "/src/src/GameState/ThunderbirdsBoardGameEngine.GameState.EF.DatabaseMigrator"
 RUN dotnet build "./ThunderbirdsBoardGameEngine.GameState.EF.DatabaseMigrator.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 # This stage is used to publish the service project to be copied to the final stage
