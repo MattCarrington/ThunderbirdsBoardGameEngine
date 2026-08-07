@@ -6,6 +6,7 @@ using ThunderbirdsBoardGameEngine.GameState.Application;
 using ThunderbirdsBoardGameEngine.GameState.Infrastructure.GameStateIntegrity;
 using ThunderbirdsBoardGameEngine.GameState.Infrastructure.Persistence;
 using ThunderbirdsBoardGameEngine.GameState.Infrastructure.Persistence.Configuration;
+using ThunderbirdsBoardGameEngine.GameState.Infrastructure.Persistence.Migrations;
 using ThunderbirdsBoardGameEngine.GameState.Infrastructure.RulesValidation;
 
 namespace ThunderbirdsBoardGameEngine.GameState.Infrastructure
@@ -50,6 +51,12 @@ namespace ThunderbirdsBoardGameEngine.GameState.Infrastructure
         public static IServiceCollection AddGameStateRulesGateway(this IServiceCollection services)
         {
             services.AddScoped<IValidateMovementGateway, ValidateMovementGateway>();
+            return services;
+        }
+
+        public static IServiceCollection AddGameStateDatabaseMigrator(this IServiceCollection services)
+        {
+            services.AddScoped<IGameStateDatabaseMigrator, GameStateDatabaseMigrator>();
             return services;
         }
     }

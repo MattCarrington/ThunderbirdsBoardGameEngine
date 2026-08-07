@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "ThunderbirdsBoardGameEngine.GameState.EF.DatabaseMigrator": {
+      "commandName": "Project"
+    },
+    "Container (Dockerfile)": {
+      "commandName": "Docker"
+    }
+  }
+}
