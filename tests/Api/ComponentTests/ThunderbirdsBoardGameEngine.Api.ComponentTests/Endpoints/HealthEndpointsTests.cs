@@ -10,9 +10,9 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints
         public async Task GetLivenessReturnsOkWhenHealthStatusIsHealthy()
         {
             // Arrange
-            var factory = new HealthCheckWebApplicationFactory(HealthStatus.Healthy);
+            await using var factory = new HealthCheckWebApplicationFactory(HealthStatus.Healthy);
 
-            var client = factory.CreateClient();
+            using var client = factory.CreateClient();
 
             using var request = new HttpRequestMessage(HttpMethod.Get, "/health/live");
 
@@ -27,9 +27,9 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints
         public async Task GetReadinessReturnsOkWhenHealthStatusIsHealthy()
         {
             // Arrange
-            var factory = new HealthCheckWebApplicationFactory(HealthStatus.Healthy);
+            await using var factory = new HealthCheckWebApplicationFactory(HealthStatus.Healthy);
 
-            var client = factory.CreateClient();
+            using var client = factory.CreateClient();
 
             using var request = new HttpRequestMessage(HttpMethod.Get, "/health/ready");
 
@@ -44,9 +44,9 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints
         public async Task GetReadinessReturnsServiceUnavailableWhenHealthStatusIsUnhealthy()
         {
             // Arrange
-            var factory = new HealthCheckWebApplicationFactory(HealthStatus.Unhealthy);
+            await using var factory = new HealthCheckWebApplicationFactory(HealthStatus.Unhealthy);
 
-            var client = factory.CreateClient();
+            using var client = factory.CreateClient();
 
             using var request = new HttpRequestMessage(HttpMethod.Get, "/health/ready");
 
