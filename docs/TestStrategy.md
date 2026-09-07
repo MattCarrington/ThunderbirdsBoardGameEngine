@@ -11,6 +11,12 @@ and no hidden coupling between environments.
 
 ## Test layers
 
+An initial manual API performance experiment is available in
+[tests/Performance](../tests/Performance/README.md). It measures stateless movement
+validation at a small set of concurrent user counts, separating successful
+latency from rate-limit rejections. Its thresholds are exploratory, not production
+service objectives or CI gates.
+
 The following layers exist, roughly in order from fastest/most isolated to
 slowest/most integrated.
 
