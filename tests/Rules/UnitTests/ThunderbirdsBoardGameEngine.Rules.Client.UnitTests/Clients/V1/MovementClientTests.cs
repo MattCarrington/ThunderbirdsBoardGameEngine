@@ -46,7 +46,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Client.UnitTests.Clients.V1
 
             var apiResult = CreateValidateMovementSuccessApiResult();
 
-            var handler = HttpResponseHandlerHelpers.CreateMockHttpResponseHandler(apiResult);
+            var handler = HttpResponseHandlerHelper.CreateMockHttpResponseHandler(apiResult);
 
             var client = new MovementClient(httpClient, handler);
 
@@ -292,7 +292,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Client.UnitTests.Clients.V1
                 BaseAddress = new Uri("http://localhost")
             };
 
-            var handler = HttpResponseHandlerHelpers.CreateMockHttpResponseHandler(apiResult);
+            var handler = HttpResponseHandlerHelper.CreateMockHttpResponseHandler(apiResult);
 
             return new MovementClient(httpClient, handler);
         }

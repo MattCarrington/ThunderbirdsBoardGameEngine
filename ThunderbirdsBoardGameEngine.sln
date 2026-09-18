@@ -122,6 +122,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThunderbirdsBoardGameEngine
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThunderbirdsBoardGameEngine.GameState.EF.DatabaseMigrator", "src\GameState\ThunderbirdsBoardGameEngine.GameState.EF.DatabaseMigrator\ThunderbirdsBoardGameEngine.GameState.EF.DatabaseMigrator.csproj", "{2A35ACBE-9860-DD98-CC1B-1F1B23D22B84}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThunderbirdsBoardGameEngine.GameState.Client", "src\GameState\ThunderbirdsBoardGameEngine.GameState.Client\ThunderbirdsBoardGameEngine.GameState.Client.csproj", "{5B77D666-0647-4875-ADBE-0B88EA0951CB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThunderbirdsBoardGameEngine.GameState.Client.UnitTests", "tests\GameState\UnitTests\ThunderbirdsBoardGameEngine.GameState.Client.UnitTests\ThunderbirdsBoardGameEngine.GameState.Client.UnitTests.csproj", "{82B02E0C-A4B0-4911-8731-C64707C38FCE}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThunderbirdsBoardGameEngine.TestUtils.WireMock.xUnit", "tests\Common\ThunderbirdsBoardGameEngine.TestUtils.WireMock.xUnit\ThunderbirdsBoardGameEngine.TestUtils.WireMock.xUnit.csproj", "{0286B7EC-2DC5-4B79-B2D6-484F878A4229}"
 EndProject
 Global
@@ -686,6 +690,30 @@ Global
 		{2A35ACBE-9860-DD98-CC1B-1F1B23D22B84}.Release|x64.Build.0 = Release|Any CPU
 		{2A35ACBE-9860-DD98-CC1B-1F1B23D22B84}.Release|x86.ActiveCfg = Release|Any CPU
 		{2A35ACBE-9860-DD98-CC1B-1F1B23D22B84}.Release|x86.Build.0 = Release|Any CPU
+		{5B77D666-0647-4875-ADBE-0B88EA0951CB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5B77D666-0647-4875-ADBE-0B88EA0951CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5B77D666-0647-4875-ADBE-0B88EA0951CB}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{5B77D666-0647-4875-ADBE-0B88EA0951CB}.Debug|x64.Build.0 = Debug|Any CPU
+		{5B77D666-0647-4875-ADBE-0B88EA0951CB}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{5B77D666-0647-4875-ADBE-0B88EA0951CB}.Debug|x86.Build.0 = Debug|Any CPU
+		{5B77D666-0647-4875-ADBE-0B88EA0951CB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5B77D666-0647-4875-ADBE-0B88EA0951CB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5B77D666-0647-4875-ADBE-0B88EA0951CB}.Release|x64.ActiveCfg = Release|Any CPU
+		{5B77D666-0647-4875-ADBE-0B88EA0951CB}.Release|x64.Build.0 = Release|Any CPU
+		{5B77D666-0647-4875-ADBE-0B88EA0951CB}.Release|x86.ActiveCfg = Release|Any CPU
+		{5B77D666-0647-4875-ADBE-0B88EA0951CB}.Release|x86.Build.0 = Release|Any CPU
+		{82B02E0C-A4B0-4911-8731-C64707C38FCE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{82B02E0C-A4B0-4911-8731-C64707C38FCE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{82B02E0C-A4B0-4911-8731-C64707C38FCE}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{82B02E0C-A4B0-4911-8731-C64707C38FCE}.Debug|x64.Build.0 = Debug|Any CPU
+		{82B02E0C-A4B0-4911-8731-C64707C38FCE}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{82B02E0C-A4B0-4911-8731-C64707C38FCE}.Debug|x86.Build.0 = Debug|Any CPU
+		{82B02E0C-A4B0-4911-8731-C64707C38FCE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{82B02E0C-A4B0-4911-8731-C64707C38FCE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{82B02E0C-A4B0-4911-8731-C64707C38FCE}.Release|x64.ActiveCfg = Release|Any CPU
+		{82B02E0C-A4B0-4911-8731-C64707C38FCE}.Release|x64.Build.0 = Release|Any CPU
+		{82B02E0C-A4B0-4911-8731-C64707C38FCE}.Release|x86.ActiveCfg = Release|Any CPU
+		{82B02E0C-A4B0-4911-8731-C64707C38FCE}.Release|x86.Build.0 = Release|Any CPU
 		{0286B7EC-2DC5-4B79-B2D6-484F878A4229}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{0286B7EC-2DC5-4B79-B2D6-484F878A4229}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0286B7EC-2DC5-4B79-B2D6-484F878A4229}.Debug|x64.ActiveCfg = Debug|Any CPU
@@ -741,6 +769,7 @@ Global
 		{A383EE43-1C58-4A0A-A82D-E9B4F15CC621} = {D8475FB6-8FFD-4252-BF79-1BC0AF31A524}
 		{5D566CE7-F60F-42C4-B790-23DA1683259A} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 		{2A35ACBE-9860-DD98-CC1B-1F1B23D22B84} = {FC7280B4-F6FF-4E00-B8C0-6C5F6FA6219C}
+		{82B02E0C-A4B0-4911-8731-C64707C38FCE} = {D8475FB6-8FFD-4252-BF79-1BC0AF31A524}
 		{0286B7EC-2DC5-4B79-B2D6-484F878A4229} = {C005E618-80C1-4CCD-9774-336D558E958F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
