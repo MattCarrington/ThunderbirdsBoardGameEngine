@@ -101,7 +101,7 @@ namespace ThunderbirdsBoardGameEngine.Client.Core.UnitTests.Handlers
         }
 
         [Fact]
-        public async Task HandleResponseAsync_WhenCancelled_ThrowsOperationCanceledException()
+        public async Task HandleResponseAsync_WhenAlreadyCancelled_ThrowsOperationCanceledException()
         {
             // Arrange
             var handler = new DefaultHttpResponseHandler();
