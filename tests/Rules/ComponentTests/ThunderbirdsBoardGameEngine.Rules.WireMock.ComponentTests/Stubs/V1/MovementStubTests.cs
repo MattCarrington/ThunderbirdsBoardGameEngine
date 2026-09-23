@@ -5,7 +5,7 @@ using System.Net.Http.Json;
 using ThunderbirdsBoardGameEngine.Rules.Contracts.Dtos.Movement.AccessibleLocations.V1;
 using ThunderbirdsBoardGameEngine.Rules.Contracts.Dtos.Movement.ValidateMovement.V1;
 using ThunderbirdsBoardGameEngine.Rules.WireMock.Stubs.V1;
-using ThunderbirdsBoardGameEngine.TestUtils.xUnit.Fixtures;
+using ThunderbirdsBoardGameEngine.TestUtils.WireMock.xUnit.Fixtures;
 using WireMock.Server;
 using Xunit;
 
