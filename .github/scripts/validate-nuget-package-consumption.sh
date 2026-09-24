@@ -63,7 +63,7 @@ dotnet nuget update source GitHub \
   --store-password-in-clear-text
 
 dotnet new console \
-  --framework net8.0 \
+  --framework net10.0 \
   --output "$CONSUMER_DIR"
 
 PROJECT_FILE="${CONSUMER_DIR}/consumer.csproj"

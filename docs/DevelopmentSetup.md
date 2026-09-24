@@ -2,10 +2,17 @@
 
 ## Prerequisites
 
-- [.NET 8 SDK](https://dotnet.microsoft.com/download/dotnet/8.0)
+- [.NET 10 SDK](https://dotnet.microsoft.com/download/dotnet/10.0), meeting the baseline in [`global.json`](../global.json)
 - [Docker Desktop](https://www.docker.com/products/docker-desktop)
 
 ## First-time setup
+
+`global.json` selects the build SDK. It permits stable .NET 10.0 SDKs at or
+above the recorded version, including newer feature bands, but not .NET 11.
+Run `dotnet --version` from the repository root to check the selected SDK.
+GitHub Actions installs the version recorded in this file; Docker builds also
+read it, so their images must contain a compatible SDK. The application target
+framework remains configured separately in `Directory.Build.props`.
 
 After cloning the repository, install the Git hooks:
 
