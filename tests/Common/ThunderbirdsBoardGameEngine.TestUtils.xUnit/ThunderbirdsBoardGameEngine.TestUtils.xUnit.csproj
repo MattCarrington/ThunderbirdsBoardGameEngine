@@ -10,8 +10,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\tools\Common\ThunderbirdsBoardGameEngine.WireMock.Hosting\ThunderbirdsBoardGameEngine.WireMock.Hosting.csproj" />
     <ProjectReference Include="..\ThunderbirdsBoardGameEngine.TestUtils\ThunderbirdsBoardGameEngine.TestUtils.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>
 
 </Project>
