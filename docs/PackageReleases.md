@@ -4,6 +4,25 @@ Package versions are chosen manually in each package project. The declared
 version is the next intended stable version; CI does not decide whether a
 change is major, minor, or patch.
 
+## Compatibility and versioning
+
+Published packages now target .NET 10 and require consumers to target .NET 10
+or a compatible later framework. They no longer support .NET 8 consumers.
+
+Package versions are independent of the application's maturity:
+
+- For stable packages (`1.x` and later), dropping a supported framework is a
+  breaking change and requires a major version bump.
+- For pre-1.0 packages, this repository uses a minor bump for breaking changes,
+  resetting the patch to zero (for example, `0.4.1` to `0.5.0`).
+- ReferenceData.Core and ReferenceData.Runtime are versioned `2.0.0` for the
+  .NET 10 migration. Other packages can remain on their own `0.x` release lines.
+
+NuGet package versions are separate from reference-data snapshot metadata.
+Changing the target framework does not require regenerating the snapshot or
+bumping its schema or content version. See
+[Reference Data](../src/ReferenceData/Readme.md#snapshot-metadata).
+
 The package graph is defined in `.github/packages.json`. When package source, an
 explicitly packed file, or a centrally managed external dependency changes, CI
 selects that package and every downstream package that consumes it. Packages

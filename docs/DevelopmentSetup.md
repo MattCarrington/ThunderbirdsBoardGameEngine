@@ -42,11 +42,13 @@ The API will be available at:
 - `http://localhost:5197`
 - `https://localhost:7032`
 
-Swagger UI is available at `/swagger`.
+Swagger UI is available at `/swagger` when the API runs in `Development`.
+The document is served at `/swagger/v1/swagger.json`. Versioned API requests
+require the `X-API-Version` header (currently `1`).
 
 If you want to exercise the Blazor UI against this API instance, make sure
 the UI client configuration points at the same API URL you started. The repo
-defaults to `https://localhost:<HOST_PORT>/` in the UI development settings, so that
+defaults to `https://localhost:8080/` in the UI development settings, so that
 value may need to be adjusted for a direct `dotnet run` workflow.
 
 ---
@@ -65,7 +67,7 @@ docker compose -f Docker/docker-compose.yml -f Docker/docker-compose.override.ym
 
 The API will be available at:
 
-- `http://localhost:<HOST_PORT>`
+- `http://localhost:8000`
 
 The override file sets `ASPNETCORE_ENVIRONMENT=Development` and mounts
 the `TestData/` directory into the container.
@@ -80,11 +82,37 @@ To stop and remove containers:
 docker compose -f Docker/docker-compose.yml -f Docker/docker-compose.override.yml down
 ```
 
+### Test Compose configuration
+
+For integration and browser tests, use the test override instead:
+
+```powershell
+docker compose -f Docker/docker-compose.yml -f Docker/docker-compose.test.yml up --build
+```
+
+| Configuration | Environment | API and UI address | Swagger |
+|---|---|---|---|
+| Base + development override | `Development` | `http://localhost:8000` | Enabled |
+| Base + test override | `Docker` | `http://localhost:8080` | Disabled |
+
+Both configurations serve the published Blazor UI and API from the same origin.
+A 404 at `/swagger/v1/swagger.json` in the test configuration is expected:
+Swagger endpoints are only enabled in `Development`.
+
+Stop the current configuration with its matching `down` command before
+switching, because both use the same container name. To stop the test setup:
+
+```powershell
+docker compose -f Docker/docker-compose.yml -f Docker/docker-compose.test.yml down
+```
+
 ---
 
 ## Notes
 
-- There is no separate front-end dev server.
+- Compose serves the published UI without a separate front-end dev server.
+  For separate local UI development, the Blazor project has its own launch
+  profiles; configure its API address to match the running API.
 - When running via `dotnet run`, the API is hosted locally on the ports from
   `launchSettings.json`, and the UI configuration must point at that API URL if
   you want to use the UI in that mode.

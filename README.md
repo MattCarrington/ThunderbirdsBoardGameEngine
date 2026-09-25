@@ -136,4 +136,7 @@ automation quality.
 
 Early-stage and evolving.
 
-Breaking changes are expected until a `1.0.0` release is declared.
+The application is still evolving. Published packages have independent versions
+and compatibility commitments; a stable package does not imply that the whole
+application is complete. See [package releases](docs/PackageReleases.md) for the
+versioning policy and .NET requirements.

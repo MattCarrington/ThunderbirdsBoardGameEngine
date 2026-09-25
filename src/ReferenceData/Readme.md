@@ -63,6 +63,13 @@ All catalogs are immutable and registered as singletons.
 
 ## Snapshot Metadata
 
+Snapshot versions are independent of NuGet package versions. The .NET 10
+migration moves the Core and Runtime packages to `2.0.0` because it changes
+consumer framework requirements. It leaves the existing snapshot unchanged:
+schema version `3`, content version `1.2.0`, and generator version `1.2.0`.
+The generator version records the compiler that produced that snapshot; it
+does not need to match the currently installed package version.
+
 Snapshots contain the following metadata:
 
 | Field | Purpose |
