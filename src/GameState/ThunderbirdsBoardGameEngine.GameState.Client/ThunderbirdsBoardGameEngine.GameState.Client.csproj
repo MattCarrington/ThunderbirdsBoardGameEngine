@@ -1,11 +1,5 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-  </PropertyGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\..\Common\ThunderbirdsBoardGameEngine.Client.Core\ThunderbirdsBoardGameEngine.Client.Core.csproj" />
     <ProjectReference Include="..\ThunderbirdsBoardGameEngine.GameState.Contracts\ThunderbirdsBoardGameEngine.GameState.Contracts.csproj" />
