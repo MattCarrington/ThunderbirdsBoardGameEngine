@@ -4,7 +4,7 @@ using ThunderbirdsBoardGameEngine.ReferenceData.Runtime;
 using ThunderbirdsBoardGameEngine.Rules.Client.Extensions;
 using ThunderbirdsBoardGameEngine.Rules.Contracts.Dtos.Rescue.CalculateRescueTarget.V1;
 using ThunderbirdsBoardGameEngine.Rules.WireMock;
-using ThunderbirdsBoardGameEngine.TestUtils.xUnit.Fixtures;
+using ThunderbirdsBoardGameEngine.TestUtils.WireMock.xUnit.Fixtures;
 using ThunderbirdsBoardGameEngine.UI.Features.DisasterCards;
 using ThunderbirdsBoardGameEngine.WireMock.Hosting;
 using Xunit;

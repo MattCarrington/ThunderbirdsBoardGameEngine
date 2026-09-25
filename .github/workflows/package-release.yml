@@ -65,7 +65,7 @@ jobs:
         if: steps.package-plan.outputs.has_packages == 'true'
         uses: actions/setup-dotnet@v6
         with:
-          dotnet-version: 8.0.x
+          global-json-file: global.json
 
       - name: Install jq
         if: steps.package-plan.outputs.has_packages == 'true'

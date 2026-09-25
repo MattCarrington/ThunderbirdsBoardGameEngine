@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <UserSecretsId>018b5bd4-90a3-4bd4-bc36-116bc5c4cd99</UserSecretsId>
@@ -19,7 +19,6 @@
     <PackageReference Include="Asp.Versioning.Mvc.ApiExplorer" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" />
     <PackageReference Include="Swashbuckle.AspNetCore" />
-    <PackageReference Include="System.Threading.Tasks" />
   </ItemGroup>
 
   <ItemGroup>

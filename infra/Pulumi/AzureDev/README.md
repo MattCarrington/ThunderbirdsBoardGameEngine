@@ -31,7 +31,7 @@ The stack exports an application URL so you can quickly verify deployment succes
 
 ## Prerequisites
 
-1. Install .NET 8 SDK.
+1. Install a .NET 10 SDK meeting the baseline in [global.json](../../../global.json).
 2. Install Pulumi CLI.
 3. Install Azure CLI.
 4. Sign in and select subscription:

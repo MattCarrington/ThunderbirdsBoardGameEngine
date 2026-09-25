@@ -141,6 +141,12 @@ development, CI pipelines, and any deployed environment without code changes.
 fakes, and stubs used across test layers. This keeps test code DRY without
 leaking test concerns into production code.
 
+`TestUtils.xUnit` contains general assertions and theory data. Its ASP.NET Core
+framework reference supplies the HTTP and Problem Details types used by the
+assertions. `TestUtils.WireMock.xUnit` separately owns `WireMockFixture` and its
+xUnit lifecycle management. Only tests using that fixture reference the latter,
+so consumers of general assertions do not inherit WireMock's dependencies.
+
 ---
 
 ## Test pyramid summary

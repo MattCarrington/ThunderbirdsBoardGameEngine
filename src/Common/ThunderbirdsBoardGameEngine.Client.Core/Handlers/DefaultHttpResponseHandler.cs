@@ -25,6 +25,8 @@ namespace ThunderbirdsBoardGameEngine.Client.Core.Handlers
         /// message.</returns>
         public async Task<ApiResult<T>> HandleResponseAsync<T>(HttpResponseMessage response, CancellationToken cancellationToken)
         {
+            cancellationToken.ThrowIfCancellationRequested();
+
             try
             {
                 if (response.IsSuccessStatusCode)

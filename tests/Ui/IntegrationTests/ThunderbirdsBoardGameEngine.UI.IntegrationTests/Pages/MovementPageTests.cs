@@ -6,7 +6,7 @@ using ThunderbirdsBoardGameEngine.Rules.Contracts.Dtos.Movement.AccessibleLocati
 using ThunderbirdsBoardGameEngine.Rules.Contracts.Dtos.Movement.ValidateMovement.V1;
 using ThunderbirdsBoardGameEngine.Rules.WireMock;
 using ThunderbirdsBoardGameEngine.Rules.WireMock.Stubs.V1;
-using ThunderbirdsBoardGameEngine.TestUtils.xUnit.Fixtures;
+using ThunderbirdsBoardGameEngine.TestUtils.WireMock.xUnit.Fixtures;
 using ThunderbirdsBoardGameEngine.UI.Features.Movement;
 using Xunit;
 

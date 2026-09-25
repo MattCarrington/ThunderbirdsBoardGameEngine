@@ -77,6 +77,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThunderbirdsBoardGameEngine
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{A6D0E6A7-3B5B-4A8D-9F1E-6D66B7D2C3E1}"
 	ProjectSection(SolutionItems) = preProject
+		Directory.Build.props = Directory.Build.props
 		Directory.Packages.props = Directory.Packages.props
 	EndProjectSection
 EndProject
@@ -101,6 +102,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThunderbirdsBoardGameEngine.Client.Core", "src\Common\ThunderbirdsBoardGameEngine.Client.Core\ThunderbirdsBoardGameEngine.Client.Core.csproj", "{929BF3DA-25C4-4AF1-5F31-B1491DB3A3AE}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThunderbirdsBoardGameEngine.Client.Core.UnitTests", "tests\Common\ThunderbirdsBoardGameEngine.Client.Core.UnitTests\ThunderbirdsBoardGameEngine.Client.Core.UnitTests.csproj", "{8489A72F-BD66-7C66-AAF7-737EC146E96D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThunderbirdsBoardGameEngine.TestUtils.WireMock.xUnit", "tests\Common\ThunderbirdsBoardGameEngine.TestUtils.WireMock.xUnit\ThunderbirdsBoardGameEngine.TestUtils.WireMock.xUnit.csproj", "{0286B7EC-2DC5-4B79-B2D6-484F878A4229}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -556,6 +559,18 @@ Global
 		{8489A72F-BD66-7C66-AAF7-737EC146E96D}.Release|x64.Build.0 = Release|Any CPU
 		{8489A72F-BD66-7C66-AAF7-737EC146E96D}.Release|x86.ActiveCfg = Release|Any CPU
 		{8489A72F-BD66-7C66-AAF7-737EC146E96D}.Release|x86.Build.0 = Release|Any CPU
+		{0286B7EC-2DC5-4B79-B2D6-484F878A4229}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0286B7EC-2DC5-4B79-B2D6-484F878A4229}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0286B7EC-2DC5-4B79-B2D6-484F878A4229}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{0286B7EC-2DC5-4B79-B2D6-484F878A4229}.Debug|x64.Build.0 = Debug|Any CPU
+		{0286B7EC-2DC5-4B79-B2D6-484F878A4229}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{0286B7EC-2DC5-4B79-B2D6-484F878A4229}.Debug|x86.Build.0 = Debug|Any CPU
+		{0286B7EC-2DC5-4B79-B2D6-484F878A4229}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0286B7EC-2DC5-4B79-B2D6-484F878A4229}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0286B7EC-2DC5-4B79-B2D6-484F878A4229}.Release|x64.ActiveCfg = Release|Any CPU
+		{0286B7EC-2DC5-4B79-B2D6-484F878A4229}.Release|x64.Build.0 = Release|Any CPU
+		{0286B7EC-2DC5-4B79-B2D6-484F878A4229}.Release|x86.ActiveCfg = Release|Any CPU
+		{0286B7EC-2DC5-4B79-B2D6-484F878A4229}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -594,6 +609,7 @@ Global
 		{2EDB538D-32C3-6BC5-30B3-AA5E4220288B} = {D8475FB6-8FFD-4252-BF79-1BC0AF31A524}
 		{5B332CCE-61A4-B31B-1A08-3C1DD6009B23} = {D8475FB6-8FFD-4252-BF79-1BC0AF31A524}
 		{8489A72F-BD66-7C66-AAF7-737EC146E96D} = {D8475FB6-8FFD-4252-BF79-1BC0AF31A524}
+		{0286B7EC-2DC5-4B79-B2D6-484F878A4229} = {C005E618-80C1-4CCD-9774-336D558E958F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {92EB50C5-075F-4AF3-8107-0DC9EDBBAB83}

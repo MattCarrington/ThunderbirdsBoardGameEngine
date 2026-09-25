@@ -16,7 +16,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\src\Rules\ThunderbirdsBoardGameEngine.Rules.Client\ThunderbirdsBoardGameEngine.Rules.Client.csproj" />
     <ProjectReference Include="..\..\..\..\tools\Rules\ThunderbirdsBoardGameEngine.Rules.WireMock\ThunderbirdsBoardGameEngine.Rules.WireMock.csproj" />
-    <ProjectReference Include="..\..\..\Common\ThunderbirdsBoardGameEngine.TestUtils.xUnit\ThunderbirdsBoardGameEngine.TestUtils.xUnit.csproj" />
+    <ProjectReference Include="..\..\..\Common\ThunderbirdsBoardGameEngine.TestUtils.WireMock.xUnit\ThunderbirdsBoardGameEngine.TestUtils.WireMock.xUnit.csproj" />
     <ProjectReference Include="..\..\..\Common\ThunderbirdsBoardGameEngine.TestUtils\ThunderbirdsBoardGameEngine.TestUtils.csproj" />
   </ItemGroup>
 

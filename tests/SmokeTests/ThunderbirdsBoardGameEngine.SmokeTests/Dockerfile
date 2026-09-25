@@ -1,4 +1,9 @@
+FROM mcr.microsoft.com/dotnet/sdk:10.0-noble AS dotnet-sdk
+
 FROM mcr.microsoft.com/playwright/dotnet:v1.61.0-noble
+
+# Keep the build SDK current independently of the bundled Playwright SDK.
+COPY --from=dotnet-sdk /usr/share/dotnet/ /usr/share/dotnet/
 
 ARG BUILD_CONFIGURATION=Release
 ARG GITHUB_PACKAGES_USERNAME
@@ -10,6 +15,7 @@ WORKDIR /src
 COPY ["NuGet.config", "."]
 COPY ["Directory.Packages.props", "."]
 COPY ["Directory.Build.props", "."]
+COPY ["global.json", "."]
 
 COPY ["tests/SmokeTests/ThunderbirdsBoardGameEngine.SmokeTests/ThunderbirdsBoardGameEngine.SmokeTests.csproj", "tests/SmokeTests/ThunderbirdsBoardGameEngine.SmokeTests/"]
 

@@ -6,7 +6,7 @@ the Blazor UI against a running application.
 
 ## Prerequisites
 
-- [.NET 8 SDK](https://dotnet.microsoft.com/download/dotnet/8.0)
+- [.NET 10 SDK](https://dotnet.microsoft.com/download/dotnet/10.0), meeting the baseline in [global.json](../../global.json)
 - A running instance of the application (see
   [docs/DevelopmentSetup.md](../../docs/DevelopmentSetup.md))
 
@@ -17,7 +17,7 @@ Build the test project and install the Playwright browsers:
 ```powershell
 cd tests/EndToEnd/ThunderbirdsBoardGameEngine.PlaywrightTests
 dotnet build
-pwsh bin/Debug/net8.0/playwright.ps1 install
+pwsh bin/Debug/net10.0/playwright.ps1 install
 ```
 
 > The `playwright install` step downloads the browser binaries used by the
@@ -32,18 +32,19 @@ application. Set this to whatever URL your local instance is served on.
 **PowerShell:**
 
 ```powershell
-$env:BASE_URL = "http://localhost:5197"
+$env:BASE_URL = "http://localhost:8080"
 ```
 
 **bash/zsh:**
 
 ```bash
-export BASE_URL="http://localhost:5197"
+export BASE_URL="http://localhost:8080"
 ```
 
-Replace `http://localhost:5197` with the actual URL of your running instance.
-If you are running via Docker Compose the default port is `8000`
-(`http://localhost:8000`). See
+The example uses the test Docker Compose configuration, which serves both the
+API and published UI on port `8080`. The development Compose configuration uses
+port `8000`. Use the UI's address when running it separately from the API; an
+API-only `dotnet run` does not publish the Blazor UI. See
 [docs/DevelopmentSetup.md](../../docs/DevelopmentSetup.md) for details.
 
 ## Running the tests
@@ -67,7 +68,7 @@ If tests fail with a browser executable error, re-run the install step:
 
 ```powershell
 cd tests/EndToEnd/ThunderbirdsBoardGameEngine.PlaywrightTests
-pwsh bin/Debug/net8.0/playwright.ps1 install
+pwsh bin/Debug/net10.0/playwright.ps1 install
 ```
 
 ### Playwright version mismatch

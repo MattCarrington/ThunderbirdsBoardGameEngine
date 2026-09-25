@@ -13,6 +13,7 @@ public static class ApiVersioningSetupExtensions
             options.ReportApiVersions = true;                      // adds api-supported-versions headers
             options.ApiVersionReader = new HeaderApiVersionReader("X-API-Version");
         })
+        .AddMvc()
         .AddApiExplorer(options =>
         {
             options.GroupNameFormat = "'v'VVV";         // v1, v2, etc.

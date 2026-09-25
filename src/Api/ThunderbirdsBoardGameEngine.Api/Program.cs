@@ -41,7 +41,6 @@ namespace ThunderbirdsBoardGameEngine.Api
             builder.Services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Your API", Version = "v1" });
-                c.OperationFilter<AddApiVersionHeaderParameter>();
             });
 
             var app = builder.Build();

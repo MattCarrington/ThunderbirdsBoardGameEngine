@@ -1,7 +1,7 @@
 ﻿using ThunderbirdsBoardGameEngine.WireMock.Hosting;
 using Xunit;
 
-namespace ThunderbirdsBoardGameEngine.TestUtils.xUnit.Fixtures
+namespace ThunderbirdsBoardGameEngine.TestUtils.WireMock.xUnit.Fixtures
 {
     /// <summary>
     /// xUnit fixture that manages the lifecycle of a <see cref="WireMockHost"/>.
