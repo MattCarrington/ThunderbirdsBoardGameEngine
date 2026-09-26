@@ -9,7 +9,7 @@ using ThunderbirdsBoardGameEngine.TestUtils.Stubs;
 using ThunderbirdsBoardGameEngine.TestUtils.xUnit.ClassData;
 using Xunit;
 
-namespace ThunderbirdsBoardGameEngine.GameState.Client.UnitTests
+namespace ThunderbirdsBoardGameEngine.GameState.Client.UnitTests.Clients.V1
 {
     public class GameClientTests
     {
