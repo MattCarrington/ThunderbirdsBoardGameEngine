@@ -2,6 +2,7 @@
 using System.Text.Json;
 using ThunderbirdsBoardGameEngine.Client.Core;
 using ThunderbirdsBoardGameEngine.Client.Core.Interfaces;
+using ThunderbirdsBoardGameEngine.GameState.Client.Interfaces.V1;
 using ThunderbirdsBoardGameEngine.GameState.Contracts.Dtos.V1;
 using ThunderbirdsBoardGameEngine.GameState.Contracts.Dtos.V1.ThunderbirdMachines;
 

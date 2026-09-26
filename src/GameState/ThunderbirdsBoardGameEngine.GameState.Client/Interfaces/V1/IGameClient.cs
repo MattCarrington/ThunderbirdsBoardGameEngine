@@ -2,7 +2,7 @@
 using ThunderbirdsBoardGameEngine.GameState.Contracts.Dtos.V1;
 using ThunderbirdsBoardGameEngine.GameState.Contracts.Dtos.V1.ThunderbirdMachines;
 
-namespace ThunderbirdsBoardGameEngine.GameState.Client.Clients.V1
+namespace ThunderbirdsBoardGameEngine.GameState.Client.Interfaces.V1
 {
     public interface IGameClient
     {
