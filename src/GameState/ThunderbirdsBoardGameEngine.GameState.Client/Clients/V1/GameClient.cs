@@ -62,6 +62,8 @@ namespace ThunderbirdsBoardGameEngine.GameState.Client.Clients.V1
                 throw new ArgumentException("Thunderbird code cannot be null or whitespace.", nameof(thunderbirdCode));
             }
 
+            ArgumentNullException.ThrowIfNull(request, nameof(request));
+
             var route = $"api/games/{gameId}/thunderbird-machines/{Uri.EscapeDataString(thunderbirdCode)}/movements";
 
             var content = new StringContent(JsonSerializer.Serialize(request), Encoding.UTF8, "application/json");
