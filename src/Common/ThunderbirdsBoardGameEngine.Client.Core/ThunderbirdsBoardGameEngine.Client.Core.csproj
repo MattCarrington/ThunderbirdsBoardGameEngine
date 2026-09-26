@@ -21,6 +21,7 @@
 
   <ItemGroup>
     <PackageReference Include="microsoft.extensions.dependencyinjection" />
+    <PackageReference Include="Microsoft.Extensions.Options" />
   </ItemGroup>
 
 </Project>
