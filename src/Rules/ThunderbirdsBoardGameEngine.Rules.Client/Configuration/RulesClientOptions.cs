@@ -1,4 +1,6 @@
-﻿namespace ThunderbirdsBoardGameEngine.Rules.Client.Configuration
+﻿using ThunderbirdsBoardGameEngine.Client.Core.Configuration;
+
+namespace ThunderbirdsBoardGameEngine.Rules.Client.Configuration
 {
     /// <summary>
     /// Configuration options for the Thunderbirds rules HTTP client.
@@ -7,8 +9,13 @@
     /// These options are typically bound from configuration (e.g. <c>appsettings.json</c>)
     /// and used when registering the catalog client via dependency injection.
     /// </remarks>
-    public class RulesClientOptions
+    public class RulesClientOptions : IApiClientOptions
     {
+        /// <summary>
+        /// Gets the name of the configuration section for the rules client options.
+        /// </summary>
+        public const string SectionName = "RulesClient";
+
         /// <summary>
         /// Gets or sets the absolute base address of the rules API.
         /// </summary>
