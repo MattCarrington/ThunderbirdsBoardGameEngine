@@ -3,6 +3,7 @@ using System.Text.Json;
 using ThunderbirdsBoardGameEngine.Client.Core;
 using ThunderbirdsBoardGameEngine.Client.Core.Interfaces;
 using ThunderbirdsBoardGameEngine.GameState.Client.Interfaces.V1;
+using ThunderbirdsBoardGameEngine.GameState.Client.Routing.V1;
 using ThunderbirdsBoardGameEngine.GameState.Contracts.Dtos.V1;
 using ThunderbirdsBoardGameEngine.GameState.Contracts.Dtos.V1.ThunderbirdMachines;
 
@@ -21,7 +22,7 @@ namespace ThunderbirdsBoardGameEngine.GameState.Client.Clients.V1
 
         public async Task<ApiResult<GameStateResponseDto>> CreateGameAsync(CancellationToken cancellationToken = default)
         {
-            var route = "api/games";
+            var route = ApiRoutes.Games;
 
             using var message = new HttpRequestMessage(HttpMethod.Post, route);
 
@@ -37,7 +38,7 @@ namespace ThunderbirdsBoardGameEngine.GameState.Client.Clients.V1
                 throw new ArgumentException("Game ID cannot be empty.", nameof(gameId));
             }
 
-            var route = $"api/games/{gameId}";
+            var route = ApiRoutes.GetGameState(gameId);
 
             using var message = new HttpRequestMessage(HttpMethod.Get, route);
 
@@ -64,7 +65,7 @@ namespace ThunderbirdsBoardGameEngine.GameState.Client.Clients.V1
 
             ArgumentNullException.ThrowIfNull(request, nameof(request));
 
-            var route = $"api/games/{gameId}/thunderbird-machines/{Uri.EscapeDataString(thunderbirdCode)}/movements";
+            var route = ApiRoutes.MoveThunderbirdMachine(gameId, thunderbirdCode);
 
             var content = new StringContent(JsonSerializer.Serialize(request), Encoding.UTF8, "application/json");
 
