@@ -300,7 +300,23 @@ namespace ThunderbirdsBoardGameEngine.GameState.Client.UnitTests.Clients.V1
             // Act & Assert
             var exception = await Assert.ThrowsAsync<ArgumentException>(() =>
                 gameClient.MoveThunderbirdMachineAsync(gameId, thunderbirdCode, moveThunderbirdMachineRequestDto, TestContext.Current.CancellationToken));
+
             Assert.Equal("Thunderbird code cannot be null or whitespace. (Parameter 'thunderbirdCode')", exception.Message);
+        }
+
+        [Fact]
+        public async Task MoveThunderbirdMachineAsync_WhenRequestNull_ShouldThrowArgumentNullException()
+        {
+            // Arrange
+            var gameId = Guid.NewGuid();
+
+            var gameClient = CreateGameClient(CreateGameStateResponseApiResult(gameId));
+
+            // Act & Assert
+            var exception = await Assert.ThrowsAsync<ArgumentNullException>(() =>
+                gameClient.MoveThunderbirdMachineAsync(gameId, "TB1", null!, TestContext.Current.CancellationToken));
+
+            Assert.Equal("Value cannot be null. (Parameter 'request')", exception.Message);
         }
 
         private static ApiResult<GameStateResponseDto> CreateGameStateResponseApiResult(Guid gameId)
