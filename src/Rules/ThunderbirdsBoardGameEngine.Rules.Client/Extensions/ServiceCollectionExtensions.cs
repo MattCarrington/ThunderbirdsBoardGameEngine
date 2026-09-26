@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using ThunderbirdsBoardGameEngine.Client.Core;
+using ThunderbirdsBoardGameEngine.Client.Core.Configuration;
 using ThunderbirdsBoardGameEngine.Rules.Client.Configuration;
 
 namespace ThunderbirdsBoardGameEngine.Rules.Client.Extensions
@@ -30,16 +31,16 @@ namespace ThunderbirdsBoardGameEngine.Rules.Client.Extensions
             IConfiguration configuration)
         {
             services.AddOptions<RulesClientOptions>()
-                .Bind(configuration.GetSection("RulesClient"))
+                .Bind(configuration.GetSection(RulesClientOptions.SectionName))
                 .ValidateOnStart();
 
             services.AddSingleton<
                 IPostConfigureOptions<RulesClientOptions>,
-                RulesClientOptionsPostConfigure>();
+                ApiClientOptionsPostConfigure<RulesClientOptions>>();
 
             services.AddSingleton<
                 IValidateOptions<RulesClientOptions>,
-                RulesClientOptionsValidator>();
+                ApiClientOptionsValidator<RulesClientOptions>>();
 
             Action<IServiceProvider, HttpClient> configureBase = (sp, http) =>
             {
