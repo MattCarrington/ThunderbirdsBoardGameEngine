@@ -31,6 +31,8 @@ jobs:
   tests-docker:
     name: Run Integration And Playwright Tests
     runs-on: ubuntu-latest
+    env:
+      GAME_STATE_DB_PASSWORD: integration-test-password
 
     steps:
       - uses: actions/checkout@v7
@@ -100,7 +102,10 @@ jobs:
               --results-directory ./TestResults/Integration
           done
         env:
-          CatalogBaseUrl: ${{ inputs.base_url }}
+          RulesBaseUrl: ${{ inputs.base_url }}
+          GameStateClient__BaseAddress: ${{ inputs.base_url }}
+          GAME_STATE_TEST_CONNECTION_STRING: Host=localhost;Port=5432;Database=thunderbirds_game_state;Username=postgres;Password=${{ env.GAME_STATE_DB_PASSWORD }};GSS Encryption Mode=Disable
+          GameState__Persistence__ConnectionString: Host=localhost;Port=5432;Database=thunderbirds_game_state;Username=postgres;Password=${{ env.GAME_STATE_DB_PASSWORD }};GSS Encryption Mode=Disable
 
       - name: Install Playwright CLI
         if: ${{ inputs.run_playwright }}
@@ -135,7 +140,7 @@ jobs:
           done
 
       - name: Stop containers
-        if: ${{ inputs.run_integration || inputs.run_playwright }}
+        if: ${{ always() && (inputs.run_integration || inputs.run_playwright) }}
         run: |
             set -euo pipefail
             unset COMPOSE_FILE
