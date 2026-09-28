@@ -8,7 +8,8 @@ using Xunit;
 
 namespace ThunderbirdsBoardGameEngine.GameState.Client.IntegrationTests.Clients.V1
 {
-    public class GameClientTests : IClassFixture<GameStateApiIntegrationFixture>
+    [Collection("Game State API integration")]
+    public class GameClientTests
     {
         private readonly GameStateApiIntegrationFixture _fixture;
         private readonly IGameClient _client;
