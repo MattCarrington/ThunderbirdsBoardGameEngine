@@ -2,7 +2,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using Reqnroll.Microsoft.Extensions.DependencyInjection;
 using ThunderbirdsBoardGameEngine.GameState.Client.Extensions;
-using ThunderbirdsBoardGameEngine.GameState.Contracts.Dtos.V1;
 
 namespace ThunderbirdsBoardGameEngine.Api.UserJourneys.Supports
 {
@@ -25,12 +24,5 @@ namespace ThunderbirdsBoardGameEngine.Api.UserJourneys.Supports
 
             return services;
         }
-    }
-
-    public sealed class GameJourneyContext
-    {
-        public Guid GameId { get; set; }
-
-        public GameStateResponseDto? CurrentGame { get; set; }
     }
 }
