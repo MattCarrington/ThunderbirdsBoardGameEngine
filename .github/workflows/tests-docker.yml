@@ -148,3 +148,25 @@ jobs:
                 -f Docker/docker-compose.yml \
                 -f Docker/docker-compose.test.yml \
                 down -v
+
+      - name: Run API User Journeys
+        env:
+          GameStateClient__BaseAddress: ${{ inputs.base_url }}
+        run: |
+          dotnet test \
+            tests/EndToEnd/ThunderbirdsBoardGameEngine.Api.UserJourneys/ThunderbirdsBoardGameEngine.Api.UserJourneys.csproj \
+            --configuration Release \
+            --filter "Category!=restart" \
+            --logger:"trx;LogFileName=api-user-journeys-${RUNNER_OS}.trx" \
+            --results-directory ./TestResults/UserJourneys
+
+      - name: Run API Restart User Journeys
+        env:
+          GameStateClient__BaseAddress: ${{ inputs.base_url }}
+        run: |
+          dotnet test \
+            tests/EndToEnd/ThunderbirdsBoardGameEngine.Api.UserJourneys/ThunderbirdsBoardGameEngine.Api.UserJourneys.csproj \
+            --configuration Release \
+            --filter "Category=restart" \
+            --logger:"trx;LogFileName=api-restart-user-journeys-${RUNNER_OS}.trx" \
+            --results-directory ./TestResults/UserJourneys
