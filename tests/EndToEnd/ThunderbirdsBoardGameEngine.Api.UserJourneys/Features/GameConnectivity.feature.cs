@@ -17,22 +17,24 @@ namespace ThunderbirdsBoardGameEngine.Api.UserJourneys.Features
     
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Reqnroll", "3.0.0.0")]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public partial class MoveThunderbirdFeature : object, Xunit.IClassFixture<MoveThunderbirdFeature.FixtureData>, Xunit.IAsyncLifetime
+    [global::Xunit.TraitAttribute("Category", "restart")]
+    public partial class GameConnectivityFeature : object, Xunit.IClassFixture<GameConnectivityFeature.FixtureData>, Xunit.IAsyncLifetime
     {
         
         private global::Reqnroll.ITestRunner testRunner;
         
         private Xunit.ITestOutputHelper _testOutputHelper;
         
-        private static string[] featureTags = ((string[])(null));
+        private static string[] featureTags = new string[] {
+                "restart"};
         
-        private static global::Reqnroll.FeatureInfo featureInfo = new global::Reqnroll.FeatureInfo(new global::System.Globalization.CultureInfo("en-US"), "Features", "MoveThunderbird", "\tAs a player\r\n    I want to explore and commit Thunderbird movements\r\n    So that" +
-                " the companion application matches the board", global::Reqnroll.ProgrammingLanguage.CSharp, featureTags, InitializeCucumberMessages());
+        private static global::Reqnroll.FeatureInfo featureInfo = new global::Reqnroll.FeatureInfo(new global::System.Globalization.CultureInfo("en-US"), "Features", "GameConnectivity", "\tAs a player,\r\n\tI want to be able to retrieve my game after something happens on " +
+                "the server,\r\n\tSo that I can continue playing", global::Reqnroll.ProgrammingLanguage.CSharp, featureTags, InitializeCucumberMessages());
         
-#line 1 "MoveThunderbird.feature"
+#line 1 "GameConnectivity.feature"
 #line hidden
         
-        public MoveThunderbirdFeature(MoveThunderbirdFeature.FixtureData fixtureData, Xunit.ITestOutputHelper testOutputHelper)
+        public GameConnectivityFeature(GameConnectivityFeature.FixtureData fixtureData, Xunit.ITestOutputHelper testOutputHelper)
         {
             this._testOutputHelper = testOutputHelper;
         }
@@ -106,7 +108,7 @@ namespace ThunderbirdsBoardGameEngine.Api.UserJourneys.Features
         
         private static global::Reqnroll.Formatters.RuntimeSupport.FeatureLevelCucumberMessages InitializeCucumberMessages()
         {
-            return new global::Reqnroll.Formatters.RuntimeSupport.FeatureLevelCucumberMessages("Features/MoveThunderbird.feature.ndjson", 4);
+            return new global::Reqnroll.Formatters.RuntimeSupport.FeatureLevelCucumberMessages("Features/GameConnectivity.feature.ndjson", 4);
         }
         
         async System.Threading.Tasks.ValueTask Xunit.IAsyncLifetime.InitializeAsync()
@@ -134,18 +136,18 @@ namespace ThunderbirdsBoardGameEngine.Api.UserJourneys.Features
             await this.TestTearDownAsync();
         }
         
-        [global::Xunit.FactAttribute(DisplayName="A player moves a Thunderbird and revisits the game")]
-        [global::Xunit.TraitAttribute("FeatureTitle", "MoveThunderbird")]
-        [global::Xunit.TraitAttribute("Description", "A player moves a Thunderbird and revisits the game")]
-        public async global::System.Threading.Tasks.Task APlayerMovesAThunderbirdAndRevisitsTheGame()
+        [global::Xunit.FactAttribute(DisplayName="A player returns after the application restarts")]
+        [global::Xunit.TraitAttribute("FeatureTitle", "GameConnectivity")]
+        [global::Xunit.TraitAttribute("Description", "A player returns after the application restarts")]
+        public async global::System.Threading.Tasks.Task APlayerReturnsAfterTheApplicationRestarts()
         {
             string[] tagsOfScenario = ((string[])(null));
             global::System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new global::System.Collections.Specialized.OrderedDictionary();
             string pickleIndex = "0";
-            global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("A player moves a Thunderbird and revisits the game", null, tagsOfScenario, argumentsOfScenario, featureTags, pickleIndex);
+            global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("A player returns after the application restarts", null, tagsOfScenario, argumentsOfScenario, featureTags, pickleIndex);
             string[] tagsOfRule = ((string[])(null));
             global::Reqnroll.RuleInfo ruleInfo = null;
-#line 7
+#line 8
 this.ScenarioInitialize(scenarioInfo, ruleInfo);
 #line hidden
             if ((global::Reqnroll.TagHelper.ContainsIgnoreTag(scenarioInfo.CombinedTags) || global::Reqnroll.TagHelper.ContainsIgnoreTag(featureTags)))
@@ -155,31 +157,37 @@ this.ScenarioInitialize(scenarioInfo, ruleInfo);
             else
             {
                 await this.ScenarioStartAsync();
-#line 8
+#line 9
     await testRunner.GivenAsync("a new game has been created", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
 #line hidden
-#line 9
-    await testRunner.WhenAsync("the player moves \"Thunderbird 3\" to \"The Sun\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
-#line hidden
 #line 10
-    await testRunner.ThenAsync("\"Thunderbird 3\" should be at \"The Sun\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+    await testRunner.AndAsync("the player moves \"Thunderbird 1\" to \"Europe\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
+#line hidden
+#line 11
+    await testRunner.WhenAsync("the application is restarted", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+#line hidden
+#line 12
+    await testRunner.AndAsync("the player returns to the game", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
+#line hidden
+#line 13
+    await testRunner.ThenAsync("\"Thunderbird 1\" should be at \"Europe\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
             }
             await this.ScenarioCleanupAsync();
         }
         
-        [global::Xunit.FactAttribute(DisplayName="A player makes an invalid move")]
-        [global::Xunit.TraitAttribute("FeatureTitle", "MoveThunderbird")]
-        [global::Xunit.TraitAttribute("Description", "A player makes an invalid move")]
-        public async global::System.Threading.Tasks.Task APlayerMakesAnInvalidMove()
+        [global::Xunit.FactAttribute(DisplayName="A newly created game survives an application restart")]
+        [global::Xunit.TraitAttribute("FeatureTitle", "GameConnectivity")]
+        [global::Xunit.TraitAttribute("Description", "A newly created game survives an application restart")]
+        public async global::System.Threading.Tasks.Task ANewlyCreatedGameSurvivesAnApplicationRestart()
         {
             string[] tagsOfScenario = ((string[])(null));
             global::System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new global::System.Collections.Specialized.OrderedDictionary();
             string pickleIndex = "1";
-            global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("A player makes an invalid move", null, tagsOfScenario, argumentsOfScenario, featureTags, pickleIndex);
+            global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("A newly created game survives an application restart", null, tagsOfScenario, argumentsOfScenario, featureTags, pickleIndex);
             string[] tagsOfRule = ((string[])(null));
             global::Reqnroll.RuleInfo ruleInfo = null;
-#line 12
+#line 15
 this.ScenarioInitialize(scenarioInfo, ruleInfo);
 #line hidden
             if ((global::Reqnroll.TagHelper.ContainsIgnoreTag(scenarioInfo.CombinedTags) || global::Reqnroll.TagHelper.ContainsIgnoreTag(featureTags)))
@@ -189,14 +197,20 @@ this.ScenarioInitialize(scenarioInfo, ruleInfo);
             else
             {
                 await this.ScenarioStartAsync();
-#line 13
- await testRunner.GivenAsync("a new game has been created", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
+#line 16
+    await testRunner.GivenAsync("a new game has been created", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
 #line hidden
-#line 14
- await testRunner.WhenAsync("the player attempts to move \"Thunderbird 2\" to \"The Moon\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+#line 17
+    await testRunner.WhenAsync("the application is restarted", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-#line 15
- await testRunner.ThenAsync("an error should be returned indicating that the move is invalid", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+#line 18
+    await testRunner.AndAsync("the player returns to the game", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
+#line hidden
+#line 19
+    await testRunner.ThenAsync("the game should still be available", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+#line hidden
+#line 20
+    await testRunner.AndAsync("its Thunderbird positions should match the recorded positions", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
             }
             await this.ScenarioCleanupAsync();
@@ -209,12 +223,12 @@ this.ScenarioInitialize(scenarioInfo, ruleInfo);
             
             async System.Threading.Tasks.ValueTask Xunit.IAsyncLifetime.InitializeAsync()
             {
-                await MoveThunderbirdFeature.FeatureSetupAsync();
+                await GameConnectivityFeature.FeatureSetupAsync();
             }
             
             async System.Threading.Tasks.ValueTask System.IAsyncDisposable.DisposeAsync()
             {
-                await MoveThunderbirdFeature.FeatureTearDownAsync();
+                await GameConnectivityFeature.FeatureTearDownAsync();
             }
         }
     }
