@@ -3,7 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Reqnroll.Microsoft.Extensions.DependencyInjection;
 using ThunderbirdsBoardGameEngine.GameState.Client.Extensions;
 
-namespace ThunderbirdsBoardGameEngine.Api.UserJourneys.Supports
+namespace ThunderbirdsBoardGameEngine.Api.UserJourneys.Support
 {
     public static class TestDependencies
     {
@@ -21,6 +21,8 @@ namespace ThunderbirdsBoardGameEngine.Api.UserJourneys.Supports
             services.AddGameStateClients(configuration);
 
             services.AddSingleton<GameJourneyContext>();
+
+            services.AddSingleton<IApplicationRestarter, DockerApplicationRestarter>();
 
             return services;
         }
