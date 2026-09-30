@@ -54,7 +54,7 @@ namespace ThunderbirdsBoardGameEngine.Api.UserJourneys.StepDefinitions
         public async Task WhenThePlayerAttemptsToMoveTo(string thunderbirdCode, string destination)
         {
             var result = await MoveThunderbirdAsync(thunderbirdCode, destination);
-            
+
             _context.LastApiResult = result;
         }
 
