@@ -139,16 +139,6 @@ jobs:
               --results-directory ./TestResults/Playwright
           done
 
-      - name: Stop containers
-        if: ${{ always() && (inputs.run_integration || inputs.run_playwright) }}
-        run: |
-            set -euo pipefail
-            unset COMPOSE_FILE
-            docker compose \
-                -f Docker/docker-compose.yml \
-                -f Docker/docker-compose.test.yml \
-                down -v
-
       - name: Run API User Journeys
         env:
           GameStateClient__BaseAddress: ${{ inputs.base_url }}
@@ -170,3 +160,12 @@ jobs:
             --filter "Category=restart" \
             --logger:"trx;LogFileName=api-restart-user-journeys-${RUNNER_OS}.trx" \
             --results-directory ./TestResults/UserJourneys
+      - name: Stop containers
+        if: ${{ always() && (inputs.run_integration || inputs.run_playwright) }}
+        run: |
+            set -euo pipefail
+            unset COMPOSE_FILE
+            docker compose \
+                -f Docker/docker-compose.yml \
+                -f Docker/docker-compose.test.yml \
+                down -v
