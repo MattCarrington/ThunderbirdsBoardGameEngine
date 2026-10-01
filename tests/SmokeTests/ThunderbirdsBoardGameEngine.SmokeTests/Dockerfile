@@ -1,6 +1,6 @@
 FROM mcr.microsoft.com/dotnet/sdk:10.0-noble AS dotnet-sdk
 
-FROM mcr.microsoft.com/playwright/dotnet:v1.61.0-noble
+FROM mcr.microsoft.com/playwright/dotnet:v1.63.0-noble
 
 # Keep the build SDK current independently of the bundled Playwright SDK.
 COPY --from=dotnet-sdk /usr/share/dotnet/ /usr/share/dotnet/
