@@ -32,5 +32,15 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Runtime.Catalogs
         {
             return _byCode.TryGetValue(code, out definition);
         }
+
+        public ReferenceThunderbirdDefinition GetByCode(ThunderbirdCode code)
+        {
+            if (!_byCode.TryGetValue(code, out var definition))
+            {
+                throw new KeyNotFoundException($"Thunderbird with code '{code}' not found.");
+            }
+
+            return definition;
+        }
     }
 }

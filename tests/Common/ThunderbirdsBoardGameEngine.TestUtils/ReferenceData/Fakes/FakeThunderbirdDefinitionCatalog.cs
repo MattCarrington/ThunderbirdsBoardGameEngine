@@ -21,6 +21,11 @@ namespace ThunderbirdsBoardGameEngine.TestUtils.ReferenceData.Fakes
             return _thunderbirds.Values.ToImmutableArray();
         }
 
+        public ReferenceThunderbirdDefinition GetByCode(ThunderbirdCode code)
+        {
+            return _thunderbirds[code];
+        }
+
         public bool TryGetByCode(ThunderbirdCode code, [NotNullWhen(true)] out ReferenceThunderbirdDefinition? definition)
         {
             return _thunderbirds.TryGetValue(code, out definition);

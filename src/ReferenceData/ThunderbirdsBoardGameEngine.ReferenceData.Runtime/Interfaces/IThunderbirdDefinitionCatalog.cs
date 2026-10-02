@@ -28,5 +28,12 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Runtime.Interfaces
         /// </summary>
         /// <returns></returns>
         ImmutableArray<ReferenceThunderbirdDefinition> GetAll();
+
+        /// <summary>
+        /// Gets a Thunderbird definition by its unique code.
+        /// </summary>
+        /// <param name="code">The Thunderbird code.</param>
+        /// <returns>The Thunderbird definition.</returns>
+        ReferenceThunderbirdDefinition GetByCode(ThunderbirdCode code);
     }
 }
