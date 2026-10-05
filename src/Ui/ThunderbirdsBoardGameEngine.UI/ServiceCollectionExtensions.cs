@@ -1,6 +1,9 @@
 ﻿using ThunderbirdsBoardGameEngine.UI.Features.DisasterCards.Interfaces;
 using ThunderbirdsBoardGameEngine.UI.Features.DisasterCards.Mappers;
 using ThunderbirdsBoardGameEngine.UI.Features.DisasterCards.Services;
+using ThunderbirdsBoardGameEngine.UI.Features.GameDashboard.Interfaces;
+using ThunderbirdsBoardGameEngine.UI.Features.GameDashboard.Mappers;
+using ThunderbirdsBoardGameEngine.UI.Features.GameDashboard.Services;
 using ThunderbirdsBoardGameEngine.UI.Features.Movement.Interfaces;
 using ThunderbirdsBoardGameEngine.UI.Features.Movement.Mappers;
 using ThunderbirdsBoardGameEngine.UI.Features.Movement.Services;
@@ -19,9 +22,12 @@ namespace ThunderbirdsBoardGameEngine.UI
             services.AddScoped<IMovementClientService, MovementClientService>();
             services.AddScoped<IEventCardMovementService, EventCardMovementService>();
 
+            services.AddScoped<IGameService, GameService>();
+
             services.AddSingleton<DisasterCardMapper>();
             services.AddSingleton<MovementResultMapper>();
             services.AddSingleton<MovementLocationOptionsMapper>();
+            services.AddSingleton<GameDashboardMapper>();
 
             return services;
         }
