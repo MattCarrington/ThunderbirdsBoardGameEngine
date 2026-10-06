@@ -1,0 +1,87 @@
+﻿<div class="modal d-block"
+     tabindex="-1"
+     role="dialog"
+     aria-modal="true"
+     aria-labelledby="move-dialog-title">
+
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="move-dialog-title" class="modal-title h5">
+                    Move @Machine.ThunderbirdDisplayName
+                </h2>
+            </div>
+
+            <div class="modal-body">
+                <p>
+                    Current location:
+                    <strong>@Machine.LocationDisplayName</strong>
+                </p>
+
+                @if (IsLoadingDestinations)
+                {
+                    <p aria-live="polite">
+                        Loading destinations…
+                    </p>
+                }
+                else if (Destinations.Count == 0)
+                {
+                    <p>
+                        This Thunderbird Machine has no available
+                        destinations.
+                    </p>
+                }
+                else
+                {
+                    <label for="move-destination"
+                           class="form-label">
+                        Destination
+                    </label>
+
+                    <select id="move-destination"
+                            class="form-select"
+                            @bind="_selectedDestination">
+                        <option value="">
+                            Select a destination
+                        </option>
+
+                        @foreach (var destination in Destinations)
+                        {
+                            <option value="@destination.Key">
+                                @destination.DisplayName
+                            </option>
+                        }
+                    </select>
+                }
+
+                @if (!string.IsNullOrWhiteSpace(ErrorMessage))
+                {
+                    <div class="alert alert-danger mt-3"
+                         role="alert">
+                        @ErrorMessage
+                    </div>
+                }
+            </div>
+
+            <div class="modal-footer">
+                <button type="button"
+                        class="btn btn-secondary"
+                        disabled="@IsMoving"
+                        data-testid="cancel-move"
+                        @onclick="CancelAsync">
+                    Cancel
+                </button>
+
+                <button type="button"
+                        class="btn btn-primary"
+                        disabled="@CannotSubmit"
+                        data-testid="confirm-move"
+                        @onclick="ConfirmAsync">
+                    @(IsMoving ? "Moving…" : "Move")
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal-backdrop show"></div>
