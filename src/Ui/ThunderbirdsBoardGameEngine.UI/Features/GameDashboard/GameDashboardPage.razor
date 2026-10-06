@@ -27,7 +27,8 @@
         </div>
 
         <button class="btn btn-primary"
-                @onclick="OnParametersSetAsync">
+                data-testid="retry-game"
+                @onclick="LoadGameAsync">
             Try Again
         </button>
     }

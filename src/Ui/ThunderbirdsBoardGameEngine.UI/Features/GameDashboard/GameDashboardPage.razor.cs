@@ -4,7 +4,7 @@ using ThunderbirdsBoardGameEngine.UI.Features.GameDashboard.ViewModels;
 
 namespace ThunderbirdsBoardGameEngine.UI.Features.GameDashboard;
 
-public partial class GameDashboard
+public partial class GameDashboardPage
 {
     [Parameter]
     public Guid GameId { get; set; }
@@ -13,14 +13,19 @@ public partial class GameDashboard
     public IGameService GameService { get; set; } = null!;
 
     [Inject]
-    public ILogger<GameDashboard> Logger { get; set; } = null!;
+    public ILogger<GameDashboardPage> Logger { get; set; } = null!;
 
     private GameDashboardViewModel? _game;
     private bool _isLoading;
     private bool _notFound;
     private bool _failed;
 
-    protected override async Task OnParametersSetAsync()
+    protected override Task OnParametersSetAsync()
+    {
+        return LoadGameAsync();
+    }
+
+    private async Task LoadGameAsync()
     {
         _game = null;
         _notFound = false;
@@ -36,7 +41,6 @@ public partial class GameDashboard
         {
             _failed = true;
 
-            // Deliberately do not include GameId.
             Logger.LogError(
                 exception,
                 "Unable to load the requested game dashboard.");
