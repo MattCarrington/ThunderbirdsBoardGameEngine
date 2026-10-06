@@ -12,6 +12,7 @@
                     <th scope="col">Machine</th>
                     <th scope="col">Location</th>
                     <th scope="col">Characters aboard</th>
+                    <th scope="col">Actions</th>
                 </tr>
             </thead>
             <tbody>
@@ -35,6 +36,13 @@
                                         occupant =>
                                             occupant.CharacterDisplayName))
                             }
+                        </td>
+                        <td>
+                            <button class="btn btn-sm btn-primary"
+                                    data-testid="@($"move-{machine.ThunderbirdCode}")"
+                                    @onclick="() => MoveRequested.InvokeAsync(machine)">
+                                Move
+                            </button>
                         </td>
                     </tr>
                 }

@@ -27,14 +27,28 @@
         </div>
 
         <button class="btn btn-primary"
-                data-testid="retry-game"
-                @onclick="LoadGameAsync">
+        data-testid="retry-game"
+        @onclick="LoadGameAsync">
             Try Again
         </button>
     }
     else if (_game is not null)
     {
         <ThunderbirdMachinesSegment
-            Machines="@_game.ThunderbirdMachines" />
+        Machines="@_game.ThunderbirdMachines"
+        MoveRequested="BeginMoveAsync" />
+
+        @if (_selectedMachine is not null)
+        {
+            <MoveThunderbirdDialog
+            @key="_selectedMachine.ThunderbirdCode"
+            Machine="@_selectedMachine"
+            Destinations="@_destinations"
+            IsLoadingDestinations="@_isLoadingDestinations"
+            IsMoving="@_isMoving"
+            ErrorMessage="@_movementError"
+            MoveConfirmed="MoveAsync"
+            Cancelled="CancelMove" />
+        }
     }
 </div>
