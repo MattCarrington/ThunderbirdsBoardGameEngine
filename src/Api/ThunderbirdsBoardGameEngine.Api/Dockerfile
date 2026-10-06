@@ -22,9 +22,11 @@ COPY ["src/Rules/ThunderbirdsBoardGameEngine.Rules.Domain/ThunderbirdsBoardGameE
 COPY ["src/GameState/ThunderbirdsBoardGameEngine.GameState.Application/ThunderbirdsBoardGameEngine.GameState.Application.csproj", "GameState/ThunderbirdsBoardGameEngine.GameState.Application/"]
 COPY ["src/GameState/ThunderbirdsBoardGameEngine.GameState.Infrastructure/ThunderbirdsBoardGameEngine.GameState.Infrastructure.csproj", "GameState/ThunderbirdsBoardGameEngine.GameState.Infrastructure/"]
 COPY ["src/GameState/ThunderbirdsBoardGameEngine.GameState.Domain/ThunderbirdsBoardGameEngine.GameState.Domain.csproj", "GameState/ThunderbirdsBoardGameEngine.GameState.Domain/"]
+COPY ["src/GameState/ThunderbirdsBoardGameEngine.GameState.Contracts/ThunderbirdsBoardGameEngine.GameState.Contracts.csproj", "GameState/ThunderbirdsBoardGameEngine.GameState.Contracts/"]
 
 COPY ["src/Ui/ThunderbirdsBoardGameEngine.UI/ThunderbirdsBoardGameEngine.UI.csproj", "Ui/ThunderbirdsBoardGameEngine.UI/"]
 COPY ["src/Rules/ThunderbirdsBoardGameEngine.Rules.Client/ThunderbirdsBoardGameEngine.Rules.Client.csproj", "Rules/ThunderbirdsBoardGameEngine.Rules.Client/"]
+COPY ["src/GameState/ThunderbirdsBoardGameEngine.GameState.Client/ThunderbirdsBoardGameEngine.GameState.Client.csproj", "GameState/ThunderbirdsBoardGameEngine.GameState.Client/"]
 COPY ["src/Common/ThunderbirdsBoardGameEngine.Client.Core/ThunderbirdsBoardGameEngine.Client.Core.csproj", "Common/ThunderbirdsBoardGameEngine.Client.Core/"]
 
 RUN dotnet restore "./Api/ThunderbirdsBoardGameEngine.Api/ThunderbirdsBoardGameEngine.Api.csproj"
