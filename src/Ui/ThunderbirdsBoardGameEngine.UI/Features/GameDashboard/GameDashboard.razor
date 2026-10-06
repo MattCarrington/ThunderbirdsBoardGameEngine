@@ -1,0 +1,39 @@
+﻿@page "/games/{GameId:guid}"
+@using ThunderbirdsBoardGameEngine.UI.Features.GameDashboard.Components
+
+<PageTitle>Game Dashboard</PageTitle>
+
+<div class="container py-4">
+    <h1>Game Dashboard</h1>
+
+    @if (_isLoading)
+    {
+        <p aria-live="polite">Loading game…</p>
+    }
+    else if (_notFound)
+    {
+        <div class="alert alert-warning" role="alert">
+            This game could not be found.
+        </div>
+
+        <a class="btn btn-secondary" href="/">
+            Return home
+        </a>
+    }
+    else if (_failed)
+    {
+        <div class="alert alert-danger" role="alert">
+            The game could not be loaded. Please try again.
+        </div>
+
+        <button class="btn btn-primary"
+                @onclick="OnParametersSetAsync">
+            Try Again
+        </button>
+    }
+    else if (_game is not null)
+    {
+        <ThunderbirdMachinesSegment
+            Machines="@_game.ThunderbirdMachines" />
+    }
+</div>

@@ -1,7 +1,65 @@
 ﻿@page "/"
 
-<PageTitle>Home</PageTitle>
+<PageTitle>Thunderbirds Companion</PageTitle>
 
-<h1>Hello, world!</h1>
+<div class="container py-4">
+    <h1>Thunderbirds Companion</h1>
 
-Welcome to your new app.
+    <p class="lead">
+        Start a new game or return to an existing game.
+    </p>
+
+    <section class="card mb-4" aria-labelledby="start-game-heading">
+        <div class="card-body">
+            <h2 id="start-game-heading" class="h4">
+                Start a new game
+            </h2>
+
+            <p>
+                Create a new game using the standard setup.
+            </p>
+
+            <button class="btn btn-primary"
+                    disabled="@_isCreating"
+                    @onclick="CreateGameAsync">
+                @(_isCreating ? "Creating game…" : "Start Game")
+            </button>
+        </div>
+    </section>
+
+    <section class="card" aria-labelledby="resume-game-heading">
+        <div class="card-body">
+            <h2 id="resume-game-heading" class="h4">
+                Resume a game
+            </h2>
+
+            <p>
+                Enter the game identifier from your private game link.
+            </p>
+
+            <div class="mb-3">
+                <label for="game-identifier" class="form-label">
+                    Game identifier
+                </label>
+
+                <input id="game-identifier"
+                       class="form-control"
+                       type="text"
+                       autocomplete="off"
+                       @bind="_gameIdentifier" />
+            </div>
+
+            <button class="btn btn-secondary"
+                    @onclick="ResumeGame">
+                Resume Game
+            </button>
+        </div>
+    </section>
+
+    @if (!string.IsNullOrWhiteSpace(_message))
+    {
+        <div class="alert alert-danger mt-3" role="alert">
+            @_message
+        </div>
+    }
+</div>
