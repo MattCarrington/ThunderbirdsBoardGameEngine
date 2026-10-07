@@ -3,7 +3,7 @@ using ThunderbirdsBoardGameEngine.UI.Features.GameDashboard.Interfaces;
 using ThunderbirdsBoardGameEngine.UI.Features.GameDashboard.Services;
 using ThunderbirdsBoardGameEngine.UI.Features.GameDashboard.ViewModels;
 using ThunderbirdsBoardGameEngine.UI.Features.Movement.Interfaces;
-using ThunderbirdsBoardGameEngine.UI.Features.Movement.Models;
+using ThunderbirdsBoardGameEngine.UI.Features.Shared.ViewModels;
 
 namespace ThunderbirdsBoardGameEngine.UI.Features.GameDashboard;
 
@@ -26,7 +26,7 @@ public partial class GameDashboardPage
     private bool _notFound;
     private bool _failed;
     private ThunderbirdMachinesDashboardViewModel? _selectedMachine;
-    private IReadOnlyList<MovementLocationOptions> _destinations = [];
+    private IReadOnlyList<LocationOptionsViewModel> _destinations = [];
     private bool _isLoadingDestinations;
     private bool _isMoving;
     private string? _movementError;

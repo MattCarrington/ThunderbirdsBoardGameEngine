@@ -1,12 +1,12 @@
 ﻿using Microsoft.AspNetCore.Components;
-using ThunderbirdsBoardGameEngine.UI.Features.Movement.Models;
+using ThunderbirdsBoardGameEngine.UI.Features.Shared.ViewModels;
 
-namespace ThunderbirdsBoardGameEngine.UI.Features.Movement.Components
+namespace ThunderbirdsBoardGameEngine.UI.Features.Shared.Components
 {
     public partial class LocationSelector
     {
         [Parameter, EditorRequired]
-        public IReadOnlyList<MovementLocationOptions> Locations { get; set; } = [];
+        public IReadOnlyList<LocationOptionsViewModel> Locations { get; set; } = [];
 
         [Parameter]
         public string? SelectedLocationKey { get; set; }

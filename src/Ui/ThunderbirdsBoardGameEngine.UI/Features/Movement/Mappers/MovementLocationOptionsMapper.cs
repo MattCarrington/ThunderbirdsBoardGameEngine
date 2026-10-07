@@ -1,6 +1,6 @@
 ﻿using ThunderbirdsBoardGameEngine.ReferenceData.Core.Identities;
 using ThunderbirdsBoardGameEngine.ReferenceData.Runtime.Interfaces;
-using ThunderbirdsBoardGameEngine.UI.Features.Movement.Models;
+using ThunderbirdsBoardGameEngine.UI.Features.Shared.ViewModels;
 
 namespace ThunderbirdsBoardGameEngine.UI.Features.Movement.Mappers
 {
@@ -13,9 +13,9 @@ namespace ThunderbirdsBoardGameEngine.UI.Features.Movement.Mappers
             _catalog = catalog;
         }
 
-        public IReadOnlyList<MovementLocationOptions> ToViewModel(IEnumerable<string> locationCodes)
+        public IReadOnlyList<LocationOptionsViewModel> ToViewModel(IEnumerable<string> locationCodes)
         {
-            var options = new List<MovementLocationOptions>();
+            var options = new List<LocationOptionsViewModel>();
 
             foreach (var code in locationCodes)
             {
@@ -24,7 +24,7 @@ namespace ThunderbirdsBoardGameEngine.UI.Features.Movement.Mappers
                     continue;
                 }
 
-                options.Add(new MovementLocationOptions(location.Code.Value, location.DisplayName));
+                options.Add(new LocationOptionsViewModel(location.Code.Value, location.DisplayName));
             }
 
             return options;
