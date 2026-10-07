@@ -1,4 +1,6 @@
 ﻿using Bunit;
+using Microsoft.AspNetCore.Components;
+using ThunderbirdsBoardGameEngine.UI.ComponentTests.Factories;
 using ThunderbirdsBoardGameEngine.UI.Features.GameDashboard.Components;
 using ThunderbirdsBoardGameEngine.UI.Features.GameDashboard.ViewModels;
 using Xunit;
@@ -10,36 +12,38 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Features.GameDashboard.C
         [Fact]
         public void DisplaysMachinesLocationsAndOccupants()
         {
+            // Arrange
             var machines = new[]
             {
-                new ThunderbirdMachinesDashboardViewModel(
-                    ThunderbirdCode: "thunderbird-1",
-                    ThunderbirdDisplayName: "Thunderbird 1",
-                    LocationCode: "south-pacific",
-                    LocationDisplayName: "South Pacific",
-                    Occupants:
-                    [
-                        new(
-                            CharacterCode: "scott",
-                            CharacterDisplayName: "Scott"),
-                        new(
-                            CharacterCode: "alan",
-                            CharacterDisplayName: "Alan")
+                GameDashboardViewModelFactory.CreateMachine(
+                    thunderbirdCode: "thunderbird-1",
+                    thunderbirdDisplayName: "Thunderbird 1",
+                    locationCode: "south-pacific",
+                    locationDisplayName: "South Pacific",
+                    occupants: [
+                        GameDashboardViewModelFactory.CreateOccupant(
+                            characterCode: "scott",
+                            characterDisplayName: "Scott"),
+                        GameDashboardViewModelFactory.CreateOccupant(
+                            characterCode: "alan",
+                            characterDisplayName: "Alan")
                     ]),
-                new ThunderbirdMachinesDashboardViewModel(
-                    ThunderbirdCode: "thunderbird-2",
-                    ThunderbirdDisplayName: "Thunderbird 2",
-                    LocationCode: "europe",
-                    LocationDisplayName: "Europe",
-                    Occupants: [])
+                GameDashboardViewModelFactory.CreateMachine(
+                    thunderbirdCode: "thunderbird-2",
+                    thunderbirdDisplayName: "Thunderbird 2",
+                    locationCode: "europe",
+                    locationDisplayName: "Europe",
+                    occupants: [])
             };
 
+            // Act
             var cut = Render<ThunderbirdMachinesSegment>(
                 parameters => parameters
                     .Add(component => component.Machines, machines));
 
             var rows = cut.FindAll("tbody tr");
 
+            // Assert
             Assert.Collection(
                 rows,
                 first =>
@@ -54,6 +58,43 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Features.GameDashboard.C
                     Assert.Contains("Europe", second.TextContent);
                     Assert.Contains("Empty", second.TextContent);
                 });
+        }
+
+        [Fact]
+        public void InvokesMoveRequestedCallbackWhenMoveButtonClicked()
+        {
+            // Arrange
+            var machines = new[]
+            {
+                GameDashboardViewModelFactory.CreateMachine(
+                    thunderbirdCode: "thunderbird-1",
+                    thunderbirdDisplayName: "Thunderbird 1",
+                    locationCode: "south-pacific",
+                    locationDisplayName: "South Pacific",
+                    occupants: []),
+                GameDashboardViewModelFactory.CreateMachine(
+                    thunderbirdCode: "thunderbird-2",
+                    thunderbirdDisplayName: "Thunderbird 2",
+                    locationCode: "europe",
+                    locationDisplayName: "Europe",
+                    occupants: [])
+            };
+
+            ThunderbirdMachinesDashboardViewModel? callbackParameter = null;
+
+            var cut = Render<ThunderbirdMachinesSegment>(
+                parameters => parameters
+                    .Add(component => component.Machines, machines)
+                    .Add(component => component.MoveRequested, EventCallback.Factory.Create<ThunderbirdMachinesDashboardViewModel>(this, (machine) =>
+                    {
+                        callbackParameter = machine;
+                    })));
+
+            cut.Find("[data-testid='move-thunderbird-2']").Click();
+
+            // Assert
+            Assert.NotNull(callbackParameter);
+            Assert.Equal("thunderbird-2", callbackParameter!.ThunderbirdCode);
         }
     }
 }
