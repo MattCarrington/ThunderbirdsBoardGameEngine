@@ -1,9 +1,9 @@
 ﻿using Bunit;
-using ThunderbirdsBoardGameEngine.UI.Features.Movement.Components;
-using ThunderbirdsBoardGameEngine.UI.Features.Movement.Models;
+using ThunderbirdsBoardGameEngine.UI.Features.Shared.Components;
+using ThunderbirdsBoardGameEngine.UI.Features.Shared.ViewModels;
 using Xunit;
 
-namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Features.Movement.Components
+namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Features.Shared.Components
 {
     public class LocationSelectorTests : BunitContext
     {
@@ -45,13 +45,13 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Features.Movement.Compon
             Assert.Equal("venus", selectedKey);
         }
 
-        private static IReadOnlyList<MovementLocationOptions> CreateSampleLocations()
+        private static IReadOnlyList<LocationOptionsViewModel> CreateSampleLocations()
         {
             return
             [
-                new MovementLocationOptions(Key: "earth", DisplayName: "Earth"),
-                new MovementLocationOptions(Key: "mars", DisplayName: "Mars"),
-                new MovementLocationOptions(Key: "venus", DisplayName: "Venus"),
+                new LocationOptionsViewModel(Key: "earth", DisplayName: "Earth"),
+                new LocationOptionsViewModel(Key: "mars", DisplayName: "Mars"),
+                new LocationOptionsViewModel(Key: "venus", DisplayName: "Venus"),
             ];
         }
     }

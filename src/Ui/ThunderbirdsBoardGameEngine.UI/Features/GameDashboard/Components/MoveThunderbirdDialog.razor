@@ -1,4 +1,6 @@
-﻿<div class="modal d-block"
+﻿@using ThunderbirdsBoardGameEngine.UI.Features.Shared.Components
+
+<div class="modal d-block"
      tabindex="-1"
      role="dialog"
      aria-modal="true"
@@ -32,26 +34,12 @@
                     </p>
                 }
                 else
-                {
-                    <label for="move-destination"
-                           class="form-label">
-                        Destination
-                    </label>
-
-                    <select id="move-destination"
-                            class="form-select"
-                            @bind="_selectedDestination">
-                        <option value="">
-                            Select a destination
-                        </option>
-
-                        @foreach (var destination in Destinations)
-                        {
-                            <option value="@destination.Key">
-                                @destination.DisplayName
-                            </option>
-                        }
-                    </select>
+                {                    
+                    <LocationSelector
+                        LocationId="move-destination"
+                        LocationTitle="Destination"
+                        Locations="@Destinations"
+                        @bind-SelectedLocationKey="_selectedDestination" />
                 }
 
                 @if (!string.IsNullOrWhiteSpace(ErrorMessage))

@@ -1,24 +1,16 @@
 using Microsoft.AspNetCore.Components;
 using ThunderbirdsBoardGameEngine.UI.Features.GameDashboard.ViewModels;
-using ThunderbirdsBoardGameEngine.UI.Features.Movement.Models;
+using ThunderbirdsBoardGameEngine.UI.Features.Shared.ViewModels;
 
 namespace ThunderbirdsBoardGameEngine.UI.Features.GameDashboard.Components
 {
     public partial class MoveThunderbirdDialog
     {
         [Parameter, EditorRequired]
-        public ThunderbirdMachinesDashboardViewModel Machine
-        {
-            get;
-            set;
-        } = null!;
+        public ThunderbirdMachinesDashboardViewModel Machine { get; set; } = null!;
 
         [Parameter, EditorRequired]
-        public IReadOnlyList<MovementLocationOptions> Destinations
-        {
-            get;
-            set;
-        } = [];
+        public IReadOnlyList<LocationOptionsViewModel> Destinations { get; set; } = [];
 
         [Parameter]
         public bool IsLoadingDestinations { get; set; }
