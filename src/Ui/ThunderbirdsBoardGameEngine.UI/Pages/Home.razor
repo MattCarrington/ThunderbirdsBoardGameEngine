@@ -20,6 +20,7 @@
             </p>
 
             <button class="btn btn-primary"
+                    data-testid="create-game"
                     disabled="@_isCreating"
                     @onclick="CreateGameAsync">
                 @(_isCreating ? "Creating game…" : "Start Game")
@@ -50,6 +51,7 @@
             </div>
 
             <button class="btn btn-secondary"
+                    data-testid="resume-game"
                     @onclick="ResumeGame">
                 Resume Game
             </button>
