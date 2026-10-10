@@ -1,0 +1,6 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\src\GameState\ThunderbirdsBoardGameEngine.GameState.Contracts\ThunderbirdsBoardGameEngine.GameState.Contracts.csproj" />
+    <ProjectReference Include="..\..\Common\ThunderbirdsBoardGameEngine.WireMock.Hosting\ThunderbirdsBoardGameEngine.WireMock.Hosting.csproj" />
+  </ItemGroup>
+</Project>
