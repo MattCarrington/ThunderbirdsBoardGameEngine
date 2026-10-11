@@ -107,6 +107,28 @@ jobs:
           GAME_STATE_TEST_CONNECTION_STRING: Host=localhost;Port=5432;Database=thunderbirds_game_state;Username=postgres;Password=${{ env.GAME_STATE_DB_PASSWORD }};GSS Encryption Mode=Disable
           GameState__Persistence__ConnectionString: Host=localhost;Port=5432;Database=thunderbirds_game_state;Username=postgres;Password=${{ env.GAME_STATE_DB_PASSWORD }};GSS Encryption Mode=Disable
 
+      - name: Run API User Journeys
+        env:
+          GameStateClient__BaseAddress: ${{ inputs.base_url }}
+        run: |
+          dotnet test \
+            tests/EndToEnd/ThunderbirdsBoardGameEngine.Api.UserJourneys/ThunderbirdsBoardGameEngine.Api.UserJourneys.csproj \
+            --configuration Release \
+            --filter "Category!=restart" \
+            --logger:"trx;LogFileName=api-user-journeys-${RUNNER_OS}.trx" \
+            --results-directory ./TestResults/UserJourneys
+
+      - name: Run API Restart User Journeys
+        env:
+          GameStateClient__BaseAddress: ${{ inputs.base_url }}
+        run: |
+          dotnet test \
+            tests/EndToEnd/ThunderbirdsBoardGameEngine.Api.UserJourneys/ThunderbirdsBoardGameEngine.Api.UserJourneys.csproj \
+            --configuration Release \
+            --filter "Category=restart" \
+            --logger:"trx;LogFileName=api-restart-user-journeys-${RUNNER_OS}.trx" \
+            --results-directory ./TestResults/UserJourneys
+            
       - name: Install Playwright CLI
         if: ${{ inputs.run_playwright }}
         run: dotnet tool install --global Microsoft.Playwright.CLI
@@ -139,27 +161,6 @@ jobs:
               --results-directory ./TestResults/Playwright
           done
 
-      - name: Run API User Journeys
-        env:
-          GameStateClient__BaseAddress: ${{ inputs.base_url }}
-        run: |
-          dotnet test \
-            tests/EndToEnd/ThunderbirdsBoardGameEngine.Api.UserJourneys/ThunderbirdsBoardGameEngine.Api.UserJourneys.csproj \
-            --configuration Release \
-            --filter "Category!=restart" \
-            --logger:"trx;LogFileName=api-user-journeys-${RUNNER_OS}.trx" \
-            --results-directory ./TestResults/UserJourneys
-
-      - name: Run API Restart User Journeys
-        env:
-          GameStateClient__BaseAddress: ${{ inputs.base_url }}
-        run: |
-          dotnet test \
-            tests/EndToEnd/ThunderbirdsBoardGameEngine.Api.UserJourneys/ThunderbirdsBoardGameEngine.Api.UserJourneys.csproj \
-            --configuration Release \
-            --filter "Category=restart" \
-            --logger:"trx;LogFileName=api-restart-user-journeys-${RUNNER_OS}.trx" \
-            --results-directory ./TestResults/UserJourneys
       - name: Stop containers
         if: ${{ always() && (inputs.run_integration || inputs.run_playwright) }}
         run: |
