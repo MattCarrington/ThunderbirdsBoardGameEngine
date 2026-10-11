@@ -12,7 +12,7 @@
     }
     else if (_notFound)
     {
-        <div class="alert alert-warning" role="alert">
+        <div class="alert alert-warning" role="alert" data-testid="game-not-found">
             This game could not be found.
         </div>
 
@@ -22,7 +22,7 @@
     }
     else if (_failed)
     {
-        <div class="alert alert-danger" role="alert">
+        <div class="alert alert-danger" role="alert" data-testid="game-load-failed">
             The game could not be loaded. Please try again.
         </div>
 
