@@ -89,7 +89,6 @@ return await Deployment.RunAsync(() =>
             Registries = registries,
             Secrets = secrets,
             IdentitySettings = [],
-            TargetLabel = string.Empty,
         },
         Template = new TemplateArgs
         {
