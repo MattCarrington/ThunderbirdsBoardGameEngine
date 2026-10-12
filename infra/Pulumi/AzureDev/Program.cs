@@ -115,6 +115,13 @@ return await Deployment.RunAsync(() =>
             },
         },
         Tags = tags,
+    },
+    new CustomResourceOptions
+    {
+        IgnoreChanges =
+        {
+            "configuration.targetLabel",
+        },
     });
 
     return new Dictionary<string, object?>
