@@ -37,8 +37,8 @@
     <PackageVersion Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.23.0" />
     <PackageVersion Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.3" />
     <PackageVersion Include="NSubstitute" Version="5.3.0" />
-    <PackageVersion Include="Pulumi" Version="3.114.0" />
-    <PackageVersion Include="Pulumi.AzureNative" Version="2.92.3" />
+    <PackageVersion Include="Pulumi" Version="3.114.2" />
+    <PackageVersion Include="Pulumi.AzureNative" Version="3.28.0" />
     <PackageVersion Include="Reqnroll.Microsoft.Extensions.DependencyInjection" Version="3.3.4" />
     <PackageVersion Include="Reqnroll.xunit.v3" Version="3.3.4" />
     <PackageVersion Include="Swashbuckle.AspNetCore" Version="6.9.0" />
