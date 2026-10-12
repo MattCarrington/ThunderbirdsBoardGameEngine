@@ -1,6 +1,7 @@
 using Pulumi;
 using Pulumi.AzureNative.App;
 using Pulumi.AzureNative.App.Inputs;
+using Pulumi.AzureNative.Security;
 using Resources = Pulumi.AzureNative.Resources;
 
 return await Deployment.RunAsync(() =>
@@ -29,6 +30,21 @@ return await Deployment.RunAsync(() =>
     {
         ResourceGroupName = resourceGroup.Name,
         Location = resourceGroup.Location,
+        PublicNetworkAccess = "Enabled",
+        PeerAuthentication = new ManagedEnvironmentPeerAuthenticationArgs
+        {
+            Mtls = new MtlsArgs
+            {
+                Enabled = false,
+            }
+        },
+        PeerTrafficConfiguration = new ManagedEnvironmentPeerTrafficConfigurationArgs
+        {
+            Encryption = new ManagedEnvironmentEncryptionArgs
+            {
+                Enabled = false
+            }
+        },
         Tags = tags,
     });
 
@@ -72,6 +88,8 @@ return await Deployment.RunAsync(() =>
             },
             Registries = registries,
             Secrets = secrets,
+            IdentitySettings = [],
+            TargetLabel = string.Empty,
         },
         Template = new TemplateArgs
         {
@@ -86,12 +104,15 @@ return await Deployment.RunAsync(() =>
                         Cpu = 0.25,
                         Memory = "0.5Gi",
                     },
+                    ImageType = ImageType.ContainerImage,
                 },
             },
             Scale = new ScaleArgs
             {
                 MinReplicas = 1,
                 MaxReplicas = 1,
+                CooldownPeriod = 300,
+                PollingInterval = 30,
             },
         },
         Tags = tags,
