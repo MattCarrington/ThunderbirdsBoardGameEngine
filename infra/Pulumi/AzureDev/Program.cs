@@ -22,6 +22,8 @@ return await Deployment.RunAsync(() =>
     var databaseAdministratorUsername = projectConfig.Require("databaseAdministratorUsername");
     var databaseAdministratorPassword = projectConfig.RequireSecret("databaseAdministratorPassword");
 
+    var databaseMigratorImage = projectConfig.Get("databaseMigratorImage") ?? "ghcr.io/mattcarrington/thunderbirds-game-state-db-migrator:latest";
+
     if (string.IsNullOrWhiteSpace(databaseName))
     {
         throw new InvalidOperationException("thunderbirds-azure-dev:databaseName cannot be empty.");
@@ -162,6 +164,28 @@ return await Deployment.RunAsync(() =>
         },
         Template = new TemplateArgs
         {
+            InitContainers =
+            {
+                new InitContainerArgs
+                {
+                    Name = "game-state-db-migrator",
+                    Image = databaseMigratorImage,
+                    Env =
+                    {
+                        new EnvironmentVarArgs
+                        {
+                            Name = databaseConnectionStringEnvironmentVariable,
+                            SecretRef = databaseConnectionStringSecretName,
+                        },
+                    },
+                    Resources = new ContainerResourcesArgs
+                    {
+                        Cpu = 0.25,
+                        Memory = "0.5Gi",
+                    },
+                    ImageType = ImageType.ContainerImage,
+                },
+            },
             Containers =
             {
                 new ContainerArgs
