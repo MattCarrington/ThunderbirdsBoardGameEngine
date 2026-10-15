@@ -35,6 +35,8 @@ return await Deployment.RunAsync(() =>
     }
 
     const string registryPasswordSecretName = "registry-password";
+    const string databaseConnectionStringSecretName = "game-state-database-connection-string";
+    const string databaseConnectionStringEnvironmentVariable = "GameState__Persistence__ConnectionString";
 
     var tags = BuildTags(stack);
 
@@ -66,6 +68,51 @@ return await Deployment.RunAsync(() =>
         Tags = tags,
     });
 
+    var databaseServer = new PostgreSql.Server($"{baseName}-{stack}-postgres", new PostgreSql.ServerArgs
+    {
+        ResourceGroupName = resourceGroup.Name,
+        Location = resourceGroup.Location,
+        AdministratorLogin = databaseAdministratorUsername,
+        AdministratorLoginPassword = databaseAdministratorPassword,
+        Version = PostgreSql.PostgresMajorVersion.PostgresMajorVersion_16,
+        Network = new PostgreSqlInputs.NetworkArgs
+        {
+            PublicNetworkAccess = PostgreSql.ServerPublicNetworkAccessState.Enabled,
+        },
+        Sku = new PostgreSqlInputs.SkuArgs
+        {
+            Name = "Standard_B1ms",
+            Tier = PostgreSql.SkuTier.Burstable,
+        },
+        Storage = new PostgreSqlInputs.StorageArgs
+        {
+            StorageSizeGB = 32,
+        },
+        Tags = tags,
+    });
+
+    var allowAzureServices = new PostgreSql.FirewallRule($"{baseName}-{stack}-postgres-allow-azure", new PostgreSql.FirewallRuleArgs
+    {
+        ResourceGroupName = resourceGroup.Name,
+        ServerName = databaseServer.Name,
+        FirewallRuleName = "AllowAzureServices",
+        StartIpAddress = "0.0.0.0",
+        EndIpAddress = "0.0.0.0",
+    });
+
+    var database = new PostgreSql.Database($"{baseName}-{stack}-{databaseName}", new PostgreSql.DatabaseArgs
+    {
+        ResourceGroupName = resourceGroup.Name,
+        ServerName = databaseServer.Name,
+        DatabaseName = databaseName,
+        Charset = "UTF8",
+        Collation = "en_US.utf8",
+    });
+
+
+    var databaseConnectionString = Output.Format(
+        $"Host={databaseServer.FullyQualifiedDomainName};Port=5432;Database={database.Name};Username={databaseAdministratorUsername};Password={databaseAdministratorPassword};SSL Mode=Require");
+
     // Build registries and secrets lists without nulls
     var registries = new List<RegistryCredentialsArgs>();
     var secrets = new List<SecretArgs>();
@@ -84,6 +131,11 @@ return await Deployment.RunAsync(() =>
         {
             Name = registryPasswordSecretName,
             Value = registryPassword,
+        });
+        secrets.Add(new SecretArgs
+        {
+            Name = databaseConnectionStringSecretName,
+            Value = databaseConnectionString,
         });
     }
     else if (!string.IsNullOrWhiteSpace(registryUsername) || registryPassword != null)
@@ -116,13 +168,21 @@ return await Deployment.RunAsync(() =>
                 {
                     Name = "app",
                     Image = containerImage,
+                    Env =
+                {
+                    new EnvironmentVarArgs
+                    {
+                        Name = databaseConnectionStringEnvironmentVariable,
+                        SecretRef = databaseConnectionStringSecretName,
+                    },
+                },
                     Resources = new ContainerResourcesArgs
                     {
                         Cpu = 0.25,
                         Memory = "0.5Gi",
                     },
                     ImageType = ImageType.ContainerImage,
-                },
+                }
             },
             Scale = new ScaleArgs
             {
@@ -140,34 +200,6 @@ return await Deployment.RunAsync(() =>
         {
             "configuration.targetLabel",
         },
-    });
-
-    var databaseServer = new PostgreSql.Server($"{baseName}-{stack}-postgres", new PostgreSql.ServerArgs
-    {
-        ResourceGroupName = resourceGroup.Name,
-        Location = resourceGroup.Location,
-        AdministratorLogin = databaseAdministratorUsername,
-        AdministratorLoginPassword = databaseAdministratorPassword,
-        Version = PostgreSql.PostgresMajorVersion.PostgresMajorVersion_16,
-        Sku = new PostgreSqlInputs.SkuArgs
-        {
-            Name = "Standard_B1ms",
-            Tier = PostgreSql.SkuTier.Burstable,
-        },
-        Storage = new PostgreSqlInputs.StorageArgs
-        {
-            StorageSizeGB = 32,
-        },
-        Tags = tags,
-    });
-
-    var database = new PostgreSql.Database($"{baseName}-{stack}-{databaseName}", new PostgreSql.DatabaseArgs
-    {
-        ResourceGroupName = resourceGroup.Name,
-        ServerName = databaseServer.Name,
-        DatabaseName = databaseName,
-        Charset = "UTF8",
-        Collation = "en_US.utf8",
     });
 
     return new Dictionary<string, object?>
