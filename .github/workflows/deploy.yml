@@ -57,7 +57,7 @@ jobs:
       - name: Set up Pulumi CLI
         uses: pulumi/actions@v7
         with:
-          pulumi-version: 3.112.0
+          pulumi-version: 3.268.0
 
       - name: Select Pulumi stack
         run: pulumi stack select ${{ inputs.environment }}
