@@ -1,7 +1,8 @@
 using Pulumi;
 using Pulumi.AzureNative.App;
 using Pulumi.AzureNative.App.Inputs;
-using Pulumi.AzureNative.Security;
+using PostgreSql = Pulumi.AzureNative.DBforPostgreSQL;
+using PostgreSqlInputs = Pulumi.AzureNative.DBforPostgreSQL.Inputs;
 using Resources = Pulumi.AzureNative.Resources;
 
 return await Deployment.RunAsync(() =>
@@ -16,6 +17,23 @@ return await Deployment.RunAsync(() =>
     var registryUsername = projectConfig.Get("registryUsername");
     var registryPassword = projectConfig.GetSecret("registryPassword");
     var stack = Deployment.Instance.StackName;
+
+    var databaseName = projectConfig.Get("databaseName") ?? "thunderbirds_game_state";
+    var databaseAdministratorUsername = projectConfig.Require("databaseAdministratorUsername");
+    var databaseAdministratorPassword = projectConfig.RequireSecret("databaseAdministratorPassword");
+
+    if (string.IsNullOrWhiteSpace(databaseName))
+    {
+        throw new InvalidOperationException("thunderbirds-azure-dev:databaseName cannot be empty.");
+    }
+
+    if (string.IsNullOrWhiteSpace(databaseAdministratorUsername))
+    {
+        throw new InvalidOperationException(
+            "thunderbirds-azure-dev:databaseAdministratorUsername " +
+            "cannot be empty.");
+    }
+
     const string registryPasswordSecretName = "registry-password";
 
     var tags = BuildTags(stack);
@@ -122,6 +140,34 @@ return await Deployment.RunAsync(() =>
         {
             "configuration.targetLabel",
         },
+    });
+
+    var databaseServer = new PostgreSql.Server($"{baseName}-{stack}-postgres", new PostgreSql.ServerArgs
+    {
+        ResourceGroupName = resourceGroup.Name,
+        Location = resourceGroup.Location,
+        AdministratorLogin = databaseAdministratorUsername,
+        AdministratorLoginPassword = databaseAdministratorPassword,
+        Version = PostgreSql.PostgresMajorVersion.PostgresMajorVersion_16,
+        Sku = new PostgreSqlInputs.SkuArgs
+        {
+            Name = "Standard_B1ms",
+            Tier = PostgreSql.SkuTier.Burstable,
+        },
+        Storage = new PostgreSqlInputs.StorageArgs
+        {
+            StorageSizeGB = 32,
+        },
+        Tags = tags,
+    });
+
+    var database = new PostgreSql.Database($"{baseName}-{stack}-{databaseName}", new PostgreSql.DatabaseArgs
+    {
+        ResourceGroupName = resourceGroup.Name,
+        ServerName = databaseServer.Name,
+        DatabaseName = databaseName,
+        Charset = "UTF8",
+        Collation = "en_US.utf8",
     });
 
     return new Dictionary<string, object?>

@@ -73,7 +73,13 @@ jobs:
 
       - name: Deploy to Azure
         run: |
-          pulumi up --yes --stack ${{ inputs.environment }}
+          OWNER="${GITHUB_REPOSITORY_OWNER,,}"
+          IMAGE="ghcr.io/$OWNER/${{ inputs.image_name }}:${{ inputs.image_tag }}"
+
+          pulumi up \
+            --yes \
+            --stack "${{ inputs.environment }}" \
+            --config "thunderbirds-azure-dev:containerImage=$IMAGE"
 
       - name: Get Deployment URI
         id: get-uri
