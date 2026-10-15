@@ -144,6 +144,7 @@ jobs:
     secrets: inherit
     needs:
       - docker-publish-app
+      - docker-publish-migrator
 
   smoke-tests:
     name: Run Smoke Tests
