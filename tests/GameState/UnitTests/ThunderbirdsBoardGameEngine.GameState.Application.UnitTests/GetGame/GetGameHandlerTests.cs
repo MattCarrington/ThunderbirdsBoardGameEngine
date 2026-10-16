@@ -9,8 +9,6 @@ namespace ThunderbirdsBoardGameEngine.GameState.Application.UnitTests.GetGame
 {
     public class GetGameHandlerTests
     {
-
-
         [Fact]
         public async Task Handle_ShouldReturnGame_WhenGameExistsAsync()
         {
