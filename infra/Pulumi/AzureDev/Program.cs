@@ -117,11 +117,20 @@ return await Deployment.RunAsync(() =>
 
     // Build registries and secrets lists without nulls
     var registries = new List<RegistryCredentialsArgs>();
-    var secrets = new List<SecretArgs>();
+
+    var secrets = new List<SecretArgs>
+    {
+        new()
+        {
+            Name = databaseConnectionStringSecretName,
+            Value = databaseConnectionString,
+        },
+    };
     if (!string.IsNullOrWhiteSpace(registryUsername) && registryPassword != null)
     {
-        var registryServer = TryGetRegistryServer(containerImage) ?? throw new InvalidOperationException(
-            "When using registry credentials, thunderbirds-azure-dev:containerImage must include an explicit registry server (for example, ghcr.io/owner/image:tag or myregistry.azurecr.io/image:tag).");
+        var registryServer = TryGetRegistryServer(containerImage)
+            ?? throw new InvalidOperationException(
+                "When using registry credentials, thunderbirds-azure-dev:containerImage must include an explicit registry server.");
 
         registries.Add(new RegistryCredentialsArgs
         {
@@ -129,15 +138,11 @@ return await Deployment.RunAsync(() =>
             Username = registryUsername,
             PasswordSecretRef = registryPasswordSecretName,
         });
+
         secrets.Add(new SecretArgs
         {
             Name = registryPasswordSecretName,
             Value = registryPassword,
-        });
-        secrets.Add(new SecretArgs
-        {
-            Name = databaseConnectionStringSecretName,
-            Value = databaseConnectionString,
         });
     }
     else if (!string.IsNullOrWhiteSpace(registryUsername) || registryPassword != null)
