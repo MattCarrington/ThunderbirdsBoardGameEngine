@@ -31,6 +31,7 @@ namespace ThunderbirdsBoardGameEngine.PlaywrightTests.Pages
             await confirmButton.WaitForAsync();
             await Assertions.Expect(confirmButton).ToBeEnabledAsync();
             await confirmButton.ClickAsync();
+            await AssertThunderbirdLocationAsync(thunderbirdName, location);
         }
 
         public async Task AssertPageDisplayedAsync()
