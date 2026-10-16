@@ -25,7 +25,7 @@ namespace ThunderbirdsBoardGameEngine.Api.Handlers
             if (exception is ThunderbirdMovementRejectedException movementRejectedException)
             {
                 _logger.LogWarning(
-                    "Requested Thunderbird was not found. TraceId = {TraceId}",
+                    "Requested Thunderbird movement was rejected. TraceId = {TraceId}",
                     httpContext.TraceIdentifier);
 
                 var problemDetails = _problemDetailsFactory.CreateProblemDetails(
