@@ -54,6 +54,29 @@
     ]
   },
   {
+    "name": "GameState.Contracts",
+    "package_id": "ThunderbirdsBoardGameEngine.GameState.Contracts",
+    "project_path": "src/GameState/ThunderbirdsBoardGameEngine.GameState.Contracts/ThunderbirdsBoardGameEngine.GameState.Contracts.csproj",
+    "source_paths": ["src/GameState/ThunderbirdsBoardGameEngine.GameState.Contracts"],
+    "central_packages": [],
+    "dependencies": []
+  },
+  {
+    "name": "GameState.Client",
+    "package_id": "ThunderbirdsBoardGameEngine.GameState.Client",
+    "project_path": "src/GameState/ThunderbirdsBoardGameEngine.GameState.Client/ThunderbirdsBoardGameEngine.GameState.Client.csproj",
+    "source_paths": ["src/GameState/ThunderbirdsBoardGameEngine.GameState.Client"],
+    "central_packages": [
+      "Microsoft.Extensions.Http",
+      "Microsoft.Extensions.Logging.Abstractions",
+      "Microsoft.Extensions.Options"
+    ],
+    "dependencies": [
+      "ThunderbirdsBoardGameEngine.Client.Core",
+      "ThunderbirdsBoardGameEngine.GameState.Contracts"
+    ]
+  },
+  {
     "name": "WireMock.Hosting",
     "package_id": "ThunderbirdsBoardGameEngine.WireMock.Hosting",
     "project_path": "tools/Common/ThunderbirdsBoardGameEngine.WireMock.Hosting/ThunderbirdsBoardGameEngine.WireMock.Hosting.csproj",
@@ -69,6 +92,17 @@
     "central_packages": [],
     "dependencies": [
       "ThunderbirdsBoardGameEngine.Rules.Contracts",
+      "ThunderbirdsBoardGameEngine.WireMock.Hosting"
+    ]
+  },
+  {
+    "name": "GameState.WireMock",
+    "package_id": "ThunderbirdsBoardGameEngine.GameState.WireMock",
+    "project_path": "tools/GameState/ThunderbirdsBoardGameEngine.GameState.WireMock/ThunderbirdsBoardGameEngine.GameState.WireMock.csproj",
+    "source_paths": ["tools/GameState/ThunderbirdsBoardGameEngine.GameState.WireMock"],
+    "central_packages": [],
+    "dependencies": [
+      "ThunderbirdsBoardGameEngine.GameState.Contracts",
       "ThunderbirdsBoardGameEngine.WireMock.Hosting"
     ]
   }
