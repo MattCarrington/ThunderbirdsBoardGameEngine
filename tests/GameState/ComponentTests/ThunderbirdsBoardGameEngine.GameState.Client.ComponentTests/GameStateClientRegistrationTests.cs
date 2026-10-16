@@ -16,7 +16,7 @@ namespace ThunderbirdsBoardGameEngine.GameState.Client.ComponentTests
             var cfg = new ConfigurationBuilder()
                 .AddInMemoryCollection(new Dictionary<string, string?>
                 {
-                    ["GameClient:BaseAddress"] = "http:/example.com"
+                    ["GameStateClient:BaseAddress"] = "http:/example.com"
                 })
                 .Build();
 
