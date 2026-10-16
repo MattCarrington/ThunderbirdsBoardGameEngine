@@ -55,9 +55,9 @@ run_test \
   '["ThunderbirdsBoardGameEngine.Rules.WireMock"]'
 
 run_test \
-  "Client.Core selects Rules.Client" \
+  "Client.Core selects Rules.Client and GameState.Client" \
   "src/Common/ThunderbirdsBoardGameEngine.Client.Core/ApiResult.cs" \
-  '["ThunderbirdsBoardGameEngine.Client.Core","ThunderbirdsBoardGameEngine.Rules.Client"]'
+  '["ThunderbirdsBoardGameEngine.Client.Core","ThunderbirdsBoardGameEngine.Rules.Client","ThunderbirdsBoardGameEngine.GameState.Client"]'
 
 run_test \
   "WireMock.Hosting selects Rules.WireMock & GameState.WireMock" \
