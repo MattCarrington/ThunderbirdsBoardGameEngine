@@ -86,9 +86,9 @@ run_test \
   '+    <PackageVersion Include="Microsoft.Extensions.Http" Version="8.0.2" />'
 
 run_test \
-  "Client.Core dependency propagates to Rules.Client" \
+  "Client.Core dependency propagates to Rules.Client and GameState.Client" \
   "Directory.Packages.props" \
-  '["ThunderbirdsBoardGameEngine.Client.Core","ThunderbirdsBoardGameEngine.Rules.Client"]' \
+  '["ThunderbirdsBoardGameEngine.Client.Core","ThunderbirdsBoardGameEngine.Rules.Client","ThunderbirdsBoardGameEngine.GameState.Client"]' \
   '+    <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="8.0.2" />'
 
 run_test \
