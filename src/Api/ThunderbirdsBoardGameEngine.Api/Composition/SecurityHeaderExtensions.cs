@@ -22,8 +22,10 @@
             });
         }
 
-        private static bool IsGameRequest(PathString path) =>
-            path.StartsWithSegments("/api/games")
-            || path.StartsWithSegments("/games");
+        private static bool IsGameRequest(PathString path)
+        {
+            return path.StartsWithSegments("/api/games")
+                || path.StartsWithSegments("/games");
+        }
     }
 }
