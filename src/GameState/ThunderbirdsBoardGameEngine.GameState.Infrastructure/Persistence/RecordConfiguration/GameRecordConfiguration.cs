@@ -22,6 +22,10 @@ namespace ThunderbirdsBoardGameEngine.GameState.Infrastructure.Persistence.Recor
                 .HasMaxLength(50)
                 .IsRequired();
 
+            builder.Property(game => game.StateVersion)
+                .IsRequired()
+                .IsConcurrencyToken();
+
             builder.HasMany(game => game.ThunderbirdMachineStates)
                 .WithOne(machine => machine.Game)
                 .HasForeignKey(machine => machine.GameId)
