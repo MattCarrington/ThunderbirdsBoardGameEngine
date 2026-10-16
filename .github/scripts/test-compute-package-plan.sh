@@ -60,9 +60,9 @@ run_test \
   '["ThunderbirdsBoardGameEngine.Client.Core","ThunderbirdsBoardGameEngine.Rules.Client"]'
 
 run_test \
-  "WireMock.Hosting selects Rules.WireMock" \
+  "WireMock.Hosting selects Rules.WireMock & GameState.WireMock" \
   "tools/Common/ThunderbirdsBoardGameEngine.WireMock.Hosting/Server.cs" \
-  '["ThunderbirdsBoardGameEngine.WireMock.Hosting","ThunderbirdsBoardGameEngine.Rules.WireMock"]'
+  '["ThunderbirdsBoardGameEngine.WireMock.Hosting","ThunderbirdsBoardGameEngine.Rules.WireMock","ThunderbirdsBoardGameEngine.GameState.WireMock"]'
 
 run_test \
   "ReferenceData.Core selects Runtime" \
