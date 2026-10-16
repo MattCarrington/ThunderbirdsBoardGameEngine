@@ -26,6 +26,8 @@ namespace ThunderbirdsBoardGameEngine.UI.IntegrationTests.Pages
 
         public GameDashboardPageTests(WireMockFixture wireMockFixture)
         {
+            Register(this);
+
             var host = wireMockFixture.Host;
             host.Reset();
 
@@ -212,6 +214,17 @@ namespace ThunderbirdsBoardGameEngine.UI.IntegrationTests.Pages
                 Assert.Contains("North Atlantic", cut.Markup);
                 Assert.DoesNotContain("South Pacific", cut.Markup);
             });
+        }
+
+        private static void Register(BunitContext context)
+        {
+            var module = context.JSInterop.SetupModule("./js/dialog.js");
+
+            module.SetupVoid("show", _ => true)
+                .SetVoidResult();
+
+            module.SetupVoid("close", _ => true)
+                .SetVoidResult();
         }
     }
 }

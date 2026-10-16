@@ -1,10 +1,8 @@
 ﻿@using ThunderbirdsBoardGameEngine.UI.Features.Shared.Components
 
-<div class="modal d-block"
-     tabindex="-1"
-     role="dialog"
-     aria-modal="true"
-     aria-labelledby="move-dialog-title">
+<dialog @ref="_dialog"
+        class="modal-dialog-native"
+        aria-labelledby="move-dialog-title">
 
     <div class="modal-dialog">
         <div class="modal-content">
@@ -69,6 +67,4 @@
             </div>
         </div>
     </div>
-</div>
-
-<div class="modal-backdrop show"></div>
+</dialog>

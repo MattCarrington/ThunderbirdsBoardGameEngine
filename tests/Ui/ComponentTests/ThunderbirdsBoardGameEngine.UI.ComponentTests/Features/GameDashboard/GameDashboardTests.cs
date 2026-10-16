@@ -188,6 +188,8 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Features.GameDashboard
             var context = new GameDashboardPageTestContext(this);
             context.GameService.GetGameAsync(gameId).Returns(game);
 
+            DialogJsInterop.Register(this);
+
             var cut = Render<GameDashboardPage>(parameters => parameters
                 .Add(p => p.GameId, gameId));
 
@@ -247,6 +249,8 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Features.GameDashboard
                 .Returns(new ThunderbirdMovementResult(
                     ThunderbirdMovementOutcome.Success,
                     movedGame));
+
+            DialogJsInterop.Register(this);
 
             var cut = Render<GameDashboardPage>(parameters => parameters
                 .Add(p => p.GameId, gameId));
@@ -322,6 +326,8 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Features.GameDashboard
                 .MoveThunderbirdAsync(gameId, "thunderbird-1", "europe")
                 .Returns(new ThunderbirdMovementResult(outcome, null));
 
+            DialogJsInterop.Register(this);
+
             var cut = Render<GameDashboardPage>(parameters => parameters
                 .Add(p => p.GameId, gameId));
 
@@ -366,6 +372,8 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Features.GameDashboard
                     new("south-pacific", "South Pacific"),
                     new("europe", "Europe")
                 ]);
+
+            DialogJsInterop.Register(this);
 
             var cut = Render<GameDashboardPage>(parameters => parameters
                 .Add(p => p.GameId, gameId));
@@ -416,6 +424,8 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Features.GameDashboard
             context.MovementClientService
                 .GetAccessibleLocationsAsync("thunderbird-1")
                 .ThrowsAsync(new HttpRequestException());
+
+            DialogJsInterop.Register(this);
 
             // Act
             var cut = Render<GameDashboardPage>(parameters => parameters

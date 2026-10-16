@@ -1,5 +1,6 @@
 ﻿using Bunit;
 using ThunderbirdsBoardGameEngine.UI.ComponentTests.Factories;
+using ThunderbirdsBoardGameEngine.UI.ComponentTests.Fixtures;
 using ThunderbirdsBoardGameEngine.UI.Features.GameDashboard.Components;
 using ThunderbirdsBoardGameEngine.UI.Features.Shared.ViewModels;
 using Xunit;
@@ -8,6 +9,11 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Features.GameDashboard.C
 {
     public class MoveThunderbirdDialogTests : BunitContext
     {
+        public MoveThunderbirdDialogTests()
+        {
+            DialogJsInterop.Register(this);
+        }
+
         [Fact]
         public void MoveThunderbirdDialogShouldRenderCorrectly()
         {
