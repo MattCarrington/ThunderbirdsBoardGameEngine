@@ -6,8 +6,7 @@ namespace ThunderbirdsBoardGameEngine.GameState.Infrastructure.Persistence.Recor
 {
     internal sealed class ThunderbirdMachineStateRecordConfiguration : IEntityTypeConfiguration<ThunderbirdMachineStateRecord>
     {
-        public void Configure(
-            EntityTypeBuilder<ThunderbirdMachineStateRecord> builder)
+        public void Configure(EntityTypeBuilder<ThunderbirdMachineStateRecord> builder)
         {
             builder.ToTable("game_machine_positions");
 

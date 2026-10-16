@@ -6,8 +6,7 @@ namespace ThunderbirdsBoardGameEngine.GameState.Infrastructure.Persistence.Recor
 {
     internal sealed class CharacterStateRecordConfiguration : IEntityTypeConfiguration<CharacterStateRecord>
     {
-        public void Configure(
-            EntityTypeBuilder<CharacterStateRecord> builder)
+        public void Configure(EntityTypeBuilder<CharacterStateRecord> builder)
         {
             builder.ToTable("game_character_assignments");
 

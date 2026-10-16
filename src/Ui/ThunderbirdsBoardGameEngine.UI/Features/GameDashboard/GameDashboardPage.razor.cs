@@ -64,8 +64,7 @@ public partial class GameDashboardPage
         }
     }
 
-    private async Task BeginMoveAsync(
-        ThunderbirdMachinesDashboardViewModel machine)
+    private async Task BeginMoveAsync(ThunderbirdMachinesDashboardViewModel machine)
     {
         _selectedMachine = machine;
         _destinations = [];

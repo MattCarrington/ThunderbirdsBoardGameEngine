@@ -16,13 +16,10 @@ namespace ThunderbirdsBoardGameEngine.GameState.Infrastructure
         public static IServiceCollection AddGameStatePersistence(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddOptions<GameStatePersistenceOptions>()
-                .Bind(configuration.GetSection(
-                    GameStatePersistenceOptions.SectionName))
+                .Bind(configuration.GetSection(GameStatePersistenceOptions.SectionName))
                 .ValidateOnStart();
 
-            services.AddSingleton<
-                IValidateOptions<GameStatePersistenceOptions>,
-                GameStatePersistenceOptionsValidator>();
+            services.AddSingleton<IValidateOptions<GameStatePersistenceOptions>, GameStatePersistenceOptionsValidator>();
 
             services.AddDbContext<GameStateDbContext>((serviceProvider, options) =>
             {
