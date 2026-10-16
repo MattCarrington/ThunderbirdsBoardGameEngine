@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ThunderbirdsBoardGameEngine.GameState.Application;
+using ThunderbirdsBoardGameEngine.GameState.Application.Exceptions;
 using ThunderbirdsBoardGameEngine.GameState.Domain;
 using ThunderbirdsBoardGameEngine.GameState.Infrastructure.Persistence.Records;
 using ThunderbirdsBoardGameEngine.ReferenceData.Core.Identities;
@@ -46,20 +47,19 @@ namespace ThunderbirdsBoardGameEngine.GameState.Infrastructure.Persistence
             ArgumentNullException.ThrowIfNull(game, nameof(game));
 
             var persistedGame = await _dbContext.Games
-               .AsSplitQuery()
-               .Include(record => record.CharacterStates)
-               .Include(record => record.ThunderbirdMachineStates)
-               .SingleOrDefaultAsync(
-                   record => record.Id == game.Id,
-                   cancellationToken)
-                       ?? throw new DbUpdateConcurrencyException(
-                           $"Game {game.Id} no longer exists.");
+                .AsSplitQuery()
+                .Include(record => record.CharacterStates)
+                .Include(record => record.ThunderbirdMachineStates)
+                .SingleOrDefaultAsync(
+                    record => record.Id == game.Id,
+                    cancellationToken)
+                ?? throw new GameNotFoundException();
 
             var expectedVersion = game.StateVersion;
 
             if (persistedGame.StateVersion != expectedVersion)
             {
-                throw new DbUpdateConcurrencyException();
+                throw new GameStateConcurrencyException();
             }
 
             var versionEntry = _dbContext
@@ -72,7 +72,14 @@ namespace ThunderbirdsBoardGameEngine.GameState.Infrastructure.Persistence
             UpdateMachineStates(game, persistedGame);
             UpdateCharacterStates(game, persistedGame);
 
-            await _dbContext.SaveChangesAsync(cancellationToken);
+            try
+            {
+                await _dbContext.SaveChangesAsync(cancellationToken);
+            }
+            catch (DbUpdateConcurrencyException exception)
+            {
+                throw new GameStateConcurrencyException(exception);
+            }
         }
 
         private static void UpdateMachineStates(Game game, GameRecord persistedGame)
