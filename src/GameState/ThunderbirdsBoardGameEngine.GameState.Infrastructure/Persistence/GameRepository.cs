@@ -52,8 +52,22 @@ namespace ThunderbirdsBoardGameEngine.GameState.Infrastructure.Persistence
                .SingleOrDefaultAsync(
                    record => record.Id == game.Id,
                    cancellationToken)
-               ?? throw new DbUpdateConcurrencyException(
-                   $"Game {game.Id} no longer exists.");
+                       ?? throw new DbUpdateConcurrencyException(
+                           $"Game {game.Id} no longer exists.");
+
+            var expectedVersion = game.StateVersion;
+
+            if (persistedGame.StateVersion != expectedVersion)
+            {
+                throw new DbUpdateConcurrencyException();
+            }
+
+            var versionEntry = _dbContext
+                .Entry(persistedGame)
+                .Property(record => record.StateVersion);
+
+            versionEntry.OriginalValue = expectedVersion;
+            versionEntry.CurrentValue = checked(expectedVersion + 1);
 
             UpdateMachineStates(game, persistedGame);
             UpdateCharacterStates(game, persistedGame);
