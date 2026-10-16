@@ -6,6 +6,7 @@ services:
       dockerfile: src/Api/ThunderbirdsBoardGameEngine.Api/Dockerfile
     environment:
       ASPNETCORE_URLS: http://+:8080
+      GameState__Persistence__ConnectionString: Host=game-state-db;Port=5432;Database=thunderbirds_game_state;Username=postgres;Password=${GAME_STATE_DB_PASSWORD};GSS Encryption Mode=Disable
     expose:
       - "8080"
     depends_on:
@@ -22,6 +23,8 @@ services:
     build:
       context: ..
       dockerfile: src/GameState/ThunderbirdsBoardGameEngine.GameState.EF.DatabaseMigrator/Dockerfile
+    environment:
+      GameState__Persistence__ConnectionString: Host=game-state-db;Port=5432;Database=thunderbirds_game_state;Username=postgres;Password=${GAME_STATE_DB_PASSWORD};GSS Encryption Mode=Disable
     depends_on:
       game-state-db:
         condition: service_healthy
