@@ -11,11 +11,15 @@ namespace ThunderbirdsBoardGameEngine.GameState.Domain
         private readonly ReadOnlyDictionary<ThunderbirdCode, LocationCode> _machinesView;
         private readonly ReadOnlyDictionary<CharacterCode, ThunderbirdCode> _charactersView;
 
+        private const int InitialStateVersion = 0;
+
         public Guid Id { get; private set; }
 
         public DateTimeOffset CreatedAtUtc { get; private set; }
 
         public string SetupVersion { get; private set; }
+
+        public long StateVersion { get; private set; }
 
         public IReadOnlyDictionary<ThunderbirdCode, LocationCode> Machines => _machinesView;
 
@@ -25,12 +29,14 @@ namespace ThunderbirdsBoardGameEngine.GameState.Domain
             Guid id,
             DateTimeOffset createdAtUtc,
             string setupVersion,
+            long stateVersion,
             IReadOnlyDictionary<ThunderbirdCode, LocationCode> machines,
             IReadOnlyDictionary<CharacterCode, ThunderbirdCode> characters)
         {
             Id = id;
             CreatedAtUtc = createdAtUtc;
             SetupVersion = setupVersion;
+            StateVersion = stateVersion;
 
             _machinesState =
                 new Dictionary<ThunderbirdCode, LocationCode>(machines);
@@ -58,6 +64,7 @@ namespace ThunderbirdsBoardGameEngine.GameState.Domain
                 id,
                 createdAtUtc,
                 setupVersion,
+                InitialStateVersion,
                 machines,
                 characters);
         }
@@ -66,6 +73,7 @@ namespace ThunderbirdsBoardGameEngine.GameState.Domain
             Guid id,
             DateTimeOffset createdAtUtc,
             string setupVersion,
+            long stateVersion,
             IReadOnlyDictionary<ThunderbirdCode, LocationCode> machines,
             IReadOnlyDictionary<CharacterCode, ThunderbirdCode> characters)
         {
@@ -73,6 +81,7 @@ namespace ThunderbirdsBoardGameEngine.GameState.Domain
                 id,
                 createdAtUtc,
                 setupVersion,
+                stateVersion,
                 machines,
                 characters);
         }

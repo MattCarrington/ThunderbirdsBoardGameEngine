@@ -23,6 +23,7 @@ namespace ThunderbirdsBoardGameEngine.GameState.Infrastructure.Persistence
                 Id = game.Id,
                 CreatedAtUtc = game.CreatedAtUtc,
                 SetupVersion = game.SetupVersion,
+                StateVersion = game.StateVersion,
                 CharacterStates = characterStates,
                 ThunderbirdMachineStates = thunderbirdMachineStates
             };
@@ -42,7 +43,7 @@ namespace ThunderbirdsBoardGameEngine.GameState.Infrastructure.Persistence
                     ms => new ThunderbirdCode(ms.ThunderbirdCode),
                     ms => new LocationCode(ms.LocationCode));
 
-            var game = Game.Restore(gameRecord.Id, gameRecord.CreatedAtUtc, gameRecord.SetupVersion, machines, characters);
+            var game = Game.Restore(gameRecord.Id, gameRecord.CreatedAtUtc, gameRecord.SetupVersion, gameRecord.StateVersion, machines, characters);
 
             return game;
         }

@@ -15,6 +15,7 @@ namespace ThunderbirdsBoardGameEngine.GameState.Infrastructure.UnitTests
             var gameId = Guid.NewGuid();
             var createdAtUtc = DateTime.UtcNow;
             var setupVersion = "v1";
+            var stateVersion = 17;
 
             var characters = new Dictionary<CharacterCode, ThunderbirdCode>
             {
@@ -28,7 +29,7 @@ namespace ThunderbirdsBoardGameEngine.GameState.Infrastructure.UnitTests
                 { new ThunderbirdCode("TB2"), new LocationCode("LOC2") }
             };
 
-            var game = Game.Create(gameId, createdAtUtc, setupVersion, machines, characters);
+            var game = Game.Restore(gameId, createdAtUtc, setupVersion, stateVersion, machines, characters);
 
             var mapper = new GameRecordMapper();
 
@@ -39,6 +40,7 @@ namespace ThunderbirdsBoardGameEngine.GameState.Infrastructure.UnitTests
             Assert.Equal(gameId, gameRecord.Id);
             Assert.Equal(createdAtUtc, gameRecord.CreatedAtUtc);
             Assert.Equal(setupVersion, gameRecord.SetupVersion);
+            Assert.Equal(stateVersion, gameRecord.StateVersion);
             Assert.Equal(characters.Count, gameRecord.CharacterStates.Count);
             Assert.Equal(machines.Count, gameRecord.ThunderbirdMachineStates.Count);
         }
@@ -50,6 +52,7 @@ namespace ThunderbirdsBoardGameEngine.GameState.Infrastructure.UnitTests
             var gameId = Guid.NewGuid();
             var createdAtUtc = DateTime.UtcNow;
             var setupVersion = "v1";
+            var stateVersion = 57;
 
             var characterStates = new List<CharacterStateRecord>
             {
@@ -68,6 +71,7 @@ namespace ThunderbirdsBoardGameEngine.GameState.Infrastructure.UnitTests
                 Id = gameId,
                 CreatedAtUtc = createdAtUtc,
                 SetupVersion = setupVersion,
+                StateVersion = stateVersion,
                 CharacterStates = characterStates,
                 ThunderbirdMachineStates = machineStates
             };
@@ -81,6 +85,7 @@ namespace ThunderbirdsBoardGameEngine.GameState.Infrastructure.UnitTests
             Assert.Equal(gameId, game.Id);
             Assert.Equal(createdAtUtc, game.CreatedAtUtc);
             Assert.Equal(setupVersion, game.SetupVersion);
+            Assert.Equal(stateVersion, game.StateVersion);
             Assert.Equal(characterStates.Count, game.Characters.Count);
             Assert.Equal(machineStates.Count, game.Machines.Count);
         }

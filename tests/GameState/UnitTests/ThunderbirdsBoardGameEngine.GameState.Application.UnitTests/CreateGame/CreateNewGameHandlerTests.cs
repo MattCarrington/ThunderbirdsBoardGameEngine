@@ -35,6 +35,7 @@ namespace ThunderbirdsBoardGameEngine.GameState.Application.UnitTests.CreateGame
 
             Assert.NotNull(result);
             Assert.NotNull(result.GameSession);
+            Assert.Equal(0, result.GameSession.StateVersion);
             Assert.Equal(6, result.GameSession.Machines.Count);
             Assert.Equal(6, result.GameSession.Characters.Count);
 

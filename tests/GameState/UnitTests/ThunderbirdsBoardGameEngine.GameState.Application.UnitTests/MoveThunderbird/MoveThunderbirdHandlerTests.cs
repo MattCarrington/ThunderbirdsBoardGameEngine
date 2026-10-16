@@ -85,12 +85,12 @@ namespace ThunderbirdsBoardGameEngine.GameState.Application.UnitTests.MoveThunde
                 id: Guid.NewGuid(),
                 createdAtUtc: DateTimeOffset.UtcNow,
                 setupVersion: "1.0",
+                stateVersion: 1,
                 machines: new Dictionary<ThunderbirdCode, LocationCode>
                 {
                     { new ThunderbirdCode("thunderbird-1"), new LocationCode("location-1") }
-                },
-                characters: new Dictionary<CharacterCode, ThunderbirdCode>()
-            );
+                }, characters: new Dictionary<CharacterCode, ThunderbirdCode>()
+);
         }
 
         private static MoveThunderbirdCommand CreateCommand()

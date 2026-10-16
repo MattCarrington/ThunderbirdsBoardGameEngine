@@ -9,6 +9,8 @@ namespace ThunderbirdsBoardGameEngine.GameState.Application.UnitTests.GetGame
 {
     public class GetGameHandlerTests
     {
+
+
         [Fact]
         public async Task Handle_ShouldReturnGame_WhenGameExistsAsync()
         {
@@ -16,6 +18,7 @@ namespace ThunderbirdsBoardGameEngine.GameState.Application.UnitTests.GetGame
             var gameId = Guid.NewGuid();
             var createdAtUtc = DateTime.UtcNow;
             var setupVersion = "v1";
+            var stateVersion = 1;
 
             var characters = new Dictionary<CharacterCode, ThunderbirdCode>
             {
@@ -29,7 +32,7 @@ namespace ThunderbirdsBoardGameEngine.GameState.Application.UnitTests.GetGame
                 { new ThunderbirdCode("TB2"), new LocationCode("LOC2") }
             };
 
-            var game = Game.Restore(gameId, createdAtUtc, setupVersion, machines, characters);
+            var game = Game.Restore(gameId, createdAtUtc, setupVersion, stateVersion, machines, characters);
 
             var handler = CreateHandler(game);
 
