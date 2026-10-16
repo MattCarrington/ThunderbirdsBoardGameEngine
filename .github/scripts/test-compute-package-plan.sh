@@ -55,12 +55,27 @@ run_test \
   '["ThunderbirdsBoardGameEngine.Rules.WireMock"]'
 
 run_test \
-  "Client.Core selects Rules.Client and GameState.Client" \
+  "GameState.Contracts selects its consumers" \
+  "src/GameState/ThunderbirdsBoardGameEngine.GameState.Contracts/Dtos/Response.cs" \
+  '["ThunderbirdsBoardGameEngine.GameState.Contracts","ThunderbirdsBoardGameEngine.GameState.Client","ThunderbirdsBoardGameEngine.GameState.WireMock"]'
+
+run_test \
+  "GameState.Client selects only itself" \
+  "src/GameState/ThunderbirdsBoardGameEngine.GameState.Client/GameStateClient.cs" \
+  '["ThunderbirdsBoardGameEngine.GameState.Client"]'
+
+run_test \
+  "GameState.WireMock selects only itself" \
+  "tools/GameState/ThunderbirdsBoardGameEngine.GameState.WireMock/GameStateStub.cs" \
+  '["ThunderbirdsBoardGameEngine.GameState.WireMock"]'
+
+run_test \
+  "Client.Core selects both clients" \
   "src/Common/ThunderbirdsBoardGameEngine.Client.Core/ApiResult.cs" \
   '["ThunderbirdsBoardGameEngine.Client.Core","ThunderbirdsBoardGameEngine.Rules.Client","ThunderbirdsBoardGameEngine.GameState.Client"]'
 
 run_test \
-  "WireMock.Hosting selects Rules.WireMock & GameState.WireMock" \
+  "WireMock.Hosting selects both WireMock packages" \
   "tools/Common/ThunderbirdsBoardGameEngine.WireMock.Hosting/Server.cs" \
   '["ThunderbirdsBoardGameEngine.WireMock.Hosting","ThunderbirdsBoardGameEngine.Rules.WireMock","ThunderbirdsBoardGameEngine.GameState.WireMock"]'
 
@@ -80,21 +95,21 @@ run_test \
   '["ThunderbirdsBoardGameEngine.ReferenceData.Runtime"]'
 
 run_test \
-  "Rules.Client dependency selects Rules.Client" \
+  "Shared HTTP dependency selects both clients" \
   "Directory.Packages.props" \
-  '["ThunderbirdsBoardGameEngine.Rules.Client"]' \
+  '["ThunderbirdsBoardGameEngine.Rules.Client","ThunderbirdsBoardGameEngine.GameState.Client"]' \
   '+    <PackageVersion Include="Microsoft.Extensions.Http" Version="8.0.2" />'
 
 run_test \
-  "Client.Core dependency propagates to Rules.Client and GameState.Client" \
+  "Client.Core dependency propagates to both clients" \
   "Directory.Packages.props" \
   '["ThunderbirdsBoardGameEngine.Client.Core","ThunderbirdsBoardGameEngine.Rules.Client","ThunderbirdsBoardGameEngine.GameState.Client"]' \
   '+    <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="8.0.2" />'
 
 run_test \
-  "WireMock.Hosting dependency propagates to Rules.WireMock" \
+  "WireMock.Hosting dependency propagates to both WireMock packages" \
   "Directory.Packages.props" \
-  '["ThunderbirdsBoardGameEngine.WireMock.Hosting","ThunderbirdsBoardGameEngine.Rules.WireMock"]' \
+  '["ThunderbirdsBoardGameEngine.WireMock.Hosting","ThunderbirdsBoardGameEngine.Rules.WireMock","ThunderbirdsBoardGameEngine.GameState.WireMock"]' \
   '+    <PackageVersion Include="WireMock.Net" Version="1.20.0" />'
 
 run_test \
