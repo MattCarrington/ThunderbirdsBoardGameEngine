@@ -1,10 +1,14 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.TestHost;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.DependencyModel;
 using System.Net;
 using System.Net.Http.Json;
 using System.Text.Json;
 using ThunderbirdsBoardGameEngine.Api.ComponentTests.Factories;
 using ThunderbirdsBoardGameEngine.GameState.Application;
+using ThunderbirdsBoardGameEngine.GameState.Application.Exceptions;
 using ThunderbirdsBoardGameEngine.GameState.Contracts.Dtos.V1;
 using ThunderbirdsBoardGameEngine.GameState.Contracts.Dtos.V1.ThunderbirdMachines;
 using ThunderbirdsBoardGameEngine.GameState.Domain;
@@ -19,6 +23,7 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints.GameState.V1
 {
     public class MoveThunderbirdTests : IClassFixture<ApiComponentWebApplicationFactory>
     {
+        private readonly ApiComponentWebApplicationFactory _factory;
         private readonly HttpClient _httpClient;
         private readonly IGameRepository _repository;
 
@@ -26,6 +31,7 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints.GameState.V1
 
         public MoveThunderbirdTests(ApiComponentWebApplicationFactory factory)
         {
+            _factory = factory;
             _httpClient = factory.CreateClient();
             _repository = factory.Repository;
         }
@@ -370,6 +376,74 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints.GameState.V1
             var details = await ProblemDetailsAssertions.AssertBadRequestAsync(response, "Bad request.");
 
             Assert.Equal("The provided GUID is empty.", details.Detail);
+        }
+
+        [Fact]
+        public async Task ConcurrentMoveReturnsConflict()
+        {
+            // Arrange
+            var gameId = Guid.NewGuid();
+
+            var game = new StandardGameSetupFactory()
+                .Create(gameId, DateTimeOffset.UtcNow);
+
+            await _repository.CreateNewGameSession(game, TestContext.Current.CancellationToken);
+
+            using var conflictFactory = _factory.WithWebHostBuilder(builder =>
+            {
+                builder.ConfigureTestServices(services =>
+                {
+                    services.RemoveAll<IGameRepository>();
+
+                    services.AddSingleton<IGameRepository>(
+                        new ConcurrencyFailingGameRepository(
+                            _factory.Repository));
+                });
+            });
+
+            using var client = conflictFactory.CreateClient();
+
+            var dto = new MoveThunderbirdMachineRequestDto
+            {
+                Destination = "the-sun"
+            };
+
+            var route = GameStateRoutes.MoveThunderbird(gameId, KnownThunderbirdCodes.Thunderbird3.Value);
+
+            using var request = new HttpRequestMessage(HttpMethod.Post, route);
+            request.Headers.Add("X-API-Version", ApiVersion.ToString());
+            request.Content = JsonContent.Create(dto);
+
+            // Act
+            using var response = await client.SendAsync(request, TestContext.Current.CancellationToken);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.Conflict, response.StatusCode);
+        }
+
+        private sealed class ConcurrencyFailingGameRepository : IGameRepository
+        {
+            private readonly IGameRepository _inner;
+
+            public ConcurrencyFailingGameRepository(IGameRepository inner)
+            {
+                _inner = inner;
+            }
+
+            public Task CreateNewGameSession(Game game, CancellationToken cancellationToken)
+            {
+                return _inner.CreateNewGameSession(game, cancellationToken);
+            }
+
+            public Task<Game?> GetGameSessionById(Guid gameId, CancellationToken cancellationToken)
+            {
+                return _inner.GetGameSessionById(gameId, cancellationToken);
+            }
+
+            public Task UpdateGameSession(Game game, CancellationToken cancellationToken)
+            {
+                throw new GameStateConcurrencyException();
+            }
         }
     }
 }

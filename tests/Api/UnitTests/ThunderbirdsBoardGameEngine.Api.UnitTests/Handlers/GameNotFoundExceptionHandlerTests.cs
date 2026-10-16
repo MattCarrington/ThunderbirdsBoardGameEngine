@@ -10,7 +10,7 @@ using Xunit;
 
 namespace ThunderbirdsBoardGameEngine.Api.UnitTests.Handlers
 {
-    public class GameNotFoundExceptionHandlerTests
+    public partial class GameNotFoundExceptionHandlerTests
     {
         [Fact]
         public async Task TryHandleAsync_WhenGameNotFoundException_ReturnsTrueAsync()

@@ -14,6 +14,7 @@ namespace ThunderbirdsBoardGameEngine.Api.Composition
             services.AddExceptionHandler<ThunderbirdMachineNotFoundExceptionHandler>();
             services.AddExceptionHandler<ThunderbirdMovementRejectedExceptionHandler>();
             services.AddExceptionHandler<GameNotFoundExceptionHandler>();
+            services.AddExceptionHandler<GameStateConcurrencyExceptionHandler>();
             services.AddExceptionHandler<UnhandledExceptionHandler>();
 
             return services;
