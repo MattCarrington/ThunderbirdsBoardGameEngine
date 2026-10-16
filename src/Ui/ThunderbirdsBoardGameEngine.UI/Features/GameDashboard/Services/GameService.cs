@@ -80,13 +80,4 @@ namespace ThunderbirdsBoardGameEngine.UI.Features.GameDashboard.Services
                 "The Thunderbird Machine could not be moved.");
         }
     }
-
-    public enum ThunderbirdMovementOutcome
-    {
-        Success,
-        Rejected,
-        NotFound
-    }
-
-    public sealed record ThunderbirdMovementResult(ThunderbirdMovementOutcome Outcome, GameDashboardViewModel? UpdatedGameState = null);
 }
