@@ -2,7 +2,7 @@
 
 ## Status
 
-Planned model for the persisted game dashboard vertical slice.
+Implemented and deployed to the development environment.
 
 ## Responsibility
 
@@ -135,5 +135,7 @@ Two distinct operations are anticipated but not included in the first slice:
 
 - **Move Thunderbird Machine** changes a machine's location and therefore the
   derived location of everyone aboard it.
+  **Note:** This was included in the first slice to prove updates as part of 
+  persisting game state
 - **Transfer Characters** atomically changes the machine assignments of one or
   more characters while preserving all assignment invariants.
