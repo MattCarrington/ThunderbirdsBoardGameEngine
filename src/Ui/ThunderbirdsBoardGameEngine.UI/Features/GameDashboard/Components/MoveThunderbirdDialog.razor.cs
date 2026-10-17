@@ -34,7 +34,7 @@ namespace ThunderbirdsBoardGameEngine.UI.Features.GameDashboard.Components
         [JSInvokable]
         public Task HandleDialogCancelled()
         {
-            return Cancelled.InvokeAsync();
+            return CancelAsync();
         }
 
         private ElementReference _dialog;
@@ -87,6 +87,11 @@ namespace ThunderbirdsBoardGameEngine.UI.Features.GameDashboard.Components
 
         private async Task CancelAsync()
         {
+            if (IsMoving)
+            {
+                return;
+            }
+
             if (_dialogModule is not null)
             {
                 await _dialogModule.InvokeVoidAsync(

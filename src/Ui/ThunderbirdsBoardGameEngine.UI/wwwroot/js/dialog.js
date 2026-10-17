@@ -3,9 +3,12 @@
         return;
     }
 
-    dialog.addEventListener("cancel", () => {
-        componentReference.invokeMethodAsync("HandleDialogCancelled");
-    }, { once: true });
+    dialog.addEventListener("cancel", event => {
+        event.preventDefault();
+
+        componentReference.invokeMethodAsync(
+            "HandleDialogCancelled");
+    });
 
     dialog.showModal();
 }

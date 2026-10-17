@@ -450,5 +450,60 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Features.GameDashboard
             await context.GameService.DidNotReceiveWithAnyArgs()
                 .MoveThunderbirdAsync(default, default!, default!);
         }
+
+        [Fact]
+        public async Task CancellingDialogWhileMovingDoesNotRaiseCancelled()
+        {
+            // Arrange
+            var cancelled = false;
+
+            DialogJsInterop.Register(this);
+
+            var cut = Render<MoveThunderbirdDialog>(
+                parameters => parameters
+                    .Add(
+                        component => component.Machine,
+                        GameDashboardViewModelFactory.CreateMachine())
+                    .Add(
+                        component => component.Destinations,
+                        [new("venus", "Venus")])
+                    .Add(component => component.IsMoving, true)
+                    .Add(
+                        component => component.Cancelled,
+                        () => cancelled = true));
+
+            // Act
+            await cut.Instance.HandleDialogCancelled();
+
+            // Assert
+            Assert.False(cancelled);
+        }
+
+        [Fact]
+        public async Task CancellingDialogWhenIdleRaisesCancelled()
+        {
+            // Arrange
+            var cancelled = false;
+
+            DialogJsInterop.Register(this);
+
+            var cut = Render<MoveThunderbirdDialog>(
+                parameters => parameters
+                    .Add(
+                        component => component.Machine,
+                        GameDashboardViewModelFactory.CreateMachine())
+                    .Add(
+                        component => component.Destinations,
+                        [new("venus", "Venus")])
+                    .Add(
+                        component => component.Cancelled,
+                        () => cancelled = true));
+
+            // Act
+            await cut.Instance.HandleDialogCancelled();
+
+            // Assert
+            Assert.True(cancelled);
+        }
     }
 }
