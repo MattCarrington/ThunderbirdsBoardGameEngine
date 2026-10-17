@@ -18,9 +18,10 @@ board game.
 ## Scope
 
 The first slice creates the currently supported standard setup, persists it,
-and presents its Thunderbird Machines as a dashboard segment. It proves the
-complete production path through domain construction, PostgreSQL persistence,
-API, client, UI, deployment, security controls, testing, and observability.
+and presents its Thunderbird Machines as a dashboard segment. It proves the 
+complete deployable path through domain construction, PostgreSQL persistence, 
+API, client, UI, deployment, proportionate security controls, automated testing, 
+and operational visibility in the development environment.
 
 The shared code currently uses `ThunderbirdCode` as the identity for all
 Thunderbird Machines, including FAB 1. New product language should use
@@ -138,7 +139,7 @@ or attribution of actions to people in this slice.
 
 ### Persistence and deployment
 
-- Production persistence uses PostgreSQL through EF Core and Npgsql.
+- Deployed persistence uses PostgreSQL through EF Core and Npgsql.
 - Schema changes are represented by reviewed EF Core migrations committed to
   source control.
 - A one-shot migration job applies migrations before application deployment.
@@ -205,7 +206,6 @@ the application cannot derive it until it tracks the relevant gameplay.
 
 - Selecting or recording player-controlled characters
 - Applying John's alternative Thunderbird 3 setup automatically
-- Moving Thunderbird Machines
 - Transfer Characters
 - Turn or action-point accounting
 - Hood, scheme, disaster, deck, card, token, dice, or starting-player state
