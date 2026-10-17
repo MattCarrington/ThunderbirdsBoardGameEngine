@@ -36,8 +36,19 @@ namespace ThunderbirdsBoardGameEngine.PlaywrightTests.Pages
 
         public async Task AssertPageDisplayedAsync()
         {
-            await Page.WaitForSelectorAsync("h1:text-is('Game Dashboard')");
-            await Assertions.Expect(Page.GetByRole(AriaRole.Table)).ToBeVisibleAsync();
+            await Assertions.Expect(
+                    Page.GetByRole(
+                        AriaRole.Heading,
+                        new()
+                        {
+                            Name = "Game Dashboard",
+                            Exact = true
+                        }))
+                .ToBeVisibleAsync();
+
+            await Assertions.Expect(
+                    Page.GetByRole(AriaRole.Table))
+                .ToBeVisibleAsync();
         }
 
         public async Task AssertThunderbirdLocationAsync(string thunderbirdName, string expectedLocation)
