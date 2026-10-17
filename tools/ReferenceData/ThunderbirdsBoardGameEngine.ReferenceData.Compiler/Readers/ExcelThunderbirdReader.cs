@@ -26,7 +26,9 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Readers
 
                 var movementDomain = row.Cell(columnMap["Domain"]).GetString();
 
-                thunderbirds.Add(new ThunderbirdInput(name, topSpeed, movementDomain));
+                var characterCapacity = row.Cell(columnMap["Character Capacity"]).GetValue<int>();
+
+                thunderbirds.Add(new ThunderbirdInput(name, topSpeed, movementDomain, characterCapacity));
             }
 
             return thunderbirds;

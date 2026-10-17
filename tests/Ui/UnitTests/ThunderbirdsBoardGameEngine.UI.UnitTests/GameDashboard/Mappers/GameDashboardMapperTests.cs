@@ -190,7 +190,8 @@ namespace ThunderbirdsBoardGameEngine.UI.UnitTests.GameDashboard.Mappers
                 new ThunderbirdCode(code),
                 displayName,
                 MovementDomain.Earth,
-                topSpeed: 1);
+                topSpeed: 1,
+                characterCapacity: 1);
         }
 
         private static ReferenceLocationDefinition CreateLocation(string code, string displayName)
