@@ -81,6 +81,19 @@ Scenario: Retrieve an unknown game
     Then a not-found response should be returned
     And no game should be created
     And no storage or implementation details should be disclosed
+
+Scenario: Move a Thunderbird Machine
+    Given a standard game has been created
+    When a player moves a Thunderbird Machine to a permitted destination
+    Then its updated location should be persisted
+    And the dashboard should display its updated location
+
+Scenario: Updated game state survives an application restart
+    Given a standard game has been created
+    And a Thunderbird Machine has been moved to a permitted destination
+    When the application is restarted
+    And the game is retrieved using its Guid
+    Then the Thunderbird Machine should remain at its updated destination
 ```
 
 ## Supported setup
@@ -163,9 +176,10 @@ or attribution of actions to people in this slice.
 ### Testing
 
 - Domain tests cover standard setup and character-assignment invariants.
-- Application tests cover creation and retrieval orchestration.
 - Repository integration tests run against real PostgreSQL.
-- API component tests cover creation, retrieval, and not-found behaviour.
+- Application tests cover creation, retrieval, and movement orchestration.
+- API component tests cover creation, retrieval, movement, not-found,
+  validation, and concurrency-conflict behaviour.
 - Client tests cover the published HTTP contract.
 - UI component tests cover the Thunderbird Machines segment.
 - A browser test covers create, navigate, and refresh.
