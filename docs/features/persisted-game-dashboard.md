@@ -18,9 +18,10 @@ board game.
 ## Scope
 
 The first slice creates the currently supported standard setup, persists it,
-and presents its Thunderbird Machines as a dashboard segment. It proves the
-complete production path through domain construction, PostgreSQL persistence,
-API, client, UI, deployment, security controls, testing, and observability.
+and presents its Thunderbird Machines as a dashboard segment. It proves the 
+complete deployable path through domain construction, PostgreSQL persistence, 
+API, client, UI, deployment, proportionate security controls, automated testing, 
+and operational visibility in the development environment.
 
 The shared code currently uses `ThunderbirdCode` as the identity for all
 Thunderbird Machines, including FAB 1. New product language should use
@@ -80,6 +81,19 @@ Scenario: Retrieve an unknown game
     Then a not-found response should be returned
     And no game should be created
     And no storage or implementation details should be disclosed
+
+Scenario: Move a Thunderbird Machine
+    Given a standard game has been created
+    When a player moves a Thunderbird Machine to a permitted destination
+    Then its updated location should be persisted
+    And the dashboard should display its updated location
+
+Scenario: Updated game state survives an application restart
+    Given a standard game has been created
+    And a Thunderbird Machine has been moved to a permitted destination
+    When the application is restarted
+    And the game is retrieved using its Guid
+    Then the Thunderbird Machine should remain at its updated destination
 ```
 
 ## Supported setup
@@ -122,7 +136,7 @@ The slice must nevertheless:
 There is no access revocation, token rotation, lost-link recovery, ownership,
 or attribution of actions to people in this slice.
 
-## Production definition of done
+## Vertical slice definition of done
 
 ### Domain and application
 
@@ -138,7 +152,7 @@ or attribution of actions to people in this slice.
 
 ### Persistence and deployment
 
-- Production persistence uses PostgreSQL through EF Core and Npgsql.
+- Deployed persistence uses PostgreSQL through EF Core and Npgsql.
 - Schema changes are represented by reviewed EF Core migrations committed to
   source control.
 - A one-shot migration job applies migrations before application deployment.
@@ -162,9 +176,10 @@ or attribution of actions to people in this slice.
 ### Testing
 
 - Domain tests cover standard setup and character-assignment invariants.
-- Application tests cover creation and retrieval orchestration.
 - Repository integration tests run against real PostgreSQL.
-- API component tests cover creation, retrieval, and not-found behaviour.
+- Application tests cover creation, retrieval, and movement orchestration.
+- API component tests cover creation, retrieval, movement, not-found,
+  validation, and concurrency-conflict behaviour.
 - Client tests cover the published HTTP contract.
 - UI component tests cover the Thunderbird Machines segment.
 - A browser test covers create, navigate, and refresh.
@@ -173,13 +188,20 @@ or attribution of actions to people in this slice.
 - CI applies all migrations to an empty PostgreSQL database before running
   persistence tests.
 
-### Observability
+### Operational visibility
 
-- Structured logs and traces correlate requests without using the game Guid as
-  the correlation identifier.
-- Metrics cover creation and retrieval outcomes and duration.
-- Database failures are observable without exposing connection details.
-- Game payloads and private game URLs are not logged.
+- The application exposes separate liveness and database-aware readiness
+  endpoints.
+- Application startup and unexpected failures are written as structured
+  console logs.
+- Logs use request trace identifiers for correlation and do not include game
+  Guids, private game URLs, game payloads, credentials, or connection details.
+- Azure Container Apps system and live console log streams provide sufficient
+  diagnostic visibility for the initial development environment.
+- Migration failures prevent the application revision from becoming ready.
+- Durable log retention, custom application metrics, distributed tracing,
+  dashboards, and operational alerts are deferred until the application has
+  an identified operational need or a production environment.
 
 ## Lifecycle
 
@@ -198,7 +220,6 @@ the application cannot derive it until it tracks the relevant gameplay.
 
 - Selecting or recording player-controlled characters
 - Applying John's alternative Thunderbird 3 setup automatically
-- Moving Thunderbird Machines
 - Transfer Characters
 - Turn or action-point accounting
 - Hood, scheme, disaster, deck, card, token, dice, or starting-player state
@@ -211,8 +232,10 @@ the application cannot derive it until it tracks the relevant gameplay.
 ## Follow-on stories
 
 - Select player-controlled characters and apply the John-dependent setup rule.
-- Move a Thunderbird Machine and persist the updated state.
 - Transfer Characters atomically between Thunderbird Machines.
 - Introduce lifecycle behaviour when the application can meaningfully record or
   derive game completion.
 - Adopt `ThunderbirdMachine` consistently as the shared domain terminology.
+- Introduce durable observability when operational requirements justify it,
+  including retained logs, safe application metrics, tracing, dashboards,
+  and alerts.
