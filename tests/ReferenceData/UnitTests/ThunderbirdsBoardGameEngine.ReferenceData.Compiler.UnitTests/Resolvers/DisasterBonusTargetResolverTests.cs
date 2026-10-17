@@ -114,8 +114,8 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.UnitTests.Resolvers
 
             var thunderbirds = new List<ReferenceThunderbirdDefinition>
             {
-                new(displayName: "Thunderbird 1", code: new ThunderbirdCode("TB1"), topSpeed: 100, domain: MovementDomain.Earth),
-                new(displayName: "Thunderbird 2", code: new ThunderbirdCode("TB2"), topSpeed: 120, domain: MovementDomain.Space)
+                new(displayName: "Thunderbird 1", code: new ThunderbirdCode("TB1"), topSpeed: 100, domain: MovementDomain.Earth, characterCapacity: 1),
+                new(displayName: "Thunderbird 2", code: new ThunderbirdCode("TB2"), topSpeed: 120, domain: MovementDomain.Space, characterCapacity : 1)
             };
 
             var podVehicles = new List<ReferencePodVehicleDefinition>
@@ -143,8 +143,8 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.UnitTests.Resolvers
 
             var thunderbirds = new List<ReferenceThunderbirdDefinition>
             {
-                new(displayName: "Thunderbird 1", code: new ThunderbirdCode("TB1"), topSpeed: 100, domain: MovementDomain.Earth),
-                new(displayName: "Thunderbird 1", code: new ThunderbirdCode("TB2"), topSpeed: 120, domain: MovementDomain.Space)
+                new(displayName: "Thunderbird 1", code: new ThunderbirdCode("TB1"), topSpeed: 100, domain: MovementDomain.Earth, characterCapacity : 1),
+                new(displayName: "Thunderbird 1", code: new ThunderbirdCode("TB2"), topSpeed: 120, domain: MovementDomain.Space, characterCapacity : 1)
             };
 
             var podVehicles = new List<ReferencePodVehicleDefinition>
@@ -172,8 +172,8 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.UnitTests.Resolvers
 
             var thunderbirds = new List<ReferenceThunderbirdDefinition>
             {
-                new(displayName: "Thunderbird 1", code: new ThunderbirdCode("TB1"), topSpeed: 100, domain: MovementDomain.Earth),
-                new(displayName: "Thunderbird 2", code: new ThunderbirdCode("TB2"), topSpeed: 120, domain: MovementDomain.Space)
+                new(displayName: "Thunderbird 1", code: new ThunderbirdCode("TB1"), topSpeed: 100, domain: MovementDomain.Earth, characterCapacity : 1),
+                new(displayName: "Thunderbird 2", code: new ThunderbirdCode("TB2"), topSpeed: 120, domain: MovementDomain.Space, characterCapacity : 1)
             };
 
             var podVehicles = new List<ReferencePodVehicleDefinition>
@@ -201,8 +201,8 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.UnitTests.Resolvers
 
             var thunderbirds = new List<ReferenceThunderbirdDefinition>
             {
-                new(displayName: "Thunderbird 1", code: new ThunderbirdCode("TB1"), topSpeed: 100, domain: MovementDomain.Earth),
-                new(displayName: "Pod Vehicle A", code: new ThunderbirdCode("TB2"), topSpeed: 120, domain: MovementDomain.Space)
+                new(displayName: "Thunderbird 1", code: new ThunderbirdCode("TB1"), topSpeed: 100, domain: MovementDomain.Earth, characterCapacity : 1),
+                new(displayName: "Pod Vehicle A", code: new ThunderbirdCode("TB2"), topSpeed: 120, domain: MovementDomain.Space, characterCapacity : 1)
             };
 
             var podVehicles = new List<ReferencePodVehicleDefinition>
@@ -232,7 +232,7 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.UnitTests.Resolvers
 
             var thunderbirds = new List<ReferenceThunderbirdDefinition>
             {
-                new(displayName: "Thunderbird 1", code: new ThunderbirdCode("DUPLICATE_CODE"), topSpeed: 100, domain: MovementDomain.Earth)
+                new(displayName: "Thunderbird 1", code: new ThunderbirdCode("DUPLICATE_CODE"), topSpeed: 100, domain: MovementDomain.Earth, characterCapacity : 1)
             };
 
             var podVehicles = new List<ReferencePodVehicleDefinition>
@@ -260,8 +260,8 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.UnitTests.Resolvers
 
             var thunderbirds = new List<ReferenceThunderbirdDefinition>
             {
-                new(displayName: "Thunderbird 1", code: new ThunderbirdCode("TB1"), topSpeed: 100, domain: MovementDomain.Earth),
-                new(displayName: "Thunderbird 2", code: new ThunderbirdCode("TB2"), topSpeed: 120, domain: MovementDomain.Space)
+                new(displayName: "Thunderbird 1", code: new ThunderbirdCode("TB1"), topSpeed: 100, domain: MovementDomain.Earth, characterCapacity : 1),
+                new(displayName: "Thunderbird 2", code: new ThunderbirdCode("TB2"), topSpeed: 120, domain: MovementDomain.Space, characterCapacity : 1)
             };
 
             var podVehicles = new List<ReferencePodVehicleDefinition>

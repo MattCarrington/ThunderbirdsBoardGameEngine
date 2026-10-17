@@ -35,6 +35,7 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Runtime.UnitTests.Catalogs
             Assert.Equal("Thunderbird 2", definition.DisplayName);
             Assert.Equal(MovementDomain.Space, definition.Domain);
             Assert.Equal(3, definition.TopSpeed);
+            Assert.Equal(3, definition.CharacterCapacity);
         }
 
         [Fact]
@@ -64,8 +65,14 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Runtime.UnitTests.Catalogs
 
             // Assert
             Assert.Equal(2, result.Length);
-            Assert.Contains(result, t => t.Code == new ThunderbirdCode("thunderbird-1") && t.DisplayName == "Thunderbird 1" && t.Domain == MovementDomain.Earth && t.TopSpeed == 0);
-            Assert.Contains(result, t => t.Code == new ThunderbirdCode("thunderbird-2") && t.DisplayName == "Thunderbird 2" && t.Domain == MovementDomain.Space && t.TopSpeed == 3);
+
+            Assert.Contains(
+                result,
+                t => t.Code == new ThunderbirdCode("thunderbird-1") && t.DisplayName == "Thunderbird 1" && t.Domain == MovementDomain.Earth && t.TopSpeed == 0 && t.CharacterCapacity == 1);
+
+            Assert.Contains(
+                result,
+                t => t.Code == new ThunderbirdCode("thunderbird-2") && t.DisplayName == "Thunderbird 2" && t.Domain == MovementDomain.Space && t.TopSpeed == 3 && t.CharacterCapacity == 3);
         }
 
         [Fact]
@@ -84,6 +91,7 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Runtime.UnitTests.Catalogs
             Assert.Equal("Thunderbird 1", definition.DisplayName);
             Assert.Equal(MovementDomain.Earth, definition.Domain);
             Assert.Equal(0, definition.TopSpeed);
+            Assert.Equal(1, definition.CharacterCapacity);
         }
 
         [Fact]
@@ -102,7 +110,7 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Runtime.UnitTests.Catalogs
         {
             var snapshot = new ReferenceDataSnapshotBuilder()
                 .WithThunderbird("thunderbird-1", "Thunderbird 1")
-                .WithThunderbird("thunderbird-2", "Thunderbird 2", MovementDomain.Space, 3)
+                .WithThunderbird("thunderbird-2", "Thunderbird 2", MovementDomain.Space, 3, 3)
                 .Build();
 
             return new ThunderbirdDefinitionCatalog(snapshot);

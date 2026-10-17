@@ -43,6 +43,7 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.ComponentTests.Loader
             Assert.Equal("Thunderbird 1", definition.DisplayName);
             Assert.Equal(MovementDomain.Earth, definition.Domain);
             Assert.Equal(3, definition.TopSpeed);
+            Assert.Equal(2, definition.CharacterCapacity);
         }
     }
 }

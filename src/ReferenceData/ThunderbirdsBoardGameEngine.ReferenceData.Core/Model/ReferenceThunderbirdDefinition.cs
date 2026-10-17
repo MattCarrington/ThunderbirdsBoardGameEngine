@@ -13,15 +13,19 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Core.Model
 
         public int TopSpeed { get; }
 
-        public ReferenceThunderbirdDefinition(ThunderbirdCode code, string displayName, MovementDomain domain, int topSpeed)
+        public int CharacterCapacity { get; }
+
+        public ReferenceThunderbirdDefinition(ThunderbirdCode code, string displayName, MovementDomain domain, int topSpeed, int characterCapacity)
         {
             ArgumentException.ThrowIfNullOrWhiteSpace(displayName);
             ArgumentOutOfRangeException.ThrowIfNegative(topSpeed);
+            ArgumentOutOfRangeException.ThrowIfNegativeOrZero(characterCapacity);
 
             Code = code;
             DisplayName = displayName;
             Domain = domain;
             TopSpeed = topSpeed;
+            CharacterCapacity = characterCapacity;
         }
     }
 }

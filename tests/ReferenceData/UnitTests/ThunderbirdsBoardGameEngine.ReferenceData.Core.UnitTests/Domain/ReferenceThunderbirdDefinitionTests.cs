@@ -4,7 +4,7 @@ using ThunderbirdsBoardGameEngine.ReferenceData.Core.Model;
 using ThunderbirdsBoardGameEngine.TestUtils.xUnit.ClassData;
 using Xunit;
 
-namespace ThunderbirdsBoardGameEngine.ReferenceData.UnitTests.Domain
+namespace ThunderbirdsBoardGameEngine.ReferenceData.Core.UnitTests.Domain
 {
     public class ReferenceThunderbirdDefinitionTests
     {
@@ -16,6 +16,8 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.UnitTests.Domain
 
         private static int ValidTopSpeed => 3;
 
+        private static int ValidCharacterCapacity => 2;
+
         [Fact]
         public void Constructor_WhenAllInputsValid_CreatesInstance()
         {
@@ -26,13 +28,15 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.UnitTests.Domain
                 code: ValidThunderbirdCode,
                 displayName: ValidDisplayName,
                 domain: ValidDomain,
-                topSpeed: ValidTopSpeed);
+                topSpeed: ValidTopSpeed,
+                characterCapacity: ValidCharacterCapacity);
 
             // Assert
             Assert.Equal(ValidThunderbirdCode, result.Code);
             Assert.Equal(ValidDisplayName, result.DisplayName);
             Assert.Equal(ValidDomain, result.Domain);
             Assert.Equal(ValidTopSpeed, result.TopSpeed);
+            Assert.Equal(ValidCharacterCapacity, result.CharacterCapacity);
         }
 
         [Theory]
@@ -46,7 +50,8 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.UnitTests.Domain
                 code: ValidThunderbirdCode,
                 displayName: displayName,
                 domain: ValidDomain,
-                topSpeed: ValidTopSpeed));
+                topSpeed: ValidTopSpeed,
+                characterCapacity: ValidCharacterCapacity));
         }
 
         [Theory]
@@ -61,7 +66,8 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.UnitTests.Domain
                 code: ValidThunderbirdCode,
                 displayName: ValidDisplayName,
                 domain: ValidDomain,
-                topSpeed: topSpeed);
+                topSpeed: topSpeed,
+                characterCapacity: ValidCharacterCapacity);
 
             // Assert
             Assert.Equal(topSpeed, result.TopSpeed);
@@ -79,7 +85,41 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.UnitTests.Domain
                 code: ValidThunderbirdCode,
                 displayName: ValidDisplayName,
                 domain: ValidDomain,
-                topSpeed: topSpeed));
+                topSpeed: topSpeed,
+                characterCapacity: ValidCharacterCapacity));
+        }
+
+        [Theory]
+        [InlineData(1)]
+        [InlineData(int.MaxValue)]
+        public void Constructor_WhenCharacterCapacityValid(int characterCapacity)
+        {
+            // Arrange
+
+            // Act
+            var result = new ReferenceThunderbirdDefinition(
+                code: ValidThunderbirdCode,
+                displayName: ValidDisplayName,
+                domain: ValidDomain,
+                topSpeed: ValidTopSpeed,
+                characterCapacity: characterCapacity);
+        }
+
+        [Theory]
+        [InlineData(0)]
+        [InlineData(-1)]
+        [InlineData(int.MinValue)]
+        public void Constructor_WhenCharacterCapacityInvalid_ThrowsArgumentOutOfRangeException(int characterCapacity)
+        {
+            // Arrange
+
+            // Act & Assert
+            Assert.Throws<ArgumentOutOfRangeException>(() => new ReferenceThunderbirdDefinition(
+                code: ValidThunderbirdCode,
+                displayName: ValidDisplayName,
+                domain: ValidDomain,
+                topSpeed: ValidTopSpeed,
+                characterCapacity: characterCapacity));
         }
     }
 }
