@@ -108,6 +108,7 @@ jobs:
           GameState__Persistence__ConnectionString: Host=localhost;Port=5432;Database=thunderbirds_game_state;Username=postgres;Password=${{ env.GAME_STATE_DB_PASSWORD }};GSS Encryption Mode=Disable
 
       - name: Run API User Journeys
+        if: ${{ inputs.run_integration }}
         env:
           GameStateClient__BaseAddress: ${{ inputs.base_url }}
         run: |
@@ -119,6 +120,7 @@ jobs:
             --results-directory ./TestResults/UserJourneys
 
       - name: Run API Restart User Journeys
+        if: ${{ inputs.run_integration }}
         env:
           GameStateClient__BaseAddress: ${{ inputs.base_url }}
         run: |
