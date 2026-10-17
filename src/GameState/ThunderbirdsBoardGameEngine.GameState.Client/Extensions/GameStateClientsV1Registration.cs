@@ -18,6 +18,9 @@ namespace ThunderbirdsBoardGameEngine.GameState.Client.Extensions
                 where TClient : class
                 where TImpl : class, TClient
                 => services.AddHttpClient<TClient, TImpl>(configureBase)
+                    // Game identifiers embedded in request paths are anonymous
+                    // read/write capabilities and must not be written to logs.
+                    .RemoveAllLoggers()
                     .AddHttpMessageHandler(() =>
                         new ApiVersionHeaderHandler(Version));
 
