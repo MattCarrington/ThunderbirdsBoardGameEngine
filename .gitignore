@@ -343,6 +343,7 @@ ASALocalRun/
 # Pulumi IaC
 .pulumi/
 Pulumi.*.yaml
+!infra/Pulumi/AzureDev/Pulumi.dev.yaml
 
 # MSBuild Binary and Structured Log
 *.binlog
@@ -370,3 +371,5 @@ FodyWeavers.xsd
 /ThunderbirdsBoardGameEngine.GameData.Importer/Resources/DisasterCards.xlsx
 /ThunderbirdsBoardGameEngine.GameData.Importer/Output/DisasterCards.json
 /TemplateEngineHost/vs
+
+/Docker/.env

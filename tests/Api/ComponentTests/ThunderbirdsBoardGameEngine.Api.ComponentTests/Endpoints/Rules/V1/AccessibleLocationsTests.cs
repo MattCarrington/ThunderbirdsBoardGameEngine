@@ -1,20 +1,20 @@
 ﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc.Testing;
 using System.Net;
 using System.Net.Http.Json;
+using ThunderbirdsBoardGameEngine.Api.ComponentTests.Factories;
 using ThunderbirdsBoardGameEngine.Rules.Contracts.Dtos.Movement.AccessibleLocations.V1;
 using ThunderbirdsBoardGameEngine.TestUtils.xUnit.Assertions;
 using Xunit;
 
 namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints.Rules.V1
 {
-    public class AccessibleLocationsTests : IClassFixture<WebApplicationFactory<Program>>
+    public class AccessibleLocationsTests : IClassFixture<ApiComponentWebApplicationFactory>
     {
         private readonly HttpClient _client;
 
         private const int ApiVersion = 1;
 
-        public AccessibleLocationsTests(WebApplicationFactory<Program> factory)
+        public AccessibleLocationsTests(ApiComponentWebApplicationFactory factory)
         {
             _client = factory.CreateClient();
         }
@@ -41,7 +41,6 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints.Rules.V1
 
         [Fact]
         public async Task ReturnsNotFoundWhenThunderbirdDoesNotExist()
-
         {
             using var request = new HttpRequestMessage(HttpMethod.Get, "/api/rules/movement/thunderbird-x/accessible-locations");
             request.Headers.Add("X-API-Version", ApiVersion.ToString());

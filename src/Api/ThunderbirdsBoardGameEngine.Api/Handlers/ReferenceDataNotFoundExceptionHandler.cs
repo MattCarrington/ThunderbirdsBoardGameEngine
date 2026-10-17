@@ -26,11 +26,11 @@ namespace ThunderbirdsBoardGameEngine.Api.Handlers
             if (exception is ReferenceDataNotFoundException notFoundException)
             {
                 _logger.LogWarning(
-                    "{ResourceType} with Code {Code} not found for request {Method} {Path}. TraceId = {TraceId}",
+                    "{ResourceType} with Code {Code} was not found for request method " +
+                    "{Method}. TraceId = {TraceId}",
                     notFoundException.ResourceType,
                     notFoundException.Code,
                     httpContext.Request.Method,
-                    httpContext.Request.Path.Value,
                     httpContext.TraceIdentifier);
 
                 var problemDetails = _problemDetailsFactory.CreateProblemDetails(
@@ -39,6 +39,8 @@ namespace ThunderbirdsBoardGameEngine.Api.Handlers
                     "Resource not found.",
                     ProblemTypes.NotFound,
                     "The requested resource could not be found.");
+
+                problemDetails.Instance = null;
 
                 httpContext.Response.StatusCode = problemDetails.Status ?? StatusCodes.Status404NotFound;
 

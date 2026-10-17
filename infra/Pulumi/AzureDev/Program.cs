@@ -1,7 +1,8 @@
 using Pulumi;
 using Pulumi.AzureNative.App;
 using Pulumi.AzureNative.App.Inputs;
-using Pulumi.AzureNative.Security;
+using PostgreSql = Pulumi.AzureNative.DBforPostgreSQL;
+using PostgreSqlInputs = Pulumi.AzureNative.DBforPostgreSQL.Inputs;
 using Resources = Pulumi.AzureNative.Resources;
 
 return await Deployment.RunAsync(() =>
@@ -16,7 +17,28 @@ return await Deployment.RunAsync(() =>
     var registryUsername = projectConfig.Get("registryUsername");
     var registryPassword = projectConfig.GetSecret("registryPassword");
     var stack = Deployment.Instance.StackName;
+
+    var databaseName = projectConfig.Get("databaseName") ?? "thunderbirds_game_state";
+    var databaseAdministratorUsername = projectConfig.Require("databaseAdministratorUsername");
+    var databaseAdministratorPassword = projectConfig.RequireSecret("databaseAdministratorPassword");
+
+    var databaseMigratorImage = projectConfig.Get("databaseMigratorImage") ?? "ghcr.io/mattcarrington/thunderbirds-game-state-db-migrator:latest";
+
+    if (string.IsNullOrWhiteSpace(databaseName))
+    {
+        throw new InvalidOperationException("thunderbirds-azure-dev:databaseName cannot be empty.");
+    }
+
+    if (string.IsNullOrWhiteSpace(databaseAdministratorUsername))
+    {
+        throw new InvalidOperationException(
+            "thunderbirds-azure-dev:databaseAdministratorUsername " +
+            "cannot be empty.");
+    }
+
     const string registryPasswordSecretName = "registry-password";
+    const string databaseConnectionStringSecretName = "game-state-database-connection-string";
+    const string databaseConnectionStringEnvironmentVariable = "GameState__Persistence__ConnectionString";
 
     var tags = BuildTags(stack);
 
@@ -48,13 +70,67 @@ return await Deployment.RunAsync(() =>
         Tags = tags,
     });
 
+    var databaseServer = new PostgreSql.Server($"{baseName}-{stack}-postgres", new PostgreSql.ServerArgs
+    {
+        ResourceGroupName = resourceGroup.Name,
+        Location = resourceGroup.Location,
+        AdministratorLogin = databaseAdministratorUsername,
+        AdministratorLoginPassword = databaseAdministratorPassword,
+        Version = PostgreSql.PostgresMajorVersion.PostgresMajorVersion_16,
+        Network = new PostgreSqlInputs.NetworkArgs
+        {
+            PublicNetworkAccess = PostgreSql.ServerPublicNetworkAccessState.Enabled,
+        },
+        Sku = new PostgreSqlInputs.SkuArgs
+        {
+            Name = "Standard_B1ms",
+            Tier = PostgreSql.SkuTier.Burstable,
+        },
+        Storage = new PostgreSqlInputs.StorageArgs
+        {
+            StorageSizeGB = 32,
+        },
+        Tags = tags,
+    });
+
+    var allowAzureServices = new PostgreSql.FirewallRule($"{baseName}-{stack}-postgres-allow-azure", new PostgreSql.FirewallRuleArgs
+    {
+        ResourceGroupName = resourceGroup.Name,
+        ServerName = databaseServer.Name,
+        FirewallRuleName = "AllowAzureServices",
+        StartIpAddress = "0.0.0.0",
+        EndIpAddress = "0.0.0.0",
+    });
+
+    var database = new PostgreSql.Database($"{baseName}-{stack}-{databaseName}", new PostgreSql.DatabaseArgs
+    {
+        ResourceGroupName = resourceGroup.Name,
+        ServerName = databaseServer.Name,
+        DatabaseName = databaseName,
+        Charset = "UTF8",
+        Collation = "en_US.utf8",
+    });
+
+
+    var databaseConnectionString = Output.Format(
+        $"Host={databaseServer.FullyQualifiedDomainName};Port=5432;Database={database.Name};Username={databaseAdministratorUsername};Password={databaseAdministratorPassword};SSL Mode=Require");
+
     // Build registries and secrets lists without nulls
     var registries = new List<RegistryCredentialsArgs>();
-    var secrets = new List<SecretArgs>();
+
+    var secrets = new List<SecretArgs>
+    {
+        new()
+        {
+            Name = databaseConnectionStringSecretName,
+            Value = databaseConnectionString,
+        },
+    };
     if (!string.IsNullOrWhiteSpace(registryUsername) && registryPassword != null)
     {
-        var registryServer = TryGetRegistryServer(containerImage) ?? throw new InvalidOperationException(
-            "When using registry credentials, thunderbirds-azure-dev:containerImage must include an explicit registry server (for example, ghcr.io/owner/image:tag or myregistry.azurecr.io/image:tag).");
+        var registryServer = TryGetRegistryServer(containerImage)
+            ?? throw new InvalidOperationException(
+                "When using registry credentials, thunderbirds-azure-dev:containerImage must include an explicit registry server.");
 
         registries.Add(new RegistryCredentialsArgs
         {
@@ -62,6 +138,7 @@ return await Deployment.RunAsync(() =>
             Username = registryUsername,
             PasswordSecretRef = registryPasswordSecretName,
         });
+
         secrets.Add(new SecretArgs
         {
             Name = registryPasswordSecretName,
@@ -92,12 +169,20 @@ return await Deployment.RunAsync(() =>
         },
         Template = new TemplateArgs
         {
-            Containers =
+            InitContainers =
             {
-                new ContainerArgs
+                new InitContainerArgs
                 {
-                    Name = "app",
-                    Image = containerImage,
+                    Name = "game-state-db-migrator",
+                    Image = databaseMigratorImage,
+                    Env =
+                    {
+                        new EnvironmentVarArgs
+                        {
+                            Name = databaseConnectionStringEnvironmentVariable,
+                            SecretRef = databaseConnectionStringSecretName,
+                        },
+                    },
                     Resources = new ContainerResourcesArgs
                     {
                         Cpu = 0.25,
@@ -105,6 +190,28 @@ return await Deployment.RunAsync(() =>
                     },
                     ImageType = ImageType.ContainerImage,
                 },
+            },
+            Containers =
+            {
+                new ContainerArgs
+                {
+                    Name = "app",
+                    Image = containerImage,
+                    Env =
+                {
+                    new EnvironmentVarArgs
+                    {
+                        Name = databaseConnectionStringEnvironmentVariable,
+                        SecretRef = databaseConnectionStringSecretName,
+                    },
+                },
+                    Resources = new ContainerResourcesArgs
+                    {
+                        Cpu = 0.25,
+                        Memory = "0.5Gi",
+                    },
+                    ImageType = ImageType.ContainerImage,
+                }
             },
             Scale = new ScaleArgs
             {

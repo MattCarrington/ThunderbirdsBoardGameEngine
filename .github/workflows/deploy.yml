@@ -12,6 +12,9 @@ on:
       environment:
         required: true
         type: string
+      database_migrator_image_name:
+        required: true
+        type: string
     outputs:
       deployment_uri:
         description: The URI of the deployed application
@@ -54,26 +57,37 @@ jobs:
       - name: Set up Pulumi CLI
         uses: pulumi/actions@v7
         with:
-          pulumi-version: 3.112.0
+          pulumi-version: 3.268.0
 
       - name: Select Pulumi stack
         run: pulumi stack select ${{ inputs.environment }}
 
-      - name: Configure deployment image and optional registry credentials
+      - name: Configure optional registry credentials
         run: |
           OWNER="${GITHUB_REPOSITORY_OWNER,,}"
-          IMAGE="ghcr.io/$OWNER/${{ inputs.image_name }}:${{ inputs.image_tag }}"
-
-          pulumi config set --stack ${{ inputs.environment }} thunderbirds-azure-dev:containerImage "$IMAGE"
 
           if [ -n "$GHCR_PULL_TOKEN" ]; then
-            pulumi config set --stack ${{ inputs.environment }} thunderbirds-azure-dev:registryUsername "$OWNER"
-            pulumi config set --secret --stack ${{ inputs.environment }} thunderbirds-azure-dev:registryPassword "$GHCR_PULL_TOKEN"
+            pulumi config set \
+              --stack "${{ inputs.environment }}" \
+              thunderbirds-azure-dev:registryUsername "$OWNER"
+
+            pulumi config set \
+              --secret \
+              --stack "${{ inputs.environment }}" \
+              thunderbirds-azure-dev:registryPassword "$GHCR_PULL_TOKEN"
           fi
 
       - name: Deploy to Azure
         run: |
-          pulumi up --yes --stack ${{ inputs.environment }}
+          OWNER="${GITHUB_REPOSITORY_OWNER,,}"
+          APP_IMAGE="ghcr.io/$OWNER/${{ inputs.image_name }}:${{ inputs.image_tag }}"
+          MIGRATOR_IMAGE="ghcr.io/$OWNER/${{ inputs.database_migrator_image_name }}:${{ inputs.image_tag }}"
+
+          pulumi up \
+            --yes \
+            --stack "${{ inputs.environment }}" \
+            --config "thunderbirds-azure-dev:containerImage=$APP_IMAGE" \
+            --config "thunderbirds-azure-dev:databaseMigratorImage=$MIGRATOR_IMAGE"
 
       - name: Get Deployment URI
         id: get-uri

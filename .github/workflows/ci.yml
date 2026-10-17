@@ -16,6 +16,7 @@ env:
   SOLUTION_FILE: &solution ThunderbirdsBoardGameEngine.sln
   IMAGE_NAME: &image_name "thunderbirds-app"
   SMOKE_IMAGE_NAME: &smoke_image_name "thunderbirds-smoke-tests"
+  MIGRATOR_IMAGE_NAME: &migrator_image_name "thunderbirds-game-state-db-migrator"
   BASE_URL: &base_url "http://localhost:8080"
   
 jobs:
@@ -40,6 +41,16 @@ jobs:
     with:
       image_name: *image_name
       dockerfile_path: "src/Api/ThunderbirdsBoardGameEngine.Api/Dockerfile"
+      docker_build_context: "."
+    needs:
+      - static-analysis
+
+  docker-build-migrator:
+    if: github.event_name == 'push'
+    uses: ./.github/workflows/build-docker.yml
+    with:
+      image_name: *migrator_image_name
+      dockerfile_path: "src/GameState/ThunderbirdsBoardGameEngine.GameState.EF.DatabaseMigrator/Dockerfile"
       docker_build_context: "."
     needs:
       - static-analysis
@@ -95,6 +106,20 @@ jobs:
       registry_token: ${{ secrets.GITHUB_TOKEN }}
     needs:
       - docker-build-app
+      - docker-build-migrator
+      - compute-version
+
+  docker-publish-migrator:
+    if: github.event_name == 'push' && needs.compute-version.outputs.release_type != 'none'
+    uses: ./.github/workflows/publish-docker.yml
+    with:
+      image_name: *migrator_image_name
+      version: ${{ needs.compute-version.outputs.version }}
+      push_latest: ${{ github.ref == 'refs/heads/main' }}
+    secrets:
+      registry_token: ${{ secrets.GITHUB_TOKEN }}
+    needs:
+      - docker-build-migrator
       - compute-version
 
   packages:
@@ -113,11 +138,13 @@ jobs:
     uses: ./.github/workflows/deploy.yml
     with:
       image_name: *image_name
+      database_migrator_image_name: *migrator_image_name
       image_tag: ${{ needs.docker-publish-app.outputs.image_tag }}
       environment: "dev"
     secrets: inherit
     needs:
       - docker-publish-app
+      - docker-publish-migrator
 
   smoke-tests:
     name: Run Smoke Tests

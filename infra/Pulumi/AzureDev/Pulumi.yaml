@@ -9,3 +9,7 @@ config:
     default: ghcr.io/mattcarrington/thunderbirds-app:latest
   thunderbirds-azure-dev:containerPort:
     default: 8080
+  thunderbirds-azure-dev:databaseName:
+    default: thunderbirds_game_state
+  thunderbirds-azure-dev:databaseMigratorImage:
+    default: ghcr.io/mattcarrington/thunderbirds-game-state-db-migrator:latest

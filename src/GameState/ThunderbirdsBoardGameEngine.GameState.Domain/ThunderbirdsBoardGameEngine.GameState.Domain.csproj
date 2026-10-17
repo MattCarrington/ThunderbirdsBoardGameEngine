@@ -1,0 +1,7 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  
+  <ItemGroup>
+    <ProjectReference Include="..\..\ReferenceData\ThunderbirdsBoardGameEngine.ReferenceData.Core\ThunderbirdsBoardGameEngine.ReferenceData.Core.csproj" />
+  </ItemGroup>
+
+</Project>

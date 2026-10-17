@@ -1,0 +1,52 @@
+﻿@using ThunderbirdsBoardGameEngine.UI.Features.GameDashboard.ViewModels
+
+<section aria-labelledby="thunderbird-machines-heading">
+    <h2 id="thunderbird-machines-heading" class="h3">
+        Thunderbird Machines
+    </h2>
+
+    <div class="table-responsive">
+        <table class="table align-middle">
+            <thead>
+                <tr>
+                    <th scope="col">Machine</th>
+                    <th scope="col">Location</th>
+                    <th scope="col">Characters aboard</th>
+                    <th scope="col">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var machine in Machines)
+                {
+                    <tr>
+                        <th scope="row">
+                            @machine.ThunderbirdDisplayName
+                        </th>
+                        <td>@machine.LocationDisplayName</td>
+                        <td>
+                            @if (machine.Occupants.Count == 0)
+                            {
+                                <span class="text-muted">Empty</span>
+                            }
+                            else
+                            {
+                                @string.Join(
+                                    ", ",
+                                    machine.Occupants.Select(
+                                        occupant =>
+                                            occupant.CharacterDisplayName))
+                            }
+                        </td>
+                        <td>
+                            <button class="btn btn-sm btn-primary"
+                                    data-testid="@($"move-{machine.ThunderbirdCode}")"
+                                    @onclick="() => MoveRequested.InvokeAsync(machine)">
+                                Move
+                            </button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</section>

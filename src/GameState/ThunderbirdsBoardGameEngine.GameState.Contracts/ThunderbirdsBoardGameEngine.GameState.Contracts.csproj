@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+	<GenerateDocumentationFile>True</GenerateDocumentationFile>
+	<PackageId>ThunderbirdsBoardGameEngine.GameState.Contracts</PackageId>
+	<Version>0.1.0</Version>
+	<Authors>Matthew Carrington</Authors>
+	<Description>Public DTO contracts for the Thunderbirds Board Game Engine Game State API.</Description>
+	<RepositoryUrl>https://github.com/MattCarrington/ThunderbirdsBoardGameEngine</RepositoryUrl>
+	<RepositoryType>git</RepositoryType>
+	<PackageLicenseExpression>UNLICENSED</PackageLicenseExpression>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
+  </PropertyGroup>
+</Project>

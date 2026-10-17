@@ -17,11 +17,18 @@
   <ItemGroup>
     <PackageReference Include="Asp.Versioning.Mvc" />
     <PackageReference Include="Asp.Versioning.Mvc.ApiExplorer" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" />
     <PackageReference Include="Swashbuckle.AspNetCore" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\GameState\ThunderbirdsBoardGameEngine.GameState.Application\ThunderbirdsBoardGameEngine.GameState.Application.csproj" />
+    <ProjectReference Include="..\..\GameState\ThunderbirdsBoardGameEngine.GameState.Contracts\ThunderbirdsBoardGameEngine.GameState.Contracts.csproj" />
+    <ProjectReference Include="..\..\GameState\ThunderbirdsBoardGameEngine.GameState.Infrastructure\ThunderbirdsBoardGameEngine.GameState.Infrastructure.csproj" />
     <ProjectReference Include="..\..\Rules\ThunderbirdsBoardGameEngine.Rules.Application\ThunderbirdsBoardGameEngine.Rules.Application.csproj" />
     <ProjectReference Include="..\..\Rules\ThunderbirdsBoardGameEngine.Rules.Contracts\ThunderbirdsBoardGameEngine.Rules.Contracts.csproj" />
     <ProjectReference Include="..\..\Rules\ThunderbirdsBoardGameEngine.Rules.Infrastructure\ThunderbirdsBoardGameEngine.Rules.Infrastructure.csproj" />

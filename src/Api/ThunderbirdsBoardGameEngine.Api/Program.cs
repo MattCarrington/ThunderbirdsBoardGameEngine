@@ -5,6 +5,8 @@ using System.Text.Json.Serialization;
 using ThunderbirdsBoardGameEngine.Api.Composition;
 using ThunderbirdsBoardGameEngine.Api.Routing;
 using ThunderbirdsBoardGameEngine.Api.Swagger;
+using ThunderbirdsBoardGameEngine.GameState.Application;
+using ThunderbirdsBoardGameEngine.GameState.Infrastructure;
 using ThunderbirdsBoardGameEngine.ReferenceData.Runtime;
 using ThunderbirdsBoardGameEngine.Rules.Infrastructure;
 
@@ -32,6 +34,10 @@ namespace ThunderbirdsBoardGameEngine.Api
 
             builder.Services.AddReferenceData();
             builder.Services.AddRules();
+            builder.Services.AddGameState();
+            builder.Services.AddGameStateIntegrity();
+            builder.Services.AddGameStatePersistence(builder.Configuration);
+            builder.Services.AddGameStateRulesGateway();
             builder.Services.AddApiServices(builder.Configuration);
 
             builder.Services.AddAuthorization();
@@ -61,6 +67,8 @@ namespace ThunderbirdsBoardGameEngine.Api
             {
                 app.UseHsts();
             }
+
+            app.UseCapabilitySecurityHeaders();
 
             app.UseApiExceptionHandling();
             app.UseApiProblemDetails();

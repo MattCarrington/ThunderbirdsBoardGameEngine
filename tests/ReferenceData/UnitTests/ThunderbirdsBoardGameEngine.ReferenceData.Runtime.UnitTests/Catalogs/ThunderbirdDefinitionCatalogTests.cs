@@ -68,6 +68,36 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Runtime.UnitTests.Catalogs
             Assert.Contains(result, t => t.Code == new ThunderbirdCode("thunderbird-2") && t.DisplayName == "Thunderbird 2" && t.Domain == MovementDomain.Space && t.TopSpeed == 3);
         }
 
+        [Fact]
+        public void GetByCode_WithExistingCode_ReturnsDefinition()
+        {
+            // Arrange
+            var catalog = CreateCatalog();
+
+            var code = new ThunderbirdCode("thunderbird-1");
+            // Act
+            var definition = catalog.GetByCode(code);
+
+            // Assert
+            Assert.NotNull(definition);
+            Assert.Equal(code, definition.Code);
+            Assert.Equal("Thunderbird 1", definition.DisplayName);
+            Assert.Equal(MovementDomain.Earth, definition.Domain);
+            Assert.Equal(0, definition.TopSpeed);
+        }
+
+        [Fact]
+        public void GetByCode_WithNonExistingCode_ThrowsKeyNotFoundException()
+        {
+            // Arrange
+            var catalog = CreateCatalog();
+
+            var code = new ThunderbirdCode("non-existing-code");
+
+            // Act & Assert
+            Assert.Throws<KeyNotFoundException>(() => catalog.GetByCode(code));
+        }
+
         private static ThunderbirdDefinitionCatalog CreateCatalog()
         {
             var snapshot = new ReferenceDataSnapshotBuilder()
