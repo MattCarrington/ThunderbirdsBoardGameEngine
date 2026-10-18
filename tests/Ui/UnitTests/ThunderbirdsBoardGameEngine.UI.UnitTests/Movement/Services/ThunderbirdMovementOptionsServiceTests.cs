@@ -19,19 +19,22 @@ namespace ThunderbirdsBoardGameEngine.UI.UnitTests.Movement.Services
                 code: new ThunderbirdCode("TB001"),
                 displayName: "Thunderbird 1",
                 domain: MovementDomain.Earth,
-                topSpeed: 100);
+                topSpeed: 100,
+                characterCapacity: 1);
 
             var thunderbird2 = new ReferenceThunderbirdDefinition(
                 code: new ThunderbirdCode("TB002"),
                 displayName: "Thunderbird 2",
                 domain: MovementDomain.Space,
-                topSpeed: 0);
+                topSpeed: 0,
+                characterCapacity: 2);
 
             var thunderbird3 = new ReferenceThunderbirdDefinition(
                 code: new ThunderbirdCode("TB003"),
                 displayName: "Thunderbird 3",
                 domain: MovementDomain.Space,
-                topSpeed: 150);
+                topSpeed: 150,
+                characterCapacity: 3);
 
             var catalog = Substitute.For<IThunderbirdDefinitionCatalog>();
             catalog.GetAll().Returns(new[] { thunderbird1, thunderbird2, thunderbird3 }.ToImmutableArray());

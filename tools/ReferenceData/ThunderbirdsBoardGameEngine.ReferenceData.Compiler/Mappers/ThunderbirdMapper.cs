@@ -18,7 +18,8 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Mappers
                 code: new ThunderbirdCode(StringHelpers.Slugify(input.Name)),
                 displayName: StringHelpers.NormalizeWhitespace(input.Name, nameof(input.Name)),
                 domain: Enum.Parse<MovementDomain>(input.MovementDomain, ignoreCase: true),
-                topSpeed: input.TopSpeed
+                topSpeed: input.TopSpeed,
+                characterCapacity: input.CharacterCapacity
             );
         }
     }

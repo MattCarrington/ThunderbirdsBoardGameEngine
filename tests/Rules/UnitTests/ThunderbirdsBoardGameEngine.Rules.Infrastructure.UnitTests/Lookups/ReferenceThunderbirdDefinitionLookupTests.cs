@@ -22,7 +22,8 @@ namespace ThunderbirdsBoardGameEngine.Rules.Infrastructure.UnitTests.Lookups
                 code: code,
                 displayName: "Test Thunderbird",
                 domain: MovementDomain.Earth,
-                topSpeed: 3);
+                topSpeed: 3,
+                characterCapacity: 1);
 
             var catalog = Substitute.For<IThunderbirdDefinitionCatalog>();
             catalog.TryGetByCode(Arg.Any<ThunderbirdCode>(), out Arg.Any<ReferenceThunderbirdDefinition?>()).Returns(x =>

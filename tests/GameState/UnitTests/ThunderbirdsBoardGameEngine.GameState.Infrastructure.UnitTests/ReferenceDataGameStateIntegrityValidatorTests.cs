@@ -271,8 +271,19 @@ namespace ThunderbirdsBoardGameEngine.GameState.Infrastructure.UnitTests
             var characterOne = new ReferenceCharacterDefinition(new CharacterCode("character-1"), "Character 1", null);
             var characterTwo = new ReferenceCharacterDefinition(new CharacterCode("character-2"), "Character 2", null);
 
-            var thunderbirdOne = new ReferenceThunderbirdDefinition(new ThunderbirdCode("thunderbird-1"), "Thunderbird 1", MovementDomain.Earth, 1);
-            var thunderbirdTwo = new ReferenceThunderbirdDefinition(new ThunderbirdCode("thunderbird-2"), "Thunderbird 2", MovementDomain.Space, 2);
+            var thunderbirdOne = new ReferenceThunderbirdDefinition(
+                code: new ThunderbirdCode("thunderbird-1"),
+                displayName: "Thunderbird 1",
+                domain: MovementDomain.Earth,
+                topSpeed: 1,
+                characterCapacity: 1);
+
+            var thunderbirdTwo = new ReferenceThunderbirdDefinition(
+                code: new ThunderbirdCode("thunderbird-2"),
+                displayName: "Thunderbird 2",
+                domain: MovementDomain.Space,
+                topSpeed: 2,
+                characterCapacity: 2);
 
             var locationOne = new ReferenceLocationDefinition(new LocationCode("location-1"), "Location 1", MovementDomain.Earth);
             var locationTwo = new ReferenceLocationDefinition(new LocationCode("location-2"), "Location 2", MovementDomain.Space);
