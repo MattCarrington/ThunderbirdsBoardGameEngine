@@ -3,8 +3,8 @@ using ThunderbirdsBoardGameEngine.Rules.Domain.Movement.Contributions;
 
 namespace ThunderbirdsBoardGameEngine.Rules.Application.Movement.Interfaces
 {
-    public interface IThunderbirdsDefinitionLookup
+    public interface IThunderbirdMovementDefinitionLookup
     {
-        ThunderbirdContribution GetThunderbirdMovementContribution(ThunderbirdCode thunderbirdCode);
+        ThunderbirdMovementContribution GetThunderbirdMovementContribution(ThunderbirdCode thunderbirdCode);
     }
 }

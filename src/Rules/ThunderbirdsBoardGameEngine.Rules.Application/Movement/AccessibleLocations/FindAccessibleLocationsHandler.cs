@@ -6,10 +6,10 @@ namespace ThunderbirdsBoardGameEngine.Rules.Application.Movement.AccessibleLocat
 {
     public sealed class FindAccessibleLocationsHandler : IRequestHandler<FindAccessibleLocationsQuery, FindAccessibleLocationsResponse>
     {
-        private readonly IThunderbirdsDefinitionLookup _thunderbirdsDefinitionLookup;
+        private readonly IThunderbirdMovementDefinitionLookup _thunderbirdsDefinitionLookup;
         private readonly IMapEdgeDefinitionLookup _mapEdgeDefinitionLookup;
 
-        public FindAccessibleLocationsHandler(IThunderbirdsDefinitionLookup thunderbirdsDefinitionLookup, IMapEdgeDefinitionLookup mapEdgeDefinitionLookup)
+        public FindAccessibleLocationsHandler(IThunderbirdMovementDefinitionLookup thunderbirdsDefinitionLookup, IMapEdgeDefinitionLookup mapEdgeDefinitionLookup)
         {
             _thunderbirdsDefinitionLookup = thunderbirdsDefinitionLookup ?? throw new ArgumentNullException(nameof(thunderbirdsDefinitionLookup));
             _mapEdgeDefinitionLookup = mapEdgeDefinitionLookup ?? throw new ArgumentNullException(nameof(mapEdgeDefinitionLookup));

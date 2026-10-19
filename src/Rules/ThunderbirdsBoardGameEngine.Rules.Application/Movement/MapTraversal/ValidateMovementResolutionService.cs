@@ -8,13 +8,13 @@ namespace ThunderbirdsBoardGameEngine.Rules.Application.Movement.MapTraversal
 {
     public class ValidateMovementResolutionService : IValidateMovementResolutionService
     {
-        private readonly IThunderbirdsDefinitionLookup _thunderbirdsDefinitionLookup;
+        private readonly IThunderbirdMovementDefinitionLookup _thunderbirdsDefinitionLookup;
         private readonly ILocationDefinitionLookup _locationDefinitionLookup;
         private readonly IMapEdgeDefinitionLookup _edgeDefinitionLookup;
         private readonly IEventCardValidator _eventCardValidator;
         private readonly MovementEvaluator _movementEvaluator;
 
-        public ValidateMovementResolutionService(IThunderbirdsDefinitionLookup thunderbirdsDefinitionLookup,
+        public ValidateMovementResolutionService(IThunderbirdMovementDefinitionLookup thunderbirdsDefinitionLookup,
             ILocationDefinitionLookup locationDefinitionLookup,
             IMapEdgeDefinitionLookup edgeDefinitionLookup,
             IEventCardValidator eventCardValidator,

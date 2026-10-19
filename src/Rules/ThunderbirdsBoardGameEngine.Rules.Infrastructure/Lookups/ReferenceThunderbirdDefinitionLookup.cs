@@ -6,23 +6,23 @@ using ThunderbirdsBoardGameEngine.Rules.Domain.Movement.Contributions;
 
 namespace ThunderbirdsBoardGameEngine.Rules.Infrastructure.Lookups
 {
-    internal class ReferenceThunderbirdsDefinitionLookup : IThunderbirdsDefinitionLookup
+    internal class ReferenceThunderbirdDefinitionLookup : IThunderbirdMovementDefinitionLookup
     {
         private readonly IThunderbirdDefinitionCatalog _thunderbirdDefinitionCatalog;
 
-        public ReferenceThunderbirdsDefinitionLookup(IThunderbirdDefinitionCatalog thunderbirdDefinitionCatalog)
+        public ReferenceThunderbirdDefinitionLookup(IThunderbirdDefinitionCatalog thunderbirdDefinitionCatalog)
         {
             _thunderbirdDefinitionCatalog = thunderbirdDefinitionCatalog;
         }
 
-        public ThunderbirdContribution GetThunderbirdMovementContribution(ThunderbirdCode thunderbirdCode)
+        public ThunderbirdMovementContribution GetThunderbirdMovementContribution(ThunderbirdCode thunderbirdCode)
         {
             if (!_thunderbirdDefinitionCatalog.TryGetByCode(thunderbirdCode, out var thunderbird))
             {
                 throw new ReferenceDataNotFoundException("Thunderbird", thunderbirdCode.Value);
             }
 
-            return new ThunderbirdContribution(
+            return new ThunderbirdMovementContribution(
                 Key: thunderbird.Code,
                 TraversalDomain: thunderbird.Domain,
                 TopSpeed: thunderbird.TopSpeed);

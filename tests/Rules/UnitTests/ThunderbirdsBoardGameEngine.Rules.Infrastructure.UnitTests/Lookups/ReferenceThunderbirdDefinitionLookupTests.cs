@@ -33,7 +33,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Infrastructure.UnitTests.Lookups
                 return true;
             });
 
-            var lookup = new ReferenceThunderbirdsDefinitionLookup(catalog);
+            var lookup = new ReferenceThunderbirdDefinitionLookup(catalog);
 
             // Act
             var result = lookup.GetThunderbirdMovementContribution(code);
@@ -58,7 +58,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Infrastructure.UnitTests.Lookups
                 return false;
             });
 
-            var lookup = new ReferenceThunderbirdsDefinitionLookup(catalog);
+            var lookup = new ReferenceThunderbirdDefinitionLookup(catalog);
 
             // Act & Assert
             var ex = Assert.Throws<ReferenceDataNotFoundException>(() => lookup.GetThunderbirdMovementContribution(code));

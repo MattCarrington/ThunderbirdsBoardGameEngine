@@ -37,7 +37,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Infrastructure
             services.AddSingleton<ICharacterCatalogLookup, ReferenceCharacterCatalogLookup>();
             services.AddSingleton<ILocationDefinitionLookup, ReferenceLocationDefinitionLookup>();
             services.AddSingleton<IMapEdgeDefinitionLookup, ReferenceMapEdgeDefinitionLookup>();
-            services.AddSingleton<IThunderbirdsDefinitionLookup, ReferenceThunderbirdsDefinitionLookup>();
+            services.AddSingleton<IThunderbirdMovementDefinitionLookup, ReferenceThunderbirdDefinitionLookup>();
             services.AddSingleton<IFabCardCatalogLookup, ReferenceFabCardCatalogLookup>();
             services.AddSingleton<IEventCardCatalogLookup, ReferenceEventCardCatalogLookup>();
 

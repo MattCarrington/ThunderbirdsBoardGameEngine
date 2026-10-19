@@ -25,7 +25,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.Movement
 
         private readonly LocationCode _invalidLocationCode = new("invalid-location-code");
 
-        private readonly ThunderbirdContribution _thunderbird = new(new ThunderbirdCode("thunderbird-1"), MovementDomain.Earth, 1);
+        private readonly ThunderbirdMovementContribution _thunderbird = new(new ThunderbirdCode("thunderbird-1"), MovementDomain.Earth, 1);
 
         private static readonly IReadOnlyCollection<CardCode> _noCards = [];
 
