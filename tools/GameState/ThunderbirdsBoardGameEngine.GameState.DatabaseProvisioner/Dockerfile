@@ -13,6 +13,7 @@ WORKDIR /src
 COPY ["Directory.Packages.props", "."]
 COPY ["Directory.Build.props", "."]
 COPY ["NuGet.config", "."]
+COPY ["global.json", "."]
 COPY ["tools/GameState/ThunderbirdsBoardGameEngine.GameState.DatabaseProvisioner/ThunderbirdsBoardGameEngine.GameState.DatabaseProvisioner.csproj", "tools/GameState/ThunderbirdsBoardGameEngine.GameState.DatabaseProvisioner/"]
 RUN dotnet restore "./tools/GameState/ThunderbirdsBoardGameEngine.GameState.DatabaseProvisioner/ThunderbirdsBoardGameEngine.GameState.DatabaseProvisioner.csproj"
 COPY . .
