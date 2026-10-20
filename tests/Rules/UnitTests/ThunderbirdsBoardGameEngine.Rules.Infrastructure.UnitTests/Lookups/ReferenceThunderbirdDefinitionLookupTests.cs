@@ -65,5 +65,55 @@ namespace ThunderbirdsBoardGameEngine.Rules.Infrastructure.UnitTests.Lookups
             Assert.Equal("Thunderbird", ex.ResourceType);
             Assert.Equal(code.ToString(), ex.Code);
         }
+
+        [Fact]
+        public void GetThunderbirdCapacity_WhenValidThunderbirdCode_ReturnsCharacterCapacity()
+        {
+            // Arrange
+            var code = new ThunderbirdCode("test-thunderbird");
+
+            var thunderbirdDefinition = new ReferenceThunderbirdDefinition(
+                code: code,
+                displayName: "Test Thunderbird",
+                domain: MovementDomain.Earth,
+                topSpeed: 3,
+                characterCapacity: 3);
+
+            var catalog = Substitute.For<IThunderbirdDefinitionCatalog>();
+            catalog.TryGetByCode(Arg.Any<ThunderbirdCode>(), out Arg.Any<ReferenceThunderbirdDefinition?>()).Returns(x =>
+            {
+                x[1] = thunderbirdDefinition;
+                return true;
+            });
+
+            var lookup = new ReferenceThunderbirdDefinitionLookup(catalog);
+
+            // Act
+            var result = lookup.GetThunderbirdCapacity(code);
+
+            // Assert
+            Assert.Equal(thunderbirdDefinition.CharacterCapacity, result);
+        }
+
+        [Fact]
+        public void GetThunderbirdCapacity_WhenThunderbirdCodeNotFound_ThrowsReferenceDataNotFound()
+        {
+            // Arrange
+            var code = new ThunderbirdCode("non-existent-thunderbird");
+
+            var catalog = Substitute.For<IThunderbirdDefinitionCatalog>();
+            catalog.TryGetByCode(Arg.Any<ThunderbirdCode>(), out Arg.Any<ReferenceThunderbirdDefinition?>()).Returns(x =>
+            {
+                x[1] = null;
+                return false;
+            });
+
+            var lookup = new ReferenceThunderbirdDefinitionLookup(catalog);
+
+            // Act & Assert
+            var ex = Assert.Throws<ReferenceDataNotFoundException>(() => lookup.GetThunderbirdCapacity(code));
+            Assert.Equal("Thunderbird", ex.ResourceType);
+            Assert.Equal(code.ToString(), ex.Code);
+        }
     }
 }
