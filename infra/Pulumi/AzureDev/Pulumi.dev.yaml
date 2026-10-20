@@ -2,7 +2,11 @@ config:
   thunderbirds-azure-dev:databaseAdministratorUsername: thunderbirds_admin
   thunderbirds-azure-dev:databaseAdministratorPassword:
     secure: AAABAEl7d7vXWVWU2XuCHtYYf/Prqj97Fh/bS/wo1FwdcOU7bP5ORmYvVhLGXWEV
-  thunderbirds-azure-dev:containerImage: ghcr.io/mattcarrington/thunderbirds-app:0.15.7
+  thunderbirds-azure-dev:containerImage: ghcr.io/mattcarrington/thunderbirds-app:0.17.1
   thunderbirds-azure-dev:registryUsername: mattcarrington
   thunderbirds-azure-dev:registryPassword:
     secure: AAABAEEcWd88oyGtdSBEtGtyPU1xBjroEYDy5qkM627u83mx4trMC73LTuZ7adMx1hL2Yvawndf/lKMriNdwj0FljduSUSCt
+  thunderbirds-azure-dev:databaseMigratorImage: ghcr.io/mattcarrington/thunderbirds-game-state-db-migrator:0.17.1
+  thunderbirds-azure-dev:databaseRuntimeUsername: game_state_runtime
+  thunderbirds-azure-dev:databaseRuntimePassword:
+    secure: AAABAGD68R2BywLWpno0CM/K2l2a/3lUzbbQxOHFdkIPqF8YmoocSlNod0O3t3EI

@@ -37,7 +37,8 @@ return await Deployment.RunAsync(() =>
     }
 
     const string registryPasswordSecretName = "registry-password";
-    const string databaseConnectionStringSecretName = "game-state-database-connection-string";
+    const string databaseAdministratorConnectionStringSecretName = "game-state-database-connection-string";
+    const string databaseRuntimeConnectionStringSecretName = "game-state-runtime-database-connection-string";
     const string databaseConnectionStringEnvironmentVariable = "GameState__Persistence__ConnectionString";
 
     var tags = BuildTags(stack);
@@ -111,8 +112,13 @@ return await Deployment.RunAsync(() =>
         Collation = "en_US.utf8",
     });
 
+    var databaseRuntimeUsername = projectConfig.Require("databaseRuntimeUsername");
+    var databaseRuntimePassword = projectConfig.RequireSecret("databaseRuntimePassword");
 
-    var databaseConnectionString = Output.Format(
+    var databaseRuntimeConnectionString = Output.Format(
+        $"Host={databaseServer.FullyQualifiedDomainName};Port=5432;Database={database.Name};Username={databaseRuntimeUsername};Password={databaseRuntimePassword};SSL Mode=Require");
+
+    var databaseAdministratorConnectionString = Output.Format(
         $"Host={databaseServer.FullyQualifiedDomainName};Port=5432;Database={database.Name};Username={databaseAdministratorUsername};Password={databaseAdministratorPassword};SSL Mode=Require");
 
     // Build registries and secrets lists without nulls
@@ -122,8 +128,13 @@ return await Deployment.RunAsync(() =>
     {
         new()
         {
-            Name = databaseConnectionStringSecretName,
-            Value = databaseConnectionString,
+            Name = databaseAdministratorConnectionStringSecretName,
+            Value = databaseAdministratorConnectionString,
+        },
+        new()
+        {
+            Name = databaseRuntimeConnectionStringSecretName,
+            Value = databaseRuntimeConnectionString,
         },
     };
     if (!string.IsNullOrWhiteSpace(registryUsername) && registryPassword != null)
@@ -180,7 +191,7 @@ return await Deployment.RunAsync(() =>
                         new EnvironmentVarArgs
                         {
                             Name = databaseConnectionStringEnvironmentVariable,
-                            SecretRef = databaseConnectionStringSecretName,
+                            SecretRef = databaseAdministratorConnectionStringSecretName,
                         },
                     },
                     Resources = new ContainerResourcesArgs
@@ -202,7 +213,7 @@ return await Deployment.RunAsync(() =>
                     new EnvironmentVarArgs
                     {
                         Name = databaseConnectionStringEnvironmentVariable,
-                        SecretRef = databaseConnectionStringSecretName,
+                        SecretRef = databaseAdministratorConnectionStringSecretName,
                     },
                 },
                     Resources = new ContainerResourcesArgs
