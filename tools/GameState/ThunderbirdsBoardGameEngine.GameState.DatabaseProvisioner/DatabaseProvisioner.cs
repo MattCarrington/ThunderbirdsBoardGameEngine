@@ -57,6 +57,7 @@ namespace ThunderbirdsBoardGameEngine.GameState.DatabaseProvisioner
                 _logger.LogInformation("Runtime database role already exists; applying configuration");
             }
 
+            await ValidateRuntimeRoleAsync(connection, cancellationToken);
             await ConfigureRuntimeRoleAsync(connection, cancellationToken);
             await GrantDatabaseAccessAsync(connection, cancellationToken);
 
@@ -104,7 +105,7 @@ namespace ThunderbirdsBoardGameEngine.GameState.DatabaseProvisioner
         {
             const string sql = """
                 SELECT format(
-                    'ALTER ROLE %I WITH LOGIN NOSUPERUSER NOCREATEDB NOCREATEROLE PASSWORD %L',
+                    'ALTER ROLE %I WITH LOGIN NOCREATEDB NOCREATEROLE PASSWORD %L',
                     @username,
                     @password
                 );
@@ -167,6 +168,40 @@ namespace ThunderbirdsBoardGameEngine.GameState.DatabaseProvisioner
             await command.ExecuteNonQueryAsync(cancellationToken);
 
             _logger.LogInformation("Database provisioning lock acquired");
+        }
+
+        private async Task ValidateRuntimeRoleAsync(NpgsqlConnection connection, CancellationToken cancellationToken)
+        {
+            const string sql = """
+                SELECT EXISTS (
+                    SELECT 1
+                    FROM pg_catalog.pg_roles AS role
+                    WHERE role.rolname = @username
+                      AND (
+                          role.rolsuper
+                          OR role.rolcreatedb
+                          OR role.rolcreaterole
+                          OR role.rolreplication
+                          OR role.rolbypassrls
+                          OR EXISTS (
+                              SELECT 1
+                              FROM pg_catalog.pg_auth_members AS membership
+                              WHERE membership.member = role.oid
+                          )
+                      )
+                );
+                """;
+
+            await using var command = new NpgsqlCommand(sql, connection);
+
+            command.Parameters.AddWithValue("username", _options.RuntimeUsername);
+
+            var hasElevatedAccess = await command.ExecuteScalarAsync(cancellationToken);
+
+            if (hasElevatedAccess is true)
+            {
+                throw new InvalidOperationException("Runtime role must not have administrative attributes or role memberships.");
+            }
         }
     }
 }
