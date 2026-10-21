@@ -42,11 +42,14 @@ namespace ThunderbirdsBoardGameEngine.GameState.DatabaseProvisioner
 
             await using var transaction = await connection.BeginTransactionAsync(cancellationToken);
 
+            await AcquireProvisioningLockAsync(connection, cancellationToken);
+
             var roleExists = await RuntimeRoleExistsAsync(connection, cancellationToken);
 
             if (!roleExists)
             {
                 await CreateRuntimeRoleAsync(connection, cancellationToken);
+
                 _logger.LogInformation("Runtime database role created; awaiting provisioning commit");
             }
             else
@@ -150,6 +153,20 @@ namespace ThunderbirdsBoardGameEngine.GameState.DatabaseProvisioner
             await using var command = new NpgsqlCommand(sql, connection);
 
             await command.ExecuteNonQueryAsync(cancellationToken);
+        }
+
+        private async Task AcquireProvisioningLockAsync(NpgsqlConnection connection, CancellationToken cancellationToken)
+        {
+            // Fixed identifier shared by all Game State provisioning runs.
+            const string sql = "SELECT pg_advisory_xact_lock(742019, 1);";
+
+            _logger.LogInformation("Waiting for database provisioning lock");
+
+            await using var command = new NpgsqlCommand(sql, connection);
+
+            await command.ExecuteNonQueryAsync(cancellationToken);
+
+            _logger.LogInformation("Database provisioning lock acquired");
         }
     }
 }
