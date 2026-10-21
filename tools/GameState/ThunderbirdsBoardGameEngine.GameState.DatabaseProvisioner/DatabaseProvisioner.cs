@@ -23,12 +23,31 @@ namespace ThunderbirdsBoardGameEngine.GameState.DatabaseProvisioner
 
             await connection.OpenAsync(cancellationToken);
 
+            const string identitySql = "SELECT current_user;";
+
+            await using var identityCommand = new NpgsqlCommand(identitySql, connection);
+
+            var administratorRole = (string?)await identityCommand
+                .ExecuteScalarAsync(cancellationToken);
+
+            if (string.Equals(_options.RuntimeUsername, administratorRole, StringComparison.Ordinal))
+            {
+                throw new InvalidOperationException("Runtime account must differ from the provisioning account.");
+            }
+
+            if (connection.Database is "postgres" or "template0" or "template1")
+            {
+                throw new InvalidOperationException("Provisioning must target an application database.");
+            }
+
+            await using var transaction = await connection.BeginTransactionAsync(cancellationToken);
+
             var roleExists = await RuntimeRoleExistsAsync(connection, cancellationToken);
 
             if (!roleExists)
             {
                 await CreateRuntimeRoleAsync(connection, cancellationToken);
-                _logger.LogInformation("Runtime database role created");
+                _logger.LogInformation("Runtime database role created; awaiting provisioning commit");
             }
             else
             {
@@ -37,6 +56,8 @@ namespace ThunderbirdsBoardGameEngine.GameState.DatabaseProvisioner
 
             await ConfigureRuntimeRoleAsync(connection, cancellationToken);
             await GrantDatabaseAccessAsync(connection, cancellationToken);
+
+            await transaction.CommitAsync(cancellationToken);
 
             _logger.LogInformation("Database account provisioning completed");
         }
