@@ -26,6 +26,19 @@ services:
     environment:
       GameState__Persistence__ConnectionString: Host=game-state-db;Port=5432;Database=thunderbirds_game_state;Username=postgres;Password=${GAME_STATE_DB_PASSWORD};GSS Encryption Mode=Disable
     depends_on:
+      game-state-db-provisioner:
+        condition: service_completed_successfully
+    restart: "no"
+
+  game-state-db-provisioner:
+    build:
+      context: ..
+      dockerfile: tools/GameState/ThunderbirdsBoardGameEngine.GameState.DatabaseProvisioner/Dockerfile
+    environment:
+      GameState__DatabaseProvisioning__AdministratorConnectionString: Host=game-state-db;Port=5432;Database=thunderbirds_game_state;Username=postgres;Password=${GAME_STATE_DB_PASSWORD};GSS Encryption Mode=Disable
+      GameState__DatabaseProvisioning__RuntimeUsername: game_state_runtime
+      GameState__DatabaseProvisioning__RuntimePassword: ${GAME_STATE_DB_RUNTIME_PASSWORD:?Set GAME_STATE_DB_RUNTIME_PASSWORD}
+    depends_on:
       game-state-db:
         condition: service_healthy
     restart: "no"
