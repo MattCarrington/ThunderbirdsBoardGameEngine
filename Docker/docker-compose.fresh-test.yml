@@ -1,0 +1,7 @@
+services:
+  game-state-db:
+    volumes:
+      - game-state-fresh-test-data:/var/lib/postgresql/data
+
+volumes:
+  game-state-fresh-test-data:
