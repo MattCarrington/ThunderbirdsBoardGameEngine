@@ -10,7 +10,7 @@ services:
     expose:
       - "8080"
     depends_on:
-      game-state-db-migrator:
+      game-state-db-permissions:
         condition: service_completed_successfully
     healthcheck:
       test: ["CMD", "curl", "-fsS", "http://localhost:8080/health/ready"]
@@ -26,11 +26,11 @@ services:
     environment:
       GameState__Persistence__ConnectionString: Host=game-state-db;Port=5432;Database=thunderbirds_game_state;Username=postgres;Password=${GAME_STATE_DB_PASSWORD};GSS Encryption Mode=Disable
     depends_on:
-      game-state-db-provisioner:
-        condition: service_completed_successfully
+      game-state-db:
+        condition: service_healthy
     restart: "no"
 
-  game-state-db-provisioner:
+  game-state-db-permissions:
     build:
       context: ..
       dockerfile: tools/GameState/ThunderbirdsBoardGameEngine.GameState.DatabaseProvisioner/Dockerfile
@@ -39,8 +39,8 @@ services:
       GameState__DatabaseProvisioning__RuntimeUsername: game_state_runtime
       GameState__DatabaseProvisioning__RuntimePassword: ${GAME_STATE_DB_RUNTIME_PASSWORD:?Set GAME_STATE_DB_RUNTIME_PASSWORD}
     depends_on:
-      game-state-db:
-        condition: service_healthy
+      game-state-db-migrator:
+        condition: service_completed_successfully
     restart: "no"
 
   game-state-db:
