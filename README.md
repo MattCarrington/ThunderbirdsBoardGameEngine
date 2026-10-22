@@ -85,9 +85,9 @@ integration and end-to-end testing scenarios.
 ## Reference data
 
 Static game data — disasters, characters, locations, Thunderbirds, and pod
-vehicles — is managed as **reference data**: compiled from spreadsheets at
-build time into a versioned JSON snapshot, then embedded into the application
-and loaded into read-only in-memory catalogs at startup.
+vehicles — is managed as **reference data**: explicitly compiled from spreadsheets
+into a versioned JSON snapshot, copied into Runtime, and embedded during the
+build. It is loaded into read-only in-memory catalogs when first resolved.
 
 This avoids a dependency on a live catalog service and keeps the runtime
 fully self-contained.

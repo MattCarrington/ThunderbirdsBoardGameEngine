@@ -15,8 +15,10 @@ Package versions are independent of the application's maturity:
   breaking change and requires a major version bump.
 - For pre-1.0 packages, this repository uses a minor bump for breaking changes,
   resetting the patch to zero (for example, `0.4.1` to `0.5.0`).
-- ReferenceData.Core and ReferenceData.Runtime are versioned `2.0.0` for the
-  .NET 10 migration. Other packages can remain on their own `0.x` release lines.
+- ReferenceData.Core and ReferenceData.Runtime moved to `2.0.0` for the
+  .NET 10 migration and subsequently to `3.0.0` with the required character-capacity
+  constructor change. Project files hold current declared versions. Other packages
+  can remain on their own `0.x` release lines.
 
 NuGet package versions are separate from reference-data snapshot metadata.
 Changing the target framework does not require regenerating the snapshot or
