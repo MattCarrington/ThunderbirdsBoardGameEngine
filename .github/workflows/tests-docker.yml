@@ -6,11 +6,17 @@ on:
       solution_file:
         required: true
         type: string
-      image_name:
+      app_image_name:
         description: "Docker image name to use for API"
         required: false
         type: string
         default: "thunderbirds-api"
+      database_migrator_image_name:
+        required: true
+        type: string
+      database_provisioner_image_name:
+        required: true
+        type: string
       run_integration:
         description: "Run integration tests"
         required: false
@@ -53,12 +59,36 @@ jobs:
         if: ${{ inputs.run_integration || inputs.run_playwright }}
         uses: actions/download-artifact@v8
         with:
-          name: ${{ inputs.image_name }}-image
+          name: ${{ inputs.app_image_name }}-image
           path: .
 
       - name: Load Docker image
         if: ${{ inputs.run_integration || inputs.run_playwright }}
-        run: docker load -i ${{ inputs.image_name }}.tar
+        run: docker load -i ${{ inputs.app_image_name }}.tar
+
+      - name: Download migrator image
+        if: ${{ inputs.run_integration || inputs.run_playwright }}
+        uses: actions/download-artifact@v8
+        with:
+          name: ${{ inputs.database_migrator_image_name }}-image
+
+      - name: Load migrator image
+        if: ${{ inputs.run_integration || inputs.run_playwright }}
+        env:
+          IMAGE_NAME: ${{ inputs.database_migrator_image_name }}
+        run: docker load -i "$IMAGE_NAME.tar"
+
+      - name: Download provisioner image
+        if: ${{ inputs.run_integration || inputs.run_playwright }}
+        uses: actions/download-artifact@v8
+        with:
+          name: ${{ inputs.database_provisioner_image_name }}-image
+
+      - name: Load provisioner image
+        if: ${{ inputs.run_integration || inputs.run_playwright }}
+        env:
+          IMAGE_NAME: ${{ inputs.database_provisioner_image_name }}
+        run: docker load -i "$IMAGE_NAME.tar"
         
       - name: Start API env
         if: ${{ inputs.run_integration || inputs.run_playwright }}
@@ -69,7 +99,11 @@ jobs:
           -f Docker/docker-compose.yml \
           -f Docker/docker-compose.test.yml \
           -f Docker/docker-compose.ci.override.yml \
-          up -d
+          up -d --no-build
+        env:
+          APP_IMAGE_NAME: ${{ inputs.app_image_name }}
+          MIGRATOR_IMAGE_NAME: ${{ inputs.database_migrator_image_name }}
+          PROVISIONER_IMAGE_NAME: ${{ inputs.database_provisioner_image_name }}
 
       - name: Wait for readiness
         if: ${{ inputs.run_integration || inputs.run_playwright }}

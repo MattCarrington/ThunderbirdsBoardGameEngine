@@ -70,7 +70,9 @@ jobs:
     uses: ./.github/workflows/tests-docker.yml
     with:
       solution_file: *solution
-      image_name: *app_image_name
+      app_image_name: *app_image_name
+      database_migrator_image_name: *migrator_image_name
+      database_provisioner_image_name: *provisioner_image_name
       run_integration: true
       run_playwright: true
       base_url: *base_url
