@@ -147,7 +147,6 @@ namespace ThunderbirdsBoardGameEngine.GameState.DatabaseProvisioner
                 ALTER DEFAULT PRIVILEGES IN SCHEMA game_state
                 GRANT SELECT, INSERT, UPDATE ON TABLES TO {roleName};
 
-                REVOKE CONNECT ON DATABASE postgres FROM PUBLIC;
                 REVOKE TEMPORARY ON DATABASE {databaseName} FROM PUBLIC;
                 """;
 
