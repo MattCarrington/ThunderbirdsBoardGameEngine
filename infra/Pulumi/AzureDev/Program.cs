@@ -23,6 +23,7 @@ return await Deployment.RunAsync(() =>
     var databaseAdministratorPassword = projectConfig.RequireSecret("databaseAdministratorPassword");
 
     var databaseMigratorImage = projectConfig.Get("databaseMigratorImage") ?? "ghcr.io/mattcarrington/thunderbirds-game-state-db-migrator:latest";
+    var databaseProvisionerImage = projectConfig.Get("databaseProvisionerImage") ?? "ghcr.io/mattcarrington/thunderbirds-game-state-db-provisioner:latest";
 
     if (string.IsNullOrWhiteSpace(databaseName))
     {
@@ -40,6 +41,7 @@ return await Deployment.RunAsync(() =>
     const string databaseAdministratorConnectionStringSecretName = "game-state-database-connection-string";
     const string databaseRuntimeConnectionStringSecretName = "game-state-runtime-database-connection-string";
     const string databaseConnectionStringEnvironmentVariable = "GameState__Persistence__ConnectionString";
+    const string databaseRuntimePasswordSecretName = "game-state-runtime-password";
 
     var tags = BuildTags(stack);
 
@@ -136,6 +138,11 @@ return await Deployment.RunAsync(() =>
             Name = databaseRuntimeConnectionStringSecretName,
             Value = databaseRuntimeConnectionString,
         },
+        new()
+        {
+            Name = databaseRuntimePasswordSecretName,
+            Value = databaseRuntimePassword,
+        },
     };
     if (!string.IsNullOrWhiteSpace(registryUsername) && registryPassword != null)
     {
@@ -201,6 +208,35 @@ return await Deployment.RunAsync(() =>
                     },
                     ImageType = ImageType.ContainerImage,
                 },
+                new InitContainerArgs
+                {
+                    Name = "game-state-db-provisioner",
+                    Image = databaseProvisionerImage,
+                    Env =
+                    {
+                        new EnvironmentVarArgs
+                        {
+                            Name = "GameState__DatabaseProvisioning__AdministratorConnectionString",
+                            SecretRef = databaseAdministratorConnectionStringSecretName,
+                        },
+                        new EnvironmentVarArgs
+                        {
+                            Name = "GameState__DatabaseProvisioning__RuntimeUsername",
+                            Value = databaseRuntimeUsername,
+                        },
+                        new EnvironmentVarArgs
+                        {
+                            Name = "GameState__DatabaseProvisioning__RuntimePassword",
+                            SecretRef = databaseRuntimePasswordSecretName,
+                        },
+                    },
+                    Resources = new ContainerResourcesArgs
+                    {
+                        Cpu = 0.25,
+                        Memory = "0.5Gi",
+                    },
+                    ImageType = ImageType.ContainerImage,
+                }
             },
             Containers =
             {
@@ -209,13 +245,13 @@ return await Deployment.RunAsync(() =>
                     Name = "app",
                     Image = containerImage,
                     Env =
-                {
-                    new EnvironmentVarArgs
                     {
-                        Name = databaseConnectionStringEnvironmentVariable,
-                        SecretRef = databaseAdministratorConnectionStringSecretName,
+                        new EnvironmentVarArgs
+                        {
+                            Name = databaseConnectionStringEnvironmentVariable,
+                            SecretRef = databaseRuntimeConnectionStringSecretName,
+                        },
                     },
-                },
                     Resources = new ContainerResourcesArgs
                     {
                         Cpu = 0.25,

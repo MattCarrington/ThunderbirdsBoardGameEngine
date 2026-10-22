@@ -13,3 +13,5 @@ config:
     default: thunderbirds_game_state
   thunderbirds-azure-dev:databaseMigratorImage:
     default: ghcr.io/mattcarrington/thunderbirds-game-state-db-migrator:latest
+  thunderbirds-azure-dev:databaseProvisionerImage:
+    default: ghcr.io/mattcarrington/thunderbirds-game-state-db-provisioner:latest
