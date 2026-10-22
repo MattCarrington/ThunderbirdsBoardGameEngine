@@ -1,6 +1,6 @@
 # ADR 0005: Separate GameState Runtime and Database Provisioning Access
 
-- Status: Proposed; password handling and Azure verification remain unresolved
+- Status: Accepted for this increment, with a temporary database-log risk; implementation verification remains outstanding
 - Date: 2026-10-22
 
 ## Context
@@ -15,12 +15,11 @@ roles, or change table structures. Infrastructure provisioning and schema
 migrations still require elevated access. New environments, including UAT, must
 be reproducible without manual account creation or permission grants.
 
-The implementation has been explored locally, but the deployment design must
-be agreed before extending it further. In particular, a password-logging concern
-led to an experimental native PostgreSQL client wrapper. That experiment was
-rolled back because its complexity had not been justified against alternatives.
+Local exploration established the permission model and repeatable setup. The
+selected design keeps account management separate from migrations and avoids
+requiring direct database connectivity from the Pulumi deployment runner.
 
-## Proposed Decision
+## Decision
 
 Separate responsibilities as follows:
 
@@ -51,7 +50,7 @@ API starts using its runtime account
 ```
 
 Docker Compose expresses this order through health and successful-completion
-dependencies. The proposed Azure implementation puts the migrator first and
+dependencies. The Azure implementation will put the migrator first and
 the provisioner second in the Container App's init-container array. Azure
 documents sequential execution in array order, with successful completion
 required before the main container starts.
@@ -91,15 +90,13 @@ other applications requires revisiting these shared permission changes.
 
 ### Relationship to ADR 0003
 
-[ADR 0003](0003-deployment-managed-database-migrations.md) describes a migration
-bundle run once as a deployment job. The current implementation instead uses a
-.NET migrator executable in an init container. This proposal retains that
-existing mechanism and adds another init container; it does not claim the two
-approaches have identical lifecycle guarantees.
-
-Before accepting this ADR, explicitly decide whether to amend/supersede that
-part of ADR 0003 or retain its deployment-job direction. The API remains free of
-schema-migration responsibilities in either case.
+[ADR 0003](0003-deployment-managed-database-migrations.md) originally selected a
+migration bundle run once as a deployment job. This ADR supersedes that artifact
+and execution choice for this increment: use the existing .NET migrator
+executable and ordered init containers. This accepts execution on replica
+initialization rather than exactly once per deployment. The remaining ADR 0003
+principles, including reviewed migrations and keeping schema changes out of the
+API process, remain in force.
 
 ## Alternatives Considered
 
@@ -114,7 +111,8 @@ developer workstation and GitHub-hosted deployment runner. Firewall access,
 fresh-environment bootstrap, migration/grant ordering, and cleanup need a
 concrete design. Provider password handling must also be verified; using a
 provider does not by itself eliminate password-bearing SQL or database logging
-risks. This remains a viable alternative, not a rejected approach.
+risks. It is not selected for this increment, but can be reconsidered if the
+maintenance cost or deployment requirements change.
 
 ### Account Provisioning Inside the EF Migrator
 
@@ -127,9 +125,10 @@ current preference is to keep those responsibilities separate.
 Run controlled provisioning inside Azure without direct database access from
 the deployment runner. This separates execution from replica initialization,
 but requires explicit job invocation, completion checks, and deployment gating.
-Sequential init containers may avoid that extra orchestration for this slice.
+Sequential init containers avoid that extra orchestration for this slice; a
+separate job remains an option if initialization costs or scaling warrant it.
 
-## Credential Handling: Unresolved
+## Credential Handling and Accepted Temporary Risk
 
 The current provisioner supplies the runtime password as a parameter to a
 `SELECT format(...)` query, then executes the returned `ALTER ROLE` command.
@@ -157,10 +156,44 @@ These disable routine statement/duration and audit logging, but a failing
 password-bearing statement can still be recorded by error logging. Future
 logging changes could introduce additional exposure.
 
-Do not treat this risk as resolved, broadly disable diagnostics, or add native
-interop without comparing the operational and maintenance tradeoffs. A SCRAM
-verifier is a possible approach, but its implementation, packaging, and handling
-must be justified. Verifiers are sensitive too.
+The application owner accepts this PostgreSQL server-log exposure temporarily
+for the current hobby environment, in order to deliver the restricted runtime
+account without adding native interop or a custom cryptographic implementation.
+This is a risk acceptance, not a claim that password-bearing SQL is safe under
+all logging configurations. It does not automatically extend to future shared,
+public, or higher-risk environments; reassess before creating those environments.
+
+The story's credential acceptance boundary is explicit:
+
+- Plaintext passwords must not appear in committed source, deployment/container
+  logs, or ordinary Pulumi outputs. Verify both success and failure paths before
+  completing the story, using disposable credentials rather than real secrets.
+- PostgreSQL server statement/error logs are a separate, temporarily accepted
+  exception. Treat them as sensitive and verify that access to them and any
+  exported copies is restricted to authorized operators.
+- Retain useful error diagnostics. Do not broadly suppress error logging to
+  conceal password-setting statements. Review any logging/audit configuration
+  changes for their effect on credential exposure.
+- Key Vault changes secret storage and retrieval, not this SQL-logging exposure.
+
+### Follow-up: Harden Password Provisioning Against Database Log Exposure
+
+Track a separate hardening story before treating this risk as resolved:
+
+- Select and document a supported approach that keeps plaintext passwords out of
+  database statement/error logs, including failed password-setting operations.
+- Compare client-generated SCRAM verifiers, available tooling/providers, and
+  targeted logging/redaction controls without assuming any option meets every
+  requirement. Protect verifiers as sensitive material too.
+- Verify successful provisioning, repeat execution, failure behaviour, and API
+  authentication with disposable credentials under the relevant logging modes.
+- Include diagnostic visibility, Linux/Windows dependencies, operational cost,
+  and Azure compatibility in the decision. Avoid bespoke cryptography.
+- Update this ADR to remove or replace the temporary risk acceptance only after
+  the selected approach is verified.
+
+These follow-up criteria are recorded here for backlog capture; this ADR does
+not imply that a Trello card has already been created.
 
 ## Validation Evidence and Acceptance Gates
 
@@ -182,15 +215,17 @@ Manual local checks completed during refinement:
   while retaining it caused a timeout before account changes.
 
 These are manual observations, not automated regression coverage or evidence of
-Azure compatibility. Before accepting and completing the story:
+Azure compatibility. Architecture acceptance does not mean the story is done.
+Before completing the story:
 
-- Resolve credential handling and verify success/failure logs without exposing
-  real credentials.
+- Verify the source, deployment/container-log, and Pulumi-output boundary on
+  success and failure without exposing real credentials; verify restricted access
+  to PostgreSQL logs and their exports under the accepted temporary risk.
 - Verify operations with Azure's non-superuser administrator, including database
   ownership, shared permission changes, and repeated role management.
 - Confirm future-object permissions under the actual migration identity and
   inspect effective access beyond the intended database/schema.
-- Resolve the ADR 0003 lifecycle discrepancy and complete deployment wiring.
+- Complete the ordered init-container deployment wiring selected by this ADR.
 - Run deployed API integration/user-journey checks and inspect deployed identity
   and secret references; retire old revisions carrying administrator API config.
 
@@ -212,7 +247,7 @@ Future stories can independently:
 
 Automated rotation, passwordless authentication, private networking, backups,
 and Pulumi ESC remain outside this story. No native-library solution or switch
-to the PostgreSQL provider is accepted by this proposed ADR.
+to the PostgreSQL provider is selected for this increment.
 
 ## References
 
