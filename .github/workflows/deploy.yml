@@ -3,7 +3,7 @@ name: Deploy
 on:
   workflow_call:
     inputs:
-      image_name:
+      app_image_name:
         required: true
         type: string
       image_tag:
@@ -13,6 +13,9 @@ on:
         required: true
         type: string
       database_migrator_image_name:
+        required: true
+        type: string
+      database_provisioner_image_name:
         required: true
         type: string
     outputs:
@@ -80,14 +83,16 @@ jobs:
       - name: Deploy to Azure
         run: |
           OWNER="${GITHUB_REPOSITORY_OWNER,,}"
-          APP_IMAGE="ghcr.io/$OWNER/${{ inputs.image_name }}:${{ inputs.image_tag }}"
+          APP_IMAGE="ghcr.io/$OWNER/${{ inputs.app_image_name }}:${{ inputs.image_tag }}"
           MIGRATOR_IMAGE="ghcr.io/$OWNER/${{ inputs.database_migrator_image_name }}:${{ inputs.image_tag }}"
+          PROVISIONER_IMAGE="ghcr.io/$OWNER/${{ inputs.database_provisioner_image_name }}:${{ inputs.image_tag }}"
 
           pulumi up \
             --yes \
             --stack "${{ inputs.environment }}" \
             --config "thunderbirds-azure-dev:containerImage=$APP_IMAGE" \
-            --config "thunderbirds-azure-dev:databaseMigratorImage=$MIGRATOR_IMAGE"
+            --config "thunderbirds-azure-dev:databaseMigratorImage=$MIGRATOR_IMAGE" \
+            --config "thunderbirds-azure-dev:databaseProvisionerImage=$PROVISIONER_IMAGE"
 
       - name: Get Deployment URI
         id: get-uri
