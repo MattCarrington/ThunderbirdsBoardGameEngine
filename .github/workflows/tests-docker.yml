@@ -33,6 +33,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       GAME_STATE_DB_PASSWORD: integration-test-password
+      GAME_STATE_DB_RUNTIME_PASSWORD: integration-runtime-test-password
 
     steps:
       - uses: actions/checkout@v7
