@@ -1,3 +1,4 @@
+using Npgsql;
 using Pulumi;
 using Pulumi.AzureNative.App;
 using Pulumi.AzureNative.App.Inputs;
@@ -117,11 +118,42 @@ return await Deployment.RunAsync(() =>
     var databaseRuntimeUsername = projectConfig.Require("databaseRuntimeUsername");
     var databaseRuntimePassword = projectConfig.RequireSecret("databaseRuntimePassword");
 
-    var databaseRuntimeConnectionString = Output.Format(
-        $"Host={databaseServer.FullyQualifiedDomainName};Port=5432;Database={database.Name};Username={databaseRuntimeUsername};Password={databaseRuntimePassword};SSL Mode=Require");
+    var databaseRuntimeConnectionString = Output.Tuple(
+        databaseServer.FullyQualifiedDomainName,
+        database.Name,
+        databaseRuntimePassword
+    ).Apply(values =>
+    {
+        var (host, name, password) = values;
 
-    var databaseAdministratorConnectionString = Output.Format(
-        $"Host={databaseServer.FullyQualifiedDomainName};Port=5432;Database={database.Name};Username={databaseAdministratorUsername};Password={databaseAdministratorPassword};SSL Mode=Require");
+        return new NpgsqlConnectionStringBuilder
+        {
+            Host = host,
+            Port = 5432,
+            Database = name,
+            Username = databaseRuntimeUsername,
+            Password = password,
+            SslMode = SslMode.Require,
+        }.ConnectionString;
+    });
+
+    var databaseAdministratorConnectionString = Output.Tuple(
+        databaseServer.FullyQualifiedDomainName,
+        database.Name,
+        databaseAdministratorPassword
+    ).Apply(values =>
+    {
+        var (host, name, password) = values;
+        return new NpgsqlConnectionStringBuilder
+        {
+            Host = host,
+            Port = 5432,
+            Database = name,
+            Username = databaseAdministratorUsername,
+            Password = password,
+            SslMode = SslMode.Require,
+        }.ConnectionString;
+    });
 
     // Build registries and secrets lists without nulls
     var registries = new List<RegistryCredentialsArgs>();
