@@ -60,8 +60,9 @@ From this folder:
 
 	pulumi up
 
-	For the first deployment that moves Game State tables into `game_state`,
-	follow the planned-downtime procedure below before applying this update.
+	The `game_state` table move was completed in DEV with release `0.17.4`.
+	See the maintenance record below before deploying to an older environment;
+	do not repeat the outage merely for an already-applied migration.
 
 4. Check outputs:
 
@@ -79,10 +80,44 @@ tables move, even if the replacement revision has not started successfully.
 The application owner accepts a planned outage for this transition, as recorded
 in [ADR 0005](../../../docs/architecture/decisions/0005-least-privileged-game-state-database-access.md).
 
-**Implementation status:** this is the required procedure, not a claim that
-`pulumi up` or the CI deployment workflow already implements it. Verify the
-Azure maintenance mechanism and recovery procedure before deploying the table
-move. A successful infrastructure preview does not verify these behaviours.
+**DEV status:** the one-time table move was deployed on 2026-10-23 as release
+`0.17.4`, using a manual stop-old-revision gate. It is no longer pending for this
+database. The workflow has a GitHub environment approval checkpoint, not a
+reusable automatic maintenance mechanism. An ordinary repeat deployment does
+not reapply a recorded EF migration.
+
+### Completed DEV maintenance record
+
+- Builds, tests, and publication completed for the merged release. Deployment
+  waited for the required review on GitHub environment `dev`.
+- Before approval, the operator switched Azure revision mode to `Multiple` and
+  deactivated `tbbge-dev-app96f32a3e--0000043`.
+- A direct revision query confirmed `Active: false` and `Replicas: 0`. This was
+  the evidence used to release deployment. A separate replica-list command
+  failed due to Windows CLI parsing and supplied no additional evidence.
+- The operator approved deployment only after that confirmation. Revision
+  `tbbge-dev-app96f32a3e--0000044` became active and healthy with one replica;
+  its migrator and provisioner used release `0.17.4`.
+- Azure resumed service as the replacement became ready; smoke tests passed,
+  and existing gameplay/read-update behaviour against `game_state` was checked.
+  There was no additional traffic hold pending all post-deployment checks.
+- The operator restored `Single` revision mode and verified the API's runtime
+  secret reference. Subsequent direct database permission checks are recorded
+  in ADR 0005.
+
+This establishes that the old revision was stopped before the table-move
+deployment proceeded. It does not prove Azure failure/cancellation recovery,
+database downgrade, or independent session draining. Those paths were not
+exercised; reusable maintenance and disposable upgrade/recovery rehearsal are
+follow-up work. Historical init-container console logs were not retrieved.
+
+### Procedure for another pre-migration environment
+
+The following is retained for an environment still on the old schema, or as a
+starting point for a future incompatible migration. It is not a pending action
+for the completed DEV release. Review the actual schema/version and rehearse
+recovery for the target environment; do not claim the successful DEV deployment
+validated every step below.
 
 ### Before migration
 
@@ -105,13 +140,16 @@ move. A successful infrastructure preview does not verify these behaviours.
 1. Apply the replacement configuration with matching images. Its init containers
    must execute **migrator -> provisioner -> API**; only the API receives the
    runtime connection string.
-2. Keep public service in maintenance while checking setup-container completion,
-   replacement readiness, the configured runtime identity, and restricted
-   permissions. Check logs without displaying credentials.
+2. Verify setup-container completion, replacement readiness, the configured
+   runtime identity, and restricted permissions. Check logs without displaying
+   credentials. If service must remain blocked until all functional checks pass,
+   arrange and verify a separate traffic gate; revision deactivation and GitHub
+   approval alone do not provide that hold after the replacement starts.
 3. Retrieve an existing game, create a game, move a machine, and retrieve the
    updated state. Verify persistence and any relevant concurrency checks.
-4. Restore public service only after these checks succeed, then verify the
-   public endpoint. Retire old revisions that retain administrator API
+4. If using a separate traffic gate, restore public service after checks succeed;
+   otherwise verify the endpoint after Azure resumes service on readiness.
+   Retire old revisions that retain administrator API
    configuration; do not reactivate them against the new schema.
 
 ### If deployment fails
@@ -133,14 +171,14 @@ move. A successful infrastructure preview does not verify these behaviours.
 - Do not automatically downgrade on deployment errors, delete database volumes,
   or edit previously applied migrations as a recovery shortcut.
 
-### Required evidence
+### Follow-up verification
 
-Before treating the deployment review finding as resolved, verify that old
-replicas cannot serve or restart during the schema move, failure preserves the
-maintenance gate, and the selected Azure controls allow safe replacement
-initialization. Exercise the schema downgrade/recovery path against disposable
-local data. Existing local restart tests do not establish old/new revision
-compatibility or Azure maintenance behaviour.
+The completed DEV record supplies the successful manual stop/deploy evidence
+for this release. General failure/cancellation handling and schema downgrade
+remain unverified and belong to the maintenance and upgrade-rehearsal backlog
+stories. Rehearse these against disposable data before relying on them for a
+future environment requiring stronger recovery guarantees. Existing local
+restart tests alone do not establish old/new revision compatibility.
 
 If uninterrupted deployment becomes necessary, use a separately reviewed
 compatibility transition (for example, verified updatable views at the old
