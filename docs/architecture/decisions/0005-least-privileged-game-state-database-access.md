@@ -3,6 +3,7 @@
 - Status: Accepted for this increment, with a temporary database-log risk; implementation verification remains outstanding
 - Date: 2026-10-22
 - Amended: 2026-10-23 (planned downtime for the schema move)
+- Amended: 2026-10-23 (runtime-role scope clarified after deployed permission checks)
 
 ## Context
 
@@ -76,13 +77,42 @@ old revisions from restarting before migrations begin. Blocking new requests
 alone is insufficient: existing requests and database activity must have ended.
 Prevent overlapping deployments during the maintenance operation.
 
-Deploy matching API, migrator, and provisioner images, and run the ordered init
-containers while the old application remains stopped. Restore public service
-only after the replacement is ready and the required game journey succeeds.
-The exact Azure mechanism for stopping old replicas, allowing replacement
-initialization, and controlling public service must be implemented and verified
-before this deployment. This ADR does not assert that the current workflow
-already provides maintenance coordination.
+Use matching API, migrator, and provisioner images and run the ordered init
+containers while the old application remains stopped. The release `0.17.4`
+transition was completed using the manual procedure below, not reusable
+maintenance automation. Azure resumed service when the replacement became
+ready; smoke and gameplay checks followed. A separate traffic hold until all
+post-deployment checks completed was not implemented.
+
+#### Completed Maintenance Operation: 2026-10-23
+
+1. GitHub's `dev` environment was configured with the application owner as a
+   required reviewer, with self-review allowed. The merged `main` run completed
+   builds, tests, and image publishing, then waited for deployment approval.
+2. While deployment remained waiting, the operator changed the Container App
+   from `Single` to `Multiple` revision mode and deactivated old revision
+   `tbbge-dev-app96f32a3e--0000043`. Azure reported deactivation succeeded.
+3. Before approval, `az containerapp revision show` returned `Active: false`
+   and `Replicas: 0` for `0000043`. A separate replica-list query encountered a
+   Windows CLI parsing error; it is not counted as successful evidence.
+4. Only after that stopped-state result did the operator approve the GitHub
+   deployment. The replacement revision `0000044` became active and healthy
+   with one replica. Its migrator and provisioner images were both `0.17.4`.
+5. Smoke tests passed, gameplay remained usable, and the operator verified
+   reads/updates against `game_state` and the runtime secret reference.
+6. The operator restored `Single` revision mode after verifying replacement
+   health. Direct database identity/permission checks followed, as recorded in
+   the validation evidence below.
+
+The stop-old-revision gate was therefore manually satisfied for this schema
+move; the deployment was not an uncoordinated rolling table migration. Evidence
+is the operator-reported CLI output and workflow state recorded during the
+release, not an automated audit of the entire outage. The schema downgrade,
+Azure failure/cancellation recovery, and independent database-session draining
+were not demonstrated. Those guarantees must not be inferred from the
+successful release. General maintenance automation and repeatable upgrade/
+recovery rehearsals are separate backlog work, not prerequisites to rerunning
+this already-applied migration in the existing environment.
 
 If migration, provisioning, or startup fails, retain the outage while recovering.
 Prefer correcting the new deployment and completing forward. Restarting the
@@ -117,14 +147,31 @@ specific to this incompatible schema move, not a blanket rule for all releases.
 - Existing-table grants are reconciled after migrations. Default privileges
   cover future tables created by the migration identity in `game_state`.
   Moving an existing table into a schema does not apply its default privileges.
-- The local implementation revokes shared temporary-table access on the
-  application database and shared connection access to `postgres`. These affect
-  `PUBLIC`, not only the runtime role, and require Azure ownership/permission
-  verification. Other databases and inherited access must be inspected before
-  claiming database isolation.
+- This story provisions the runtime identity and its application-object grants;
+  it does not harden every role or database on the server. Do not change shared
+  `PUBLIC` permissions as a way to restrict this one role. Such changes affect
+  other users and may affect administrative or platform behaviour.
+- PostgreSQL privileges are additive, including grants inherited through
+  `PUBLIC`. The runtime identity may retain default `CONNECT` or `TEMPORARY`
+  permissions. `CONNECT` alone is not a grant to read or modify another
+  database's application tables, and is not an administrative privilege. This
+  decision does not assert that every object in every other database has been
+  audited or that connectivity is exclusive to GameState.
 
-This policy assumes a dedicated application server. Sharing the server with
-other applications requires revisiting these shared permission changes.
+The refined acceptance boundary replaces the original story's blanket
+"access only to the required Game State database and objects" wording: grant
+only the required application-data permissions in GameState and `game_state`,
+keep the API off the administrator identity, and verify the absence of elevated
+attributes and application-object ownership. Inherited platform/default access
+is documented rather than implicitly treated as removed. Reflect this scope
+clarification in the Trello story; repository edits do not update Trello.
+
+Server-wide access hardening, including changes to `PUBLIC` database/schema
+defaults, belongs to a separate story with impact analysis and platform checks.
+The provisioner still contains `REVOKE TEMPORARY ... FROM PUBLIC` at the time of
+this amendment. That line requires the same scope review as the removed
+`REVOKE CONNECT ON DATABASE postgres FROM PUBLIC`; this documentation change
+does not remove it or restore grants previously revoked in deployed databases.
 
 ### Relationship to ADR 0003
 
@@ -244,29 +291,58 @@ Manual local checks completed during refinement:
 - A direct runtime connection authenticated and read application data.
 - Role attributes and effective grants matched the intended local restrictions;
   creating an application-schema table was rejected.
-- Runtime access to temporary tables, migration-history writes, and connection
-  to `postgres` was absent after reconciliation.
+- Earlier local checks found no temporary-table, migration-history-write, or
+  `postgres` connection access after shared revokes. Those results describe the
+  earlier implementation, not the refined acceptance boundary above.
 - Repeat provisioning succeeded; invalid identity/database and elevated-role
   probes were rejected.
 - A deliberate failure rolled back probe-role creation.
 - A held advisory lock blocked provisioning; releasing it allowed progress,
   while retaining it caused a timeout before account changes.
 
-These are manual observations, not automated regression coverage or evidence of
-Azure compatibility. Architecture acceptance does not mean the story is done.
+Azure checks reported after deployment of revision `0000044` (release `0.17.4`):
+
+- Smoke tests passed and existing gameplay continued to persist moves.
+- The healthy API revision references the runtime connection-string secret;
+  both migrator and provisioner init-container images are `0.17.4`.
+- A direct connection authenticated as `game_state_runtime` to
+  `thunderbirds_game_state`.
+- All checked administrative role flags were false. On `game_state.games`,
+  `SELECT`, `INSERT`, and `UPDATE` were allowed, while `DELETE` and creation of
+  objects in `game_state` were not.
+- Creating objects in `public`, creating temporary tables in the application
+  database, and modifying EF migration history were not permitted at the time
+  of inspection. Temporary-table denial reflects a shared revoke and is not a
+  requirement of the refined runtime-role story.
+- Effective `CONNECT` was true for `azure_maintenance`, `postgres`, `azure_sys`,
+  and `thunderbirds_game_state`. The `postgres` revoke had been removed during
+  review; these results are not evidence of that command failing. They do not
+  establish object access or a successful login to each managed database.
+- The API log stream showed queries/updates against `game_state` with masked
+  parameter values. Provisioner console history was not retrieved; environment
+  logging destination and workspace fields were null. This does not establish
+  that no other diagnostic export exists or verify all failure-log paths.
+
+These are manual observations, not complete automated regression coverage or
+proof of every Azure acceptance criterion. Architecture acceptance does not mean the story is done.
 Before completing the story:
 
 - Verify the source, deployment/container-log, and Pulumi-output boundary on
   success and failure without exposing real credentials; verify restricted access
   to PostgreSQL logs and their exports under the accepted temporary risk.
 - Verify operations with Azure's non-superuser administrator, including database
-  ownership, shared permission changes, and repeated role management.
+  ownership and repeated role management. Review the remaining shared temporary
+  privilege revoke against the refined scope, and assess any restoration of
+  previously changed defaults separately rather than silently reversing them.
 - Confirm future-object permissions under the actual migration identity and
-  inspect effective access beyond the intended database/schema.
-- Complete the ordered init-container deployment wiring selected by this ADR.
-- Implement and verify the maintenance gate for the incompatible table move:
-  old replicas are stopped before migration, failure leaves old revisions
-  stopped, and the documented recovery path is exercised locally before use.
+  inspect effective object access and ownership within the application boundary.
+  Record inherited access outside that boundary without treating server-wide
+  hardening as a prerequisite for this story.
+- Ordered init-container wiring and the manual stop-old-revision gate were
+  exercised during release `0.17.4`; see the completed maintenance operation.
+  Do not repeat the schema move simply to satisfy a now-past deployment gate.
+  Track reusable maintenance and upgrade/recovery rehearsal separately; failure
+  and downgrade paths remain unverified rather than retrospectively certified.
 - Run deployed API integration/user-journey checks and inspect deployed identity
   and secret references; retire old revisions carrying administrator API config.
 
