@@ -2,6 +2,7 @@
 
 - Status: Accepted for this increment, with a temporary database-log risk; implementation verification remains outstanding
 - Date: 2026-10-22
+- Amended: 2026-10-23 (planned downtime for the schema move)
 
 ## Context
 
@@ -61,6 +62,43 @@ and a transaction-level advisory lock to coordinate cooperating provisioning
 runs against the same database. This lock does not coordinate migrations or
 provisioners connected to different databases, and is not a global deployment
 lock.
+
+### Schema Transition: Planned Downtime
+
+Moving application tables from `public` to `game_state` breaks the database
+interface used by the previous API image. An old revision can continue serving
+while a replacement revision's init containers run; ordering those init
+containers does not protect the old revision from this schema change.
+
+The application owner accepts a planned outage for this hobby environment.
+For this table-move deployment, stop existing application replicas and prevent
+old revisions from restarting before migrations begin. Blocking new requests
+alone is insufficient: existing requests and database activity must have ended.
+Prevent overlapping deployments during the maintenance operation.
+
+Deploy matching API, migrator, and provisioner images, and run the ordered init
+containers while the old application remains stopped. Restore public service
+only after the replacement is ready and the required game journey succeeds.
+The exact Azure mechanism for stopping old replicas, allowing replacement
+initialization, and controlling public service must be implemented and verified
+before this deployment. This ADR does not assert that the current workflow
+already provides maintenance coordination.
+
+If migration, provisioning, or startup fails, retain the outage while recovering.
+Prefer correcting the new deployment and completing forward. Restarting the
+old API image alone is not a database rollback: it still expects tables in
+`public`. If reverting is necessary, first establish the actual migration state,
+stop new application instances, review and execute the schema downgrade with
+administrator access, and verify the old schema before restoring a compatible
+old image. Account and grant changes are managed outside EF and must be checked
+separately. Do not automatically downgrade the database on any deployment error.
+
+Compatibility views and a staged expand-and-contract deployment are not selected
+for this transition. They would require testing the previous API's actual EF
+reads, writes, and concurrency behaviour against the views, retaining them until
+old revisions are retired, and removing them in a later migration. Reconsider
+that approach if availability requirements change. Planned downtime here is
+specific to this incompatible schema move, not a blanket rule for all releases.
 
 ### Permission Boundary
 
@@ -226,6 +264,9 @@ Before completing the story:
 - Confirm future-object permissions under the actual migration identity and
   inspect effective access beyond the intended database/schema.
 - Complete the ordered init-container deployment wiring selected by this ADR.
+- Implement and verify the maintenance gate for the incompatible table move:
+  old replicas are stopped before migration, failure leaves old revisions
+  stopped, and the documented recovery path is exercised locally before use.
 - Run deployed API integration/user-journey checks and inspect deployed identity
   and secret references; retire old revisions carrying administrator API config.
 

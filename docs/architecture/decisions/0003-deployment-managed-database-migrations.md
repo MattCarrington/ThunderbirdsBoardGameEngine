@@ -2,7 +2,7 @@
 
 - Status: Accepted; artifact and execution model superseded by ADR 0005
 - Date: 2026-07-24
-- Amended: 2026-10-22
+- Amended: 2026-10-23
 
 ## Amendment: Ordered Init Containers
 
@@ -20,6 +20,14 @@ runs. The API process still does not apply migrations. Reviewed, committed
 migrations, runtime-supplied credentials, and the validation principles below
 remain applicable. Azure execution and failure behaviour still require deployed
 verification.
+
+The `public` to `game_state` table move is incompatible with the previous API
+image. ADR 0005 accepts planned downtime for that transition: old replicas must
+be stopped before migrations run and remain stopped on failure. Init-container
+ordering alone does not establish this maintenance gate. Restoring an old image
+after the table move requires a reviewed database recovery as well; an image
+rollback does not reverse migrations. See the deployment runbook in the
+[Azure DEV README](../../../infra/Pulumi/AzureDev/README.md#planned-downtime-for-the-game-state-schema-move).
 
 The original decision is retained below as historical context; its job lifecycle
 and executable-bundle requirements no longer describe the selected design.
