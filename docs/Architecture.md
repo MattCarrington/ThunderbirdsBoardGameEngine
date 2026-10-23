@@ -9,6 +9,11 @@
 
 ## Deployment shape
 
+For the implemented CI/CD flow and its planned evolution, see
+[Deployment Workflow](DeploymentWorkflow.md) and
+[ADR 0006](architecture/decisions/0006-separate-dev-validation-and-deployment.md).
+The target workflow is documented separately from currently implemented behaviour.
+
 The application is deployed as a **single Docker image** containing both the
 ASP.NET Core API and the Blazor WebAssembly UI. The UI is published as static
 files and served directly from the API's `wwwroot` folder, making them
