@@ -3,6 +3,7 @@
 - Status: Accepted for this increment, with a temporary database-log risk; implementation verification remains outstanding
 - Date: 2026-10-22
 - Amended: 2026-10-23 (planned downtime for the schema move)
+- Amended: 2026-10-23 (runtime-role scope clarified after deployed permission checks)
 
 ## Context
 
@@ -117,14 +118,31 @@ specific to this incompatible schema move, not a blanket rule for all releases.
 - Existing-table grants are reconciled after migrations. Default privileges
   cover future tables created by the migration identity in `game_state`.
   Moving an existing table into a schema does not apply its default privileges.
-- The local implementation revokes shared temporary-table access on the
-  application database and shared connection access to `postgres`. These affect
-  `PUBLIC`, not only the runtime role, and require Azure ownership/permission
-  verification. Other databases and inherited access must be inspected before
-  claiming database isolation.
+- This story provisions the runtime identity and its application-object grants;
+  it does not harden every role or database on the server. Do not change shared
+  `PUBLIC` permissions as a way to restrict this one role. Such changes affect
+  other users and may affect administrative or platform behaviour.
+- PostgreSQL privileges are additive, including grants inherited through
+  `PUBLIC`. The runtime identity may retain default `CONNECT` or `TEMPORARY`
+  permissions. `CONNECT` alone is not a grant to read or modify another
+  database's application tables, and is not an administrative privilege. This
+  decision does not assert that every object in every other database has been
+  audited or that connectivity is exclusive to GameState.
 
-This policy assumes a dedicated application server. Sharing the server with
-other applications requires revisiting these shared permission changes.
+The refined acceptance boundary replaces the original story's blanket
+"access only to the required Game State database and objects" wording: grant
+only the required application-data permissions in GameState and `game_state`,
+keep the API off the administrator identity, and verify the absence of elevated
+attributes and application-object ownership. Inherited platform/default access
+is documented rather than implicitly treated as removed. Reflect this scope
+clarification in the Trello story; repository edits do not update Trello.
+
+Server-wide access hardening, including changes to `PUBLIC` database/schema
+defaults, belongs to a separate story with impact analysis and platform checks.
+The provisioner still contains `REVOKE TEMPORARY ... FROM PUBLIC` at the time of
+this amendment. That line requires the same scope review as the removed
+`REVOKE CONNECT ON DATABASE postgres FROM PUBLIC`; this documentation change
+does not remove it or restore grants previously revoked in deployed databases.
 
 ### Relationship to ADR 0003
 
@@ -244,25 +262,53 @@ Manual local checks completed during refinement:
 - A direct runtime connection authenticated and read application data.
 - Role attributes and effective grants matched the intended local restrictions;
   creating an application-schema table was rejected.
-- Runtime access to temporary tables, migration-history writes, and connection
-  to `postgres` was absent after reconciliation.
+- Earlier local checks found no temporary-table, migration-history-write, or
+  `postgres` connection access after shared revokes. Those results describe the
+  earlier implementation, not the refined acceptance boundary above.
 - Repeat provisioning succeeded; invalid identity/database and elevated-role
   probes were rejected.
 - A deliberate failure rolled back probe-role creation.
 - A held advisory lock blocked provisioning; releasing it allowed progress,
   while retaining it caused a timeout before account changes.
 
-These are manual observations, not automated regression coverage or evidence of
-Azure compatibility. Architecture acceptance does not mean the story is done.
+Azure checks reported after deployment of revision `0000044` (release `0.17.4`):
+
+- Smoke tests passed and existing gameplay continued to persist moves.
+- The healthy API revision references the runtime connection-string secret;
+  both migrator and provisioner init-container images are `0.17.4`.
+- A direct connection authenticated as `game_state_runtime` to
+  `thunderbirds_game_state`.
+- All checked administrative role flags were false. On `game_state.games`,
+  `SELECT`, `INSERT`, and `UPDATE` were allowed, while `DELETE` and creation of
+  objects in `game_state` were not.
+- Creating objects in `public`, creating temporary tables in the application
+  database, and modifying EF migration history were not permitted at the time
+  of inspection. Temporary-table denial reflects a shared revoke and is not a
+  requirement of the refined runtime-role story.
+- Effective `CONNECT` was true for `azure_maintenance`, `postgres`, `azure_sys`,
+  and `thunderbirds_game_state`. The `postgres` revoke had been removed during
+  review; these results are not evidence of that command failing. They do not
+  establish object access or a successful login to each managed database.
+- The API log stream showed queries/updates against `game_state` with masked
+  parameter values. Provisioner console history was not retrieved; environment
+  logging destination and workspace fields were null. This does not establish
+  that no other diagnostic export exists or verify all failure-log paths.
+
+These are manual observations, not complete automated regression coverage or
+proof of every Azure acceptance criterion. Architecture acceptance does not mean the story is done.
 Before completing the story:
 
 - Verify the source, deployment/container-log, and Pulumi-output boundary on
   success and failure without exposing real credentials; verify restricted access
   to PostgreSQL logs and their exports under the accepted temporary risk.
 - Verify operations with Azure's non-superuser administrator, including database
-  ownership, shared permission changes, and repeated role management.
+  ownership and repeated role management. Review the remaining shared temporary
+  privilege revoke against the refined scope, and assess any restoration of
+  previously changed defaults separately rather than silently reversing them.
 - Confirm future-object permissions under the actual migration identity and
-  inspect effective access beyond the intended database/schema.
+  inspect effective object access and ownership within the application boundary.
+  Record inherited access outside that boundary without treating server-wide
+  hardening as a prerequisite for this story.
 - Complete the ordered init-container deployment wiring selected by this ADR.
 - Implement and verify the maintenance gate for the incompatible table move:
   old replicas are stopped before migration, failure leaves old revisions

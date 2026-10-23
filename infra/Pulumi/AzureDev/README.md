@@ -148,6 +148,24 @@ table names, removed in a later migration) instead of this outage procedure.
 
 ## Configuration
 
+### Runtime-account permission scope
+
+The API uses a dedicated runtime role with the application-data permissions it
+needs in the `game_state` schema. The migrator and provisioner retain
+administrator access for this increment. See
+[ADR 0005](../../../docs/architecture/decisions/0005-least-privileged-game-state-database-access.md)
+for the accepted boundary and database-log risk.
+
+This is not server-wide hardening: inherited PostgreSQL/platform defaults may
+permit connections to other databases. `CONNECT` alone does not grant access
+to their tables or administration. Do not revoke shared `PUBLIC` privileges on
+Azure-managed databases merely to make a runtime-role check pass. Such changes
+affect other roles and require a separate impact assessment.
+
+The remaining provisioner statement revoking `TEMPORARY` from `PUBLIC` also
+requires scope review. Existing database ACL changes persist even if a statement
+is removed from code; do not assume removal restores earlier defaults.
+
 ### Container Image
 
 The **containerImage** is the core of your deployment. It's a pre-built Docker image containing both the API and UI (as static files).
