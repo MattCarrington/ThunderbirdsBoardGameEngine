@@ -1,7 +1,36 @@
 # ADR 0003: Apply Database Migrations as a Deployment Job
 
-- Status: Accepted for the planned persisted-game slice
+- Status: Accepted; artifact and execution model superseded by ADR 0005
 - Date: 2026-07-24
+- Amended: 2026-10-23
+
+## Amendment: Ordered Init Containers
+
+[ADR 0005](0005-least-privileged-game-state-database-access.md) supersedes the
+original migration-bundle and once-per-deployment job choice below for the
+current increment. Migrations use the existing .NET migrator executable as the
+first Azure Container App init container, followed by the database provisioner
+init container, then the API. Docker Compose enforces the corresponding order
+through successful-completion dependencies.
+
+Init containers execute on replica initialization and are not guaranteed to run
+only once per deployment. Migration and provisioning operations must tolerate
+repeat execution; the provisioner's advisory lock does not coordinate migration
+runs. The API process still does not apply migrations. Reviewed, committed
+migrations, runtime-supplied credentials, and the validation principles below
+remain applicable. Azure execution and failure behaviour still require deployed
+verification.
+
+The `public` to `game_state` table move is incompatible with the previous API
+image. ADR 0005 accepts planned downtime for that transition: old replicas must
+be stopped before migrations run and remain stopped on failure. Init-container
+ordering alone does not establish this maintenance gate. Restoring an old image
+after the table move requires a reviewed database recovery as well; an image
+rollback does not reverse migrations. See the deployment runbook in the
+[Azure DEV README](../../../infra/Pulumi/AzureDev/README.md#planned-downtime-for-the-game-state-schema-move).
+
+The original decision is retained below as historical context; its job lifecycle
+and executable-bundle requirements no longer describe the selected design.
 
 ## Context
 

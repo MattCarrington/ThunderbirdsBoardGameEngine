@@ -17,6 +17,7 @@ namespace ThunderbirdsBoardGameEngine.GameState.Infrastructure.Persistence.Migra
         {
 #pragma warning disable 612, 618
             modelBuilder
+                .HasDefaultSchema("game_state")
                 .HasAnnotation("ProductVersion", "10.0.12")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
@@ -38,7 +39,7 @@ namespace ThunderbirdsBoardGameEngine.GameState.Infrastructure.Persistence.Migra
 
                     b.HasKey("GameId", "CharacterCode");
 
-                    b.ToTable("game_character_assignments", (string)null);
+                    b.ToTable("game_character_assignments", "game_state");
                 });
 
             modelBuilder.Entity("ThunderbirdsBoardGameEngine.GameState.Infrastructure.Persistence.Records.GameRecord", b =>
@@ -60,7 +61,7 @@ namespace ThunderbirdsBoardGameEngine.GameState.Infrastructure.Persistence.Migra
 
                     b.HasKey("Id");
 
-                    b.ToTable("games", (string)null);
+                    b.ToTable("games", "game_state");
                 });
 
             modelBuilder.Entity("ThunderbirdsBoardGameEngine.GameState.Infrastructure.Persistence.Records.ThunderbirdMachineStateRecord", b =>
@@ -79,7 +80,7 @@ namespace ThunderbirdsBoardGameEngine.GameState.Infrastructure.Persistence.Migra
 
                     b.HasKey("GameId", "ThunderbirdCode");
 
-                    b.ToTable("game_machine_positions", (string)null);
+                    b.ToTable("game_machine_positions", "game_state");
                 });
 
             modelBuilder.Entity("ThunderbirdsBoardGameEngine.GameState.Infrastructure.Persistence.Records.CharacterStateRecord", b =>

@@ -60,6 +60,9 @@ From this folder:
 
 	pulumi up
 
+	For the first deployment that moves Game State tables into `game_state`,
+	follow the planned-downtime procedure below before applying this update.
+
 4. Check outputs:
 
 	pulumi stack output resourceGroupName
@@ -67,6 +70,81 @@ From this folder:
 	pulumi stack output containerAppName
 	pulumi stack output containerImage
 	pulumi stack output applicationUrl
+
+## Planned downtime for the Game State schema move
+
+The migration from `public` tables to the `game_state` schema is incompatible
+with the previous API image. A running old revision can fail as soon as the
+tables move, even if the replacement revision has not started successfully.
+The application owner accepts a planned outage for this transition, as recorded
+in [ADR 0005](../../../docs/architecture/decisions/0005-least-privileged-game-state-database-access.md).
+
+**Implementation status:** this is the required procedure, not a claim that
+`pulumi up` or the CI deployment workflow already implements it. Verify the
+Azure maintenance mechanism and recovery procedure before deploying the table
+move. A successful infrastructure preview does not verify these behaviours.
+
+### Before migration
+
+1. Record the current image references, revision/traffic configuration, and
+   applied migration state without exporting secrets. Identify the matching
+   new API, migrator, and provisioner images and review the migration SQL.
+2. Establish a recovery point appropriate to the existing data and identify the
+   previous migration to which a downgrade would return. This is deployment
+   preparation, not implementation of a new backup service in this story.
+3. Prevent overlapping deployments and enter maintenance. Stop all old
+   application replicas, allow in-flight work to end, and prevent old revisions
+   from automatically restarting. Merely routing new requests elsewhere does
+   not prove old database activity has stopped.
+4. Confirm old application database activity has ended before allowing the
+   replacement's migrator to execute. The maintenance mechanism must permit
+   replacement initialization without also restarting an incompatible old API.
+
+### Deploy and verify
+
+1. Apply the replacement configuration with matching images. Its init containers
+   must execute **migrator -> provisioner -> API**; only the API receives the
+   runtime connection string.
+2. Keep public service in maintenance while checking setup-container completion,
+   replacement readiness, the configured runtime identity, and restricted
+   permissions. Check logs without displaying credentials.
+3. Retrieve an existing game, create a game, move a machine, and retrieve the
+   updated state. Verify persistence and any relevant concurrency checks.
+4. Restore public service only after these checks succeed, then verify the
+   public endpoint. Retire old revisions that retain administrator API
+   configuration; do not reactivate them against the new schema.
+
+### If deployment fails
+
+- Keep public service in maintenance and old revisions stopped. Determine
+  whether migrations committed, which grants were applied, and whether the
+  failure occurred during provisioning or API startup.
+- Prefer fixing the replacement and completing forward. Provisioning failure
+  does not roll back an earlier successful EF migration.
+- Do not restore the previous API image alone: it expects the original tables
+  in `public` and is incompatible after the move.
+- If reverting is necessary, stop replacement replicas and prevent competing
+  initialization. Generate and review the EF downgrade SQL for the actual
+  current migration state and intended previous migration. Apply it through a
+  controlled administrator operation, verify tables/data and permissions in the
+  old schema, then restore the compatible prior image and verify its game
+  journey before restoring service. Inspect provisioner-managed account/grant
+  changes separately; EF downgrade does not reverse them.
+- Do not automatically downgrade on deployment errors, delete database volumes,
+  or edit previously applied migrations as a recovery shortcut.
+
+### Required evidence
+
+Before treating the deployment review finding as resolved, verify that old
+replicas cannot serve or restart during the schema move, failure preserves the
+maintenance gate, and the selected Azure controls allow safe replacement
+initialization. Exercise the schema downgrade/recovery path against disposable
+local data. Existing local restart tests do not establish old/new revision
+compatibility or Azure maintenance behaviour.
+
+If uninterrupted deployment becomes necessary, use a separately reviewed
+compatibility transition (for example, verified updatable views at the old
+table names, removed in a later migration) instead of this outage procedure.
 
 ## Configuration
 

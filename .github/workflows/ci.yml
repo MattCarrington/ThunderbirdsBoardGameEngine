@@ -14,9 +14,10 @@ permissions:
 
 env:
   SOLUTION_FILE: &solution ThunderbirdsBoardGameEngine.sln
-  IMAGE_NAME: &image_name "thunderbirds-app"
+  APP_IMAGE_NAME: &app_image_name "thunderbirds-app"
   SMOKE_IMAGE_NAME: &smoke_image_name "thunderbirds-smoke-tests"
   MIGRATOR_IMAGE_NAME: &migrator_image_name "thunderbirds-game-state-db-migrator"
+  PROVISIONER_IMAGE_NAME: &provisioner_image_name "thunderbirds-game-state-db-provisioner"
   BASE_URL: &base_url "http://localhost:8080"
   
 jobs:
@@ -35,22 +36,23 @@ jobs:
     needs:
       - static-analysis
 
-  docker-build-app:
+  docker-build:
+    name: Build ${{ matrix.image_name }}
     if: github.event_name == 'push'
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - image_name: *app_image_name
+            dockerfile_path: src/Api/ThunderbirdsBoardGameEngine.Api/Dockerfile
+          - image_name: *migrator_image_name
+            dockerfile_path: src/GameState/ThunderbirdsBoardGameEngine.GameState.EF.DatabaseMigrator/Dockerfile
+          - image_name: *provisioner_image_name
+            dockerfile_path: tools/GameState/ThunderbirdsBoardGameEngine.GameState.DatabaseProvisioner/Dockerfile
     uses: ./.github/workflows/build-docker.yml
     with:
-      image_name: *image_name
-      dockerfile_path: "src/Api/ThunderbirdsBoardGameEngine.Api/Dockerfile"
-      docker_build_context: "."
-    needs:
-      - static-analysis
-
-  docker-build-migrator:
-    if: github.event_name == 'push'
-    uses: ./.github/workflows/build-docker.yml
-    with:
-      image_name: *migrator_image_name
-      dockerfile_path: "src/GameState/ThunderbirdsBoardGameEngine.GameState.EF.DatabaseMigrator/Dockerfile"
+      image_name: ${{ matrix.image_name }}
+      dockerfile_path: ${{ matrix.dockerfile_path }}
       docker_build_context: "."
     needs:
       - static-analysis
@@ -68,13 +70,15 @@ jobs:
     uses: ./.github/workflows/tests-docker.yml
     with:
       solution_file: *solution
-      image_name: *image_name
+      app_image_name: *app_image_name
+      database_migrator_image_name: *migrator_image_name
+      database_provisioner_image_name: *provisioner_image_name
       run_integration: true
       run_playwright: true
       base_url: *base_url
     needs:
       - build
-      - docker-build-app
+      - docker-build
 
   compute-version:
     if: github.event_name == 'push'
@@ -95,31 +99,25 @@ jobs:
     needs:
       - compute-version
 
-  docker-publish-app:
+  docker-publish:
+    name: Publish ${{ matrix.image_name }}
     if: github.event_name == 'push' && needs.compute-version.outputs.release_type != 'none'
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - image_name: *app_image_name
+          - image_name: *migrator_image_name
+          - image_name: *provisioner_image_name
     uses: ./.github/workflows/publish-docker.yml
     with:
-      image_name: *image_name
+      image_name: ${{ matrix.image_name }}
       version: ${{ needs.compute-version.outputs.version }}
       push_latest: ${{ github.ref == 'refs/heads/main' }}
     secrets:
       registry_token: ${{ secrets.GITHUB_TOKEN }}
     needs:
-      - docker-build-app
-      - docker-build-migrator
-      - compute-version
-
-  docker-publish-migrator:
-    if: github.event_name == 'push' && needs.compute-version.outputs.release_type != 'none'
-    uses: ./.github/workflows/publish-docker.yml
-    with:
-      image_name: *migrator_image_name
-      version: ${{ needs.compute-version.outputs.version }}
-      push_latest: ${{ github.ref == 'refs/heads/main' }}
-    secrets:
-      registry_token: ${{ secrets.GITHUB_TOKEN }}
-    needs:
-      - docker-build-migrator
+      - docker-build
       - compute-version
 
   packages:
@@ -137,14 +135,15 @@ jobs:
     if: github.ref == 'refs/heads/main'
     uses: ./.github/workflows/deploy.yml
     with:
-      image_name: *image_name
+      app_image_name: *app_image_name 
       database_migrator_image_name: *migrator_image_name
-      image_tag: ${{ needs.docker-publish-app.outputs.image_tag }}
+      database_provisioner_image_name: *provisioner_image_name
+      image_tag: ${{ needs.compute-version.outputs.version }}
       environment: "dev"
     secrets: inherit
     needs:
-      - docker-publish-app
-      - docker-publish-migrator
+      - docker-publish
+      - compute-version
 
   smoke-tests:
     name: Run Smoke Tests

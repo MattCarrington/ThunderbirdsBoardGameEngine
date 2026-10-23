@@ -1,4 +1,12 @@
 services:
   api:
-    image: thunderbirds-app:${API_IMAGE_TAG}
+    image: ${APP_IMAGE_NAME}:${API_IMAGE_TAG}
+    build: null
+
+  game-state-db-migrator:
+    image: ${MIGRATOR_IMAGE_NAME}:${API_IMAGE_TAG}
+    build: null
+
+  game-state-db-permissions:
+    image: ${PROVISIONER_IMAGE_NAME}:${API_IMAGE_TAG}
     build: null

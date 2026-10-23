@@ -20,6 +20,8 @@ namespace ThunderbirdsBoardGameEngine.GameState.Infrastructure.Persistence
         {
             base.OnModelCreating(modelBuilder);
 
+            modelBuilder.HasDefaultSchema("game_state");
+
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(GameStateDbContext).Assembly);
         }
     }

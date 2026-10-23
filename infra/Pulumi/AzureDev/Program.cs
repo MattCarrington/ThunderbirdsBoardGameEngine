@@ -1,3 +1,4 @@
+using Npgsql;
 using Pulumi;
 using Pulumi.AzureNative.App;
 using Pulumi.AzureNative.App.Inputs;
@@ -23,6 +24,7 @@ return await Deployment.RunAsync(() =>
     var databaseAdministratorPassword = projectConfig.RequireSecret("databaseAdministratorPassword");
 
     var databaseMigratorImage = projectConfig.Get("databaseMigratorImage") ?? "ghcr.io/mattcarrington/thunderbirds-game-state-db-migrator:latest";
+    var databaseProvisionerImage = projectConfig.Get("databaseProvisionerImage") ?? "ghcr.io/mattcarrington/thunderbirds-game-state-db-provisioner:latest";
 
     if (string.IsNullOrWhiteSpace(databaseName))
     {
@@ -37,8 +39,10 @@ return await Deployment.RunAsync(() =>
     }
 
     const string registryPasswordSecretName = "registry-password";
-    const string databaseConnectionStringSecretName = "game-state-database-connection-string";
+    const string databaseAdministratorConnectionStringSecretName = "game-state-database-connection-string";
+    const string databaseRuntimeConnectionStringSecretName = "game-state-runtime-database-connection-string";
     const string databaseConnectionStringEnvironmentVariable = "GameState__Persistence__ConnectionString";
+    const string databaseRuntimePasswordSecretName = "game-state-runtime-password";
 
     var tags = BuildTags(stack);
 
@@ -111,9 +115,45 @@ return await Deployment.RunAsync(() =>
         Collation = "en_US.utf8",
     });
 
+    var databaseRuntimeUsername = projectConfig.Require("databaseRuntimeUsername");
+    var databaseRuntimePassword = projectConfig.RequireSecret("databaseRuntimePassword");
 
-    var databaseConnectionString = Output.Format(
-        $"Host={databaseServer.FullyQualifiedDomainName};Port=5432;Database={database.Name};Username={databaseAdministratorUsername};Password={databaseAdministratorPassword};SSL Mode=Require");
+    var databaseRuntimeConnectionString = Output.Tuple(
+        databaseServer.FullyQualifiedDomainName,
+        database.Name,
+        databaseRuntimePassword
+    ).Apply(values =>
+    {
+        var (host, name, password) = values;
+
+        return new NpgsqlConnectionStringBuilder
+        {
+            Host = host,
+            Port = 5432,
+            Database = name,
+            Username = databaseRuntimeUsername,
+            Password = password,
+            SslMode = SslMode.Require,
+        }.ConnectionString;
+    });
+
+    var databaseAdministratorConnectionString = Output.Tuple(
+        databaseServer.FullyQualifiedDomainName,
+        database.Name,
+        databaseAdministratorPassword
+    ).Apply(values =>
+    {
+        var (host, name, password) = values;
+        return new NpgsqlConnectionStringBuilder
+        {
+            Host = host,
+            Port = 5432,
+            Database = name,
+            Username = databaseAdministratorUsername,
+            Password = password,
+            SslMode = SslMode.Require,
+        }.ConnectionString;
+    });
 
     // Build registries and secrets lists without nulls
     var registries = new List<RegistryCredentialsArgs>();
@@ -122,8 +162,18 @@ return await Deployment.RunAsync(() =>
     {
         new()
         {
-            Name = databaseConnectionStringSecretName,
-            Value = databaseConnectionString,
+            Name = databaseAdministratorConnectionStringSecretName,
+            Value = databaseAdministratorConnectionString,
+        },
+        new()
+        {
+            Name = databaseRuntimeConnectionStringSecretName,
+            Value = databaseRuntimeConnectionString,
+        },
+        new()
+        {
+            Name = databaseRuntimePasswordSecretName,
+            Value = databaseRuntimePassword,
         },
     };
     if (!string.IsNullOrWhiteSpace(registryUsername) && registryPassword != null)
@@ -180,7 +230,7 @@ return await Deployment.RunAsync(() =>
                         new EnvironmentVarArgs
                         {
                             Name = databaseConnectionStringEnvironmentVariable,
-                            SecretRef = databaseConnectionStringSecretName,
+                            SecretRef = databaseAdministratorConnectionStringSecretName,
                         },
                     },
                     Resources = new ContainerResourcesArgs
@@ -190,6 +240,35 @@ return await Deployment.RunAsync(() =>
                     },
                     ImageType = ImageType.ContainerImage,
                 },
+                new InitContainerArgs
+                {
+                    Name = "game-state-db-provisioner",
+                    Image = databaseProvisionerImage,
+                    Env =
+                    {
+                        new EnvironmentVarArgs
+                        {
+                            Name = "GameState__DatabaseProvisioning__AdministratorConnectionString",
+                            SecretRef = databaseAdministratorConnectionStringSecretName,
+                        },
+                        new EnvironmentVarArgs
+                        {
+                            Name = "GameState__DatabaseProvisioning__RuntimeUsername",
+                            Value = databaseRuntimeUsername,
+                        },
+                        new EnvironmentVarArgs
+                        {
+                            Name = "GameState__DatabaseProvisioning__RuntimePassword",
+                            SecretRef = databaseRuntimePasswordSecretName,
+                        },
+                    },
+                    Resources = new ContainerResourcesArgs
+                    {
+                        Cpu = 0.25,
+                        Memory = "0.5Gi",
+                    },
+                    ImageType = ImageType.ContainerImage,
+                }
             },
             Containers =
             {
@@ -198,13 +277,13 @@ return await Deployment.RunAsync(() =>
                     Name = "app",
                     Image = containerImage,
                     Env =
-                {
-                    new EnvironmentVarArgs
                     {
-                        Name = databaseConnectionStringEnvironmentVariable,
-                        SecretRef = databaseConnectionStringSecretName,
+                        new EnvironmentVarArgs
+                        {
+                            Name = databaseConnectionStringEnvironmentVariable,
+                            SecretRef = databaseRuntimeConnectionStringSecretName,
+                        },
                     },
-                },
                     Resources = new ContainerResourcesArgs
                     {
                         Cpu = 0.25,
