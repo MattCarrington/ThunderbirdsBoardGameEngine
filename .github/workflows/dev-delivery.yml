@@ -43,6 +43,12 @@ jobs:
           CI_RUN_ID: ${{ inputs.ci_run_id || github.event.workflow_run.id }}
         with:
           script: |
+            if (context.ref !== "refs/heads/main") {
+                throw new Error(
+                    "Run DEV Delivery from main; select the application branch using its CI run ID."
+                );
+            }
+
             const runId = process.env.CI_RUN_ID;
 
             if (!/^[1-9][0-9]*$/.test(runId)) {
@@ -142,6 +148,13 @@ jobs:
 
             core.setOutput("available", "true");
 
+      - name: Checkout delivery validation code
+        if: steps.release-artifact.outputs.available == 'true'
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ github.workflow_sha }}
+          persist-credentials: false
+
       - name: Download selected release manifest
         if: steps.release-artifact.outputs.available == 'true'
         uses: actions/download-artifact@v8
@@ -162,71 +175,38 @@ jobs:
         with:
           script: |
             const fs = require("node:fs/promises");
+            const path = require("node:path");
 
-            const manifest = JSON.parse(
-              await fs.readFile(
-                "selected-release/release-manifest.json",
-                "utf8"
-              )
+            const { validateReleaseManifest } = require(
+                path.join(
+                    process.env.GITHUB_WORKSPACE,
+                    ".github/scripts/release-manifest.cjs"
+                )
             );
 
-            const repository =
-              `${context.repo.owner}/${context.repo.repo}`;
-
-            if (
-              manifest.schema_version !== 1 ||
-              manifest.repository !== repository ||
-              manifest.run_id !== process.env.EXPECTED_RUN_ID ||
-              manifest.run_attempt !== process.env.EXPECTED_RUN_ATTEMPT ||
-              manifest.commit !== process.env.EXPECTED_COMMIT ||
-              typeof manifest.version !== "string" ||
-              !/^[A-Za-z0-9_][A-Za-z0-9_.-]{0,127}$/.test(manifest.version)
-            ) {
-              throw new Error("Manifest does not match the selected release.");
-            }
-
-            const roles = ["app", "migrator", "provisioner"];
-
-            if (
-              !manifest.images ||
-              typeof manifest.images !== "object" ||
-              Array.isArray(manifest.images) ||
-              Object.keys(manifest.images).length !== roles.length
-            ) {
-              throw new Error("Expected three release image references.");
-            }
-
-            const prefix =
-              `ghcr.io/${context.repo.owner.toLowerCase()}/`;
-
-            for (const role of roles) {
-              const reference = manifest.images[role];
-
-              if (
-                typeof reference !== "string" ||
-                !reference.startsWith(prefix) ||
-                !/^[a-z0-9]+(?:[._-][a-z0-9]+)*@sha256:[a-f0-9]{64}$/.test(
-                  reference.slice(prefix.length)
+            const candidate = JSON.parse(
+                await fs.readFile(
+                    "selected-release/release-manifest.json",
+                    "utf8"
                 )
-              ) {
-                throw new Error(`Invalid image reference for ${role}.`);
-              }
-            }
+            );
 
-            if (new Set(Object.values(manifest.images)).size !== roles.length) {
-              throw new Error("Release roles must identify distinct images.");
-            }
+            const manifest = validateReleaseManifest(candidate, {
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                commit: process.env.EXPECTED_COMMIT,
+                run_id: process.env.EXPECTED_RUN_ID,
+                run_attempt: process.env.EXPECTED_RUN_ATTEMPT
+            });
 
-            for (const role of roles) {
-              core.setOutput(`${role}_image`, manifest.images[role]);
+            for (const role of ["app", "migrator", "provisioner"]) {
+                core.setOutput(`${role}_image`, manifest.images[role]);
             }
 
             core.setOutput("commit", manifest.commit);
             core.setOutput("version", manifest.version);
-            core.info("Selected release manifest validated.");
-
             core.setOutput("ready", "true");
-
+            core.info("Selected release manifest validated.");
   deploy:
     name: Deploy selected release to DEV
     if: needs.select-release.outputs.ready == 'true'

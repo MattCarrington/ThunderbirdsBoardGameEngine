@@ -58,4 +58,55 @@ function assembleReleaseManifest(receipts, expected) {
   };
 }
 
-module.exports = { assembleReleaseManifest };
+function validateReleaseManifest(manifest, expected) {
+  if (
+    !manifest ||
+    manifest.schema_version !== 1 ||
+    manifest.repository !== `${expected.owner}/${expected.repo}` ||
+    manifest.run_id !== expected.run_id ||
+    manifest.run_attempt !== expected.run_attempt ||
+    manifest.commit !== expected.commit ||
+    typeof manifest.version !== "string" ||
+    !/^[A-Za-z0-9_][A-Za-z0-9_.-]{0,127}$/.test(manifest.version)
+  ) {
+    throw new Error("Manifest does not match the selected release.");
+  }
+
+  const roles = ["app", "migrator", "provisioner"];
+
+  if (
+    !manifest.images ||
+    typeof manifest.images !== "object" ||
+    Array.isArray(manifest.images) ||
+    Object.keys(manifest.images).length !== roles.length
+  ) {
+    throw new Error("Expected three release image references.");
+  }
+
+  const prefix = `ghcr.io/${expected.owner.toLowerCase()}/`;
+
+  for (const role of roles) {
+    const reference = manifest.images[role];
+
+    if (
+      typeof reference !== "string" ||
+      !reference.startsWith(prefix) ||
+      !/^[a-z0-9]+(?:[._-][a-z0-9]+)*@sha256:[a-f0-9]{64}$/.test(
+        reference.slice(prefix.length)
+      )
+    ) {
+      throw new Error(`Invalid image reference for ${role}.`);
+    }
+  }
+
+  if (new Set(Object.values(manifest.images)).size !== roles.length) {
+    throw new Error("Release roles must identify distinct images.");
+  }
+
+  return manifest;
+}
+
+module.exports = { 
+    assembleReleaseManifest, 
+    validateReleaseManifest 
+};
