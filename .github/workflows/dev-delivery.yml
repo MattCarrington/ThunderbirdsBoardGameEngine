@@ -1,0 +1,255 @@
+name: DEV Delivery
+
+on:
+  workflow_run:
+    workflows: ["CI"]
+    branches: [main]
+    types: [completed]
+
+  workflow_dispatch:
+    inputs:
+      ci_run_id:
+        description: Successful CI run to deploy to shared DEV
+        required: true
+        type: string
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: delivery-dev
+  cancel-in-progress: false
+
+jobs:
+  select-release:
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    outputs:
+      app_image: ${{ steps.manifest.outputs.app_image }}
+      migrator_image: ${{ steps.manifest.outputs.migrator_image }}
+      provisioner_image: ${{ steps.manifest.outputs.provisioner_image }}
+      commit: ${{ steps.manifest.outputs.commit }}
+      version: ${{ steps.manifest.outputs.version }}
+      ready: ${{ steps.manifest.outputs.ready }}
+
+    steps:
+      - name: Validate selected CI run
+        id: selected-run
+        uses: actions/github-script@v8
+        env:
+          CI_RUN_ID: ${{ inputs.ci_run_id || github.event.workflow_run.id }}
+        with:
+          script: |
+            const runId = process.env.CI_RUN_ID;
+
+            if (!/^[1-9][0-9]*$/.test(runId)) {
+              throw new Error("A valid CI run ID is required.");
+            }
+
+            const { data: run } = await github.rest.actions.getWorkflowRun({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              run_id: Number(runId)
+            });
+
+            const repository =
+              `${context.repo.owner}/${context.repo.repo}`;
+
+            if (
+              run.path !== ".github/workflows/ci.yml" ||
+              run.event !== "push" ||
+              run.status !== "completed" ||
+              run.conclusion !== "success" ||
+              run.head_repository?.full_name !== repository
+            ) {
+              throw new Error(
+                "Select a successful push CI run from this repository."
+              );
+            }
+
+            if (context.eventName === "workflow_run") {
+                const { data: main } = await github.rest.repos.getBranch({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    branch: "main"
+                });
+
+                if (run.head_sha !== main.commit.sha) {
+                    core.notice(
+                    "Automatic delivery skipped: this commit has been superseded on main."
+                    );
+                    core.setOutput("eligible", "false");
+                    return;
+                }
+            }
+
+            core.setOutput("eligible", "true");
+
+            core.info(`Selected CI run: ${run.id}`);
+            core.info(`Branch: ${run.head_branch}`);
+            core.info(`Commit: ${run.head_sha}`);
+
+            core.setOutput("run_id", String(run.id));
+            core.setOutput("run_attempt", String(run.run_attempt));
+            core.setOutput("commit", run.head_sha);
+
+      - name: Find release manifest
+        id: release-artifact
+        if: steps.selected-run.outputs.eligible == 'true'
+        uses: actions/github-script@v8
+        env:
+          SELECTED_RUN_ID: ${{ steps.selected-run.outputs.run_id }}
+          SELECTED_RUN_ATTEMPT: ${{ steps.selected-run.outputs.run_attempt }}
+        with:
+          script: |
+            const artifacts = await github.paginate(
+              github.rest.actions.listWorkflowRunArtifacts,
+              {
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                run_id: Number(process.env.SELECTED_RUN_ID),
+                per_page: 100
+              }
+            );
+
+            const name =
+              `release-manifest-${process.env.SELECTED_RUN_ATTEMPT}`;
+
+            const matches = artifacts.filter(a => a.name === name);
+
+            if (matches.length === 0) {
+              if (context.eventName === "workflow_dispatch") {
+                throw new Error(
+                  "The selected CI run has no release manifest."
+                );
+              }
+
+              core.notice(
+                "No release manifest exists for this CI attempt; delivery skipped."
+              );
+              core.setOutput("available", "false");
+              return;
+            }
+
+            if (matches.length !== 1 || matches[0].expired) {
+              throw new Error(
+                "Expected one unexpired release manifest."
+              );
+            }
+
+            core.setOutput("available", "true");
+
+      - name: Download selected release manifest
+        if: steps.release-artifact.outputs.available == 'true'
+        uses: actions/download-artifact@v8
+        with:
+          name: release-manifest-${{ steps.selected-run.outputs.run_attempt }}
+          path: selected-release
+          run-id: ${{ steps.selected-run.outputs.run_id }}
+          github-token: ${{ github.token }}
+
+      - name: Validate release manifest
+        if: steps.release-artifact.outputs.available == 'true'
+        id: manifest
+        uses: actions/github-script@v8
+        env:
+          EXPECTED_RUN_ID: ${{ steps.selected-run.outputs.run_id }}
+          EXPECTED_RUN_ATTEMPT: ${{ steps.selected-run.outputs.run_attempt }}
+          EXPECTED_COMMIT: ${{ steps.selected-run.outputs.commit }}
+        with:
+          script: |
+            const fs = require("node:fs/promises");
+
+            const manifest = JSON.parse(
+              await fs.readFile(
+                "selected-release/release-manifest.json",
+                "utf8"
+              )
+            );
+
+            const repository =
+              `${context.repo.owner}/${context.repo.repo}`;
+
+            if (
+              manifest.schema_version !== 1 ||
+              manifest.repository !== repository ||
+              manifest.run_id !== process.env.EXPECTED_RUN_ID ||
+              manifest.run_attempt !== process.env.EXPECTED_RUN_ATTEMPT ||
+              manifest.commit !== process.env.EXPECTED_COMMIT ||
+              typeof manifest.version !== "string" ||
+              !/^[A-Za-z0-9_][A-Za-z0-9_.-]{0,127}$/.test(manifest.version)
+            ) {
+              throw new Error("Manifest does not match the selected release.");
+            }
+
+            const roles = ["app", "migrator", "provisioner"];
+
+            if (
+              !manifest.images ||
+              typeof manifest.images !== "object" ||
+              Array.isArray(manifest.images) ||
+              Object.keys(manifest.images).length !== roles.length
+            ) {
+              throw new Error("Expected three release image references.");
+            }
+
+            const prefix =
+              `ghcr.io/${context.repo.owner.toLowerCase()}/`;
+
+            for (const role of roles) {
+              const reference = manifest.images[role];
+
+              if (
+                typeof reference !== "string" ||
+                !reference.startsWith(prefix) ||
+                !/^[a-z0-9]+(?:[._-][a-z0-9]+)*@sha256:[a-f0-9]{64}$/.test(
+                  reference.slice(prefix.length)
+                )
+              ) {
+                throw new Error(`Invalid image reference for ${role}.`);
+              }
+            }
+
+            if (new Set(Object.values(manifest.images)).size !== roles.length) {
+              throw new Error("Release roles must identify distinct images.");
+            }
+
+            for (const role of roles) {
+              core.setOutput(`${role}_image`, manifest.images[role]);
+            }
+
+            core.setOutput("commit", manifest.commit);
+            core.setOutput("version", manifest.version);
+            core.info("Selected release manifest validated.");
+
+            core.setOutput("ready", "true");
+
+  deploy:
+    name: Deploy selected release to DEV
+    if: needs.select-release.outputs.ready == 'true'
+    uses: ./.github/workflows/deploy.yml
+    with:
+      app_image: ${{ needs.select-release.outputs.app_image }}
+      migrator_image: ${{ needs.select-release.outputs.migrator_image }}
+      provisioner_image: ${{ needs.select-release.outputs.provisioner_image }}
+      environment: dev
+      source_commit: ${{ needs.select-release.outputs.commit }}
+      require_current_main: ${{ github.event_name == 'workflow_run' }}
+    secrets: inherit
+    needs: 
+      - select-release
+
+  smoke-tests:
+    name: Verify DEV deployment
+    permissions:
+      contents: read
+      packages: read
+    uses: ./.github/workflows/smoke-tests.yml
+    with:
+      deployment_uri: ${{ needs.deploy.outputs.deployment_uri }}
+      image_tag: ${{ vars.SMOKE_IMAGE_TAG || 'latest' }}      
+    needs: 
+      - deploy
