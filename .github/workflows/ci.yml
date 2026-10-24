@@ -145,6 +145,9 @@ jobs:
       actions: read
       contents: read
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
       - name: Download published image receipts
         uses: actions/download-artifact@v8
         with:
@@ -159,68 +162,33 @@ jobs:
         with:
           script: |
             const fs = require("node:fs/promises");
+            const path = require("node:path");
+
+            const { assembleReleaseManifest } = require(
+              path.join(
+                process.env.GITHUB_WORKSPACE,
+                ".github/scripts/release-manifest.cjs"
+              )
+            );
 
             const files = await fs.readdir("release-metadata");
-            const expectedRoles = ["app", "migrator", "provisioner"];
-            const images = {};
 
-            if (files.length !== expectedRoles.length) {
-              throw new Error("Expected exactly three image receipts.");
-            }
-
-            for (const file of files) {
-              const receipt = JSON.parse(
-                await fs.readFile(`release-metadata/${file}`, "utf8")
-              );
-
-              if (
-                !expectedRoles.includes(receipt.role) ||
-                Object.hasOwn(images, receipt.role)
-              ) {
-                throw new Error("Unexpected or duplicate image role.");
-              }
-
-              if (
-                receipt.commit !== process.env.GITHUB_SHA ||
-                receipt.run_id !== process.env.GITHUB_RUN_ID ||
-                receipt.run_attempt !== process.env.GITHUB_RUN_ATTEMPT ||
-                receipt.version !== process.env.RELEASE_VERSION
-              ) {
-                throw new Error("Receipt does not match this release.");
-              }
-
-              if (
-                typeof receipt.image !== "string" ||
-                !/^[a-z0-9]+(?:[._-][a-z0-9]+)*$/.test(receipt.image) ||
-                typeof receipt.reference !== "string"
-              ) {
-                throw new Error("Invalid image identity.");
-              }
-
-              const prefix =
-                `ghcr.io/${context.repo.owner.toLowerCase()}/${receipt.image}@`;
-
-              if (
-                !receipt.reference.startsWith(prefix) ||
-                !/^sha256:[a-f0-9]{64}$/.test(
-                  receipt.reference.slice(prefix.length)
+            const receipts = await Promise.all(
+              files.map(async file =>
+                JSON.parse(
+                  await fs.readFile(`release-metadata/${file}`, "utf8")
                 )
-              ) {
-                throw new Error("Invalid registry or image digest.");
-              }
+              )
+            );
 
-              images[receipt.role] = receipt.reference;
-            }
-
-            const manifest = {
-              schema_version: 1,
-              repository: `${context.repo.owner}/${context.repo.repo}`,
+            const manifest = assembleReleaseManifest(receipts, {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
               commit: process.env.GITHUB_SHA,
               run_id: process.env.GITHUB_RUN_ID,
               run_attempt: process.env.GITHUB_RUN_ATTEMPT,
-              version: process.env.RELEASE_VERSION,
-              images
-            };
+              version: process.env.RELEASE_VERSION
+            });
 
             await fs.mkdir("release", { recursive: true });
             await fs.writeFile(
