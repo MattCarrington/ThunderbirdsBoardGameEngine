@@ -36,6 +36,12 @@ jobs:
       ready: ${{ steps.manifest.outputs.ready }}
 
     steps:
+      - name: Checkout delivery validation code
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ github.workflow_sha }}
+          persist-credentials: false
+    
       - name: Validate selected CI run
         id: selected-run
         uses: actions/github-script@v8
@@ -61,46 +67,48 @@ jobs:
               run_id: Number(runId)
             });
 
-            const repository =
-              `${context.repo.owner}/${context.repo.repo}`;
+            const path = require("node:path");
+            const { selectCiRun } = require(
+                path.join(
+                    process.env.GITHUB_WORKSPACE,
+                    ".github/scripts/release-selection.cjs"
+                )
+            );
 
-            if (
-              run.path !== ".github/workflows/ci.yml" ||
-              run.event !== "push" ||
-              run.status !== "completed" ||
-              run.conclusion !== "success" ||
-              run.head_repository?.full_name !== repository
-            ) {
-              throw new Error(
-                "Select a successful push CI run from this repository."
-              );
-            }
+            const automatic = context.eventName === "workflow_run";
+            let currentMainCommit;
 
-            if (context.eventName === "workflow_run") {
+            if (automatic) {
                 const { data: main } = await github.rest.repos.getBranch({
                     owner: context.repo.owner,
                     repo: context.repo.repo,
                     branch: "main"
                 });
 
-                if (run.head_sha !== main.commit.sha) {
-                    core.notice(
-                    "Automatic delivery skipped: this commit has been superseded on main."
-                    );
-                    core.setOutput("eligible", "false");
-                    return;
-                }
+                currentMainCommit = main.commit.sha;
             }
 
-            core.setOutput("eligible", "true");
+            const selection = selectCiRun(run, {
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                automatic,
+                currentMainCommit
+            });
+
+            core.setOutput("eligible", String(selection.eligible));
+
+            if (!selection.eligible) {
+                core.notice(selection.reason);
+                return;
+            }
 
             core.info(`Selected CI run: ${run.id}`);
             core.info(`Branch: ${run.head_branch}`);
-            core.info(`Commit: ${run.head_sha}`);
+            core.info(`Commit: ${selection.commit}`);
 
-            core.setOutput("run_id", String(run.id));
-            core.setOutput("run_attempt", String(run.run_attempt));
-            core.setOutput("commit", run.head_sha);
+            core.setOutput("run_id", selection.run_id);
+            core.setOutput("run_attempt", selection.run_attempt);
+            core.setOutput("commit", selection.commit);
 
       - name: Find release manifest
         id: release-artifact
