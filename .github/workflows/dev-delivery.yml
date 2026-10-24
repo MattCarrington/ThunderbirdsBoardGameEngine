@@ -151,13 +151,6 @@ jobs:
 
             core.setOutput("name", selection.name);
 
-      - name: Checkout delivery validation code
-        if: steps.release-artifact.outputs.available == 'true'
-        uses: actions/checkout@v7
-        with:
-          ref: ${{ github.workflow_sha }}
-          persist-credentials: false
-
       - name: Download selected release manifest
         if: steps.release-artifact.outputs.available == 'true'
         uses: actions/download-artifact@v8
