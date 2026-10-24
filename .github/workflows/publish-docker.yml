@@ -3,6 +3,10 @@ name: Publish Docker Image (Reusable)
 on:
   workflow_call:
     inputs:
+      image_role:
+        description: Logical deployment role
+        required: true
+        type: string
       image_name:
         type: string
         required: true
@@ -63,7 +67,11 @@ jobs:
 
       - name: Push Image
         id: publish
+        env:
+          IMAGE_ROLE: ${{ inputs.image_role }}
         run: |
+          set -euo pipefail
+
           IMAGE="${{ inputs.image_name }}"
           VERSION="${{ inputs.version }}"
           SHA_TAG="sha-${GITHUB_SHA::7}"
@@ -80,4 +88,42 @@ jobs:
 
           echo "image_tag=$VERSION" >> $GITHUB_OUTPUT
 
+          digest_ref=$(
+            docker image inspect "$IMAGE:$SHA_TAG" \
+              --format '{{json .RepoDigests}}' |
+            jq -er --arg prefix "$GHCR@" '
+              [.[] | select(startswith($prefix))]
+              | unique
+              | if length == 1 then .[0]
+                else error("Expected one matching image digest")
+                end
+            '
+          )
 
+          mkdir -p release-metadata
+
+          jq -n \
+            --arg image "$IMAGE" \
+            --arg reference "$digest_ref" \
+            --arg version "$VERSION" \
+            --arg commit "$GITHUB_SHA" \
+            --arg run_id "$GITHUB_RUN_ID" \
+            --arg run_attempt "$GITHUB_RUN_ATTEMPT" \
+            --arg role "$IMAGE_ROLE" \
+            '{
+              role: $role,
+              image: $image,
+              reference: $reference,
+              version: $version,
+              commit: $commit,
+              run_id: $run_id,
+              run_attempt: $run_attempt
+            }' > "release-metadata/$IMAGE.json"
+
+      - name: Upload published image receipt
+        uses: actions/upload-artifact@v7
+        with:
+          name: release-image-${{ inputs.image_name }}-${{ github.run_attempt }}
+          path: release-metadata/${{ inputs.image_name }}.json
+          if-no-files-found: error
+          retention-days: 7

@@ -3,21 +3,29 @@ name: Deploy
 on:
   workflow_call:
     inputs:
-      app_image_name:
-        required: true
-        type: string
-      image_tag:
-        required: true
-        type: string
       environment:
         required: true
         type: string
-      database_migrator_image_name:
+      app_image:
+        description: Complete API image reference
         required: true
         type: string
-      database_provisioner_image_name:
+      migrator_image:
+        description: Complete migrator image reference
         required: true
         type: string
+      provisioner_image:
+        description: Complete provisioner image reference
+        required: true
+        type: string
+      source_commit:
+        description: Validated application commit
+        required: true
+        type: string
+      require_current_main:
+        description: Reject automatic releases superseded on main
+        required: true
+        type: boolean
     outputs:
       deployment_uri:
         description: The URI of the deployed application
@@ -80,12 +88,33 @@ jobs:
               thunderbirds-azure-dev:registryPassword "$GHCR_PULL_TOKEN"
           fi
 
+      - name: Check automatic release is still current
+        if: inputs.require_current_main
+        uses: actions/github-script@v8
+        env:
+          SOURCE_COMMIT: ${{ inputs.source_commit }}
+        with:
+          script: |
+            const { data: main } = await github.rest.repos.getBranch({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              branch: "main"
+            });
+
+            if (process.env.SOURCE_COMMIT !== main.commit.sha) {
+              throw new Error(
+                "Deployment stopped before Azure update: " +
+                "a newer commit exists on main."
+              );
+            }
+
       - name: Deploy to Azure
+        env:
+          APP_IMAGE: ${{ inputs.app_image }}
+          MIGRATOR_IMAGE: ${{ inputs.migrator_image }}
+          PROVISIONER_IMAGE: ${{ inputs.provisioner_image }}
         run: |
-          OWNER="${GITHUB_REPOSITORY_OWNER,,}"
-          APP_IMAGE="ghcr.io/$OWNER/${{ inputs.app_image_name }}:${{ inputs.image_tag }}"
-          MIGRATOR_IMAGE="ghcr.io/$OWNER/${{ inputs.database_migrator_image_name }}:${{ inputs.image_tag }}"
-          PROVISIONER_IMAGE="ghcr.io/$OWNER/${{ inputs.database_provisioner_image_name }}:${{ inputs.image_tag }}"
+          set -euo pipefail
 
           pulumi up \
             --yes \

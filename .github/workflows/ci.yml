@@ -106,11 +106,15 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - image_name: *app_image_name
-          - image_name: *migrator_image_name
-          - image_name: *provisioner_image_name
+          - image_role: app
+            image_name: *app_image_name
+          - image_role: migrator
+            image_name: *migrator_image_name
+          - image_role: provisioner
+            image_name: *provisioner_image_name
     uses: ./.github/workflows/publish-docker.yml
     with:
+      image_role: ${{ matrix.image_role }}
       image_name: ${{ matrix.image_name }}
       version: ${{ needs.compute-version.outputs.version }}
       push_latest: ${{ github.ref == 'refs/heads/main' }}
@@ -130,29 +134,106 @@ jobs:
     needs:
       - compute-version
 
-  deploy:
-    name: Deploy Application
-    if: github.ref == 'refs/heads/main'
-    uses: ./.github/workflows/deploy.yml
-    with:
-      app_image_name: *app_image_name 
-      database_migrator_image_name: *migrator_image_name
-      database_provisioner_image_name: *provisioner_image_name
-      image_tag: ${{ needs.compute-version.outputs.version }}
-      environment: "dev"
-    secrets: inherit
+  release-manifest:
+    name: Assemble release manifest
+    if: github.event_name == 'push' && needs.compute-version.outputs.release_type != 'none'
+    runs-on: ubuntu-latest
     needs:
       - docker-publish
       - compute-version
-
-  smoke-tests:
-    name: Run Smoke Tests
-    if: github.ref == 'refs/heads/main'
     permissions:
-      packages: read
-    uses: ./.github/workflows/smoke-tests.yml
-    with:
-      deployment_uri: ${{ needs.deploy.outputs.deployment_uri }}
-      image_tag: ${{ vars.SMOKE_IMAGE_TAG || 'latest' }}
-    needs:
-      - deploy
+      actions: read
+      contents: read
+    steps:
+      - name: Download published image receipts
+        uses: actions/download-artifact@v8
+        with:
+          pattern: release-image-*-${{ github.run_attempt }}
+          path: release-metadata
+          merge-multiple: true
+
+      - name: Validate receipts and create manifest
+        uses: actions/github-script@v8
+        env:
+          RELEASE_VERSION: ${{ needs.compute-version.outputs.version }}
+        with:
+          script: |
+            const fs = require("node:fs/promises");
+
+            const files = await fs.readdir("release-metadata");
+            const expectedRoles = ["app", "migrator", "provisioner"];
+            const images = {};
+
+            if (files.length !== expectedRoles.length) {
+              throw new Error("Expected exactly three image receipts.");
+            }
+
+            for (const file of files) {
+              const receipt = JSON.parse(
+                await fs.readFile(`release-metadata/${file}`, "utf8")
+              );
+
+              if (
+                !expectedRoles.includes(receipt.role) ||
+                Object.hasOwn(images, receipt.role)
+              ) {
+                throw new Error("Unexpected or duplicate image role.");
+              }
+
+              if (
+                receipt.commit !== process.env.GITHUB_SHA ||
+                receipt.run_id !== process.env.GITHUB_RUN_ID ||
+                receipt.run_attempt !== process.env.GITHUB_RUN_ATTEMPT ||
+                receipt.version !== process.env.RELEASE_VERSION
+              ) {
+                throw new Error("Receipt does not match this release.");
+              }
+
+              if (
+                typeof receipt.image !== "string" ||
+                !/^[a-z0-9]+(?:[._-][a-z0-9]+)*$/.test(receipt.image) ||
+                typeof receipt.reference !== "string"
+              ) {
+                throw new Error("Invalid image identity.");
+              }
+
+              const prefix =
+                `ghcr.io/${context.repo.owner.toLowerCase()}/${receipt.image}@`;
+
+              if (
+                !receipt.reference.startsWith(prefix) ||
+                !/^sha256:[a-f0-9]{64}$/.test(
+                  receipt.reference.slice(prefix.length)
+                )
+              ) {
+                throw new Error("Invalid registry or image digest.");
+              }
+
+              images[receipt.role] = receipt.reference;
+            }
+
+            const manifest = {
+              schema_version: 1,
+              repository: `${context.repo.owner}/${context.repo.repo}`,
+              commit: process.env.GITHUB_SHA,
+              run_id: process.env.GITHUB_RUN_ID,
+              run_attempt: process.env.GITHUB_RUN_ATTEMPT,
+              version: process.env.RELEASE_VERSION,
+              images
+            };
+
+            await fs.mkdir("release", { recursive: true });
+            await fs.writeFile(
+              "release/release-manifest.json",
+              JSON.stringify(manifest, null, 2) + "\n"
+            );
+
+            core.info("Validated release manifest created.");
+
+      - name: Upload release manifest
+        uses: actions/upload-artifact@v7
+        with:
+          name: release-manifest-${{ github.run_attempt }}
+          path: release/release-manifest.json
+          if-no-files-found: error
+          retention-days: 7
