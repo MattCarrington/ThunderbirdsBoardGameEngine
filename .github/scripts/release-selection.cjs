@@ -31,4 +31,36 @@ function selectCiRun(run, expected) {
     };
 }
 
-module.exports = { selectCiRun };
+function selectReleaseArtifact(artifacts, expected) {
+    const name = `release-manifest-${expected.run_attempt}`;
+    const matches = artifacts.filter(artifact => artifact.name === name);
+
+    if (matches.length === 0) {
+        if (!expected.automatic) {
+            throw new Error(
+                "The selected CI run has no release manifest."
+            );
+        }
+
+        return {
+            available: false,
+            reason: "No release manifest exists for this CI attempt; delivery skipped."
+        };
+    }
+
+    if (matches.length !== 1 || matches[0].expired) {
+        throw new Error(
+            "Expected one unexpired release manifest."
+        );
+    }
+
+    return {
+        available: true,
+        name: matches[0].name
+    };
+}
+
+module.exports = { 
+    selectCiRun, 
+    selectReleaseArtifact 
+};

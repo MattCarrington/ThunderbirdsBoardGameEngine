@@ -129,32 +129,27 @@ jobs:
               }
             );
 
-            const name =
-              `release-manifest-${process.env.SELECTED_RUN_ATTEMPT}`;
+            const path = require("node:path");
+            const { selectReleaseArtifact } = require(
+                path.join(
+                    process.env.GITHUB_WORKSPACE,
+                    ".github/scripts/release-selection.cjs"
+                )
+            );
 
-            const matches = artifacts.filter(a => a.name === name);
+            const selection = selectReleaseArtifact(artifacts, {
+                run_attempt: process.env.SELECTED_RUN_ATTEMPT,
+                automatic: context.eventName === "workflow_run"
+            });
 
-            if (matches.length === 0) {
-              if (context.eventName === "workflow_dispatch") {
-                throw new Error(
-                  "The selected CI run has no release manifest."
-                );
-              }
+            core.setOutput("available", String(selection.available));
 
-              core.notice(
-                "No release manifest exists for this CI attempt; delivery skipped."
-              );
-              core.setOutput("available", "false");
-              return;
+            if (!selection.available) {
+                core.notice(selection.reason);
+                return;
             }
 
-            if (matches.length !== 1 || matches[0].expired) {
-              throw new Error(
-                "Expected one unexpired release manifest."
-              );
-            }
-
-            core.setOutput("available", "true");
+            core.setOutput("name", selection.name);
 
       - name: Checkout delivery validation code
         if: steps.release-artifact.outputs.available == 'true'
@@ -167,7 +162,7 @@ jobs:
         if: steps.release-artifact.outputs.available == 'true'
         uses: actions/download-artifact@v8
         with:
-          name: release-manifest-${{ steps.selected-run.outputs.run_attempt }}
+          name: ${{ steps.release-artifact.outputs.name }}
           path: selected-release
           run-id: ${{ steps.selected-run.outputs.run_id }}
           github-token: ${{ github.token }}
@@ -215,6 +210,7 @@ jobs:
             core.setOutput("version", manifest.version);
             core.setOutput("ready", "true");
             core.info("Selected release manifest validated.");
+
   deploy:
     name: Deploy selected release to DEV
     if: needs.select-release.outputs.ready == 'true'
