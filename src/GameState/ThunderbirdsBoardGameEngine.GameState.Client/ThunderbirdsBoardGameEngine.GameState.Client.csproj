@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <PackageId>ThunderbirdsBoardGameEngine.GameState.Client</PackageId>
-    <Version>0.1.0</Version>
+    <Version>0.1.1</Version>
     <Authors>Matthew Carrington</Authors>
     <Description>Public request/response contracts for the Game State bounded context of ThunderbirdsBoardGameEngine.</Description>
     <RepositoryUrl>https://github.com/MattCarrington/ThunderbirdsBoardGameEngine</RepositoryUrl>
