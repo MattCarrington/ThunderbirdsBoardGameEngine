@@ -1,27 +1,36 @@
 function assembleReleaseManifest(receipts, expected) {
   const roles = ["app", "migrator", "provisioner"];
-  const images = {};
+  const selectedReceipts = {};
+  const seenReceipts = new Set();
 
-  if (!Array.isArray(receipts) || receipts.length !== roles.length) {
-    throw new Error("Expected exactly three image receipts.");
+  if (!Array.isArray(receipts)) {
+    throw new Error("Expected image receipts.");
   }
 
   for (const receipt of receipts) {
-    if (
-      !receipt ||
-      !roles.includes(receipt.role) ||
-      Object.hasOwn(images, receipt.role)
-    ) {
-      throw new Error("Unexpected or duplicate image role.");
+    if (!receipt || !roles.includes(receipt.role)) {
+      throw new Error("Unexpected image role.");
     }
 
     if (
       receipt.commit !== expected.commit ||
       receipt.run_id !== expected.run_id ||
-      receipt.run_attempt !== expected.run_attempt ||
       receipt.version !== expected.version
     ) {
       throw new Error("Receipt does not match this release.");
+    }
+
+    const receiptAttempt = Number(receipt.run_attempt);
+    const currentAttempt = Number(expected.run_attempt);
+
+    if (
+      !/^[1-9][0-9]*$/.test(receipt.run_attempt) ||
+      !/^[1-9][0-9]*$/.test(expected.run_attempt) ||
+      !Number.isSafeInteger(receiptAttempt) ||
+      !Number.isSafeInteger(currentAttempt) ||
+      receiptAttempt > currentAttempt
+    ) {
+      throw new Error("Invalid receipt run attempt.");
     }
 
     if (
@@ -44,8 +53,41 @@ function assembleReleaseManifest(receipts, expected) {
       throw new Error("Invalid registry or image digest.");
     }
 
-    images[receipt.role] = receipt.reference;
+    const selected = selectedReceipts[receipt.role];
+
+    if (
+      !selected ||
+      receiptAttempt > Number(selected.run_attempt)
+    ) {
+      selectedReceipts[receipt.role] = receipt;
+    }
+
+    const receiptKey = `${receipt.role}:${receiptAttempt}`;
+
+    if (seenReceipts.has(receiptKey)) {
+      throw new Error("Duplicate receipt for image role and attempt.");
+    }
+
+    seenReceipts.add(receiptKey);
   }
+
+  if (roles.some(role => !Object.hasOwn(selectedReceipts, role))) {
+    throw new Error("Missing receipt for required image role.");
+  }
+
+  const images = Object.fromEntries(
+    roles.map(role => [
+      role,
+      selectedReceipts[role].reference
+    ])
+  );
+
+  const imageAttempts = Object.fromEntries(
+    roles.map(role => [
+      role,
+      selectedReceipts[role].run_attempt
+    ])
+  );
 
   return {
     schema_version: 1,
@@ -54,7 +96,8 @@ function assembleReleaseManifest(receipts, expected) {
     run_id: expected.run_id,
     run_attempt: expected.run_attempt,
     version: expected.version,
-    images
+    images,
+    image_attempts: imageAttempts
   };
 }
 

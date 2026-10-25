@@ -56,6 +56,11 @@ function createManifestFixture() {
       app: `ghcr.io/exampleowner/example-app@sha256:${"1".repeat(64)}`,
       migrator: `ghcr.io/exampleowner/example-migrator@sha256:${"2".repeat(64)}`,
       provisioner: `ghcr.io/exampleowner/example-provisioner@sha256:${"3".repeat(64)}`
+    },
+    image_attempts: {
+      app: "1",
+      migrator: "1",
+      provisioner: "1"
     }
   };
 
@@ -78,6 +83,11 @@ test("assembles three images into one release manifest", () => {
       app: receipts[0].reference,
       migrator: receipts[1].reference,
       provisioner: receipts[2].reference
+    },
+    image_attempts: {
+      app: "1",
+      migrator: "1",
+      provisioner: "1"
     }
   });
 });
@@ -89,16 +99,6 @@ test("rejects images built from different commits", () => {
   assert.throws(
     () => assembleReleaseManifest(receipts, expected),
     /Receipt does not match this release/
-  );
-});
-
-test("rejects duplicate roles", () => {
-  const { receipts, expected } = createFixture();
-  receipts[2].role = "app";
-
-  assert.throws(
-    () => assembleReleaseManifest(receipts, expected),
-    /Unexpected or duplicate image role/
   );
 });
 
@@ -115,13 +115,13 @@ test("rejects an image from another registry", () => {
   );
 });
 
-test("expects exactly three image receipts", () => {
+test("rejects a release missing a required image role", () => {
   const { receipts, expected } = createFixture();
   receipts.pop(); // Remove one image to have only two
 
   assert.throws(
     () => assembleReleaseManifest(receipts, expected),
-    /Expected exactly three image receipts./
+    /Missing receipt for required image role/
   );
 });
 
@@ -283,5 +283,86 @@ test("rejects a null manifest", () => {
   assert.throws(
     () => validateReleaseManifest(manifest, expected),
     /Manifest does not match the selected release/
+  );
+});
+
+test("assembles receipts from different attempts of the same CI run", () => {
+  const { receipts, expected } = createFixture();
+  expected.run_attempt = "2";
+  receipts[1].run_attempt = "2";
+
+  const manifest = assembleReleaseManifest(receipts, expected);
+
+  assert.equal(manifest.run_attempt, "2");
+  assert.deepEqual(manifest.images, {
+    app: receipts[0].reference,
+    migrator: receipts[1].reference,
+    provisioner: receipts[2].reference
+  });
+});
+
+test("selects the newest receipt for each image role", () => {
+  const { receipts, expected } = createFixture();
+  expected.run_attempt = "10";
+
+  const attempt2 = {
+    ...receipts[0],
+    run_attempt: "2",
+    reference:
+      `ghcr.io/exampleowner/example-app@sha256:${"a".repeat(64)}`
+  };
+
+  const attempt10 = {
+    ...receipts[0],
+    run_attempt: "10",
+    reference:
+      `ghcr.io/exampleowner/example-app@sha256:${"b".repeat(64)}`
+  };
+
+  // Deliberately unordered: selection must compare attempt numbers.
+  receipts.unshift(attempt10);
+  receipts.push(attempt2);
+
+  const manifest = assembleReleaseManifest(receipts, expected);
+
+  assert.deepEqual(manifest.images, {
+    app: attempt10.reference,
+    migrator: receipts.find(r => r.role === "migrator").reference,
+    provisioner: receipts.find(r => r.role === "provisioner").reference
+  });
+});
+
+test("records the producing attempt for each selected receipt", () => {
+  const { receipts, expected } = createFixture();
+  expected.run_attempt = "3";
+  receipts[1].run_attempt = "2";
+  receipts[2].run_attempt = "3";
+
+  const manifest = assembleReleaseManifest(receipts, expected);
+
+  assert.deepEqual(manifest.image_attempts, {
+    app: "1",
+    migrator: "2",
+    provisioner: "3"
+  });
+});
+
+test("rejects a receipt from a future run attempt", () => {
+  const { receipts, expected } = createFixture();
+  receipts[0].run_attempt = "2";
+
+  assert.throws(
+    () => assembleReleaseManifest(receipts, expected),
+    /Invalid receipt run attempt/
+  );
+});
+
+test("rejects duplicate receipts for the same role and attempt", () => {
+  const { receipts, expected } = createFixture();
+  receipts.push({ ...receipts[0] });
+
+  assert.throws(
+    () => assembleReleaseManifest(receipts, expected),
+    /Duplicate receipt for image role and attempt/
   );
 });
