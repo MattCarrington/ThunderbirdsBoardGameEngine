@@ -145,22 +145,26 @@ test("selects one matching unexpired release manifest", () => {
 
     assert.deepEqual(result, {
         available: true,
-        name: "release-manifest-1"
+        name: "release-manifest-1",
+        run_attempt: "1"
     });
 });
 
-test("ignores artifacts from other run attempts", () => {
+test("selects the newer manifest when an older attempt is also available", () => {
     const { artifacts, expected } = createReleaseArtifactFixture();
     artifacts.push({
         name: "release-manifest-2",
         expired: false
     });
 
+    expected.run_attempt = "2";
+
     const result = selectReleaseArtifact(artifacts, expected);
 
     assert.deepEqual(result, {
         available: true,
-        name: "release-manifest-1"
+        name: "release-manifest-2",
+        run_attempt: "2"
     });
 });
 
@@ -206,4 +210,54 @@ test("rejects an expired release manifest", () => {
     assert.throws(() => selectReleaseArtifact(artifacts, expected), {
         message: "Expected one unexpired release manifest."
     });
+});
+
+test("selects an earlier manifest when the latest CI attempt produced none", () => {
+  const { artifacts, expected } = createReleaseArtifactFixture();
+  expected.run_attempt = "2";
+
+  const result = selectReleaseArtifact(artifacts, expected);
+
+  assert.deepEqual(result, {
+    available: true,
+    name: "release-manifest-1",
+    run_attempt: "1"
+  });
+});
+
+test("selects the newest manifest by numeric attempt", () => {
+    const { artifacts, expected } = createReleaseArtifactFixture();
+    expected.run_attempt = "10";
+
+    artifacts.unshift({
+        name: "release-manifest-10",
+        expired: false
+    });
+
+    artifacts.push({
+        name: "release-manifest-2",
+        expired: false
+    });
+
+    const result = selectReleaseArtifact(artifacts, expected);
+
+    assert.deepEqual(result, {
+        available: true,
+        name: "release-manifest-10",
+        run_attempt: "10"
+    });
+});
+
+test("rejects a manifest artifact from a future attempt", () => {
+    const { artifacts, expected } = createReleaseArtifactFixture();
+
+    artifacts.push({
+        name: "release-manifest-2",
+        expired: false
+    });
+
+    assert.throws(
+        () => selectReleaseArtifact(artifacts, expected),
+        /Manifest artifact is from a future run attempt/
+    );
 });

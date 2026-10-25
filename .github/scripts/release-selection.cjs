@@ -32,8 +32,33 @@ function selectCiRun(run, expected) {
 }
 
 function selectReleaseArtifact(artifacts, expected) {
-    const name = `release-manifest-${expected.run_attempt}`;
-    const matches = artifacts.filter(artifact => artifact.name === name);
+    const candidates = artifacts.flatMap(artifact => {
+    const match = /^release-manifest-([1-9][0-9]*)$/.exec(
+        artifact.name
+    );
+
+    return match
+        ? [{ artifact, attempt: Number(match[1]) }]
+        : [];
+    });
+
+    const currentAttempt = Number(expected.run_attempt);
+
+    if (candidates.some(candidate => candidate.attempt > currentAttempt)) {
+        throw new Error("Manifest artifact is from a future run attempt.");
+    }
+
+    const eligible = candidates.filter(
+        candidate => candidate.attempt <= currentAttempt
+    );
+
+    const newestAttempt = Math.max(
+        ...eligible.map(candidate => candidate.attempt)
+    );
+
+    const matches = eligible
+        .filter(candidate => candidate.attempt === newestAttempt)
+        .map(candidate => candidate.artifact);
 
     if (matches.length === 0) {
         if (!expected.automatic) {
@@ -56,7 +81,8 @@ function selectReleaseArtifact(artifacts, expected) {
 
     return {
         available: true,
-        name: matches[0].name
+        name: matches[0].name,
+        run_attempt: String(newestAttempt)
     };
 }
 
