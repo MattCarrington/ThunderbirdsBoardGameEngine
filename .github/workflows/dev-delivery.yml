@@ -150,6 +150,7 @@ jobs:
             }
 
             core.setOutput("name", selection.name);
+            core.setOutput("run_attempt", selection.run_attempt);
 
       - name: Download selected release manifest
         if: steps.release-artifact.outputs.available == 'true'
@@ -166,7 +167,7 @@ jobs:
         uses: actions/github-script@v8
         env:
           EXPECTED_RUN_ID: ${{ steps.selected-run.outputs.run_id }}
-          EXPECTED_RUN_ATTEMPT: ${{ steps.selected-run.outputs.run_attempt }}
+          EXPECTED_RUN_ATTEMPT: ${{ steps.release-artifact.outputs.run_attempt }}
           EXPECTED_COMMIT: ${{ steps.selected-run.outputs.commit }}
         with:
           script: |

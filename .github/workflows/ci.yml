@@ -151,9 +151,9 @@ jobs:
       - name: Download published image receipts
         uses: actions/download-artifact@v8
         with:
-          pattern: release-image-*-${{ github.run_attempt }}
+          pattern: release-image-*
           path: release-metadata
-          merge-multiple: true
+          merge-multiple: false
 
       - name: Validate receipts and create manifest
         uses: actions/github-script@v8
@@ -171,14 +171,36 @@ jobs:
               )
             );
 
-            const files = await fs.readdir("release-metadata");
+            const entries = await fs.readdir("release-metadata", {
+              withFileTypes: true
+            });
 
             const receipts = await Promise.all(
-              files.map(async file =>
-                JSON.parse(
-                  await fs.readFile(`release-metadata/${file}`, "utf8")
-                )
-              )
+              entries.map(async entry => {
+                if (!entry.isDirectory()) {
+                  throw new Error("Expected a directory for each receipt artifact.");
+                }
+
+                const directory = path.join("release-metadata", entry.name);
+                const files = await fs.readdir(directory);
+
+                if (files.length !== 1 || !files[0].endsWith(".json")) {
+                  throw new Error("Expected one JSON receipt per artifact.");
+                }
+
+                const receipt = JSON.parse(
+                  await fs.readFile(path.join(directory, files[0]), "utf8")
+                );
+
+                const expectedArtifactName =
+                  `release-image-${receipt.image}-${receipt.run_attempt}`;
+
+                if (entry.name !== expectedArtifactName) {
+                  throw new Error("Receipt does not match its artifact name.");
+                }
+
+                return receipt;
+              })
             );
 
             const manifest = assembleReleaseManifest(receipts, {
