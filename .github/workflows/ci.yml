@@ -227,20 +227,3 @@ jobs:
           path: release/release-manifest.json
           if-no-files-found: error
           retention-days: 7
-
-  rerun-rehearsal:
-    name: Temporary post-manifest rerun rehearsal
-    needs: release-manifest
-    if: github.event_name == 'push'
-    runs-on: ubuntu-latest
-    steps:
-      - name: Fail only on the first attempt
-        env:
-          RUN_ATTEMPT: ${{ github.run_attempt }}
-        run: |
-          if [ "$RUN_ATTEMPT" = "1" ]; then
-            echo "Deliberately failing after manifest publication."
-            exit 1
-          fi
-
-          echo "Rehearsal succeeds on rerun."
