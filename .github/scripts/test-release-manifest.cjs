@@ -42,7 +42,7 @@ function createManifestFixture() {
     repo: "ExampleProject",
     commit: "a".repeat(40),
     run_id: "12345",
-    run_attempt: "1"
+    run_attempt: "1",
   };
 
   const manifest = {
@@ -365,4 +365,60 @@ test("rejects duplicate receipts for the same role and attempt", () => {
     () => assembleReleaseManifest(receipts, expected),
     /Duplicate receipt for image role and attempt/
   );
+});
+
+test("rejects a manifest missing image attempt provenance", () => {
+    const { manifest, expected } = createManifestFixture();
+    delete manifest.image_attempts;
+
+    assert.throws(
+        () => validateReleaseManifest(manifest, expected),
+        /Invalid image attempt provenance/
+    );
+});
+
+test("rejects image attempt provenance missing a required role", () => {
+  const { manifest, expected } = createManifestFixture();
+  delete manifest.image_attempts.migrator;
+
+  assert.throws(
+    () => validateReleaseManifest(manifest, expected),
+    /Invalid image attempt provenance/
+  );
+});
+
+test("rejects image provenance from a future attempt", () => {
+  const { manifest, expected } = createManifestFixture();
+  manifest.image_attempts.app = "2";
+
+  assert.throws(
+    () => validateReleaseManifest(manifest, expected),
+    /Invalid image attempt provenance/
+  );
+});
+
+test("rejects a non-numeric image attempt", () => {
+  const { manifest, expected } = createManifestFixture();
+  manifest.image_attempts.app = "invalid";
+
+  assert.throws(
+    () => validateReleaseManifest(manifest, expected),
+    /Invalid image attempt provenance/
+  );
+});
+
+test("validates a manifest containing images from earlier attempts", () => {
+  const { manifest, expected } = createManifestFixture();
+
+  manifest.run_attempt = "3";
+  expected.run_attempt = "3";
+  manifest.image_attempts = {
+    app: "1",
+    migrator: "2",
+    provisioner: "3"
+  };
+
+  const result = validateReleaseManifest(manifest, expected);
+
+  assert.deepEqual(result, manifest);
 });

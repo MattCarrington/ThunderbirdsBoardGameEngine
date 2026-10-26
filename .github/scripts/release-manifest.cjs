@@ -118,12 +118,38 @@ function validateReleaseManifest(manifest, expected) {
   const roles = ["app", "migrator", "provisioner"];
 
   if (
+    !manifest.image_attempts ||
+    typeof manifest.image_attempts !== "object" ||
+    Array.isArray(manifest.image_attempts) ||
+    Object.keys(manifest.image_attempts).length !== roles.length ||
+    roles.some(role => !Object.hasOwn(manifest.image_attempts, role))
+  ) {
+    throw new Error("Invalid image attempt provenance.");
+  }
+
+  if (
     !manifest.images ||
     typeof manifest.images !== "object" ||
     Array.isArray(manifest.images) ||
     Object.keys(manifest.images).length !== roles.length
   ) {
     throw new Error("Expected three release image references.");
+  }
+
+  const manifestAttempt = Number(manifest.run_attempt);
+
+  for (const role of roles) {
+    const value = manifest.image_attempts[role];
+    const attempt = Number(value);
+
+    if (
+      typeof value !== "string" ||
+      !/^[1-9][0-9]*$/.test(value) ||
+      !Number.isSafeInteger(attempt) ||
+      attempt > manifestAttempt
+    ) {
+      throw new Error("Invalid image attempt provenance.");
+    }
   }
 
   const prefix = `ghcr.io/${expected.owner.toLowerCase()}/`;
