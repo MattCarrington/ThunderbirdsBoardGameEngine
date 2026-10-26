@@ -106,11 +106,15 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - image_name: *app_image_name
-          - image_name: *migrator_image_name
-          - image_name: *provisioner_image_name
+          - image_role: app
+            image_name: *app_image_name
+          - image_role: migrator
+            image_name: *migrator_image_name
+          - image_role: provisioner
+            image_name: *provisioner_image_name
     uses: ./.github/workflows/publish-docker.yml
     with:
+      image_role: ${{ matrix.image_role }}
       image_name: ${{ matrix.image_name }}
       version: ${{ needs.compute-version.outputs.version }}
       push_latest: ${{ github.ref == 'refs/heads/main' }}
@@ -130,29 +134,96 @@ jobs:
     needs:
       - compute-version
 
-  deploy:
-    name: Deploy Application
-    if: github.ref == 'refs/heads/main'
-    uses: ./.github/workflows/deploy.yml
-    with:
-      app_image_name: *app_image_name 
-      database_migrator_image_name: *migrator_image_name
-      database_provisioner_image_name: *provisioner_image_name
-      image_tag: ${{ needs.compute-version.outputs.version }}
-      environment: "dev"
-    secrets: inherit
+  release-manifest:
+    name: Assemble release manifest
+    if: github.event_name == 'push' && needs.compute-version.outputs.release_type != 'none'
+    runs-on: ubuntu-latest
     needs:
       - docker-publish
       - compute-version
-
-  smoke-tests:
-    name: Run Smoke Tests
-    if: github.ref == 'refs/heads/main'
     permissions:
-      packages: read
-    uses: ./.github/workflows/smoke-tests.yml
-    with:
-      deployment_uri: ${{ needs.deploy.outputs.deployment_uri }}
-      image_tag: ${{ vars.SMOKE_IMAGE_TAG || 'latest' }}
-    needs:
-      - deploy
+      actions: read
+      contents: read
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      - name: Download published image receipts
+        uses: actions/download-artifact@v8
+        with:
+          pattern: release-image-*
+          path: release-metadata
+          merge-multiple: false
+
+      - name: Validate receipts and create manifest
+        uses: actions/github-script@v8
+        env:
+          RELEASE_VERSION: ${{ needs.compute-version.outputs.version }}
+        with:
+          script: |
+            const fs = require("node:fs/promises");
+            const path = require("node:path");
+
+            const { assembleReleaseManifest } = require(
+              path.join(
+                process.env.GITHUB_WORKSPACE,
+                ".github/scripts/release-manifest.cjs"
+              )
+            );
+
+            const entries = await fs.readdir("release-metadata", {
+              withFileTypes: true
+            });
+
+            const receipts = await Promise.all(
+              entries.map(async entry => {
+                if (!entry.isDirectory()) {
+                  throw new Error("Expected a directory for each receipt artifact.");
+                }
+
+                const directory = path.join("release-metadata", entry.name);
+                const files = await fs.readdir(directory);
+
+                if (files.length !== 1 || !files[0].endsWith(".json")) {
+                  throw new Error("Expected one JSON receipt per artifact.");
+                }
+
+                const receipt = JSON.parse(
+                  await fs.readFile(path.join(directory, files[0]), "utf8")
+                );
+
+                const expectedArtifactName =
+                  `release-image-${receipt.image}-${receipt.run_attempt}`;
+
+                if (entry.name !== expectedArtifactName) {
+                  throw new Error("Receipt does not match its artifact name.");
+                }
+
+                return receipt;
+              })
+            );
+
+            const manifest = assembleReleaseManifest(receipts, {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              commit: process.env.GITHUB_SHA,
+              run_id: process.env.GITHUB_RUN_ID,
+              run_attempt: process.env.GITHUB_RUN_ATTEMPT,
+              version: process.env.RELEASE_VERSION
+            });
+
+            await fs.mkdir("release", { recursive: true });
+            await fs.writeFile(
+              "release/release-manifest.json",
+              JSON.stringify(manifest, null, 2) + "\n"
+            );
+
+            core.info("Validated release manifest created.");
+
+      - name: Upload release manifest
+        uses: actions/upload-artifact@v7
+        with:
+          name: release-manifest-${{ github.run_attempt }}
+          path: release/release-manifest.json
+          if-no-files-found: error
+          retention-days: 7
