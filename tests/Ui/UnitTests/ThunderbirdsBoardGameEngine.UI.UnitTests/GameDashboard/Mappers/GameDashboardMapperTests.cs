@@ -1,4 +1,5 @@
-﻿using NSubstitute;
+﻿using ThunderbirdsBoardGameEngine.TestUtils.ReferenceData.Builders;
+using NSubstitute;
 using ThunderbirdsBoardGameEngine.GameState.Contracts.Dtos.V1;
 using ThunderbirdsBoardGameEngine.ReferenceData.Core.Enums;
 using ThunderbirdsBoardGameEngine.ReferenceData.Core.Identities;
@@ -186,7 +187,7 @@ namespace ThunderbirdsBoardGameEngine.UI.UnitTests.GameDashboard.Mappers
 
         private static ReferenceThunderbirdDefinition CreateThunderbird(string code, string displayName)
         {
-            return new(
+            return ReferenceDefinitionFactory.Thunderbird(
                 new ThunderbirdCode(code),
                 displayName,
                 MovementDomain.Earth,
@@ -196,7 +197,7 @@ namespace ThunderbirdsBoardGameEngine.UI.UnitTests.GameDashboard.Mappers
 
         private static ReferenceLocationDefinition CreateLocation(string code, string displayName)
         {
-            return new(
+            return ReferenceDefinitionFactory.Location(
                 new LocationCode(code),
                 displayName,
                 MovementDomain.Earth);
@@ -204,7 +205,7 @@ namespace ThunderbirdsBoardGameEngine.UI.UnitTests.GameDashboard.Mappers
 
         private static ReferenceCharacterDefinition CreateCharacter(string code, string displayName)
         {
-            return new(
+            return ReferenceDefinitionFactory.Character(
                 new CharacterCode(code),
                 displayName,
                 rescueBonus: null);

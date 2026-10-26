@@ -1,4 +1,5 @@
-﻿using NSubstitute;
+﻿using ThunderbirdsBoardGameEngine.TestUtils.ReferenceData.Builders;
+using NSubstitute;
 using System.Collections.Immutable;
 using ThunderbirdsBoardGameEngine.ReferenceData.Core.Enums;
 using ThunderbirdsBoardGameEngine.ReferenceData.Core.Identities;
@@ -17,8 +18,8 @@ namespace ThunderbirdsBoardGameEngine.Rules.Infrastructure.UnitTests.Lookups
             // Arrange
             var locationDefinitions = new[]
             {
-                new ReferenceLocationDefinition(new LocationCode("location-1"), "Location 1", MovementDomain.Earth),
-                new ReferenceLocationDefinition(new LocationCode("location-2"), "Location 2", MovementDomain.Space)
+                ReferenceDefinitionFactory.Location(new LocationCode("location-1"), "Location 1", MovementDomain.Earth),
+                ReferenceDefinitionFactory.Location(new LocationCode("location-2"), "Location 2", MovementDomain.Space)
             };
 
 

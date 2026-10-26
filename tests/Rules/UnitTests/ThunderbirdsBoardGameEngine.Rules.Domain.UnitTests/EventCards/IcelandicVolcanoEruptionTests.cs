@@ -1,3 +1,4 @@
+﻿using ThunderbirdsBoardGameEngine.TestUtils.ReferenceData.Builders;
 using ThunderbirdsBoardGameEngine.ReferenceData.Core.Identities;
 using ThunderbirdsBoardGameEngine.ReferenceData.Core.KnownIdentities;
 using ThunderbirdsBoardGameEngine.ReferenceData.Core.Model;
@@ -19,7 +20,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.EventCards
         {
             // Arrange
             var card = new IcelandicVolcanoEruption();
-            var edge = new ReferenceMapEdgeDefinition(new LocationCode(location1), new LocationCode(location2), ReferenceData.Core.Enums.MovementDomain.Earth);
+            var edge = ReferenceDefinitionFactory.MapEdge(new LocationCode(location1), new LocationCode(location2), ReferenceData.Core.Enums.MovementDomain.Earth);
 
             // Act
             var result = card.ApplyMovementModifier();

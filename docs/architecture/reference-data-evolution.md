@@ -1,6 +1,6 @@
 # Reference Data Evolution Plan
 
-- Status: Draft proposal; delivery has not started through this document
+- Status: Draft roadmap; construction boundary implemented, remaining delivery planned
 - Date: 2026-10-22
 
 ## Purpose
@@ -44,7 +44,7 @@ Core and Runtime may release independently, with explicit compatible dependencie
 
 ## Proposed delivery order
 
-1. **Owned construction:** implement the [proposed construction-boundary ADR](decisions/0005-reference-data-owned-construction.md), preserving compiler, deserialization, and test paths.
+1. **Owned construction:** the [accepted construction-boundary ADR](decisions/0007-reference-data-owned-construction.md) is implemented, preserving compiler, deserialization, and test paths.
 2. **Versioning and compatibility:** decide content/schema/package relationships, snapshot selection, existing-game version behaviour, and upgrade/rollback expectations. Record the decisions in a focused ADR.
 3. **Automated production:** make validation, compilation, metadata handling, and hydration verification repeatable; produce a reviewable artifact without manual copying.
 4. **Package integration:** establish package-consumer verification and API compatibility checks. Decide whether independent builds and releases justify solution or repository extraction before creating repository-specific publishing workflows.

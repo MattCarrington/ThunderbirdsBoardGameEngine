@@ -1,4 +1,5 @@
-﻿using NSubstitute;
+﻿using ThunderbirdsBoardGameEngine.TestUtils.ReferenceData.Builders;
+using NSubstitute;
 using NSubstitute.ExceptionExtensions;
 using ThunderbirdsBoardGameEngine.ReferenceData.Core.Enums;
 using ThunderbirdsBoardGameEngine.ReferenceData.Core.Identities;
@@ -19,7 +20,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Infrastructure.UnitTests.Lookups
             // Arrange
             var code = new CardCode("test-disaster-card");
 
-            var disaster = new ReferenceDisasterDefinition(
+            var disaster = ReferenceDefinitionFactory.Disaster(
                 code: code,
                 displayName: "Test Disaster Card",
                 difficultyNumber: 7,
@@ -27,14 +28,14 @@ namespace ThunderbirdsBoardGameEngine.Rules.Infrastructure.UnitTests.Lookups
                 rescueType: RescueType.Air,
                 bonuses:
                 [
-                    new ReferenceDisasterBonus(new DisasterBonusKey("character-1"), 1, null),
-                    new ReferenceDisasterBonus(new DisasterBonusKey("thunderbird-1"), 2, null),
-                    new ReferenceDisasterBonus(new DisasterBonusKey("pod-vehicle-1"), 3, null)
+                    ReferenceDefinitionFactory.DisasterBonus(new DisasterBonusKey("character-1"), 1, null),
+                    ReferenceDefinitionFactory.DisasterBonus(new DisasterBonusKey("thunderbird-1"), 2, null),
+                    ReferenceDefinitionFactory.DisasterBonus(new DisasterBonusKey("pod-vehicle-1"), 3, null)
                 ],
                 rewards:
                 [
-                    new ReferenceDisasterReward.PlayerChoice(),
-                    new ReferenceDisasterReward.SpecificToken(BonusToken.Technology)
+                    ReferenceDefinitionFactory.PlayerChoice(),
+                    ReferenceDefinitionFactory.SpecificToken(BonusToken.Technology)
                 ]
             );
 

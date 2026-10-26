@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -15,6 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\Common\ThunderbirdsBoardGameEngine.TestUtils\ThunderbirdsBoardGameEngine.TestUtils.csproj" />
     <ProjectReference Include="..\..\..\..\src\Rules\ThunderbirdsBoardGameEngine.Rules.Domain\ThunderbirdsBoardGameEngine.Rules.Domain.csproj" />
   </ItemGroup>
 

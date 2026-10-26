@@ -1,4 +1,5 @@
-﻿using ThunderbirdsBoardGameEngine.ReferenceData.Core.Enums;
+﻿using System.Text.Json.Serialization;
+using ThunderbirdsBoardGameEngine.ReferenceData.Core.Enums;
 using ThunderbirdsBoardGameEngine.ReferenceData.Core.Identities;
 
 namespace ThunderbirdsBoardGameEngine.ReferenceData.Core.Model
@@ -11,7 +12,8 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Core.Model
 
         public MovementDomain Domain { get; }
 
-        public ReferenceLocationDefinition(LocationCode code, string displayName, MovementDomain domain)
+        [JsonConstructor]
+        internal ReferenceLocationDefinition(LocationCode code, string displayName, MovementDomain domain)
         {
             ArgumentException.ThrowIfNullOrWhiteSpace(displayName);
 

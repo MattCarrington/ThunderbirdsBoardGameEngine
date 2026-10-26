@@ -1,4 +1,5 @@
-﻿using NSubstitute;
+﻿using ThunderbirdsBoardGameEngine.TestUtils.ReferenceData.Builders;
+using NSubstitute;
 using System.Collections.Immutable;
 using ThunderbirdsBoardGameEngine.GameState.Application.Exceptions;
 using ThunderbirdsBoardGameEngine.GameState.Domain;
@@ -268,25 +269,25 @@ namespace ThunderbirdsBoardGameEngine.GameState.Infrastructure.UnitTests
 
         private static ReferenceDataGameStateIntegrityValidator CreateValidator()
         {
-            var characterOne = new ReferenceCharacterDefinition(new CharacterCode("character-1"), "Character 1", null);
-            var characterTwo = new ReferenceCharacterDefinition(new CharacterCode("character-2"), "Character 2", null);
+            var characterOne = ReferenceDefinitionFactory.Character(new CharacterCode("character-1"), "Character 1", null);
+            var characterTwo = ReferenceDefinitionFactory.Character(new CharacterCode("character-2"), "Character 2", null);
 
-            var thunderbirdOne = new ReferenceThunderbirdDefinition(
+            var thunderbirdOne = ReferenceDefinitionFactory.Thunderbird(
                 code: new ThunderbirdCode("thunderbird-1"),
                 displayName: "Thunderbird 1",
                 domain: MovementDomain.Earth,
                 topSpeed: 1,
                 characterCapacity: 1);
 
-            var thunderbirdTwo = new ReferenceThunderbirdDefinition(
+            var thunderbirdTwo = ReferenceDefinitionFactory.Thunderbird(
                 code: new ThunderbirdCode("thunderbird-2"),
                 displayName: "Thunderbird 2",
                 domain: MovementDomain.Space,
                 topSpeed: 2,
                 characterCapacity: 2);
 
-            var locationOne = new ReferenceLocationDefinition(new LocationCode("location-1"), "Location 1", MovementDomain.Earth);
-            var locationTwo = new ReferenceLocationDefinition(new LocationCode("location-2"), "Location 2", MovementDomain.Space);
+            var locationOne = ReferenceDefinitionFactory.Location(new LocationCode("location-1"), "Location 1", MovementDomain.Earth);
+            var locationTwo = ReferenceDefinitionFactory.Location(new LocationCode("location-2"), "Location 2", MovementDomain.Space);
 
             var locationCatalog = Substitute.For<ILocationDefinitionCatalog>();
             locationCatalog.Exists(locationOne.Code).Returns(true);

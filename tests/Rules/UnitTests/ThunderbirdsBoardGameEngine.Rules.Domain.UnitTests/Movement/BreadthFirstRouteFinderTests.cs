@@ -1,4 +1,5 @@
-﻿using ThunderbirdsBoardGameEngine.ReferenceData.Core.Enums;
+﻿using ThunderbirdsBoardGameEngine.TestUtils.ReferenceData.Builders;
+using ThunderbirdsBoardGameEngine.ReferenceData.Core.Enums;
 using ThunderbirdsBoardGameEngine.ReferenceData.Core.Identities;
 using ThunderbirdsBoardGameEngine.ReferenceData.Core.Model;
 using ThunderbirdsBoardGameEngine.Rules.Domain.Movement.Contributions;
@@ -200,16 +201,16 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.Movement
         {
             return
             [
-                new(edge1: _locationA.Key, edge2: _locationB.Key, edgeType: MovementDomain.Earth),
-                new(edge1: _locationB.Key, edge2: _locationC.Key, edgeType: MovementDomain.Earth),
-                new(edge1: _locationA.Key, edge2: _locationC.Key, edgeType: MovementDomain.Earth),
-                new(edge1: _locationD.Key, edge2: _locationB.Key, edgeType: MovementDomain.Earth),
-                new(edge1: _locationE.Key, edge2: _locationD.Key, edgeType: MovementDomain.Earth),
-                new(edge1: _locationA.Key, edge2: _locationF.Key, edgeType: MovementDomain.Earth),
-                new(edge1: _locationF.Key, edge2: _locationG.Key, edgeType: MovementDomain.Earth),
-                new(edge1: _locationG.Key, edge2: _locationH.Key, edgeType: MovementDomain.Earth),
-                new(edge1: _locationH.Key, edge2: _locationC.Key, edgeType: MovementDomain.Earth),
-                new(edge1: _locationA.Key, edge2: _locationSpace.Key, edgeType: MovementDomain.Space),
+                ReferenceDefinitionFactory.MapEdge(edge1: _locationA.Key, edge2: _locationB.Key, edgeType: MovementDomain.Earth),
+                ReferenceDefinitionFactory.MapEdge(edge1: _locationB.Key, edge2: _locationC.Key, edgeType: MovementDomain.Earth),
+                ReferenceDefinitionFactory.MapEdge(edge1: _locationA.Key, edge2: _locationC.Key, edgeType: MovementDomain.Earth),
+                ReferenceDefinitionFactory.MapEdge(edge1: _locationD.Key, edge2: _locationB.Key, edgeType: MovementDomain.Earth),
+                ReferenceDefinitionFactory.MapEdge(edge1: _locationE.Key, edge2: _locationD.Key, edgeType: MovementDomain.Earth),
+                ReferenceDefinitionFactory.MapEdge(edge1: _locationA.Key, edge2: _locationF.Key, edgeType: MovementDomain.Earth),
+                ReferenceDefinitionFactory.MapEdge(edge1: _locationF.Key, edge2: _locationG.Key, edgeType: MovementDomain.Earth),
+                ReferenceDefinitionFactory.MapEdge(edge1: _locationG.Key, edge2: _locationH.Key, edgeType: MovementDomain.Earth),
+                ReferenceDefinitionFactory.MapEdge(edge1: _locationH.Key, edge2: _locationC.Key, edgeType: MovementDomain.Earth),
+                ReferenceDefinitionFactory.MapEdge(edge1: _locationA.Key, edge2: _locationSpace.Key, edgeType: MovementDomain.Space),
             ];
         }
     }

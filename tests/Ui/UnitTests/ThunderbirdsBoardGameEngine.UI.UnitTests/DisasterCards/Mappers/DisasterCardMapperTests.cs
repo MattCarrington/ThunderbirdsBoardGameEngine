@@ -1,4 +1,5 @@
-﻿using NSubstitute;
+﻿using ThunderbirdsBoardGameEngine.TestUtils.ReferenceData.Builders;
+using NSubstitute;
 using ThunderbirdsBoardGameEngine.ReferenceData.Core.Enums;
 using ThunderbirdsBoardGameEngine.ReferenceData.Core.Identities;
 using ThunderbirdsBoardGameEngine.ReferenceData.Core.Model;
@@ -19,14 +20,14 @@ namespace ThunderbirdsBoardGameEngine.UI.UnitTests.DisasterCards.Mappers
             var disaster = CreateDisasterDefinition(
                 bonuses: new[]
                 {
-                    new ReferenceDisasterBonus(
+                    ReferenceDefinitionFactory.DisasterBonus(
                         key: new DisasterBonusKey("bonus1"),
                         value: 2,
                         location: null)
                 },
                 rewards: new[]
                 {
-                    new ReferenceDisasterReward.PlayerChoice()
+                    ReferenceDefinitionFactory.PlayerChoice()
                 }
             );
 
@@ -51,14 +52,14 @@ namespace ThunderbirdsBoardGameEngine.UI.UnitTests.DisasterCards.Mappers
             var disaster = CreateDisasterDefinition(
                 bonuses: new[]
                 {
-                    new ReferenceDisasterBonus(
+                    ReferenceDefinitionFactory.DisasterBonus(
                         key: new DisasterBonusKey("bonus1"),
                         value: 2,
                         location: null)
                 },
                 rewards: new[]
                 {
-                    new ReferenceDisasterReward.PlayerChoice()
+                    ReferenceDefinitionFactory.PlayerChoice()
                 }
             );
 
@@ -78,14 +79,14 @@ namespace ThunderbirdsBoardGameEngine.UI.UnitTests.DisasterCards.Mappers
             var disaster = CreateDisasterDefinition(
                 bonuses: new[]
                 {
-                new ReferenceDisasterBonus(
+                ReferenceDefinitionFactory.DisasterBonus(
                     key: new DisasterBonusKey("bonus1"),
                     value: 2,
                     location: new LocationCode("test-location"))
                 },
                 rewards: new[]
                 {
-                new ReferenceDisasterReward.PlayerChoice()
+                ReferenceDefinitionFactory.PlayerChoice()
                 }
             );
 
@@ -105,14 +106,14 @@ namespace ThunderbirdsBoardGameEngine.UI.UnitTests.DisasterCards.Mappers
             var disaster = CreateDisasterDefinition(
                 bonuses: new[]
                 {
-                new ReferenceDisasterBonus(
+                ReferenceDefinitionFactory.DisasterBonus(
                     key: new DisasterBonusKey("bonus1"),
                     value: 2,
                     location: new LocationCode("geo-stationary-orbit"))
                 },
                 rewards: new[]
                 {
-                new ReferenceDisasterReward.PlayerChoice()
+                ReferenceDefinitionFactory.PlayerChoice()
                 }
             );
 
@@ -133,14 +134,14 @@ namespace ThunderbirdsBoardGameEngine.UI.UnitTests.DisasterCards.Mappers
             var disaster = CreateDisasterDefinition(
                 bonuses: new[]
                 {
-                new ReferenceDisasterBonus(
+                ReferenceDefinitionFactory.DisasterBonus(
                     key: new DisasterBonusKey("bonus1"),
                     value: 2,
                     location: new LocationCode("test-location"))
                 },
                 rewards: new[]
                 {
-                new ReferenceDisasterReward.PlayerChoice()
+                ReferenceDefinitionFactory.PlayerChoice()
                 }
             );
 
@@ -160,14 +161,14 @@ namespace ThunderbirdsBoardGameEngine.UI.UnitTests.DisasterCards.Mappers
             var disaster = CreateDisasterDefinition(
                 bonuses: new[]
                 {
-                    new ReferenceDisasterBonus(
+                    ReferenceDefinitionFactory.DisasterBonus(
                         key: new DisasterBonusKey("bonus1"),
                         value: 2,
                         location: new LocationCode("test-location"))
                 },
                 rewards: new[]
                     {
-                    new ReferenceDisasterReward.SpecificToken(BonusToken.Intelligence)
+                    ReferenceDefinitionFactory.SpecificToken(BonusToken.Intelligence)
                 }
             );
 
@@ -185,13 +186,13 @@ namespace ThunderbirdsBoardGameEngine.UI.UnitTests.DisasterCards.Mappers
         public void Map_WhenLocationIsGeoStationaryOrbit_MapsLocationDisplayName()
         {
             // Arrange
-            var geoStationaryOrbit = new ReferenceLocationDefinition(
+            var geoStationaryOrbit = ReferenceDefinitionFactory.Location(
                 code: new LocationCode("geo-stationary-orbit"),
                 displayName: "Geo-Stationary Orbit",
                 domain: MovementDomain.Space
             );
 
-            var disaster = new ReferenceDisasterDefinition(
+            var disaster = ReferenceDefinitionFactory.Disaster(
                 code: new CardCode("test-disaster"),
                 displayName: "Test Disaster",
                 difficultyNumber: 3,
@@ -199,14 +200,14 @@ namespace ThunderbirdsBoardGameEngine.UI.UnitTests.DisasterCards.Mappers
                 rescueType: RescueType.Air,
                 bonuses: new[]
                 {
-                    new ReferenceDisasterBonus(
+                    ReferenceDefinitionFactory.DisasterBonus(
                         key: new DisasterBonusKey("bonus1"),
                         value: 2,
                         location: null)
                 },
                 rewards: new[]
                 {
-                    new ReferenceDisasterReward.PlayerChoice()
+                    ReferenceDefinitionFactory.PlayerChoice()
                 }
             );
 
@@ -218,9 +219,9 @@ namespace ThunderbirdsBoardGameEngine.UI.UnitTests.DisasterCards.Mappers
             });
 
             var disasterBonusKeyCatalog = Substitute.For<IDisasterBonusKeyDefinitionCatalog>();
-            disasterBonusKeyCatalog.GetByCode(Arg.Any<DisasterBonusKey>()).Returns(new DisasterBonusKeyDefinition(
-                Key: new DisasterBonusKey("bonus1"),
-                DisplayName: "Bonus 1"
+            disasterBonusKeyCatalog.GetByCode(Arg.Any<DisasterBonusKey>()).Returns(ReferenceDefinitionFactory.DisasterBonusKey(
+                key: new DisasterBonusKey("bonus1"),
+                displayName: "Bonus 1"
             ));
 
             var mapper = new DisasterCardMapper(locationCatalog, disasterBonusKeyCatalog);
@@ -234,7 +235,7 @@ namespace ThunderbirdsBoardGameEngine.UI.UnitTests.DisasterCards.Mappers
 
         private static ReferenceDisasterDefinition CreateDisasterDefinition(ReferenceDisasterBonus[] bonuses, ReferenceDisasterReward[] rewards)
         {
-            return new ReferenceDisasterDefinition(
+            return ReferenceDefinitionFactory.Disaster(
                 code: new CardCode("test-disaster"),
                 displayName: "Test Disaster",
                 difficultyNumber: 3,
@@ -250,7 +251,7 @@ namespace ThunderbirdsBoardGameEngine.UI.UnitTests.DisasterCards.Mappers
             var locationCatalog = Substitute.For<ILocationDefinitionCatalog>();
             locationCatalog.TryGetByCode(Arg.Any<LocationCode>(), out Arg.Any<ReferenceLocationDefinition>()).Returns(callInfo =>
             {
-                callInfo[1] = new ReferenceLocationDefinition(
+                callInfo[1] = ReferenceDefinitionFactory.Location(
                     code: new LocationCode("test-location"),
                     displayName: "Test Location",
                     domain: MovementDomain.Earth
@@ -259,9 +260,9 @@ namespace ThunderbirdsBoardGameEngine.UI.UnitTests.DisasterCards.Mappers
             });
 
             var disasterBonusKeyCatalog = Substitute.For<IDisasterBonusKeyDefinitionCatalog>();
-            disasterBonusKeyCatalog.GetByCode(Arg.Any<DisasterBonusKey>()).Returns(new DisasterBonusKeyDefinition(
-                Key: new DisasterBonusKey("bonus1"),
-                DisplayName: "Bonus 1"
+            disasterBonusKeyCatalog.GetByCode(Arg.Any<DisasterBonusKey>()).Returns(ReferenceDefinitionFactory.DisasterBonusKey(
+                key: new DisasterBonusKey("bonus1"),
+                displayName: "Bonus 1"
             ));
 
             return new DisasterCardMapper(locationCatalog, disasterBonusKeyCatalog);

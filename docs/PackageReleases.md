@@ -25,6 +25,20 @@ Changing the target framework does not require regenerating the snapshot or
 bumping its schema or content version. See
 [Reference Data](../src/ReferenceData/Readme.md#snapshot-metadata).
 
+### Reference Data construction boundary
+
+Core and Runtime declare `4.0.0` for the construction-boundary change described
+in [ADR 0007](architecture/decisions/0007-reference-data-owned-construction.md).
+Removing public definition constructors breaks source and binary callers of
+those constructors. Public init setters on specific-token rewards and derived
+bonus-key definitions are also removed; their read and deconstruction APIs
+remain. Consumers obtain definitions through Runtime catalogs. Tests migrate
+to the shared test-only factories/builders, and previously compiled callers of
+removed APIs must rebuild after migration.
+
+This release changes package APIs, not snapshot structure or content, so no
+snapshot version increment or regeneration is required.
+
 The package graph is defined in `.github/packages.json`. When package source, an
 explicitly packed file, or a centrally managed external dependency changes, CI
 selects that package and every downstream package that consumes it. Packages

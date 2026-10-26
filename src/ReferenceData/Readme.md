@@ -70,7 +70,17 @@ All catalogs are immutable and registered as singletons.
 
 Applications obtain definitions through Runtime catalog interfaces and read their immutable properties. Definition construction belongs to the compiler, Runtime snapshot deserialization, and automated test tooling.
 
-This is the intended consumption model. Core currently exposes public definition constructors, so the construction boundary is not yet enforced. The proposed [construction-boundary ADR](../../docs/architecture/decisions/0005-reference-data-owned-construction.md) records the planned restriction and its compatibility impact.
+Definition constructors are internal. The compiler and shared test tooling have
+explicit friend access; Core unit tests retain access to exercise validation.
+Runtime hydrates Core definitions through explicitly attributed JSON
+constructors. See the accepted [construction-boundary ADR](../../docs/architecture/decisions/0007-reference-data-owned-construction.md)
+for the mechanism and compatibility impact.
+
+Application tests use `ReferenceDefinitionFactory`, shared fixtures, or
+`ReferenceDataSnapshotBuilder` in the test-only TestUtils assembly. Production
+consumers should not reference that assembly. Typed identity constructors remain
+public for catalogue lookups; the public snapshot envelope serves compilation
+and serialization rather than application definition construction.
 
 See the [compiler guide](../../tools/ReferenceData/README.md) for authoring and snapshot-update instructions, and [package releases](../../docs/PackageReleases.md) for the existing publication process.
 

@@ -1,4 +1,5 @@
-﻿using NSubstitute;
+﻿using ThunderbirdsBoardGameEngine.TestUtils.ReferenceData.Builders;
+using NSubstitute;
 using System.Collections.Immutable;
 using ThunderbirdsBoardGameEngine.ReferenceData.Core.Model;
 using ThunderbirdsBoardGameEngine.ReferenceData.Core.Identities;
@@ -30,17 +31,17 @@ namespace ThunderbirdsBoardGameEngine.UI.UnitTests.DisasterCards.Services
         public void GetAll_WhenCatalogReturnsMultipleItems_ReturnsCorrectCount()
         {
             // Arrange
-            var character1 = new ReferenceCharacterDefinition(
+            var character1 = ReferenceDefinitionFactory.Character(
                 code: new CharacterCode("CH001"),
                 displayName: "Character 1",
                 rescueBonus: null
             );
-            var character2 = new ReferenceCharacterDefinition(
+            var character2 = ReferenceDefinitionFactory.Character(
                 code: new CharacterCode("CH002"),
                 displayName: "Character 2",
                 rescueBonus: null
             );
-            var character3 = new ReferenceCharacterDefinition(
+            var character3 = ReferenceDefinitionFactory.Character(
                 code: new CharacterCode("CH003"),
                 displayName: "Character 3",
                 rescueBonus: null

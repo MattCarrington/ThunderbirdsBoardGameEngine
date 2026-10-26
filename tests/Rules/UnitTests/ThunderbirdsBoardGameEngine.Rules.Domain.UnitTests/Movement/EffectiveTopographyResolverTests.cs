@@ -1,3 +1,4 @@
+﻿using ThunderbirdsBoardGameEngine.TestUtils.ReferenceData.Builders;
 using ThunderbirdsBoardGameEngine.ReferenceData.Core.Enums;
 using ThunderbirdsBoardGameEngine.ReferenceData.Core.Identities;
 using ThunderbirdsBoardGameEngine.ReferenceData.Core.Model;
@@ -59,7 +60,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.Movement
 
         private static ReferenceMapEdgeDefinition CreateEdge(string location1, string location2)
         {
-            return new ReferenceMapEdgeDefinition(
+            return ReferenceDefinitionFactory.MapEdge(
                 new LocationCode(location1),
                 new LocationCode(location2),
                 MovementDomain.Earth);

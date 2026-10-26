@@ -10,8 +10,23 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Core.Model
     {
         private ReferenceDisasterReward() { }
 
-        public sealed record SpecificToken(BonusToken Token) : ReferenceDisasterReward;
+        public sealed record SpecificToken : ReferenceDisasterReward
+        {
+            public BonusToken Token { get; }
 
-        public sealed record PlayerChoice : ReferenceDisasterReward;
+            [JsonConstructor]
+            internal SpecificToken(BonusToken token)
+            {
+                Token = token;
+            }
+
+            public void Deconstruct(out BonusToken Token) => Token = this.Token;
+        }
+
+        public sealed record PlayerChoice : ReferenceDisasterReward
+        {
+            [JsonConstructor]
+            internal PlayerChoice() { }
+        }
     }
 }

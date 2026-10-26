@@ -1,4 +1,5 @@
-﻿using ThunderbirdsBoardGameEngine.ReferenceData.Core.Identities;
+﻿using System.Text.Json.Serialization;
+using ThunderbirdsBoardGameEngine.ReferenceData.Core.Identities;
 
 namespace ThunderbirdsBoardGameEngine.ReferenceData.Core.Model
 {
@@ -10,7 +11,8 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Core.Model
 
         public LocationCode? Location { get; }
 
-        public ReferenceDisasterBonus(
+        [JsonConstructor]
+        internal ReferenceDisasterBonus(
             DisasterBonusKey key,
             int value,
             LocationCode? location)

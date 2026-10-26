@@ -1,7 +1,8 @@
 # ADR 0007: Reference Data Infrastructure Owns Definition Construction
 
-- Status: Proposed
+- Status: Accepted
 - Date: 2026-10-22
+- Implemented: 2026-10-26
 
 ## Context
 
@@ -19,11 +20,37 @@ Apply the boundary consistently across reference definitions. Do not replace pub
 
 Retain supported paths for complete compiler construction, Runtime deserialization, and representative test data. Production constructors will not remain public solely for tests. Core construction-validation tests must still be able to exercise invalid inputs through an appropriate owned path.
 
-The implementation must assess Core-owned internal factories, explicit serialization configuration, and narrowly scoped `InternalsVisibleTo`. This ADR establishes ownership; the concrete mechanism remains to be selected after checking serializer and assembly requirements.
+Use internal constructors with explicit `JsonConstructor` attributes on Core
+definitions and their bonus/reward values. System.Text.Json on the supported
+.NET 10 target can hydrate those constructors without making them public or
+introducing a separate serialization model. Existing snapshot JSON remains
+compatible; this change does not alter its schema.
+
+Core grants narrowly scoped `InternalsVisibleTo` access to the compiler, Core
+unit tests, and shared TestUtils assembly. Runtime grants access to TestUtils
+for its derived disaster-bonus-key definition, in addition to its existing
+Runtime unit-test access. Other test assemblies use
+`ReferenceDefinitionFactory`, shared fixtures, or `ReferenceDataSnapshotBuilder`
+from TestUtils. No production factory is introduced and Runtime does not need
+friend access to Core for deserialization.
+
+Keep constructors public on typed identities, which consumers use for lookups.
+`ReferenceDataSnapshot` remains a public serialization/compilation envelope;
+it is not a catalogue definition. This boundary controls the supported API,
+not hostile reflection or arbitrary use of JSON deserialization.
+
+Definitions expose get-only properties. Disaster definitions copy bonus and
+reward collections into immutable arrays rather than retaining mutable input
+lists. The formerly positional reward and Runtime bonus-key records retain
+read/deconstruction support but no longer expose public init setters.
 
 ## Consequences
 
 - Removing existing public constructors is itself a source and binary compatibility change and requires an explicit package-release decision.
+- Core and Runtime move from `3.0.1` to `4.0.0`. Existing binaries calling
+  removed public constructors must migrate and rebuild; callers using the
+  removed init setters must also migrate. Catalogue readers retain their
+  property and deconstruction APIs. Snapshot metadata is unchanged.
 - Future required construction inputs can change within owned infrastructure without exposing constructor changes to catalogue consumers.
 - Changes to public properties, semantics, snapshot schemas, or gameplay can still require coordinated or breaking releases.
 - Compiler generation, Runtime hydration, public API visibility, and test-data creation must be verified before release.

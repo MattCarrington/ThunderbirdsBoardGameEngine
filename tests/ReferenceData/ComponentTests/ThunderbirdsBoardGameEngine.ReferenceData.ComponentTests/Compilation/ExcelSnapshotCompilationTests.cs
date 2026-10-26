@@ -55,6 +55,23 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.ComponentTests.Compilation
                 Assert.NotEmpty(snapshot.ThunderbirdDefinitions);
                 Assert.NotEmpty(snapshot.PodVehicleDefinitions);
                 Assert.NotEmpty(snapshot.MapEdgeDefinitions);
+                Assert.NotEmpty(snapshot.FabCardDefinitions);
+                Assert.NotEmpty(snapshot.EventCardDefinitions);
+                Assert.All(snapshot.ThunderbirdDefinitions, definition =>
+                    Assert.True(definition.CharacterCapacity > 0));
+
+                // Include nested bonuses and polymorphic rewards in the hydration check.
+                Assert.All(snapshot.DisasterDefinitions, definition =>
+                {
+                    Assert.NotEmpty(definition.Bonuses);
+                    Assert.NotEmpty(definition.Rewards);
+                });
+
+                var reserialized = JsonSerializer.Serialize(snapshot, SnapshotJsonOptions.Create());
+                using var compiledDocument = JsonDocument.Parse(json);
+                using var hydratedDocument = JsonDocument.Parse(reserialized);
+                Assert.True(JsonElement.DeepEquals(compiledDocument.RootElement,
+                    hydratedDocument.RootElement));
             }
             finally
             {

@@ -1,4 +1,5 @@
-﻿using NSubstitute;
+﻿using ThunderbirdsBoardGameEngine.TestUtils.ReferenceData.Builders;
+using NSubstitute;
 using System.Collections.Immutable;
 using ThunderbirdsBoardGameEngine.ReferenceData.Core.Enums;
 using ThunderbirdsBoardGameEngine.ReferenceData.Core.Identities;
@@ -15,21 +16,21 @@ namespace ThunderbirdsBoardGameEngine.UI.UnitTests.Movement.Services
         public void GetAllMobileVehicles_WhenCalled_ReturnsMobileVehicles()
         {
             // Arrange
-            var thunderbird1 = new ReferenceThunderbirdDefinition(
+            var thunderbird1 = ReferenceDefinitionFactory.Thunderbird(
                 code: new ThunderbirdCode("TB001"),
                 displayName: "Thunderbird 1",
                 domain: MovementDomain.Earth,
                 topSpeed: 100,
                 characterCapacity: 1);
 
-            var thunderbird2 = new ReferenceThunderbirdDefinition(
+            var thunderbird2 = ReferenceDefinitionFactory.Thunderbird(
                 code: new ThunderbirdCode("TB002"),
                 displayName: "Thunderbird 2",
                 domain: MovementDomain.Space,
                 topSpeed: 0,
                 characterCapacity: 2);
 
-            var thunderbird3 = new ReferenceThunderbirdDefinition(
+            var thunderbird3 = ReferenceDefinitionFactory.Thunderbird(
                 code: new ThunderbirdCode("TB003"),
                 displayName: "Thunderbird 3",
                 domain: MovementDomain.Space,
