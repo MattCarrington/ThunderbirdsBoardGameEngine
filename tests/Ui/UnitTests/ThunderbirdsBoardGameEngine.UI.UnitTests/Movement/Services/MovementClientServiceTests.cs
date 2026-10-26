@@ -1,4 +1,5 @@
-﻿using NSubstitute;
+﻿using ThunderbirdsBoardGameEngine.TestUtils.ReferenceData.Builders;
+using NSubstitute;
 using System.Net;
 using ThunderbirdsBoardGameEngine.Client.Core;
 using ThunderbirdsBoardGameEngine.ReferenceData.Core.Enums;
@@ -284,7 +285,7 @@ namespace ThunderbirdsBoardGameEngine.UI.UnitTests.Movement.Services
             catalog.TryGetByCode(Arg.Any<LocationCode>(), out Arg.Any<ReferenceLocationDefinition>()).Returns(x =>
             {
                 var code = (LocationCode)x[0];
-                var location = new ReferenceLocationDefinition(code, $"Location {code.Value}", MovementDomain.Earth);
+                var location = ReferenceDefinitionFactory.Location(code, $"Location {code.Value}", MovementDomain.Earth);
                 x[1] = location;
                 return true;
             });

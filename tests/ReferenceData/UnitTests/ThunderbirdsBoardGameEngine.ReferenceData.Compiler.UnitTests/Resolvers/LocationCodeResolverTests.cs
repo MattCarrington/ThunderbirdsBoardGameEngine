@@ -1,4 +1,5 @@
-﻿using ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Compilation;
+﻿using ThunderbirdsBoardGameEngine.TestUtils.ReferenceData.Builders;
+using ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Compilation;
 using ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Resolvers;
 using ThunderbirdsBoardGameEngine.ReferenceData.Core.Enums;
 using ThunderbirdsBoardGameEngine.ReferenceData.Core.Identities;
@@ -81,8 +82,8 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.UnitTests.Resolvers
             // Arrange
             var locations = new List<ReferenceLocationDefinition>
             {
-                new(displayName: "Location A", code: new LocationCode("LOC_A"), domain: MovementDomain.Earth),
-                new(displayName: "Location A", code: new LocationCode("LOC_B"), domain: MovementDomain.Earth)
+                ReferenceDefinitionFactory.Location(displayName: "Location A", code: new LocationCode("LOC_A"), domain: MovementDomain.Earth),
+                ReferenceDefinitionFactory.Location(displayName: "Location A", code: new LocationCode("LOC_B"), domain: MovementDomain.Earth)
             };
 
             // Act & Assert
@@ -96,8 +97,8 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.UnitTests.Resolvers
         {
             var locations = new List<ReferenceLocationDefinition>
             {
-                new(displayName: "Location A", code: new LocationCode("LOC_A"), domain: MovementDomain.Earth),
-                new(displayName: "Location B", code: new LocationCode("LOC_B"), domain: MovementDomain.Earth)
+                ReferenceDefinitionFactory.Location(displayName: "Location A", code: new LocationCode("LOC_A"), domain: MovementDomain.Earth),
+                ReferenceDefinitionFactory.Location(displayName: "Location B", code: new LocationCode("LOC_B"), domain: MovementDomain.Earth)
             };
 
             return new LocationCodeResolver(locations);

@@ -1,4 +1,5 @@
-﻿using DocumentFormat.OpenXml.ExtendedProperties;
+﻿using ThunderbirdsBoardGameEngine.TestUtils.ReferenceData.Builders;
+using DocumentFormat.OpenXml.ExtendedProperties;
 using ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Compilation;
 using ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Resolvers;
 using ThunderbirdsBoardGameEngine.ReferenceData.Core.Enums;
@@ -108,20 +109,20 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.UnitTests.Resolvers
             // Arrange
             var characters = new List<ReferenceCharacterDefinition>
             {
-                new(displayName: "Character A", code: new CharacterCode("CHAR_A"), rescueBonus: null),
-                new(displayName: "Character A", code: new CharacterCode("CHAR_B"), rescueBonus: null)
+                ReferenceDefinitionFactory.Character(displayName: "Character A", code: new CharacterCode("CHAR_A"), rescueBonus: null),
+                ReferenceDefinitionFactory.Character(displayName: "Character A", code: new CharacterCode("CHAR_B"), rescueBonus: null)
             };
 
             var thunderbirds = new List<ReferenceThunderbirdDefinition>
             {
-                new(displayName: "Thunderbird 1", code: new ThunderbirdCode("TB1"), topSpeed: 100, domain: MovementDomain.Earth, characterCapacity: 1),
-                new(displayName: "Thunderbird 2", code: new ThunderbirdCode("TB2"), topSpeed: 120, domain: MovementDomain.Space, characterCapacity : 1)
+                ReferenceDefinitionFactory.Thunderbird(displayName: "Thunderbird 1", code: new ThunderbirdCode("TB1"), topSpeed: 100, domain: MovementDomain.Earth, characterCapacity: 1),
+                ReferenceDefinitionFactory.Thunderbird(displayName: "Thunderbird 2", code: new ThunderbirdCode("TB2"), topSpeed: 120, domain: MovementDomain.Space, characterCapacity : 1)
             };
 
             var podVehicles = new List<ReferencePodVehicleDefinition>
             {
-                new(displayName: "Pod Vehicle A", code: new PodVehicleCode("PV_A")),
-                new(displayName: "Pod Vehicle B", code: new PodVehicleCode("PV_B"))
+                ReferenceDefinitionFactory.PodVehicle(displayName: "Pod Vehicle A", code: new PodVehicleCode("PV_A")),
+                ReferenceDefinitionFactory.PodVehicle(displayName: "Pod Vehicle B", code: new PodVehicleCode("PV_B"))
             };
 
             // Act & Assert
@@ -137,20 +138,20 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.UnitTests.Resolvers
             // Arrange
             var characters = new List<ReferenceCharacterDefinition>
             {
-                new(displayName: "Character A", code: new CharacterCode("CHAR_A"), rescueBonus: null),
-                new(displayName: "Character B", code: new CharacterCode("CHAR_B"), rescueBonus: null)
+                ReferenceDefinitionFactory.Character(displayName: "Character A", code: new CharacterCode("CHAR_A"), rescueBonus: null),
+                ReferenceDefinitionFactory.Character(displayName: "Character B", code: new CharacterCode("CHAR_B"), rescueBonus: null)
             };
 
             var thunderbirds = new List<ReferenceThunderbirdDefinition>
             {
-                new(displayName: "Thunderbird 1", code: new ThunderbirdCode("TB1"), topSpeed: 100, domain: MovementDomain.Earth, characterCapacity : 1),
-                new(displayName: "Thunderbird 1", code: new ThunderbirdCode("TB2"), topSpeed: 120, domain: MovementDomain.Space, characterCapacity : 1)
+                ReferenceDefinitionFactory.Thunderbird(displayName: "Thunderbird 1", code: new ThunderbirdCode("TB1"), topSpeed: 100, domain: MovementDomain.Earth, characterCapacity : 1),
+                ReferenceDefinitionFactory.Thunderbird(displayName: "Thunderbird 1", code: new ThunderbirdCode("TB2"), topSpeed: 120, domain: MovementDomain.Space, characterCapacity : 1)
             };
 
             var podVehicles = new List<ReferencePodVehicleDefinition>
             {
-                new(displayName: "Pod Vehicle A", code: new PodVehicleCode("PV_A")),
-                new(displayName: "Pod Vehicle B", code: new PodVehicleCode("PV_B"))
+                ReferenceDefinitionFactory.PodVehicle(displayName: "Pod Vehicle A", code: new PodVehicleCode("PV_A")),
+                ReferenceDefinitionFactory.PodVehicle(displayName: "Pod Vehicle B", code: new PodVehicleCode("PV_B"))
             };
 
             // Act & Assert
@@ -166,20 +167,20 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.UnitTests.Resolvers
             // Arrange
             var characters = new List<ReferenceCharacterDefinition>
             {
-                new(displayName: "Character A", code: new CharacterCode("CHAR_A"), rescueBonus: null),
-                new(displayName: "Character B", code: new CharacterCode("CHAR_B"), rescueBonus: null)
+                ReferenceDefinitionFactory.Character(displayName: "Character A", code: new CharacterCode("CHAR_A"), rescueBonus: null),
+                ReferenceDefinitionFactory.Character(displayName: "Character B", code: new CharacterCode("CHAR_B"), rescueBonus: null)
             };
 
             var thunderbirds = new List<ReferenceThunderbirdDefinition>
             {
-                new(displayName: "Thunderbird 1", code: new ThunderbirdCode("TB1"), topSpeed: 100, domain: MovementDomain.Earth, characterCapacity : 1),
-                new(displayName: "Thunderbird 2", code: new ThunderbirdCode("TB2"), topSpeed: 120, domain: MovementDomain.Space, characterCapacity : 1)
+                ReferenceDefinitionFactory.Thunderbird(displayName: "Thunderbird 1", code: new ThunderbirdCode("TB1"), topSpeed: 100, domain: MovementDomain.Earth, characterCapacity : 1),
+                ReferenceDefinitionFactory.Thunderbird(displayName: "Thunderbird 2", code: new ThunderbirdCode("TB2"), topSpeed: 120, domain: MovementDomain.Space, characterCapacity : 1)
             };
 
             var podVehicles = new List<ReferencePodVehicleDefinition>
             {
-                new(displayName: "Pod Vehicle A", code: new PodVehicleCode("PV_A")),
-                new(displayName: "Pod Vehicle A", code: new PodVehicleCode("PV_B"))
+                ReferenceDefinitionFactory.PodVehicle(displayName: "Pod Vehicle A", code: new PodVehicleCode("PV_A")),
+                ReferenceDefinitionFactory.PodVehicle(displayName: "Pod Vehicle A", code: new PodVehicleCode("PV_B"))
             };
 
             // Act & Assert
@@ -195,20 +196,20 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.UnitTests.Resolvers
             // Arrange
             var characters = new List<ReferenceCharacterDefinition>
             {
-                new(displayName: "Character A", code: new CharacterCode("CHAR_A"), rescueBonus: null),
-                new(displayName: "Thunderbird 1", code: new CharacterCode("CHAR_B"), rescueBonus: null)
+                ReferenceDefinitionFactory.Character(displayName: "Character A", code: new CharacterCode("CHAR_A"), rescueBonus: null),
+                ReferenceDefinitionFactory.Character(displayName: "Thunderbird 1", code: new CharacterCode("CHAR_B"), rescueBonus: null)
             };
 
             var thunderbirds = new List<ReferenceThunderbirdDefinition>
             {
-                new(displayName: "Thunderbird 1", code: new ThunderbirdCode("TB1"), topSpeed: 100, domain: MovementDomain.Earth, characterCapacity : 1),
-                new(displayName: "Pod Vehicle A", code: new ThunderbirdCode("TB2"), topSpeed: 120, domain: MovementDomain.Space, characterCapacity : 1)
+                ReferenceDefinitionFactory.Thunderbird(displayName: "Thunderbird 1", code: new ThunderbirdCode("TB1"), topSpeed: 100, domain: MovementDomain.Earth, characterCapacity : 1),
+                ReferenceDefinitionFactory.Thunderbird(displayName: "Pod Vehicle A", code: new ThunderbirdCode("TB2"), topSpeed: 120, domain: MovementDomain.Space, characterCapacity : 1)
             };
 
             var podVehicles = new List<ReferencePodVehicleDefinition>
             {
-                new(displayName: "Pod Vehicle A", code: new PodVehicleCode("PV_A")),
-                new(displayName: "Character A", code: new PodVehicleCode("PV_B"))
+                ReferenceDefinitionFactory.PodVehicle(displayName: "Pod Vehicle A", code: new PodVehicleCode("PV_A")),
+                ReferenceDefinitionFactory.PodVehicle(displayName: "Character A", code: new PodVehicleCode("PV_B"))
             };
 
             // Act & Assert
@@ -227,17 +228,17 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.UnitTests.Resolvers
             // Arrange
             var characters = new List<ReferenceCharacterDefinition>
             {
-                new(displayName: "Character A", code: new CharacterCode("DUPLICATE_CODE"), rescueBonus: null)
+                ReferenceDefinitionFactory.Character(displayName: "Character A", code: new CharacterCode("DUPLICATE_CODE"), rescueBonus: null)
             };
 
             var thunderbirds = new List<ReferenceThunderbirdDefinition>
             {
-                new(displayName: "Thunderbird 1", code: new ThunderbirdCode("DUPLICATE_CODE"), topSpeed: 100, domain: MovementDomain.Earth, characterCapacity : 1)
+                ReferenceDefinitionFactory.Thunderbird(displayName: "Thunderbird 1", code: new ThunderbirdCode("DUPLICATE_CODE"), topSpeed: 100, domain: MovementDomain.Earth, characterCapacity : 1)
             };
 
             var podVehicles = new List<ReferencePodVehicleDefinition>
             {
-                new(displayName: "Pod Vehicle A", code: new PodVehicleCode("DUPLICATE_CODE"))
+                ReferenceDefinitionFactory.PodVehicle(displayName: "Pod Vehicle A", code: new PodVehicleCode("DUPLICATE_CODE"))
             };
 
             // Act & Assert
@@ -254,20 +255,20 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Compiler.UnitTests.Resolvers
         {
             var characters = new List<ReferenceCharacterDefinition>
             {
-                new(displayName: "Character A", code: new CharacterCode("CHAR_A"), rescueBonus: null),
-                new(displayName: "Character B", code: new CharacterCode("CHAR_B"), rescueBonus: null)
+                ReferenceDefinitionFactory.Character(displayName: "Character A", code: new CharacterCode("CHAR_A"), rescueBonus: null),
+                ReferenceDefinitionFactory.Character(displayName: "Character B", code: new CharacterCode("CHAR_B"), rescueBonus: null)
             };
 
             var thunderbirds = new List<ReferenceThunderbirdDefinition>
             {
-                new(displayName: "Thunderbird 1", code: new ThunderbirdCode("TB1"), topSpeed: 100, domain: MovementDomain.Earth, characterCapacity : 1),
-                new(displayName: "Thunderbird 2", code: new ThunderbirdCode("TB2"), topSpeed: 120, domain: MovementDomain.Space, characterCapacity : 1)
+                ReferenceDefinitionFactory.Thunderbird(displayName: "Thunderbird 1", code: new ThunderbirdCode("TB1"), topSpeed: 100, domain: MovementDomain.Earth, characterCapacity : 1),
+                ReferenceDefinitionFactory.Thunderbird(displayName: "Thunderbird 2", code: new ThunderbirdCode("TB2"), topSpeed: 120, domain: MovementDomain.Space, characterCapacity : 1)
             };
 
             var podVehicles = new List<ReferencePodVehicleDefinition>
             {
-                new(displayName: "Pod Vehicle A", code: new PodVehicleCode("PV_A")),
-                new(displayName: "Pod Vehicle B", code: new PodVehicleCode("PV_B"))
+                ReferenceDefinitionFactory.PodVehicle(displayName: "Pod Vehicle A", code: new PodVehicleCode("PV_A")),
+                ReferenceDefinitionFactory.PodVehicle(displayName: "Pod Vehicle B", code: new PodVehicleCode("PV_B"))
             };
 
             return new DisasterBonusTargetResolver(characters, podVehicles, thunderbirds);

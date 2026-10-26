@@ -1,4 +1,5 @@
-﻿using NSubstitute;
+﻿using ThunderbirdsBoardGameEngine.TestUtils.ReferenceData.Builders;
+using NSubstitute;
 using NSubstitute.ExceptionExtensions;
 using ThunderbirdsBoardGameEngine.ReferenceData.Core.Enums;
 using ThunderbirdsBoardGameEngine.ReferenceData.Core.Identities;
@@ -18,7 +19,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Infrastructure.UnitTests.Lookups
             // Arrange
             var code = new ThunderbirdCode("test-thunderbird");
 
-            var thunderbirdDefinition = new ReferenceThunderbirdDefinition(
+            var thunderbirdDefinition = ReferenceDefinitionFactory.Thunderbird(
                 code: code,
                 displayName: "Test Thunderbird",
                 domain: MovementDomain.Earth,

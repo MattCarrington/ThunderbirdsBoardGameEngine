@@ -1,4 +1,5 @@
-﻿using NSubstitute;
+﻿using ThunderbirdsBoardGameEngine.TestUtils.ReferenceData.Builders;
+using NSubstitute;
 using System.Collections.Immutable;
 using ThunderbirdsBoardGameEngine.ReferenceData.Core.Enums;
 using ThunderbirdsBoardGameEngine.ReferenceData.Core.Identities;
@@ -37,32 +38,32 @@ namespace ThunderbirdsBoardGameEngine.UI.UnitTests.DisasterCards.Services
         public void GetAll_WhenCatalogReturnsItemsInAnyOrder_ReturnsItemsSortedByDisplayName()
         {
             // Arrange
-            var disaster1 = new ReferenceDisasterDefinition(
+            var disaster1 = ReferenceDefinitionFactory.Disaster(
                 code: new CardCode("DC003"),
                 displayName: "Space Disaster",
                 difficultyNumber: 5,
                 location: new LocationCode("london"),
                 rescueType: RescueType.Space,
-                bonuses: [new ReferenceDisasterBonus(new DisasterBonusKey("test"), 1, null)],
-                rewards: [new ReferenceDisasterReward.SpecificToken(BonusToken.Teamwork)]
+                bonuses: [ReferenceDefinitionFactory.DisasterBonus(new DisasterBonusKey("test"), 1, null)],
+                rewards: [ReferenceDefinitionFactory.SpecificToken(BonusToken.Teamwork)]
             );
-            var disaster2 = new ReferenceDisasterDefinition(
+            var disaster2 = ReferenceDefinitionFactory.Disaster(
                 code: new CardCode("DC002"),
                 displayName: "Land Disaster",
                 difficultyNumber: 3,
                 location: new LocationCode("paris"),
                 rescueType: RescueType.Land,
-                bonuses: [new ReferenceDisasterBonus(new DisasterBonusKey("test2"), 2, null)],
-                rewards: [new ReferenceDisasterReward.SpecificToken(BonusToken.Intelligence)]
+                bonuses: [ReferenceDefinitionFactory.DisasterBonus(new DisasterBonusKey("test2"), 2, null)],
+                rewards: [ReferenceDefinitionFactory.SpecificToken(BonusToken.Intelligence)]
             );
-            var disaster3 = new ReferenceDisasterDefinition(
+            var disaster3 = ReferenceDefinitionFactory.Disaster(
                 code: new CardCode("DC001"),
                 displayName: "Air Disaster",
                 difficultyNumber: 4,
                 location: new LocationCode("newyork"),
                 rescueType: RescueType.Air,
-                bonuses: [new ReferenceDisasterBonus(new DisasterBonusKey("test3"), 3, null)],
-                rewards: [new ReferenceDisasterReward.SpecificToken(BonusToken.Determination)]
+                bonuses: [ReferenceDefinitionFactory.DisasterBonus(new DisasterBonusKey("test3"), 3, null)],
+                rewards: [ReferenceDefinitionFactory.SpecificToken(BonusToken.Determination)]
             );
 
             var catalog = Substitute.For<IDisasterDefinitionCatalog>();
@@ -141,17 +142,17 @@ namespace ThunderbirdsBoardGameEngine.UI.UnitTests.DisasterCards.Services
 
         private static ReferenceDisasterDefinition CreateMinimalDisaster(string code)
         {
-            var bonus = new ReferenceDisasterBonus(
+            var bonus = ReferenceDefinitionFactory.DisasterBonus(
                 new DisasterBonusKey("test"),
                 value: 1,
                 location: null
             );
 
-            var reward = new ReferenceDisasterReward.SpecificToken(
+            var reward = ReferenceDefinitionFactory.SpecificToken(
                 BonusToken.Teamwork
             );
 
-            return new ReferenceDisasterDefinition(
+            return ReferenceDefinitionFactory.Disaster(
                 code: new CardCode(code),
                 displayName: "Test Disaster",
                 difficultyNumber: 5,
@@ -166,11 +167,11 @@ namespace ThunderbirdsBoardGameEngine.UI.UnitTests.DisasterCards.Services
         {
             var locationCatalog = Substitute.For<ILocationDefinitionCatalog>();
             locationCatalog.GetByCode(Arg.Any<LocationCode>())
-                .Returns(new ReferenceLocationDefinition(new LocationCode("london"), "London", MovementDomain.Earth));
+                .Returns(ReferenceDefinitionFactory.Location(new LocationCode("london"), "London", MovementDomain.Earth));
 
             var disasterBonusKeyCatalog = Substitute.For<IDisasterBonusKeyDefinitionCatalog>();
             disasterBonusKeyCatalog.GetByCode(Arg.Any<DisasterBonusKey>())
-                .Returns(new DisasterBonusKeyDefinition(new DisasterBonusKey("test"), "Test Bonus"));
+                .Returns(ReferenceDefinitionFactory.DisasterBonusKey(new DisasterBonusKey("test"), "Test Bonus"));
 
             return new DisasterCardMapper(locationCatalog, disasterBonusKeyCatalog);
         }

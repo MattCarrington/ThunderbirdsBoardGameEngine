@@ -1,4 +1,5 @@
-﻿using ThunderbirdsBoardGameEngine.ReferenceData.Core.Identities;
+﻿using System.Text.Json.Serialization;
+using ThunderbirdsBoardGameEngine.ReferenceData.Core.Identities;
 
 namespace ThunderbirdsBoardGameEngine.ReferenceData.Core.Model
 {
@@ -10,7 +11,8 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Core.Model
 
         public ReferenceCharacterRescueBonus? RescueBonus { get; }
 
-        public ReferenceCharacterDefinition(
+        [JsonConstructor]
+        internal ReferenceCharacterDefinition(
             CharacterCode code,
             string displayName,
             ReferenceCharacterRescueBonus? rescueBonus)

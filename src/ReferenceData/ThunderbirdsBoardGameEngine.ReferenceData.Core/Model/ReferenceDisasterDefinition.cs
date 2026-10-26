@@ -1,4 +1,6 @@
-﻿using ThunderbirdsBoardGameEngine.ReferenceData.Core.Enums;
+﻿using System.Collections.Immutable;
+using System.Text.Json.Serialization;
+using ThunderbirdsBoardGameEngine.ReferenceData.Core.Enums;
 using ThunderbirdsBoardGameEngine.ReferenceData.Core.Identities;
 
 namespace ThunderbirdsBoardGameEngine.ReferenceData.Core.Model
@@ -38,7 +40,8 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Core.Model
         /// <exception cref="ArgumentException">Thrown when displayName is null or whitespace.</exception>
         /// <exception cref="ArgumentOutOfRangeException">Thrown when difficultyNumber is zero or negative, or when bonuses or rewards are empty.</exception>
         /// <exception cref="ArgumentNullException">Thrown when bonuses or rewards are null.</exception>
-        public ReferenceDisasterDefinition(
+        [JsonConstructor]
+        internal ReferenceDisasterDefinition(
             CardCode code,
             string displayName,
             int difficultyNumber,
@@ -59,8 +62,8 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Core.Model
             DifficultyNumber = difficultyNumber;
             Location = location;
             RescueType = rescueType;
-            Bonuses = bonuses;
-            Rewards = rewards;
+            Bonuses = ImmutableArray.CreateRange(bonuses);
+            Rewards = ImmutableArray.CreateRange(rewards);
         }
     }
 }

@@ -15,13 +15,29 @@ Package versions are independent of the application's maturity:
   breaking change and requires a major version bump.
 - For pre-1.0 packages, this repository uses a minor bump for breaking changes,
   resetting the patch to zero (for example, `0.4.1` to `0.5.0`).
-- ReferenceData.Core and ReferenceData.Runtime are versioned `2.0.0` for the
-  .NET 10 migration. Other packages can remain on their own `0.x` release lines.
+- ReferenceData.Core and ReferenceData.Runtime moved to `2.0.0` for the
+  .NET 10 migration and subsequently to `3.0.0` with the required character-capacity
+  constructor change. Project files hold current declared versions. Other packages
+  can remain on their own `0.x` release lines.
 
 NuGet package versions are separate from reference-data snapshot metadata.
 Changing the target framework does not require regenerating the snapshot or
 bumping its schema or content version. See
 [Reference Data](../src/ReferenceData/Readme.md#snapshot-metadata).
+
+### Reference Data construction boundary
+
+Core and Runtime declare `4.0.0` for the construction-boundary change described
+in [ADR 0007](architecture/decisions/0007-reference-data-owned-construction.md).
+Removing public definition constructors breaks source and binary callers of
+those constructors. Public init setters on specific-token rewards and derived
+bonus-key definitions are also removed; their read and deconstruction APIs
+remain. Consumers obtain definitions through Runtime catalogs. Tests migrate
+to the shared test-only factories/builders, and previously compiled callers of
+removed APIs must rebuild after migration.
+
+This release changes package APIs, not snapshot structure or content, so no
+snapshot version increment or regeneration is required.
 
 The package graph is defined in `.github/packages.json`. When package source, an
 explicitly packed file, or a centrally managed external dependency changes, CI

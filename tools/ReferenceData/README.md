@@ -22,13 +22,29 @@ The compiler is responsible for:
 
 ## Running the Compiler
 
-Run the compiler with:
+From the repository root, run the compiler from its project directory so its relative input and output paths resolve correctly:
 
-```bash
-dotnet run --project tools/ReferenceData/ThunderbirdsBoardGameEngine.ReferenceData.Compiler
+```powershell
+Push-Location tools/ReferenceData/ThunderbirdsBoardGameEngine.ReferenceData.Compiler
+try {
+    dotnet run
+} finally {
+    Pop-Location
+}
 ```
 
-The generated snapshot is written to the configured output location.
+The current entry point reads `ReferenceData.xlsx` and writes `snapshot.json`, both relative to the process working directory. It has no command-line path configuration. Building the application does not run this compiler.
+
+### Updating the embedded snapshot
+
+1. Update the authoritative spreadsheet in the compiler project.
+2. Assess the schema and content changes using the [shared versioning rules](../../src/ReferenceData/Readme.md#snapshot-metadata). Update the generation constants in `SnapshotVersions.cs` as appropriate; generator and content versions are currently maintained manually.
+3. Run the compiler as above. If compilation fails, correct the source or compiler before proceeding; an existing output file is not evidence of a successful run.
+4. Review the generated snapshot and its metadata. Copy the successfully generated `snapshot.json` to `src/ReferenceData/ThunderbirdsBoardGameEngine.ReferenceData.Runtime/snapshot.json`, replacing the embedded source. Retain a prior snapshot under `src/ReferenceData/Archive` when needed for compatibility coverage; archive policy is not yet automated.
+5. Run the relevant Reference Data unit and component tests, including Runtime loading checks, and any application tests affected by changed definitions or identities.
+6. Review package compatibility and declared package versions using [package-release guidance](../../docs/PackageReleases.md). Commit the source, generated artifacts, metadata, and related code/test changes together.
+
+The compiler does not copy its output into Runtime, archive previous snapshots, choose package versions, or publish artifacts. Those are currently separate steps. Their automation is part of the proposed [evolution plan](../../docs/architecture/reference-data-evolution.md).
 
 ---
 
@@ -135,25 +151,7 @@ Compilation fails if invalid data is detected.
 
 ## Versioning
 
-### Schema Version
-
-Increment when the snapshot contract changes.
-
-Examples:
-
-- New fields
-- Changed serialization shape
-- Renamed properties
-
-### Content Version
-
-Increment when reference data changes without schema changes.
-
-Examples:
-
-- New disasters
-- Balance updates
-- Corrected display names
+The authoritative explanation of schema, content, and generator versions is in [Reference Data snapshot metadata](../../src/ReferenceData/Readme.md#snapshot-metadata). Package version selection follows [package-release guidance](../../docs/PackageReleases.md).
 
 ---
 

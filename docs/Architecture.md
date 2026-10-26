@@ -60,9 +60,10 @@ consumers can reference them independently.
 Provides immutable, in-memory static game data: disasters, characters,
 locations, Thunderbirds, and pod vehicles.
 
-Data is compiled from spreadsheets at build time into a versioned JSON
-snapshot, embedded into the application, and loaded into read-only singleton
-catalogs at startup. The runtime never calls an external service.
+Data is compiled from spreadsheets by explicitly running the compiler. Its
+versioned JSON snapshot is copied into Runtime and embedded during the build.
+Runtime loads read-only singleton catalogs when first resolved. It never calls
+an external service.
 
 Exposed via catalog interfaces:
 `IDisasterDefinitionCatalog`, `ICharacterDefinitionCatalog`,
@@ -70,6 +71,10 @@ Exposed via catalog interfaces:
 `IMapEdgeDefinitionCatalog`, and others.
 
 See [src/ReferenceData/Readme.md](../src/ReferenceData/Readme.md) for detail.
+
+The [Reference Data evolution plan](architecture/reference-data-evolution.md)
+describes proposed independent releases, automated production, and Azure Blob
+delivery. Those proposals do not describe the currently deployed architecture.
 
 ---
 

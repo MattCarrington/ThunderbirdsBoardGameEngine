@@ -1,4 +1,5 @@
-﻿using NSubstitute;
+﻿using ThunderbirdsBoardGameEngine.TestUtils.ReferenceData.Builders;
+using NSubstitute;
 using NSubstitute.ExceptionExtensions;
 using ThunderbirdsBoardGameEngine.ReferenceData.Core.Enums;
 using ThunderbirdsBoardGameEngine.ReferenceData.Core.Identities;
@@ -19,10 +20,10 @@ namespace ThunderbirdsBoardGameEngine.Rules.Infrastructure.UnitTests.Lookups
             // Arrange
             var code = new CharacterCode("gordon");
 
-            var character = new ReferenceCharacterDefinition(
+            var character = ReferenceDefinitionFactory.Character(
                 code: code,
                 displayName: "Gordon",
-                rescueBonus: new ReferenceCharacterRescueBonus(RescueType.Sea, 2)
+                rescueBonus: ReferenceDefinitionFactory.CharacterRescueBonus(RescueType.Sea, 2)
             );
 
             var lookup = CreateLookup(character);
@@ -44,7 +45,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Infrastructure.UnitTests.Lookups
             // Arrange
             var code = new CharacterCode("lady_penelope");
 
-            var character = new ReferenceCharacterDefinition(code, "Lady Penelope", null);
+            var character = ReferenceDefinitionFactory.Character(code, "Lady Penelope", null);
 
             var lookup = CreateLookup(character);
 

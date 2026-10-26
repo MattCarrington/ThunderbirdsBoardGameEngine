@@ -1,4 +1,5 @@
-﻿using ThunderbirdsBoardGameEngine.ReferenceData.Core.Enums;
+﻿using System.Text.Json.Serialization;
+using ThunderbirdsBoardGameEngine.ReferenceData.Core.Enums;
 using ThunderbirdsBoardGameEngine.ReferenceData.Core.Identities;
 
 namespace ThunderbirdsBoardGameEngine.ReferenceData.Core.Model
@@ -11,7 +12,8 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Core.Model
 
         public MovementDomain EdgeType { get; }
 
-        public ReferenceMapEdgeDefinition(LocationCode edge1, LocationCode edge2, MovementDomain edgeType)
+        [JsonConstructor]
+        internal ReferenceMapEdgeDefinition(LocationCode edge1, LocationCode edge2, MovementDomain edgeType)
         {
             if (edge1 == edge2)
             {

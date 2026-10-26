@@ -67,6 +67,26 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.UnitTests.Domain
             Assert.Equal(ValidRewards, result.Rewards);
         }
 
+        [Fact]
+        public void Constructor_WhenSourceCollectionsChange_DefinitionRemainsUnchanged()
+        {
+            var bonuses = ValidBonuses;
+            var rewards = ValidRewards;
+            var definition = new ReferenceDisasterDefinition(
+                ValidCardCode, ValidDisplayName, ValidDifficultyNumber,
+                ValidLocationCode, ValidRescueType, bonuses, rewards);
+
+            bonuses.Clear();
+            rewards.Clear();
+
+            Assert.Single(definition.Bonuses);
+            Assert.Equal(2, definition.Rewards.Count);
+            Assert.Throws<NotSupportedException>(() =>
+                ((IList<ReferenceDisasterBonus>)definition.Bonuses).Clear());
+            Assert.Throws<NotSupportedException>(() =>
+                ((IList<ReferenceDisasterReward>)definition.Rewards).Clear());
+        }
+
         [Theory]
         [ClassData(typeof(NullOrWhitespaceStringData))]
         public void Constructor_WhenDisplayNameInvalid_ThrowsArgumentException(string? displayName)

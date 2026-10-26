@@ -1,4 +1,5 @@
-﻿using ThunderbirdsBoardGameEngine.ReferenceData.Core.Enums;
+﻿using ThunderbirdsBoardGameEngine.TestUtils.ReferenceData.Builders;
+using ThunderbirdsBoardGameEngine.ReferenceData.Core.Enums;
 using ThunderbirdsBoardGameEngine.ReferenceData.Core.Identities;
 using ThunderbirdsBoardGameEngine.ReferenceData.Core.Model;
 using ThunderbirdsBoardGameEngine.Rules.Domain.Movement.Topology;
@@ -89,10 +90,10 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.Movement
         {
             var edges = new List<ReferenceMapEdgeDefinition>
             {
-                new(new LocationCode("A"), new LocationCode("B"), MovementDomain.Earth),
-                new(new LocationCode("B"), new LocationCode("C"), MovementDomain.Earth),
-                new(new LocationCode("C"), new LocationCode("D"), MovementDomain.Earth),
-                new(new LocationCode("A"), new LocationCode("D"), MovementDomain.Space)
+                ReferenceDefinitionFactory.MapEdge(new LocationCode("A"), new LocationCode("B"), MovementDomain.Earth),
+                ReferenceDefinitionFactory.MapEdge(new LocationCode("B"), new LocationCode("C"), MovementDomain.Earth),
+                ReferenceDefinitionFactory.MapEdge(new LocationCode("C"), new LocationCode("D"), MovementDomain.Earth),
+                ReferenceDefinitionFactory.MapEdge(new LocationCode("A"), new LocationCode("D"), MovementDomain.Space)
             };
 
             return new Topography(edges);

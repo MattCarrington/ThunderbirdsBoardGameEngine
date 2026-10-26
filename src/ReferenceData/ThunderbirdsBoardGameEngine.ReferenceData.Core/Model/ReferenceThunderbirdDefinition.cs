@@ -1,4 +1,5 @@
-﻿using ThunderbirdsBoardGameEngine.ReferenceData.Core.Enums;
+﻿using System.Text.Json.Serialization;
+using ThunderbirdsBoardGameEngine.ReferenceData.Core.Enums;
 using ThunderbirdsBoardGameEngine.ReferenceData.Core.Identities;
 
 namespace ThunderbirdsBoardGameEngine.ReferenceData.Core.Model
@@ -15,7 +16,8 @@ namespace ThunderbirdsBoardGameEngine.ReferenceData.Core.Model
 
         public int CharacterCapacity { get; }
 
-        public ReferenceThunderbirdDefinition(ThunderbirdCode code, string displayName, MovementDomain domain, int topSpeed, int characterCapacity)
+        [JsonConstructor]
+        internal ReferenceThunderbirdDefinition(ThunderbirdCode code, string displayName, MovementDomain domain, int topSpeed, int characterCapacity)
         {
             ArgumentException.ThrowIfNullOrWhiteSpace(displayName);
             ArgumentOutOfRangeException.ThrowIfNegative(topSpeed);
