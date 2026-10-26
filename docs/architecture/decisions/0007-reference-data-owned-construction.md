@@ -1,4 +1,4 @@
-# ADR 0005: Reference Data Infrastructure Owns Definition Construction
+# ADR 0007: Reference Data Infrastructure Owns Definition Construction
 
 - Status: Proposed
 - Date: 2026-10-22
