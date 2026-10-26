@@ -120,6 +120,12 @@ jobs:
               run_attempt: $run_attempt
             }' > "release-metadata/$IMAGE.json"
 
+      - name: Temporary partial-rerun rehearsal
+        if: inputs.image_role == 'migrator' && github.run_attempt == '1'
+        run: |
+          echo "Deliberately failing the first migrator publication attempt."
+          exit 1
+
       - name: Upload published image receipt
         uses: actions/upload-artifact@v7
         with:
