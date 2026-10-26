@@ -1,11 +1,12 @@
 # ADR 0006: Separate Cancellable Validation from DEV Deployment
 
-- Status: Accepted design for the DEV deployment increment; not yet implemented
+- Status: Accepted; implementation in PR #163, execution validation pending
 - Date: 2026-10-23
+- Implementation notes updated: 2026-10-26
 
 ## Context
 
-The current CI workflow builds, tests, publishes, deploys to DEV after merges
+Before this increment, the CI workflow builds, tests, publishes, deploys to DEV after merges
 to `main`, and runs smoke tests. Workflow-level concurrency cancels superseded
 runs, including any deployment in those runs. Setting different concurrency on
 a called reusable workflow does not protect it from its parent being cancelled.
@@ -52,6 +53,15 @@ the existing CI deploy/smoke jobs are removed.
 - Bind the release to its CI run, source commit, and API/migrator/provisioner
   artifact identities. Prefer immutable image digests. Never resolve a queued
   release by checking out whatever a mutable branch points to at execution time.
+- Partial reruns may reuse image receipts from earlier attempts of the same
+  run, commit, and version. Validate every receipt and select the highest numeric
+  attempt per role. Preserve per-image producing attempts as `image_attempts`
+  in the manifest; reject duplicate role/attempt pairs and future attempts.
+- Discover the newest manifest artifact available up to the selected CI
+  attempt. Validate against that artifact's producing attempt, preserving run,
+  commit, registry, digest, and provenance checks. An unrelated job rerun need
+  not reproduce an already successful manifest. Keep downloaded receipt
+  artifacts in separate directories and check their names against their content.
 - Do not rebuild application images during deployment. Record what was tested
   and deployed; identify trusted infrastructure/workflow code separately from
   the selected application artifacts.
@@ -65,8 +75,12 @@ the existing CI deploy/smoke jobs are removed.
 
 - Serialize all DEV release operations through one environment-specific lock or
   equivalent concurrency boundary, including post-deployment verification.
-- Preserve an active deployment when newer validation finishes. Define queue
-  behaviour explicitly; do not assume basic concurrency provides commit-order
+- Preserve an active deployment when newer validation finishes. Use the
+  workflow-level `delivery-dev` concurrency group with `cancel-in-progress:
+  false` and `queue: max`, covering selection through smoke verification.
+  GitHub permits up to 100 pending requests; further requests are cancelled
+  when full. New non-deployable completions do not replace pending releases,
+  though they can wait and subsequently skip. Do not assume source-commit-order
   execution or unlimited pending runs. Reject stale automatic candidates before
   deployment starts so late-finishing CI cannot silently roll DEV backwards.
 - An explicit manual branch deployment may replace shared DEV; display the
@@ -97,8 +111,9 @@ may be procedural; automated schema-conflict analysis is not required here.
 
 ### Contract with Future DEV Operating Hours
 
-The separate cost-control story proposes DEV readiness by 10:00 and shutdown
-from 22:00 every day in `Europe/London`, including daylight-saving changes.
+The separate cost-control story proposes a configurable nightly shutdown,
+initially 22:00 in `Europe/London`, including daylight-saving changes. DEV wakes
+on deployment or a manual request; a scheduled morning wake is no longer planned.
 
 When that story is implemented, deployment must wake DEV and wait for database
 readiness before initialization. Shutdown must not race with startup, deployment,
@@ -131,6 +146,9 @@ Before claiming this design is implemented:
   branch release, and rejection of untrusted or mismatched candidates.
 - Verify exact artifact selection, environment serialization, pending/stale
   candidate policy, and release identity evidence.
+- Exercise partial publication recovery across attempts, reuse of an earlier
+  manifest after an unrelated job rerun, and pending-delivery preservation with
+  `queue: max`. Green CI alone does not demonstrate these runtime scenarios.
 - Review shared database migration compatibility and record branch deployment
   history. Use disposable/local data for destructive failure tests.
 - Cut over the triggers and remove the old deploy/smoke jobs together, avoiding
