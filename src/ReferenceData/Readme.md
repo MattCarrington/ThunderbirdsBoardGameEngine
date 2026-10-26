@@ -21,6 +21,10 @@ The runtime does not call a separate Catalog API for static game data.
 
 ## Architecture
 
+The foundational decision is recorded in
+[ADR 0000: Snapshot-based Reference Data](../../docs/architecture/decisions/0000-snapshot-based-reference-data.md).
+The sections below describe the current implementation.
+
 The system consists of two main parts:
 
 ### Compiler

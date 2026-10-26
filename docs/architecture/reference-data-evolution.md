@@ -11,6 +11,10 @@ Practical Azure experience is an explicit objective, including infrastructure as
 
 ## Current position
 
+[ADR 0000](decisions/0000-snapshot-based-reference-data.md) records the original
+accepted snapshot architecture. This plan builds on that model; future Blob
+delivery decisions must explicitly revise its embedded-delivery assumptions.
+
 The [Reference Data overview](../../src/ReferenceData/Readme.md) describes the implemented subsystem. The [compiler guide](../../tools/ReferenceData/README.md) owns authoring, relationship validation, and the current manual snapshot-update procedure.
 
 The compiler generates a local JSON file. Runtime embeds a separately copied snapshot and requires an exact schema-version match. Core and Runtime are published packages, but production projects can integrate through project references. Package selection and publishing share the repository's [release infrastructure](../PackageReleases.md).
