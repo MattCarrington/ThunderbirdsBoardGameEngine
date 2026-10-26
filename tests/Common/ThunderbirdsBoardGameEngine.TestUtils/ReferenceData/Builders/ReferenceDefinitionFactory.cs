@@ -70,7 +70,10 @@ public static class ReferenceDefinitionFactory
         LocationCode location,
         RescueType rescueType,
         IReadOnlyList<ReferenceDisasterBonus> bonuses,
-        IReadOnlyList<ReferenceDisasterReward> rewards) => new(code, displayName, difficultyNumber, location, rescueType, bonuses, rewards);
+        IReadOnlyList<ReferenceDisasterReward> rewards)
+    {
+        return new(code, displayName, difficultyNumber, location, rescueType, bonuses, rewards);
+    }
 
     public static ReferenceDisasterBonus DisasterBonus(DisasterBonusKey key, int value, LocationCode? location)
     {
