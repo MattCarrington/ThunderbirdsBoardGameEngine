@@ -1,12 +1,11 @@
-﻿using ThunderbirdsBoardGameEngine.TestUtils.ReferenceData.Builders;
-using NSubstitute;
-using NSubstitute.ExceptionExtensions;
+﻿using NSubstitute;
 using ThunderbirdsBoardGameEngine.ReferenceData.Core.Enums;
 using ThunderbirdsBoardGameEngine.ReferenceData.Core.Identities;
 using ThunderbirdsBoardGameEngine.ReferenceData.Core.Model;
 using ThunderbirdsBoardGameEngine.ReferenceData.Runtime.Interfaces;
 using ThunderbirdsBoardGameEngine.Rules.Application.Exceptions;
 using ThunderbirdsBoardGameEngine.Rules.Infrastructure.Lookups;
+using ThunderbirdsBoardGameEngine.TestUtils.ReferenceData.Builders;
 using Xunit;
 
 namespace ThunderbirdsBoardGameEngine.Rules.Infrastructure.UnitTests.Lookups
@@ -72,7 +71,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Infrastructure.UnitTests.Lookups
             // Arrange
             var code = new ThunderbirdCode("test-thunderbird");
 
-            var thunderbirdDefinition = new ReferenceThunderbirdDefinition(
+            var thunderbirdDefinition = ReferenceDefinitionFactory.Thunderbird(
                 code: code,
                 displayName: "Test Thunderbird",
                 domain: MovementDomain.Earth,
