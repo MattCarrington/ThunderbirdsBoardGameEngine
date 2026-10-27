@@ -153,6 +153,16 @@ Compilation fails if invalid data is detected.
 
 The authoritative explanation of schema, content, and generator versions is in [Reference Data snapshot metadata](../../src/ReferenceData/Readme.md#snapshot-metadata). Package version selection follows [package-release guidance](../../docs/PackageReleases.md).
 
+The accepted [versioning and compatibility policy](../../docs/architecture/decisions/0008-reference-data-versioning-and-compatibility.md)
+applies content increment rules prospectively. Classify changes by the compiled
+result: correcting an authored name can also change a generated code, making
+the change an identity change rather than a display-only correction.
+
+Future CI publication will validate and load the artifact, generate a companion
+SHA-256/provenance manifest, and publish immutable versions. The current compiler
+does not generate that manifest or enforce publication uniqueness. Existing
+snapshots must not be edited or regenerated to apply the policy retroactively.
+
 ---
 
 ## Runtime Relationship

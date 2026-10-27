@@ -25,6 +25,13 @@ Changing the target framework does not require regenerating the snapshot or
 bumping its schema or content version. See
 [Reference Data](../src/ReferenceData/Readme.md#snapshot-metadata).
 
+[ADR 0008](architecture/decisions/0008-reference-data-versioning-and-compatibility.md)
+defines the separate package, schema, and content responsibilities. Core and
+Runtime versions need not match: release Runtime when its code or required Core
+dependency changes; a Runtime-only change does not require releasing Core.
+Snapshot content increments describe content impact and are not a substitute
+for package API compatibility assessment.
+
 ### Reference Data construction boundary
 
 Core and Runtime declare `4.0.0` for the construction-boundary change described

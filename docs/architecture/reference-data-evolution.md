@@ -2,12 +2,17 @@
 
 - Status: Draft roadmap; construction boundary implemented, remaining delivery planned
 - Date: 2026-10-22
+- Policy updated: 2026-10-27
 
 ## Purpose
 
 Give Reference Data an independent production and release lifecycle, with automated snapshot production and versioned delivery through Azure Blob Storage. Applications continue to consume immutable definitions through Runtime catalogs.
 
-Practical Azure experience is an explicit objective, including infrastructure as code, authentication, artifact publishing, and reliable retrieval. Blob delivery is intended scope. A separate solution or repository is an option to evaluate, not a prerequisite for the first change.
+Practical Azure experience is an explicit objective, including infrastructure as
+code, authentication, artifact publishing, and reliable retrieval. A separate
+Reference Data repository with its own CI and release lifecycle, and delivery
+through Blob storage, are intended scope. Initially preserve embedded delivery,
+then publish the same verified artifact through both paths while migrating.
 
 ## Current position
 
@@ -19,9 +24,15 @@ The [Reference Data overview](../../src/ReferenceData/Readme.md) describes the i
 
 The compiler generates a local JSON file. Runtime embeds a separately copied snapshot and requires an exact schema-version match. Core and Runtime are published packages, but production projects can integrate through project references. Package selection and publishing share the repository's [release infrastructure](../PackageReleases.md).
 
-Public definition constructors expose an infrastructure concern as a consumer contract. Compilation, snapshot copying, and version updates require manual coordination. Shared builds can hide the compatibility effects of changing multiple projects together.
+Definition construction is now restricted under ADR 0007. Compilation, snapshot
+copying, and version updates still require manual coordination. Shared builds
+can hide the compatibility effects of changing multiple projects together.
 
-The [smoke-test guide](../../tests/SmokeTests/Readme.md) separately documents an image-selection timing issue: deployment tests can run a previous smoke image. Reference Data evolution must clarify pipeline responsibilities without treating that existing issue as a consequence of Reference Data or automatically expanding the construction ticket to fix it.
+Application deployment verification remains a separate responsibility; see the
+[smoke-test guide](../../tests/SmokeTests/Readme.md) and
+[deployment ADR](decisions/0006-separate-dev-validation-and-deployment.md).
+Reference Data CI must have explicit production and publication gates rather
+than being coupled to application deployment smoke tests.
 
 ## Intended boundaries
 
@@ -29,7 +40,11 @@ The [smoke-test guide](../../tests/SmokeTests/Readme.md) separately documents an
 - **Application integration:** verify selected packages and snapshots support required identities, relationships, and game behaviour.
 - **Deployment verification:** verify the deployed application can access its configured snapshot and serve its essential journeys.
 
-An independently published snapshot does not imply automatic adoption. Snapshot selection, compatibility checks, and rollback must be explicit. Existing games may need to retain a reference-data version; this must be decided before enabling content adoption that could alter their behaviour.
+The accepted [versioning and compatibility ADR](decisions/0008-reference-data-versioning-and-compatibility.md)
+defines exact application-selected content versions, schema validation,
+immutable publication, retention/provenance, and future game pinning. Publishing
+does not automatically adopt a snapshot. Game pinning and historical catalogue
+resolution are not implemented and are separate from repository extraction.
 
 ## Change model
 
@@ -45,18 +60,44 @@ Core and Runtime may release independently, with explicit compatible dependencie
 ## Proposed delivery order
 
 1. **Owned construction:** the [accepted construction-boundary ADR](decisions/0007-reference-data-owned-construction.md) is implemented, preserving compiler, deserialization, and test paths.
-2. **Versioning and compatibility:** decide content/schema/package relationships, snapshot selection, existing-game version behaviour, and upgrade/rollback expectations. Record the decisions in a focused ADR.
-3. **Automated production:** make validation, compilation, metadata handling, and hydration verification repeatable; produce a reviewable artifact without manual copying.
-4. **Package integration:** establish package-consumer verification and API compatibility checks. Decide whether independent builds and releases justify solution or repository extraction before creating repository-specific publishing workflows.
-5. **Blob publishing:** record the delivery decision, provision Azure resources through code, and publish versioned artifacts using authenticated automation.
-6. **Runtime retrieval:** implement the selected version policy, authentication, validation, caching, diagnostics, and failure/recovery behaviour. Resolve which hosts retrieve snapshots, including browser-hosted consumers and their access constraints.
-7. **Workflow demonstration:** verify a content-only update, a contract change, deployed retrieval, and rollback. Document release ownership and operational procedures.
+2. **Versioning and compatibility:** policy is recorded in ADR 0008. This design slice does not implement the capabilities it describes.
+3. **Repository extraction:** create the independently buildable/testable Reference Data repository and basic CI, preserving embedded behaviour. Resolve shared test dependencies. Keep the application buildable until package migration is verified.
+4. **Automated embedded publication:** validate and compile input, verify hydration, generate provenance and checksum evidence, retain immutable artifacts, and package the same verified snapshot without manual copying/resource changes.
+5. **Package integration:** move application consumption to published packages, add consumer and API compatibility checks, and remove superseded projects and pipeline steps after verification.
+6. **Blob publishing:** provision Azure resources through code and publish versioned artifacts/manifests using authenticated automation alongside embedded delivery.
+7. **Runtime retrieval:** implement explicit exact-version selection, authentication, manifest/integrity and schema checks, caching, diagnostics, and failure/recovery behaviour. Resolve supported hosts, including browser-hosted consumers and access constraints.
+8. **Application adoption and workflow demonstration:** switch deployment to Blob, verify a content-only update and contract change, and demonstrate compatible default rollback. Record whether embedded delivery remains supported. Game-specific rollback behaviour can only be demonstrated once the separate pinning work exists.
 
 Each slice includes appropriate tests and documentation. The order expresses dependencies, not a requirement to implement the entire plan as one change.
 
 ## Architecture records
 
-Use focused ADRs for owned construction, versioning/compatibility, Blob delivery, and package/release boundaries. Record repository extraction separately if chosen. Mark proposals clearly and move them to accepted status only when their decisions are agreed. Implementation status belongs in current architecture and operational documentation.
+ADRs 0007 and 0008 record owned construction and versioning/compatibility.
+Use focused later ADRs for repository/package release boundaries and Blob
+delivery mechanics. Extraction is intended scope; its migration mechanics still
+need design. Implementation status belongs in current architecture and
+operational documentation, distinct from an accepted policy.
+
+## Implementation follow-ups from ADR 0008
+
+These are backlog requirements, not claims of existing support or newly created
+board cards. They can be split into reviewable stories without reopening the
+agreed policy.
+
+| Follow-up | Required outcome |
+|---|---|
+| Publication validation and immutable identity | Block invalid releases; classify content increments; prevent reuse of a content version for different bytes; review actual identity and game-fact changes |
+| CI provenance and retention | Generate the companion SHA-256 manifest with source/compiler revisions, publication/run identity, and durable validation evidence; retain the exact artifacts and referenced sources indefinitely |
+| Historical snapshot availability | Distribute and retrieve exact supported historical versions; keeping files in the repository alone does not fulfil this |
+| Version-specific catalogue resolution | Resolve definitions from a requested version without substituting a global default; report unavailable or unsupported versions explicitly |
+| Pin persisted games to an immutable Reference Data version | Persist the creation version through a database migration; use it for relevant reads, validation, projections, and actions; define a non-guessing policy for pre-existing unversioned games |
+| Schema-support changes and game retirement/migration | For each schema transition, explicitly preserve support, implement a justified conversion/migration, or report unsupported games without modifying their saved state |
+| Default and code rollback verification | A changed default affects new games after pinning exists; existing games retain their versions; code rollback must retain required schema support or return a controlled outcome |
+
+The pinning story depends on historical availability and version-specific
+resolution. It is a persisted-game consistency concern that exists even with
+embedded delivery, not an automatic consequence of extraction or Blob storage.
+Do not claim it is complete merely because a game stores a version identifier.
 
 ## Completion evidence
 
@@ -70,4 +111,9 @@ Use focused ADRs for owned construction, versioning/compatibility, Blob delivery
 
 ## Documentation ownership
 
-Keep shared consumption and versioning guidance in the Reference Data overview. Keep compiler operation and authoring policies in its guide. Keep general package publication mechanics and deployed smoke-test operation in their existing guides. Link these documents rather than duplicating them. Consolidate or remove obsolete material as each slice lands and update inbound links.
+Keep the versioning decision authoritative in ADR 0008, with a short consumption
+and metadata summary in the Reference Data overview. Keep compiler operation and
+authoring policies in its guide. Keep general package publication mechanics and
+deployed smoke-test operation in their existing guides. Link these documents
+rather than duplicating them. Consolidate or remove obsolete material as each
+slice lands and update inbound links.

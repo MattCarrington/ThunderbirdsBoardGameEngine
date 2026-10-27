@@ -111,17 +111,29 @@ Examples:
 
 ### Content Version
 
-The content version changes when the reference data changes without changing the schema.
+The content version uniquely identifies an immutable published snapshot across
+all schema versions. It advances for a new publication whether or not the
+schema changes. It does not determine whether Runtime can read that structure.
 
-Examples:
-
-- Adding a new disaster
-- Correcting display text
-- Updating balance values
+[ADR 0008](../../docs/architecture/decisions/0008-reference-data-versioning-and-compatibility.md)
+defines the prospective content increment policy: patch for presentation-only
+corrections preserving identities and gameplay facts, minor for additions
+preserving existing facts, and major for identity removals or changes to existing
+gameplay facts and constraints. Published history is not renumbered.
 
 For example, adding FAB 2 with speed 2, character capacity 2, and domain Earth uses the existing definition shape. It is a content change, provided consumers support additional identities and no new gameplay behaviour is required. Adding a `CargoCapacity` property changes the definition and snapshot contracts and requires coordinated code and artifact updates.
 
 Runtime currently requires an exact schema-version match. Independent content delivery and package releases do not imply that arbitrary package and snapshot versions are compatible.
+
+### Accepted evolution policy
+
+ADR 0008 also records exact application-selected snapshot versions, immutable
+publication, independent package releases, retained artifacts and provenance,
+and future game pinning. These are accepted policies with incremental
+implementation. Runtime currently loads one embedded snapshot; configurable
+content selection, manifest verification, and historical game-specific
+catalogues are not implemented. Existing snapshot metadata remains in place;
+future CI will add a companion checksum/provenance manifest.
 
 ---
 
