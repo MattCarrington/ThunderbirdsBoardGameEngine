@@ -76,6 +76,11 @@ The [Reference Data evolution plan](architecture/reference-data-evolution.md)
 describes proposed independent releases, automated production, and Azure Blob
 delivery. Those proposals do not describe the currently deployed architecture.
 
+[ADR 0008](architecture/decisions/0008-reference-data-versioning-and-compatibility.md)
+records the accepted versioning, publication, retention, and future game-pinning
+policies. Their loading and publishing capabilities will be implemented in
+separate slices; the embedded implementation above remains current.
+
 ---
 
 ## Dependency rules
