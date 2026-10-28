@@ -45,7 +45,7 @@ jobs:
     
       - name: Validate selected CI run
         id: selected-run
-        uses: actions/github-script@v8
+        uses: actions/github-script@v9
         env:
           CI_RUN_ID: ${{ inputs.ci_run_id || github.event.workflow_run.id }}
         with:
@@ -114,7 +114,7 @@ jobs:
       - name: Find release manifest
         id: release-artifact
         if: steps.selected-run.outputs.eligible == 'true'
-        uses: actions/github-script@v8
+        uses: actions/github-script@v9
         env:
           SELECTED_RUN_ID: ${{ steps.selected-run.outputs.run_id }}
           SELECTED_RUN_ATTEMPT: ${{ steps.selected-run.outputs.run_attempt }}
@@ -165,7 +165,7 @@ jobs:
       - name: Validate release manifest
         if: steps.release-artifact.outputs.available == 'true'
         id: manifest
-        uses: actions/github-script@v8
+        uses: actions/github-script@v9
         env:
           EXPECTED_RUN_ID: ${{ steps.selected-run.outputs.run_id }}
           EXPECTED_RUN_ATTEMPT: ${{ steps.release-artifact.outputs.run_attempt }}

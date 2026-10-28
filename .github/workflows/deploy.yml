@@ -90,7 +90,7 @@ jobs:
 
       - name: Check automatic release is still current
         if: inputs.require_current_main
-        uses: actions/github-script@v8
+        uses: actions/github-script@v9
         env:
           SOURCE_COMMIT: ${{ inputs.source_commit }}
         with:
