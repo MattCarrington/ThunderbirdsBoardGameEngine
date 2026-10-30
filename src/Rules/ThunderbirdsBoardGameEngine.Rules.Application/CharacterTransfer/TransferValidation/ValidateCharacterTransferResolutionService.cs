@@ -11,12 +11,14 @@ namespace ThunderbirdsBoardGameEngine.Rules.Application.CharacterTransfer.Transf
 
         public ValidateCharacterTransferResolutionService(IThunderbirdTransferDefinitionLookup lookup, CharacterTransferEvaluator evaluator)
         {
-            _lookup = lookup;
-            _evaluator = evaluator;
+            _lookup = lookup ?? throw new ArgumentNullException(nameof(lookup));
+            _evaluator = evaluator ?? throw new ArgumentNullException(nameof(evaluator));
         }
 
         public CharacterTransferEvaluationResult ResolveTransferValidation(ValidateCharacterTransferInput input)
         {
+            ArgumentNullException.ThrowIfNull(input, nameof(input));
+
             var thunderbirds = input.Thunderbirds
                 .Select(thunderbird => new ThunderbirdTransferState(
                     ThunderbirdCode: thunderbird.ThunderbirdCode,
