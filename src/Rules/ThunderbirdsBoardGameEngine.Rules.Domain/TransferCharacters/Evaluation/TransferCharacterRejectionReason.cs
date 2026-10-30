@@ -1,6 +1,6 @@
 ﻿namespace ThunderbirdsBoardGameEngine.Rules.Domain.TransferCharacters.Evaluation
 {
-    public enum CharacterTransferRejectionReason
+    public enum TransferCharacterRejectionReason
     {
         NotReciprocal,
         MachinesNotCoLocated,

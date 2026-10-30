@@ -4,15 +4,15 @@ using Xunit;
 
 namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.TransferCharacters
 {
-    public class CharacterTransferEvaluatorTests
+    public class TransferCharacterEvaluatorTests
     {
         [Fact]
         public void Evaluate_WhenMachinesAreCoLocatedAndDestinationHasCapacity_ShouldReturnValidOutcome()
         {
             // Arrange
-            var evaluator = new CharacterTransferEvaluator();
+            var evaluator = new TransferCharacterEvaluator();
 
-            var input = new CharacterTransferEvaluationInput(
+            var input = new TransferCharacterEvaluationInput(
                 Thunderbirds:
                 [
                     new(
@@ -42,7 +42,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.TransferCharacters
             var result = evaluator.Evaluate(input);
 
             // Assert
-            Assert.Equal(CharacterTransferOutcome.Valid, result.Outcome);
+            Assert.Equal(TransferCharacterOutcome.Valid, result.Outcome);
             Assert.Null(result.RejectionReason);
         }
 
@@ -50,9 +50,9 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.TransferCharacters
         public void Evaluate_WhenMachinesAreInDifferentLocations_ShouldReturnRejectedOutcome()
         {
             // Arrange
-            var evaluator = new CharacterTransferEvaluator();
+            var evaluator = new TransferCharacterEvaluator();
 
-            var input = new CharacterTransferEvaluationInput(
+            var input = new TransferCharacterEvaluationInput(
                 Thunderbirds:
                 [
                     new(
@@ -82,16 +82,16 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.TransferCharacters
             var result = evaluator.Evaluate(input);
 
             // Assert
-            Assert.Equal(CharacterTransferOutcome.Rejected, result.Outcome);
-            Assert.Equal(CharacterTransferRejectionReason.MachinesNotCoLocated, result.RejectionReason);
+            Assert.Equal(TransferCharacterOutcome.Rejected, result.Outcome);
+            Assert.Equal(TransferCharacterRejectionReason.MachinesNotCoLocated, result.RejectionReason);
         }
 
         [Fact]
         public void Evaluate_WhenDestinationThunderbirdIsAtCapacity_ShouldReturnRejectedOutcome()
         {
             // Arrange
-            var evaluator = new CharacterTransferEvaluator();
-            var input = new CharacterTransferEvaluationInput(
+            var evaluator = new TransferCharacterEvaluator();
+            var input = new TransferCharacterEvaluationInput(
                 Thunderbirds:
                 [
                     new(
@@ -122,17 +122,17 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.TransferCharacters
             var result = evaluator.Evaluate(input);
 
             // Assert
-            Assert.Equal(CharacterTransferOutcome.Rejected, result.Outcome);
-            Assert.Equal(CharacterTransferRejectionReason.CharacterCapacityExceeded, result.RejectionReason);
+            Assert.Equal(TransferCharacterOutcome.Rejected, result.Outcome);
+            Assert.Equal(TransferCharacterRejectionReason.CharacterCapacityExceeded, result.RejectionReason);
         }
 
         [Fact]
         public void Evaluate_WhenDestinationSameAsSource_ShouldReturnNoChangeOutcome()
         {
             // Arrange
-            var evaluator = new CharacterTransferEvaluator();
+            var evaluator = new TransferCharacterEvaluator();
 
-            var input = new CharacterTransferEvaluationInput(
+            var input = new TransferCharacterEvaluationInput(
                 Thunderbirds:
                 [
                     new(
@@ -160,7 +160,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.TransferCharacters
             var result = evaluator.Evaluate(input);
 
             // Assert
-            Assert.Equal(CharacterTransferOutcome.NoChange, result.Outcome);
+            Assert.Equal(TransferCharacterOutcome.NoChange, result.Outcome);
             Assert.Null(result.RejectionReason);
         }
 
@@ -168,9 +168,9 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.TransferCharacters
         public void Evaluate_ReciprocalSwap_ShouldReturnValidOutcome()
         {
             // Arrange
-            var evaluator = new CharacterTransferEvaluator();
+            var evaluator = new TransferCharacterEvaluator();
 
-            var input = new CharacterTransferEvaluationInput(
+            var input = new TransferCharacterEvaluationInput(
                 Thunderbirds:
                 [
                     new(
@@ -204,7 +204,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.TransferCharacters
             var result = evaluator.Evaluate(input);
 
             // Assert
-            Assert.Equal(CharacterTransferOutcome.Valid, result.Outcome);
+            Assert.Equal(TransferCharacterOutcome.Valid, result.Outcome);
             Assert.Null(result.RejectionReason);
         }
 
@@ -212,9 +212,9 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.TransferCharacters
         public void Evaluate_ReciprocalSwapWithBothMachinesAlreadyAtCapacity_ShouldReturnValidOutcome()
         {
             // Arrange
-            var evaluator = new CharacterTransferEvaluator();
+            var evaluator = new TransferCharacterEvaluator();
 
-            var input = new CharacterTransferEvaluationInput(
+            var input = new TransferCharacterEvaluationInput(
                 Thunderbirds:
                 [
                     new(
@@ -250,7 +250,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.TransferCharacters
             var result = evaluator.Evaluate(input);
 
             // Assert
-            Assert.Equal(CharacterTransferOutcome.Valid, result.Outcome);
+            Assert.Equal(TransferCharacterOutcome.Valid, result.Outcome);
             Assert.Null(result.RejectionReason);
         }
 
@@ -258,9 +258,9 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.TransferCharacters
         public void Evaluate_WhenTwoAssignmentsAreNotReciprocal_ShouldReturnRejectedOutcome()
         {
             // Arrange
-            var evaluator = new CharacterTransferEvaluator();
+            var evaluator = new TransferCharacterEvaluator();
 
-            var input = new CharacterTransferEvaluationInput(
+            var input = new TransferCharacterEvaluationInput(
                 Thunderbirds:
                 [
                     new(
@@ -292,17 +292,17 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.TransferCharacters
             var result = evaluator.Evaluate(input);
 
             // Assert
-            Assert.Equal(CharacterTransferOutcome.Rejected, result.Outcome);
-            Assert.Equal(CharacterTransferRejectionReason.NotReciprocal, result.RejectionReason);
+            Assert.Equal(TransferCharacterOutcome.Rejected, result.Outcome);
+            Assert.Equal(TransferCharacterRejectionReason.NotReciprocal, result.RejectionReason);
         }
 
         [Fact]
         public void Evaluate_WhenReciprocalSwapNotAtSameLocation_ShouldReturnRejectedOutcome()
         {
             // Arrange
-            var evaluator = new CharacterTransferEvaluator();
+            var evaluator = new TransferCharacterEvaluator();
 
-            var input = new CharacterTransferEvaluationInput(
+            var input = new TransferCharacterEvaluationInput(
                 Thunderbirds:
                 [
                     new(
@@ -336,17 +336,17 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.TransferCharacters
             var result = evaluator.Evaluate(input);
 
             // Assert
-            Assert.Equal(CharacterTransferOutcome.Rejected, result.Outcome);
-            Assert.Equal(CharacterTransferRejectionReason.MachinesNotCoLocated, result.RejectionReason);
+            Assert.Equal(TransferCharacterOutcome.Rejected, result.Outcome);
+            Assert.Equal(TransferCharacterRejectionReason.MachinesNotCoLocated, result.RejectionReason);
         }
 
         [Fact]
         public void Evaluate_WhenReciprocalSwapResultsInNoChange_ShouldReturnNoChangeOutcome()
         {
             // Arrange
-            var evaluator = new CharacterTransferEvaluator();
+            var evaluator = new TransferCharacterEvaluator();
 
-            var input = new CharacterTransferEvaluationInput(
+            var input = new TransferCharacterEvaluationInput(
                 Thunderbirds:
                 [
                     new(
@@ -380,7 +380,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.TransferCharacters
             var result = evaluator.Evaluate(input);
 
             // Assert
-            Assert.Equal(CharacterTransferOutcome.NoChange, result.Outcome);
+            Assert.Equal(TransferCharacterOutcome.NoChange, result.Outcome);
             Assert.Null(result.RejectionReason);
         }
 
@@ -388,8 +388,8 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.TransferCharacters
         public void Evaluate_ReciprocalSwapWhereOneAssignmentIsNoSwap_ShouldReturnRejectedOutcome()
         {
             // Arrange
-            var evaluator = new CharacterTransferEvaluator();
-            var input = new CharacterTransferEvaluationInput(
+            var evaluator = new TransferCharacterEvaluator();
+            var input = new TransferCharacterEvaluationInput(
                 Thunderbirds:
                 [
                     new(
@@ -421,17 +421,17 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.TransferCharacters
             // Act
             var result = evaluator.Evaluate(input);
             // Assert
-            Assert.Equal(CharacterTransferOutcome.Rejected, result.Outcome);
-            Assert.Equal(CharacterTransferRejectionReason.NotReciprocal, result.RejectionReason);
+            Assert.Equal(TransferCharacterOutcome.Rejected, result.Outcome);
+            Assert.Equal(TransferCharacterRejectionReason.NotReciprocal, result.RejectionReason);
         }
 
         [Fact]
         public void Evaluate_WhenDestinationThunderbirdNotFound_ShouldThrowArgumentException()
         {
             // Arrange
-            var evaluator = new CharacterTransferEvaluator();
+            var evaluator = new TransferCharacterEvaluator();
 
-            var input = new CharacterTransferEvaluationInput(
+            var input = new TransferCharacterEvaluationInput(
                 Thunderbirds:
                 [
                     new(
@@ -463,9 +463,9 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.TransferCharacters
         public void Evaluate_WhenOneThunderbirdIsMissing_ShouldThrowArgumentException()
         {
             // Arrange
-            var evaluator = new CharacterTransferEvaluator();
+            var evaluator = new TransferCharacterEvaluator();
 
-            var input = new CharacterTransferEvaluationInput(
+            var input = new TransferCharacterEvaluationInput(
                 Thunderbirds:
                 [
                     new(
@@ -492,9 +492,9 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.TransferCharacters
         public void Evaluate_WhenThreeThunderbirdsAreProvided_ShouldThrowArgumentException()
         {
             // Arrange
-            var evaluator = new CharacterTransferEvaluator();
+            var evaluator = new TransferCharacterEvaluator();
 
-            var input = new CharacterTransferEvaluationInput(
+            var input = new TransferCharacterEvaluationInput(
                 Thunderbirds:
                 [
                     new(
@@ -531,9 +531,9 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.TransferCharacters
         public void Evaluate_WhenNoAssignmentsProvided_ShouldThrowArgumentException()
         {
             // Arrange
-            var evaluator = new CharacterTransferEvaluator();
+            var evaluator = new TransferCharacterEvaluator();
 
-            var input = new CharacterTransferEvaluationInput(
+            var input = new TransferCharacterEvaluationInput(
                 Thunderbirds:
                 [
                     new(
@@ -561,9 +561,9 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.TransferCharacters
         public void Evaluate_WhenThreeAssignmentsAreProvided_ShouldThrowArgumentException()
         {
             // Arrange
-            var evaluator = new CharacterTransferEvaluator();
+            var evaluator = new TransferCharacterEvaluator();
 
-            var input = new CharacterTransferEvaluationInput(
+            var input = new TransferCharacterEvaluationInput(
                 Thunderbirds:
                 [
                     new(
@@ -601,8 +601,8 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.TransferCharacters
         public void Evaluate_WhenCharacterNotFoundInAnyThunderbird_ShouldThrowArgumentException()
         {
             // Arrange
-            var evaluator = new CharacterTransferEvaluator();
-            var input = new CharacterTransferEvaluationInput(
+            var evaluator = new TransferCharacterEvaluator();
+            var input = new TransferCharacterEvaluationInput(
                 Thunderbirds:
                 [
                     new(
@@ -634,9 +634,9 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.TransferCharacters
         public void Evaluate_WhenCharacterToBeTransferredAppearsInBothVehicles_ShouldThrowArgumentException()
         {
             // Arrange
-            var evaluator = new CharacterTransferEvaluator();
+            var evaluator = new TransferCharacterEvaluator();
 
-            var input = new CharacterTransferEvaluationInput(
+            var input = new TransferCharacterEvaluationInput(
                 Thunderbirds:
                 [
                     new(
@@ -671,9 +671,9 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.TransferCharacters
         public void Evaluate_WhenThunderbirdsProvidedHaveSameCode_ShouldThrowArgumentException()
         {
             // Arrange
-            var evaluator = new CharacterTransferEvaluator();
+            var evaluator = new TransferCharacterEvaluator();
 
-            var input = new CharacterTransferEvaluationInput(
+            var input = new TransferCharacterEvaluationInput(
                 Thunderbirds:
                 [
                     new(
@@ -705,9 +705,9 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.TransferCharacters
         public void Evaluate_WhenAssignmentsProvidedHaveSameCharacter_ShouldThrowArgumentException()
         {
             // Arrange
-            var evaluator = new CharacterTransferEvaluator();
+            var evaluator = new TransferCharacterEvaluator();
 
-            var input = new CharacterTransferEvaluationInput(
+            var input = new TransferCharacterEvaluationInput(
                 Thunderbirds:
                 [
                     new(
@@ -742,8 +742,8 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.TransferCharacters
         public void Evaluate_WhenThunderbirdCapacityIsZero_ShouldThrowArgumentException()
         {
             // Arrange
-            var evaluator = new CharacterTransferEvaluator();
-            var input = new CharacterTransferEvaluationInput(
+            var evaluator = new TransferCharacterEvaluator();
+            var input = new TransferCharacterEvaluationInput(
                 Thunderbirds:
                 [
                     new(
@@ -774,9 +774,9 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.TransferCharacters
         public void Evaluate_WhenThunderbirdCapacityAlreadyExceeded_ShouldThrowArgumentException()
         {
             // Arrange
-            var evaluator = new CharacterTransferEvaluator();
+            var evaluator = new TransferCharacterEvaluator();
 
-            var input = new CharacterTransferEvaluationInput(
+            var input = new TransferCharacterEvaluationInput(
                 Thunderbirds:
                 [
                     new(
@@ -809,9 +809,9 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.TransferCharacters
         public void Evaluate_WhenNonTransferredCharacterOccupiesBothThunderbirds_ShouldThrow()
         {
             // Arrange
-            var evaluator = new CharacterTransferEvaluator();
+            var evaluator = new TransferCharacterEvaluator();
 
-            var input = new CharacterTransferEvaluationInput(
+            var input = new TransferCharacterEvaluationInput(
                 Thunderbirds:
                 [
                     new(

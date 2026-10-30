@@ -5,6 +5,6 @@ namespace ThunderbirdsBoardGameEngine.Rules.Application.TransferCharacters.Inter
 {
     public interface IValidateCharacterTransferResolutionService
     {
-        CharacterTransferEvaluationResult ResolveTransferValidation(ValidateCharacterTransferInput input);
+        TransferCharacterEvaluationResult ResolveTransferValidation(ValidateCharacterTransferInput input);
     }
 }

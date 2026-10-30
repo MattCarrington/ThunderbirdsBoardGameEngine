@@ -29,13 +29,13 @@ namespace ThunderbirdsBoardGameEngine.Rules.Application.TransferCharacters.Trans
 
             var response = evaluationResult.Outcome switch
             {
-                CharacterTransferOutcome.Valid => new ValidateCharacterTransferResponse(
+                TransferCharacterOutcome.Valid => new ValidateCharacterTransferResponse(
                     CharacterTransferValidationOutcome: TransferCharacterValidationState.Valid,
                     CharacterTransferValidationRejectionReason: null),
-                CharacterTransferOutcome.NoChange => new ValidateCharacterTransferResponse(
+                TransferCharacterOutcome.NoChange => new ValidateCharacterTransferResponse(
                     CharacterTransferValidationOutcome: TransferCharacterValidationState.NoChange,
                     CharacterTransferValidationRejectionReason: null),
-                CharacterTransferOutcome.Rejected => new ValidateCharacterTransferResponse(
+                TransferCharacterOutcome.Rejected => new ValidateCharacterTransferResponse(
                     TransferCharacterValidationState.Rejected,
                     CharacterTransferValidationRejectionReason: MapRejectionReason(evaluationResult.RejectionReason)),
                 _ => throw new InvalidOperationException($"Unexpected outcome: {evaluationResult.Outcome}")
@@ -44,15 +44,15 @@ namespace ThunderbirdsBoardGameEngine.Rules.Application.TransferCharacters.Trans
             return Task.FromResult(response);
         }
 
-        private TransferCharacterValidationRejectionReason? MapRejectionReason(CharacterTransferRejectionReason? rejectionReason)
+        private TransferCharacterValidationRejectionReason? MapRejectionReason(TransferCharacterRejectionReason? rejectionReason)
         {
             ArgumentNullException.ThrowIfNull(rejectionReason, nameof(rejectionReason));
 
             return rejectionReason switch
             {
-                CharacterTransferRejectionReason.NotReciprocal => TransferCharacterValidationRejectionReason.NotReciprocal,
-                CharacterTransferRejectionReason.MachinesNotCoLocated => TransferCharacterValidationRejectionReason.MachinesNotCoLocated,
-                CharacterTransferRejectionReason.CharacterCapacityExceeded => TransferCharacterValidationRejectionReason.CharacterCapacityExceeded,
+                TransferCharacterRejectionReason.NotReciprocal => TransferCharacterValidationRejectionReason.NotReciprocal,
+                TransferCharacterRejectionReason.MachinesNotCoLocated => TransferCharacterValidationRejectionReason.MachinesNotCoLocated,
+                TransferCharacterRejectionReason.CharacterCapacityExceeded => TransferCharacterValidationRejectionReason.CharacterCapacityExceeded,
                 _ => throw new InvalidOperationException($"Unexpected rejection reason: {rejectionReason}")
             };
         }

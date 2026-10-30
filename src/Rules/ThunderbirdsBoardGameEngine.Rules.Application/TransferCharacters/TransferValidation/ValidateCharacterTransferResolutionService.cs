@@ -7,15 +7,15 @@ namespace ThunderbirdsBoardGameEngine.Rules.Application.TransferCharacters.Trans
     public class ValidateCharacterTransferResolutionService : IValidateCharacterTransferResolutionService
     {
         private readonly IThunderbirdTransferDefinitionLookup _lookup;
-        private readonly CharacterTransferEvaluator _evaluator;
+        private readonly TransferCharacterEvaluator _evaluator;
 
-        public ValidateCharacterTransferResolutionService(IThunderbirdTransferDefinitionLookup lookup, CharacterTransferEvaluator evaluator)
+        public ValidateCharacterTransferResolutionService(IThunderbirdTransferDefinitionLookup lookup, TransferCharacterEvaluator evaluator)
         {
             _lookup = lookup ?? throw new ArgumentNullException(nameof(lookup));
             _evaluator = evaluator ?? throw new ArgumentNullException(nameof(evaluator));
         }
 
-        public CharacterTransferEvaluationResult ResolveTransferValidation(ValidateCharacterTransferInput input)
+        public TransferCharacterEvaluationResult ResolveTransferValidation(ValidateCharacterTransferInput input)
         {
             ArgumentNullException.ThrowIfNull(input, nameof(input));
 
@@ -27,7 +27,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Application.TransferCharacters.Trans
                     Occupants: thunderbird.Occupants))
                 .ToArray();
 
-            var evaluationInput = new CharacterTransferEvaluationInput(
+            var evaluationInput = new TransferCharacterEvaluationInput(
                 thunderbirds,
                 input.Assignments);
 

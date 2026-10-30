@@ -106,7 +106,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Infrastructure
 
         private static void RegisterCharacterTransferServices(IServiceCollection services)
         {
-            services.AddSingleton<CharacterTransferEvaluator>();
+            services.AddSingleton<TransferCharacterEvaluator>();
             services.AddSingleton<IValidateCharacterTransferResolutionService, ValidateCharacterTransferResolutionService>();
         }
     }

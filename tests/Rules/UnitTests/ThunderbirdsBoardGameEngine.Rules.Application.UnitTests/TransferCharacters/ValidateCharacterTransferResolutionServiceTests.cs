@@ -26,7 +26,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Application.UnitTests.TransferCharac
             lookup.GetThunderbirdCharacterCapacity(Arg.Is(thunderbird2.ThunderbirdCode))
                 .Returns(2);
 
-            var evaluator = new CharacterTransferEvaluator();
+            var evaluator = new TransferCharacterEvaluator();
 
             var service = new ValidateCharacterTransferResolutionService(lookup, evaluator);
 
@@ -34,7 +34,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Application.UnitTests.TransferCharac
             var result = service.ResolveTransferValidation(input);
 
             // Assert
-            Assert.Equal(CharacterTransferOutcome.Valid, result.Outcome);
+            Assert.Equal(TransferCharacterOutcome.Valid, result.Outcome);
             Assert.Null(result.RejectionReason);
 
             lookup.Received(1).GetThunderbirdCharacterCapacity(thunderbird1.ThunderbirdCode);
@@ -55,7 +55,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Application.UnitTests.TransferCharac
 
             var service = new ValidateCharacterTransferResolutionService(
                 lookup,
-                new CharacterTransferEvaluator());
+                new TransferCharacterEvaluator());
 
             var input = CreateValidInput();
 
@@ -68,7 +68,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Application.UnitTests.TransferCharac
             // Arrange
             var lookup = Substitute.For<IThunderbirdTransferDefinitionLookup>();
 
-            var evaluator = new CharacterTransferEvaluator();
+            var evaluator = new TransferCharacterEvaluator();
 
             var service = new ValidateCharacterTransferResolutionService(lookup, evaluator);
 
