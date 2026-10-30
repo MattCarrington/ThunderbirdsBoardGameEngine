@@ -1,13 +1,13 @@
 ﻿using NSubstitute;
 using NSubstitute.ExceptionExtensions;
 using ThunderbirdsBoardGameEngine.ReferenceData.Core.Identities;
-using ThunderbirdsBoardGameEngine.Rules.Application.CharacterTransfer.Interfaces;
-using ThunderbirdsBoardGameEngine.Rules.Application.CharacterTransfer.TransferValidation;
 using ThunderbirdsBoardGameEngine.Rules.Application.Exceptions;
+using ThunderbirdsBoardGameEngine.Rules.Application.TransferCharacters.Interfaces;
+using ThunderbirdsBoardGameEngine.Rules.Application.TransferCharacters.TransferValidation;
 using ThunderbirdsBoardGameEngine.Rules.Domain.TransferCharacters;
 using ThunderbirdsBoardGameEngine.Rules.Domain.TransferCharacters.Evaluation;
 
-namespace ThunderbirdsBoardGameEngine.Rules.Application.UnitTests.CharacterTransfer
+namespace ThunderbirdsBoardGameEngine.Rules.Application.UnitTests.TransferCharacters
 {
     public class ValidateCharacterTransferResolutionServiceTests
     {

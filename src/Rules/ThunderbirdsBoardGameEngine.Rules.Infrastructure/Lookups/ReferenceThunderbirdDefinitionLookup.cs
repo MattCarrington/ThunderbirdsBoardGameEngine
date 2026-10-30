@@ -1,9 +1,9 @@
 ﻿using ThunderbirdsBoardGameEngine.ReferenceData.Core.Identities;
 using ThunderbirdsBoardGameEngine.ReferenceData.Core.Model;
 using ThunderbirdsBoardGameEngine.ReferenceData.Runtime.Interfaces;
-using ThunderbirdsBoardGameEngine.Rules.Application.CharacterTransfer.Interfaces;
 using ThunderbirdsBoardGameEngine.Rules.Application.Exceptions;
 using ThunderbirdsBoardGameEngine.Rules.Application.Movement.Interfaces;
+using ThunderbirdsBoardGameEngine.Rules.Application.TransferCharacters.Interfaces;
 using ThunderbirdsBoardGameEngine.Rules.Domain.Movement.Contributions;
 
 namespace ThunderbirdsBoardGameEngine.Rules.Infrastructure.Lookups

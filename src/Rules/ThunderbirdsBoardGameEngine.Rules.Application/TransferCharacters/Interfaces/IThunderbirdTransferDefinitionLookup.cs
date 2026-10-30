@@ -1,6 +1,6 @@
 ﻿using ThunderbirdsBoardGameEngine.ReferenceData.Core.Identities;
 
-namespace ThunderbirdsBoardGameEngine.Rules.Application.CharacterTransfer.Interfaces
+namespace ThunderbirdsBoardGameEngine.Rules.Application.TransferCharacters.Interfaces
 {
     public interface IThunderbirdTransferDefinitionLookup
     {

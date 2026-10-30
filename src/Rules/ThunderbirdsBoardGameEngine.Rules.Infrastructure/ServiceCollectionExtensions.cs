@@ -1,12 +1,12 @@
 ﻿using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using System.Runtime.CompilerServices;
-using ThunderbirdsBoardGameEngine.Rules.Application.CharacterTransfer.Interfaces;
-using ThunderbirdsBoardGameEngine.Rules.Application.CharacterTransfer.TransferValidation;
 using ThunderbirdsBoardGameEngine.Rules.Application.Movement.Interfaces;
 using ThunderbirdsBoardGameEngine.Rules.Application.Movement.MapTraversal;
 using ThunderbirdsBoardGameEngine.Rules.Application.Rescue.CalculateRescueTarget;
 using ThunderbirdsBoardGameEngine.Rules.Application.Rescue.Interfaces;
+using ThunderbirdsBoardGameEngine.Rules.Application.TransferCharacters.Interfaces;
+using ThunderbirdsBoardGameEngine.Rules.Application.TransferCharacters.TransferValidation;
 using ThunderbirdsBoardGameEngine.Rules.Application.Validators;
 using ThunderbirdsBoardGameEngine.Rules.Domain.EventCards;
 using ThunderbirdsBoardGameEngine.Rules.Domain.FabCards;

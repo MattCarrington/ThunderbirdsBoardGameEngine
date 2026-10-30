@@ -1,8 +1,8 @@
-﻿using ThunderbirdsBoardGameEngine.Rules.Application.CharacterTransfer.Interfaces;
+﻿using ThunderbirdsBoardGameEngine.Rules.Application.TransferCharacters.Interfaces;
 using ThunderbirdsBoardGameEngine.Rules.Domain.TransferCharacters;
 using ThunderbirdsBoardGameEngine.Rules.Domain.TransferCharacters.Evaluation;
 
-namespace ThunderbirdsBoardGameEngine.Rules.Application.CharacterTransfer.TransferValidation
+namespace ThunderbirdsBoardGameEngine.Rules.Application.TransferCharacters.TransferValidation
 {
     public class ValidateCharacterTransferResolutionService : IValidateCharacterTransferResolutionService
     {
