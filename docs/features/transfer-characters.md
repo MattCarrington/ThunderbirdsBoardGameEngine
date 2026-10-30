@@ -42,6 +42,20 @@ The swap is evaluated against its complete proposed final state. It is not
 processed as two sequential transfers. This permits characters to exchange
 places between full machines without creating an invalid intermediate state.
 
+### Empty Thunderbird Machines
+
+A successful transfer may leave its source Thunderbird Machine without any
+characters. An empty machine is a valid persisted game state and does not
+invalidate the transfer.
+
+An empty Thunderbird Machine cannot subsequently be moved. GameState enforces
+this when processing a movement request because it owns the current character
+assignments.
+
+Active-character and turn enforcement remain outside this slice. Until those
+features are introduced, the presence of any character is sufficient to permit
+a movement attempt.
+
 ### Request cardinality
 
 - Zero assignments is not a well-formed Transfer Characters request.
@@ -140,6 +154,13 @@ Scenario: Resume a game after transferring a character
     Given Scott has been transferred from Thunderbird 1 to Thunderbird 2
     When the game is retrieved again
     Then Scott should still be aboard Thunderbird 2
+
+Scenario: Reject moving an empty Thunderbird Machine
+    Given Gordon has transferred from Thunderbird 4 to Thunderbird 2
+    And Thunderbird 4 contains no characters
+    When the player attempts to move Thunderbird 4
+    Then the movement should be rejected
+    And Thunderbird 4 should remain at its current location
 ```
 
 ## Thunderbird Machine character capacities
