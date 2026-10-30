@@ -16,26 +16,12 @@ namespace ThunderbirdsBoardGameEngine.Rules.Infrastructure.UnitTests.Lookups
         public void GetThunderbirdMovementContribution_WhenValidThunderbirdCode_ReturnsThunderbirdContribution()
         {
             // Arrange
-            var code = new ThunderbirdCode("test-thunderbird");
+            var thunderbirdDefinition = CreateThunderbirdDefinition();
 
-            var thunderbirdDefinition = ReferenceDefinitionFactory.Thunderbird(
-                code: code,
-                displayName: "Test Thunderbird",
-                domain: MovementDomain.Earth,
-                topSpeed: 3,
-                characterCapacity: 1);
-
-            var catalog = Substitute.For<IThunderbirdDefinitionCatalog>();
-            catalog.TryGetByCode(Arg.Any<ThunderbirdCode>(), out Arg.Any<ReferenceThunderbirdDefinition?>()).Returns(x =>
-            {
-                x[1] = thunderbirdDefinition;
-                return true;
-            });
-
-            var lookup = new ReferenceThunderbirdDefinitionLookup(catalog);
+            var lookup = CreateLookupWithDefinition(thunderbirdDefinition);
 
             // Act
-            var result = lookup.GetThunderbirdMovementContribution(code);
+            var result = lookup.GetThunderbirdMovementContribution(thunderbirdDefinition.Code);
 
             // Assert
             Assert.NotNull(result);
@@ -50,14 +36,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Infrastructure.UnitTests.Lookups
             // Arrange
             var code = new ThunderbirdCode("non-existent-thunderbird");
 
-            var catalog = Substitute.For<IThunderbirdDefinitionCatalog>();
-            catalog.TryGetByCode(Arg.Any<ThunderbirdCode>(), out Arg.Any<ReferenceThunderbirdDefinition?>()).Returns(x =>
-            {
-                x[1] = null;
-                return false;
-            });
-
-            var lookup = new ReferenceThunderbirdDefinitionLookup(catalog);
+            var lookup = CreateLookupWithNoDefinition();
 
             // Act & Assert
             var ex = Assert.Throws<ReferenceDataNotFoundException>(() => lookup.GetThunderbirdMovementContribution(code));
@@ -69,26 +48,12 @@ namespace ThunderbirdsBoardGameEngine.Rules.Infrastructure.UnitTests.Lookups
         public void GetThunderbirdCapacity_WhenValidThunderbirdCode_ReturnsCharacterCapacity()
         {
             // Arrange
-            var code = new ThunderbirdCode("test-thunderbird");
+            var thunderbirdDefinition = CreateThunderbirdDefinition();
 
-            var thunderbirdDefinition = ReferenceDefinitionFactory.Thunderbird(
-                code: code,
-                displayName: "Test Thunderbird",
-                domain: MovementDomain.Earth,
-                topSpeed: 3,
-                characterCapacity: 3);
-
-            var catalog = Substitute.For<IThunderbirdDefinitionCatalog>();
-            catalog.TryGetByCode(Arg.Any<ThunderbirdCode>(), out Arg.Any<ReferenceThunderbirdDefinition?>()).Returns(x =>
-            {
-                x[1] = thunderbirdDefinition;
-                return true;
-            });
-
-            var lookup = new ReferenceThunderbirdDefinitionLookup(catalog);
+            var lookup = CreateLookupWithDefinition(thunderbirdDefinition);
 
             // Act
-            var result = lookup.GetThunderbirdCharacterCapacity(code);
+            var result = lookup.GetThunderbirdCharacterCapacity(thunderbirdDefinition.Code);
 
             // Assert
             Assert.Equal(thunderbirdDefinition.CharacterCapacity, result);
@@ -100,19 +65,57 @@ namespace ThunderbirdsBoardGameEngine.Rules.Infrastructure.UnitTests.Lookups
             // Arrange
             var code = new ThunderbirdCode("non-existent-thunderbird");
 
-            var catalog = Substitute.For<IThunderbirdDefinitionCatalog>();
-            catalog.TryGetByCode(Arg.Any<ThunderbirdCode>(), out Arg.Any<ReferenceThunderbirdDefinition?>()).Returns(x =>
-            {
-                x[1] = null;
-                return false;
-            });
-
-            var lookup = new ReferenceThunderbirdDefinitionLookup(catalog);
+            var lookup = CreateLookupWithNoDefinition();
 
             // Act & Assert
             var ex = Assert.Throws<ReferenceDataNotFoundException>(() => lookup.GetThunderbirdCharacterCapacity(code));
             Assert.Equal("Thunderbird", ex.ResourceType);
             Assert.Equal(code.ToString(), ex.Code);
+        }
+
+        private static ReferenceThunderbirdDefinition CreateThunderbirdDefinition()
+        {
+            return ReferenceDefinitionFactory.Thunderbird(
+                code: new ThunderbirdCode("test-thunderbird"),
+                displayName: "Test Thunderbird",
+                domain: MovementDomain.Earth,
+                topSpeed: 3,
+                characterCapacity: 2);
+        }
+
+        private static ReferenceThunderbirdDefinitionLookup CreateLookupWithDefinition(ReferenceThunderbirdDefinition definition)
+        {
+            var catalog = Substitute.For<IThunderbirdDefinitionCatalog>();
+
+            catalog.TryGetByCode(definition.Code, out Arg.Any<ReferenceThunderbirdDefinition?>())
+                .Returns(call =>
+                {
+                    call[1] = definition;
+                    return true;
+                });
+
+            return new ReferenceThunderbirdDefinitionLookup(catalog);
+        }
+
+        private static ReferenceThunderbirdDefinitionLookup CreateLookupWithNoDefinition()
+        {
+            var catalog = Substitute.For<IThunderbirdDefinitionCatalog>();
+
+            catalog.TryGetByCode(Arg.Any<ThunderbirdCode>(), out Arg.Any<ReferenceThunderbirdDefinition?>())
+                .Returns(call =>
+                {
+                    call[1] = null;
+                    return false;
+                });
+
+            return new ReferenceThunderbirdDefinitionLookup(catalog);
+        }
+
+        private static ReferenceThunderbirdDefinitionLookup CreateEmptyLookup()
+        {
+            var catalog = Substitute.For<IThunderbirdDefinitionCatalog>();
+
+            return new ReferenceThunderbirdDefinitionLookup(catalog);
         }
     }
 }
