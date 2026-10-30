@@ -27,7 +27,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Infrastructure.Lookups
                 TopSpeed: thunderbird.TopSpeed);
         }
 
-        public int GetThunderbirdCapacity(ThunderbirdCode thunderbirdCode)
+        public int GetThunderbirdCharacterCapacity(ThunderbirdCode thunderbirdCode)
         {
             var thunderbird = GetThunderbirdDefinition(thunderbirdCode);
 

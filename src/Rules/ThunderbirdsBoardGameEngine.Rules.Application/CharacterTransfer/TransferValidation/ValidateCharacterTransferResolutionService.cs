@@ -20,7 +20,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Application.CharacterTransfer.Transf
             var thunderbirds = input.Thunderbirds
                 .Select(thunderbird => new ThunderbirdTransferState(
                     ThunderbirdCode: thunderbird.ThunderbirdCode,
-                    CharacterCapacity: _lookup.GetThunderbirdCapacity(thunderbird.ThunderbirdCode),
+                    CharacterCapacity: _lookup.GetThunderbirdCharacterCapacity(thunderbird.ThunderbirdCode),
                     CurrentLocation: thunderbird.CurrentLocation,
                     Occupants: thunderbird.Occupants))
                 .ToArray();

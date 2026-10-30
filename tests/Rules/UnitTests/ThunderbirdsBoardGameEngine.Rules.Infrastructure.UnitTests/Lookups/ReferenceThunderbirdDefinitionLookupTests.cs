@@ -88,7 +88,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Infrastructure.UnitTests.Lookups
             var lookup = new ReferenceThunderbirdDefinitionLookup(catalog);
 
             // Act
-            var result = lookup.GetThunderbirdCapacity(code);
+            var result = lookup.GetThunderbirdCharacterCapacity(code);
 
             // Assert
             Assert.Equal(thunderbirdDefinition.CharacterCapacity, result);
@@ -110,7 +110,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Infrastructure.UnitTests.Lookups
             var lookup = new ReferenceThunderbirdDefinitionLookup(catalog);
 
             // Act & Assert
-            var ex = Assert.Throws<ReferenceDataNotFoundException>(() => lookup.GetThunderbirdCapacity(code));
+            var ex = Assert.Throws<ReferenceDataNotFoundException>(() => lookup.GetThunderbirdCharacterCapacity(code));
             Assert.Equal("Thunderbird", ex.ResourceType);
             Assert.Equal(code.ToString(), ex.Code);
         }

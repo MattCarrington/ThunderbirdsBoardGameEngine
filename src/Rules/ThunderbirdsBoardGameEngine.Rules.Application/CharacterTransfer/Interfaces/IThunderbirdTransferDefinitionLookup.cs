@@ -4,6 +4,6 @@ namespace ThunderbirdsBoardGameEngine.Rules.Application.CharacterTransfer.Interf
 {
     public interface IThunderbirdTransferDefinitionLookup
     {
-        int GetThunderbirdCapacity(ThunderbirdCode thunderbirdCode);
+        int GetThunderbirdCharacterCapacity(ThunderbirdCode thunderbirdCode);
     }
 }
