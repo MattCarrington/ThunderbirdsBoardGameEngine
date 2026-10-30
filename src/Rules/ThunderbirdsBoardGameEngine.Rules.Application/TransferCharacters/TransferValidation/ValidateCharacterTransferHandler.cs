@@ -7,7 +7,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Application.TransferCharacters.Trans
 {
     public class ValidateCharacterTransferHandler : IRequestHandler<ValidateCharacterTransferQuery, ValidateCharacterTransferResponse>
     {
-        public IValidateCharacterTransferResolutionService _validationService;
+        private readonly IValidateCharacterTransferResolutionService _validationService;
 
         public ValidateCharacterTransferHandler(IValidateCharacterTransferResolutionService validationService)
         {
