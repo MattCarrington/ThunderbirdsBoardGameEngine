@@ -2,7 +2,7 @@
 
 namespace ThunderbirdsBoardGameEngine.Rules.Application.TransferCharacters.TransferValidation
 {
-    public record ProposedAssignments(
+    public record RequestedCharacterAssignment(
         CharacterCode CharacterCode,
         ThunderbirdCode TargetThunderbirdCode);
 }

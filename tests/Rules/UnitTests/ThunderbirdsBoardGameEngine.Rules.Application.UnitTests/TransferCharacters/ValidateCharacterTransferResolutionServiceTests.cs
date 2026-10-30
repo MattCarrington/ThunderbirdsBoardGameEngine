@@ -88,7 +88,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Application.UnitTests.TransferCharac
                 CurrentLocation: new LocationCode("Location-1"),
                 Occupants: [new CharacterCode("Char-2"), new CharacterCode("Char-3")]);
 
-            var assignments = new List<ProposedCharacterAssignment>
+            var assignments = new List<RequestedCharacterAssignment>
             {
                 new(new CharacterCode("Char-1"), new ThunderbirdCode("TB-2")),
                 new(new CharacterCode("Char-2"), new ThunderbirdCode("TB-1"))

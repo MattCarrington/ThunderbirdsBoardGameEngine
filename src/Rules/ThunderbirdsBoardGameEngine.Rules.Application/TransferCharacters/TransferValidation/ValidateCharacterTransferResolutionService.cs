@@ -1,5 +1,4 @@
 ﻿using ThunderbirdsBoardGameEngine.Rules.Application.TransferCharacters.Interfaces;
-using ThunderbirdsBoardGameEngine.Rules.Domain.TransferCharacters;
 using ThunderbirdsBoardGameEngine.Rules.Domain.TransferCharacters.Evaluation;
 
 namespace ThunderbirdsBoardGameEngine.Rules.Application.TransferCharacters.TransferValidation
@@ -27,9 +26,15 @@ namespace ThunderbirdsBoardGameEngine.Rules.Application.TransferCharacters.Trans
                     Occupants: thunderbird.Occupants))
                 .ToArray();
 
+            var assignments = input.Assignments
+                .Select(assignment => new ProposedCharacterAssignment(
+                    CharacterCode: assignment.CharacterCode,
+                    TargetThunderbirdCode: assignment.TargetThunderbirdCode))
+                .ToArray();
+
             var evaluationInput = new TransferCharacterEvaluationInput(
                 thunderbirds,
-                input.Assignments);
+                assignments);
 
             return _evaluator.Evaluate(evaluationInput);
         }

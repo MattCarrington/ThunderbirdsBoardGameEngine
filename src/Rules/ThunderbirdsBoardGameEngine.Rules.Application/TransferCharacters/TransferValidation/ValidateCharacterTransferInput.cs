@@ -1,8 +1,8 @@
-﻿using ThunderbirdsBoardGameEngine.Rules.Domain.TransferCharacters.Evaluation;
+﻿using ThunderbirdsBoardGameEngine.Rules.Domain.TransferCharacters;
 
-namespace ThunderbirdsBoardGameEngine.Rules.Domain.TransferCharacters
+namespace ThunderbirdsBoardGameEngine.Rules.Application.TransferCharacters.TransferValidation
 {
     public sealed record ValidateCharacterTransferInput(
         IReadOnlyCollection<CurrentThunderbirdState> Thunderbirds,
-        IReadOnlyCollection<ProposedCharacterAssignment> Assignments);
+        IReadOnlyCollection<RequestedCharacterAssignment> Assignments);
 }

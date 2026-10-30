@@ -17,13 +17,8 @@ namespace ThunderbirdsBoardGameEngine.Rules.Application.TransferCharacters.Trans
         public Task<ValidateCharacterTransferResponse> Handle(ValidateCharacterTransferQuery request, CancellationToken cancellationToken)
         {
             var input = new ValidateCharacterTransferInput(
-                Thunderbirds: request.GameState.Select(gs => new CurrentThunderbirdState(
-                    ThunderbirdCode: gs.ThunderbirdCode,
-                    CurrentLocation: gs.CurrentLocation,
-                    Occupants: gs.Occupants)).ToArray(),
-                Assignments: request.ProposedAssignments.Select(pa => new ProposedCharacterAssignment(
-                    CharacterCode: pa.CharacterCode,
-                    TargetThunderbirdCode: pa.TargetThunderbirdCode)).ToArray());
+                Thunderbirds: request.CurrentState,
+                Assignments: request.ProposedAssignments);
 
             var evaluationResult = _validationService.ResolveTransferValidation(input);
 

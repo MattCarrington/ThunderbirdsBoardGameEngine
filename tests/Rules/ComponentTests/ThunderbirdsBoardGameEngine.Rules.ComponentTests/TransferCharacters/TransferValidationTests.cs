@@ -17,7 +17,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.TransferCharacters
             var mediator = CreateMediator();
 
             var request = new ValidateCharacterTransferQuery(
-                GameState: [
+                CurrentState: [
                     new(KnownThunderbirdCodes.Thunderbird1, KnownLocationCodes.Europe, [ KnownCharacterCodes.Scott ]),
                     new(KnownThunderbirdCodes.Thunderbird2, KnownLocationCodes.Europe, [ KnownCharacterCodes.Virgil ])
                     ],
@@ -41,7 +41,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.TransferCharacters
             var mediator = CreateMediator();
 
             var request = new ValidateCharacterTransferQuery(
-                GameState: [
+                CurrentState: [
                     new(KnownThunderbirdCodes.Thunderbird1, KnownLocationCodes.Europe, [ KnownCharacterCodes.Scott ]),
                     new(KnownThunderbirdCodes.Thunderbird4, KnownLocationCodes.Europe, [ KnownCharacterCodes.Gordon ])
                     ],
@@ -65,7 +65,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.TransferCharacters
             var mediator = CreateMediator();
 
             var request = new ValidateCharacterTransferQuery(
-                GameState: [
+                CurrentState: [
                     new(KnownThunderbirdCodes.Thunderbird1, KnownLocationCodes.Europe, [ KnownCharacterCodes.Scott ]),
                     new(KnownThunderbirdCodes.Thunderbird2, KnownLocationCodes.SouthPacific, [ KnownCharacterCodes.Virgil ])
                     ],
@@ -89,7 +89,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.TransferCharacters
             var mediator = CreateMediator();
 
             var request = new ValidateCharacterTransferQuery(
-                GameState: [
+                CurrentState: [
                     new(KnownThunderbirdCodes.Thunderbird1, KnownLocationCodes.Europe, [ KnownCharacterCodes.Scott ]),
                     new(KnownThunderbirdCodes.Thunderbird4, KnownLocationCodes.Europe, [ KnownCharacterCodes.Gordon ])
                     ],
@@ -114,7 +114,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.TransferCharacters
             var mediator = CreateMediator();
 
             var request = new ValidateCharacterTransferQuery(
-                GameState: [
+                CurrentState: [
                     new(KnownThunderbirdCodes.Thunderbird1, KnownLocationCodes.Europe, [ KnownCharacterCodes.Scott, KnownCharacterCodes.Gordon ]),
                     new(KnownThunderbirdCodes.Thunderbird2, KnownLocationCodes.Europe, [ KnownCharacterCodes.Virgil ])
                     ],
