@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Microsoft.Extensions.DependencyInjection;
+using ThunderbirdsBoardGameEngine.ReferenceData.Core.Identities;
 using ThunderbirdsBoardGameEngine.ReferenceData.Core.KnownIdentities;
 using ThunderbirdsBoardGameEngine.Rules.Application.TransferCharacters.TransferValidation;
 using ThunderbirdsBoardGameEngine.Rules.Infrastructure;
@@ -130,6 +131,24 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.TransferCharacters
             Assert.NotNull(result);
             Assert.Equal(TransferCharacterValidationState.Rejected, result.TransferCharacterValidationOutcome);
             Assert.Equal(TransferCharacterValidationRejectionReason.NotReciprocal, result.TransferCharacterValidationRejectionReason);
+        }
+
+        [Fact]
+        public async Task ThrowsWhenNonExistantThunderbird()
+        {
+            // Arrange
+            var mediator = CreateMediator();
+
+            var request = new ValidateCharacterTransferQuery(
+                CurrentState: [
+                    new(KnownThunderbirdCodes.Thunderbird1, KnownLocationCodes.Europe, [ KnownCharacterCodes.Scott ])
+                    ],
+                ProposedAssignments: [
+                    new(KnownCharacterCodes.Scott, new ThunderbirdCode("thunderbird-999"))
+                    ]);
+
+            // Act & Assert
+            await Assert.ThrowsAsync<ArgumentException>(() => mediator.Send(request, TestContext.Current.CancellationToken));
         }
 
         private static IMediator CreateMediator()
