@@ -50,7 +50,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.TransferCharacters.Evaluation
 
             if (firstThunderbird.CurrentLocation != secondThunderbird.CurrentLocation)
             {
-                return new TransferCharacterEvaluationResult(TransferCharacterOutcome.Rejected, TransferCharacterRejectionReason.MachinesNotCoLocated); // Thunderbirds are not co-located
+                return TransferCharacterEvaluationResult.Rejected(TransferCharacterRejectionReason.MachinesNotCoLocated);
             }
 
             if (input.Assignments.Count == 1)
@@ -69,7 +69,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.TransferCharacters.Evaluation
 
             if (assignment.TargetThunderbirdCode == currentOccupancy.ThunderbirdCode)
             {
-                return new TransferCharacterEvaluationResult(TransferCharacterOutcome.NoChange); // Character is already in the target Thunderbird
+                return TransferCharacterEvaluationResult.NoChange();
             }
 
             var destinationThunderbird = GetDestinationThunderbird(input, assignment.TargetThunderbirdCode);
@@ -77,10 +77,10 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.TransferCharacters.Evaluation
             if (destinationThunderbird.Occupants.Count + 1 > destinationThunderbird.CharacterCapacity)
             {
                 // Target Thunderbird is at full capacity
-                return new TransferCharacterEvaluationResult(TransferCharacterOutcome.Rejected, TransferCharacterRejectionReason.CharacterCapacityExceeded);
+                return TransferCharacterEvaluationResult.Rejected(TransferCharacterRejectionReason.CharacterCapacityExceeded);
             }
 
-            return new TransferCharacterEvaluationResult(TransferCharacterOutcome.Valid); // All checks passed, transfer is possible 
+            return TransferCharacterEvaluationResult.Valid(); // All checks passed, transfer is possible 
         }
 
         private static TransferCharacterEvaluationResult EvaluateReciprocalSwap(TransferCharacterEvaluationInput input)
@@ -96,7 +96,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.TransferCharacters.Evaluation
             if (firstAssignment.TargetThunderbirdCode == secondAssignment.TargetThunderbirdCode)
             {
                 // Both assignments target the same Thunderbird
-                return new TransferCharacterEvaluationResult(TransferCharacterOutcome.Rejected, TransferCharacterRejectionReason.NotReciprocal);
+                return TransferCharacterEvaluationResult.Rejected(TransferCharacterRejectionReason.NotReciprocal);
             }
 
             var transfers = 0;
@@ -115,16 +115,16 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.TransferCharacters.Evaluation
 
             if (transfers == 0)
             {
-                return new TransferCharacterEvaluationResult(TransferCharacterOutcome.NoChange); // No transfers needed, all characters are already in their target Thunderbirds
+                return TransferCharacterEvaluationResult.NoChange(); // No transfers needed, all characters are already in their target Thunderbirds
             }
 
             if (transfers == 1)
             {
                 // Only one transfer means it is not a reciprocal swap
-                return new TransferCharacterEvaluationResult(TransferCharacterOutcome.Rejected, TransferCharacterRejectionReason.NotReciprocal);
+                return TransferCharacterEvaluationResult.Rejected(TransferCharacterRejectionReason.NotReciprocal);
             }
 
-            return new TransferCharacterEvaluationResult(TransferCharacterOutcome.Valid); // All checks passed, transfer is possible 
+            return TransferCharacterEvaluationResult.Valid(); // All checks passed, transfer is possible 
         }
 
         private static ThunderbirdTransferState GetDestinationThunderbird(TransferCharacterEvaluationInput input, ThunderbirdCode assignment)
