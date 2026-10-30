@@ -30,14 +30,14 @@ namespace ThunderbirdsBoardGameEngine.Rules.Application.TransferCharacters.Trans
             var response = evaluationResult.Outcome switch
             {
                 TransferCharacterOutcome.Valid => new ValidateCharacterTransferResponse(
-                    CharacterTransferValidationOutcome: TransferCharacterValidationState.Valid,
-                    CharacterTransferValidationRejectionReason: null),
+                    TransferCharacterValidationOutcome: TransferCharacterValidationState.Valid,
+                    TransferCharacterValidationRejectionReason: null),
                 TransferCharacterOutcome.NoChange => new ValidateCharacterTransferResponse(
-                    CharacterTransferValidationOutcome: TransferCharacterValidationState.NoChange,
-                    CharacterTransferValidationRejectionReason: null),
+                    TransferCharacterValidationOutcome: TransferCharacterValidationState.NoChange,
+                    TransferCharacterValidationRejectionReason: null),
                 TransferCharacterOutcome.Rejected => new ValidateCharacterTransferResponse(
                     TransferCharacterValidationState.Rejected,
-                    CharacterTransferValidationRejectionReason: MapRejectionReason(evaluationResult.RejectionReason)),
+                    TransferCharacterValidationRejectionReason: MapRejectionReason(evaluationResult.RejectionReason)),
                 _ => throw new InvalidOperationException($"Unexpected outcome: {evaluationResult.Outcome}")
             };
 
