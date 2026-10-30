@@ -4,7 +4,7 @@ using ThunderbirdsBoardGameEngine.Rules.Domain.TransferCharacters.Evaluation;
 
 namespace ThunderbirdsBoardGameEngine.Rules.Application.CharacterTransfer.TransferValidation
 {
-    internal class ValidateCharacterTransferResolutionService
+    public class ValidateCharacterTransferResolutionService : IValidateCharacterTransferResolutionService
     {
         private readonly IThunderbirdTransferDefinitionLookup _lookup;
         private readonly CharacterTransferEvaluator _evaluator;
