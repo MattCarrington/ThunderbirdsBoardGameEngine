@@ -2,33 +2,28 @@
 {
     public sealed record TransferCharacterEvaluationResult
     {
-        public TransferCharacterOutcome Outcome { get; }
+        public bool IsPermitted { get; set; }
 
         public TransferCharacterRejectionReason? RejectionReason { get; }
 
         private TransferCharacterEvaluationResult(
-            TransferCharacterOutcome outcome,
+            bool isPermitted,
             TransferCharacterRejectionReason? rejectionReason = null)
         {
-            Outcome = outcome;
+            IsPermitted = isPermitted;
             RejectionReason = rejectionReason;
         }
 
-        public static TransferCharacterEvaluationResult Valid()
+        public static TransferCharacterEvaluationResult Permitted()
         {
-            return new(TransferCharacterOutcome.Valid);
-        }
-
-        public static TransferCharacterEvaluationResult NoChange()
-        {
-            return new(TransferCharacterOutcome.NoChange);
+            return new(true);
         }
 
         public static TransferCharacterEvaluationResult Rejected(
             TransferCharacterRejectionReason reason)
         {
             return new(
-                TransferCharacterOutcome.Rejected,
+                false,
                 reason);
         }
     }

@@ -42,7 +42,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.TransferCharacters
             var result = evaluator.Evaluate(input);
 
             // Assert
-            Assert.Equal(TransferCharacterOutcome.Valid, result.Outcome);
+            Assert.True(result.IsPermitted);
             Assert.Null(result.RejectionReason);
         }
 
@@ -82,7 +82,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.TransferCharacters
             var result = evaluator.Evaluate(input);
 
             // Assert
-            Assert.Equal(TransferCharacterOutcome.Rejected, result.Outcome);
+            Assert.False(result.IsPermitted);
             Assert.Equal(TransferCharacterRejectionReason.MachinesNotCoLocated, result.RejectionReason);
         }
 
@@ -122,12 +122,12 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.TransferCharacters
             var result = evaluator.Evaluate(input);
 
             // Assert
-            Assert.Equal(TransferCharacterOutcome.Rejected, result.Outcome);
+            Assert.False(result.IsPermitted);
             Assert.Equal(TransferCharacterRejectionReason.CharacterCapacityExceeded, result.RejectionReason);
         }
 
         [Fact]
-        public void Evaluate_WhenDestinationSameAsSource_ShouldReturnNoChangeOutcome()
+        public void Evaluate_WhenDestinationSameAsSource_ShouldThrowArgumentException()
         {
             // Arrange
             var evaluator = new TransferCharacterEvaluator();
@@ -156,12 +156,8 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.TransferCharacters
                         TargetThunderbirdCode: new("thunderbird-1")),
                 ]);
 
-            // Act
-            var result = evaluator.Evaluate(input);
-
-            // Assert
-            Assert.Equal(TransferCharacterOutcome.NoChange, result.Outcome);
-            Assert.Null(result.RejectionReason);
+            // Act & Assert
+            Assert.Throws<ArgumentException>(() => evaluator.Evaluate(input));
         }
 
         [Fact]
@@ -204,7 +200,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.TransferCharacters
             var result = evaluator.Evaluate(input);
 
             // Assert
-            Assert.Equal(TransferCharacterOutcome.Valid, result.Outcome);
+            Assert.True(result.IsPermitted);
             Assert.Null(result.RejectionReason);
         }
 
@@ -250,7 +246,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.TransferCharacters
             var result = evaluator.Evaluate(input);
 
             // Assert
-            Assert.Equal(TransferCharacterOutcome.Valid, result.Outcome);
+            Assert.True(result.IsPermitted);
             Assert.Null(result.RejectionReason);
         }
 
@@ -292,7 +288,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.TransferCharacters
             var result = evaluator.Evaluate(input);
 
             // Assert
-            Assert.Equal(TransferCharacterOutcome.Rejected, result.Outcome);
+            Assert.False(result.IsPermitted);
             Assert.Equal(TransferCharacterRejectionReason.NotReciprocal, result.RejectionReason);
         }
 
@@ -336,12 +332,12 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.TransferCharacters
             var result = evaluator.Evaluate(input);
 
             // Assert
-            Assert.Equal(TransferCharacterOutcome.Rejected, result.Outcome);
+            Assert.False(result.IsPermitted);
             Assert.Equal(TransferCharacterRejectionReason.MachinesNotCoLocated, result.RejectionReason);
         }
 
         [Fact]
-        public void Evaluate_WhenReciprocalSwapResultsInNoChange_ShouldReturnNoChangeOutcome()
+        public void Evaluate_WhenReciprocalSwapResultsInNoChange_ShouldThrowArgumentException()
         {
             // Arrange
             var evaluator = new TransferCharacterEvaluator();
@@ -376,12 +372,8 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.TransferCharacters
                         TargetThunderbirdCode: new("thunderbird-2"))
                 ]);
 
-            // Act
-            var result = evaluator.Evaluate(input);
-
-            // Assert
-            Assert.Equal(TransferCharacterOutcome.NoChange, result.Outcome);
-            Assert.Null(result.RejectionReason);
+            // Act & Assert
+            Assert.Throws<ArgumentException>(() => evaluator.Evaluate(input));
         }
 
         [Fact]
@@ -421,8 +413,56 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.TransferCharacters
             // Act
             var result = evaluator.Evaluate(input);
             // Assert
-            Assert.Equal(TransferCharacterOutcome.Rejected, result.Outcome);
+            Assert.False(result.IsPermitted);
             Assert.Equal(TransferCharacterRejectionReason.NotReciprocal, result.RejectionReason);
+        }
+
+        [Fact]
+        public void Evaluate_WhenTwoAssignmentsInvolveThreeMachines_ShouldRejectAsNotReciprocal()
+        {
+            // Arrange
+            var evaluator = new TransferCharacterEvaluator();
+
+            var input = new TransferCharacterEvaluationInput(
+                Thunderbirds:
+                [
+                    new(
+                        ThunderbirdCode: new("thunderbird-1"),
+                        CharacterCapacity: 1,
+                        CurrentLocation: new("location-1"),
+                        Occupants:
+                        [
+                            new("character-1")
+                        ]),
+                    new(
+                        ThunderbirdCode: new("thunderbird-2"),
+                        CharacterCapacity: 1,
+                        CurrentLocation: new("location-1"),
+                        Occupants:
+                        [
+                            new("character-2")
+                        ]),
+                    new(
+                        ThunderbirdCode: new("thunderbird-3"),
+                        CharacterCapacity: 1,
+                        CurrentLocation: new("location-1"),
+                        Occupants:
+                        [
+                            new("character-3")
+                        ])
+                ],
+                Assignments:
+                [
+                    new(
+                        CharacterCode: new("character-1"),
+                        TargetThunderbirdCode: new("thunderbird-2")),
+                    new(
+                        CharacterCode: new("character-2"),
+                        TargetThunderbirdCode: new("thunderbird-3"))
+                ]);
+
+            // Act & Assert
+            Assert.Throws<ArgumentException>(() => evaluator.Evaluate(input));
         }
 
         [Fact]
@@ -489,7 +529,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.TransferCharacters
         }
 
         [Fact]
-        public void Evaluate_WhenThreeThunderbirdsAreProvided_ShouldThrowArgumentException()
+        public void Evaluate_WhenFewerThanTwoThunderbirdsAreSupplied_ShouldThrow()
         {
             // Arrange
             var evaluator = new TransferCharacterEvaluator();
@@ -504,17 +544,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.TransferCharacters
                         Occupants:
                         [
                             new("character-1")
-                        ]),
-                    new(
-                        ThunderbirdCode: new("thunderbird-2"),
-                        CharacterCapacity: 2,
-                        CurrentLocation: new("location-1"),
-                        Occupants: []),
-                    new(
-                        ThunderbirdCode: new("thunderbird-3"),
-                        CharacterCapacity: 2,
-                        CurrentLocation: new("location-1"),
-                        Occupants: [])
+                        ])
                 ],
                 Assignments:
                 [

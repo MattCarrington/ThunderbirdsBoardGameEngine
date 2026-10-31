@@ -11,23 +11,10 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.TransferCharacters
             // Arrange
 
             // Act
-            var result = TransferCharacterEvaluationResult.Valid();
+            var result = TransferCharacterEvaluationResult.Permitted();
 
             // Assert
-            Assert.Equal(TransferCharacterOutcome.Valid, result.Outcome);
-            Assert.Null(result.RejectionReason);
-        }
-
-        [Fact]
-        public void NoChange_ShouldReturnNoChangeOutcome()
-        {
-            // Arrange
-
-            // Act
-            var result = TransferCharacterEvaluationResult.NoChange();
-
-            // Assert
-            Assert.Equal(TransferCharacterOutcome.NoChange, result.Outcome);
+            Assert.True(result.IsPermitted);
             Assert.Null(result.RejectionReason);
         }
 
@@ -40,7 +27,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.TransferCharacters
             var result = TransferCharacterEvaluationResult.Rejected(TransferCharacterRejectionReason.NotReciprocal);
 
             // Assert
-            Assert.Equal(TransferCharacterOutcome.Rejected, result.Outcome);
+            Assert.False(result.IsPermitted);
             Assert.Equal(TransferCharacterRejectionReason.NotReciprocal, result.RejectionReason);
         }
     }

@@ -9,30 +9,15 @@ namespace ThunderbirdsBoardGameEngine.Rules.Application.UnitTests.TransferCharac
         public void ToResponse_ValidOutcome_ReturnsValidResponse()
         {
             // Arrange
-            var evaluationResult = TransferCharacterEvaluationResult.Valid();
+            var evaluationResult = TransferCharacterEvaluationResult.Permitted();
 
             // Act
             var result = evaluationResult.ToResponse();
 
             // Assert
             Assert.NotNull(result);
-            Assert.Equal(TransferCharacterValidationState.Valid, result.TransferCharacterValidationOutcome);
-            Assert.Null(result.TransferCharacterValidationRejectionReason);
-        }
-
-        [Fact]
-        public void ToResponse_NoChangeOutcome_ReturnsNoChangeResponse()
-        {
-            // Arrange
-            var evaluationResult = TransferCharacterEvaluationResult.NoChange();
-
-            // Act
-            var result = evaluationResult.ToResponse();
-
-            // Assert
-            Assert.NotNull(result);
-            Assert.Equal(TransferCharacterValidationState.NoChange, result.TransferCharacterValidationOutcome);
-            Assert.Null(result.TransferCharacterValidationRejectionReason);
+            Assert.True(result.IsPermitted);
+            Assert.Null(result.RejectionReason);
         }
 
         [Fact]
@@ -46,8 +31,8 @@ namespace ThunderbirdsBoardGameEngine.Rules.Application.UnitTests.TransferCharac
 
             // Assert
             Assert.NotNull(result);
-            Assert.Equal(TransferCharacterValidationState.Rejected, result.TransferCharacterValidationOutcome);
-            Assert.Equal(TransferCharacterValidationRejectionReason.NotReciprocal, result.TransferCharacterValidationRejectionReason);
+            Assert.False(result.IsPermitted);
+            Assert.Equal(TransferCharacterValidationRejectionReason.NotReciprocal, result.RejectionReason);
         }
 
         [Fact]

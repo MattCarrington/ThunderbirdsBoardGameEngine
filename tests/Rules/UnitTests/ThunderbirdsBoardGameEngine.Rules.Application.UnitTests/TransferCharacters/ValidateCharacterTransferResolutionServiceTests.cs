@@ -34,7 +34,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Application.UnitTests.TransferCharac
             var result = service.ResolveTransferValidation(input);
 
             // Assert
-            Assert.Equal(TransferCharacterOutcome.Valid, result.Outcome);
+            Assert.True(result.IsPermitted);
             Assert.Null(result.RejectionReason);
 
             lookup.Received(1).GetThunderbirdCharacterCapacity(thunderbird1.ThunderbirdCode);

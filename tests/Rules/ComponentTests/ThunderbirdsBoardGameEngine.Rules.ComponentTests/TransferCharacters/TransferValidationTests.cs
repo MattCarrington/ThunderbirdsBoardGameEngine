@@ -31,8 +31,8 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.TransferCharacters
 
             // Assert
             Assert.NotNull(result);
-            Assert.Equal(TransferCharacterValidationState.Valid, result.TransferCharacterValidationOutcome);
-            Assert.Null(result.TransferCharacterValidationRejectionReason);
+            Assert.True(result.IsPermitted);
+            Assert.Null(result.RejectionReason);
         }
 
         [Fact]
@@ -55,8 +55,8 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.TransferCharacters
 
             // Assert
             Assert.NotNull(result);
-            Assert.Equal(TransferCharacterValidationState.Rejected, result.TransferCharacterValidationOutcome);
-            Assert.Equal(TransferCharacterValidationRejectionReason.CharacterCapacityExceeded, result.TransferCharacterValidationRejectionReason);
+            Assert.False(result.IsPermitted);
+            Assert.Equal(TransferCharacterValidationRejectionReason.CharacterCapacityExceeded, result.RejectionReason);
         }
 
         [Fact]
@@ -79,8 +79,8 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.TransferCharacters
 
             // Assert
             Assert.NotNull(result);
-            Assert.Equal(TransferCharacterValidationState.Rejected, result.TransferCharacterValidationOutcome);
-            Assert.Equal(TransferCharacterValidationRejectionReason.MachinesNotCoLocated, result.TransferCharacterValidationRejectionReason);
+            Assert.False(result.IsPermitted);
+            Assert.Equal(TransferCharacterValidationRejectionReason.MachinesNotCoLocated, result.RejectionReason);
         }
 
         [Fact]
@@ -104,8 +104,8 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.TransferCharacters
 
             // Assert
             Assert.NotNull(result);
-            Assert.Equal(TransferCharacterValidationState.Valid, result.TransferCharacterValidationOutcome);
-            Assert.Null(result.TransferCharacterValidationRejectionReason);
+            Assert.True(result.IsPermitted);
+            Assert.Null(result.RejectionReason);
         }
 
         [Fact]
@@ -129,8 +129,8 @@ namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.TransferCharacters
 
             // Assert
             Assert.NotNull(result);
-            Assert.Equal(TransferCharacterValidationState.Rejected, result.TransferCharacterValidationOutcome);
-            Assert.Equal(TransferCharacterValidationRejectionReason.NotReciprocal, result.TransferCharacterValidationRejectionReason);
+            Assert.False(result.IsPermitted);
+            Assert.Equal(TransferCharacterValidationRejectionReason.NotReciprocal, result.RejectionReason);
         }
 
         [Fact]

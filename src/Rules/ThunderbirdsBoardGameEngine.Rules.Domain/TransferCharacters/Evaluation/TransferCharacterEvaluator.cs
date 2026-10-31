@@ -8,7 +8,9 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.TransferCharacters.Evaluation
         {
             if (input.Thunderbirds.Count != 2)
             {
-                throw new ArgumentException("Two thunderbirds are required for evaluation.");
+                throw new ArgumentException(
+                    "Exactly two Thunderbird Machines are required for evaluation.",
+                    nameof(input));
             }
 
             foreach (var thunderbird in input.Thunderbirds)
@@ -69,62 +71,61 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.TransferCharacters.Evaluation
 
             if (assignment.TargetThunderbirdCode == currentOccupancy.ThunderbirdCode)
             {
-                return TransferCharacterEvaluationResult.NoChange();
+                throw new ArgumentException(
+                    "Every proposed assignment must move a character to another Thunderbird.",
+                    nameof(input));
             }
 
             var destinationThunderbird = GetDestinationThunderbird(input, assignment.TargetThunderbirdCode);
 
             if (destinationThunderbird.Occupants.Count + 1 > destinationThunderbird.CharacterCapacity)
             {
-                // Target Thunderbird is at full capacity
                 return TransferCharacterEvaluationResult.Rejected(TransferCharacterRejectionReason.CharacterCapacityExceeded);
             }
 
-            return TransferCharacterEvaluationResult.Valid(); // All checks passed, transfer is possible 
+            return TransferCharacterEvaluationResult.Permitted();
         }
 
-        private static TransferCharacterEvaluationResult EvaluateReciprocalSwap(TransferCharacterEvaluationInput input)
+        private static TransferCharacterEvaluationResult EvaluateReciprocalSwap(
+    TransferCharacterEvaluationInput input)
         {
             var firstAssignment = input.Assignments.First();
             var secondAssignment = input.Assignments.Skip(1).First();
 
             if (firstAssignment.CharacterCode == secondAssignment.CharacterCode)
             {
-                throw new ArgumentException("Reciprocal assignments must involve different characters.");
+                throw new ArgumentException(
+                    "Reciprocal assignments must involve different characters.",
+                    nameof(input));
             }
 
-            if (firstAssignment.TargetThunderbirdCode == secondAssignment.TargetThunderbirdCode)
+            var firstSource = GetCurrentOccupancyThunderbird(input, firstAssignment.CharacterCode);
+
+            var secondSource = GetCurrentOccupancyThunderbird(input, secondAssignment.CharacterCode);
+
+            var firstDestination = GetDestinationThunderbird(input, firstAssignment.TargetThunderbirdCode);
+
+            var secondDestination = GetDestinationThunderbird(input, secondAssignment.TargetThunderbirdCode);
+
+            var bothAssignmentsMakeNoChange = firstSource.ThunderbirdCode == firstDestination.ThunderbirdCode
+                && secondSource.ThunderbirdCode == secondDestination.ThunderbirdCode;
+
+            if (bothAssignmentsMakeNoChange)
             {
-                // Both assignments target the same Thunderbird
+                throw new ArgumentException(
+                    "Every proposed assignment must move a character to another Thunderbird.",
+                    nameof(input));
+            }
+
+            var isReciprocal = firstSource.ThunderbirdCode == secondDestination.ThunderbirdCode
+                && secondSource.ThunderbirdCode == firstDestination.ThunderbirdCode;
+
+            if (!isReciprocal)
+            {
                 return TransferCharacterEvaluationResult.Rejected(TransferCharacterRejectionReason.NotReciprocal);
             }
 
-            var transfers = 0;
-
-            foreach (var assignment in input.Assignments)
-            {
-                var destinationThunderbird = GetDestinationThunderbird(input, assignment.TargetThunderbirdCode);
-
-                var currentOccupancy = GetCurrentOccupancyThunderbird(input, assignment.CharacterCode);
-
-                if (assignment.TargetThunderbirdCode != currentOccupancy.ThunderbirdCode)
-                {
-                    transfers++;
-                }
-            }
-
-            if (transfers == 0)
-            {
-                return TransferCharacterEvaluationResult.NoChange(); // No transfers needed, all characters are already in their target Thunderbirds
-            }
-
-            if (transfers == 1)
-            {
-                // Only one transfer means it is not a reciprocal swap
-                return TransferCharacterEvaluationResult.Rejected(TransferCharacterRejectionReason.NotReciprocal);
-            }
-
-            return TransferCharacterEvaluationResult.Valid(); // All checks passed, transfer is possible 
+            return TransferCharacterEvaluationResult.Permitted();
         }
 
         private static ThunderbirdTransferState GetDestinationThunderbird(TransferCharacterEvaluationInput input, ThunderbirdCode assignment)

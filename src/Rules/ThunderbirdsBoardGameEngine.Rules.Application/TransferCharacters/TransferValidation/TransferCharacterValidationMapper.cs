@@ -6,29 +6,20 @@ namespace ThunderbirdsBoardGameEngine.Rules.Application.TransferCharacters.Trans
     {
         public static ValidateCharacterTransferResponse ToResponse(this TransferCharacterEvaluationResult result)
         {
-            return result.Outcome switch
+            if (result.IsPermitted)
             {
-                TransferCharacterOutcome.Valid =>
-                    new(
-                        TransferCharacterValidationState.Valid,
-                        TransferCharacterValidationRejectionReason: null),
+                return new ValidateCharacterTransferResponse(true, null);
+            }
 
-                TransferCharacterOutcome.NoChange =>
-                    new(
-                        TransferCharacterValidationState.NoChange,
-                        TransferCharacterValidationRejectionReason: null),
+            if (!result.IsPermitted && result.RejectionReason is not null)
+            {
+                return new ValidateCharacterTransferResponse(false, MapRejectionReason(result.RejectionReason));
+            }
 
-                TransferCharacterOutcome.Rejected
-                    when result.RejectionReason is not null =>
-                    new(
-                        TransferCharacterValidationState.Rejected,
-                        MapRejectionReason(result.RejectionReason)),
-
-                _ => throw new ArgumentOutOfRangeException(
-                    nameof(result),
-                    result.Outcome,
-                    "Unknown transfer outcome.")
-            };
+            throw new ArgumentOutOfRangeException(
+                nameof(result),
+                result.RejectionReason,
+                "Unknown transfer outcome.");
         }
 
         private static TransferCharacterValidationRejectionReason MapRejectionReason(TransferCharacterRejectionReason? reason)
