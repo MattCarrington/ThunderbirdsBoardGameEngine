@@ -86,8 +86,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.TransferCharacters.Evaluation
             return TransferCharacterEvaluationResult.Permitted();
         }
 
-        private static TransferCharacterEvaluationResult EvaluateReciprocalSwap(
-    TransferCharacterEvaluationInput input)
+        private static TransferCharacterEvaluationResult EvaluateReciprocalSwap(TransferCharacterEvaluationInput input)
         {
             var firstAssignment = input.Assignments.First();
             var secondAssignment = input.Assignments.Skip(1).First();
