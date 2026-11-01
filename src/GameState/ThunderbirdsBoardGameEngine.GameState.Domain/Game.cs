@@ -93,6 +93,11 @@ namespace ThunderbirdsBoardGameEngine.GameState.Domain
                 throw ThunderbirdMachineNotFoundException.Create(machineCode);
             }
 
+            if (!_charactersState.ContainsValue(machineCode))
+            {
+                throw ThunderbirdMachineCannotMoveException.NoCharactersAboard(machineCode);
+            }
+
             _machinesState[machineCode] = newLocation;
         }
 

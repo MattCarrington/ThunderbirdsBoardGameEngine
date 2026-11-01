@@ -132,6 +132,50 @@ namespace ThunderbirdsBoardGameEngine.GameState.Domain.UnitTests
             AssertCharacterAssignment(game, new("character-1"), new("machine-1"));
         }
 
+        [Fact]
+        public void MoveThunderbirdMachine_WhenMachineHasAnOccupant_ShouldUpdateLocation()
+        {
+            // Arrange
+            var game = CreateGame();
+
+            var machineCode = new ThunderbirdCode("machine-1");
+
+            var newLocation = new LocationCode("location-2");
+
+            // Act
+            game.MoveThunderbirdMachine(machineCode, newLocation);
+
+            // Assert
+            var actualLocation = game.Machines[machineCode];
+            Assert.Equal(newLocation, actualLocation);
+        }
+
+        [Fact]
+        public void MoveThunderbirdMachine_WhenMachineHasNoOccupants_ShouldThrow()
+        {
+            // Arrange
+            var game = CreateGame();
+
+            var machineCode = new ThunderbirdCode("machine-3");
+
+            var newLocation = new LocationCode("location-2");
+
+            // Act & Assert
+            Assert.Throws<ThunderbirdMachineCannotMoveException>(() => game.MoveThunderbirdMachine(machineCode, newLocation));
+        }
+
+        [Fact]
+        public void MoveThunderbirdMachine_WhenMachineDoesNotExist_ShouldThrow()
+        {
+            // Arrange
+            var game = CreateGame();
+            var machineCode = new ThunderbirdCode("missing-machine");
+            var newLocation = new LocationCode("location-2");
+
+            // Act & Assert
+            Assert.Throws<ThunderbirdMachineNotFoundException>(() => game.MoveThunderbirdMachine(machineCode, newLocation));
+        }
+
         private static Game CreateGame()
         {
             return Game.Create(
