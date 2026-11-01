@@ -2,8 +2,8 @@
 {
     public sealed class ThunderbirdMovementRejectedException : Exception
     {
-        public ThunderbirdMovementRejectedException(IReadOnlyCollection<string> reasons)
-            : base("Thunderbird Machine movement was rejected.")
+        public ThunderbirdMovementRejectedException(IReadOnlyCollection<string> reasons, Exception? innerException = null)
+            : base("Thunderbird Machine movement was rejected.", innerException)
         {
             Reasons = reasons.ToArray();
         }

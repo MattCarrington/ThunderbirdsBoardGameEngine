@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using ThunderbirdsBoardGameEngine.GameState.Application.Exceptions;
+using ThunderbirdsBoardGameEngine.GameState.Domain.Exceptions;
 
 namespace ThunderbirdsBoardGameEngine.GameState.Application.MoveThunderbird
 {
@@ -32,7 +33,16 @@ namespace ThunderbirdsBoardGameEngine.GameState.Application.MoveThunderbird
                 throw new ThunderbirdMovementRejectedException(decision.Messages);
             }
 
-            game.MoveThunderbirdMachine(request.Thunderbird, request.Destination);
+            try
+            {
+                game.MoveThunderbirdMachine(request.Thunderbird, request.Destination);
+            }
+            catch (ThunderbirdMachineCannotMoveException exception)
+            {
+                throw new ThunderbirdMovementRejectedException(
+                    ["The Thunderbird Machine cannot move without a character aboard."],
+                    exception);
+            }
 
             _gameStateIntegrityValidator.Validate(game);
 
