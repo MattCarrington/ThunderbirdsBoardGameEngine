@@ -105,5 +105,51 @@ namespace ThunderbirdsBoardGameEngine.GameState.Domain
 
             return location;
         }
+
+        public void TransferCharacters(IReadOnlyCollection<CharacterAssignment> assignments)
+        {
+            if (assignments.Count is < 1 or > 2)
+            {
+                throw new ArgumentException(
+                    "One or two character assignments are required.",
+                    nameof(assignments));
+            }
+
+            var duplicateCharacterExists = assignments
+                .GroupBy(assignment => assignment.CharacterCode)
+                .Any(group => group.Count() > 1);
+
+            if (duplicateCharacterExists)
+            {
+                throw new ArgumentException(
+                    "A character may only be assigned once per operation.",
+                    nameof(assignments));
+            }
+
+            foreach (var assignment in assignments)
+            {
+                if (!_charactersState.TryGetValue(assignment.CharacterCode, out var currentMachine))
+                {
+                    throw CharacterNotFoundException.Create(assignment.CharacterCode);
+                }
+
+                if (!_machinesState.ContainsKey(assignment.TargetThunderbirdCode))
+                {
+                    throw ThunderbirdMachineNotFoundException.Create(assignment.TargetThunderbirdCode);
+                }
+
+                if (currentMachine == assignment.TargetThunderbirdCode)
+                {
+                    throw new ArgumentException(
+                        "Every assignment must transfer its character to another machine.",
+                        nameof(assignments));
+                }
+            }
+
+            foreach (var assignment in assignments)
+            {
+                _charactersState[assignment.CharacterCode] = assignment.TargetThunderbirdCode;
+            }
+        }
     }
 }
