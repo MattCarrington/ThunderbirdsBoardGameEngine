@@ -418,7 +418,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.TransferCharacters
         }
 
         [Fact]
-        public void Evaluate_WhenTwoAssignmentsInvolveThreeMachines_ShouldRejectAsNotReciprocal()
+        public void Evaluate_WhenThreeMachinesAreProvided_ShouldThrowArgumentException()
         {
             // Arrange
             var evaluator = new TransferCharacterEvaluator();
@@ -529,7 +529,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.TransferCharacters
         }
 
         [Fact]
-        public void Evaluate_WhenFewerThanTwoThunderbirdsAreSupplied_ShouldThrow()
+        public void Evaluate_WhenFewerThanTwoThunderbirdsAreSupplied_ShouldThrowArgumentException()
         {
             // Arrange
             var evaluator = new TransferCharacterEvaluator();
@@ -836,7 +836,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.TransferCharacters
         }
 
         [Fact]
-        public void Evaluate_WhenNonTransferredCharacterOccupiesBothThunderbirds_ShouldThrow()
+        public void Evaluate_WhenNonTransferredCharacterOccupiesBothThunderbirds_ShouldThrowArgumentException()
         {
             // Arrange
             var evaluator = new TransferCharacterEvaluator();
