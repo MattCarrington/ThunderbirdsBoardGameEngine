@@ -156,7 +156,7 @@ jobs:
           merge-multiple: false
 
       - name: Validate receipts and create manifest
-        uses: actions/github-script@v8
+        uses: actions/github-script@v9
         env:
           RELEASE_VERSION: ${{ needs.compute-version.outputs.version }}
         with:
