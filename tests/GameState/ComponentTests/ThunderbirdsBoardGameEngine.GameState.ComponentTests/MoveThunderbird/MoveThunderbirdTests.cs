@@ -1,5 +1,4 @@
-﻿using ThunderbirdsBoardGameEngine.GameState.Application;
-using ThunderbirdsBoardGameEngine.GameState.Application.Exceptions;
+﻿using ThunderbirdsBoardGameEngine.GameState.Application.Exceptions;
 using ThunderbirdsBoardGameEngine.GameState.Application.MoveThunderbird;
 using ThunderbirdsBoardGameEngine.GameState.ComponentTests.Helpers;
 using ThunderbirdsBoardGameEngine.GameState.Domain;

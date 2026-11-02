@@ -123,7 +123,7 @@ namespace ThunderbirdsBoardGameEngine.GameState.Application.UnitTests.MoveThunde
                 {
                       { new CharacterCode("character-1"), new ThunderbirdCode("thunderbird-1") }
                 }
-);
+            );
         }
 
         private static MoveThunderbirdCommand CreateCommand()

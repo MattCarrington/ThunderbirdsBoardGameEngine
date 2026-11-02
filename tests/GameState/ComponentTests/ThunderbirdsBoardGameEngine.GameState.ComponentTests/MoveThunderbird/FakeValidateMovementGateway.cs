@@ -1,5 +1,4 @@
-﻿using ThunderbirdsBoardGameEngine.GameState.Application;
-using ThunderbirdsBoardGameEngine.GameState.Application.MoveThunderbird;
+﻿using ThunderbirdsBoardGameEngine.GameState.Application.MoveThunderbird;
 using ThunderbirdsBoardGameEngine.ReferenceData.Core.Identities;
 
 namespace ThunderbirdsBoardGameEngine.GameState.ComponentTests.MoveThunderbird

@@ -1,7 +1,6 @@
-﻿using ThunderbirdsBoardGameEngine.GameState.Application.MoveThunderbird;
-using ThunderbirdsBoardGameEngine.ReferenceData.Core.Identities;
+﻿using ThunderbirdsBoardGameEngine.ReferenceData.Core.Identities;
 
-namespace ThunderbirdsBoardGameEngine.GameState.Application
+namespace ThunderbirdsBoardGameEngine.GameState.Application.MoveThunderbird
 {
     public interface IValidateMovementGateway
     {
