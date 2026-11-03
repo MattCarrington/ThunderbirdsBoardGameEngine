@@ -3,6 +3,7 @@ using NSubstitute;
 using ThunderbirdsBoardGameEngine.GameState.Application.TransferCharacters;
 using ThunderbirdsBoardGameEngine.GameState.Domain;
 using ThunderbirdsBoardGameEngine.GameState.Infrastructure.RulesValidation;
+using ThunderbirdsBoardGameEngine.ReferenceData.Core.Identities;
 using ThunderbirdsBoardGameEngine.Rules.Application.TransferCharacters.TransferValidation;
 using Xunit;
 
@@ -100,6 +101,48 @@ namespace ThunderbirdsBoardGameEngine.GameState.Infrastructure.UnitTests.RulesVa
                 CreateCurrentState(),
                 CreateAssignments(),
                 TestContext.Current.CancellationToken));
+        }
+
+        [Fact]
+        public async Task ValidateAsync_ShouldMapGameStateIntoRulesQuery()
+        {
+            // Arrange
+            ValidateCharacterTransferQuery? capturedQuery = null;
+
+            var mediator = Substitute.For<IMediator>();
+
+            mediator.Send(
+                    Arg.Do<ValidateCharacterTransferQuery>(
+                        query => capturedQuery = query),
+                    Arg.Any<CancellationToken>())
+                .Returns(new ValidateCharacterTransferResponse(
+                    IsPermitted: true,
+                    RejectionReason: null));
+
+            var gateway =
+                new InProcessTransferCharacterRulesGateway(mediator);
+
+            await gateway.ValidateTransferCharactersAsync(
+                CreateCurrentState(),
+                CreateAssignments(),
+                TestContext.Current.CancellationToken);
+
+            Assert.NotNull(capturedQuery);
+            Assert.Equal(2, capturedQuery.CurrentState.Count);
+            Assert.Equal(2, capturedQuery.ProposedAssignments.Count);
+
+            var thunderbird1 = Assert.Single(
+                capturedQuery.CurrentState,
+                state => state.ThunderbirdCode == new ThunderbirdCode("TB1"));
+
+            Assert.Equal(new("LOC1"), thunderbird1.CurrentLocation);
+            Assert.Equal([new("CHAR1")], thunderbird1.Occupants);
+
+            Assert.Contains(
+                capturedQuery.ProposedAssignments,
+                assignment =>
+                    assignment.CharacterCode == new CharacterCode("CHAR1")
+                    && assignment.TargetThunderbirdCode == new ThunderbirdCode("TB2"));
         }
 
         private static List<GameStateThunderbirdState> CreateCurrentState()
