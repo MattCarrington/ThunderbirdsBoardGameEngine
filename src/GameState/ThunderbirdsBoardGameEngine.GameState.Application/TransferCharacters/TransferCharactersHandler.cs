@@ -4,20 +4,20 @@ using ThunderbirdsBoardGameEngine.GameState.Application.Exceptions;
 
 namespace ThunderbirdsBoardGameEngine.GameState.Application.TransferCharacters
 {
-    internal sealed class TransferCharacterHandler : IRequestHandler<TransferCharacterCommand, TransferCharacterResult>
+    internal sealed class TransferCharactersHandler : IRequestHandler<TransferCharactersCommand, TransferCharactersResult>
     {
         private readonly IGameRepository _gameRepository;
         private readonly IGameStateIntegrityValidator _gameStateIntegrityValidator;
-        private readonly ITransferCharacterRulesGateway _transferCharacterGateway;
+        private readonly ICharacterTransferRulesGateway _transferCharacterGateway;
 
-        public TransferCharacterHandler(IGameRepository gameRepository, IGameStateIntegrityValidator gameStateIntegrityValidator, ITransferCharacterRulesGateway transferCharacterGateway)
+        public TransferCharactersHandler(IGameRepository gameRepository, IGameStateIntegrityValidator gameStateIntegrityValidator, ICharacterTransferRulesGateway transferCharacterGateway)
         {
             _gameRepository = gameRepository;
             _gameStateIntegrityValidator = gameStateIntegrityValidator;
             _transferCharacterGateway = transferCharacterGateway;
         }
 
-        public async Task<TransferCharacterResult> Handle(TransferCharacterCommand request, CancellationToken cancellationToken)
+        public async Task<TransferCharactersResult> Handle(TransferCharactersCommand request, CancellationToken cancellationToken)
         {
             var game = await _gameRepository.GetGameSessionById(request.GameId, cancellationToken)
                 ?? throw new GameNotFoundException();
@@ -89,7 +89,7 @@ namespace ThunderbirdsBoardGameEngine.GameState.Application.TransferCharacters
 
             await _gameRepository.UpdateGameSession(game, cancellationToken);
 
-            return new TransferCharacterResult(game);
+            return new TransferCharactersResult(game);
         }
     }
 }

@@ -13,11 +13,11 @@ using RulesThunderbirdState =
 
 namespace ThunderbirdsBoardGameEngine.GameState.Infrastructure.RulesValidation
 {
-    internal sealed class InProcessTransferCharacterRulesGateway : ITransferCharacterRulesGateway
+    internal sealed class InProcessCharacterTransferRulesGateway : ICharacterTransferRulesGateway
     {
         private readonly IMediator _mediator;
 
-        public InProcessTransferCharacterRulesGateway(IMediator mediator)
+        public InProcessCharacterTransferRulesGateway(IMediator mediator)
         {
             _mediator = mediator;
         }

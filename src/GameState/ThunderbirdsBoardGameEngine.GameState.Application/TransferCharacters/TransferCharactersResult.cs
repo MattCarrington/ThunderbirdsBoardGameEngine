@@ -3,6 +3,6 @@
 
 namespace ThunderbirdsBoardGameEngine.GameState.Application.TransferCharacters
 {
-    public sealed record TransferCharacterResult(
+    public sealed record TransferCharactersResult(
         Game GameSession);
 }

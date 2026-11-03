@@ -3,7 +3,7 @@
 
 namespace ThunderbirdsBoardGameEngine.GameState.Application.TransferCharacters
 {
-    public interface ITransferCharacterRulesGateway
+    public interface ICharacterTransferRulesGateway
     {
         Task<CharacterTransferDecision> ValidateTransferCharactersAsync(IReadOnlyCollection<CurrentThunderbirdState> currentThunderbirdState, IReadOnlyCollection<CharacterAssignment> characterAssignments, CancellationToken cancellationToken);
     }

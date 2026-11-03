@@ -13,7 +13,7 @@ using GameStateThunderbirdState =
 
 namespace ThunderbirdsBoardGameEngine.GameState.Infrastructure.UnitTests.RulesValidation
 {
-    public class InProcessTransferCharacterRulesGatewayTests
+    public class InProcessCharacterTransferRulesGatewayTests
     {
         [Fact]
         public async Task ValidateTransferCharactersAsync_ShouldReturnPermitted_WhenRulesAllowTransferAsync()
@@ -24,7 +24,7 @@ namespace ThunderbirdsBoardGameEngine.GameState.Infrastructure.UnitTests.RulesVa
             mediator.Send(Arg.Any<ValidateCharacterTransferQuery>(), Arg.Any<CancellationToken>())
                 .Returns(Task.FromResult(new ValidateCharacterTransferResponse(true, null)));
 
-            var gateway = new InProcessTransferCharacterRulesGateway(mediator);
+            var gateway = new InProcessCharacterTransferRulesGateway(mediator);
 
 
 
@@ -52,7 +52,7 @@ namespace ThunderbirdsBoardGameEngine.GameState.Infrastructure.UnitTests.RulesVa
                     IsPermitted: false,
                     RejectionReason: rulesReason));
 
-            var gateway = new InProcessTransferCharacterRulesGateway(mediator);
+            var gateway = new InProcessCharacterTransferRulesGateway(mediator);
 
             // Act
             var result = await gateway.ValidateTransferCharactersAsync(
@@ -75,7 +75,7 @@ namespace ThunderbirdsBoardGameEngine.GameState.Infrastructure.UnitTests.RulesVa
                     IsPermitted: false,
                     RejectionReason: null));
 
-            var gateway = new InProcessTransferCharacterRulesGateway(mediator);
+            var gateway = new InProcessCharacterTransferRulesGateway(mediator);
 
             // Act & Assert
             await Assert.ThrowsAsync<InvalidOperationException>(() => gateway.ValidateTransferCharactersAsync(
@@ -94,7 +94,7 @@ namespace ThunderbirdsBoardGameEngine.GameState.Infrastructure.UnitTests.RulesVa
                     IsPermitted: false,
                     RejectionReason: (TransferCharacterValidationRejectionReason)999));
 
-            var gateway = new InProcessTransferCharacterRulesGateway(mediator);
+            var gateway = new InProcessCharacterTransferRulesGateway(mediator);
 
             // Act & Assert
             await Assert.ThrowsAsync<ArgumentOutOfRangeException>(() => gateway.ValidateTransferCharactersAsync(
@@ -120,7 +120,7 @@ namespace ThunderbirdsBoardGameEngine.GameState.Infrastructure.UnitTests.RulesVa
                     RejectionReason: null));
 
             var gateway =
-                new InProcessTransferCharacterRulesGateway(mediator);
+                new InProcessCharacterTransferRulesGateway(mediator);
 
             await gateway.ValidateTransferCharactersAsync(
                 CreateCurrentState(),

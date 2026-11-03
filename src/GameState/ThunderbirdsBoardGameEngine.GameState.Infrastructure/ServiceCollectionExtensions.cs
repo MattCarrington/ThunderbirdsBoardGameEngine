@@ -50,7 +50,7 @@ namespace ThunderbirdsBoardGameEngine.GameState.Infrastructure
         public static IServiceCollection AddGameStateRulesGateway(this IServiceCollection services)
         {
             services.AddScoped<IMovementRulesGateway, InProcessMovementRulesGateway>();
-            services.AddScoped<ITransferCharacterRulesGateway, InProcessTransferCharacterRulesGateway>();
+            services.AddScoped<ICharacterTransferRulesGateway, InProcessCharacterTransferRulesGateway>();
             return services;
         }
 

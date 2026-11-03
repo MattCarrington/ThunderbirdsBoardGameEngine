@@ -7,7 +7,7 @@ using Xunit;
 
 namespace ThunderbirdsBoardGameEngine.GameState.Application.UnitTests.TransferCharacters
 {
-    public class TransferCharacterHandlerTests
+    public class TransferCharactersHandlerTests
     {
         [Fact]
         public async Task Handle_ShouldSendCurrentStateAndPersistUpdatedGame_WhenRequestIsValidSingleTransfer()
@@ -23,7 +23,7 @@ namespace ThunderbirdsBoardGameEngine.GameState.Application.UnitTests.TransferCh
 
             IReadOnlyCollection<CurrentThunderbirdState>? capturedState = null;
 
-            var gateway = Substitute.For<ITransferCharacterRulesGateway>();
+            var gateway = Substitute.For<ICharacterTransferRulesGateway>();
 
             gateway
                 .ValidateTransferCharactersAsync(
@@ -35,7 +35,7 @@ namespace ThunderbirdsBoardGameEngine.GameState.Application.UnitTests.TransferCh
 
             var handler = CreateHandler(repository, integrityValidator, gateway);
 
-            var command = new TransferCharacterCommand(
+            var command = new TransferCharactersCommand(
                 GameId: game.Id,
                 CharacterAssignments:
                 [
@@ -73,7 +73,7 @@ namespace ThunderbirdsBoardGameEngine.GameState.Application.UnitTests.TransferCh
 
             IReadOnlyCollection<CurrentThunderbirdState>? capturedState = null;
 
-            var gateway = Substitute.For<ITransferCharacterRulesGateway>();
+            var gateway = Substitute.For<ICharacterTransferRulesGateway>();
 
             gateway
                 .ValidateTransferCharactersAsync(
@@ -85,7 +85,7 @@ namespace ThunderbirdsBoardGameEngine.GameState.Application.UnitTests.TransferCh
 
             var handler = CreateHandler(repository, integrityValidator, gateway);
 
-            var command = new TransferCharacterCommand(
+            var command = new TransferCharactersCommand(
                 GameId: game.Id,
                 CharacterAssignments:
                 [
@@ -127,7 +127,7 @@ namespace ThunderbirdsBoardGameEngine.GameState.Application.UnitTests.TransferCh
 
             var handler = CreateHandler(repository, integrityValidator, gateway);
 
-            var command = new TransferCharacterCommand(
+            var command = new TransferCharactersCommand(
                 GameId: Guid.NewGuid(),
                 CharacterAssignments:
                 [
@@ -160,7 +160,7 @@ namespace ThunderbirdsBoardGameEngine.GameState.Application.UnitTests.TransferCh
 
             var handler = CreateHandler(repository, integrityValidator, gateway);
 
-            var command = new TransferCharacterCommand(
+            var command = new TransferCharactersCommand(
                 GameId: game.Id,
                 CharacterAssignments: Array.Empty<CharacterAssignment>()
             );
@@ -188,7 +188,7 @@ namespace ThunderbirdsBoardGameEngine.GameState.Application.UnitTests.TransferCh
 
             var handler = CreateHandler(repository, integrityValidator, gateway);
 
-            var command = new TransferCharacterCommand(
+            var command = new TransferCharactersCommand(
                 GameId: game.Id,
                 CharacterAssignments:
                 [
@@ -227,7 +227,7 @@ namespace ThunderbirdsBoardGameEngine.GameState.Application.UnitTests.TransferCh
 
             var handler = CreateHandler(repository, integrityValidator, gateway);
 
-            var command = new TransferCharacterCommand(
+            var command = new TransferCharactersCommand(
                 GameId: game.Id,
                 CharacterAssignments:
                 [
@@ -275,7 +275,7 @@ namespace ThunderbirdsBoardGameEngine.GameState.Application.UnitTests.TransferCh
 
             var handler = CreateHandler(repository, integrityValidator, gateway);
 
-            var command = new TransferCharacterCommand(
+            var command = new TransferCharactersCommand(
                 GameId: game.Id,
                 CharacterAssignments:
                 [
@@ -308,7 +308,7 @@ namespace ThunderbirdsBoardGameEngine.GameState.Application.UnitTests.TransferCh
 
             var handler = CreateHandler(repository, integrityValidator, gateway);
 
-            var command = new TransferCharacterCommand(
+            var command = new TransferCharactersCommand(
                 GameId: game.Id,
                 CharacterAssignments:
                 [
@@ -344,7 +344,7 @@ namespace ThunderbirdsBoardGameEngine.GameState.Application.UnitTests.TransferCh
 
             var handler = CreateHandler(repository, integrityValidator, gateway);
 
-            var command = new TransferCharacterCommand(
+            var command = new TransferCharactersCommand(
                 GameId: game.Id,
                 CharacterAssignments:
                 [
@@ -379,7 +379,7 @@ namespace ThunderbirdsBoardGameEngine.GameState.Application.UnitTests.TransferCh
 
             var handler = CreateHandler(repository, integrityValidator, gateway);
 
-            var command = new TransferCharacterCommand(
+            var command = new TransferCharactersCommand(
                 GameId: game.Id,
                 CharacterAssignments:
                 [
@@ -436,9 +436,9 @@ namespace ThunderbirdsBoardGameEngine.GameState.Application.UnitTests.TransferCh
             return validator;
         }
 
-        private static ITransferCharacterRulesGateway CreateTransferCharacterGateway(CharacterTransferDecision decision)
+        private static ICharacterTransferRulesGateway CreateTransferCharacterGateway(CharacterTransferDecision decision)
         {
-            var transferCharacterGateway = Substitute.For<ITransferCharacterRulesGateway>();
+            var transferCharacterGateway = Substitute.For<ICharacterTransferRulesGateway>();
             transferCharacterGateway.ValidateTransferCharactersAsync(
                     Arg.Any<IReadOnlyCollection<CurrentThunderbirdState>>(),
                     Arg.Any<IReadOnlyCollection<CharacterAssignment>>(),
@@ -448,9 +448,9 @@ namespace ThunderbirdsBoardGameEngine.GameState.Application.UnitTests.TransferCh
             return transferCharacterGateway;
         }
 
-        private static TransferCharacterHandler CreateHandler(IGameRepository repository, IGameStateIntegrityValidator integrityValidator, ITransferCharacterRulesGateway gateway)
+        private static TransferCharactersHandler CreateHandler(IGameRepository repository, IGameStateIntegrityValidator integrityValidator, ICharacterTransferRulesGateway gateway)
         {
-            return new TransferCharacterHandler(repository, integrityValidator, gateway);
+            return new TransferCharactersHandler(repository, integrityValidator, gateway);
         }
 
         private static void AssertStartingMachineState(IReadOnlyCollection<CurrentThunderbirdState>? state)
