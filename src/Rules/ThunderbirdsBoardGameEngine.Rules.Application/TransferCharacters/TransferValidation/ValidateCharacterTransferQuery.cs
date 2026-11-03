@@ -1,5 +1,4 @@
 ﻿using MediatR;
-using ThunderbirdsBoardGameEngine.Rules.Domain.TransferCharacters;
 
 namespace ThunderbirdsBoardGameEngine.Rules.Application.TransferCharacters.TransferValidation
 {

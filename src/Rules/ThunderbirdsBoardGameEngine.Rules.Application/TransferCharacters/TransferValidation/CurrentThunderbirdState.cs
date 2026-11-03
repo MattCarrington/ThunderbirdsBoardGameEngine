@@ -1,6 +1,6 @@
 ﻿using ThunderbirdsBoardGameEngine.ReferenceData.Core.Identities;
 
-namespace ThunderbirdsBoardGameEngine.Rules.Domain.TransferCharacters
+namespace ThunderbirdsBoardGameEngine.Rules.Application.TransferCharacters.TransferValidation
 {
     public sealed record CurrentThunderbirdState(
         ThunderbirdCode ThunderbirdCode,
