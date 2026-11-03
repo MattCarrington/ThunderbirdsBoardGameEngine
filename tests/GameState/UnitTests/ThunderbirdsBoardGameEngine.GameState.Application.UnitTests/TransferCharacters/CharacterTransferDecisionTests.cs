@@ -1,7 +1,7 @@
 ﻿using ThunderbirdsBoardGameEngine.GameState.Application.TransferCharacters;
 using Xunit;
 
-namespace ThunderbirdsBoardGameEngine.GameState.Application.UnitTests.MoveThunderbird
+namespace ThunderbirdsBoardGameEngine.GameState.Application.UnitTests.TransferCharacters
 {
     public class CharacterTransferDecisionTests
     {
