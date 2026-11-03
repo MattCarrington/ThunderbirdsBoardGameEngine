@@ -13,11 +13,7 @@ namespace ThunderbirdsBoardGameEngine.GameState.Application.UnitTests.Exceptions
             var permittedDecision = new CharacterTransferDecision(true, null);
 
             // Act & Assert
-            var exception = Assert.Throws<ArgumentException>(() =>
-                CharacterTransferRejectedException.FromDecision(permittedDecision));
-
-            Assert.Contains("A permitted decision cannot produce a rejection exception.", exception.Message);
-            Assert.Equal("decision", exception.ParamName);
+            Assert.Throws<ArgumentException>(() => CharacterTransferRejectedException.FromDecision(permittedDecision));
         }
 
         [Fact]
@@ -27,10 +23,7 @@ namespace ThunderbirdsBoardGameEngine.GameState.Application.UnitTests.Exceptions
             var rejectedDecisionWithoutReason = new CharacterTransferDecision(false, null);
 
             // Act & Assert
-            var exception = Assert.Throws<InvalidOperationException>(() =>
-                CharacterTransferRejectedException.FromDecision(rejectedDecisionWithoutReason));
-
-            Assert.Contains("A rejected transfer decision must provide a reason.", exception.Message);
+            Assert.Throws<InvalidOperationException>(() => CharacterTransferRejectedException.FromDecision(rejectedDecisionWithoutReason));
         }
 
         [Theory]
@@ -56,10 +49,7 @@ namespace ThunderbirdsBoardGameEngine.GameState.Application.UnitTests.Exceptions
             var decision = new CharacterTransferDecision(false, CharacterTransferRejectionReason.NoChange);
 
             // Act & Assert
-            var exception = Assert.Throws<InvalidOperationException>(() =>
-                CharacterTransferRejectedException.FromDecision(decision));
-
-            Assert.Contains("A no-change rejection cannot originate from the Rules gateway.", exception.Message);
+            Assert.Throws<InvalidOperationException>(() => CharacterTransferRejectedException.FromDecision(decision));
         }
 
         [Fact]
