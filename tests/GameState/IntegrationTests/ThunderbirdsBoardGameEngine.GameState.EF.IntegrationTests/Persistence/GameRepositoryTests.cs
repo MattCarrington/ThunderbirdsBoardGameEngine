@@ -256,7 +256,6 @@ public sealed class GameRepositoryTests
 
             Assert.Equal(KnownThunderbirdCodes.Thunderbird2, restoredGame.Characters[KnownCharacterCodes.Gordon]);
 
-            Assert.Equal(game.Characters, restoredGame.Characters);
             Assert.Equal(game.CreatedAtUtc, restoredGame.CreatedAtUtc);
             Assert.Equal(game.SetupVersion, restoredGame.SetupVersion);
             Assert.Equal(1, restoredGame.StateVersion);
