@@ -26,19 +26,9 @@ namespace ThunderbirdsBoardGameEngine.GameState.Application.Exceptions
                     nameof(decision));
             }
 
-            if (decision.RejectionReason is null)
-            {
-                throw new InvalidOperationException(
-                    "A rejected transfer decision must provide a reason.");
-            }
-
-            if (decision.RejectionReason == CharacterTransferRejectionReason.NoChange)
-            {
-                throw new InvalidOperationException(
-                    "A no-change rejection cannot originate from the Rules gateway.");
-            }
-
-            return new(decision.RejectionReason.Value);
+            return new(decision.RejectionReason
+                ?? throw new InvalidOperationException(
+                    "A rejected transfer decision must provide a reason."));
         }
     }
 }

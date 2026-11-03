@@ -19,11 +19,11 @@ namespace ThunderbirdsBoardGameEngine.GameState.Application.UnitTests.TransferCh
 
             var integrityValidator = Substitute.For<IGameStateIntegrityValidator>();
 
-            var decision = new CharacterTransferDecision(true, null);
+            var decision = CharacterTransferDecision.Permitted();
 
             IReadOnlyCollection<CurrentThunderbirdState>? capturedState = null;
 
-            var gateway = Substitute.For<ITransferCharacterGateway>();
+            var gateway = Substitute.For<ITransferCharacterRulesGateway>();
 
             gateway
                 .ValidateTransferCharactersAsync(
@@ -69,11 +69,11 @@ namespace ThunderbirdsBoardGameEngine.GameState.Application.UnitTests.TransferCh
 
             var integrityValidator = CreateValidator();
 
-            var decision = new CharacterTransferDecision(true, null);
+            var decision = CharacterTransferDecision.Permitted();
 
             IReadOnlyCollection<CurrentThunderbirdState>? capturedState = null;
 
-            var gateway = Substitute.For<ITransferCharacterGateway>();
+            var gateway = Substitute.For<ITransferCharacterRulesGateway>();
 
             gateway
                 .ValidateTransferCharactersAsync(
@@ -121,7 +121,7 @@ namespace ThunderbirdsBoardGameEngine.GameState.Application.UnitTests.TransferCh
 
             var integrityValidator = CreateValidator();
 
-            var decision = new CharacterTransferDecision(true, null);
+            var decision = CharacterTransferDecision.Permitted();
 
             var gateway = CreateTransferCharacterGateway(decision);
 
@@ -154,7 +154,7 @@ namespace ThunderbirdsBoardGameEngine.GameState.Application.UnitTests.TransferCh
 
             var integrityValidator = CreateValidator();
 
-            var decision = new CharacterTransferDecision(true, null);
+            var decision = CharacterTransferDecision.Permitted();
 
             var gateway = CreateTransferCharacterGateway(decision);
 
@@ -182,7 +182,7 @@ namespace ThunderbirdsBoardGameEngine.GameState.Application.UnitTests.TransferCh
 
             var integrityValidator = CreateValidator();
 
-            var decision = new CharacterTransferDecision(true, null);
+            var decision = CharacterTransferDecision.Permitted();
 
             var gateway = CreateTransferCharacterGateway(decision);
 
@@ -221,7 +221,7 @@ namespace ThunderbirdsBoardGameEngine.GameState.Application.UnitTests.TransferCh
 
             var integrityValidator = CreateValidator();
 
-            var decision = new CharacterTransferDecision(false, CharacterTransferRejectionReason.CharacterCapacityExceeded);
+            var decision = CharacterTransferDecision.Rejected(CharacterTransferRejectionReason.CharacterCapacityExceeded);
 
             var gateway = CreateTransferCharacterGateway(decision);
 
@@ -269,7 +269,7 @@ namespace ThunderbirdsBoardGameEngine.GameState.Application.UnitTests.TransferCh
                     }
                 });
 
-            var decision = new CharacterTransferDecision(true, null);
+            var decision = CharacterTransferDecision.Permitted();
 
             var gateway = CreateTransferCharacterGateway(decision);
 
@@ -302,7 +302,7 @@ namespace ThunderbirdsBoardGameEngine.GameState.Application.UnitTests.TransferCh
 
             var integrityValidator = CreateValidator();
 
-            var decision = new CharacterTransferDecision(true, null);
+            var decision = CharacterTransferDecision.Permitted();
 
             var gateway = CreateTransferCharacterGateway(decision);
 
@@ -338,7 +338,7 @@ namespace ThunderbirdsBoardGameEngine.GameState.Application.UnitTests.TransferCh
 
             var integrityValidator = CreateValidator();
 
-            var decision = new CharacterTransferDecision(true, null);
+            var decision = CharacterTransferDecision.Permitted();
 
             var gateway = CreateTransferCharacterGateway(decision);
 
@@ -373,7 +373,7 @@ namespace ThunderbirdsBoardGameEngine.GameState.Application.UnitTests.TransferCh
 
             var integrityValidator = CreateValidator();
 
-            var decision = new CharacterTransferDecision(true, null);
+            var decision = CharacterTransferDecision.Permitted();
 
             var gateway = CreateTransferCharacterGateway(decision);
 
@@ -436,9 +436,9 @@ namespace ThunderbirdsBoardGameEngine.GameState.Application.UnitTests.TransferCh
             return validator;
         }
 
-        private static ITransferCharacterGateway CreateTransferCharacterGateway(CharacterTransferDecision decision)
+        private static ITransferCharacterRulesGateway CreateTransferCharacterGateway(CharacterTransferDecision decision)
         {
-            var transferCharacterGateway = Substitute.For<ITransferCharacterGateway>();
+            var transferCharacterGateway = Substitute.For<ITransferCharacterRulesGateway>();
             transferCharacterGateway.ValidateTransferCharactersAsync(
                     Arg.Any<IReadOnlyCollection<CurrentThunderbirdState>>(),
                     Arg.Any<IReadOnlyCollection<CharacterAssignment>>(),
@@ -448,7 +448,7 @@ namespace ThunderbirdsBoardGameEngine.GameState.Application.UnitTests.TransferCh
             return transferCharacterGateway;
         }
 
-        private static TransferCharacterHandler CreateHandler(IGameRepository repository, IGameStateIntegrityValidator integrityValidator, ITransferCharacterGateway gateway)
+        private static TransferCharacterHandler CreateHandler(IGameRepository repository, IGameStateIntegrityValidator integrityValidator, ITransferCharacterRulesGateway gateway)
         {
             return new TransferCharacterHandler(repository, integrityValidator, gateway);
         }

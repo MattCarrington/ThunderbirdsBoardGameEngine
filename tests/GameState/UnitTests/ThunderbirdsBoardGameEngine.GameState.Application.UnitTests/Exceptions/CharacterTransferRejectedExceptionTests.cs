@@ -10,20 +10,10 @@ namespace ThunderbirdsBoardGameEngine.GameState.Application.UnitTests.Exceptions
         public void FromDecision_ShouldThrowArgumentException_WhenDecisionIsPermitted()
         {
             // Arrange
-            var permittedDecision = new CharacterTransferDecision(true, null);
+            var permittedDecision = CharacterTransferDecision.Permitted();
 
             // Act & Assert
             Assert.Throws<ArgumentException>(() => CharacterTransferRejectedException.FromDecision(permittedDecision));
-        }
-
-        [Fact]
-        public void FromDecision_ShouldThrowInvalidOperationException_WhenDecisionIsRejectedWithoutReason()
-        {
-            // Arrange
-            var rejectedDecisionWithoutReason = new CharacterTransferDecision(false, null);
-
-            // Act & Assert
-            Assert.Throws<InvalidOperationException>(() => CharacterTransferRejectedException.FromDecision(rejectedDecisionWithoutReason));
         }
 
         [Theory]
@@ -33,23 +23,13 @@ namespace ThunderbirdsBoardGameEngine.GameState.Application.UnitTests.Exceptions
         public void FromDecision_ShouldReturnExceptionWithCorrectReason_WhenDecisionIsRejectedWithReason(CharacterTransferRejectionReason rejectionReason)
         {
             // Arrange
-            var rejectedDecisionWithReason = new CharacterTransferDecision(false, rejectionReason);
+            var rejectedDecisionWithReason = CharacterTransferDecision.Rejected(rejectionReason);
 
             // Act
             var exception = CharacterTransferRejectedException.FromDecision(rejectedDecisionWithReason);
 
             // Assert
             Assert.Equal(rejectionReason, exception.Reason);
-        }
-
-        [Fact]
-        public void FromDecision_ShouldThrowInvalidOperationException_WhenReasonIsNoChange()
-        {
-            // Arrange
-            var decision = new CharacterTransferDecision(false, CharacterTransferRejectionReason.NoChange);
-
-            // Act & Assert
-            Assert.Throws<InvalidOperationException>(() => CharacterTransferRejectedException.FromDecision(decision));
         }
 
         [Fact]

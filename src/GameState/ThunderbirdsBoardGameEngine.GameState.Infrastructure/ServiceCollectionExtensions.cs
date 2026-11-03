@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using ThunderbirdsBoardGameEngine.GameState.Application;
 using ThunderbirdsBoardGameEngine.GameState.Application.MoveThunderbird;
+using ThunderbirdsBoardGameEngine.GameState.Application.TransferCharacters;
 using ThunderbirdsBoardGameEngine.GameState.Infrastructure.GameStateIntegrity;
 using ThunderbirdsBoardGameEngine.GameState.Infrastructure.Persistence;
 using ThunderbirdsBoardGameEngine.GameState.Infrastructure.Persistence.Configuration;
@@ -49,6 +50,7 @@ namespace ThunderbirdsBoardGameEngine.GameState.Infrastructure
         public static IServiceCollection AddGameStateRulesGateway(this IServiceCollection services)
         {
             services.AddScoped<IMovementRulesGateway, InProcessMovementRulesGateway>();
+            services.AddScoped<ITransferCharacterRulesGateway, InProcessTransferCharacterRulesGateway>();
             return services;
         }
 

@@ -8,9 +8,9 @@ namespace ThunderbirdsBoardGameEngine.GameState.Application.TransferCharacters
     {
         private readonly IGameRepository _gameRepository;
         private readonly IGameStateIntegrityValidator _gameStateIntegrityValidator;
-        private readonly ITransferCharacterGateway _transferCharacterGateway;
+        private readonly ITransferCharacterRulesGateway _transferCharacterGateway;
 
-        public TransferCharacterHandler(IGameRepository gameRepository, IGameStateIntegrityValidator gameStateIntegrityValidator, ITransferCharacterGateway transferCharacterGateway)
+        public TransferCharacterHandler(IGameRepository gameRepository, IGameStateIntegrityValidator gameStateIntegrityValidator, ITransferCharacterRulesGateway transferCharacterGateway)
         {
             _gameRepository = gameRepository;
             _gameStateIntegrityValidator = gameStateIntegrityValidator;
