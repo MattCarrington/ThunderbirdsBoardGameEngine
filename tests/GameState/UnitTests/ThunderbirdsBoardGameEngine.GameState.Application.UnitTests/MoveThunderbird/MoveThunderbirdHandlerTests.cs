@@ -153,8 +153,8 @@ namespace ThunderbirdsBoardGameEngine.GameState.Application.UnitTests.MoveThunde
 
         private static MoveThunderbirdHandler CreateHandler(IGameRepository repository, IGameStateIntegrityValidator integrityValidator, ValidateMovementDecision decision)
         {
-            var gateway = Substitute.For<IValidateMovementGateway>();
-            gateway.ValidateMovement(Arg.Any<ThunderbirdCode>(), Arg.Any<LocationCode>(), Arg.Any<LocationCode>(), Arg.Any<CancellationToken>())
+            var gateway = Substitute.For<IMovementRulesGateway>();
+            gateway.ValidateMovementAsync(Arg.Any<ThunderbirdCode>(), Arg.Any<LocationCode>(), Arg.Any<LocationCode>(), Arg.Any<CancellationToken>())
                 .Returns(decision);
 
             return new MoveThunderbirdHandler(repository, gateway, integrityValidator);

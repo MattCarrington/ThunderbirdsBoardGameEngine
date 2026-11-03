@@ -48,7 +48,7 @@ namespace ThunderbirdsBoardGameEngine.GameState.Infrastructure
 
         public static IServiceCollection AddGameStateRulesGateway(this IServiceCollection services)
         {
-            services.AddScoped<IValidateMovementGateway, ValidateMovementGateway>();
+            services.AddScoped<IMovementRulesGateway, InProcessMovementRulesGateway>();
             return services;
         }
 

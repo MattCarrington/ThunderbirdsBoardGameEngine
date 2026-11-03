@@ -19,10 +19,10 @@ namespace ThunderbirdsBoardGameEngine.GameState.ComponentTests.MoveThunderbird
             var game = CreateValidGame();
             var gameId = game.Id;
 
-            var gateway = new FakeValidateMovementGateway(new ValidateMovementDecision(true, Array.Empty<string>()));
+            var gateway = new FakeMovementRulesGateway(new ValidateMovementDecision(true, Array.Empty<string>()));
 
             await using var testHost = GameStateTestHost.CreateBuilder()
-                .WithService<IValidateMovementGateway>(gateway)
+                .WithService<IMovementRulesGateway>(gateway)
                 .Build();
 
             await testHost.Repository.CreateNewGameSession(game, TestContext.Current.CancellationToken);
@@ -51,10 +51,10 @@ namespace ThunderbirdsBoardGameEngine.GameState.ComponentTests.MoveThunderbird
             var game = CreateValidGame();
             var gameId = game.Id;
 
-            var gateway = new FakeValidateMovementGateway(new ValidateMovementDecision(false, new[] { "Movement not allowed" }));
+            var gateway = new FakeMovementRulesGateway(new ValidateMovementDecision(false, new[] { "Movement not allowed" }));
 
             await using var testHost = GameStateTestHost.CreateBuilder()
-                .WithService<IValidateMovementGateway>(gateway)
+                .WithService<IMovementRulesGateway>(gateway)
                 .Build();
 
             await testHost.Repository.CreateNewGameSession(game, TestContext.Current.CancellationToken);
