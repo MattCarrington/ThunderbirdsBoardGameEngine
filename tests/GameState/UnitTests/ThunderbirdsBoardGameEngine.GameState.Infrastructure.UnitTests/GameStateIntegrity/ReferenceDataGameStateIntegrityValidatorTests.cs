@@ -1,5 +1,4 @@
-﻿using ThunderbirdsBoardGameEngine.TestUtils.ReferenceData.Builders;
-using NSubstitute;
+﻿using NSubstitute;
 using System.Collections.Immutable;
 using ThunderbirdsBoardGameEngine.GameState.Application.Exceptions;
 using ThunderbirdsBoardGameEngine.GameState.Domain;
@@ -8,6 +7,7 @@ using ThunderbirdsBoardGameEngine.ReferenceData.Core.Enums;
 using ThunderbirdsBoardGameEngine.ReferenceData.Core.Identities;
 using ThunderbirdsBoardGameEngine.ReferenceData.Core.Model;
 using ThunderbirdsBoardGameEngine.ReferenceData.Runtime.Interfaces;
+using ThunderbirdsBoardGameEngine.ReferenceData.Testing.Builders;
 using Xunit;
 
 namespace ThunderbirdsBoardGameEngine.GameState.Infrastructure.UnitTests.GameStateIntegrity

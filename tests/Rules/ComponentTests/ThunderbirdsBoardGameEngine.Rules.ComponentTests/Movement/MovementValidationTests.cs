@@ -2,11 +2,11 @@
 using Microsoft.Extensions.DependencyInjection;
 using ThunderbirdsBoardGameEngine.ReferenceData.Core.Identities;
 using ThunderbirdsBoardGameEngine.ReferenceData.Core.KnownIdentities;
+using ThunderbirdsBoardGameEngine.ReferenceData.Testing.Fixtures;
+using ThunderbirdsBoardGameEngine.ReferenceData.Testing.TestData;
 using ThunderbirdsBoardGameEngine.Rules.Application.Exceptions;
 using ThunderbirdsBoardGameEngine.Rules.Application.Movement.MapTraversal;
 using ThunderbirdsBoardGameEngine.Rules.Infrastructure;
-using ThunderbirdsBoardGameEngine.TestUtils.ReferenceData.Fixtures;
-using ThunderbirdsBoardGameEngine.TestUtils.ReferenceData.TestData;
 using Xunit;
 
 namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.Movement

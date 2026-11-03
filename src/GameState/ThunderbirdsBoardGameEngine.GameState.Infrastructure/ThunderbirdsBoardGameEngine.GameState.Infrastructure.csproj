@@ -10,9 +10,9 @@
     <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore" />
     <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" />
+    <PackageReference Include="ThunderbirdsBoardGameEngine.ReferenceData.Runtime" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\ReferenceData\ThunderbirdsBoardGameEngine.ReferenceData.Runtime\ThunderbirdsBoardGameEngine.ReferenceData.Runtime.csproj" />
     <ProjectReference Include="..\..\Rules\ThunderbirdsBoardGameEngine.Rules.Application\ThunderbirdsBoardGameEngine.Rules.Application.csproj" />
     <ProjectReference Include="..\ThunderbirdsBoardGameEngine.GameState.Application\ThunderbirdsBoardGameEngine.GameState.Application.csproj" />
   </ItemGroup>

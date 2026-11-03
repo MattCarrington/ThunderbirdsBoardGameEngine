@@ -1,6 +1,4 @@
-﻿using ThunderbirdsBoardGameEngine.TestUtils.ReferenceData.Builders;
-using DocumentFormat.OpenXml.ExtendedProperties;
-using ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Compilation;
+﻿using ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Compilation;
 using ThunderbirdsBoardGameEngine.ReferenceData.Compiler.Resolvers;
 using ThunderbirdsBoardGameEngine.ReferenceData.Core.Enums;
 using ThunderbirdsBoardGameEngine.ReferenceData.Core.Identities;
