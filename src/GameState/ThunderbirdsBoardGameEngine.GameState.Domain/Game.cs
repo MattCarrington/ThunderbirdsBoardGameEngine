@@ -138,12 +138,12 @@ namespace ThunderbirdsBoardGameEngine.GameState.Domain
                     throw CharacterNotFoundException.Create(assignment.CharacterCode);
                 }
 
-                if (!_machinesState.ContainsKey(assignment.TargetThunderbirdCode))
+                if (!_machinesState.ContainsKey(assignment.DestinationThunderbirdCode))
                 {
-                    throw ThunderbirdMachineNotFoundException.Create(assignment.TargetThunderbirdCode);
+                    throw ThunderbirdMachineNotFoundException.Create(assignment.DestinationThunderbirdCode);
                 }
 
-                if (currentMachine == assignment.TargetThunderbirdCode)
+                if (currentMachine == assignment.DestinationThunderbirdCode)
                 {
                     throw new ArgumentException(
                         "Every assignment must transfer its character to another machine.",
@@ -153,8 +153,31 @@ namespace ThunderbirdsBoardGameEngine.GameState.Domain
 
             foreach (var assignment in assignments)
             {
-                _charactersState[assignment.CharacterCode] = assignment.TargetThunderbirdCode;
+                _charactersState[assignment.CharacterCode] = assignment.DestinationThunderbirdCode;
             }
+        }
+
+        public ThunderbirdCode GetCharacterAssignment(CharacterCode characterCode)
+        {
+            if (!_charactersState.TryGetValue(characterCode, out var machine))
+            {
+                throw CharacterNotFoundException.Create(characterCode);
+            }
+            return machine;
+        }
+
+        public IReadOnlyCollection<CharacterCode> GetThunderbirdMachineOccupancy(ThunderbirdCode machineCode)
+        {
+            if (!_machinesState.ContainsKey(machineCode))
+            {
+                throw ThunderbirdMachineNotFoundException.Create(machineCode);
+            }
+
+            return _charactersState
+                .Where(kvp => kvp.Value == machineCode)
+                .Select(kvp => kvp.Key)
+                .ToList()
+                .AsReadOnly();
         }
     }
 }

@@ -14,13 +14,13 @@ namespace ThunderbirdsBoardGameEngine.GameState.Domain.UnitTests
 
             var assignment = new CharacterAssignment(
                 CharacterCode: new("character-1"),
-                TargetThunderbirdCode: new("machine-2"));
+                DestinationThunderbirdCode: new("machine-2"));
 
             // Act
             game.TransferCharacters([assignment]);
 
             // Assert
-            AssertCharacterAssignment(game, assignment.CharacterCode, assignment.TargetThunderbirdCode);
+            AssertCharacterAssignment(game, assignment.CharacterCode, assignment.DestinationThunderbirdCode);
         }
 
         [Fact]
@@ -33,10 +33,10 @@ namespace ThunderbirdsBoardGameEngine.GameState.Domain.UnitTests
             {
                 new(
                     CharacterCode: new("character-1"),
-                    TargetThunderbirdCode: new("machine-2")),
+                    DestinationThunderbirdCode: new("machine-2")),
                 new(
                     CharacterCode: new("character-2"),
-                    TargetThunderbirdCode: new("machine-1"))
+                    DestinationThunderbirdCode: new("machine-1"))
             };
 
             // Act
@@ -45,7 +45,7 @@ namespace ThunderbirdsBoardGameEngine.GameState.Domain.UnitTests
             // Assert
             foreach (var assignment in assignments)
             {
-                AssertCharacterAssignment(game, assignment.CharacterCode, assignment.TargetThunderbirdCode);
+                AssertCharacterAssignment(game, assignment.CharacterCode, assignment.DestinationThunderbirdCode);
             }
         }
 
@@ -57,7 +57,7 @@ namespace ThunderbirdsBoardGameEngine.GameState.Domain.UnitTests
 
             var assignment = new CharacterAssignment(
                 CharacterCode: new("non-existent-character"),
-                TargetThunderbirdCode: new("machine-2"));
+                DestinationThunderbirdCode: new("machine-2"));
 
             // Act & Assert
             Assert.Throws<CharacterNotFoundException>(() => game.TransferCharacters([assignment]));
@@ -71,7 +71,7 @@ namespace ThunderbirdsBoardGameEngine.GameState.Domain.UnitTests
 
             var assignment = new CharacterAssignment(
                 CharacterCode: new("character-1"),
-                TargetThunderbirdCode: new("non-existent-machine"));
+                DestinationThunderbirdCode: new("non-existent-machine"));
 
             // Act & Assert
             Assert.Throws<ThunderbirdMachineNotFoundException>(() => game.TransferCharacters([assignment]));
@@ -85,7 +85,7 @@ namespace ThunderbirdsBoardGameEngine.GameState.Domain.UnitTests
 
             var assignment = new CharacterAssignment(
                 CharacterCode: new("character-1"),
-                TargetThunderbirdCode: new("machine-1"));
+                DestinationThunderbirdCode: new("machine-1"));
 
             // Act & Assert
             Assert.Throws<ArgumentException>(() => game.TransferCharacters([assignment]));
@@ -101,10 +101,10 @@ namespace ThunderbirdsBoardGameEngine.GameState.Domain.UnitTests
             {
                 new(
                     CharacterCode: new("character-1"),
-                    TargetThunderbirdCode: new("machine-2")),
+                    DestinationThunderbirdCode: new("machine-2")),
                 new(
                     CharacterCode: new("character-1"),
-                    TargetThunderbirdCode: new("machine-1"))
+                    DestinationThunderbirdCode: new("machine-1"))
             };
 
             // Act & Assert

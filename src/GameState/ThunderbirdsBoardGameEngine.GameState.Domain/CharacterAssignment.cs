@@ -2,5 +2,5 @@
 
 namespace ThunderbirdsBoardGameEngine.GameState.Domain
 {
-    public record CharacterAssignment(CharacterCode CharacterCode, ThunderbirdCode TargetThunderbirdCode);
+    public record CharacterAssignment(CharacterCode CharacterCode, ThunderbirdCode DestinationThunderbirdCode);
 }
