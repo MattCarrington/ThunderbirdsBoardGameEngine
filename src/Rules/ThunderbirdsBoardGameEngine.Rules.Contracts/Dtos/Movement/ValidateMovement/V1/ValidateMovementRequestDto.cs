@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using ThunderbirdsBoardGameEngine.Rules.Contracts.Validation;
 
 namespace ThunderbirdsBoardGameEngine.Rules.Contracts.Dtos.Movement.ValidateMovement.V1
 {
@@ -22,6 +23,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Contracts.Dtos.Movement.ValidateMove
         /// <summary>
         /// Gets the collection of unique keys for the Event Cards that are currently active.
         /// </summary>
+        [NoBlankItems(ErrorMessage = "Active event card keys cannot contain null or whitespace values.")]
         public IReadOnlyCollection<string> ActiveEventCardKeys { get; init; } = [];
     }
 }

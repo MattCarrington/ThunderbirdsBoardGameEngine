@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using ThunderbirdsBoardGameEngine.Rules.Contracts.Validation;
 
 namespace ThunderbirdsBoardGameEngine.Rules.Contracts.Dtos.Rescue.CalculateRescueTarget.V1
 {
@@ -11,6 +12,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Contracts.Dtos.Rescue.CalculateRescu
         /// <summary>
         /// Gets the collection of bonus keys that are currently active for disasters.
         /// </summary>
+        [NoBlankItems(ErrorMessage = "Present disaster bonus keys cannot contain null or whitespace values.")]
         public IReadOnlyCollection<string> PresentDisasterBonusKeys { get; init; } = [];
 
         /// <summary>
@@ -27,11 +29,13 @@ namespace ThunderbirdsBoardGameEngine.Rules.Contracts.Dtos.Rescue.CalculateRescu
         /// <summary>
         /// Gets the collection of unique keys for the Fab Cards that have been played.
         /// </summary>
+        [NoBlankItems(ErrorMessage = "Played Fab Card keys cannot contain null or whitespace values.")]
         public IReadOnlyCollection<string> PlayedFabCardKeys { get; init; } = [];
 
         /// <summary>
         /// Gets the collection of unique keys for the Event Cards that are currently active.
         /// </summary>
+        [NoBlankItems(ErrorMessage = "Active event card keys cannot contain null or whitespace values.")]
         public IReadOnlyCollection<string> ActiveEventCardKeys { get; init; } = [];
     }
 }

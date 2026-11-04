@@ -53,21 +53,6 @@ namespace ThunderbirdsBoardGameEngine.Api.UnitTests.Mappers.Rules.V1
         }
 
         [Fact]
-        public void ToQuery_ActiveEventCardKeyNull_ThrowsBadRequestException()
-        {
-            // Arrange
-            var dto = new ValidateMovementRequestDto
-            {
-                StartLocation = "location1",
-                DestinationLocation = "location2",
-                ActiveEventCardKeys = null
-            };
-            // Act & Assert
-            var ex = Assert.Throws<BadRequestException>(() => dto.ToQuery("thunderbird4"));
-            Assert.Equal("ActiveEventCardKeys cannot be null.", ex.Message);
-        }
-
-        [Fact]
         public void ToDto_ValidResponse_ReturnsExpectedDto()
         {
             // Arrange

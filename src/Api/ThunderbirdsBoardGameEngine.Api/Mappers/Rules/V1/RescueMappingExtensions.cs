@@ -1,6 +1,4 @@
-﻿using ThunderbirdsBoardGameEngine.Api.Exceptions;
-using ThunderbirdsBoardGameEngine.Api.Validators;
-using ThunderbirdsBoardGameEngine.ReferenceData.Core.Identities;
+﻿using ThunderbirdsBoardGameEngine.ReferenceData.Core.Identities;
 using ThunderbirdsBoardGameEngine.Rules.Application.Rescue.CalculateRescueTarget;
 using ThunderbirdsBoardGameEngine.Rules.Contracts.Dtos.Rescue.CalculateRescueTarget.V1;
 using ThunderbirdsBoardGameEngine.Rules.Domain.Rescue;
@@ -11,10 +9,6 @@ namespace ThunderbirdsBoardGameEngine.Api.Mappers.Rules.V1
     {
         public static CalculateRescueTargetQuery ToQuery(this CalculateRescueTargetRequestDto request, string disasterCardCode)
         {
-            CollectionMappingValidator.ValidateStringCollection(request.PresentDisasterBonusKeys, nameof(request.PresentDisasterBonusKeys));
-            CollectionMappingValidator.ValidateStringCollection(request.PlayedFabCardKeys, nameof(request.PlayedFabCardKeys));
-            CollectionMappingValidator.ValidateStringCollection(request.ActiveEventCardKeys, nameof(request.ActiveEventCardKeys));
-
             return new CalculateRescueTargetQuery
             (
                 DisasterCardCode: new CardCode(disasterCardCode),

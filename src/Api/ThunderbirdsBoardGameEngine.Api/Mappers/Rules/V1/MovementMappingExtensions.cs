@@ -1,6 +1,4 @@
-﻿using ThunderbirdsBoardGameEngine.Api.Exceptions;
-using ThunderbirdsBoardGameEngine.Api.Validators;
-using ThunderbirdsBoardGameEngine.ReferenceData.Core.Identities;
+﻿using ThunderbirdsBoardGameEngine.ReferenceData.Core.Identities;
 using ThunderbirdsBoardGameEngine.Rules.Application.Movement.MapTraversal;
 using ThunderbirdsBoardGameEngine.Rules.Contracts.Dtos.Movement.ValidateMovement.V1;
 
@@ -10,8 +8,6 @@ namespace ThunderbirdsBoardGameEngine.Api.Mappers.Rules.V1
     {
         public static ValidateMovementQuery ToQuery(this ValidateMovementRequestDto request, string thunderbirdCode)
         {
-            CollectionMappingValidator.ValidateStringCollection(request.ActiveEventCardKeys, nameof(request.ActiveEventCardKeys));
-
             return new ValidateMovementQuery
             (
                 ThunderbirdCode: new ThunderbirdCode(thunderbirdCode),
