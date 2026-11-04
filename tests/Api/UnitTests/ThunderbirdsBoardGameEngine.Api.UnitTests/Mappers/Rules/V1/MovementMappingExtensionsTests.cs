@@ -30,38 +30,6 @@ namespace ThunderbirdsBoardGameEngine.Api.UnitTests.Mappers.Rules.V1
             Assert.Empty(result.ActiveEventCardCodes);
         }
 
-        [Theory]
-        [ClassData(typeof(NullOrWhitespaceStringData))]
-        public void ToQuery_StartLocationNullOrEmpty_ThrowsBadRequestException(string? startLocation)
-        {
-            // Arrange
-            var dto = new ValidateMovementRequestDto
-            {
-                StartLocation = startLocation,
-                DestinationLocation = "location2"
-            };
-
-            // Act & Assert
-            var ex = Assert.Throws<BadRequestException>(() => dto.ToQuery("thunderbird4"));
-            Assert.Equal("Start location must be provided.", ex.Message);
-        }
-
-        [Theory]
-        [ClassData(typeof(NullOrWhitespaceStringData))]
-        public void ToQuery_DestinationLocationNullOrEmpty_ThrowsBadRequestException(string? destinationLocation)
-        {
-            // Arrange
-            var dto = new ValidateMovementRequestDto
-            {
-                StartLocation = "location1",
-                DestinationLocation = destinationLocation
-            };
-
-            // Act & Assert
-            var ex = Assert.Throws<BadRequestException>(() => dto.ToQuery("thunderbird4"));
-            Assert.Equal("Destination location must be provided.", ex.Message);
-        }
-
         [Fact]
         public void ToQuery_OptionalActiveEventCardKeysIncluded_ReturnsExpectedQuery()
         {
@@ -82,21 +50,6 @@ namespace ThunderbirdsBoardGameEngine.Api.UnitTests.Mappers.Rules.V1
             Assert.Equal(new LocationCode("location2"), result.DestinationLocationCode);
             Assert.Equal(2, result.ActiveEventCardCodes.Count);
             Assert.Equal(dto.ActiveEventCardKeys.Select(c => new CardCode(c)), result.ActiveEventCardCodes);
-        }
-
-        [Fact]
-        public void ToQuery_ActiveEventCardKeyNull_ThrowsBadRequestException()
-        {
-            // Arrange
-            var dto = new ValidateMovementRequestDto
-            {
-                StartLocation = "location1",
-                DestinationLocation = "location2",
-                ActiveEventCardKeys = null
-            };
-            // Act & Assert
-            var ex = Assert.Throws<BadRequestException>(() => dto.ToQuery("thunderbird4"));
-            Assert.Equal("ActiveEventCardKeys cannot be null.", ex.Message);
         }
 
         [Fact]

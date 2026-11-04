@@ -5,6 +5,7 @@ using System.Net.Http.Json;
 using ThunderbirdsBoardGameEngine.Api.ComponentTests.Factories;
 using ThunderbirdsBoardGameEngine.Rules.Contracts.Dtos.Movement.ValidateMovement.V1;
 using ThunderbirdsBoardGameEngine.TestUtils.xUnit.Assertions;
+using ThunderbirdsBoardGameEngine.TestUtils.xUnit.ClassData;
 using Xunit;
 
 namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints.Rules.V1
@@ -23,6 +24,7 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints.Rules.V1
         [Fact]
         public async Task ReturnsSuccessWhenRequestIsValid()
         {
+            // Arrange
             var dto = new ValidateMovementRequestDto
             {
                 StartLocation = "south-pacific",
@@ -54,6 +56,7 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints.Rules.V1
         [Fact]
         public async Task ReturnsSuccessWhenRequestIsValidButNoRouteFound()
         {
+            // Arrange
             var dto = new ValidateMovementRequestDto
             {
                 StartLocation = "south-pacific",
@@ -87,6 +90,7 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints.Rules.V1
         [Fact]
         public async Task ReturnsNotFoundWhenThunderbirdDoesNotExist()
         {
+            // Arrange
             var dto = new ValidateMovementRequestDto
             {
                 StartLocation = "south-pacific",
@@ -107,6 +111,7 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints.Rules.V1
         [Fact]
         public async Task ReturnsNotFoundWhenLocationDoesNotExist()
         {
+            // Arrange
             var dto = new ValidateMovementRequestDto
             {
                 StartLocation = "south-pacific",
@@ -127,6 +132,7 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints.Rules.V1
         [Fact]
         public async Task ReturnsBadRequestWhenStartLocationNotPresent()
         {
+            // Arrange
             var dto = new
             {
                 DestinationLocation = "north-america"
@@ -146,6 +152,7 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints.Rules.V1
         [Fact]
         public async Task ReturnsBadRequestWhenDestinationLocationNotPresent()
         {
+            // Arrange
             var dto = new
             {
                 StartLocation = "south-america"
@@ -158,6 +165,28 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints.Rules.V1
             // Act
             using var response = await _client.SendAsync(request, TestContext.Current.CancellationToken);
 
+            // Assert
+            await ProblemDetailsAssertions.AssertBadRequestAsync(response, "Request validation failed.");
+        }
+
+        [Theory]
+        [ClassData(typeof(NullOrWhitespaceStringData))]
+        public async Task ReturnBadRequestWhenEventCardsContainsEmpty(string? value)
+        {
+            // Arrange
+            var dto = new ValidateMovementRequestDto
+            {
+                StartLocation = "south-america",
+                DestinationLocation = "north-america",
+                ActiveEventCardKeys = new[] { "usn-sentinel-missile-strike", value }
+            };
+
+            using var request = new HttpRequestMessage(HttpMethod.Post, "/api/rules/movement/thunderbird-1/validate");
+            request.Headers.Add("X-API-Version", ApiVersion.ToString());
+            request.Content = JsonContent.Create(dto);
+
+            // Act
+            using var response = await _client.SendAsync(request, TestContext.Current.CancellationToken);
             // Assert
             await ProblemDetailsAssertions.AssertBadRequestAsync(response, "Request validation failed.");
         }

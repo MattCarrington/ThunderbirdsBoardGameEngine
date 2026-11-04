@@ -5,6 +5,7 @@ using System.Net.Http.Json;
 using ThunderbirdsBoardGameEngine.Api.ComponentTests.Factories;
 using ThunderbirdsBoardGameEngine.Rules.Contracts.Dtos.Rescue.CalculateRescueTarget.V1;
 using ThunderbirdsBoardGameEngine.TestUtils.xUnit.Assertions;
+using ThunderbirdsBoardGameEngine.TestUtils.xUnit.ClassData;
 using Xunit;
 
 namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints.Rules.V1
@@ -174,6 +175,91 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints.Rules.V1
 
             // Assert
             await ProblemDetailsAssertions.AssertBadRequestAsync(response, "Invalid rescue calculation request.");
+        }
+
+        [Theory]
+        [ClassData(typeof(NullOrWhitespaceStringData))]
+        public async Task CalculateRescueResult_WhenFabCardKeysIncludesEmptyString_ReturnsBadRequest(string? value)
+        {
+            // Arrange
+            var invalidFabCardDto = new CalculateRescueTargetRequestDto
+            {
+                PresentDisasterBonusKeys = new[]
+                {
+                    "mobile-crane",
+                    "domo"
+                },
+                PerformingCharacterKey = "gordon",
+                PlayedFabCardKeys = new[]
+                {
+                    value
+                }
+            };
+
+            using var request = new HttpRequestMessage(HttpMethod.Post, _route);
+            request.Headers.Add("X-API-Version", ApiVersion.ToString());
+            request.Content = JsonContent.Create(invalidFabCardDto);
+
+            // Act
+            using var response = await _client.SendAsync(request, TestContext.Current.CancellationToken);
+
+            // Assert
+            await ProblemDetailsAssertions.AssertBadRequestAsync(response, "Request validation failed.");
+        }
+
+        [Theory]
+        [ClassData(typeof(NullOrWhitespaceStringData))]
+        public async Task CalculateRescueResult_WhenDisasterBonusKeyIncludesEmptyString_ReturnsBadRequest(string? value)
+        {
+            // Arrange
+            var invalidFabCardDto = new CalculateRescueTargetRequestDto
+            {
+                PerformingCharacterKey = "gordon",
+                PresentDisasterBonusKeys = new[]
+                {
+                    value
+                }
+            };
+
+            using var request = new HttpRequestMessage(HttpMethod.Post, _route);
+            request.Headers.Add("X-API-Version", ApiVersion.ToString());
+            request.Content = JsonContent.Create(invalidFabCardDto);
+
+            // Act
+            using var response = await _client.SendAsync(request, TestContext.Current.CancellationToken);
+
+            // Assert
+            await ProblemDetailsAssertions.AssertBadRequestAsync(response, "Request validation failed.");
+        }
+
+        [Theory]
+        [ClassData(typeof(NullOrWhitespaceStringData))]
+        public async Task CalculateRescueResult_WhenActiveEventCardKeysIncludesEmptyString_ReturnsBadRequest(string? value)
+        {
+            // Arrange
+            var invalidFabCardDto = new CalculateRescueTargetRequestDto
+            {
+                PresentDisasterBonusKeys = new[]
+                {
+                    "mobile-crane",
+                    "domo"
+                },
+                PerformingCharacterKey = "gordon",
+                ActiveEventCardKeys = new[]
+                {
+                    value
+                }
+            };
+
+            using var request = new HttpRequestMessage(HttpMethod.Post, _route);
+            request.Headers.Add("X-API-Version", ApiVersion.ToString());
+            request.Content = JsonContent.Create(invalidFabCardDto);
+
+            // Act
+            using var response = await _client.SendAsync(request, TestContext.Current.CancellationToken);
+
+            // Assert
+            await ProblemDetailsAssertions.AssertBadRequestAsync(response, "Request validation failed.");
         }
     }
 }
