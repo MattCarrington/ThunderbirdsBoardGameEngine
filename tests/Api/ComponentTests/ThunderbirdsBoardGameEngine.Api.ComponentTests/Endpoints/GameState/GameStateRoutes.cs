@@ -18,5 +18,10 @@
         {
             return $"{Games}/{gameId}/thunderbird-machines/{thunderbirdCode}/movements";
         }
+
+        public static string TransferCharacters(Guid gameId)
+        {
+            return $"{Games}/{gameId}/character-transfers";
+        }
     }
 }
