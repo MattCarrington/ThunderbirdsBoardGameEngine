@@ -1,4 +1,6 @@
-﻿namespace ThunderbirdsBoardGameEngine.Rules.Contracts.Dtos.Movement.ValidateMovement.V1
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace ThunderbirdsBoardGameEngine.Rules.Contracts.Dtos.Movement.ValidateMovement.V1
 {
     /// <summary>
     /// Represents the data required to validate a movement action from a starting location to a destination location.
@@ -8,11 +10,13 @@
         /// <summary>
         /// Gets the unique key identifying the starting location of the movement action.
         /// </summary>
+        [Required(ErrorMessage = "Start location must be provided.")]
         public required string StartLocation { get; init; }
 
         /// <summary>
         /// Gets the unique key identifying the destination location of the movement action.
         /// </summary>
+        [Required(ErrorMessage = "Destination location must be provided.")]
         public required string DestinationLocation { get; init; }
 
         /// <summary>

@@ -114,21 +114,6 @@ namespace ThunderbirdsBoardGameEngine.Api.UnitTests.Mappers.Rules.V1
             Assert.Empty(result.ActiveEventCardCodes);
         }
 
-        [Theory]
-        [ClassData(typeof(NullOrWhitespaceStringData))]
-        public void ToQuery_PerformingCharacterKeyNullOrEmpty_ThrowsBadRequestException(string? character)
-        {
-            // Arrange
-            var dto = new CalculateRescueTargetRequestDto
-            {
-                PresentDisasterBonusKeys = ["character:alan", "thunderbird:thunderbird4", "podvehicle.domo"],
-                PerformingCharacterKey = character
-            };
-
-            // Act & Assert
-            Assert.Throws<BadRequestException>(() => dto.ToQuery(ValidDisasterCardCode.ToString()));
-        }
-
         [Fact]
         public void ToQuery_PresentDisasterBonusKeysNull_ThrowsBadRequestException()
         {

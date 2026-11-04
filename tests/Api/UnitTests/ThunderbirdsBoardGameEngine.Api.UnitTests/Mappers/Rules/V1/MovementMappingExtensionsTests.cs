@@ -30,38 +30,6 @@ namespace ThunderbirdsBoardGameEngine.Api.UnitTests.Mappers.Rules.V1
             Assert.Empty(result.ActiveEventCardCodes);
         }
 
-        [Theory]
-        [ClassData(typeof(NullOrWhitespaceStringData))]
-        public void ToQuery_StartLocationNullOrEmpty_ThrowsBadRequestException(string? startLocation)
-        {
-            // Arrange
-            var dto = new ValidateMovementRequestDto
-            {
-                StartLocation = startLocation,
-                DestinationLocation = "location2"
-            };
-
-            // Act & Assert
-            var ex = Assert.Throws<BadRequestException>(() => dto.ToQuery("thunderbird4"));
-            Assert.Equal("Start location must be provided.", ex.Message);
-        }
-
-        [Theory]
-        [ClassData(typeof(NullOrWhitespaceStringData))]
-        public void ToQuery_DestinationLocationNullOrEmpty_ThrowsBadRequestException(string? destinationLocation)
-        {
-            // Arrange
-            var dto = new ValidateMovementRequestDto
-            {
-                StartLocation = "location1",
-                DestinationLocation = destinationLocation
-            };
-
-            // Act & Assert
-            var ex = Assert.Throws<BadRequestException>(() => dto.ToQuery("thunderbird4"));
-            Assert.Equal("Destination location must be provided.", ex.Message);
-        }
-
         [Fact]
         public void ToQuery_OptionalActiveEventCardKeysIncluded_ReturnsExpectedQuery()
         {

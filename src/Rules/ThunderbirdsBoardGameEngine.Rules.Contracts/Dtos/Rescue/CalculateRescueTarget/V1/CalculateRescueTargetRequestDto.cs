@@ -1,4 +1,6 @@
-﻿namespace ThunderbirdsBoardGameEngine.Rules.Contracts.Dtos.Rescue.CalculateRescueTarget.V1
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace ThunderbirdsBoardGameEngine.Rules.Contracts.Dtos.Rescue.CalculateRescueTarget.V1
 {
     /// <summary>
     /// Represents the data required to calculate a rescue target
@@ -19,6 +21,7 @@
         /// While technically a breaking change, the contract is still evolving
         /// and has not yet been declared stable.
         /// </remarks>
+        [Required(ErrorMessage = "Performing character key must be provided.")]
         public required string PerformingCharacterKey { get; init; }
 
         /// <summary>
