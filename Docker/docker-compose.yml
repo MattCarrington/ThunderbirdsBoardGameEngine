@@ -4,6 +4,10 @@ services:
     build:
       context: ..
       dockerfile: src/Api/ThunderbirdsBoardGameEngine.Api/Dockerfile
+      args:
+        GITHUB_PACKAGES_USERNAME: ${GITHUB_PACKAGES_USERNAME:?Set GITHUB_PACKAGES_USERNAME}
+      secrets:
+        - github_packages_token
     environment:
       ASPNETCORE_URLS: http://+:8080
       GameState__Persistence__ConnectionString: Host=game-state-db;Port=5432;Database=thunderbirds_game_state;Username=game_state_runtime;GSS Encryption Mode=Disable
@@ -24,6 +28,10 @@ services:
     build:
       context: ..
       dockerfile: src/GameState/ThunderbirdsBoardGameEngine.GameState.EF.DatabaseMigrator/Dockerfile
+      args:
+        GITHUB_PACKAGES_USERNAME: ${GITHUB_PACKAGES_USERNAME:?Set GITHUB_PACKAGES_USERNAME}
+      secrets:
+        - github_packages_token
     environment:
       GameState__Persistence__ConnectionString: Host=game-state-db;Port=5432;Database=thunderbirds_game_state;Username=postgres;GSS Encryption Mode=Disable
       PGPASSWORD: ${GAME_STATE_DB_PASSWORD:?Set GAME_STATE_DB_PASSWORD}
@@ -68,4 +76,6 @@ services:
       start_period: 5s
 volumes:
   game-state-data:
-    
+secrets:
+  github_packages_token:
+    environment: GITHUB_PACKAGES_TOKEN
