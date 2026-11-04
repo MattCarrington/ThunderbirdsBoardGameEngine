@@ -8,7 +8,10 @@ using ThunderbirdsBoardGameEngine.Api.Mappers.GameState.V1;
 using ThunderbirdsBoardGameEngine.GameState.Application.CreateGame;
 using ThunderbirdsBoardGameEngine.GameState.Application.GetGame;
 using ThunderbirdsBoardGameEngine.GameState.Application.MoveThunderbird;
+using ThunderbirdsBoardGameEngine.GameState.Application.TransferCharacters;
 using ThunderbirdsBoardGameEngine.GameState.Contracts.Dtos.V1.ThunderbirdMachines;
+using ThunderbirdsBoardGameEngine.GameState.Contracts.Dtos.V1.TransferCharacters;
+using ThunderbirdsBoardGameEngine.GameState.Domain;
 using ThunderbirdsBoardGameEngine.ReferenceData.Core.Identities;
 
 namespace ThunderbirdsBoardGameEngine.Api.Controllers.GameState.V1
@@ -55,6 +58,25 @@ namespace ThunderbirdsBoardGameEngine.Api.Controllers.GameState.V1
             ValidateGameId(gameId);
 
             var command = new MoveThunderbirdCommand(gameId, new ThunderbirdCode(thunderbirdCode), new LocationCode(request.Destination));
+
+            var result = await _mediator.Send(command, cancellationToken);
+
+            return Ok(result.GameSession.ToDto());
+        }
+
+        [HttpPost("{gameId:guid}/character-transfers")]
+        public async Task<IActionResult> TransferCharacters([FromRoute] Guid gameId, [FromBody] TransferCharactersRequestDto request, CancellationToken cancellationToken)
+        {
+            ValidateGameId(gameId);
+
+            var assignments = request.Assignments
+                .Select(assignment => new CharacterAssignment(
+                    new CharacterCode(assignment.CharacterCode),
+                    new ThunderbirdCode(
+                        assignment.DestinationThunderbirdCode)))
+                .ToArray();
+
+            var command = new TransferCharactersCommand(gameId, assignments);
 
             var result = await _mediator.Send(command, cancellationToken);
 
