@@ -4,6 +4,7 @@ using ThunderbirdsBoardGameEngine.Client.Core;
 using ThunderbirdsBoardGameEngine.GameState.Client.Clients.V1;
 using ThunderbirdsBoardGameEngine.GameState.Contracts.Dtos.V1;
 using ThunderbirdsBoardGameEngine.GameState.Contracts.Dtos.V1.ThunderbirdMachines;
+using ThunderbirdsBoardGameEngine.GameState.Contracts.Dtos.V1.TransferCharacters;
 using ThunderbirdsBoardGameEngine.Rules.Client.UnitTests.Helpers;
 using ThunderbirdsBoardGameEngine.TestUtils.Stubs;
 using ThunderbirdsBoardGameEngine.TestUtils.xUnit.ClassData;
@@ -319,6 +320,123 @@ namespace ThunderbirdsBoardGameEngine.GameState.Client.UnitTests.Clients.V1
             Assert.Equal("Value cannot be null. (Parameter 'request')", exception.Message);
         }
 
+        [Fact]
+        public async Task TransferCharacters_WhenCalled_ShouldCallCorrectEndpoint()
+        {
+            // Arrange
+            var stubHandler = new StubHttpMessageHandler("{}", HttpStatusCode.OK);
+
+            var gameId = Guid.NewGuid();
+
+            var apiResult = CreateGameStateResponseApiResult(gameId);
+
+            var gameClient = CreateGameClient(stubHandler, apiResult);
+
+            var transferCharactersRequestDto = CreateTransferCharactersRequestDto();
+
+            // Act
+            _ = await gameClient.TransferCharacters(gameId, transferCharactersRequestDto, TestContext.Current.CancellationToken);
+
+            // Assert
+            Assert.Equal($"https://localhost:5001/api/games/{gameId}/character-transfers", stubHandler.CapturedRequest?.RequestUri?.ToString());
+        }
+
+        [Fact]
+        public async Task TransferCharacters_WhenCalled_ShouldCallResponseHandler()
+        {
+            // Arrange
+            var gameId = Guid.NewGuid();
+
+            var stubHandler = new StubHttpMessageHandler("{}", HttpStatusCode.OK);
+
+            var httpClient = CreateHttpClient(stubHandler);
+
+            var apiResult = CreateGameStateResponseApiResult(gameId);
+
+            var handler = HttpResponseHandlerHelper.CreateMockHttpResponseHandler(apiResult);
+
+            var client = new GameClient(httpClient, handler);
+
+            var transferCharactersRequestDto = CreateTransferCharactersRequestDto();
+
+            // Act
+            _ = await client.TransferCharacters(gameId, transferCharactersRequestDto, TestContext.Current.CancellationToken);
+
+            // Assert
+            await handler.Received(1).HandleResponseAsync<GameStateResponseDto>(Arg.Any<HttpResponseMessage>(), Arg.Any<CancellationToken>());
+        }
+
+        [Fact]
+        public async Task TransferCharacters_WhenCalled_ShouldReturnExpectedResult()
+        {
+            // Arrange
+            var gameId = Guid.NewGuid();
+
+            var apiResult = CreateGameStateResponseApiResult(gameId);
+
+            var gameClient = CreateGameClient(apiResult);
+
+            var transferCharactersRequestDto = CreateTransferCharactersRequestDto();
+
+            // Act            
+            var result = await gameClient.TransferCharacters(gameId, transferCharactersRequestDto, TestContext.Current.CancellationToken);
+
+            // Assert
+            Assert.Equal(apiResult, result);
+        }
+
+        [Theory]
+        [ClassData(typeof(ErrorResponseClassData))]
+        public async Task TransferCharacters_WhenCalledWithErrorResponse_ShouldReturnExpectedResult(HttpStatusCode statusCode, string reasonPhrase)
+        {
+            // Arrange
+            var stubHandler = new StubHttpMessageHandler("{}", statusCode);
+
+            var gameId = Guid.NewGuid();
+
+            var apiResult = ApiResult<GameStateResponseDto>.Failure(reasonPhrase, statusCode);
+
+            var gameClient = CreateGameClient(stubHandler, apiResult);
+
+            var transferCharactersRequestDto = CreateTransferCharactersRequestDto();
+
+            // Act            
+            var result = await gameClient.TransferCharacters(gameId, transferCharactersRequestDto, TestContext.Current.CancellationToken);
+
+            // Assert
+            Assert.Equal(apiResult, result);
+        }
+
+        [Fact]
+        public async Task TransferCharacters_WhenGuidEmpty_ShouldThrowArgumentException()
+        {
+            // Arrange
+            var gameClient = CreateGameClient(CreateGameStateResponseApiResult(Guid.NewGuid()));
+
+            var transferCharactersRequestDto = CreateTransferCharactersRequestDto();
+
+            // Act & Assert
+            var exception = await Assert.ThrowsAsync<ArgumentException>(() =>
+                gameClient.TransferCharacters(Guid.Empty, transferCharactersRequestDto, TestContext.Current.CancellationToken));
+
+            Assert.Equal("Game ID cannot be empty. (Parameter 'gameId')", exception.Message);
+        }
+
+        [Fact]
+        public async Task TransferCharacters_WhenRequestNull_ShouldThrowArgumentNullException()
+        {
+            // Arrange
+            var gameId = Guid.NewGuid();
+
+            var gameClient = CreateGameClient(CreateGameStateResponseApiResult(gameId));
+
+            // Act & Assert
+            var exception = await Assert.ThrowsAsync<ArgumentNullException>(() =>
+                gameClient.TransferCharacters(gameId, null!, TestContext.Current.CancellationToken));
+
+            Assert.Equal("Value cannot be null. (Parameter 'request')", exception.Message);
+        }
+
         private static ApiResult<GameStateResponseDto> CreateGameStateResponseApiResult(Guid gameId)
         {
             var gameStateResponseDto = new GameStateResponseDto
@@ -352,6 +470,26 @@ namespace ThunderbirdsBoardGameEngine.GameState.Client.UnitTests.Clients.V1
             return new MoveThunderbirdMachineRequestDto
             {
                 Destination = "destination"
+            };
+        }
+
+        private static TransferCharactersRequestDto CreateTransferCharactersRequestDto()
+        {
+            return new TransferCharactersRequestDto
+            {
+                Assignments =
+                [
+                    new CharacterTransferAssignmentDto
+                    {
+                        CharacterCode = "CHAR1",
+                        DestinationThunderbirdCode = "TB1"
+                    },
+                    new CharacterTransferAssignmentDto
+                    {
+                        CharacterCode = "CHAR2",
+                        DestinationThunderbirdCode = "TB2"
+                    }
+                ]
             };
         }
 

@@ -6,6 +6,7 @@ using ThunderbirdsBoardGameEngine.GameState.Client.Interfaces.V1;
 using ThunderbirdsBoardGameEngine.GameState.Client.Routing.V1;
 using ThunderbirdsBoardGameEngine.GameState.Contracts.Dtos.V1;
 using ThunderbirdsBoardGameEngine.GameState.Contracts.Dtos.V1.ThunderbirdMachines;
+using ThunderbirdsBoardGameEngine.GameState.Contracts.Dtos.V1.TransferCharacters;
 
 namespace ThunderbirdsBoardGameEngine.GameState.Client.Clients.V1
 {
@@ -70,6 +71,29 @@ namespace ThunderbirdsBoardGameEngine.GameState.Client.Clients.V1
             var content = new StringContent(JsonSerializer.Serialize(request), Encoding.UTF8, "application/json");
 
             using var message = new HttpRequestMessage(HttpMethod.Post, route)
+            {
+                Content = content
+            };
+
+            using var response = await _httpClient.SendAsync(message, cancellationToken);
+
+            return await _httpResponseHandler.HandleResponseAsync<GameStateResponseDto>(response, cancellationToken);
+        }
+
+        public async Task<ApiResult<GameStateResponseDto>> TransferCharacters(Guid gameId, TransferCharactersRequestDto request, CancellationToken cancellationToken = default)
+        {
+            if (gameId == Guid.Empty)
+            {
+                throw new ArgumentException("Game ID cannot be empty.", nameof(gameId));
+            }
+
+            ArgumentNullException.ThrowIfNull(request, nameof(request));
+
+            var route = ApiRoutes.TransferCharacters(gameId);
+
+            var content = new StringContent(JsonSerializer.Serialize(request), Encoding.UTF8, "application/json");
+            using var message = new HttpRequestMessage(HttpMethod.Post, route)
+
             {
                 Content = content
             };
