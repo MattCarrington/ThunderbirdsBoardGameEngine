@@ -2,9 +2,9 @@
 using Microsoft.Extensions.DependencyInjection;
 using ThunderbirdsBoardGameEngine.ReferenceData.Core.Identities;
 using ThunderbirdsBoardGameEngine.ReferenceData.Core.KnownIdentities;
+using ThunderbirdsBoardGameEngine.ReferenceData.Testing.Fixtures;
 using ThunderbirdsBoardGameEngine.Rules.Application.TransferCharacters.TransferValidation;
 using ThunderbirdsBoardGameEngine.Rules.Infrastructure;
-using ThunderbirdsBoardGameEngine.TestUtils.ReferenceData.Fixtures;
 using Xunit;
 
 namespace ThunderbirdsBoardGameEngine.Rules.ComponentTests.TransferCharacters
