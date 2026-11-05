@@ -1,6 +1,7 @@
 ﻿using ThunderbirdsBoardGameEngine.Client.Core;
 using ThunderbirdsBoardGameEngine.GameState.Contracts.Dtos.V1;
 using ThunderbirdsBoardGameEngine.GameState.Contracts.Dtos.V1.ThunderbirdMachines;
+using ThunderbirdsBoardGameEngine.GameState.Contracts.Dtos.V1.TransferCharacters;
 
 namespace ThunderbirdsBoardGameEngine.GameState.Client.Interfaces.V1
 {
@@ -37,5 +38,14 @@ namespace ThunderbirdsBoardGameEngine.GameState.Client.Interfaces.V1
             string thunderbirdCode,
             MoveThunderbirdMachineRequestDto request,
             CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Transfers characters within the specified game and returns the updated game state.
+        /// </summary>
+        /// <param name="gameId">Unique identifier of the game.</param>
+        /// <param name="request">Transfer details, including the characters to move and their target destination.</param>
+        /// <param name="cancellationToken">Token used to cancel the asynchronous operation.</param>
+        /// <returns>A task that resolves to an API result containing the updated game state after the transfer operation.</returns>
+        Task<ApiResult<GameStateResponseDto>> TransferCharactersAsync(Guid gameId, TransferCharactersRequestDto request, CancellationToken cancellationToken = default);
     }
 }

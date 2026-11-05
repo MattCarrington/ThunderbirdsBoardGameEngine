@@ -1,9 +1,12 @@
 ﻿using System.Net;
+using ThunderbirdsBoardGameEngine.Client.Core;
 using ThunderbirdsBoardGameEngine.GameState.Client.IntegrationTests.Fixtures;
 using ThunderbirdsBoardGameEngine.GameState.Client.Interfaces.V1;
 using ThunderbirdsBoardGameEngine.GameState.Contracts.Dtos.V1;
 using ThunderbirdsBoardGameEngine.GameState.Contracts.Dtos.V1.ThunderbirdMachines;
+using ThunderbirdsBoardGameEngine.GameState.Contracts.Dtos.V1.TransferCharacters;
 using ThunderbirdsBoardGameEngine.ReferenceData.Core.Identities;
+using ThunderbirdsBoardGameEngine.ReferenceData.Core.KnownIdentities;
 using Xunit;
 
 namespace ThunderbirdsBoardGameEngine.GameState.Client.IntegrationTests.Clients.V1
@@ -29,10 +32,7 @@ namespace ThunderbirdsBoardGameEngine.GameState.Client.IntegrationTests.Clients.
             var response = await _client.CreateGameAsync(CancellationToken.None);
 
             // Assert
-            Assert.NotNull(response);
-            Assert.True(response.Success);
-            Assert.Equal(HttpStatusCode.Created, response.StatusCode);
-            Assert.Null(response.ErrorMessage);
+            AssertResponse(response, HttpStatusCode.Created);
 
             var result = Assert.IsType<GameStateResponseDto>(response.Data);
             Assert.NotNull(result);
@@ -52,14 +52,8 @@ namespace ThunderbirdsBoardGameEngine.GameState.Client.IntegrationTests.Clients.
             var response = await _client.GetGameStateAsync(seededGame.Id, CancellationToken.None);
 
             // Assert
-            Assert.NotNull(response);
-            Assert.True(response.Success);
-            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-            Assert.Null(response.ErrorMessage);
-
-            var result = Assert.IsType<GameStateResponseDto>(response.Data);
-            Assert.NotNull(result);
-            Assert.Equal(seededGame.Id, result.GameId);
+            AssertResponse(response);
+            _ = AssertGameResponseDto(response, seededGame.Id);
         }
 
         [Fact]
@@ -99,14 +93,9 @@ namespace ThunderbirdsBoardGameEngine.GameState.Client.IntegrationTests.Clients.
                 CancellationToken.None);
 
             // Assert
-            Assert.NotNull(response);
-            Assert.True(response.Success);
-            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-            Assert.Null(response.ErrorMessage);
+            AssertResponse(response);
 
-            var result = Assert.IsType<GameStateResponseDto>(response.Data);
-            Assert.NotNull(result);
-            Assert.Equal(seededGame.Id, result.GameId);
+            var result = AssertGameResponseDto(response, seededGame.Id);
             Assert.Equal(result.ThunderbirdMachines.Single(m => m.ThunderbirdCode == thunderbirdId.Value).LocationCode, destination.Value);
 
             var updatedGame = await _fixture.LoadGame(seededGame.Id, CancellationToken.None);
@@ -114,6 +103,59 @@ namespace ThunderbirdsBoardGameEngine.GameState.Client.IntegrationTests.Clients.
 
             var updatedThunderbird = updatedGame.Machines.Single(m => m.Key == thunderbirdId);
             Assert.Equal(destination, updatedThunderbird.Value);
+        }
+
+        [Fact]
+        public async Task TransferCharacters()
+        {
+            // Arrange
+            var seededGame = await _fixture.SeedGame(CancellationToken.None);
+
+            var character = KnownCharacterCodes.Gordon;
+            var thunderbird = KnownThunderbirdCodes.Thunderbird2;
+
+            var request = new TransferCharactersRequestDto
+            {
+                Assignments =
+                [
+                    new CharacterTransferAssignmentDto
+                    {
+                        CharacterCode = character.Value,
+                        DestinationThunderbirdCode = thunderbird.Value
+                    }
+                ]
+            };
+
+            // Act
+            var response = await _client.TransferCharactersAsync(seededGame.Id, request, CancellationToken.None);
+
+            // Assert
+            AssertResponse(response);
+
+            var result = AssertGameResponseDto(response, seededGame.Id);
+            Assert.Contains(character.Value, result.ThunderbirdMachines.Single(m => m.ThunderbirdCode == thunderbird.Value).OccupantCharacterCodes);
+
+            var updatedGame = await _fixture.LoadGame(seededGame.Id, CancellationToken.None);
+            Assert.NotNull(updatedGame);
+
+            var updatedCharacter = updatedGame.Characters.Single(c => c.Key == character);
+            Assert.Equal(thunderbird, updatedCharacter.Value);
+        }
+
+        private static void AssertResponse(ApiResult<GameStateResponseDto> response, HttpStatusCode expectedStatusCode = HttpStatusCode.OK)
+        {
+            Assert.NotNull(response);
+            Assert.True(response.Success);
+            Assert.Equal(expectedStatusCode, response.StatusCode);
+            Assert.Null(response.ErrorMessage);
+        }
+
+        private static GameStateResponseDto AssertGameResponseDto(ApiResult<GameStateResponseDto> response, Guid gameId)
+        {
+            var result = Assert.IsType<GameStateResponseDto>(response.Data);
+            Assert.NotNull(result);
+            Assert.Equal(gameId, result.GameId);
+            return result;
         }
     }
 }

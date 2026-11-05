@@ -126,7 +126,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.Movement
         private static MovementEvaluationInput CreateMovementInput(int topSpeed, IEnumerable<CardCode> eventCards)
         {
             return new MovementEvaluationInput(
-                Thunderbird: new ThunderbirdContribution(new("thunderbird"), MovementDomain.Earth, topSpeed),
+                Thunderbird: new ThunderbirdMovementContribution(new("thunderbird"), MovementDomain.Earth, topSpeed),
                 Topography: new Topography([]),
                 Start: new LocationCode("A"),
                 Destination: new LocationCode("B"),

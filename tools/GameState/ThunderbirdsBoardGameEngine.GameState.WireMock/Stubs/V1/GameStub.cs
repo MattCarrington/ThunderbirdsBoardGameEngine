@@ -35,6 +35,12 @@ namespace ThunderbirdsBoardGameEngine.GameState.WireMock.Stubs.V1
         public const string MoveThunderbirdMachineRoute = "/api/games/*/thunderbird-machines/*/movements";
 
         /// <summary>
+        /// Route template for the game endpoint that transfers characters.
+        /// </summary>
+        /// <remarks>The `*` segment represents the game-specific route segment.</remarks>
+        public const string TransferCharactersRoute = "/api/games/*/character-transfers";
+
+        /// <summary>
         /// Identifies the current version of the component.
         /// </summary>
         /// <remarks>Update when the component version changes.</remarks>
@@ -210,6 +216,58 @@ namespace ThunderbirdsBoardGameEngine.GameState.WireMock.Stubs.V1
         }
 
         /// <summary>
+        /// Registers a successful transfer-characters endpoint response.
+        /// </summary>
+        /// <remarks>Configures the mock server to respond to the transfer-characters POST route with HTTP
+        /// 200 and a JSON body.</remarks>
+        /// <param name="response">The game state payload to return in the successful response. If null, a representative response is used.</param>
+        public void RegisterTransferCharactersSuccess(GameStateResponseDto? response = null)
+        {
+            response ??= CreateRepresentativeGameResponse();
+
+            Server
+                .Given(CreatePost(TransferCharactersRoute, VersionValue))
+                .RespondWith(CreateJsonResponse(response, HttpStatusCode.OK));
+        }
+
+        /// <summary>
+        /// Registers a mocked transfer-characters response that returns an invalid transfer problem.
+        /// </summary>
+        /// <remarks>Returns an HTTP 422 Unprocessable Entity problem response with the title "Invalid
+        /// transfer".</remarks>
+        /// <param name="detail">Optional problem detail message to return; if not provided, a default invalid-transfer message is used.</param>
+        public void RegisterTransferCharactersInvalidTransfer(string? detail = null)
+        {
+            Server
+                .Given(CreatePost(TransferCharactersRoute, VersionValue))
+                .RespondWith(ProblemJson(
+                    "Invalid transfer",
+                    HttpStatusCode.UnprocessableEntity,
+                    detail ?? "The requested transfer is invalid."));
+        }
+
+        /// <summary>
+        /// Registers an error response for transfer character requests.
+        /// </summary>
+        /// <remarks>Configures the server to return a problem details JSON payload for the transfer
+        /// characters endpoint.</remarks>
+        /// <param name="statusCode">HTTP status code returned in the error response.</param>
+        /// <param name="message">Error message included in the problem details response.</param>
+        /// <param name="detail">Additional error detail included in the problem details response.</param>
+        public void RegisterTransferCharactersError(
+            HttpStatusCode statusCode = HttpStatusCode.InternalServerError,
+            string message = "An unexpected error occurred.",
+            string? detail = null)
+        {
+            Server
+                .Given(CreatePost(TransferCharactersRoute, VersionValue))
+                .RespondWith(ProblemJson(
+                    message,
+                    statusCode,
+                    detail));
+        }
+
+        /// <summary>
         /// Registers a guard that enforces the presence of a required version header for POST requests on the
         /// configured route.
         /// </summary>
@@ -218,6 +276,7 @@ namespace ThunderbirdsBoardGameEngine.GameState.WireMock.Stubs.V1
             RegisterMissingVersionHeaderGuard(CreateGameRoute, "POST");
             RegisterMissingVersionHeaderGuard(GetGameStateRoute, "GET");
             RegisterMissingVersionHeaderGuard(MoveThunderbirdMachineRoute, "POST");
+            RegisterMissingVersionHeaderGuard(TransferCharactersRoute, "POST");
         }
 
         /// <summary>
@@ -229,6 +288,7 @@ namespace ThunderbirdsBoardGameEngine.GameState.WireMock.Stubs.V1
             RegisterUnsupportedVersionHeaderGuard(CreateGameRoute, "POST", VersionValue);
             RegisterUnsupportedVersionHeaderGuard(GetGameStateRoute, "GET", VersionValue);
             RegisterUnsupportedVersionHeaderGuard(MoveThunderbirdMachineRoute, "POST", VersionValue);
+            RegisterUnsupportedVersionHeaderGuard(TransferCharactersRoute, "POST", VersionValue);
         }
 
         private static GameStateResponseDto CreateRepresentativeGameResponse()

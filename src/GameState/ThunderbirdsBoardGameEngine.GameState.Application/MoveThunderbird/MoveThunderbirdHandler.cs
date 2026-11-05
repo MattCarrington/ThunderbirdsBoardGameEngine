@@ -1,15 +1,16 @@
 ﻿using MediatR;
 using ThunderbirdsBoardGameEngine.GameState.Application.Exceptions;
+using ThunderbirdsBoardGameEngine.GameState.Domain.Exceptions;
 
 namespace ThunderbirdsBoardGameEngine.GameState.Application.MoveThunderbird
 {
     internal sealed class MoveThunderbirdHandler : IRequestHandler<MoveThunderbirdCommand, MoveThunderbirdResult>
     {
         private readonly IGameRepository _gameRepository;
-        private readonly IValidateMovementGateway _movementGateway;
+        private readonly IMovementRulesGateway _movementGateway;
         private readonly IGameStateIntegrityValidator _gameStateIntegrityValidator;
 
-        public MoveThunderbirdHandler(IGameRepository gameRepository, IValidateMovementGateway movementGateway, IGameStateIntegrityValidator gameStateIntegrityValidator)
+        public MoveThunderbirdHandler(IGameRepository gameRepository, IMovementRulesGateway movementGateway, IGameStateIntegrityValidator gameStateIntegrityValidator)
         {
             _gameRepository = gameRepository;
             _movementGateway = movementGateway;
@@ -25,14 +26,23 @@ namespace ThunderbirdsBoardGameEngine.GameState.Application.MoveThunderbird
 
             var origin = game.GetThunderbirdMachineLocation(request.Thunderbird);
 
-            var decision = await _movementGateway.ValidateMovement(request.Thunderbird, origin, request.Destination, cancellationToken);
+            var decision = await _movementGateway.ValidateMovementAsync(request.Thunderbird, origin, request.Destination, cancellationToken);
 
             if (!decision.IsValid)
             {
                 throw new ThunderbirdMovementRejectedException(decision.Messages);
             }
 
-            game.MoveThunderbirdMachine(request.Thunderbird, request.Destination);
+            try
+            {
+                game.MoveThunderbirdMachine(request.Thunderbird, request.Destination);
+            }
+            catch (ThunderbirdMachineCannotMoveException exception)
+            {
+                throw new ThunderbirdMovementRejectedException(
+                    ["The Thunderbird Machine cannot move without a character aboard."],
+                    exception);
+            }
 
             _gameStateIntegrityValidator.Validate(game);
 

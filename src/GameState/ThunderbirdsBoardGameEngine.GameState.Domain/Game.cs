@@ -93,6 +93,11 @@ namespace ThunderbirdsBoardGameEngine.GameState.Domain
                 throw ThunderbirdMachineNotFoundException.Create(machineCode);
             }
 
+            if (!_charactersState.ContainsValue(machineCode))
+            {
+                throw ThunderbirdMachineCannotMoveException.NoCharactersAboard(machineCode);
+            }
+
             _machinesState[machineCode] = newLocation;
         }
 
@@ -104,6 +109,75 @@ namespace ThunderbirdsBoardGameEngine.GameState.Domain
             }
 
             return location;
+        }
+
+        public void TransferCharacters(IReadOnlyCollection<CharacterAssignment> assignments)
+        {
+            if (assignments.Count is < 1 or > 2)
+            {
+                throw new ArgumentException(
+                    "One or two character assignments are required.",
+                    nameof(assignments));
+            }
+
+            var duplicateCharacterExists = assignments
+                .GroupBy(assignment => assignment.CharacterCode)
+                .Any(group => group.Count() > 1);
+
+            if (duplicateCharacterExists)
+            {
+                throw new ArgumentException(
+                    "A character may only be assigned once per operation.",
+                    nameof(assignments));
+            }
+
+            foreach (var assignment in assignments)
+            {
+                if (!_charactersState.TryGetValue(assignment.CharacterCode, out var currentMachine))
+                {
+                    throw CharacterNotFoundException.Create(assignment.CharacterCode);
+                }
+
+                if (!_machinesState.ContainsKey(assignment.DestinationThunderbirdCode))
+                {
+                    throw ThunderbirdMachineNotFoundException.Create(assignment.DestinationThunderbirdCode);
+                }
+
+                if (currentMachine == assignment.DestinationThunderbirdCode)
+                {
+                    throw new ArgumentException(
+                        "Every assignment must transfer its character to another machine.",
+                        nameof(assignments));
+                }
+            }
+
+            foreach (var assignment in assignments)
+            {
+                _charactersState[assignment.CharacterCode] = assignment.DestinationThunderbirdCode;
+            }
+        }
+
+        public ThunderbirdCode GetCharacterAssignment(CharacterCode characterCode)
+        {
+            if (!_charactersState.TryGetValue(characterCode, out var machine))
+            {
+                throw CharacterNotFoundException.Create(characterCode);
+            }
+            return machine;
+        }
+
+        public IReadOnlyCollection<CharacterCode> GetThunderbirdMachineOccupancy(ThunderbirdCode machineCode)
+        {
+            if (!_machinesState.ContainsKey(machineCode))
+            {
+                throw ThunderbirdMachineNotFoundException.Create(machineCode);
+            }
+
+            return _charactersState
+                .Where(kvp => kvp.Value == machineCode)
+                .Select(kvp => kvp.Key)
+                .ToList()
+                .AsReadOnly();
         }
     }
 }

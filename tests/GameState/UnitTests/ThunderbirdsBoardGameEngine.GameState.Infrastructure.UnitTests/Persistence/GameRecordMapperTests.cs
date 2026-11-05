@@ -4,7 +4,7 @@ using ThunderbirdsBoardGameEngine.GameState.Infrastructure.Persistence.Records;
 using ThunderbirdsBoardGameEngine.ReferenceData.Core.Identities;
 using Xunit;
 
-namespace ThunderbirdsBoardGameEngine.GameState.Infrastructure.UnitTests
+namespace ThunderbirdsBoardGameEngine.GameState.Infrastructure.UnitTests.Persistence
 {
     public class GameRecordMapperTests
     {

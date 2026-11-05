@@ -3,7 +3,7 @@ using ThunderbirdsBoardGameEngine.GameState.Infrastructure.Persistence.Configura
 using ThunderbirdsBoardGameEngine.TestUtils.xUnit.ClassData;
 using Xunit;
 
-namespace ThunderbirdsBoardGameEngine.GameState.Infrastructure.UnitTests.Configuration
+namespace ThunderbirdsBoardGameEngine.GameState.Infrastructure.UnitTests.Persistence.Configuration
 {
     public class GameStatePersistenceOptionsValidatorTests
     {

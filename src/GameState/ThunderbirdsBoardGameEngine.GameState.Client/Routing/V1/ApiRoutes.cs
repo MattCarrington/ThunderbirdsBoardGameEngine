@@ -13,5 +13,10 @@
         {
             return $"api/games/{gameId}/thunderbird-machines/{Uri.EscapeDataString(thunderbirdCode)}/movements";
         }
+
+        public static string TransferCharacters(Guid gameId)
+        {
+            return $"api/games/{gameId}/character-transfers";
+        }
     }
 }

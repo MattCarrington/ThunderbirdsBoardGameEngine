@@ -2,7 +2,7 @@
   <PropertyGroup>
 	<GenerateDocumentationFile>True</GenerateDocumentationFile>
 	<PackageId>ThunderbirdsBoardGameEngine.GameState.Contracts</PackageId>
-	<Version>0.1.0</Version>
+	<Version>0.2.0</Version>
 	<Authors>Matthew Carrington</Authors>
 	<Description>Public DTO contracts for the Thunderbirds Board Game Engine Game State API.</Description>
 	<RepositoryUrl>https://github.com/MattCarrington/ThunderbirdsBoardGameEngine</RepositoryUrl>

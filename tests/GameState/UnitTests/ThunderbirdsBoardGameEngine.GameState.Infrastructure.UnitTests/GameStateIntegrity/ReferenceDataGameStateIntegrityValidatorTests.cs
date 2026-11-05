@@ -10,7 +10,7 @@ using ThunderbirdsBoardGameEngine.ReferenceData.Core.Model;
 using ThunderbirdsBoardGameEngine.ReferenceData.Runtime.Interfaces;
 using Xunit;
 
-namespace ThunderbirdsBoardGameEngine.GameState.Infrastructure.UnitTests
+namespace ThunderbirdsBoardGameEngine.GameState.Infrastructure.UnitTests.GameStateIntegrity
 {
     public class ReferenceDataGameStateIntegrityValidatorTests
     {

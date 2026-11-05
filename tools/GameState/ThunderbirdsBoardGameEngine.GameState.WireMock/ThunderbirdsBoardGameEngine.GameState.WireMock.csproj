@@ -7,7 +7,7 @@
   <PropertyGroup>
 	<GenerateDocumentationFile>True</GenerateDocumentationFile>
 	<PackageId>ThunderbirdsBoardGameEngine.GameState.WireMock</PackageId>
-	<Version>0.1.0</Version>
+	<Version>0.2.0</Version>
 	<Authors>Matthew Carrington</Authors>
 	<Description>WireMock.NET stubs for the Game State bounded context of ThunderbirdsBoardGameEngine.</Description>
 	<RepositoryUrl>https://github.com/MattCarrington/ThunderbirdsBoardGameEngine</RepositoryUrl>

@@ -1,9 +1,12 @@
 ﻿using MediatR;
 using Microsoft.Extensions.DependencyInjection;
+using System.Runtime.CompilerServices;
 using ThunderbirdsBoardGameEngine.Rules.Application.Movement.Interfaces;
 using ThunderbirdsBoardGameEngine.Rules.Application.Movement.MapTraversal;
 using ThunderbirdsBoardGameEngine.Rules.Application.Rescue.CalculateRescueTarget;
 using ThunderbirdsBoardGameEngine.Rules.Application.Rescue.Interfaces;
+using ThunderbirdsBoardGameEngine.Rules.Application.TransferCharacters.Interfaces;
+using ThunderbirdsBoardGameEngine.Rules.Application.TransferCharacters.TransferValidation;
 using ThunderbirdsBoardGameEngine.Rules.Application.Validators;
 using ThunderbirdsBoardGameEngine.Rules.Domain.EventCards;
 using ThunderbirdsBoardGameEngine.Rules.Domain.FabCards;
@@ -12,6 +15,7 @@ using ThunderbirdsBoardGameEngine.Rules.Domain.Movement.Routing;
 using ThunderbirdsBoardGameEngine.Rules.Domain.Movement.Speed;
 using ThunderbirdsBoardGameEngine.Rules.Domain.Movement.Topology;
 using ThunderbirdsBoardGameEngine.Rules.Domain.Rescue;
+using ThunderbirdsBoardGameEngine.Rules.Domain.TransferCharacters.Evaluation;
 using ThunderbirdsBoardGameEngine.Rules.Infrastructure.Lookups;
 
 namespace ThunderbirdsBoardGameEngine.Rules.Infrastructure
@@ -37,18 +41,31 @@ namespace ThunderbirdsBoardGameEngine.Rules.Infrastructure
             services.AddSingleton<ICharacterCatalogLookup, ReferenceCharacterCatalogLookup>();
             services.AddSingleton<ILocationDefinitionLookup, ReferenceLocationDefinitionLookup>();
             services.AddSingleton<IMapEdgeDefinitionLookup, ReferenceMapEdgeDefinitionLookup>();
-            services.AddSingleton<IThunderbirdsDefinitionLookup, ReferenceThunderbirdsDefinitionLookup>();
             services.AddSingleton<IFabCardCatalogLookup, ReferenceFabCardCatalogLookup>();
             services.AddSingleton<IEventCardCatalogLookup, ReferenceEventCardCatalogLookup>();
 
             services.AddSingleton<IEventCardValidator, EventCardValidator>();
 
+            RegisterThunderbirdLookup(services);
+
             RegisterRescueServices(services);
             RegisterMovementServices(services);
             RegisterMovementSpeedModifierSources(services);
             RegisterMovementTopologyModifierSources(services);
+            RegisterCharacterTransferServices(services);
 
             return services;
+        }
+
+        private static void RegisterThunderbirdLookup(IServiceCollection services)
+        {
+            services.AddSingleton<ReferenceThunderbirdDefinitionLookup>();
+
+            services.AddSingleton<IThunderbirdMovementDefinitionLookup>(
+                provider => provider.GetRequiredService<ReferenceThunderbirdDefinitionLookup>());
+
+            services.AddSingleton<IThunderbirdTransferDefinitionLookup>(
+                provider => provider.GetRequiredService<ReferenceThunderbirdDefinitionLookup>());
         }
 
         private static void RegisterRescueServices(IServiceCollection services)
@@ -85,6 +102,12 @@ namespace ThunderbirdsBoardGameEngine.Rules.Infrastructure
             services.AddSingleton<IEffectiveTopographyResolver, EffectiveTopographyResolver>();
             services.AddSingleton<IMovementTopologyModifierSourceRegistry, MovementTopologyModifierSourceRegistry>();
             services.AddSingleton<IMovementTopologyModifierSource, IcelandicVolcanoEruption>();
+        }
+
+        private static void RegisterCharacterTransferServices(IServiceCollection services)
+        {
+            services.AddSingleton<TransferCharacterEvaluator>();
+            services.AddSingleton<IValidateCharacterTransferResolutionService, ValidateCharacterTransferResolutionService>();
         }
     }
 }

@@ -228,6 +228,11 @@ public sealed class GameRepositoryTests
                     KnownThunderbirdCodes.Thunderbird1,
                     destination);
 
+                gameToUpdate.TransferCharacters(
+                    [
+                        new CharacterAssignment(KnownCharacterCodes.Gordon, KnownThunderbirdCodes.Thunderbird2)
+                    ]);
+
                 await repository.UpdateGameSession(
                     gameToUpdate,
                     TestContext.Current.CancellationToken);
@@ -247,12 +252,10 @@ public sealed class GameRepositoryTests
 
             Assert.NotNull(restoredGame);
 
-            Assert.Equal(
-                destination,
-                restoredGame.Machines[
-                    KnownThunderbirdCodes.Thunderbird1]);
+            Assert.Equal(destination, restoredGame.Machines[KnownThunderbirdCodes.Thunderbird1]);
 
-            Assert.Equal(game.Characters, restoredGame.Characters);
+            Assert.Equal(KnownThunderbirdCodes.Thunderbird2, restoredGame.Characters[KnownCharacterCodes.Gordon]);
+
             Assert.Equal(game.CreatedAtUtc, restoredGame.CreatedAtUtc);
             Assert.Equal(game.SetupVersion, restoredGame.SetupVersion);
             Assert.Equal(1, restoredGame.StateVersion);

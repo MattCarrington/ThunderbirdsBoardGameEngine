@@ -20,7 +20,7 @@ namespace ThunderbirdsBoardGameEngine.Api.UserJourneys.Support
 
             services.AddGameStateClients(configuration);
 
-            services.AddSingleton<GameJourneyContext>();
+            services.AddScoped<GameJourneyContext>();
 
             services.AddSingleton<IApplicationRestarter, DockerApplicationRestarter>();
 

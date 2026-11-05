@@ -79,6 +79,34 @@ namespace ThunderbirdsBoardGameEngine.GameState.Application.UnitTests.MoveThunde
             await repository.DidNotReceive().UpdateGameSession(Arg.Any<Game>(), Arg.Any<CancellationToken>());
         }
 
+        [Fact]
+        public async Task Handle_ShouldThrowThunderbirdMovementRejectedException_WhenMachineCannotMove()
+        {
+            // Arrange
+            var game = CreateGame();
+
+            var repository = CreateRepository(game);
+
+            var decision = new ValidateMovementDecision(true, Array.Empty<string>());
+
+            var integrityValidator = CreateValidator();
+
+            var handler = CreateHandler(repository, integrityValidator, decision);
+
+            var command = new MoveThunderbirdCommand(
+                GameId: game.Id,
+                Thunderbird: new ThunderbirdCode("thunderbird-2"),
+                Destination: new LocationCode("location-2")
+            );
+
+            // Act & Assert
+            await Assert.ThrowsAsync<ThunderbirdMovementRejectedException>(() => handler.Handle(command, TestContext.Current.CancellationToken));
+
+            integrityValidator.Received(1).Validate(game);
+
+            await repository.DidNotReceive().UpdateGameSession(Arg.Any<Game>(), Arg.Any<CancellationToken>());
+        }
+
         private static Game CreateGame()
         {
             return Game.Restore(
@@ -88,9 +116,14 @@ namespace ThunderbirdsBoardGameEngine.GameState.Application.UnitTests.MoveThunde
                 stateVersion: 1,
                 machines: new Dictionary<ThunderbirdCode, LocationCode>
                 {
-                    { new ThunderbirdCode("thunderbird-1"), new LocationCode("location-1") }
-                }, characters: new Dictionary<CharacterCode, ThunderbirdCode>()
-);
+                    { new ThunderbirdCode("thunderbird-1"), new LocationCode("location-1") },
+                    { new ThunderbirdCode("thunderbird-2"), new LocationCode("location-1") }
+                },
+                characters: new Dictionary<CharacterCode, ThunderbirdCode>
+                {
+                      { new CharacterCode("character-1"), new ThunderbirdCode("thunderbird-1") }
+                }
+            );
         }
 
         private static MoveThunderbirdCommand CreateCommand()
@@ -120,8 +153,8 @@ namespace ThunderbirdsBoardGameEngine.GameState.Application.UnitTests.MoveThunde
 
         private static MoveThunderbirdHandler CreateHandler(IGameRepository repository, IGameStateIntegrityValidator integrityValidator, ValidateMovementDecision decision)
         {
-            var gateway = Substitute.For<IValidateMovementGateway>();
-            gateway.ValidateMovement(Arg.Any<ThunderbirdCode>(), Arg.Any<LocationCode>(), Arg.Any<LocationCode>(), Arg.Any<CancellationToken>())
+            var gateway = Substitute.For<IMovementRulesGateway>();
+            gateway.ValidateMovementAsync(Arg.Any<ThunderbirdCode>(), Arg.Any<LocationCode>(), Arg.Any<LocationCode>(), Arg.Any<CancellationToken>())
                 .Returns(decision);
 
             return new MoveThunderbirdHandler(repository, gateway, integrityValidator);
