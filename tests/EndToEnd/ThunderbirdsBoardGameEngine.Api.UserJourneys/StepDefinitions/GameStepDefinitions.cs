@@ -101,7 +101,9 @@ namespace ThunderbirdsBoardGameEngine.Api.UserJourneys.StepDefinitions
 
         private void UpdateGameContext(ApiResult<GameStateResponseDto> result)
         {
-            Assert.True(result.Success);
+            Assert.True(
+                result.Success,
+                $"Request failed with {(int)result.StatusCode} {result.StatusCode}: {result.ErrorMessage}");
 
             var game = Assert.IsType<GameStateResponseDto>(result.Data);
 
