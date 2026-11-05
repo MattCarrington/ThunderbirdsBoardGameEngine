@@ -16,9 +16,9 @@ namespace ThunderbirdsBoardGameEngine.Api.Handlers
             ProblemDetailsFactory problemDetailsFactory, IProblemDetailsService problemDetailsService,
             ILogger<CharacterNotFoundExceptionHandler> logger)
         {
-            _problemDetailsFactory = problemDetailsFactory;
-            _problemDetailsService = problemDetailsService;
-            _logger = logger;
+            _problemDetailsFactory = problemDetailsFactory ?? throw new ArgumentNullException(nameof(problemDetailsFactory));
+            _problemDetailsService = problemDetailsService ?? throw new ArgumentNullException(nameof(problemDetailsService));
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
         public async ValueTask<bool> TryHandleAsync(HttpContext httpContext, Exception exception, CancellationToken cancellationToken)
