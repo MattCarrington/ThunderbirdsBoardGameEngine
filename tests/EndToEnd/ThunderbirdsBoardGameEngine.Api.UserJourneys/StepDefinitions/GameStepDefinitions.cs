@@ -6,6 +6,7 @@ using ThunderbirdsBoardGameEngine.Client.Core;
 using ThunderbirdsBoardGameEngine.GameState.Client.Interfaces.V1;
 using ThunderbirdsBoardGameEngine.GameState.Contracts.Dtos.V1;
 using ThunderbirdsBoardGameEngine.GameState.Contracts.Dtos.V1.ThunderbirdMachines;
+using ThunderbirdsBoardGameEngine.GameState.Contracts.Dtos.V1.TransferCharacters;
 using Xunit;
 
 namespace ThunderbirdsBoardGameEngine.Api.UserJourneys.StepDefinitions
@@ -58,6 +59,47 @@ namespace ThunderbirdsBoardGameEngine.Api.UserJourneys.StepDefinitions
             _context.LastApiResult = result;
         }
 
+        [When("the player transfers {string} to {string}")]
+        public async Task WhenThePlayerTransfersTo(string characterCode, string destinationThunderbirdCode)
+        {
+            var result = await TransferCharactersAsync(characterCode, destinationThunderbirdCode);
+
+            UpdateGameContext(result);
+        }
+
+        [When("the player swaps {string} in {string} with {string} in {string}")]
+        public async Task WhenThePlayerSwapsInWithInAsync(string characterOneCode, string firstThunderbirdCode, string characterTwoCode, string secondThunderbirdCode)
+        {
+            var dto = new TransferCharactersRequestDto
+            {
+                Assignments =
+                [
+                    new CharacterTransferAssignmentDto
+                    {
+                        CharacterCode = Slugify(characterOneCode),
+                        DestinationThunderbirdCode = Slugify(secondThunderbirdCode)
+                    },
+                    new CharacterTransferAssignmentDto
+                    {
+                        CharacterCode = Slugify(characterTwoCode),
+                        DestinationThunderbirdCode = Slugify(firstThunderbirdCode)
+                    }
+                ]
+            };
+
+            var result = await _client.TransferCharactersAsync(_context.GameId, dto, TestContext.Current.CancellationToken);
+
+            UpdateGameContext(result);
+        }
+
+        [When("the player attempts to transfer {string} to {string}")]
+        public async Task WhenThePlayerAttemptsToTransferToAsync(string characterCode, string destinationThunderbirdCode)
+        {
+            var result = await TransferCharactersAsync(characterCode, destinationThunderbirdCode);
+
+            _context.LastApiResult = result;
+        }
+
         [Then("{string} should be at {string}")]
         public async Task ThenShouldBeAt(string thunderbirdMachine, string location)
         {
@@ -68,6 +110,18 @@ namespace ThunderbirdsBoardGameEngine.Api.UserJourneys.StepDefinitions
             var machine = Assert.Single(_context.CurrentGame!.ThunderbirdMachines, machine => machine.ThunderbirdCode == Slugify(thunderbirdMachine));
 
             Assert.Equal(Slugify(location), machine.LocationCode);
+        }
+
+        [Then("{string} should be occupying {string}")]
+        public async Task ThenShouldBeOccupyingAsync(string character, string thunderbirdCode)
+        {
+            var result = await _client.GetGameStateAsync(_context.GameId, TestContext.Current.CancellationToken);
+
+            UpdateGameContext(result);
+
+            var machine = Assert.Single(_context.CurrentGame!.ThunderbirdMachines, machine => machine.ThunderbirdCode == Slugify(thunderbirdCode));
+
+            Assert.Contains(Slugify(character), machine.OccupantCharacterCodes);
         }
 
         [Then("the game should still be available")]
@@ -94,7 +148,14 @@ namespace ThunderbirdsBoardGameEngine.Api.UserJourneys.StepDefinitions
             Assert.False(_context.LastApiResult!.Success);
         }
 
-        private string Slugify(string input)
+        [Then("an error should be returned indicating that the transfer is invalid")]
+        public void ThenAnErrorShouldBeReturnedIndicatingThatTheTransferIsInvalid()
+        {
+            Assert.False(_context.LastApiResult!.Success);
+        }
+
+
+        private static string Slugify(string input)
         {
             return input.ToLowerInvariant().Replace(" ", "-");
         }
@@ -123,6 +184,23 @@ namespace ThunderbirdsBoardGameEngine.Api.UserJourneys.StepDefinitions
                 Slugify(thunderbirdCode),
                 dto,
                 TestContext.Current.CancellationToken);
+        }
+
+        private async Task<ApiResult<GameStateResponseDto>> TransferCharactersAsync(string characterCode, string destinationThunderbirdCode)
+        {
+            var dto = new TransferCharactersRequestDto
+            {
+                Assignments =
+                [
+                    new CharacterTransferAssignmentDto
+                    {
+                        CharacterCode = Slugify(characterCode),
+                        DestinationThunderbirdCode = Slugify(destinationThunderbirdCode)
+                    }
+                ]
+            };
+
+            return await _client.TransferCharactersAsync(_context.GameId, dto, TestContext.Current.CancellationToken);
         }
     }
 }
