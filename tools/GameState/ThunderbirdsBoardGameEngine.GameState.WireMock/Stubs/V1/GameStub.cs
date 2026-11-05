@@ -38,7 +38,7 @@ namespace ThunderbirdsBoardGameEngine.GameState.WireMock.Stubs.V1
         /// Route template for the game endpoint that transfers characters.
         /// </summary>
         /// <remarks>The `*` segment represents the game-specific route segment.</remarks>
-        public const string TransferCharactersRoute = "/api/games/*/transfer-characters";
+        public const string TransferCharactersRoute = "/api/games/*/character-transfers";
 
         /// <summary>
         /// Identifies the current version of the component.
