@@ -204,10 +204,15 @@ jobs:
 
       - name: Stop containers
         if: ${{ always() && (inputs.run_integration || inputs.run_playwright) }}
+        env:
+          APP_IMAGE_NAME: ${{ inputs.app_image_name }}
+          MIGRATOR_IMAGE_NAME: ${{ inputs.database_migrator_image_name }}
+          PROVISIONER_IMAGE_NAME: ${{ inputs.database_provisioner_image_name }}
         run: |
             set -euo pipefail
             unset COMPOSE_FILE
             docker compose \
                 -f Docker/docker-compose.yml \
                 -f Docker/docker-compose.test.yml \
+                -f Docker/docker-compose.ci.override.yml \
                 down -v

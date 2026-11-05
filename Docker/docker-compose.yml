@@ -5,7 +5,7 @@ services:
       context: ..
       dockerfile: src/Api/ThunderbirdsBoardGameEngine.Api/Dockerfile
       args:
-        GITHUB_PACKAGES_USERNAME: ${GITHUB_PACKAGES_USERNAME:?Set GITHUB_PACKAGES_USERNAME}
+        GITHUB_PACKAGES_USERNAME: ${GITHUB_PACKAGES_USERNAME:-}
       secrets:
         - github_packages_token
     environment:
@@ -29,7 +29,7 @@ services:
       context: ..
       dockerfile: src/GameState/ThunderbirdsBoardGameEngine.GameState.EF.DatabaseMigrator/Dockerfile
       args:
-        GITHUB_PACKAGES_USERNAME: ${GITHUB_PACKAGES_USERNAME:?Set GITHUB_PACKAGES_USERNAME}
+        GITHUB_PACKAGES_USERNAME: ${GITHUB_PACKAGES_USERNAME:-}
       secrets:
         - github_packages_token
     environment:
