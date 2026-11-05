@@ -34,6 +34,13 @@ namespace ThunderbirdsBoardGameEngine.GameState.Application.TransferCharacters
                 throw InvalidCharacterTransferRequestException.TooManyAssignments();
             }
 
+            if (request.CharacterAssignments
+                .GroupBy(assignment => assignment.CharacterCode)
+                .Any(group => group.Count() > 1))
+            {
+                throw InvalidCharacterTransferRequestException.DuplicateCharacterAssignment();
+            }
+
             var resolvedAssignments = request.CharacterAssignments
                  .Select(assignment => new
                  {
@@ -51,22 +58,20 @@ namespace ThunderbirdsBoardGameEngine.GameState.Application.TransferCharacters
                 .Distinct()
                 .ToArray();
 
+            foreach (var resolved in resolvedAssignments)
+            {
+                game.GetThunderbirdMachineLocation(resolved.Assignment.DestinationThunderbirdCode);
+            }
+
+            if (resolvedAssignments.All(resolved =>
+                resolved.SourceThunderbirdCode == resolved.Assignment.DestinationThunderbirdCode))
+            {
+                return new TransferCharactersResult(game);
+            }
+
             if (participatingMachineCodes.Length != 2)
             {
                 throw InvalidCharacterTransferRequestException.MustInvolveExactlyTwoMachines();
-            }
-
-            if (request.CharacterAssignments
-                .GroupBy(assignment => assignment.CharacterCode)
-                .Any(group => group.Count() > 1))
-            {
-                throw InvalidCharacterTransferRequestException.DuplicateCharacterAssignment();
-            }
-
-            if (resolvedAssignments.Any(resolved =>
-                resolved.SourceThunderbirdCode == resolved.Assignment.DestinationThunderbirdCode))
-            {
-                throw CharacterTransferRejectedException.NoChange();
             }
 
             var currentState = participatingMachineCodes

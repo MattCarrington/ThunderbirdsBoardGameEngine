@@ -293,7 +293,7 @@ namespace ThunderbirdsBoardGameEngine.GameState.Application.UnitTests.TransferCh
         }
 
         [Fact]
-        public async Task Handle_ShouldThrowCharacterTransferRejectedException_WhenCharacterIsAssignedToSameThunderbird()
+        public async Task Handle_ShouldReturnExistingStateWithoutPersisting_WhenBothCharacterAreAlreadyInDestinationThunderbirdMachines()
         {
             // Arrange
             var game = CreateGame();
@@ -321,8 +321,12 @@ namespace ThunderbirdsBoardGameEngine.GameState.Application.UnitTests.TransferCh
                 ]
             );
 
-            // Act & Assert
-            await Assert.ThrowsAsync<CharacterTransferRejectedException>(() => handler.Handle(command, TestContext.Current.CancellationToken));
+            // Act
+            var result = await handler.Handle(command, TestContext.Current.CancellationToken);
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.Same(game, result.GameSession);
 
             integrityValidator.Received(1).Validate(game);
             await repository.DidNotReceive().UpdateGameSession(Arg.Any<Game>(), Arg.Any<CancellationToken>());
@@ -394,6 +398,43 @@ namespace ThunderbirdsBoardGameEngine.GameState.Application.UnitTests.TransferCh
 
             // Act & Assert
             await Assert.ThrowsAsync<InvalidCharacterTransferRequestException>(() => handler.Handle(command, TestContext.Current.CancellationToken));
+
+            integrityValidator.Received(1).Validate(game);
+            await repository.DidNotReceive().UpdateGameSession(Arg.Any<Game>(), Arg.Any<CancellationToken>());
+        }
+
+        [Fact]
+        public async Task Handle_ShouldReturnExistingGameStateWithoutPersisting_WhenSingleCharacterAlreadyInDestinationThunderbirdMachine()
+        {
+            // Arrange
+            var game = CreateGame();
+
+            var repository = CreateRepository(game);
+
+            var integrityValidator = CreateValidator();
+
+            var decision = CharacterTransferDecision.Permitted();
+
+            var gateway = CreateTransferCharacterGateway(decision);
+
+            var handler = CreateHandler(repository, integrityValidator, gateway);
+
+            var command = new TransferCharactersCommand(
+                GameId: game.Id,
+                CharacterAssignments:
+                [
+                    new CharacterAssignment(
+                        CharacterCode: new CharacterCode("character-1"),
+                        DestinationThunderbirdCode: new ThunderbirdCode("thunderbird-1"))
+                ]
+            );
+
+            // Act
+            var result = await handler.Handle(command, TestContext.Current.CancellationToken);
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.Same(game, result.GameSession);
 
             integrityValidator.Received(1).Validate(game);
             await repository.DidNotReceive().UpdateGameSession(Arg.Any<Game>(), Arg.Any<CancellationToken>());
