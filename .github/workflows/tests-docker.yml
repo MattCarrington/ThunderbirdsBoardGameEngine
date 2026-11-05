@@ -48,6 +48,10 @@ jobs:
         with:
           global-json-file: global.json
 
+      - uses: ./.github/actions/authenticate-github-packages
+        with:
+          token: ${{ github.token }}
+
       - name: Compute API image tag
         run: |
           echo "API_IMAGE_TAG=sha-${GITHUB_SHA::7}" >> $GITHUB_ENV
