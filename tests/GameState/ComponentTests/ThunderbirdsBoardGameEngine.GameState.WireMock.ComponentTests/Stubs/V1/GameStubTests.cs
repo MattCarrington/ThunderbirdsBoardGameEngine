@@ -1,13 +1,12 @@
-﻿using Humanizer;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using System.Net.Http.Json;
 using ThunderbirdsBoardGameEngine.GameState.Contracts.Dtos.V1;
 using ThunderbirdsBoardGameEngine.GameState.Contracts.Dtos.V1.ThunderbirdMachines;
+using ThunderbirdsBoardGameEngine.GameState.Contracts.Dtos.V1.TransferCharacters;
 using ThunderbirdsBoardGameEngine.GameState.WireMock.Stubs.V1;
 using ThunderbirdsBoardGameEngine.TestUtils.WireMock.xUnit.Fixtures;
-using WireMock.ResponseBuilders;
 using WireMock.Server;
 using Xunit;
 
@@ -552,6 +551,263 @@ namespace ThunderbirdsBoardGameEngine.GameState.WireMock.ComponentTests.Stubs.V1
 
             // Act
             using var response = await client.PostAsJsonAsync(GameStub.MoveThunderbirdMachineRoute, request, TestContext.Current.CancellationToken);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+
+            var problem = await response.Content.ReadFromJsonAsync<ProblemDetails>(cancellationToken: TestContext.Current.CancellationToken);
+            Assert.NotNull(problem);
+            Assert.Equal(StatusCodes.Status400BadRequest, problem.Status);
+            Assert.Contains("Unsupported version in header", problem.Title);
+        }
+
+        [Fact]
+        public async Task TransferCharactersAsync_WhenSuccess_ReturnsOk()
+        {
+            // Arrange
+            _stub.RegisterTransferCharactersSuccess();
+
+            var request = new TransferCharactersRequestDto
+            {
+                Assignments =
+                [
+                    new CharacterTransferAssignmentDto
+                    {
+                        CharacterCode = "scott",
+                        DestinationThunderbirdCode = "thunderbird-2"
+                    }
+                ]
+            };
+
+            using var client = CreateClient();
+
+            // Act
+            using var response = await client.PostAsJsonAsync(GameStub.TransferCharactersRoute, request, TestContext.Current.CancellationToken);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+            var result = await response.Content.ReadFromJsonAsync<GameStateResponseDto>(cancellationToken: TestContext.Current.CancellationToken);
+            Assert.NotNull(result);
+            AssertDefaultResult(result);
+        }
+
+        [Fact]
+        public async Task TransferCharacterAsync_WhenGivenDto_ReturnsDto()
+        {
+            // Arrange
+            var dto = CreateDto();
+
+            _stub.RegisterTransferCharactersSuccess(dto);
+
+            var request = new TransferCharactersRequestDto
+            {
+                Assignments =
+                [
+                    new CharacterTransferAssignmentDto
+                    {
+                        CharacterCode = "character-1",
+                        DestinationThunderbirdCode = "thunderbird-2"
+                    }
+                ]
+            };
+
+            using var client = CreateClient();
+
+            // Act
+            using var response = await client.PostAsJsonAsync(GameStub.TransferCharactersRoute, request, TestContext.Current.CancellationToken);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+            var result = await response.Content.ReadFromJsonAsync<GameStateResponseDto>(cancellationToken: TestContext.Current.CancellationToken);
+            Assert.NotNull(result);
+            AssertCreatedDto(dto, result);
+        }
+
+        [Fact]
+        public async Task TransferCharactersAsync_SpecificInvalidMovementRegistered_ReturnsUnprocessableEntity()
+        {
+            // Arrange
+            _stub.RegisterTransferCharactersInvalidTransfer("Character not found.");
+
+            var request = new TransferCharactersRequestDto
+            {
+                Assignments =
+                [
+                    new CharacterTransferAssignmentDto
+                    {
+                        CharacterCode = "character-1",
+                        DestinationThunderbirdCode = "thunderbird-2"
+                    }
+                ]
+            };
+
+            using var client = CreateClient();
+
+            // Act
+            using var response = await client.PostAsJsonAsync(GameStub.TransferCharactersRoute, request, TestContext.Current.CancellationToken);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.UnprocessableEntity, response.StatusCode);
+
+            var result = await response.Content.ReadFromJsonAsync<ProblemDetails>(cancellationToken: TestContext.Current.CancellationToken);
+            Assert.NotNull(result);
+            Assert.Equal("Invalid transfer", result.Title);
+            Assert.Equal("Character not found.", result.Detail);
+        }
+
+        [Fact]
+        public async Task TransferCharactersAsync_DefaultInvalidTransferRegistered_ReturnsUnprocessableEntity()
+        {
+            // Arrange
+            _stub.RegisterTransferCharactersInvalidTransfer();
+
+            var request = new TransferCharactersRequestDto
+            {
+                Assignments =
+                [
+                    new CharacterTransferAssignmentDto
+                    {
+                        CharacterCode = "character-1",
+                        DestinationThunderbirdCode = "thunderbird-2"
+                    }
+                ]
+            };
+
+            using var client = CreateClient();
+
+            // Act
+            using var response = await client.PostAsJsonAsync(GameStub.TransferCharactersRoute, request, TestContext.Current.CancellationToken);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.UnprocessableEntity, response.StatusCode);
+
+            var result = await response.Content.ReadFromJsonAsync<ProblemDetails>(cancellationToken: TestContext.Current.CancellationToken);
+            Assert.NotNull(result);
+            Assert.Equal("Invalid transfer", result.Title);
+            Assert.Equal("The requested transfer is invalid.", result.Detail);
+        }
+
+        [Fact]
+        public async Task TransferCharactersAsync_ErrorRegistered_ReturnsSpecifiedError()
+        {
+            // Arrange
+            _stub.RegisterTransferCharactersError(HttpStatusCode.BadRequest, "Bad request", "Character not found");
+
+            var request = new TransferCharactersRequestDto
+            {
+                Assignments =
+                [
+                    new CharacterTransferAssignmentDto
+                    {
+                        CharacterCode = "character-1",
+                        DestinationThunderbirdCode = "thunderbird-2"
+                    }
+                ]
+            };
+
+            using var client = CreateClient();
+
+            // Act
+            using var response = await client.PostAsJsonAsync(GameStub.TransferCharactersRoute, request, TestContext.Current.CancellationToken);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+
+            var result = await response.Content.ReadFromJsonAsync<ProblemDetails>(cancellationToken: TestContext.Current.CancellationToken);
+            Assert.NotNull(result);
+            Assert.Equal("Bad request", result.Title);
+            Assert.Equal("Character not found", result.Detail);
+        }
+
+        [Fact]
+        public async Task TransferCharactersAsync_DefaultErrorRegistered_ReturnsDefaultError()
+        {
+            // Arrange
+            _stub.RegisterTransferCharactersError();
+
+            var request = new TransferCharactersRequestDto
+            {
+                Assignments =
+                [
+                    new CharacterTransferAssignmentDto
+                    {
+                        CharacterCode = "character-1",
+                        DestinationThunderbirdCode = "thunderbird-2"
+                    }
+                ]
+            };
+
+            using var client = CreateClient();
+
+            // Act
+            using var response = await client.PostAsJsonAsync(GameStub.TransferCharactersRoute, request, TestContext.Current.CancellationToken);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.InternalServerError, response.StatusCode);
+
+            var result = await response.Content.ReadFromJsonAsync<ProblemDetails>(cancellationToken: TestContext.Current.CancellationToken);
+            Assert.NotNull(result);
+            Assert.Equal("An unexpected error occurred.", result.Title);
+            Assert.Null(result.Detail);
+        }
+
+        [Fact]
+        public async Task TransferCharactersAsync_WhenNoVersionHeader_ReturnsBadRequestAsync()
+        {
+            // Arrange
+            using var client = new HttpClient { BaseAddress = new Uri(_server.Urls[0]) };
+
+            _stub.RegisterTransferCharactersSuccess(); // should not be called
+
+            var request = new TransferCharactersRequestDto
+            {
+                Assignments =
+                [
+                    new CharacterTransferAssignmentDto
+                    {
+                        CharacterCode = "character-1",
+                        DestinationThunderbirdCode = "thunderbird-2"
+                    }
+                ]
+            };
+
+            // Act
+            using var response = await client.PostAsJsonAsync(GameStub.TransferCharactersRoute, request, TestContext.Current.CancellationToken);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+
+            var problem = await response.Content.ReadFromJsonAsync<ProblemDetails>(cancellationToken: TestContext.Current.CancellationToken);
+            Assert.NotNull(problem);
+            Assert.Contains("Missing header", problem.Detail);
+            Assert.Equal(StatusCodes.Status400BadRequest, problem.Status);
+            Assert.Equal("Missing API version header", problem.Title);
+        }
+
+        [Fact]
+        public async Task TransferCharactersAsync_WhenWrongVersionHeader_ReturnsBadRequestAsync()
+        {
+            // Arrange
+            _stub.RegisterTransferCharactersSuccess(); // should not be called
+
+            var request = new TransferCharactersRequestDto
+            {
+                Assignments =
+                [
+                    new CharacterTransferAssignmentDto
+                    {
+                        CharacterCode = "character-1",
+                        DestinationThunderbirdCode = "thunderbird-2"
+                    }
+                ]
+            };
+
+            using var client = CreateClient("2.0");
+
+            // Act
+            using var response = await client.PostAsJsonAsync(GameStub.TransferCharactersRoute, request, TestContext.Current.CancellationToken);
 
             // Assert
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
