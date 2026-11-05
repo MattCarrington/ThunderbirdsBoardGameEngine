@@ -26,8 +26,6 @@ namespace ThunderbirdsBoardGameEngine.GameState.Infrastructure.UnitTests.RulesVa
 
             var gateway = new InProcessCharacterTransferRulesGateway(mediator);
 
-
-
             // Act
             var decision = await gateway.ValidateTransferCharactersAsync(
                 CreateCurrentState(),
