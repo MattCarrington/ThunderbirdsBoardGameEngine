@@ -69,6 +69,11 @@ namespace ThunderbirdsBoardGameEngine.Api.Controllers.GameState.V1
         {
             ValidateGameId(gameId);
 
+            if (request.Assignments.Any(assignment => assignment is null))
+            {
+                throw new BadRequestException("Each character transfer assignment must be non-null.");
+            }
+
             var assignments = request.Assignments
                 .Select(assignment => new CharacterAssignment(
                     new CharacterCode(assignment.CharacterCode),

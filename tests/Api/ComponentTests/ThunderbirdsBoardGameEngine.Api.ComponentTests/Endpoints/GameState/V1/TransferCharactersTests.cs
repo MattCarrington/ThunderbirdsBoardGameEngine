@@ -487,6 +487,41 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints.GameState.V1
             Assert.Equal("not-reciprocal", reason.GetString());
         }
 
+        [Fact]
+        public async Task ReturnsBadRequestIfAssignmentsContainsNullEntry()
+        {
+            // Arrange
+            var gameId = Guid.NewGuid();
+            var game = new StandardGameSetupFactory().Create(gameId, DateTimeOffset.UtcNow);
+
+            await _repository.CreateNewGameSession(game, TestContext.Current.CancellationToken);
+
+            var dto = new TransferCharactersRequestDto
+            {
+                Assignments =
+                [
+                    new CharacterTransferAssignmentDto
+                    {
+                        CharacterCode = KnownCharacterCodes.Virgil.Value,
+                        DestinationThunderbirdCode = KnownThunderbirdCodes.Thunderbird1.Value
+                    },
+                    null
+                ]
+            };
+
+            var route = GameStateRoutes.TransferCharacters(gameId);
+
+            using var request = new HttpRequestMessage(HttpMethod.Post, route);
+            request.Headers.Add("X-API-Version", ApiVersion.ToString());
+            request.Content = JsonContent.Create(dto);
+
+            // Act
+            using var response = await _httpClient.SendAsync(request, TestContext.Current.CancellationToken);
+
+            // Assert
+            await ProblemDetailsAssertions.AssertBadRequestAsync(response, "Bad request.");
+        }
+
         private static void AssertCharacterIsInThunderbird(GameStateResponseDto gameState, string characterCode, string thunderbirdCode)
         {
             var thunderbird = gameState.ThunderbirdMachines.SingleOrDefault(tm => tm.ThunderbirdCode == thunderbirdCode);
