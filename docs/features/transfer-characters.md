@@ -221,6 +221,11 @@ The GameState integrity validator checks the completed state against
 ReferenceData before persistence and after rehydration, including ensuring no
 machine exceeds its character capacity.
 
+GameState permits a Thunderbird Machine to have no occupants. Before applying
+a movement, it verifies that the selected machine currently contains at least
+one character. This is a state-dependent movement guard rather than a GameState
+integrity invariant.
+
 ### Rules
 
 Rules owns the decision about whether the proposed Transfer Characters action
@@ -240,6 +245,13 @@ Transfer validation is consumed internally through the GameState-to-Rules
 gateway. There is no public Rules endpoint, Rules client method, WireMock Rules
 endpoint, or experimental transfer page because the operation has no useful
 standalone value without authoritative GameState.
+
+The Transfer Characters evaluator may approve a proposal that leaves a source
+machine empty. It does not evaluate subsequent movement eligibility.
+
+The existing movement Rules evaluation remains responsible for route, topology,
+speed and action-point calculations. GameState rejects movement of an empty
+machine before invoking that evaluation.
 
 ### ReferenceData
 
