@@ -31,17 +31,5 @@ namespace ThunderbirdsBoardGameEngine.GameState.Application.UnitTests.Exceptions
             // Assert
             Assert.Equal(rejectionReason, exception.Reason);
         }
-
-        [Fact]
-        public void NoChange_ShouldReturnExceptionWithNoChangeReason_WhenCalled()
-        {
-            // Arrange
-
-            // Act
-            var exception = CharacterTransferRejectedException.NoChange();
-
-            // Assert
-            Assert.Equal(CharacterTransferRejectionReason.NoChange, exception.Reason);
-        }
     }
 }

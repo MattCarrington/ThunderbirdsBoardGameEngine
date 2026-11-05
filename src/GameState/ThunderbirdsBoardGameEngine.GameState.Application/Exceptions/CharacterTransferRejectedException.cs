@@ -12,11 +12,6 @@ namespace ThunderbirdsBoardGameEngine.GameState.Application.Exceptions
             Reason = reason;
         }
 
-        public static CharacterTransferRejectedException NoChange()
-        {
-            return new(CharacterTransferRejectionReason.NoChange);
-        }
-
         public static CharacterTransferRejectedException FromDecision(CharacterTransferDecision decision)
         {
             if (decision.IsPermitted)

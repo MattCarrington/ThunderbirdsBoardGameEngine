@@ -30,14 +30,5 @@ namespace ThunderbirdsBoardGameEngine.GameState.Application.UnitTests.TransferCh
             Assert.False(decision.IsPermitted);
             Assert.Equal(reason, decision.RejectionReason);
         }
-
-        [Fact]
-        public void Rejected_ShouldThrowInvalidOperationException_WhenReasonIsNoChange()
-        {
-            // Arrange
-
-            // Act & Assert
-            Assert.Throws<ArgumentException>(() => CharacterTransferDecision.Rejected(CharacterTransferRejectionReason.NoChange));
-        }
     }
 }

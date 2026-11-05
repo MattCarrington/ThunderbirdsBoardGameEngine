@@ -19,11 +19,6 @@
 
         public static CharacterTransferDecision Rejected(CharacterTransferRejectionReason rejectionReason)
         {
-            if (rejectionReason == CharacterTransferRejectionReason.NoChange)
-            {
-                throw new ArgumentException("No-change decisions are made by GameState, not the Rules gateway.", nameof(rejectionReason));
-            }
-
             return new CharacterTransferDecision(false, rejectionReason);
         }
     }

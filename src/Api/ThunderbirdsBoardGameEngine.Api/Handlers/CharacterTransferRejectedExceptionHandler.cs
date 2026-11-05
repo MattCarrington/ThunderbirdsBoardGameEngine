@@ -58,8 +58,6 @@ namespace ThunderbirdsBoardGameEngine.Api.Handlers
         {
             return reason switch
             {
-                CharacterTransferRejectionReason.NoChange => "no-change",
-
                 CharacterTransferRejectionReason.NotReciprocal => "not-reciprocal",
 
                 CharacterTransferRejectionReason.MachinesNotCoLocated => "machines-not-co-located",

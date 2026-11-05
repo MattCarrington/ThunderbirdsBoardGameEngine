@@ -15,34 +15,6 @@ namespace ThunderbirdsBoardGameEngine.Api.UnitTests.Handlers
     public class CharacterTransferRejectedExceptionHandlerTests
     {
         [Fact]
-        public async Task TryHandleAsync_WhenCharacterTransferRejectedExceptionWithNoChangeReason_ReturnsTrue()
-        {
-            // Arrange
-            var exception = CharacterTransferRejectedException.NoChange();
-
-            var service = ExceptionHandlerHelper.CreateProblemsDetailService();
-
-            var handler = CreateHandler(service);
-
-            // Act
-            var (handled, status, contentType, body) = await ExceptionHandlerHelper.InvokeAsync(handler, exception);
-
-            // Assert
-            Assert.True(handled);
-            Assert.Equal(StatusCodes.Status422UnprocessableEntity, status);
-            Assert.Equal("application/problem+json; charset=utf-8", contentType);
-            Assert.Equal(StatusCodes.Status422UnprocessableEntity, body.Status);
-            Assert.Equal("Character transfer was rejected.", body.Title);
-            Assert.Equal(ProblemTypes.Unprocessable, body.Type);
-            Assert.Null(body.Instance);
-
-            var reason = Assert.IsType<JsonElement>(body.Extensions["reason"]);
-            Assert.Equal("no-change", reason.GetString());
-
-            await service.Received(1).WriteAsync(Arg.Any<ProblemDetailsContext>());
-        }
-
-        [Fact]
         public async Task TryHandleAsync_WhenCharacterTransferRejectedExceptionWithMachinesNotCoLocatedReason_ReturnsTrue()
         {
             // Arrange

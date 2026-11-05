@@ -4,7 +4,6 @@
     {
         NotReciprocal,
         MachinesNotCoLocated,
-        CharacterCapacityExceeded,
-        NoChange
+        CharacterCapacityExceeded
     }
 }
