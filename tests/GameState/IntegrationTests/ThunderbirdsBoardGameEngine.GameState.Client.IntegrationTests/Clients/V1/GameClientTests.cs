@@ -127,7 +127,7 @@ namespace ThunderbirdsBoardGameEngine.GameState.Client.IntegrationTests.Clients.
             };
 
             // Act
-            var response = await _client.TransferCharacters(seededGame.Id, request, CancellationToken.None);
+            var response = await _client.TransferCharactersAsync(seededGame.Id, request, CancellationToken.None);
 
             // Assert
             AssertResponse(response);

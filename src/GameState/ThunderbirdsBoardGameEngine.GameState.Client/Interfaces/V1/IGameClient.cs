@@ -46,6 +46,6 @@ namespace ThunderbirdsBoardGameEngine.GameState.Client.Interfaces.V1
         /// <param name="request">Transfer details, including the characters to move and their target destination.</param>
         /// <param name="cancellationToken">Token used to cancel the asynchronous operation.</param>
         /// <returns>A task that resolves to an API result containing the updated game state after the transfer operation.</returns>
-        Task<ApiResult<GameStateResponseDto>> TransferCharacters(Guid gameId, TransferCharactersRequestDto request, CancellationToken cancellationToken = default);
+        Task<ApiResult<GameStateResponseDto>> TransferCharactersAsync(Guid gameId, TransferCharactersRequestDto request, CancellationToken cancellationToken = default);
     }
 }

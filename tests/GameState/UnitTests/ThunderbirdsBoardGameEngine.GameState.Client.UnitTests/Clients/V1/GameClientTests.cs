@@ -321,7 +321,7 @@ namespace ThunderbirdsBoardGameEngine.GameState.Client.UnitTests.Clients.V1
         }
 
         [Fact]
-        public async Task TransferCharacters_WhenCalled_ShouldCallCorrectEndpoint()
+        public async Task TransferCharactersAsync_WhenCalled_ShouldCallCorrectEndpoint()
         {
             // Arrange
             var stubHandler = new StubHttpMessageHandler("{}", HttpStatusCode.OK);
@@ -335,14 +335,14 @@ namespace ThunderbirdsBoardGameEngine.GameState.Client.UnitTests.Clients.V1
             var transferCharactersRequestDto = CreateTransferCharactersRequestDto();
 
             // Act
-            _ = await gameClient.TransferCharacters(gameId, transferCharactersRequestDto, TestContext.Current.CancellationToken);
+            _ = await gameClient.TransferCharactersAsync(gameId, transferCharactersRequestDto, TestContext.Current.CancellationToken);
 
             // Assert
             Assert.Equal($"https://localhost:5001/api/games/{gameId}/character-transfers", stubHandler.CapturedRequest?.RequestUri?.ToString());
         }
 
         [Fact]
-        public async Task TransferCharacters_WhenCalled_ShouldCallResponseHandler()
+        public async Task TransferCharactersAsync_WhenCalled_ShouldCallResponseHandler()
         {
             // Arrange
             var gameId = Guid.NewGuid();
@@ -360,14 +360,14 @@ namespace ThunderbirdsBoardGameEngine.GameState.Client.UnitTests.Clients.V1
             var transferCharactersRequestDto = CreateTransferCharactersRequestDto();
 
             // Act
-            _ = await client.TransferCharacters(gameId, transferCharactersRequestDto, TestContext.Current.CancellationToken);
+            _ = await client.TransferCharactersAsync(gameId, transferCharactersRequestDto, TestContext.Current.CancellationToken);
 
             // Assert
             await handler.Received(1).HandleResponseAsync<GameStateResponseDto>(Arg.Any<HttpResponseMessage>(), Arg.Any<CancellationToken>());
         }
 
         [Fact]
-        public async Task TransferCharacters_WhenCalled_ShouldReturnExpectedResult()
+        public async Task TransferCharactersAsync_WhenCalled_ShouldReturnExpectedResult()
         {
             // Arrange
             var gameId = Guid.NewGuid();
@@ -379,7 +379,7 @@ namespace ThunderbirdsBoardGameEngine.GameState.Client.UnitTests.Clients.V1
             var transferCharactersRequestDto = CreateTransferCharactersRequestDto();
 
             // Act            
-            var result = await gameClient.TransferCharacters(gameId, transferCharactersRequestDto, TestContext.Current.CancellationToken);
+            var result = await gameClient.TransferCharactersAsync(gameId, transferCharactersRequestDto, TestContext.Current.CancellationToken);
 
             // Assert
             Assert.Equal(apiResult, result);
@@ -387,7 +387,7 @@ namespace ThunderbirdsBoardGameEngine.GameState.Client.UnitTests.Clients.V1
 
         [Theory]
         [ClassData(typeof(ErrorResponseClassData))]
-        public async Task TransferCharacters_WhenCalledWithErrorResponse_ShouldReturnExpectedResult(HttpStatusCode statusCode, string reasonPhrase)
+        public async Task TransferCharactersAsync_WhenCalledWithErrorResponse_ShouldReturnExpectedResult(HttpStatusCode statusCode, string reasonPhrase)
         {
             // Arrange
             var stubHandler = new StubHttpMessageHandler("{}", statusCode);
@@ -401,14 +401,14 @@ namespace ThunderbirdsBoardGameEngine.GameState.Client.UnitTests.Clients.V1
             var transferCharactersRequestDto = CreateTransferCharactersRequestDto();
 
             // Act            
-            var result = await gameClient.TransferCharacters(gameId, transferCharactersRequestDto, TestContext.Current.CancellationToken);
+            var result = await gameClient.TransferCharactersAsync(gameId, transferCharactersRequestDto, TestContext.Current.CancellationToken);
 
             // Assert
             Assert.Equal(apiResult, result);
         }
 
         [Fact]
-        public async Task TransferCharacters_WhenGuidEmpty_ShouldThrowArgumentException()
+        public async Task TransferCharactersAsync_WhenGuidEmpty_ShouldThrowArgumentException()
         {
             // Arrange
             var gameClient = CreateGameClient(CreateGameStateResponseApiResult(Guid.NewGuid()));
@@ -417,13 +417,13 @@ namespace ThunderbirdsBoardGameEngine.GameState.Client.UnitTests.Clients.V1
 
             // Act & Assert
             var exception = await Assert.ThrowsAsync<ArgumentException>(() =>
-                gameClient.TransferCharacters(Guid.Empty, transferCharactersRequestDto, TestContext.Current.CancellationToken));
+                gameClient.TransferCharactersAsync(Guid.Empty, transferCharactersRequestDto, TestContext.Current.CancellationToken));
 
             Assert.Equal("Game ID cannot be empty. (Parameter 'gameId')", exception.Message);
         }
 
         [Fact]
-        public async Task TransferCharacters_WhenRequestNull_ShouldThrowArgumentNullException()
+        public async Task TransferCharactersAsync_WhenRequestNull_ShouldThrowArgumentNullException()
         {
             // Arrange
             var gameId = Guid.NewGuid();
@@ -432,7 +432,7 @@ namespace ThunderbirdsBoardGameEngine.GameState.Client.UnitTests.Clients.V1
 
             // Act & Assert
             var exception = await Assert.ThrowsAsync<ArgumentNullException>(() =>
-                gameClient.TransferCharacters(gameId, null!, TestContext.Current.CancellationToken));
+                gameClient.TransferCharactersAsync(gameId, null!, TestContext.Current.CancellationToken));
 
             Assert.Equal("Value cannot be null. (Parameter 'request')", exception.Message);
         }

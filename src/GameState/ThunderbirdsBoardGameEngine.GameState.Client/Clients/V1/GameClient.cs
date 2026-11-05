@@ -80,7 +80,7 @@ namespace ThunderbirdsBoardGameEngine.GameState.Client.Clients.V1
             return await _httpResponseHandler.HandleResponseAsync<GameStateResponseDto>(response, cancellationToken);
         }
 
-        public async Task<ApiResult<GameStateResponseDto>> TransferCharacters(Guid gameId, TransferCharactersRequestDto request, CancellationToken cancellationToken = default)
+        public async Task<ApiResult<GameStateResponseDto>> TransferCharactersAsync(Guid gameId, TransferCharactersRequestDto request, CancellationToken cancellationToken = default)
         {
             if (gameId == Guid.Empty)
             {
