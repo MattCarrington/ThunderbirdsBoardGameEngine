@@ -69,7 +69,7 @@ ADR-001. It is numbered 0000 here to retain the repository's existing ADR
 numbers. The decision above preserves the original rationale and terminology;
 the import does not constitute a new decision or approval of future changes.
 
-The [Reference Data overview](../../../src/ReferenceData/Readme.md) describes
+The [Reference Data overview](https://github.com/MattCarrington/ThunderbirdsBoardGameEngine.ReferenceData/blob/main/src/Readme.md) describes
 the current implementation, including compiler ownership and loading when
 catalogs are first resolved. The original startup wording above is retained
 as part of the historical decision.

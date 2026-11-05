@@ -7,6 +7,11 @@ goal. The test suite is designed to show how a well-structured quality engineeri
 practice looks across a realistic application: multiple layers, clear responsibilities,
 and no hidden coupling between environments.
 
+The [Reference Data repository](https://github.com/MattCarrington/ThunderbirdsBoardGameEngine.ReferenceData)
+runs the compiler and Runtime suites. App tests use ReferenceData.Testing for
+definition builders and fake catalogs, and this repository tests how the app
+integrates with Reference Data.
+
 ---
 
 ## Test layers
@@ -24,7 +29,6 @@ dependencies faked or stubbed.
 | Project | Focus |
 |---|---|
 | `tests/Rules/UnitTests/` | Domain logic, application services, client, infrastructure — one project per layer |
-| `tests/ReferenceData/UnitTests/` | Compiler validation logic and runtime snapshot loading |
 | `tests/Api/UnitTests/` | API-layer concerns in isolation |
 | `tests/Ui/UnitTests/` | Blazor component logic |
 | `tests/Common/` | Shared test utilities |
@@ -46,7 +50,6 @@ or WireMock stubs.
 | `tests/Rules/ComponentTests/ThunderbirdsBoardGameEngine.Rules.ComponentTests/` | Rules domain exercised through its full internal stack |
 | `tests/Rules/ComponentTests/ThunderbirdsBoardGameEngine.Rules.Client.ComponentTests/` | Rules HTTP client exercised against a WireMock stub |
 | `tests/Rules/ComponentTests/ThunderbirdsBoardGameEngine.Rules.WireMock.ComponentTests/` | WireMock stub correctness — verifies the stub matches real API behaviour |
-| `tests/ReferenceData/ComponentTests/` | ReferenceData runtime exercised against a real embedded snapshot |
 | `tests/Api/ComponentTests/` | API endpoints exercised via `WebApplicationFactory` with faked dependencies |
 | `tests/Ui/ComponentTests/` | Blazor components rendered in isolation with bUnit |
 

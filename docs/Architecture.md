@@ -48,8 +48,8 @@ Internally layered as:
 | Contracts | `Rules.Contracts` | Public request/response DTOs shared between API and client |
 | Client | `Rules.Client` | Typed HTTP client for consuming the Rules API |
 
-The domain layer has **no dependency on ReferenceData**. The infrastructure
-layer owns that bridge via lookup adapters, keeping the domain pure.
+The Rules domain uses public identifiers from ReferenceData.Core. The
+infrastructure layer queries Runtime catalogs through lookup adapters.
 
 **Published packages:** `Rules.Contracts`, `Rules.Client`, and the
 `Rules.WireMock` stub (see below) are all published NuGet packages so
@@ -70,11 +70,12 @@ Exposed via catalog interfaces:
 `ILocationDefinitionCatalog`, `IThunderbirdDefinitionCatalog`,
 `IMapEdgeDefinitionCatalog`, and others.
 
-See [src/ReferenceData/Readme.md](../src/ReferenceData/Readme.md) for detail.
+The app consumes Core and Runtime as NuGet packages published by the
+[Reference Data repository](https://github.com/MattCarrington/ThunderbirdsBoardGameEngine.ReferenceData).
 
 The [Reference Data evolution plan](architecture/reference-data-evolution.md)
-describes proposed independent releases, automated production, and Azure Blob
-delivery. Those proposals do not describe the currently deployed architecture.
+describes the move to independent releases and the planned work on automated
+snapshot production and Azure Blob delivery.
 
 [ADR 0008](architecture/decisions/0008-reference-data-versioning-and-compatibility.md)
 records the accepted versioning, publication, retention, and future game-pinning
