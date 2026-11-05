@@ -438,6 +438,55 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints.GameState.V1
             await ProblemDetailsAssertions.AssertNotFoundAsync(response, "Character was not found.");
         }
 
+        [Fact]
+        public async Task ReturnsUnprocessableEntityWhenTransfersNotReciprocal()
+        {
+            // Arrange
+            var gameId = Guid.NewGuid();
+            var game = new StandardGameSetupFactory().Create(gameId, DateTimeOffset.UtcNow);
+
+            await _repository.CreateNewGameSession(game, TestContext.Current.CancellationToken);
+
+            var firstCharacterCode = KnownCharacterCodes.Scott;
+            var firstThunderbirdCode = KnownThunderbirdCodes.Thunderbird1;
+            var secondCharacterCode = KnownCharacterCodes.Gordon;
+
+            var dto = new TransferCharactersRequestDto
+            {
+                Assignments =
+                [
+                    new CharacterTransferAssignmentDto
+                    {
+                        CharacterCode = firstCharacterCode.Value,
+                        DestinationThunderbirdCode = firstThunderbirdCode.Value
+                    },
+                    new CharacterTransferAssignmentDto
+                    {
+                        CharacterCode = secondCharacterCode.Value,
+                        DestinationThunderbirdCode = firstThunderbirdCode.Value
+                    }
+                ]
+            };
+
+            var route = GameStateRoutes.TransferCharacters(gameId);
+
+            using var request = new HttpRequestMessage(HttpMethod.Post, route);
+            request.Headers.Add("X-API-Version", ApiVersion.ToString());
+            request.Content = JsonContent.Create(dto);
+
+            // Act
+            using var response = await _httpClient.SendAsync(request, TestContext.Current.CancellationToken);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.UnprocessableEntity, response.StatusCode);
+
+            var problem = await response.Content.ReadFromJsonAsync<ProblemDetails>(cancellationToken: TestContext.Current.CancellationToken);
+            Assert.NotNull(problem);
+
+            var reason = Assert.IsType<JsonElement>(problem.Extensions["reason"]);
+            Assert.Equal("not-reciprocal", reason.GetString());
+        }
+
         private static void AssertCharacterIsInThunderbird(GameStateResponseDto gameState, string characterCode, string thunderbirdCode)
         {
             var thunderbird = gameState.ThunderbirdMachines.SingleOrDefault(tm => tm.ThunderbirdCode == thunderbirdCode);
