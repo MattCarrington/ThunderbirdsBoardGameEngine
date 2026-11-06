@@ -122,6 +122,56 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints.GameState.V1
         }
 
         [Fact]
+        public async Task ReturnsOkWhenNoChanges()
+        {
+            // Arrange
+            var gameId = Guid.NewGuid();
+            var game = new StandardGameSetupFactory().Create(gameId, DateTimeOffset.UtcNow);
+
+            await _repository.CreateNewGameSession(game, TestContext.Current.CancellationToken);
+
+            var firstCharacterCode = KnownCharacterCodes.Virgil;
+            var firstThunderbirdCode = KnownThunderbirdCodes.Thunderbird2;
+            var secondCharacterCode = KnownCharacterCodes.Alan;
+            var secondThunderbirdCode = KnownThunderbirdCodes.Thunderbird3;
+
+            var dto = new TransferCharactersRequestDto
+            {
+                Assignments =
+                [
+                    new CharacterTransferAssignmentDto
+                    {
+                        CharacterCode = firstCharacterCode.Value,
+                        DestinationThunderbirdCode = firstThunderbirdCode.Value
+                    },
+                    new CharacterTransferAssignmentDto
+                    {
+                        CharacterCode = secondCharacterCode.Value,
+                        DestinationThunderbirdCode = secondThunderbirdCode.Value
+                    }
+                ]
+            };
+
+            var route = GameStateRoutes.TransferCharacters(gameId);
+
+            using var request = new HttpRequestMessage(HttpMethod.Post, route);
+            request.Headers.Add("X-API-Version", ApiVersion.ToString());
+            request.Content = JsonContent.Create(dto);
+
+            // Act
+            using var response = await _httpClient.SendAsync(request, TestContext.Current.CancellationToken);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+            var result = await response.Content.ReadFromJsonAsync<GameStateResponseDto>(cancellationToken: TestContext.Current.CancellationToken);
+            Assert.NotNull(result);
+
+            AssertCharacterIsInThunderbird(result, firstCharacterCode.Value, firstThunderbirdCode.Value);
+            AssertCharacterIsInThunderbird(result, secondCharacterCode.Value, secondThunderbirdCode.Value);
+        }
+
+        [Fact]
         public async Task ReturnsUnprocessableEntityWhenCharacterTransferRejected()
         {
             // Arrange
