@@ -15,6 +15,16 @@ updates:
       # Avoid surprise breaking changes early on
       - dependency-name: "*"
         update-types: ["version-update:semver-major"]
+    groups:
+      ef-core:
+        patterns:
+          - "Microsoft.EntityFrameworkCore"
+          - "Microsoft.EntityFrameworkCore.*"
+          - "Microsoft.Extensions.DependencyInjection"
+          - "Microsoft.Extensions.DependencyInjection.Abstractions"
+          - "dotnet-ef"
+        update-types:
+          - "patch"
 
   # GitHub Actions
   - package-ecosystem: "github-actions"
