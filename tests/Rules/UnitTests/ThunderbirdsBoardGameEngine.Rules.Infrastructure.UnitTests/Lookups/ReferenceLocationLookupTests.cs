@@ -1,10 +1,9 @@
-﻿using ThunderbirdsBoardGameEngine.TestUtils.ReferenceData.Builders;
-using NSubstitute;
+﻿using NSubstitute;
 using System.Collections.Immutable;
 using ThunderbirdsBoardGameEngine.ReferenceData.Core.Enums;
 using ThunderbirdsBoardGameEngine.ReferenceData.Core.Identities;
-using ThunderbirdsBoardGameEngine.ReferenceData.Core.Model;
 using ThunderbirdsBoardGameEngine.ReferenceData.Runtime.Interfaces;
+using ThunderbirdsBoardGameEngine.ReferenceData.Testing.Builders;
 using ThunderbirdsBoardGameEngine.Rules.Infrastructure.Lookups;
 using Xunit;
 

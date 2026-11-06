@@ -1,7 +1,7 @@
-﻿using ThunderbirdsBoardGameEngine.TestUtils.ReferenceData.Builders;
-using ThunderbirdsBoardGameEngine.ReferenceData.Core.Enums;
+﻿using ThunderbirdsBoardGameEngine.ReferenceData.Core.Enums;
 using ThunderbirdsBoardGameEngine.ReferenceData.Core.Identities;
 using ThunderbirdsBoardGameEngine.ReferenceData.Core.Model;
+using ThunderbirdsBoardGameEngine.ReferenceData.Testing.Builders;
 using ThunderbirdsBoardGameEngine.Rules.Domain.Movement.Contributions;
 using ThunderbirdsBoardGameEngine.Rules.Domain.Movement.Evaluation;
 using ThunderbirdsBoardGameEngine.Rules.Domain.Movement.Routing;

@@ -4,6 +4,11 @@ Package versions are chosen manually in each package project. The declared
 version is the next intended stable version; CI does not decide whether a
 change is major, minor, or patch.
 
+This repository consumes ReferenceData.Core, ReferenceData.Runtime and
+ReferenceData.Testing from GitHub Packages. Their consumer versions are set in
+`Directory.Packages.props`. The [Reference Data repository](https://github.com/MattCarrington/ThunderbirdsBoardGameEngine.ReferenceData)
+owns publishing and documents its [release process](https://github.com/MattCarrington/ThunderbirdsBoardGameEngine.ReferenceData/blob/main/docs/package-releases.md).
+
 ## Compatibility and versioning
 
 Published packages now target .NET 10 and require consumers to target .NET 10
@@ -17,13 +22,12 @@ Package versions are independent of the application's maturity:
   resetting the patch to zero (for example, `0.4.1` to `0.5.0`).
 - ReferenceData.Core and ReferenceData.Runtime moved to `2.0.0` for the
   .NET 10 migration and subsequently to `3.0.0` with the required character-capacity
-  constructor change. Project files hold current declared versions. Other packages
-  can remain on their own `0.x` release lines.
+  constructor change, before the extraction.
 
 NuGet package versions are separate from reference-data snapshot metadata.
 Changing the target framework does not require regenerating the snapshot or
 bumping its schema or content version. See
-[Reference Data](../src/ReferenceData/Readme.md#snapshot-metadata).
+[Reference Data snapshot metadata](https://github.com/MattCarrington/ThunderbirdsBoardGameEngine.ReferenceData/blob/main/src/Readme.md#snapshot-metadata).
 
 [ADR 0008](architecture/decisions/0008-reference-data-versioning-and-compatibility.md)
 defines the separate package, schema, and content responsibilities. Core and
@@ -34,7 +38,7 @@ for package API compatibility assessment.
 
 ### Reference Data construction boundary
 
-Core and Runtime declare `4.0.0` for the construction-boundary change described
+Core and Runtime moved to `4.0.0` for the construction-boundary change described
 in [ADR 0007](architecture/decisions/0007-reference-data-owned-construction.md).
 Removing public definition constructors breaks source and binary callers of
 those constructors. Public init setters on specific-token rewards and derived
@@ -61,7 +65,7 @@ Rules.Contracts
 ```
 
 `Client.Core` and `WireMock.Hosting` remain on their stable versions unless
-their own source changes. Reference Data packages are outside the Rules graph.
+their own source changes.
 
 The catalog's `source_paths` include files outside a project directory when
 they are packed into its nupkg. Its `central_packages` list identifies entries

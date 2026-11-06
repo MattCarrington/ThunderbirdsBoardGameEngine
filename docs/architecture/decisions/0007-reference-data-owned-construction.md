@@ -58,6 +58,6 @@ read/deconstruction support but no longer expose public init setters.
 
 ## Related documentation
 
-- [Reference Data overview](../../../src/ReferenceData/Readme.md)
+- [Reference Data overview](https://github.com/MattCarrington/ThunderbirdsBoardGameEngine.ReferenceData/blob/main/src/Readme.md)
 - [Reference Data evolution plan](../reference-data-evolution.md)
 - [PR #156](https://github.com/MattCarrington/ThunderbirdsBoardGameEngine/pull/156)

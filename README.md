@@ -84,16 +84,16 @@ integration and end-to-end testing scenarios.
 
 ## Reference data
 
-Static game data — disasters, characters, locations, Thunderbirds, and pod
-vehicles — is managed as **reference data**: explicitly compiled from spreadsheets
-into a versioned JSON snapshot, copied into Runtime, and embedded during the
-build. It is loaded into read-only in-memory catalogs when first resolved.
+The app consumes static game data from the ReferenceData.Core and
+ReferenceData.Runtime NuGet packages. Runtime includes a versioned JSON snapshot
+and loads it into read-only in-memory catalogs when first resolved.
 
 This avoids a dependency on a live catalog service and keeps the runtime
 fully self-contained.
 
-For more detail on the compiler, snapshot versioning, and catalog interfaces,
-see [src/ReferenceData/Readme.md](src/ReferenceData/Readme.md).
+The [Reference Data repository](https://github.com/MattCarrington/ThunderbirdsBoardGameEngine.ReferenceData) owns
+snapshot authoring, compilation, and package releases. App tests can use
+ReferenceData.Testing for definition builders and fake catalogs.
 
 ---
 

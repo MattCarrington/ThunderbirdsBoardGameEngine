@@ -1,7 +1,6 @@
-﻿using ThunderbirdsBoardGameEngine.TestUtils.ReferenceData.Builders;
-using ThunderbirdsBoardGameEngine.ReferenceData.Core.Identities;
+﻿using ThunderbirdsBoardGameEngine.ReferenceData.Core.Identities;
 using ThunderbirdsBoardGameEngine.ReferenceData.Core.KnownIdentities;
-using ThunderbirdsBoardGameEngine.ReferenceData.Core.Model;
+using ThunderbirdsBoardGameEngine.ReferenceData.Testing.Builders;
 using ThunderbirdsBoardGameEngine.Rules.Domain.EventCards;
 using Xunit;
 

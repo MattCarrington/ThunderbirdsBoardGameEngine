@@ -4,6 +4,7 @@
 
 - [.NET 10 SDK](https://dotnet.microsoft.com/download/dotnet/10.0), meeting the baseline in [`global.json`](../global.json)
 - [Docker Desktop](https://www.docker.com/products/docker-desktop)
+- A GitHub account with read access to the Reference Data packages
 
 ## First-time setup
 
@@ -13,6 +14,23 @@ Run `dotnet --version` from the repository root to check the selected SDK.
 GitHub Actions installs the version recorded in this file; Docker builds also
 read it, so their images must contain a compatible SDK. The application target
 framework remains configured separately in `Directory.Build.props`.
+
+### GitHub Packages credentials
+
+Create a [personal access token (classic)](https://github.com/settings/tokens/new?scopes=read%3Apackages)
+with the `read:packages` scope. The GitHub account that owns the token also
+needs permission to read the packages. Set both variables in the PowerShell
+session you will use to build or run the app:
+
+```powershell
+$env:GITHUB_PACKAGES_USERNAME = Read-Host 'GitHub username'
+$packageToken = Read-Host 'GitHub Packages token' -AsSecureString
+$env:GITHUB_PACKAGES_TOKEN = [System.Net.NetworkCredential]::new('', $packageToken).Password
+Remove-Variable packageToken
+```
+
+Repeat this in a new terminal when you need to restore packages. Keep the token
+out of committed files, including `NuGet.config`.
 
 After cloning the repository, install the Git hooks:
 
@@ -33,7 +51,13 @@ There are two supported approaches for local development.
 Runs the API directly on the host. Best for day-to-day API development and
 debugging in an IDE.
 
+In the same PowerShell session, set the NuGet credential variable for the
+`GitHub` source in [`NuGet.config`](../NuGet.config). NuGet uses this value
+when `dotnet run` restores packages. The same setting applies to `dotnet restore`,
+`dotnet build`, and `dotnet test`. See [NuGet's feed authentication guide](https://learn.microsoft.com/en-us/nuget/consume-packages/consuming-packages-authenticated-feeds#credentials-in-environment-variables).
+
 ```powershell
+$env:NuGetPackageSourceCredentials_GitHub = "Username=$($env:GITHUB_PACKAGES_USERNAME);Password=$($env:GITHUB_PACKAGES_TOKEN);ValidAuthenticationTypes=Basic"
 dotnet run --project src/Api/ThunderbirdsBoardGameEngine.Api
 ```
 
@@ -59,7 +83,10 @@ Runs the application in a container, matching the production image more
 closely. Best for validating Docker-specific behaviour or running
 integration, smoke, and end-to-end tests against a containerised build.
 
-From the repository root:
+From the repository root, run the following in the PowerShell session where
+you set the [GitHub Packages credentials](#github-packages-credentials).
+Compose passes the username as a build argument and the token as a build
+secret for NuGet restore inside Docker.
 
 ```powershell
 docker compose -f Docker/docker-compose.yml -f Docker/docker-compose.override.yml up --build
@@ -84,7 +111,8 @@ docker compose -f Docker/docker-compose.yml -f Docker/docker-compose.override.ym
 
 ### Test Compose configuration
 
-For integration and browser tests, use the test override instead:
+For integration and browser tests, use the test override with the same
+GitHub Packages environment variables:
 
 ```powershell
 docker compose -f Docker/docker-compose.yml -f Docker/docker-compose.test.yml up --build

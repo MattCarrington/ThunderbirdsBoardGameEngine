@@ -8,29 +8,6 @@
     "dependencies": []
   },
   {
-    "name": "ReferenceData.Core",
-    "package_id": "ThunderbirdsBoardGameEngine.ReferenceData.Core",
-    "project_path": "src/ReferenceData/ThunderbirdsBoardGameEngine.ReferenceData.Core/ThunderbirdsBoardGameEngine.ReferenceData.Core.csproj",
-    "source_paths": ["src/ReferenceData/ThunderbirdsBoardGameEngine.ReferenceData.Core"],
-    "central_packages": [],
-    "dependencies": []
-  },
-  {
-    "name": "ReferenceData.Runtime",
-    "package_id": "ThunderbirdsBoardGameEngine.ReferenceData.Runtime",
-    "project_path": "src/ReferenceData/ThunderbirdsBoardGameEngine.ReferenceData.Runtime/ThunderbirdsBoardGameEngine.ReferenceData.Runtime.csproj",
-    "source_paths": [
-      "src/ReferenceData/ThunderbirdsBoardGameEngine.ReferenceData.Runtime",
-      "src/ReferenceData/Readme.md"
-    ],
-    "central_packages": [
-      "Microsoft.Extensions.DependencyInjection.Abstractions",
-      "Microsoft.Extensions.Logging",
-      "Microsoft.Extensions.Logging.Abstractions"
-    ],
-    "dependencies": ["ThunderbirdsBoardGameEngine.ReferenceData.Core"]
-  },
-  {
     "name": "Rules.Contracts",
     "package_id": "ThunderbirdsBoardGameEngine.Rules.Contracts",
     "project_path": "src/Rules/ThunderbirdsBoardGameEngine.Rules.Contracts/ThunderbirdsBoardGameEngine.Rules.Contracts.csproj",

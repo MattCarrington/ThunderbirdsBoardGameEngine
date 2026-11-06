@@ -24,6 +24,10 @@ jobs:
         with:
           global-json-file: global.json
 
+      - uses: ./.github/actions/authenticate-github-packages
+        with:
+          token: ${{ github.token }}
+
       - name: Run Unit Tests
         run: |
           set -e

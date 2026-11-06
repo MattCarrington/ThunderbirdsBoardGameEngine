@@ -6,15 +6,15 @@ USER $APP_UID
 
 FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 ARG BUILD_CONFIGURATION=Release
+ARG GITHUB_PACKAGES_USERNAME
 WORKDIR /src
 
+COPY ["NuGet.config", "."]
 COPY ["Directory.Packages.props", "."]
 COPY ["Directory.Build.props", "."]
 COPY ["global.json", "."]
 
 COPY ["src/Api/ThunderbirdsBoardGameEngine.Api/ThunderbirdsBoardGameEngine.Api.csproj", "Api/ThunderbirdsBoardGameEngine.Api/"]
-COPY ["src/ReferenceData/ThunderbirdsBoardGameEngine.ReferenceData.Core/ThunderbirdsBoardGameEngine.ReferenceData.Core.csproj", "ReferenceData/ThunderbirdsBoardGameEngine.ReferenceData.Core/"]
-COPY ["src/ReferenceData/ThunderbirdsBoardGameEngine.ReferenceData.Runtime/ThunderbirdsBoardGameEngine.ReferenceData.Runtime.csproj", "ReferenceData/ThunderbirdsBoardGameEngine.ReferenceData.Runtime/"]
 COPY ["src/Rules/ThunderbirdsBoardGameEngine.Rules.Application/ThunderbirdsBoardGameEngine.Rules.Application.csproj", "Rules/ThunderbirdsBoardGameEngine.Rules.Application/"]
 COPY ["src/Rules/ThunderbirdsBoardGameEngine.Rules.Infrastructure/ThunderbirdsBoardGameEngine.Rules.Infrastructure.csproj", "Rules/ThunderbirdsBoardGameEngine.Rules.Infrastructure/"]
 COPY ["src/Rules/ThunderbirdsBoardGameEngine.Rules.Contracts/ThunderbirdsBoardGameEngine.Rules.Contracts.csproj", "Rules/ThunderbirdsBoardGameEngine.Rules.Contracts/"]
@@ -29,7 +29,9 @@ COPY ["src/Rules/ThunderbirdsBoardGameEngine.Rules.Client/ThunderbirdsBoardGameE
 COPY ["src/GameState/ThunderbirdsBoardGameEngine.GameState.Client/ThunderbirdsBoardGameEngine.GameState.Client.csproj", "GameState/ThunderbirdsBoardGameEngine.GameState.Client/"]
 COPY ["src/Common/ThunderbirdsBoardGameEngine.Client.Core/ThunderbirdsBoardGameEngine.Client.Core.csproj", "Common/ThunderbirdsBoardGameEngine.Client.Core/"]
 
-RUN dotnet restore "./Api/ThunderbirdsBoardGameEngine.Api/ThunderbirdsBoardGameEngine.Api.csproj"
+RUN --mount=type=secret,id=github_packages_token,required=true \
+    NuGetPackageSourceCredentials_GitHub="Username=${GITHUB_PACKAGES_USERNAME};Password=$(cat /run/secrets/github_packages_token);ValidAuthenticationTypes=Basic" \
+    dotnet restore "./Api/ThunderbirdsBoardGameEngine.Api/ThunderbirdsBoardGameEngine.Api.csproj"
 
 COPY src/ .
 

@@ -80,21 +80,6 @@ run_test \
   '["ThunderbirdsBoardGameEngine.WireMock.Hosting","ThunderbirdsBoardGameEngine.Rules.WireMock","ThunderbirdsBoardGameEngine.GameState.WireMock"]'
 
 run_test \
-  "ReferenceData.Core selects Runtime" \
-  "src/ReferenceData/ThunderbirdsBoardGameEngine.ReferenceData.Core/Model.cs" \
-  '["ThunderbirdsBoardGameEngine.ReferenceData.Core","ThunderbirdsBoardGameEngine.ReferenceData.Runtime"]'
-
-run_test \
-  "ReferenceData.Runtime selects only itself" \
-  "src/ReferenceData/ThunderbirdsBoardGameEngine.ReferenceData.Runtime/Runtime.cs" \
-  '["ThunderbirdsBoardGameEngine.ReferenceData.Runtime"]'
-
-run_test \
-  "ReferenceData readme selects Runtime" \
-  "src/ReferenceData/Readme.md" \
-  '["ThunderbirdsBoardGameEngine.ReferenceData.Runtime"]'
-
-run_test \
   "Shared HTTP dependency selects both clients" \
   "Directory.Packages.props" \
   '["ThunderbirdsBoardGameEngine.Rules.Client","ThunderbirdsBoardGameEngine.GameState.Client"]' \
