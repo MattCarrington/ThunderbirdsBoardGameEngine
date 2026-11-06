@@ -489,7 +489,7 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints.GameState.V1
         }
 
         [Fact]
-        public async Task ReturnsUnprocessableEntityWhenTransfersNotReciprocal()
+        public async Task ReturnsUnprocessableEntityWhenOnlyOneAssignmentChangesMachine()
         {
             // Arrange
             var gameId = Guid.NewGuid();

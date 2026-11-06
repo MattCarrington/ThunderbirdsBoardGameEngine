@@ -293,7 +293,7 @@ namespace ThunderbirdsBoardGameEngine.GameState.Application.UnitTests.TransferCh
         }
 
         [Fact]
-        public async Task Handle_ShouldReturnExistingStateWithoutPersisting_WhenBothCharacterAreAlreadyInDestinationThunderbirdMachines()
+        public async Task Handle_ShouldReturnExistingStateWithoutPersisting_WhenBothCharactersAreAlreadyInTheirDestinationMachines()
         {
             // Arrange
             var game = CreateGame();
