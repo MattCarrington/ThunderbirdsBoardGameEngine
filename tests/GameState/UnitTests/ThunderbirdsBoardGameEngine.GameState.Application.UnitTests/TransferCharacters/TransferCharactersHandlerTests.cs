@@ -330,6 +330,10 @@ namespace ThunderbirdsBoardGameEngine.GameState.Application.UnitTests.TransferCh
 
             integrityValidator.Received(1).Validate(game);
             await repository.DidNotReceive().UpdateGameSession(Arg.Any<Game>(), Arg.Any<CancellationToken>());
+            await gateway.DidNotReceive().ValidateTransferCharactersAsync(
+                Arg.Any<IReadOnlyCollection<CurrentThunderbirdState>>(),
+                Arg.Any<IReadOnlyCollection<CharacterAssignment>>(),
+                Arg.Any<CancellationToken>());
         }
 
         [Fact]
@@ -438,6 +442,10 @@ namespace ThunderbirdsBoardGameEngine.GameState.Application.UnitTests.TransferCh
 
             integrityValidator.Received(1).Validate(game);
             await repository.DidNotReceive().UpdateGameSession(Arg.Any<Game>(), Arg.Any<CancellationToken>());
+            await gateway.DidNotReceive().ValidateTransferCharactersAsync(
+                Arg.Any<IReadOnlyCollection<CurrentThunderbirdState>>(),
+                Arg.Any<IReadOnlyCollection<CharacterAssignment>>(),
+                Arg.Any<CancellationToken>());
         }
 
         private static Game CreateGame()
