@@ -1,16 +1,51 @@
 #!/usr/bin/env python3
 
+import argparse
 import json
 import os
 from pathlib import Path
 import re
+import subprocess
 import sys
+import xml.etree.ElementTree as ET
 
 
 def fail(message: str) -> None:
     print(f"ERROR: {message}", file=sys.stderr)
     raise SystemExit(1)
 
+
+def git(*args: str) -> str:
+    return subprocess.check_output(["git", *args], encoding="utf-8")
+
+
+def check_versions(plan: list, base: str) -> None:
+    previous_paths = set(git("ls-tree", "-r", "--name-only", base).splitlines())
+    errors = []
+    for package in plan:
+        path = package["project_path"]
+        current = ET.parse(path).getroot().findtext("./PropertyGroup/Version", "").strip()
+        previous = None
+        if path in previous_paths:
+            previous = ET.fromstring(git("show", f"{base}:{path}")).findtext(
+                "./PropertyGroup/Version", ""
+            ).strip()
+
+        if not re.fullmatch(r"[0-9]+\.[0-9]+\.[0-9]+", current):
+            errors.append(f"{path}: declare a stable version in <Version> (major.minor.patch).")
+        elif previous is not None:
+            if not re.fullmatch(r"[0-9]+\.[0-9]+\.[0-9]+", previous):
+                errors.append(f"{path}: cannot compare with base version {previous!r}.")
+            elif tuple(map(int, current.split("."))) <= tuple(map(int, previous.split("."))):
+                errors.append(f"{path}: bump <Version> above {previous} (found {current}).")
+
+    if errors:
+        fail("Package releases require version bumps:\n  " + "\n  ".join(errors))
+
+
+parser = argparse.ArgumentParser()
+parser.add_argument("--check-base", help="Check that selected package versions increase from this base commit")
+args = parser.parse_args()
 
 script_directory = Path(__file__).resolve().parent
 catalog_path = Path(
@@ -23,7 +58,9 @@ if not catalog_path.is_file():
 changed_files_path = os.environ.get("CHANGED_FILES_PATH")
 changed_files_value = os.environ.get("CHANGED_FILES")
 
-if changed_files_path:
+if args.check_base:
+    changed_files = git("diff", "--name-only", args.check_base, "HEAD", "--").splitlines()
+elif changed_files_path:
     changed_files = Path(changed_files_path).read_text(encoding="utf-8").splitlines()
 elif changed_files_value is not None:
     changed_files = changed_files_value.splitlines()
@@ -34,7 +71,9 @@ package_props_changed = "Directory.Packages.props" in changed_files
 package_props_diff_path = os.environ.get("PACKAGE_PROPS_DIFF_PATH")
 package_props_diff_value = os.environ.get("PACKAGE_PROPS_DIFF")
 
-if package_props_diff_path:
+if args.check_base:
+    package_props_diff = git("diff", "--unified=0", args.check_base, "HEAD", "--", "Directory.Packages.props")
+elif package_props_diff_path:
     package_props_diff = Path(package_props_diff_path).read_text(encoding="utf-8")
 elif package_props_diff_value is not None:
     package_props_diff = package_props_diff_value
@@ -96,6 +135,9 @@ if plan:
         print(f'  {package["package_id"]}')
 else:
     print("  (no packages)")
+
+if args.check_base and plan:
+    check_versions(plan, args.check_base)
 
 github_output = os.environ.get("GITHUB_OUTPUT")
 if github_output:
