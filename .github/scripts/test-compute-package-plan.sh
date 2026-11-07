@@ -109,3 +109,50 @@ run_test \
   '[]'
 
 echo "All $PASSED compute-package-plan tests passed."
+
+# Exercise the PR check with a central dependency bump and no client source changes.
+(
+  cd "$TEST_ROOT"
+  git init -q
+  git config user.name "Package planner test"
+  git config user.email "package-test@example.invalid"
+  git config commit.gpgsign false
+
+  projects=(
+    src/Common/ThunderbirdsBoardGameEngine.Client.Core/ThunderbirdsBoardGameEngine.Client.Core.csproj
+    src/Rules/ThunderbirdsBoardGameEngine.Rules.Client/ThunderbirdsBoardGameEngine.Rules.Client.csproj
+    src/GameState/ThunderbirdsBoardGameEngine.GameState.Client/ThunderbirdsBoardGameEngine.GameState.Client.csproj
+  )
+
+  write_version() {
+    printf '<Project><PropertyGroup><Version>%s</Version></PropertyGroup></Project>\n' "$2" > "$1"
+  }
+
+  for project in "${projects[@]}"; do
+    mkdir -p "$(dirname "$project")"
+    write_version "$project" 0.1.9
+  done
+  printf '<PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="10.0.13" />\n' > Directory.Packages.props
+  git add -- Directory.Packages.props "${projects[@]}"
+  git commit -qm base
+  base=$(git rev-parse HEAD)
+
+  printf '<PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="10.0.14" />\n' > Directory.Packages.props
+  write_version "${projects[0]}" 0.1.10
+  write_version "${projects[1]}" 0.1.10
+  git commit -qam 'Bump dependency and two packages'
+
+  if output=$("$PYTHON_COMMAND" "$PLANNER" --check-base "$base" 2>&1); then
+    echo "FAIL: PR check accepted an unchanged downstream package version" >&2
+    exit 1
+  fi
+  if [[ "$output" != *"${projects[2]}: bump <Version> above 0.1.9 (found 0.1.9)."* ]]; then
+    echo "FAIL: PR check did not identify the missing downstream version bump: $output" >&2
+    exit 1
+  fi
+
+  write_version "${projects[2]}" 0.1.10
+  git commit -qam 'Bump remaining consumer'
+  "$PYTHON_COMMAND" "$PLANNER" --check-base "$base" >/dev/null
+  echo "PASS: PR check requires the downstream version bump"
+)

@@ -74,6 +74,11 @@ test-only or application-only package versions do not trigger publication.
 
 ## Release-line behaviour
 
+The **Check package release versions** PR job uses the publish planner to list
+affected packages and requires each existing package's version to increase from
+the PR base. It does not publish or query the registry. Make this job a required
+check in the default branch's rules so auto-merge waits for it.
+
 - On a feature branch, an affected package whose stable version does not exist
   is published as `<version>-beta.<run-number>`.
 - On a feature branch, an affected package whose stable version already exists

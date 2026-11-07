@@ -24,6 +24,24 @@ jobs:
   ci-script-tests:
     uses: ./.github/workflows/tests-ci-scripts.yml
 
+  package-release-check:
+    name: Check package release versions
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 2
+
+      - name: Check versions of affected packages
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+        run: python3 .github/scripts/compute-package-plan.py --check-base "$BASE_SHA"
+    needs:
+      - ci-script-tests
+
   static-analysis:
     uses: ./.github/workflows/static-analysis.yml
     with:
