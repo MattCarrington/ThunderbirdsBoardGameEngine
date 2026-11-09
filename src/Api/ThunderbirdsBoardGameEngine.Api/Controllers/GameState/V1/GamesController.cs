@@ -33,7 +33,7 @@ namespace ThunderbirdsBoardGameEngine.Api.Controllers.GameState.V1
         [HttpPost]
         public async Task<IActionResult> CreateGame(CancellationToken cancellationToken)
         {
-            var result = await _mediator.Send(new CreateNewGameCommand(), cancellationToken);
+            var result = await _mediator.Send(new CreateNewGameCommand(new List<CharacterCode>()), cancellationToken);  //  TODO: Replace with actual turn order when implemented
 
             return CreatedAtAction(nameof(GetGame), new { gameId = result.GameSession.Id }, result.GameSession.ToDto());
         }

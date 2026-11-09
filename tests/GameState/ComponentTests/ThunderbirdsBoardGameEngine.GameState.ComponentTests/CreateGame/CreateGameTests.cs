@@ -1,5 +1,6 @@
 ﻿using ThunderbirdsBoardGameEngine.GameState.Application.CreateGame;
 using ThunderbirdsBoardGameEngine.GameState.ComponentTests.Helpers;
+using ThunderbirdsBoardGameEngine.ReferenceData.Core.Identities;
 using ThunderbirdsBoardGameEngine.ReferenceData.Core.KnownIdentities;
 using Xunit;
 
@@ -13,7 +14,14 @@ namespace ThunderbirdsBoardGameEngine.GameState.ComponentTests.CreateGame
             // Arrange
             await using var testHost = GameStateTestHost.CreateBuilder().Build();
 
-            var command = new CreateNewGameCommand();
+            var activeTurnOrder = new List<CharacterCode>
+            {
+                KnownCharacterCodes.Gordon,
+                KnownCharacterCodes.John,
+                KnownCharacterCodes.LadyPenelope
+            };
+
+            var command = new CreateNewGameCommand(activeTurnOrder);
 
             // Act
             var result = await testHost.Mediator.Send(command, CancellationToken.None);

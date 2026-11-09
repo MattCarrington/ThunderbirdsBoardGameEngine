@@ -1,7 +1,10 @@
 ﻿using NSubstitute;
 using ThunderbirdsBoardGameEngine.GameState.Application.CreateGame;
+using ThunderbirdsBoardGameEngine.GameState.Application.Exceptions;
 using ThunderbirdsBoardGameEngine.GameState.Domain;
+using ThunderbirdsBoardGameEngine.GameState.Domain.Exceptions;
 using ThunderbirdsBoardGameEngine.GameState.Domain.Setup.V1;
+using ThunderbirdsBoardGameEngine.ReferenceData.Core.Identities;
 using ThunderbirdsBoardGameEngine.ReferenceData.Core.KnownIdentities;
 using Xunit;
 
@@ -15,14 +18,23 @@ namespace ThunderbirdsBoardGameEngine.GameState.Application.UnitTests.CreateGame
             // Arrange
             var validator = Substitute.For<IGameStateIntegrityValidator>();
             var repository = Substitute.For<IGameRepository>();
+            var existenceLookup = Substitute.For<ICharacterExistenceLookup>();
+            existenceLookup.Exists(Arg.Any<CharacterCode>()).Returns(true);
 
             var handler = new CreateNewGameHandler(
                 new StandardGameSetupFactory(),
                 validator,
-                repository);
+                repository,
+                existenceLookup);
+
+            var activeTurnOrder = new List<CharacterCode>
+            {
+                new("character-1"),
+                new("character-2"),
+            };
 
             // Act
-            var result = await handler.Handle(new CreateNewGameCommand(), CancellationToken.None);
+            var result = await handler.Handle(new CreateNewGameCommand(activeTurnOrder), CancellationToken.None);
 
             // Assert
             validator.Received(1)
@@ -55,11 +67,106 @@ namespace ThunderbirdsBoardGameEngine.GameState.Application.UnitTests.CreateGame
         }
 
         [Fact]
+        public async Task Handle_ShouldCreateGame_WhenFourActiveCharacters()
+        {
+            // Arrange
+            var validator = Substitute.For<IGameStateIntegrityValidator>();
+            var repository = Substitute.For<IGameRepository>();
+            var existenceLookup = Substitute.For<ICharacterExistenceLookup>();
+            existenceLookup.Exists(Arg.Any<CharacterCode>()).Returns(true);
+
+            var handler = new CreateNewGameHandler(
+                new StandardGameSetupFactory(),
+                validator,
+                repository,
+                existenceLookup);
+
+            var activeTurnOrder = new List<CharacterCode>
+            {
+                new("character-1"),
+                new("character-2"),
+                new("character-3"),
+                new("character-4"),
+            };
+
+            // Act
+            var result = await handler.Handle(new CreateNewGameCommand(activeTurnOrder), CancellationToken.None);
+
+            // Assert
+            validator.Received(1)
+                .Validate(Arg.Any<Game>());
+
+            await repository.Received(1)
+                .CreateNewGameSession(
+                    Arg.Any<Game>(),
+                    Arg.Any<CancellationToken>());
+
+            Assert.NotNull(result);
+            Assert.NotNull(result.GameSession);
+        }
+
+        [Fact]
+        public async Task Handle_ShouldThrowInvalidTurnOrderException_WhenTurnOrderHasLessThanTwoCharacters()
+        {
+            // Arrange
+            var validator = Substitute.For<IGameStateIntegrityValidator>();
+            var repository = Substitute.For<IGameRepository>();
+            var existenceLookup = Substitute.For<ICharacterExistenceLookup>();
+            existenceLookup.Exists(Arg.Any<CharacterCode>()).Returns(true);
+
+            var handler = new CreateNewGameHandler(
+                new StandardGameSetupFactory(),
+                validator,
+                repository,
+                existenceLookup);
+            var activeTurnOrder = new List<CharacterCode>
+
+            {
+                new("character-1"),
+            };
+
+            // Act & Assert
+            await Assert.ThrowsAsync<InvalidTurnOrderException>(
+                () => handler.Handle(new CreateNewGameCommand(activeTurnOrder), CancellationToken.None));
+        }
+
+        [Fact]
+        public async Task Handle_ShouldThrowInvalidTurnOrderException_WhenTurnOrderHasMoreThanFourCharacters()
+        {
+            // Arrange
+            var validator = Substitute.For<IGameStateIntegrityValidator>();
+            var repository = Substitute.For<IGameRepository>();
+            var existenceLookup = Substitute.For<ICharacterExistenceLookup>();
+            existenceLookup.Exists(Arg.Any<CharacterCode>()).Returns(true);
+
+            var handler = new CreateNewGameHandler(
+                new StandardGameSetupFactory(),
+                validator,
+                repository,
+                existenceLookup);
+
+            var activeTurnOrder = new List<CharacterCode>
+            {
+                new("character-1"),
+                new("character-2"),
+                new("character-3"),
+                new("character-4"),
+                new("character-5"),
+            };
+
+            // Act & Assert
+            await Assert.ThrowsAsync<InvalidTurnOrderException>(
+                () => handler.Handle(new CreateNewGameCommand(activeTurnOrder), CancellationToken.None));
+        }
+
+        [Fact]
         public async Task Handle_ShouldNotPersistGame_WhenIntegrityValidationFails()
         {
             // Arrange
             var validator = Substitute.For<IGameStateIntegrityValidator>();
             var repository = Substitute.For<IGameRepository>();
+            var existenceLookup = Substitute.For<ICharacterExistenceLookup>();
+            existenceLookup.Exists(Arg.Any<CharacterCode>()).Returns(true);
 
             validator
                 .When(x => x.Validate(Arg.Any<Game>()))
@@ -68,11 +175,18 @@ namespace ThunderbirdsBoardGameEngine.GameState.Application.UnitTests.CreateGame
             var handler = new CreateNewGameHandler(
                 new StandardGameSetupFactory(),
                 validator,
-                repository);
+                repository,
+                existenceLookup);
+
+            var activeTurnOrder = new List<CharacterCode>
+            {
+                new("character-1"),
+                new("character-2"),
+            };
 
             // Act
             await Assert.ThrowsAsync<InvalidOperationException>(
-                () => handler.Handle(new CreateNewGameCommand(), CancellationToken.None));
+                () => handler.Handle(new CreateNewGameCommand(activeTurnOrder), CancellationToken.None));
 
             // Assert
             validator.Received(1)
@@ -82,6 +196,32 @@ namespace ThunderbirdsBoardGameEngine.GameState.Application.UnitTests.CreateGame
                 .CreateNewGameSession(
                     Arg.Any<Game>(),
                     Arg.Any<CancellationToken>());
+        }
+
+        [Fact]
+        public async Task Handle_ShouldThrowCharacterNotFoundException_WhenLookupReturnsFalse()
+        {
+            // Arrange
+            var validator = Substitute.For<IGameStateIntegrityValidator>();
+            var repository = Substitute.For<IGameRepository>();
+            var existenceLookup = Substitute.For<ICharacterExistenceLookup>();
+            existenceLookup.Exists(Arg.Any<CharacterCode>()).Returns(false);
+
+            var handler = new CreateNewGameHandler(
+                new StandardGameSetupFactory(),
+                validator,
+                repository,
+                existenceLookup);
+
+            var activeTurnOrder = new List<CharacterCode>
+            {
+                new("character-1"),
+                new("character-2"),
+            };
+
+            // Act & Assert
+            await Assert.ThrowsAsync<CharacterNotFoundException>(
+                () => handler.Handle(new CreateNewGameCommand(activeTurnOrder), CancellationToken.None));
         }
     }
 }
