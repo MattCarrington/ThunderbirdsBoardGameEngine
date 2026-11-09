@@ -16,13 +16,15 @@ updates:
       - dependency-name: "*"
         update-types: ["version-update:semver-major"]
     groups:
-      ef-core:
+      dotnet-stack:
         patterns:
           - "Microsoft.EntityFrameworkCore"
           - "Microsoft.EntityFrameworkCore.*"
-          - "Microsoft.Extensions.DependencyInjection"
-          - "Microsoft.Extensions.DependencyInjection.Abstractions"
+          - "Microsoft.AspNetCore.*"
+          - "Microsoft.Extensions.*"
           - "dotnet-ef"
+        exclude-patterns:
+          - "Microsoft.AspNetCore.Mvc.ApiExplorer"
         update-types:
           - "patch"
 
