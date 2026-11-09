@@ -5,5 +5,6 @@
         string ThunderbirdDisplayName,
         string LocationCode,
         string LocationDisplayName,
-        IReadOnlyList<OccupantsDashboardViewModel> Occupants);
+        IReadOnlyList<OccupantsDashboardViewModel> Occupants,
+        int CharacterCapacity);
 }

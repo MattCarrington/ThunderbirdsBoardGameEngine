@@ -9,14 +9,16 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Factories
             string thunderbirdDisplayName = "Thunderbird 1",
             string locationCode = "south-pacific",
             string locationDisplayName = "South Pacific",
-            IReadOnlyList<OccupantsDashboardViewModel>? occupants = null)
+            IReadOnlyList<OccupantsDashboardViewModel>? occupants = null,
+            int characterCapacity = 1)
         {
             return new ThunderbirdMachinesDashboardViewModel(
                 ThunderbirdCode: thunderbirdCode,
                 ThunderbirdDisplayName: thunderbirdDisplayName,
                 LocationCode: locationCode,
                 LocationDisplayName: locationDisplayName,
-                Occupants: occupants ?? []);
+                Occupants: occupants ?? [],
+                CharacterCapacity: characterCapacity);
         }
 
         public static OccupantsDashboardViewModel CreateOccupant(
