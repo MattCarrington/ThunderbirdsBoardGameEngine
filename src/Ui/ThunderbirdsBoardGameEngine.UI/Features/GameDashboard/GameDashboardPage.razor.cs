@@ -30,6 +30,9 @@ public partial class GameDashboardPage
     private bool _isLoadingDestinations;
     private bool _isMoving;
     private string? _movementError;
+    private ThunderbirdMachinesDashboardViewModel? _transferSource;
+    private IReadOnlyList<ThunderbirdMachinesDashboardViewModel>
+        _transferDestinations = [];
 
     protected override Task OnParametersSetAsync()
     {
@@ -152,5 +155,26 @@ public partial class GameDashboardPage
         _movementError = null;
         _isLoadingDestinations = false;
         _isMoving = false;
+    }
+
+    private void BeginTransfer(ThunderbirdMachinesDashboardViewModel source)
+    {
+        if (_game is null)
+        {
+            return;
+        }
+
+        _transferSource = source;
+
+        _transferDestinations = _game.ThunderbirdMachines
+            .Where(machine => machine.ThunderbirdCode != source.ThunderbirdCode
+                && machine.LocationCode == source.LocationCode)
+            .ToArray();
+    }
+
+    private void CancelTransfer()
+    {
+        _transferSource = null;
+        _transferDestinations = [];
     }
 }

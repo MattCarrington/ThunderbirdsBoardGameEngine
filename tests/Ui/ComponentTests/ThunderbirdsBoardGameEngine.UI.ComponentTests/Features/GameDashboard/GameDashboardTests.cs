@@ -505,5 +505,87 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Features.GameDashboard
             // Assert
             Assert.True(cancelled);
         }
+
+        [Fact]
+        public void ClickingTransferShouldRequestTransferForSelectedMachine()
+        {
+            // Arrange
+            ThunderbirdMachinesDashboardViewModel? selectedMachine = null;
+
+            var occupants = new List<OccupantsDashboardViewModel>
+            {
+                GameDashboardViewModelFactory.CreateOccupant()
+            };
+
+            var machines = new List<ThunderbirdMachinesDashboardViewModel>
+            {
+                GameDashboardViewModelFactory.CreateMachine(thunderbirdCode: "thunderbird-1", occupants: occupants),
+                GameDashboardViewModelFactory.CreateMachine(thunderbirdCode: "thunderbird-2")
+            };
+
+            var cut = Render<ThunderbirdMachinesSegment>(parameters => parameters
+                .Add(p => p.Machines, machines)
+                .Add(p => p.TransferRequested, machine => selectedMachine = machine));
+
+            // Act
+            cut.Find("[data-testid='transfer-thunderbird-1']").Click();
+
+            // Assert
+            Assert.NotNull(selectedMachine);
+            Assert.Equal("thunderbird-1", selectedMachine.ThunderbirdCode);
+        }
+
+        [Fact]
+        public async Task CancellingTransferShouldNotUpdateDashboardButCloseDialogAsync()
+        {
+            // Arrange
+            var gameId = Guid.NewGuid();
+
+            var occupants = new List<OccupantsDashboardViewModel>
+            {
+                GameDashboardViewModelFactory.CreateOccupant()
+            };
+
+            var thunderbirds = new List<ThunderbirdMachinesDashboardViewModel>
+            {
+                GameDashboardViewModelFactory.CreateMachine(thunderbirdCode: "thunderbird-1", occupants: occupants),
+                GameDashboardViewModelFactory.CreateMachine(thunderbirdCode: "thunderbird-2")
+            };
+
+            var game = GameDashboardViewModelFactory.CreateDashboard(gameId: gameId, machines: thunderbirds);
+
+            var context = new GameDashboardPageTestContext(this);
+
+            context.GameService
+                .GetGameAsync(gameId)
+                .Returns(game);
+
+            DialogJsInterop.Register(this);
+
+            var cut = Render<GameDashboardPage>(parameters => parameters
+                .Add(p => p.GameId, gameId));
+
+            // Act
+            cut.WaitForElement("[data-testid='transfer-thunderbird-1']")
+                .Click();
+
+            var dialog = cut.FindComponent<TransferCharactersDialog>();
+
+            Assert.Contains("Transfer from", dialog.Markup);
+
+            await dialog
+                .Find("[data-testid='cancel-transfer']")
+                .ClickAsync(new MouseEventArgs());
+
+            // Assert
+            cut.WaitForAssertion(() =>
+            {
+                Assert.Contains("South Pacific", cut.Markup);
+                Assert.Empty(cut.FindComponents<MoveThunderbirdDialog>());
+            });
+
+            await context.GameService.Received(1)
+                .GetGameAsync(gameId);
+        }
     }
 }

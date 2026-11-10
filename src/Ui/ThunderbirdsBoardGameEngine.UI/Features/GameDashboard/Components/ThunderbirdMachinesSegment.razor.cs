@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Components;
 using ThunderbirdsBoardGameEngine.UI.Features.GameDashboard.ViewModels;
-using ThunderbirdsBoardGameEngine.UI.Features.Movement.Models;
 
 namespace ThunderbirdsBoardGameEngine.UI.Features.GameDashboard.Components
 {
@@ -11,5 +10,8 @@ namespace ThunderbirdsBoardGameEngine.UI.Features.GameDashboard.Components
 
         [Parameter]
         public EventCallback<ThunderbirdMachinesDashboardViewModel> MoveRequested { get; set; }
+
+        [Parameter]
+        public EventCallback<ThunderbirdMachinesDashboardViewModel> TransferRequested { get; set; }
     }
 }

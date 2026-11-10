@@ -1,0 +1,57 @@
+﻿<dialog @ref="_dialog"
+        class="modal-dialog-native"
+        aria-labelledby="transfer-dialog-title"
+        data-testid="transfer-characters-dialog">
+
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="transfer-dialog-title"
+                    class="modal-title h5">
+                    Transfer from @SourceMachine.ThunderbirdDisplayName
+                </h2>
+            </div>
+
+            <div class="modal-body">
+                <p>
+                    Current location:
+                    <strong>@SourceMachine.LocationDisplayName</strong>
+                </p>
+
+                @if (DestinationMachines.Count == 0)
+                {
+                    <p>
+                        No co-located destination machines are available.
+                    </p>
+                }
+                else
+                {
+                    <p>Available destinations:</p>
+
+                    <ul>
+                        @foreach (var destination in DestinationMachines)
+                        {
+                            <li>@destination.ThunderbirdDisplayName</li>
+                        }
+                    </ul>
+                }
+            </div>
+
+            <div class="modal-footer">
+                <button type="button"
+                        class="btn btn-secondary"
+                        data-testid="cancel-transfer"
+                        @onclick="CancelAsync">
+                    Cancel
+                </button>
+
+                <button type="button"
+                        class="btn btn-primary"
+                        disabled
+                        data-testid="confirm-transfer">
+                    Transfer
+                </button>
+            </div>
+        </div>
+    </div>
+</dialog>
