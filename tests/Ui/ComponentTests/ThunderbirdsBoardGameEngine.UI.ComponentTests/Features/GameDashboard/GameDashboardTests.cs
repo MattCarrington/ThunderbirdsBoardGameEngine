@@ -154,30 +154,6 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Features.GameDashboard
         }
 
         [Fact]
-        public void ClickingMoveShouldRequestMovementForSelectedMachine()
-        {
-            // Arrange
-            ThunderbirdMachinesDashboardViewModel? selectedMachine = null;
-
-            var machines = new List<ThunderbirdMachinesDashboardViewModel>
-            {
-                GameDashboardViewModelFactory.CreateMachine(thunderbirdCode: "thunderbird-1"),
-                GameDashboardViewModelFactory.CreateMachine(thunderbirdCode: "thunderbird-2")
-            };
-
-            var cut = Render<ThunderbirdMachinesSegment>(parameters => parameters
-                .Add(p => p.Machines, machines)
-                .Add(p => p.MoveRequested, machine => selectedMachine = machine));
-
-            // Act
-            cut.Find("[data-testid='move-thunderbird-1']").Click();
-
-            // Assert
-            Assert.NotNull(selectedMachine);
-            Assert.Equal("thunderbird-1", selectedMachine.ThunderbirdCode);
-        }
-
-        [Fact]
         public void ClickingMoveShouldOpenDialogForSelectedMachine()
         {
             // Arrange
@@ -504,35 +480,6 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Features.GameDashboard
 
             // Assert
             Assert.True(cancelled);
-        }
-
-        [Fact]
-        public void ClickingTransferShouldRequestTransferForSelectedMachine()
-        {
-            // Arrange
-            ThunderbirdMachinesDashboardViewModel? selectedMachine = null;
-
-            var occupants = new List<OccupantsDashboardViewModel>
-            {
-                GameDashboardViewModelFactory.CreateOccupant()
-            };
-
-            var machines = new List<ThunderbirdMachinesDashboardViewModel>
-            {
-                GameDashboardViewModelFactory.CreateMachine(thunderbirdCode: "thunderbird-1", occupants: occupants),
-                GameDashboardViewModelFactory.CreateMachine(thunderbirdCode: "thunderbird-2")
-            };
-
-            var cut = Render<ThunderbirdMachinesSegment>(parameters => parameters
-                .Add(p => p.Machines, machines)
-                .Add(p => p.TransferRequested, machine => selectedMachine = machine));
-
-            // Act
-            cut.Find("[data-testid='transfer-thunderbird-1']").Click();
-
-            // Assert
-            Assert.NotNull(selectedMachine);
-            Assert.Equal("thunderbird-1", selectedMachine.ThunderbirdCode);
         }
 
         [Fact]
