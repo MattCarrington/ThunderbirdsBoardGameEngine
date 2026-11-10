@@ -1,8 +1,8 @@
 ﻿using Bunit;
-using System.Threading.Channels;
 using ThunderbirdsBoardGameEngine.Rules.Contracts.Dtos.Rescue.CalculateRescueTarget.V1;
 using ThunderbirdsBoardGameEngine.UI.Features.DisasterCards.Components;
 using ThunderbirdsBoardGameEngine.UI.Features.DisasterCards.ViewModels;
+using ThunderbirdsBoardGameEngine.UI.Features.Shared.ViewModels;
 using Xunit;
 
 namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Features.DisasterCards.Components

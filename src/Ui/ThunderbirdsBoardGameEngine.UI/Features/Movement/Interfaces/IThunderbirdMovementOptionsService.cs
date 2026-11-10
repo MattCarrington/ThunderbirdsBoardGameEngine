@@ -1,4 +1,4 @@
-﻿using ThunderbirdsBoardGameEngine.UI.Features.Movement.Models;
+﻿using ThunderbirdsBoardGameEngine.UI.Features.Shared.ViewModels;
 
 namespace ThunderbirdsBoardGameEngine.UI.Features.Movement.Interfaces
 {

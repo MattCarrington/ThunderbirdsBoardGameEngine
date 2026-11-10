@@ -1,6 +1,6 @@
 ﻿using Bunit;
-using ThunderbirdsBoardGameEngine.UI.Features.Movement.Components;
-using ThunderbirdsBoardGameEngine.UI.Features.Movement.Models;
+using ThunderbirdsBoardGameEngine.UI.Features.Shared.Components;
+using ThunderbirdsBoardGameEngine.UI.Features.Shared.ViewModels;
 using Xunit;
 
 namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Features.Movement.Components

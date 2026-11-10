@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
-using ThunderbirdsBoardGameEngine.UI.Features.Movement.Models;
+using ThunderbirdsBoardGameEngine.UI.Features.Shared.ViewModels;
 
-namespace ThunderbirdsBoardGameEngine.UI.Features.Movement.Components
+namespace ThunderbirdsBoardGameEngine.UI.Features.Shared.Components
 {
     public partial class ThunderbirdSelector
     {
