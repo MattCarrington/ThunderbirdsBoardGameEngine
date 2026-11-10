@@ -4,15 +4,13 @@ using ThunderbirdsBoardGameEngine.UI.Features.GameDashboard.ViewModels;
 
 namespace ThunderbirdsBoardGameEngine.UI.Features.GameDashboard.Components
 {
-    public partial class TransferCharactersDialog
+    public partial class TransferCharactersDialog : IAsyncDisposable
     {
         [Parameter, EditorRequired]
         public ThunderbirdMachinesDashboardViewModel SourceMachine { get; set; } = null!;
 
         [Parameter, EditorRequired]
-        public IReadOnlyList<ThunderbirdMachinesDashboardViewModel>
-            DestinationMachines
-        { get; set; } = [];
+        public IReadOnlyList<ThunderbirdMachinesDashboardViewModel> DestinationMachines { get; set; } = [];
 
         [Parameter]
         public EventCallback Cancelled { get; set; }
@@ -22,9 +20,9 @@ namespace ThunderbirdsBoardGameEngine.UI.Features.GameDashboard.Components
 
         private ElementReference _dialog;
         private IJSObjectReference? _dialogModule;
-
-        private DotNetObjectReference<TransferCharactersDialog>?
-            _componentReference;
+        private DotNetObjectReference<TransferCharactersDialog>? _componentReference;
+        //private string? _selectedCharacterCode;
+        //private string? _selectedDestinationCode;
 
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
