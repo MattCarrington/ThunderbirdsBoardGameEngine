@@ -1,4 +1,6 @@
-﻿<dialog @ref="_dialog"
+﻿@using ThunderbirdsBoardGameEngine.UI.Features.Shared.Components
+
+<dialog @ref="_dialog"
         class="modal-dialog-native"
         aria-labelledby="transfer-dialog-title"
         data-testid="transfer-characters-dialog">
@@ -26,14 +28,40 @@
                 }
                 else
                 {
-                    <p>Available destinations:</p>
-
-                    <ul>
-                        @foreach (var destination in DestinationMachines)
-                        {
-                            <li>@destination.ThunderbirdDisplayName</li>
-                        }
-                    </ul>
+                    @if (SourceMachine.Occupants.Count == 1)
+                    {
+                        <p>
+                            Character:
+                            <strong>
+                                @SourceMachine.Occupants[0].CharacterDisplayName
+                            </strong>
+                        </p>
+                    }
+                    else
+                    {
+                        <CharacterSelector
+                            CharacterId="transfer-character"
+                            CharacterTitle="Character"
+                            Characters="@CharacterOptions"
+                            @bind-SelectedCharacterCode="_selectedCharacterCode" />
+                    }
+                    
+                    @if (DestinationMachines.Count == 1)
+                    {
+                        <p>
+                            Destination:
+                            <strong>
+                                @DestinationMachines[0].ThunderbirdDisplayName
+                            </strong>
+                        </p>
+                    }
+                    else if (DestinationMachines.Count > 1)
+                    {
+                        <ThunderbirdSelector ThunderbirdId="transfer-destination"
+                                             ThunderbirdTitle="Destination"
+                                             Thunderbirds="@DestinationOptions"
+                                             @bind-SelectedThunderbirdCode="_selectedDestinationCode" />
+                    }
                 }
             </div>
 

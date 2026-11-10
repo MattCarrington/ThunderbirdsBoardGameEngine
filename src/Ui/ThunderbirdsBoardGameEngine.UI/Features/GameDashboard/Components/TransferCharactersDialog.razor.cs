@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using ThunderbirdsBoardGameEngine.UI.Features.GameDashboard.ViewModels;
+using ThunderbirdsBoardGameEngine.UI.Features.Shared.ViewModels;
 
 namespace ThunderbirdsBoardGameEngine.UI.Features.GameDashboard.Components
 {
@@ -18,11 +19,25 @@ namespace ThunderbirdsBoardGameEngine.UI.Features.GameDashboard.Components
         [Inject]
         public IJSRuntime JSRuntime { get; set; } = null!;
 
+        private IReadOnlyList<SelectionOptionViewModel> CharacterOptions =>
+            SourceMachine.Occupants
+                .Select(occupant => new SelectionOptionViewModel(
+                    occupant.CharacterCode,
+                    occupant.CharacterDisplayName))
+                .ToArray();
+
+        private IReadOnlyList<SelectionOptionViewModel> DestinationOptions =>
+            DestinationMachines
+                .Select(t => new SelectionOptionViewModel(
+                    t.ThunderbirdCode,
+                    t.ThunderbirdDisplayName))
+                .ToArray();
+
         private ElementReference _dialog;
         private IJSObjectReference? _dialogModule;
         private DotNetObjectReference<TransferCharactersDialog>? _componentReference;
-        //private string? _selectedCharacterCode;
-        //private string? _selectedDestinationCode;
+        private string? _selectedCharacterCode;
+        private string? _selectedDestinationCode;
 
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
