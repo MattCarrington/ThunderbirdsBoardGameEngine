@@ -12,7 +12,7 @@ namespace ThunderbirdsBoardGameEngine.UI.Features.Shared.Components
         public string? SelectedThunderbirdCode { get; set; }
 
         [Parameter]
-        public EventCallback<string> SelectedThunderbirdCodeChanged { get; set; }
+        public EventCallback<string?> SelectedThunderbirdCodeChanged { get; set; }
 
         [Parameter]
         public string ThunderbirdId { get; set; } = Guid.NewGuid().ToString();
@@ -22,7 +22,12 @@ namespace ThunderbirdsBoardGameEngine.UI.Features.Shared.Components
 
         private Task OnChanged(ChangeEventArgs e)
         {
-            return SelectedThunderbirdCodeChanged.InvokeAsync(e.Value?.ToString() ?? string.Empty);
+            var value = e.Value?.ToString();
+
+            return SelectedThunderbirdCodeChanged.InvokeAsync(
+                string.IsNullOrWhiteSpace(value)
+                    ? null
+                    : value);
         }
     }
 }

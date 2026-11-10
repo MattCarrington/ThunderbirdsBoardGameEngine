@@ -22,7 +22,12 @@ namespace ThunderbirdsBoardGameEngine.UI.Features.Shared.Components
 
         private Task OnChanged(ChangeEventArgs e)
         {
-            return SelectedCharacterCodeChanged.InvokeAsync(e.Value?.ToString());
+            var value = e.Value?.ToString();
+
+            return SelectedCharacterCodeChanged.InvokeAsync(
+                string.IsNullOrWhiteSpace(value)
+                    ? null
+                    : value);
         }
     }
 }

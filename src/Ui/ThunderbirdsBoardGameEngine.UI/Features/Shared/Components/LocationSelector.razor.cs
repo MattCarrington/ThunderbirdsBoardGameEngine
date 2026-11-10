@@ -12,7 +12,7 @@ namespace ThunderbirdsBoardGameEngine.UI.Features.Shared.Components
         public string? SelectedLocationKey { get; set; }
 
         [Parameter]
-        public EventCallback<string> SelectedLocationKeyChanged { get; set; }
+        public EventCallback<string?> SelectedLocationKeyChanged { get; set; }
 
         [Parameter]
         public string LocationId { get; set; } = Guid.NewGuid().ToString();
@@ -22,7 +22,12 @@ namespace ThunderbirdsBoardGameEngine.UI.Features.Shared.Components
 
         private Task OnChanged(ChangeEventArgs e)
         {
-            return SelectedLocationKeyChanged.InvokeAsync(e.Value?.ToString() ?? string.Empty);
+            var value = e.Value?.ToString();
+
+            return SelectedLocationKeyChanged.InvokeAsync(
+                string.IsNullOrWhiteSpace(value)
+                    ? null
+                    : value);
         }
     }
 }
