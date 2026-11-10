@@ -82,8 +82,6 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Features.GameDashboard.C
 
             // Assert
             var selector = cut.FindComponent<CharacterSelector>();
-
-            Assert.NotNull(selector);
             Assert.Equal(2, selector.Instance.Characters.Count);
             Assert.Contains("Occupant 1", cut.Markup);
             Assert.Contains("Occupant 2", cut.Markup);
@@ -166,8 +164,6 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Features.GameDashboard.C
 
             // Assert
             var selector = cut.FindComponent<ThunderbirdSelector>();
-
-            Assert.NotNull(selector);
             Assert.Equal(2, selector.Instance.Thunderbirds.Count);
             Assert.Contains("Thunderbird 2", cut.Markup);
             Assert.Contains("Thunderbird 3", cut.Markup);

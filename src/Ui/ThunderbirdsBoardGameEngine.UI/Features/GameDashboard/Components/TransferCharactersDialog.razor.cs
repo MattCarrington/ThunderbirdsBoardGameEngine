@@ -39,6 +39,19 @@ namespace ThunderbirdsBoardGameEngine.UI.Features.GameDashboard.Components
         private string? _selectedCharacterCode;
         private string? _selectedDestinationCode;
 
+        protected override void OnParametersSet()
+        {
+            if (SourceMachine.Occupants.Count == 1)
+            {
+                _selectedCharacterCode = SourceMachine.Occupants[0].CharacterCode;
+            }
+
+            if (DestinationMachines.Count == 1)
+            {
+                _selectedDestinationCode = DestinationMachines[0].ThunderbirdCode;
+            }
+        }
+
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
             if (!firstRender)
