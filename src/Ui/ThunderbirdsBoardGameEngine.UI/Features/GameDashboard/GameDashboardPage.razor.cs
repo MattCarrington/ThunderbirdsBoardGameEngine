@@ -26,7 +26,7 @@ public partial class GameDashboardPage
     private bool _notFound;
     private bool _failed;
     private ThunderbirdMachinesDashboardViewModel? _selectedMachine;
-    private IReadOnlyList<LocationOptionsViewModel> _destinations = [];
+    private IReadOnlyList<SelectionOptionViewModel> _destinations = [];
     private bool _isLoadingDestinations;
     private bool _isMoving;
     private string? _movementError;

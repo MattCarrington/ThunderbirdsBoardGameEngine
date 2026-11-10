@@ -6,7 +6,7 @@ namespace ThunderbirdsBoardGameEngine.UI.Features.Shared.Components
     public partial class LocationSelector
     {
         [Parameter, EditorRequired]
-        public IReadOnlyList<LocationOptionsViewModel> Locations { get; set; } = [];
+        public IReadOnlyList<SelectionOptionViewModel> Locations { get; set; } = [];
 
         [Parameter]
         public string? SelectedLocationKey { get; set; }

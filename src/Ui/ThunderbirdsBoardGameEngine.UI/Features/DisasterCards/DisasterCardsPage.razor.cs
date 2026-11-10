@@ -21,7 +21,7 @@ namespace ThunderbirdsBoardGameEngine.UI.Features.DisasterCards
         private IRescueCalculationModifierService CardModifierService { get; set; } = null!;
 
         private IReadOnlyList<DisasterCardSummaryViewModel> _cards = Array.Empty<DisasterCardSummaryViewModel>();
-        private IReadOnlyList<CharacterViewModel> _characters = Array.Empty<CharacterViewModel>();
+        private IReadOnlyList<SelectionOptionViewModel> _characters = Array.Empty<SelectionOptionViewModel>();
         private IReadOnlyList<CardModifierViewModel> _fabCardModifiers = Array.Empty<CardModifierViewModel>();
         private IReadOnlyList<CardModifierViewModel> _eventCardModifiers = Array.Empty<CardModifierViewModel>();
 

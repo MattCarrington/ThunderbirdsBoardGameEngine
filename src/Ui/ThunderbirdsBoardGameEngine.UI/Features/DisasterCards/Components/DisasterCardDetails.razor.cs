@@ -11,7 +11,7 @@ namespace ThunderbirdsBoardGameEngine.UI.Features.DisasterCards.Components
         public DisasterCardViewModel Card { get; set; } = null!;
 
         [Parameter]
-        public IReadOnlyList<CharacterViewModel> Characters { get; set; } = [];
+        public IReadOnlyList<SelectionOptionViewModel> Characters { get; set; } = [];
 
         [Parameter]
         public string? SelectedCharacterCode { get; set; }

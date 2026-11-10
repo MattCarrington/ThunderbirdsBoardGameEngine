@@ -6,7 +6,7 @@ namespace ThunderbirdsBoardGameEngine.UI.Features.Shared.Components
     public partial class ThunderbirdSelector
     {
         [Parameter, EditorRequired]
-        public IReadOnlyList<ThunderbirdMovementOptions> Thunderbirds { get; set; } = [];
+        public IReadOnlyList<SelectionOptionViewModel> Thunderbirds { get; set; } = [];
 
         [Parameter]
         public string? SelectedThunderbirdCode { get; set; }

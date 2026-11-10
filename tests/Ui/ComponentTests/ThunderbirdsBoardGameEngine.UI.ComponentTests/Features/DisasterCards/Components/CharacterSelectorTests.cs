@@ -45,12 +45,12 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Features.DisasterCards.C
             Assert.Equal("lady-penelope", selectedCharacter);
         }
 
-        private static IReadOnlyList<CharacterViewModel> CreateCharacters()
+        private static IReadOnlyList<SelectionOptionViewModel> CreateCharacters()
         {
             return
             [
-                new CharacterViewModel( Key: "scott", DisplayName: "Scott"),
-                new CharacterViewModel( Key: "lady-penelope", DisplayName: "Lady Penelope"),
+                new SelectionOptionViewModel( Key: "scott", DisplayName: "Scott"),
+                new SelectionOptionViewModel( Key: "lady-penelope", DisplayName: "Lady Penelope"),
             ];
         }
     }

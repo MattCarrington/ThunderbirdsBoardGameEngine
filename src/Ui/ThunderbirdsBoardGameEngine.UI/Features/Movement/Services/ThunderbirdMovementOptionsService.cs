@@ -13,11 +13,11 @@ namespace ThunderbirdsBoardGameEngine.UI.Features.Movement.Services
             _catalog = catalog;
         }
 
-        public IReadOnlyList<ThunderbirdMovementOptions> GetAllMobileVehicles()
+        public IReadOnlyList<SelectionOptionViewModel> GetAllMobileVehicles()
         {
             return _catalog.GetAll()
                 .Where(t => t.TopSpeed > 0)
-                .Select(t => new ThunderbirdMovementOptions(t.Code.Value, t.DisplayName)).ToList();
+                .Select(t => new SelectionOptionViewModel(t.Code.Value, t.DisplayName)).ToList();
         }
     }
 }

@@ -6,7 +6,7 @@ namespace ThunderbirdsBoardGameEngine.UI.Features.Shared.Components
     public partial class CharacterSelector
     {
         [Parameter, EditorRequired]
-        public IReadOnlyList<CharacterViewModel> Characters { get; set; } = [];
+        public IReadOnlyList<SelectionOptionViewModel> Characters { get; set; } = [];
 
         [Parameter]
         public string? SelectedCharacterCode { get; set; }

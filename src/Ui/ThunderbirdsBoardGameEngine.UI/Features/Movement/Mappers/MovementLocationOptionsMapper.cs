@@ -13,9 +13,9 @@ namespace ThunderbirdsBoardGameEngine.UI.Features.Movement.Mappers
             _catalog = catalog;
         }
 
-        public IReadOnlyList<LocationOptionsViewModel> ToViewModel(IEnumerable<string> locationCodes)
+        public IReadOnlyList<SelectionOptionViewModel> ToViewModel(IEnumerable<string> locationCodes)
         {
-            var options = new List<LocationOptionsViewModel>();
+            var options = new List<SelectionOptionViewModel>();
 
             foreach (var code in locationCodes)
             {
@@ -24,7 +24,7 @@ namespace ThunderbirdsBoardGameEngine.UI.Features.Movement.Mappers
                     continue;
                 }
 
-                options.Add(new LocationOptionsViewModel(location.Code.Value, location.DisplayName));
+                options.Add(new SelectionOptionViewModel(location.Code.Value, location.DisplayName));
             }
 
             return options;

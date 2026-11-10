@@ -8,6 +8,6 @@ namespace ThunderbirdsBoardGameEngine.UI.Features.Movement.Interfaces
     {
         Task<MovementResultViewModel?> ValidateMovementAsync(string thunderbirdCode, string startLocationCode, string destinationLocationCode, IReadOnlyList<string> eventCards);
 
-        Task<IReadOnlyList<LocationOptionsViewModel>> GetAccessibleLocationsAsync(string thunderbirdCode);
+        Task<IReadOnlyList<SelectionOptionViewModel>> GetAccessibleLocationsAsync(string thunderbirdCode);
     }
 }

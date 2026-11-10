@@ -45,13 +45,13 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Features.Shared.Componen
             Assert.Equal("venus", selectedKey);
         }
 
-        private static IReadOnlyList<LocationOptionsViewModel> CreateSampleLocations()
+        private static IReadOnlyList<SelectionOptionViewModel> CreateSampleLocations()
         {
             return
             [
-                new LocationOptionsViewModel(Key: "earth", DisplayName: "Earth"),
-                new LocationOptionsViewModel(Key: "mars", DisplayName: "Mars"),
-                new LocationOptionsViewModel(Key: "venus", DisplayName: "Venus"),
+                new SelectionOptionViewModel(Key: "earth", DisplayName: "Earth"),
+                new SelectionOptionViewModel(Key: "mars", DisplayName: "Mars"),
+                new SelectionOptionViewModel(Key: "venus", DisplayName: "Venus"),
             ];
         }
     }
