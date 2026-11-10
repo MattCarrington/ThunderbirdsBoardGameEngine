@@ -14,6 +14,12 @@ namespace ThunderbirdsBoardGameEngine.UI.Features.Shared.Components
         [Parameter]
         public EventCallback<string?> SelectedCharacterCodeChanged { get; set; }
 
+        [Parameter]
+        public string CharacterId { get; set; } = Guid.NewGuid().ToString();
+
+        [Parameter]
+        public string CharacterTitle { get; set; } = "Character";
+
         private Task OnChanged(ChangeEventArgs e)
         {
             return SelectedCharacterCodeChanged.InvokeAsync(e.Value?.ToString());

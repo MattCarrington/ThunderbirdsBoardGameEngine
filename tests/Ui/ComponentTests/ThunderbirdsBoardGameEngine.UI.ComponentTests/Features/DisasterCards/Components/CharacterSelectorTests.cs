@@ -34,6 +34,7 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Features.DisasterCards.C
 
             var cut = Render<CharacterSelector>(parameters => parameters
                 .Add(p => p.Characters, characters)
+                .Add(p => p.CharacterId, "characterSelect")
                 .Add(
                     p => p.SelectedCharacterCodeChanged,
                     value => selectedCharacter = value));

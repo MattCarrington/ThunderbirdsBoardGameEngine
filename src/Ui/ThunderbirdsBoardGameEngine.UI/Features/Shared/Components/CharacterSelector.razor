@@ -1,9 +1,13 @@
-﻿<label for="characterSelect" class="form-label">Character</label>
-<select id="characterSelect"
+﻿<label for="@CharacterId" class="form-label">
+    @CharacterTitle
+</label>
+
+<select id="@CharacterId"
         class="form-select"
         value="@SelectedCharacterCode"
         @onchange="OnChanged"
         required>
+
     <option value="">-- Select a character --</option>
 
     @foreach (var c in Characters)
