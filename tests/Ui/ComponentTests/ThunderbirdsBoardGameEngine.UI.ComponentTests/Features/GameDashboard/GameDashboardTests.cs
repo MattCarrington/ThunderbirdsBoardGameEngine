@@ -581,7 +581,7 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Features.GameDashboard
             cut.WaitForAssertion(() =>
             {
                 Assert.Contains("South Pacific", cut.Markup);
-                Assert.Empty(cut.FindComponents<MoveThunderbirdDialog>());
+                Assert.Empty(cut.FindComponents<TransferCharactersDialog>());
             });
 
             await context.GameService.Received(1)
