@@ -132,6 +132,7 @@
             <div class="modal-footer">
                 <button type="button"
                         class="btn btn-secondary"
+                        disabled="@IsTransferring"
                         data-testid="cancel-transfer"
                         @onclick="CancelAsync">
                     Cancel
@@ -139,9 +140,10 @@
 
                 <button type="button"
                         class="btn btn-primary"
-                        disabled
-                        data-testid="confirm-transfer">
-                    Transfer
+                        disabled="@CannotSubmit"
+                        data-testid="confirm-transfer"
+                        @onclick="ConfirmAsync">
+                    @(IsTransferring ? "Transferring…" : "Transfer")
                 </button>
             </div>
         </div>

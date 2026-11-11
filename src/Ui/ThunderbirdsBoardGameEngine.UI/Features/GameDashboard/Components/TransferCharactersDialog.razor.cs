@@ -19,6 +19,12 @@ namespace ThunderbirdsBoardGameEngine.UI.Features.GameDashboard.Components
         [Inject]
         public IJSRuntime JSRuntime { get; set; } = null!;
 
+        [Parameter]
+        public EventCallback<CharacterTransferSelection> TransferConfirmed { get; set; }
+
+        [Parameter]
+        public bool IsTransferring { get; set; }
+
         private IReadOnlyList<SelectionOptionViewModel> CharacterOptions =>
             SourceMachine.Occupants
                 .Select(occupant => new SelectionOptionViewModel(
@@ -52,6 +58,13 @@ namespace ThunderbirdsBoardGameEngine.UI.Features.GameDashboard.Components
                     occupant.CharacterDisplayName))
                 .ToArray()
             ?? [];
+
+        private bool CannotSubmit => IsTransferring
+            || string.IsNullOrWhiteSpace(_selectedCharacterCode)
+            || string.IsNullOrWhiteSpace(_selectedDestinationCode)
+            || _selectedMode is null
+            || (_selectedMode == CharacterTransferMode.Swap
+                && string.IsNullOrWhiteSpace(_selectedReturningCharacterCode));
 
         private ElementReference _dialog;
         private IJSObjectReference? _dialogModule;
@@ -100,7 +113,9 @@ namespace ThunderbirdsBoardGameEngine.UI.Features.GameDashboard.Components
         [JSInvokable]
         public Task HandleDialogCancelled()
         {
-            return CancelAsync();
+            return IsTransferring
+                ? Task.CompletedTask
+                : CancelAsync();
         }
 
         private async Task CancelAsync()
@@ -129,12 +144,37 @@ namespace ThunderbirdsBoardGameEngine.UI.Features.GameDashboard.Components
         private void DestinationChanged(string? destinationCode)
         {
             _selectedDestinationCode = destinationCode;
+            _selectedReturningCharacterCode = null;
 
-            _selectedMode = CanTransfer
-                ? CharacterTransferMode.Transfer
-                : CanSwap
-                    ? CharacterTransferMode.Swap
-                    : null;
+            if (CanTransfer)
+            {
+                SelectMode(CharacterTransferMode.Transfer);
+            }
+            else if (CanSwap)
+            {
+                SelectMode(CharacterTransferMode.Swap);
+            }
+            else
+            {
+                _selectedMode = null;
+            }
+        }
+
+        private Task ConfirmAsync()
+        {
+            if (CannotSubmit)
+            {
+                return Task.CompletedTask;
+            }
+
+            return TransferConfirmed.InvokeAsync(
+                new CharacterTransferSelection(
+                    SourceMachine.ThunderbirdCode,
+                    _selectedCharacterCode!,
+                    _selectedDestinationCode!,
+                    _selectedMode == CharacterTransferMode.Swap
+                        ? _selectedReturningCharacterCode
+                        : null));
         }
 
         public async ValueTask DisposeAsync()
