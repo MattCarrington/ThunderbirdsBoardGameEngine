@@ -103,7 +103,29 @@
                                 </label>
                             </div>
                         </fieldset>
-                    }                    
+                    }
+                    
+                    @if (_selectedMode == CharacterTransferMode.Swap &&
+                         SelectedDestination is not null)
+                    {
+                        @if (SelectedDestination.Occupants.Count == 1)
+                        {
+                            <p data-testid="returning-character-summary">
+                                Character returning to
+                                @SourceMachine.ThunderbirdDisplayName:
+                                <strong>
+                                    @SelectedDestination.Occupants[0].CharacterDisplayName
+                                </strong>
+                            </p>
+                        }
+                        else
+                        {
+                            <CharacterSelector CharacterId="returning-character"
+                                               CharacterTitle="Character returning"
+                                               Characters="@ReturningCharacterOptions"
+                                               @bind-SelectedCharacterCode="_selectedReturningCharacterCode" />
+                        }
+                    }
                 }
             </div>
 

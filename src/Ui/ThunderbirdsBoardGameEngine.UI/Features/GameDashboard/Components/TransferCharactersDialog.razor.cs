@@ -45,12 +45,21 @@ namespace ThunderbirdsBoardGameEngine.UI.Features.GameDashboard.Components
         private bool CanSwap => SelectedDestination is not null
             && SelectedDestination.Occupants.Count > 0;
 
+        private IReadOnlyList<SelectionOptionViewModel> ReturningCharacterOptions =>
+            SelectedDestination?.Occupants
+                .Select(occupant => new SelectionOptionViewModel(
+                    occupant.CharacterCode,
+                    occupant.CharacterDisplayName))
+                .ToArray()
+            ?? [];
+
         private ElementReference _dialog;
         private IJSObjectReference? _dialogModule;
         private DotNetObjectReference<TransferCharactersDialog>? _componentReference;
         private string? _selectedCharacterCode;
         private string? _selectedDestinationCode;
         private CharacterTransferMode? _selectedMode;
+        private string? _selectedReturningCharacterCode;
 
         protected override void OnParametersSet()
         {
@@ -109,6 +118,12 @@ namespace ThunderbirdsBoardGameEngine.UI.Features.GameDashboard.Components
         private void SelectMode(CharacterTransferMode mode)
         {
             _selectedMode = mode;
+
+            _selectedReturningCharacterCode =
+                mode == CharacterTransferMode.Swap &&
+                SelectedDestination?.Occupants.Count == 1
+                    ? SelectedDestination.Occupants[0].CharacterCode
+                    : null;
         }
 
         private void DestinationChanged(string? destinationCode)

@@ -1,4 +1,5 @@
-﻿using AngleSharp.Dom;
+﻿using AngleSharp.Css.Dom;
+using AngleSharp.Dom;
 using Bunit;
 using ThunderbirdsBoardGameEngine.UI.ComponentTests.Factories;
 using ThunderbirdsBoardGameEngine.UI.ComponentTests.Fixtures;
@@ -469,6 +470,258 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Features.GameDashboard.C
 
             var swapRadioThird = cut.Find("[data-testid='transfer-mode-swap']");
             Assert.True(swapRadioThird.IsDisabled());
+        }
+
+        [Fact]
+        public void SelectingTransferDoesNotShowReturningCharacterSelector()
+        {
+            // Arrange
+            var source = GameDashboardViewModelFactory.CreateMachine(
+                thunderbirdDisplayName: "Thunderbird 1",
+                thunderbirdCode: "thunderbird-1",
+                locationDisplayName: "Location 1",
+                locationCode: "location-1",
+                characterCapacity: 2,
+                occupants:
+                [
+                    new("OCC1", "Occupant 1"),
+                    new("OCC2", "Occupant 2")
+                ]
+            );
+
+            var destination = GameDashboardViewModelFactory.CreateMachine(
+                thunderbirdDisplayName: "Thunderbird 2",
+                thunderbirdCode: "thunderbird-2",
+                locationDisplayName: "Location 1",
+                locationCode: "location-1",
+                characterCapacity: 2,
+                occupants:
+                [
+                    new("OCC3", "Occupant 3")
+                ]
+            );
+
+            var cut = Render<TransferCharactersDialog>(
+                parameters => parameters
+                    .Add(p => p.SourceMachine, source)
+                    .Add(p => p.DestinationMachines, [destination])
+            );
+
+            // Act
+            cut.Find("[data-testid='transfer-mode-transfer']").Change(true);
+
+            // Assert
+            var returningSelector = cut.FindAll("#returning-character");
+            Assert.Empty(returningSelector);
+        }
+
+        [Fact]
+        public void SelectingSwapShowsReturningCharacterSelectorWhenMultipleOccupantsInDestination()
+        {
+            // Arrange
+            var source = GameDashboardViewModelFactory.CreateMachine(
+                thunderbirdDisplayName: "Thunderbird 1",
+                thunderbirdCode: "thunderbird-1",
+                locationDisplayName: "Location 1",
+                locationCode: "location-1",
+                characterCapacity: 2,
+                occupants:
+                [
+                    new("OCC1", "Occupant 1")
+                ]
+            );
+
+            var destination = GameDashboardViewModelFactory.CreateMachine(
+                thunderbirdDisplayName: "Thunderbird 2",
+                thunderbirdCode: "thunderbird-2",
+                locationDisplayName: "Location 1",
+                locationCode: "location-1",
+                characterCapacity: 2,
+                occupants:
+                [
+                    new("OCC3", "Occupant 3"),
+                    new("OCC2", "Occupant 2")
+                ]
+            );
+
+            var cut = Render<TransferCharactersDialog>(
+                parameters => parameters
+                    .Add(p => p.SourceMachine, source)
+                    .Add(p => p.DestinationMachines, [destination])
+            );
+
+            // Act
+            cut.Find("[data-testid='transfer-mode-swap']").Change(true);
+
+            // Assert
+            var returningSelector = Assert.Single(
+                cut.FindComponents<CharacterSelector>(),
+                component =>
+                    component.Instance.CharacterId == "returning-character");
+
+            Assert.Equal(2, returningSelector.Instance.Characters.Count);
+            Assert.Contains("Occupant 3", cut.Markup);
+            Assert.Contains("Occupant 2", cut.Markup);
+        }
+
+        [Fact]
+        public void SelectingSwapDoesNotShowReturningCharacterSelectorWhenSingleOccupantInDestination()
+        {
+            // Arrange
+            var source = GameDashboardViewModelFactory.CreateMachine(
+                thunderbirdDisplayName: "Thunderbird 1",
+                thunderbirdCode: "thunderbird-1",
+                locationDisplayName: "Location 1",
+                locationCode: "location-1",
+                characterCapacity: 2,
+                occupants:
+                [
+                    new("OCC1", "Occupant 1")
+                ]
+            );
+
+            var destination = GameDashboardViewModelFactory.CreateMachine(
+                thunderbirdDisplayName: "Thunderbird 2",
+                thunderbirdCode: "thunderbird-2",
+                locationDisplayName: "Location 1",
+                locationCode: "location-1",
+                characterCapacity: 2,
+                occupants:
+                [
+                    new("OCC3", "Occupant 3")
+                ]
+            );
+
+            var cut = Render<TransferCharactersDialog>(
+                parameters => parameters
+                    .Add(p => p.SourceMachine, source)
+                    .Add(p => p.DestinationMachines, [destination])
+            );
+
+            // Act
+            cut.Find("[data-testid='transfer-mode-swap']").Change(true);
+
+            // Assert
+            var returningSelector = cut.FindAll("#returning-character");
+            Assert.Empty(returningSelector);
+
+            var summary = cut.Find("[data-testid='returning-character-summary']");
+            Assert.Contains("Occupant 3", summary.TextContent);
+        }
+
+        [Fact]
+        public void ReturningToTransferModeHidesReturningCharacterSelector()
+        {
+            // Arrange
+            var source = GameDashboardViewModelFactory.CreateMachine(
+                thunderbirdDisplayName: "Thunderbird 1",
+                thunderbirdCode: "thunderbird-1",
+                locationDisplayName: "Location 1",
+                locationCode: "location-1",
+                characterCapacity: 2,
+                occupants:
+                [
+                    new("OCC1", "Occupant 1")
+                ]
+            );
+
+            var destination = GameDashboardViewModelFactory.CreateMachine(
+                thunderbirdDisplayName: "Thunderbird 2",
+                thunderbirdCode: "thunderbird-2",
+                locationDisplayName: "Location 1",
+                locationCode: "location-1",
+                characterCapacity: 2,
+                occupants:
+                [
+                    new("OCC3", "Occupant 3"),
+                    new("OCC2", "Occupant 2")
+                ]
+            );
+
+            var cut = Render<TransferCharactersDialog>(
+                parameters => parameters
+                    .Add(p => p.SourceMachine, source)
+                    .Add(p => p.DestinationMachines, [destination])
+            );
+
+            // Act
+            cut.Find("[data-testid='transfer-mode-swap']").Change(true);
+
+            var selector = cut.FindAll("#returning-character");
+            Assert.NotEmpty(selector);
+
+            cut.Find("[data-testid='transfer-mode-transfer']").Change(true);
+
+            // Assert
+            var returningSelector = cut.FindAll("#returning-character");
+            Assert.Empty(returningSelector);
+        }
+
+        [Fact]
+        public void ChangingDestinationWhileInSwapModeUpdatesReturningCharacterSelector()
+        {
+            // Arrange
+            var source = GameDashboardViewModelFactory.CreateMachine(
+                thunderbirdDisplayName: "Thunderbird 1",
+                thunderbirdCode: "thunderbird-1",
+                locationDisplayName: "Location 1",
+                locationCode: "location-1",
+                characterCapacity: 2,
+                occupants:
+                [
+                    new("OCC1", "Occupant 1")
+                ]
+            );
+
+            var destinationOne = GameDashboardViewModelFactory.CreateMachine(
+                thunderbirdDisplayName: "Thunderbird 2",
+                thunderbirdCode: "thunderbird-2",
+                locationDisplayName: "Location 1",
+                locationCode: "location-1",
+                characterCapacity: 2,
+                occupants:
+                [
+                    new("OCC3", "Occupant 3"),
+                    new("OCC2", "Occupant 2")
+                ]
+            );
+
+            var destinationTwo = GameDashboardViewModelFactory.CreateMachine(
+                thunderbirdDisplayName: "Thunderbird 3",
+                thunderbirdCode: "thunderbird-3",
+                locationDisplayName: "Location 1",
+                locationCode: "location-1",
+                characterCapacity: 2,
+                occupants:
+                [
+                    new("OCC4", "Occupant 4"),
+                    new("OCC5", "Occupant 5")
+                ]
+            );
+
+            var cut = Render<TransferCharactersDialog>(
+                parameters => parameters
+                    .Add(p => p.SourceMachine, source)
+                    .Add(p => p.DestinationMachines, [destinationOne, destinationTwo])
+            );
+
+            // Act
+            cut.Find("#transfer-destination").Change("thunderbird-2");
+
+            cut.Find("[data-testid='transfer-mode-swap']").Change(true);
+
+            var selectorOne = cut.FindAll("#returning-character");
+            Assert.NotEmpty(selectorOne);
+            Assert.Contains("Occupant 3", cut.Markup);
+            Assert.Contains("Occupant 2", cut.Markup);
+
+            cut.Find("#transfer-destination").Change("thunderbird-3");
+
+            // Assert
+            var selectorTwo = cut.FindAll("#returning-character");
+            Assert.NotEmpty(selectorTwo);
+            Assert.Contains("Occupant 4", cut.Markup);
+            Assert.Contains("Occupant 5", cut.Markup);
         }
     }
 }
