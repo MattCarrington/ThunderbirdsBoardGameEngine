@@ -15,6 +15,7 @@
     <PackageVersion Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="10.0.14" />
     <PackageVersion Include="Microsoft.AspNetCore.Mvc.ApiExplorer" Version="2.3.10" />
     <PackageVersion Include="Microsoft.AspNetCore.Mvc.Testing" Version="10.0.14" />
+    <PackageVersion Include="Microsoft.AspNetCore.WebUtilities" Version="2.3.14" />
     <PackageVersion Include="Microsoft.EntityFrameworkCore" Version="10.0.14" />
     <PackageVersion Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.14" />
     <PackageVersion Include="Microsoft.EntityFrameworkCore.Relational" Version="10.0.14" />
@@ -48,7 +49,7 @@
     <PackageVersion Include="ThunderbirdsBoardGameEngine.ReferenceData.Runtime" Version="4.0.1" />
     <PackageVersion Include="ThunderbirdsBoardGameEngine.ReferenceData.Testing" Version="0.1.0" />
     <PackageVersion Include="ThunderbirdsBoardGameEngine.Rules.Client" Version="0.7.0" />
-    <PackageVersion Include="WireMock.Net" Version="2.18.0" />
+    <PackageVersion Include="WireMock.Net" Version="2.30.0" />
     <PackageVersion Include="xunit.runner.visualstudio" Version="3.1.5" />
     <PackageVersion Include="xunit.v3" Version="3.2.2" />
     <PackageVersion Include="xunit.v3.assert" Version="3.2.2" />
