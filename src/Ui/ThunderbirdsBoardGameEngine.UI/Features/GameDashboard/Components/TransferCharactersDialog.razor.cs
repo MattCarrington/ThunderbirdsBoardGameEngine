@@ -33,22 +33,37 @@ namespace ThunderbirdsBoardGameEngine.UI.Features.GameDashboard.Components
                     t.ThunderbirdDisplayName))
                 .ToArray();
 
+        private ThunderbirdMachinesDashboardViewModel? SelectedDestination =>
+            DestinationMachines.SingleOrDefault(
+                machine =>
+                    machine.ThunderbirdCode ==
+                    _selectedDestinationCode);
+
+        private bool CanTransfer => SelectedDestination is not null
+            && SelectedDestination.Occupants.Count < SelectedDestination.CharacterCapacity;
+
+        private bool CanSwap => SelectedDestination is not null
+            && SelectedDestination.Occupants.Count > 0;
+
         private ElementReference _dialog;
         private IJSObjectReference? _dialogModule;
         private DotNetObjectReference<TransferCharactersDialog>? _componentReference;
         private string? _selectedCharacterCode;
         private string? _selectedDestinationCode;
+        private CharacterTransferMode? _selectedMode;
 
         protected override void OnParametersSet()
         {
-            if (SourceMachine.Occupants.Count == 1)
+            if (SourceMachine.Occupants.Count == 1
+                && _selectedCharacterCode is null)
             {
                 _selectedCharacterCode = SourceMachine.Occupants[0].CharacterCode;
             }
 
-            if (DestinationMachines.Count == 1)
+            if (DestinationMachines.Count == 1
+                && _selectedDestinationCode is null)
             {
-                _selectedDestinationCode = DestinationMachines[0].ThunderbirdCode;
+                DestinationChanged(DestinationMachines[0].ThunderbirdCode);
             }
         }
 
@@ -89,6 +104,22 @@ namespace ThunderbirdsBoardGameEngine.UI.Features.GameDashboard.Components
             }
 
             await Cancelled.InvokeAsync();
+        }
+
+        private void SelectMode(CharacterTransferMode mode)
+        {
+            _selectedMode = mode;
+        }
+
+        private void DestinationChanged(string? destinationCode)
+        {
+            _selectedDestinationCode = destinationCode;
+
+            _selectedMode = CanTransfer
+                ? CharacterTransferMode.Transfer
+                : CanSwap
+                    ? CharacterTransferMode.Swap
+                    : null;
         }
 
         public async ValueTask DisposeAsync()
