@@ -376,11 +376,11 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Features.GameDashboard
             await context.GameService.Received(1)
                 .GetGameAsync(gameId);
 
-            await context.GameService.Received(0)
+            await context.GameService.DidNotReceiveWithAnyArgs()
                 .MoveThunderbirdAsync(
-                    gameId,
-                    "thunderbird-1",
-                    "europe");
+                    default,
+                    default!,
+                    default!);
         }
 
         [Fact]
@@ -533,6 +533,11 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Features.GameDashboard
 
             await context.GameService.Received(1)
                 .GetGameAsync(gameId);
+
+            await context.GameService.DidNotReceiveWithAnyArgs()
+                .TransferCharactersAsync(
+                    default,
+                    default!);
         }
 
         [Fact]
