@@ -955,6 +955,45 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Features.GameDashboard.C
         }
 
         [Fact]
+        public void ConfirmButtonIsDisabledWhenTransferringCharacterIsNotSelected()
+        {
+            // Arrange
+            var source = GameDashboardViewModelFactory.CreateMachine(
+                thunderbirdDisplayName: "Thunderbird 1",
+                thunderbirdCode: "thunderbird-1",
+                locationDisplayName: "Location 1",
+                locationCode: "location-1",
+                characterCapacity: 2,
+                occupants:
+                [
+                    new("OCC1", "Occupant 1"),
+                    new("OCC2", "Occupant 2")
+                ]
+            );
+
+            var destination = GameDashboardViewModelFactory.CreateMachine(
+                thunderbirdDisplayName: "Thunderbird 2",
+                thunderbirdCode: "thunderbird-2",
+                locationDisplayName: "Location 1",
+                locationCode: "location-1",
+                characterCapacity: 2,
+                occupants: []
+            );
+
+            var cut = Render<TransferCharactersDialog>(
+                parameters => parameters
+                    .Add(p => p.SourceMachine, source)
+                    .Add(p => p.DestinationMachines, [destination])
+            );
+
+            // Act
+            var confirmButton = cut.Find("[data-testid='confirm-transfer']");
+
+            // Assert
+            Assert.True(confirmButton.IsDisabled());
+        }
+
+        [Fact]
         public void ClickingCancelRaisesCancelEvent()
         {
             // Arrange
@@ -993,6 +1032,46 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Features.GameDashboard.C
 
             // Assert
             Assert.True(cancelRaised);
+        }
+
+        [Fact]
+        public async Task DialogCancellationDoesNotCancelWhileTransferIsInProgress()
+        {
+            // Arrange
+            var source = GameDashboardViewModelFactory.CreateMachine(
+                thunderbirdDisplayName: "Thunderbird 1",
+                thunderbirdCode: "thunderbird-1",
+                locationDisplayName: "Location 1",
+                locationCode: "location-1",
+                characterCapacity: 2,
+                occupants:
+                [
+                    new("OCC1", "Occupant 1")
+                ]
+            );
+
+            var destination = GameDashboardViewModelFactory.CreateMachine(
+                thunderbirdDisplayName: "Thunderbird 2",
+                thunderbirdCode: "thunderbird-2",
+                locationDisplayName: "Location 1",
+                locationCode: "location-1",
+                characterCapacity: 2,
+                occupants: []
+            );
+
+            var cancelled = false;
+
+            var cut = Render<TransferCharactersDialog>(parameters => parameters
+                .Add(p => p.SourceMachine, source)
+                .Add(p => p.DestinationMachines, [destination])
+                .Add(p => p.IsTransferring, true)
+                .Add(p => p.Cancelled, () => cancelled = true));
+
+            // Act
+            await cut.InvokeAsync(() => cut.Instance.HandleDialogCancelled());
+
+            // Assert
+            Assert.False(cancelled);
         }
     }
 }
