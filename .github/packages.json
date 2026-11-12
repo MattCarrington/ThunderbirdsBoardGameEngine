@@ -58,7 +58,10 @@
     "package_id": "ThunderbirdsBoardGameEngine.WireMock.Hosting",
     "project_path": "tools/Common/ThunderbirdsBoardGameEngine.WireMock.Hosting/ThunderbirdsBoardGameEngine.WireMock.Hosting.csproj",
     "source_paths": ["tools/Common/ThunderbirdsBoardGameEngine.WireMock.Hosting"],
-    "central_packages": ["WireMock.Net"],
+    "central_packages": [
+      "WireMock.Net",
+      "Microsoft.AspNetCore.WebUtilities"
+    ],
     "dependencies": []
   },
   {
