@@ -10,5 +10,7 @@ namespace ThunderbirdsBoardGameEngine.UI.Features.GameDashboard.Interfaces
         Task<GameDashboardViewModel?> GetGameAsync(Guid gameId);
 
         Task<ThunderbirdMovementResult> MoveThunderbirdAsync(Guid gameId, string thunderbirdMachineCode, string destinationLocationCode);
+
+        Task<CharacterTransferResult> TransferCharactersAsync(Guid gameId, CharacterTransferSelection selection);
     }
 }
