@@ -74,6 +74,24 @@ namespace ThunderbirdsBoardGameEngine.UI.Features.GameDashboard.Components
         private CharacterTransferMode? _selectedMode;
         private string? _selectedReturningCharacterCode;
 
+        [JSInvokable]
+        public Task HandleDialogCancelled()
+        {
+            return IsTransferring
+                ? Task.CompletedTask
+                : CancelAsync();
+        }
+
+        public async ValueTask DisposeAsync()
+        {
+            _componentReference?.Dispose();
+
+            if (_dialogModule is not null)
+            {
+                await _dialogModule.DisposeAsync();
+            }
+        }
+
         protected override void OnParametersSet()
         {
             if (SourceMachine.Occupants.Count == 1
@@ -108,14 +126,6 @@ namespace ThunderbirdsBoardGameEngine.UI.Features.GameDashboard.Components
                 "show",
                 _dialog,
                 _componentReference);
-        }
-
-        [JSInvokable]
-        public Task HandleDialogCancelled()
-        {
-            return IsTransferring
-                ? Task.CompletedTask
-                : CancelAsync();
         }
 
         private async Task CancelAsync()
@@ -175,16 +185,6 @@ namespace ThunderbirdsBoardGameEngine.UI.Features.GameDashboard.Components
                     _selectedMode == CharacterTransferMode.Swap
                         ? _selectedReturningCharacterCode
                         : null));
-        }
-
-        public async ValueTask DisposeAsync()
-        {
-            _componentReference?.Dispose();
-
-            if (_dialogModule is not null)
-            {
-                await _dialogModule.DisposeAsync();
-            }
         }
     }
 }
