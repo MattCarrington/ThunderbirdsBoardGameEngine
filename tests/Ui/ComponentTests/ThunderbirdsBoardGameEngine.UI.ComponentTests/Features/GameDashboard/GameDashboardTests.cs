@@ -534,5 +534,157 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Features.GameDashboard
             await context.GameService.Received(1)
                 .GetGameAsync(gameId);
         }
+
+        [Fact]
+        public async Task SuccessfulSingleTransferShouldUpdateDashboardAndCloseDialogAsync()
+        {
+            // Arrange
+            var gameId = Guid.NewGuid();
+
+            var occupants = new List<OccupantsDashboardViewModel>
+            {
+                GameDashboardViewModelFactory.CreateOccupant()
+            };
+
+            var originalThunderbirds = new List<ThunderbirdMachinesDashboardViewModel>
+            {
+                GameDashboardViewModelFactory.CreateMachine(thunderbirdCode: "thunderbird-1", occupants: occupants),
+                GameDashboardViewModelFactory.CreateMachine(thunderbirdCode: "thunderbird-2")
+            };
+
+            var updatedThunderbirds = new List<ThunderbirdMachinesDashboardViewModel>
+            {
+                GameDashboardViewModelFactory.CreateMachine(thunderbirdCode: "thunderbird-1"),
+                GameDashboardViewModelFactory.CreateMachine(thunderbirdCode: "thunderbird-2", occupants: occupants)
+            };
+
+            var game = GameDashboardViewModelFactory.CreateDashboard(gameId: gameId, machines: originalThunderbirds);
+
+            var context = new GameDashboardPageTestContext(this);
+            context.GameService
+                .GetGameAsync(gameId)
+                .Returns(game);
+
+            context.GameService
+                .TransferCharactersAsync(
+                    gameId,
+                    new CharacterTransferSelection(
+                        SourceThunderbirdCode: "thunderbird-1",
+                        CharacterCode: "scott",
+                        DestinationThunderbirdCode: "thunderbird-2",
+                        ReturningCharacterCode: null)
+                    )
+                .Returns(new CharacterTransferResult(
+                    CharacterTransferOutcome.Success,
+                    GameDashboardViewModelFactory.CreateDashboard(gameId: gameId, machines: updatedThunderbirds)));
+
+            DialogJsInterop.Register(this);
+
+            var cut = Render<GameDashboardPage>(parameters => parameters
+                .Add(p => p.GameId, gameId));
+
+            // Act
+            cut.WaitForElement("[data-testid='transfer-thunderbird-1']")
+                .Click();
+
+            var dialog = cut.FindComponent<TransferCharactersDialog>();
+
+            await dialog
+                .Find("[data-testid='confirm-transfer']")
+                .ClickAsync(new MouseEventArgs());
+
+            // Assert
+            cut.WaitForAssertion(() =>
+            {
+                Assert.Empty(cut.FindComponents<TransferCharactersDialog>());
+
+                var sourceRow = cut.Find("[data-testid='machine-thunderbird-1']");
+
+                var destinationRow = cut.Find("[data-testid='machine-thunderbird-2']");
+
+                Assert.Contains("Empty", sourceRow.TextContent);
+                Assert.Contains("Scott", destinationRow.TextContent);
+            });
+
+            await context.GameService.Received(1)
+                .GetGameAsync(gameId);
+
+            await context.GameService.Received(1)
+                .TransferCharactersAsync(
+                    gameId,
+                    new CharacterTransferSelection(
+                        SourceThunderbirdCode: "thunderbird-1",
+                        CharacterCode: "scott",
+                        DestinationThunderbirdCode: "thunderbird-2",
+                        ReturningCharacterCode: null));
+        }
+
+        [Theory]
+        [InlineData(CharacterTransferOutcome.Rejected, "That character transfer is not permitted.")]
+        [InlineData(CharacterTransferOutcome.NotFound, "The game, character, or Thunderbird Machine could not be found.")]
+
+        public async Task UnsuccessfulTransferShouldKeepDialogOpenAndDisplayError(CharacterTransferOutcome outcome, string expectedMessage)
+        {
+            var gameId = Guid.NewGuid();
+
+            var occupants = new List<OccupantsDashboardViewModel>
+            {
+                GameDashboardViewModelFactory.CreateOccupant()
+            };
+
+            var originalThunderbirds = new List<ThunderbirdMachinesDashboardViewModel>
+            {
+                GameDashboardViewModelFactory.CreateMachine(thunderbirdCode: "thunderbird-1", occupants: occupants),
+                GameDashboardViewModelFactory.CreateMachine(thunderbirdCode: "thunderbird-2")
+            };
+
+            var dashboard = GameDashboardViewModelFactory.CreateDashboard(gameId: gameId, machines: originalThunderbirds);
+
+            var context = new GameDashboardPageTestContext(this);
+
+            context.GameService
+                .GetGameAsync(gameId)
+                .Returns(dashboard);
+
+            context.GameService
+                .TransferCharactersAsync(
+                    gameId,
+                    new CharacterTransferSelection(
+                        SourceThunderbirdCode: "thunderbird-1",
+                        CharacterCode: "scott",
+                        DestinationThunderbirdCode: "thunderbird-2",
+                        ReturningCharacterCode: null)
+                    )
+                .Returns(new CharacterTransferResult(outcome, null));
+
+            DialogJsInterop.Register(this);
+
+            var cut = Render<GameDashboardPage>(parameters => parameters
+                .Add(p => p.GameId, gameId));
+
+            // Act
+            cut.WaitForElement("[data-testid='transfer-thunderbird-1']")
+                .Click();
+
+            var dialog = cut.FindComponent<TransferCharactersDialog>();
+
+            await dialog
+                .Find("[data-testid='confirm-transfer']")
+                .ClickAsync(new MouseEventArgs());
+
+            // Assert
+            cut.WaitForAssertion(() =>
+            {
+                Assert.Single(cut.FindComponents<TransferCharactersDialog>());
+                Assert.Contains(expectedMessage, cut.Find("[role='alert']").TextContent);
+
+                var sourceRow = cut.Find("[data-testid='machine-thunderbird-1']");
+
+                var destinationRow = cut.Find("[data-testid='machine-thunderbird-2']");
+
+                Assert.Contains("Scott", sourceRow.TextContent);
+                Assert.Contains("Empty", destinationRow.TextContent);
+            });
+        }
     }
 }

@@ -58,6 +58,9 @@
                 @key="_transferSource.ThunderbirdCode"
                 SourceMachine="@_transferSource"
                 DestinationMachines="@_transferDestinations"
+                IsTransferring="@_isTransferring"
+                ErrorMessage="@_transferError"
+                TransferConfirmed="TransferCharactersAsync"
                 Cancelled="CancelTransfer" />
         }
     }

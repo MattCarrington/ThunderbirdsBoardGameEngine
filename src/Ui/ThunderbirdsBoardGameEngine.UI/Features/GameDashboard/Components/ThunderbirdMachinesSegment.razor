@@ -17,7 +17,7 @@
             <tbody>
                 @foreach (var machine in Machines)
                 {
-                    <tr>
+                    <tr data-testid="@($"machine-{machine.ThunderbirdCode}")">
                         <th scope="row">
                             @machine.ThunderbirdDisplayName
                         </th>

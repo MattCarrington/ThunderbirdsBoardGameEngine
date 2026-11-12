@@ -32,6 +32,8 @@ public partial class GameDashboardPage
     private string? _movementError;
     private ThunderbirdMachinesDashboardViewModel? _transferSource;
     private IReadOnlyList<ThunderbirdMachinesDashboardViewModel> _transferDestinations = [];
+    private bool _isTransferring;
+    private string? _transferError;
 
     protected override Task OnParametersSetAsync()
     {
@@ -171,9 +173,58 @@ public partial class GameDashboardPage
             .ToArray();
     }
 
+    private async Task TransferCharactersAsync(CharacterTransferSelection selection)
+    {
+        if (_transferSource is null)
+        {
+            return;
+        }
+
+        _transferError = null;
+        _isTransferring = true;
+
+        try
+        {
+            var result = await GameService.TransferCharactersAsync(
+                GameId,
+                selection);
+
+            switch (result.Outcome)
+            {
+                case CharacterTransferOutcome.Success
+                    when result.UpdatedGameState is not null:
+                    _game = result.UpdatedGameState;
+                    CancelTransfer();
+                    break;
+                case CharacterTransferOutcome.Rejected:
+                    _transferError = "That character transfer is not permitted.";
+                    break;
+                case CharacterTransferOutcome.NotFound:
+                    _transferError = "The game, character, or Thunderbird Machine could not be found.";
+                    break;
+                default:
+                    _transferError = "The character transfer could not be completed.";
+                    break;
+            }
+        }
+        catch (Exception exception)
+        {
+            _transferError = "The character transfer could not be completed. Please try again.";
+            Logger.LogError(
+                exception,
+                "Unable to transfer the requested character.");
+        }
+        finally
+        {
+            _isTransferring = false;
+        }
+    }
+
     private void CancelTransfer()
     {
         _transferSource = null;
         _transferDestinations = [];
+        _transferError = null;
+        _isTransferring = false;
     }
 }

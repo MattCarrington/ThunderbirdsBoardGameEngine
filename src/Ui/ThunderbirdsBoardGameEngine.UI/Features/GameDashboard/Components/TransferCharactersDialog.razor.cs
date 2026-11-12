@@ -25,6 +25,9 @@ namespace ThunderbirdsBoardGameEngine.UI.Features.GameDashboard.Components
         [Parameter]
         public bool IsTransferring { get; set; }
 
+        [Parameter]
+        public string? ErrorMessage { get; set; }
+
         private IReadOnlyList<SelectionOptionViewModel> CharacterOptions =>
             SourceMachine.Occupants
                 .Select(occupant => new SelectionOptionViewModel(
