@@ -26,13 +26,12 @@ public partial class GameDashboardPage
     private bool _notFound;
     private bool _failed;
     private ThunderbirdMachinesDashboardViewModel? _selectedMachine;
-    private IReadOnlyList<SelectionOptionViewModel> _destinations = [];
-    private bool _isLoadingDestinations;
+    private IReadOnlyList<SelectionOptionViewModel> _movementDestinations = [];
+    private bool _isLoadingMovementDestinations;
     private bool _isMoving;
     private string? _movementError;
     private ThunderbirdMachinesDashboardViewModel? _transferSource;
-    private IReadOnlyList<ThunderbirdMachinesDashboardViewModel>
-        _transferDestinations = [];
+    private IReadOnlyList<ThunderbirdMachinesDashboardViewModel> _transferDestinations = [];
 
     protected override Task OnParametersSetAsync()
     {
@@ -70,13 +69,13 @@ public partial class GameDashboardPage
     private async Task BeginMoveAsync(ThunderbirdMachinesDashboardViewModel machine)
     {
         _selectedMachine = machine;
-        _destinations = [];
+        _movementDestinations = [];
         _movementError = null;
-        _isLoadingDestinations = true;
+        _isLoadingMovementDestinations = true;
 
         try
         {
-            _destinations = await MovementClientService.GetAccessibleLocationsAsync(machine.ThunderbirdCode);
+            _movementDestinations = await MovementClientService.GetAccessibleLocationsAsync(machine.ThunderbirdCode);
         }
         catch (Exception exception)
         {
@@ -86,7 +85,7 @@ public partial class GameDashboardPage
         }
         finally
         {
-            _isLoadingDestinations = false;
+            _isLoadingMovementDestinations = false;
         }
     }
 
@@ -151,9 +150,9 @@ public partial class GameDashboardPage
     private void ResetMovementState()
     {
         _selectedMachine = null;
-        _destinations = [];
+        _movementDestinations = [];
         _movementError = null;
-        _isLoadingDestinations = false;
+        _isLoadingMovementDestinations = false;
         _isMoving = false;
     }
 
