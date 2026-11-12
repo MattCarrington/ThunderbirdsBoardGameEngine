@@ -109,6 +109,22 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Features.GameDashboard.C
             Assert.True(button.IsDisabled());
         }
 
+        [Fact]
+        public void MoveButtonIsDisabledWhenMachineHasNoOccupants()
+        {
+            var machine = GameDashboardViewModelFactory.CreateMachine(
+                thunderbirdCode: "thunderbird-4",
+                occupants: []);
+
+            var cut = Render<ThunderbirdMachinesSegment>(
+                parameters => parameters
+                    .Add(component => component.Machines, [machine]));
+
+            var button = cut.Find("[data-testid='move-thunderbird-4']");
+
+            Assert.True(button.IsDisabled());
+        }
+
         private static ThunderbirdMachinesDashboardViewModel[] CreateThunderbirds()
         {
             return
