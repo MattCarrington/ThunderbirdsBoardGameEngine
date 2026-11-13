@@ -6,7 +6,8 @@ using ThunderbirdsBoardGameEngine.Api.ComponentTests.Factories;
 using ThunderbirdsBoardGameEngine.GameState.Application;
 using ThunderbirdsBoardGameEngine.GameState.Contracts.Dtos.V1;
 using ThunderbirdsBoardGameEngine.GameState.Contracts.Dtos.V1.TransferCharacters;
-using ThunderbirdsBoardGameEngine.GameState.Domain.Setup.V1;
+using ThunderbirdsBoardGameEngine.GameState.Domain;
+using ThunderbirdsBoardGameEngine.GameState.Domain.Setup.V2;
 using ThunderbirdsBoardGameEngine.ReferenceData.Core.Identities;
 using ThunderbirdsBoardGameEngine.ReferenceData.Core.KnownIdentities;
 using ThunderbirdsBoardGameEngine.TestUtils.xUnit.Assertions;
@@ -32,7 +33,7 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints.GameState.V1
         {
             // Arrange
             var gameId = Guid.NewGuid();
-            var game = new StandardGameSetupFactory().Create(gameId, DateTimeOffset.UtcNow);
+            var game = CreateGame(gameId);
 
             await _repository.CreateNewGameSession(game, TestContext.Current.CancellationToken);
 
@@ -75,7 +76,7 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints.GameState.V1
         {
             // Arrange
             var gameId = Guid.NewGuid();
-            var game = new StandardGameSetupFactory().Create(gameId, DateTimeOffset.UtcNow);
+            var game = CreateGame(gameId);
 
             await _repository.CreateNewGameSession(game, TestContext.Current.CancellationToken);
 
@@ -176,7 +177,7 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints.GameState.V1
         {
             // Arrange
             var gameId = Guid.NewGuid();
-            var game = new StandardGameSetupFactory().Create(gameId, DateTimeOffset.UtcNow);
+            var game = CreateGame(gameId);
 
             await _repository.CreateNewGameSession(game, TestContext.Current.CancellationToken);
 
@@ -216,7 +217,7 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints.GameState.V1
         {
             // Arrange
             var gameId = Guid.NewGuid();
-            var game = new StandardGameSetupFactory().Create(gameId, DateTimeOffset.UtcNow);
+            var game = CreateGame(gameId);
 
             await _repository.CreateNewGameSession(game, TestContext.Current.CancellationToken);
 
@@ -257,7 +258,7 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints.GameState.V1
         {
             // Arrange
             var gameId = Guid.NewGuid();
-            var game = new StandardGameSetupFactory().Create(gameId, DateTimeOffset.UtcNow);
+            var game = CreateGame(gameId);
 
             await _repository.CreateNewGameSession(game, TestContext.Current.CancellationToken);
 
@@ -284,7 +285,7 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints.GameState.V1
         {
             // Arrange
             var gameId = Guid.NewGuid();
-            var game = new StandardGameSetupFactory().Create(gameId, DateTimeOffset.UtcNow);
+            var game = CreateGame(gameId);
 
             await _repository.CreateNewGameSession(game, TestContext.Current.CancellationToken);
 
@@ -328,7 +329,7 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints.GameState.V1
         {
             // Arrange
             var gameId = Guid.NewGuid();
-            var game = new StandardGameSetupFactory().Create(gameId, DateTimeOffset.UtcNow);
+            var game = CreateGame(gameId);
 
             await _repository.CreateNewGameSession(game, TestContext.Current.CancellationToken);
 
@@ -361,7 +362,7 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints.GameState.V1
         {
             // Arrange
             var gameId = Guid.NewGuid();
-            var game = new StandardGameSetupFactory().Create(gameId, DateTimeOffset.UtcNow);
+            var game = CreateGame(gameId);
 
             await _repository.CreateNewGameSession(game, TestContext.Current.CancellationToken);
 
@@ -425,7 +426,7 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints.GameState.V1
         {
             // Arrange
             var gameId = Guid.NewGuid();
-            var game = new StandardGameSetupFactory().Create(gameId, DateTimeOffset.UtcNow);
+            var game = CreateGame(gameId);
 
             await _repository.CreateNewGameSession(game, TestContext.Current.CancellationToken);
 
@@ -459,7 +460,7 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints.GameState.V1
         {
             // Arrange
             var gameId = Guid.NewGuid();
-            var game = new StandardGameSetupFactory().Create(gameId, DateTimeOffset.UtcNow);
+            var game = CreateGame(gameId);
 
             await _repository.CreateNewGameSession(game, TestContext.Current.CancellationToken);
             var dto = new TransferCharactersRequestDto
@@ -493,7 +494,7 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints.GameState.V1
         {
             // Arrange
             var gameId = Guid.NewGuid();
-            var game = new StandardGameSetupFactory().Create(gameId, DateTimeOffset.UtcNow);
+            var game = CreateGame(gameId);
 
             await _repository.CreateNewGameSession(game, TestContext.Current.CancellationToken);
 
@@ -542,7 +543,7 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints.GameState.V1
         {
             // Arrange
             var gameId = Guid.NewGuid();
-            var game = new StandardGameSetupFactory().Create(gameId, DateTimeOffset.UtcNow);
+            var game = CreateGame(gameId);
 
             await _repository.CreateNewGameSession(game, TestContext.Current.CancellationToken);
 
@@ -570,6 +571,13 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints.GameState.V1
 
             // Assert
             await ProblemDetailsAssertions.AssertBadRequestAsync(response, "Bad request.");
+        }
+
+        private static Game CreateGame(Guid gameId)
+        {
+            var turnOrder = new List<CharacterCode> { KnownCharacterCodes.Scott, KnownCharacterCodes.Virgil, KnownCharacterCodes.Alan };
+
+            return new StandardGameSetupFactory().Create(gameId, DateTimeOffset.UtcNow, turnOrder);
         }
 
         private static void AssertCharacterIsInThunderbird(GameStateResponseDto gameState, string characterCode, string thunderbirdCode)

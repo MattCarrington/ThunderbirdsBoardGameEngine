@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using ThunderbirdsBoardGameEngine.GameState.Application.Exceptions;
 using ThunderbirdsBoardGameEngine.GameState.Domain.Exceptions;
-using ThunderbirdsBoardGameEngine.GameState.Domain.Setup.V1;
+using ThunderbirdsBoardGameEngine.GameState.Domain.Setup.V2;
 
 namespace ThunderbirdsBoardGameEngine.GameState.Application.CreateGame
 {
@@ -44,7 +44,7 @@ namespace ThunderbirdsBoardGameEngine.GameState.Application.CreateGame
                 }
             }
 
-            var game = _gameFactory.Create(Guid.NewGuid(), DateTimeOffset.UtcNow);
+            var game = _gameFactory.Create(Guid.NewGuid(), DateTimeOffset.UtcNow, request.TurnOrder);
 
             _gameStateIntegrityValidator.Validate(game);
 

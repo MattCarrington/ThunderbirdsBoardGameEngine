@@ -4,7 +4,7 @@ using ThunderbirdsBoardGameEngine.GameState.Application;
 using ThunderbirdsBoardGameEngine.GameState.Client.Extensions;
 using ThunderbirdsBoardGameEngine.GameState.Client.Interfaces.V1;
 using ThunderbirdsBoardGameEngine.GameState.Domain;
-using ThunderbirdsBoardGameEngine.GameState.Domain.Setup.V1;
+using ThunderbirdsBoardGameEngine.GameState.Domain.Setup.V2;
 using ThunderbirdsBoardGameEngine.GameState.Infrastructure;
 using Xunit;
 
@@ -41,7 +41,8 @@ namespace ThunderbirdsBoardGameEngine.GameState.Client.IntegrationTests.Fixtures
         {
             var game = new StandardGameSetupFactory().Create(
                 Guid.NewGuid(),
-                DateTimeOffset.UtcNow);
+                DateTimeOffset.UtcNow,
+                []);    // TODO: Add turn order
 
             await using var scope = _serviceProvider.CreateAsyncScope();
 

@@ -2,7 +2,8 @@
 using ThunderbirdsBoardGameEngine.GameState.Application.TransferCharacters;
 using ThunderbirdsBoardGameEngine.GameState.ComponentTests.Helpers;
 using ThunderbirdsBoardGameEngine.GameState.Domain;
-using ThunderbirdsBoardGameEngine.GameState.Domain.Setup.V1;
+using ThunderbirdsBoardGameEngine.GameState.Domain.Setup.V2;
+using ThunderbirdsBoardGameEngine.ReferenceData.Core.Identities;
 using ThunderbirdsBoardGameEngine.ReferenceData.Core.KnownIdentities;
 using Xunit;
 
@@ -118,10 +119,17 @@ namespace ThunderbirdsBoardGameEngine.GameState.ComponentTests.TransferCharacter
             Assert.Equal(KnownThunderbirdCodes.Thunderbird1, updatedGame.GetCharacterAssignment(KnownCharacterCodes.Scott));
         }
 
-        private static Game CreateValidGame()
+        private static Game CreateValidGame(IReadOnlyList<CharacterCode>? turnOrder = null)
         {
+            turnOrder ??=
+            [
+                KnownCharacterCodes.Scott,
+                KnownCharacterCodes.Virgil,
+                KnownCharacterCodes.LadyPenelope
+            ];
+
             var gameFactory = new StandardGameSetupFactory();
-            return gameFactory.Create(Guid.NewGuid(), DateTimeOffset.UtcNow);
+            return gameFactory.Create(Guid.NewGuid(), DateTimeOffset.UtcNow, turnOrder);
         }
     }
 }

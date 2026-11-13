@@ -27,7 +27,8 @@ namespace ThunderbirdsBoardGameEngine.Api.UnitTests.Mappers.GameState.V1
                     { new CharacterCode("CHAR1"), new ThunderbirdCode("TB1") },
                     { new CharacterCode("CHAR2"), new ThunderbirdCode("TB1") },
                     { new CharacterCode("CHAR3"), new ThunderbirdCode("TB2") }
-                });
+                },
+                turnOrder: [new("CHAR1"), new("CHAR2"), new("CHAR3")]);
 
             // Act
             var dto = game.ToDto();

@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using ThunderbirdsBoardGameEngine.GameState.Application.CreateGame;
-using ThunderbirdsBoardGameEngine.GameState.Domain.Setup.V1;
+using ThunderbirdsBoardGameEngine.GameState.Domain.Setup.V2;
 
 namespace ThunderbirdsBoardGameEngine.GameState.Application
 {

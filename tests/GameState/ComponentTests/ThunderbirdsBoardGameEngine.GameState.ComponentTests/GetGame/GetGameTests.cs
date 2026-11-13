@@ -1,9 +1,6 @@
 ﻿using ThunderbirdsBoardGameEngine.GameState.Application.GetGame;
 using ThunderbirdsBoardGameEngine.GameState.ComponentTests.Helpers;
-using ThunderbirdsBoardGameEngine.GameState.Domain;
-using ThunderbirdsBoardGameEngine.GameState.Domain.Setup.V1;
-using ThunderbirdsBoardGameEngine.ReferenceData.Core.Identities;
-using ThunderbirdsBoardGameEngine.ReferenceData.Core.KnownIdentities;
+using ThunderbirdsBoardGameEngine.GameState.Domain.Setup.V2;
 using Xunit;
 
 namespace ThunderbirdsBoardGameEngine.GameState.ComponentTests.GetGame
@@ -19,7 +16,7 @@ namespace ThunderbirdsBoardGameEngine.GameState.ComponentTests.GetGame
             var gameId = Guid.NewGuid();
 
             var gameFactory = new StandardGameSetupFactory();
-            var game = gameFactory.Create(gameId, DateTimeOffset.UtcNow);
+            var game = gameFactory.Create(gameId, DateTimeOffset.UtcNow, []);    // TODO: Add turn order
 
             await testHost.Repository.CreateNewGameSession(game, TestContext.Current.CancellationToken);
 

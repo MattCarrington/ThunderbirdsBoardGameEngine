@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using ThunderbirdsBoardGameEngine.GameState.Application.Exceptions;
 using ThunderbirdsBoardGameEngine.GameState.Domain;
-using ThunderbirdsBoardGameEngine.GameState.Domain.Setup.V1;
+using ThunderbirdsBoardGameEngine.GameState.Domain.Setup.V2;
 using ThunderbirdsBoardGameEngine.GameState.Infrastructure.Persistence;
 using ThunderbirdsBoardGameEngine.ReferenceData.Core.KnownIdentities;
 using Xunit;
@@ -29,7 +29,7 @@ public sealed class GameRepositoryTests
         var options = CreateDbContextOptions();
 
         var game = new StandardGameSetupFactory()
-            .Create(Guid.NewGuid(), CreatedAtUtc);
+            .Create(Guid.NewGuid(), CreatedAtUtc, []);  // TODO: Add turn order
 
         try
         {
@@ -105,7 +105,7 @@ public sealed class GameRepositoryTests
         var options = CreateDbContextOptions();
 
         var game = new StandardGameSetupFactory()
-            .Create(Guid.NewGuid(), CreatedAtUtc);
+            .Create(Guid.NewGuid(), CreatedAtUtc, []);  // TODO: Add turn order
 
         try
         {
@@ -192,7 +192,8 @@ public sealed class GameRepositoryTests
         var options = CreateDbContextOptions();
         var game = new StandardGameSetupFactory().Create(
             Guid.NewGuid(),
-            CreatedAtUtc);
+            CreatedAtUtc,
+            []);  // TODO: Add turn order
 
         var destination = KnownLocationCodes.Europe;
 
@@ -281,7 +282,7 @@ public sealed class GameRepositoryTests
             new GameRecordMapper());
 
         var nonExistentGame = new StandardGameSetupFactory()
-            .Create(nonExistentGameId, CreatedAtUtc);
+            .Create(nonExistentGameId, CreatedAtUtc, []);  // TODO: Add turn order
 
         // Act & Assert
         await Assert.ThrowsAsync<GameNotFoundException>(async () =>
@@ -297,7 +298,7 @@ public sealed class GameRepositoryTests
     {
         var options = CreateDbContextOptions();
         var originalGame = new StandardGameSetupFactory()
-            .Create(Guid.NewGuid(), CreatedAtUtc);
+            .Create(Guid.NewGuid(), CreatedAtUtc, []);  // TODO: Add turn order
 
         try
         {

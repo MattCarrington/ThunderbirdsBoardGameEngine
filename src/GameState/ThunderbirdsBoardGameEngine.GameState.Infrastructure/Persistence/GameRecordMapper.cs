@@ -43,7 +43,15 @@ namespace ThunderbirdsBoardGameEngine.GameState.Infrastructure.Persistence
                     ms => new ThunderbirdCode(ms.ThunderbirdCode),
                     ms => new LocationCode(ms.LocationCode));
 
-            var game = Game.Restore(gameRecord.Id, gameRecord.CreatedAtUtc, gameRecord.SetupVersion, gameRecord.StateVersion, machines, characters);
+            var game = Game.Restore(
+                id: gameRecord.Id,
+                createdAtUtc: gameRecord.CreatedAtUtc,
+                setupVersion: gameRecord.SetupVersion,
+                stateVersion: gameRecord.StateVersion,
+                machines: machines,
+                characters: characters,
+                turnOrder: [new("character-1"), new("character-2")],    //  TODO: This is a placeholder. The turn order should be stored in the GameRecord and restored here.
+                activeTurnIndex: 0);                                    //  TODO: This is a placeholder. The active turn index should be stored in the GameRecord and restored here.
 
             return game;
         }

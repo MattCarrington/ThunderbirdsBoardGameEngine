@@ -1,7 +1,7 @@
 ﻿using ThunderbirdsBoardGameEngine.ReferenceData.Core.Identities;
 using ThunderbirdsBoardGameEngine.ReferenceData.Core.KnownIdentities;
 
-namespace ThunderbirdsBoardGameEngine.GameState.Domain.Setup.V1
+namespace ThunderbirdsBoardGameEngine.GameState.Domain.Setup.V2
 {
     public sealed class CharacterStartingPositions
     {

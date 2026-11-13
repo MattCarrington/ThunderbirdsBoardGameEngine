@@ -30,7 +30,9 @@ namespace ThunderbirdsBoardGameEngine.GameState.Application.UnitTests.GetGame
                 { new ThunderbirdCode("TB2"), new LocationCode("LOC2") }
             };
 
-            var game = Game.Restore(gameId, createdAtUtc, setupVersion, stateVersion, machines, characters);
+            var turnOrder = new List<CharacterCode> { new("CHAR1"), new("CHAR2") };
+
+            var game = Game.Restore(gameId, createdAtUtc, setupVersion, stateVersion, machines, characters, turnOrder, 0);
 
             var handler = CreateHandler(game);
 
