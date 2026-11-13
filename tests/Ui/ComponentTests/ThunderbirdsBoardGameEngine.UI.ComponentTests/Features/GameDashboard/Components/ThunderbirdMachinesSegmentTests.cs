@@ -112,6 +112,7 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Features.GameDashboard.C
         [Fact]
         public void MoveButtonIsDisabledWhenMachineHasNoOccupants()
         {
+            // Arrange
             var machine = GameDashboardViewModelFactory.CreateMachine(
                 thunderbirdCode: "thunderbird-4",
                 occupants: []);
@@ -120,8 +121,27 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Features.GameDashboard.C
                 parameters => parameters
                     .Add(component => component.Machines, [machine]));
 
+            // Act
             var button = cut.Find("[data-testid='move-thunderbird-4']");
 
+            // Assert
+            Assert.True(button.IsDisabled());
+        }
+
+        [Fact]
+        public void TransferButtonIsDisabledWhenNoOtherMachineIsCoLocated()
+        {
+            // Arrange
+            var machines = CreateThunderbirds();
+
+            var cut = Render<ThunderbirdMachinesSegment>(
+                parameters => parameters
+                    .Add(component => component.Machines, machines));
+
+            // Act
+            var button = cut.Find("[data-testid='transfer-thunderbird-1']");
+
+            // Assert
             Assert.True(button.IsDisabled());
         }
 

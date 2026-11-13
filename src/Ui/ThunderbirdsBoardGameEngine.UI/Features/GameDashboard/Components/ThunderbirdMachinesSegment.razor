@@ -39,13 +39,13 @@
                         <td>
                             <button class="btn btn-sm btn-primary"
                                     data-testid="@($"move-{machine.ThunderbirdCode}")"
-                                    disabled="@(machine.Occupants.Count == 0)"
+                                    disabled="@(!CanMove(machine))"
                                     @onclick="() => MoveRequested.InvokeAsync(machine)">
                                 Move
                             </button>
                             <button class="btn btn-sm btn-secondary"
                                     data-testid="@($"transfer-{machine.ThunderbirdCode}")"
-                                    disabled="@(machine.Occupants.Count == 0)"
+                                    disabled="@(!CanTransferFrom(machine))"
                                     @onclick="() => TransferRequested.InvokeAsync(machine)">
                                 Transfer
                             </button>
