@@ -162,7 +162,7 @@ this.ScenarioInitialize(scenarioInfo, ruleInfo);
  await testRunner.AndAsync("the player has opened its dashboard", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
 #line 10
- await testRunner.WhenAsync("the player transfers \"Gordon\" from \"Thunderbird 4\" to \"Thunderbird 2\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+ await testRunner.WhenAsync("the player transfers the single occupant from \"Thunderbird 4\" to \"Thunderbird 2\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
 #line 11
  await testRunner.ThenAsync("\"Gordon\" should be inside \"Thunderbird 2\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
