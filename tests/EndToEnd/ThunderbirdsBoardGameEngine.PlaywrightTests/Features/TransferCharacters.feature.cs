@@ -106,7 +106,7 @@ namespace ThunderbirdsBoardGameEngine.PlaywrightTests.Features
         
         private static global::Reqnroll.Formatters.RuntimeSupport.FeatureLevelCucumberMessages InitializeCucumberMessages()
         {
-            return new global::Reqnroll.Formatters.RuntimeSupport.FeatureLevelCucumberMessages("Features/TransferCharacters.feature.ndjson", 3);
+            return new global::Reqnroll.Formatters.RuntimeSupport.FeatureLevelCucumberMessages("Features/TransferCharacters.feature.ndjson", 4);
         }
         
         async System.Threading.Tasks.ValueTask Xunit.IAsyncLifetime.InitializeAsync()
@@ -172,6 +172,52 @@ this.ScenarioInitialize(scenarioInfo, ruleInfo);
 #line hidden
 #line 13
  await testRunner.AndAsync("\"Thunderbird 4\" cannot transfer as it has no occupants", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
+#line hidden
+            }
+            await this.ScenarioCleanupAsync();
+        }
+        
+        [global::Xunit.FactAttribute(DisplayName="A committed transfer survives a browser reload")]
+        [global::Xunit.TraitAttribute("FeatureTitle", "TransferCharacters")]
+        [global::Xunit.TraitAttribute("Description", "A committed transfer survives a browser reload")]
+        public async global::System.Threading.Tasks.Task ACommittedTransferSurvivesABrowserReload()
+        {
+            string[] tagsOfScenario = ((string[])(null));
+            global::System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new global::System.Collections.Specialized.OrderedDictionary();
+            string pickleIndex = "1";
+            global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("A committed transfer survives a browser reload", null, tagsOfScenario, argumentsOfScenario, featureTags, pickleIndex);
+            string[] tagsOfRule = ((string[])(null));
+            global::Reqnroll.RuleInfo ruleInfo = null;
+#line 15
+this.ScenarioInitialize(scenarioInfo, ruleInfo);
+#line hidden
+            if ((global::Reqnroll.TagHelper.ContainsIgnoreTag(scenarioInfo.CombinedTags) || global::Reqnroll.TagHelper.ContainsIgnoreTag(featureTags)))
+            {
+                await testRunner.SkipScenarioAsync();
+            }
+            else
+            {
+                await this.ScenarioStartAsync();
+#line 16
+ await testRunner.GivenAsync("a game has been created", ((string)(null)), ((global::Reqnroll.Table)(null)), "Given ");
+#line hidden
+#line 17
+ await testRunner.AndAsync("the player has opened its dashboard", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
+#line hidden
+#line 18
+ await testRunner.WhenAsync("the player transfers the single occupant from \"Thunderbird 3\" to \"Thunderbird 2\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+#line hidden
+#line 19
+ await testRunner.AndAsync("reloads the dashboard", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
+#line hidden
+#line 20
+ await testRunner.ThenAsync("\"Alan\" should be inside \"Thunderbird 2\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+#line hidden
+#line 21
+ await testRunner.AndAsync("\"Thunderbird 3\" cannot move because it has no occupants", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
+#line hidden
+#line 22
+ await testRunner.AndAsync("\"Thunderbird 3\" cannot transfer as it has no occupants", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
             }
             await this.ScenarioCleanupAsync();
