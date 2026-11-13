@@ -34,6 +34,22 @@ namespace ThunderbirdsBoardGameEngine.PlaywrightTests.Pages
             await AssertThunderbirdLocationAsync(thunderbirdName, location);
         }
 
+        public async Task TransferSingleCharacterAsync(string fromLocation, string toLocation)
+        {
+            var transferButton = Page.GetByTestId($"transfer-{Slugify(fromLocation)}");
+            await transferButton.WaitForAsync();
+            await Assertions.Expect(transferButton).ToBeEnabledAsync();
+            await transferButton.ClickAsync();
+
+            var fromDropdown = Page.Locator("#transfer-destination");
+            await fromDropdown.SelectOptionAsync(new SelectOptionValue { Label = toLocation });
+
+            var confirmButton = Page.GetByTestId("confirm-transfer");
+            await confirmButton.WaitForAsync();
+            await Assertions.Expect(confirmButton).ToBeEnabledAsync();
+            await confirmButton.ClickAsync();
+        }
+
         public async Task AssertPageDisplayedAsync()
         {
             await Assertions.Expect(
@@ -58,6 +74,26 @@ namespace ThunderbirdsBoardGameEngine.PlaywrightTests.Pages
 
             await Assertions.Expect(locationCell)
                 .ToHaveTextAsync(expectedLocation);
+        }
+
+        public async Task AssertCharacterLocationAsync(string characterName, string thunderbirdCode)
+        {
+            var row = GetMachineRow(thunderbirdCode);
+            var locationCell = row.GetByRole(AriaRole.Cell).Nth(1);
+            await Assertions.Expect(locationCell)
+                .ToContainTextAsync(characterName);
+        }
+
+        public async Task AssertTransferDisabledAsync(string thunderbirdName)
+        {
+            var transferButton = Page.GetByTestId($"transfer-{Slugify(thunderbirdName)}");
+            await Assertions.Expect(transferButton).ToBeDisabledAsync();
+        }
+
+        public async Task AssertMoveDisabledAsync(string thunderbirdName)
+        {
+            var moveButton = Page.GetByTestId($"move-{Slugify(thunderbirdName)}");
+            await Assertions.Expect(moveButton).ToBeDisabledAsync();
         }
 
         private static string Slugify(string input)

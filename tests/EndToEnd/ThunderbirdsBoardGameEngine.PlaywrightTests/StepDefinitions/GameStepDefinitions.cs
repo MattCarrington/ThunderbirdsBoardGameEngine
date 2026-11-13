@@ -66,6 +66,12 @@ namespace ThunderbirdsBoardGameEngine.PlaywrightTests.StepDefinitions
             await _gameDashboardPage.MoveThunderbirdAsync(thunderbird, location);
         }
 
+        [When("the player transfers {string} from {string} to {string}")]
+        public async Task WhenThePlayerTransfersFromTo(string character, string currentLocation, string destination)
+        {
+            await _gameDashboardPage.TransferSingleCharacterAsync(currentLocation, destination);
+        }
+
         [Then("the game dashboard should be displayed")]
         public async Task ThenTheGameDashboardShouldBeDisplayed()
         {
@@ -78,5 +84,22 @@ namespace ThunderbirdsBoardGameEngine.PlaywrightTests.StepDefinitions
             await _gameDashboardPage.AssertThunderbirdLocationAsync(thunderbird, location);
         }
 
+        [Then("{string} should be inside {string}")]
+        public async Task ThenShouldBeInside(string character, string thunderbird)
+        {
+            await _gameDashboardPage.AssertCharacterLocationAsync(character, thunderbird);
+        }
+
+        [Then("{string} cannot move because it has no occupants")]
+        public async Task ThenCannotMoveBecauseItHasNoOccupants(string thunderbird)
+        {
+            await _gameDashboardPage.AssertMoveDisabledAsync(thunderbird);
+        }
+
+        [Then("{string} cannot transfer as it has no occupants")]
+        public async Task ThenCannotTransferAsItHasNoOccupants(string thunderbird)
+        {
+            await _gameDashboardPage.AssertTransferDisabledAsync(thunderbird);
+        }
     }
 }
