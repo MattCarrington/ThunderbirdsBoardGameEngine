@@ -34,15 +34,15 @@ namespace ThunderbirdsBoardGameEngine.PlaywrightTests.Pages
             await AssertThunderbirdLocationAsync(thunderbirdName, location);
         }
 
-        public async Task TransferSingleCharacterAsync(string fromLocation, string toLocation)
+        public async Task TransferSingleCharacterAsync(string sourceMachineName, string destinationMachineName)
         {
-            var transferButton = Page.GetByTestId($"transfer-{Slugify(fromLocation)}");
+            var transferButton = Page.GetByTestId($"transfer-{Slugify(sourceMachineName)}");
             await transferButton.WaitForAsync();
             await Assertions.Expect(transferButton).ToBeEnabledAsync();
             await transferButton.ClickAsync();
 
-            var fromDropdown = Page.Locator("#transfer-destination");
-            await fromDropdown.SelectOptionAsync(new SelectOptionValue { Label = toLocation });
+            var destinationDropdown = Page.Locator("#transfer-destination");
+            await destinationDropdown.SelectOptionAsync(new SelectOptionValue { Label = destinationMachineName });
 
             var confirmButton = Page.GetByTestId("confirm-transfer");
             await confirmButton.WaitForAsync();

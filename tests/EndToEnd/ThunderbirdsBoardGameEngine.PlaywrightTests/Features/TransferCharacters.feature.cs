@@ -134,15 +134,15 @@ namespace ThunderbirdsBoardGameEngine.PlaywrightTests.Features
             await this.TestTearDownAsync();
         }
         
-        [global::Xunit.FactAttribute(DisplayName="A commited transfer updates the game dashboard")]
+        [global::Xunit.FactAttribute(DisplayName="A committed transfer updates the game dashboard")]
         [global::Xunit.TraitAttribute("FeatureTitle", "TransferCharacters")]
-        [global::Xunit.TraitAttribute("Description", "A commited transfer updates the game dashboard")]
-        public async global::System.Threading.Tasks.Task ACommitedTransferUpdatesTheGameDashboard()
+        [global::Xunit.TraitAttribute("Description", "A committed transfer updates the game dashboard")]
+        public async global::System.Threading.Tasks.Task ACommittedTransferUpdatesTheGameDashboard()
         {
             string[] tagsOfScenario = ((string[])(null));
             global::System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new global::System.Collections.Specialized.OrderedDictionary();
             string pickleIndex = "0";
-            global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("A commited transfer updates the game dashboard", null, tagsOfScenario, argumentsOfScenario, featureTags, pickleIndex);
+            global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("A committed transfer updates the game dashboard", null, tagsOfScenario, argumentsOfScenario, featureTags, pickleIndex);
             string[] tagsOfRule = ((string[])(null));
             global::Reqnroll.RuleInfo ruleInfo = null;
 #line 7
