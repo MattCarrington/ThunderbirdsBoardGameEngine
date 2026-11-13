@@ -165,7 +165,7 @@ this.ScenarioInitialize(scenarioInfo, ruleInfo);
  await testRunner.WhenAsync("the player transfers the single occupant from \"Thunderbird 4\" to \"Thunderbird 2\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
 #line 11
- await testRunner.ThenAsync("\"Gordon\" should be inside \"Thunderbird 2\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+ await testRunner.ThenAsync("\"Gordon\" should be aboard \"Thunderbird 2\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
 #line 12
  await testRunner.AndAsync("\"Thunderbird 4\" cannot move because it has no occupants", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
@@ -211,7 +211,7 @@ this.ScenarioInitialize(scenarioInfo, ruleInfo);
  await testRunner.AndAsync("reloads the dashboard", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
 #line 20
- await testRunner.ThenAsync("\"Alan\" should be inside \"Thunderbird 2\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
+ await testRunner.ThenAsync("\"Alan\" should be aboard \"Thunderbird 2\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
 #line 21
  await testRunner.AndAsync("\"Thunderbird 3\" cannot move because it has no occupants", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");

@@ -76,7 +76,7 @@ namespace ThunderbirdsBoardGameEngine.PlaywrightTests.Pages
                 .ToHaveTextAsync(expectedLocation);
         }
 
-        public async Task AssertCharacterLocationAsync(string characterName, string thunderbirdCode)
+        public async Task AssertCharacterAboardAsync(string characterName, string thunderbirdCode)
         {
             var row = GetMachineRow(thunderbirdCode);
             var locationCell = row.GetByRole(AriaRole.Cell).Nth(1);

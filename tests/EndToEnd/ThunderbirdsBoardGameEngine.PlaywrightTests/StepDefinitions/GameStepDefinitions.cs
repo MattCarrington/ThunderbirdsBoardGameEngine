@@ -84,10 +84,10 @@ namespace ThunderbirdsBoardGameEngine.PlaywrightTests.StepDefinitions
             await _gameDashboardPage.AssertThunderbirdLocationAsync(thunderbird, location);
         }
 
-        [Then("{string} should be inside {string}")]
-        public async Task ThenShouldBeInside(string character, string thunderbird)
+        [Then("{string} should be aboard {string}")]
+        public async Task ThenShouldBeAboard(string character, string thunderbird)
         {
-            await _gameDashboardPage.AssertCharacterLocationAsync(character, thunderbird);
+            await _gameDashboardPage.AssertCharacterAboardAsync(character, thunderbird);
         }
 
         [Then("{string} cannot move because it has no occupants")]
