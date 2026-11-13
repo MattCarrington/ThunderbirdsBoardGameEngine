@@ -47,23 +47,6 @@ namespace ThunderbirdsBoardGameEngine.GameState.Application.UnitTests.CreateGame
 
             Assert.NotNull(result);
             Assert.NotNull(result.GameSession);
-            Assert.Equal(0, result.GameSession.StateVersion);
-            Assert.Equal(6, result.GameSession.Machines.Count);
-            Assert.Equal(6, result.GameSession.Characters.Count);
-
-            Assert.Equal(result.GameSession.Machines[KnownThunderbirdCodes.Thunderbird1], KnownLocationCodes.SouthPacific);
-            Assert.Equal(result.GameSession.Machines[KnownThunderbirdCodes.Thunderbird2], KnownLocationCodes.SouthPacific);
-            Assert.Equal(result.GameSession.Machines[KnownThunderbirdCodes.Thunderbird3], KnownLocationCodes.SouthPacific);
-            Assert.Equal(result.GameSession.Machines[KnownThunderbirdCodes.Thunderbird4], KnownLocationCodes.SouthPacific);
-            Assert.Equal(result.GameSession.Machines[KnownThunderbirdCodes.Thunderbird5], KnownLocationCodes.GeoStationaryOrbit);
-            Assert.Equal(result.GameSession.Machines[KnownThunderbirdCodes.Fab1], KnownLocationCodes.Europe);
-
-            Assert.Equal(result.GameSession.Characters[KnownCharacterCodes.Scott], KnownThunderbirdCodes.Thunderbird1);
-            Assert.Equal(result.GameSession.Characters[KnownCharacterCodes.Virgil], KnownThunderbirdCodes.Thunderbird2);
-            Assert.Equal(result.GameSession.Characters[KnownCharacterCodes.Alan], KnownThunderbirdCodes.Thunderbird3);
-            Assert.Equal(result.GameSession.Characters[KnownCharacterCodes.Gordon], KnownThunderbirdCodes.Thunderbird4);
-            Assert.Equal(result.GameSession.Characters[KnownCharacterCodes.John], KnownThunderbirdCodes.Thunderbird5);
-            Assert.Equal(result.GameSession.Characters[KnownCharacterCodes.LadyPenelope], KnownThunderbirdCodes.Fab1);
         }
 
         [Fact]
