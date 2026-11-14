@@ -81,12 +81,18 @@ public partial class GameDashboardPage
         }
         finally
         {
-            _isLoading = false;
+            if (IsCurrentDashboard(generation, requestedGameId))
+            {
+                _isLoading = false;
+            }
         }
     }
 
     private async Task BeginMoveAsync(ThunderbirdMachinesDashboardViewModel machine)
     {
+        var generation = _dashboardGeneration;
+        var requestedGameId = GameId;
+
         _selectedMachine = machine;
         _movementDestinations = [];
         _movementError = null;
@@ -94,17 +100,32 @@ public partial class GameDashboardPage
 
         try
         {
-            _movementDestinations = await MovementClientService.GetAccessibleLocationsAsync(machine.ThunderbirdCode);
+            var movementDestinations = await MovementClientService.GetAccessibleLocationsAsync(machine.ThunderbirdCode);
+
+            if (!IsCurrentDashboard(generation, requestedGameId))
+            {
+                return;
+            }
+
+            _movementDestinations = movementDestinations;
         }
         catch (Exception exception)
         {
+            if (!IsCurrentDashboard(generation, requestedGameId))
+            {
+                return;
+            }
+
             _movementError = "Movement destinations could not be loaded.";
 
             Logger.LogError(exception, "Unable to load movement destinations.");
         }
         finally
         {
-            _isLoadingMovementDestinations = false;
+            if (IsCurrentDashboard(generation, requestedGameId))
+            {
+                _isLoadingMovementDestinations = false;
+            }
         }
     }
 
@@ -115,15 +136,23 @@ public partial class GameDashboardPage
             return;
         }
 
+        var generation = _dashboardGeneration;
+        var requestedGameId = GameId;
+
         _movementError = null;
         _isMoving = true;
 
         try
         {
             var result = await GameService.MoveThunderbirdAsync(
-                GameId,
+                requestedGameId,
                 _selectedMachine.ThunderbirdCode,
                 destinationCode);
+
+            if (!IsCurrentDashboard(generation, requestedGameId))
+            {
+                return;
+            }
 
             switch (result.Outcome)
             {
@@ -149,6 +178,11 @@ public partial class GameDashboardPage
         }
         catch (Exception exception)
         {
+            if (!IsCurrentDashboard(generation, requestedGameId))
+            {
+                return;
+            }
+
             _movementError = "The move could not be completed. Please try again.";
 
             Logger.LogError(
@@ -157,7 +191,10 @@ public partial class GameDashboardPage
         }
         finally
         {
-            _isMoving = false;
+            if (IsCurrentDashboard(generation, requestedGameId))
+            {
+                _isMoving = false;
+            }
         }
     }
 
@@ -249,7 +286,7 @@ public partial class GameDashboardPage
         {
             if (IsCurrentDashboard(generation, requestedGameId))
             {
-                _isLoading = false;
+                _isTransferring = false;
             }
         }
     }

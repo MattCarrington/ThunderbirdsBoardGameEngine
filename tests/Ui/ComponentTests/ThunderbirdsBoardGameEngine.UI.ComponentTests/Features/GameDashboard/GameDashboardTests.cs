@@ -867,5 +867,226 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Features.GameDashboard
                 Assert.Single(cut.FindComponents<TransferCharactersDialog>());
             });
         }
+
+        [Fact]
+        public async Task ObsoleteMovementResultDoesNotReplaceNewGame()
+        {
+            // Arrange
+            var oldGameId = Guid.NewGuid();
+            var newGameId = Guid.NewGuid();
+
+            var oldGame = GameDashboardViewModelFactory.CreateDashboard(
+                gameId: oldGameId,
+                machines: [
+                    GameDashboardViewModelFactory.CreateMachine(
+                        thunderbirdCode: "thunderbird-1",
+                        locationCode: "south-pacific",
+                        locationDisplayName: "South Pacific",
+                        occupants: [
+                            GameDashboardViewModelFactory.CreateOccupant(characterCode: "scott", characterDisplayName: "Scott")
+                        ])
+                ]);
+
+            var newGame = GameDashboardViewModelFactory.CreateDashboard(
+                gameId: newGameId,
+                machines: [
+                    GameDashboardViewModelFactory.CreateMachine(
+                        thunderbirdCode: "thunderbird-2",
+                        locationCode: "europe",
+                        locationDisplayName: "Europe",
+                        occupants: [
+                            GameDashboardViewModelFactory.CreateOccupant(characterCode: "virgil", characterDisplayName: "Virgil")
+                        ])
+                ]);
+
+            var oldMovedGame = GameDashboardViewModelFactory.CreateDashboard(
+                gameId: oldGameId,
+                machines: [
+                    GameDashboardViewModelFactory.CreateMachine(
+                        thunderbirdCode: "thunderbird-1",
+                        locationCode: "australia",
+                        locationDisplayName: "Australia",
+                        occupants: [
+                            GameDashboardViewModelFactory.CreateOccupant(characterCode: "scott", characterDisplayName: "Scott")
+                        ])
+                ]);
+
+            var oldMoveCompletion =
+                new TaskCompletionSource<ThunderbirdMovementResult>(
+                    TaskCreationOptions.RunContinuationsAsynchronously);
+
+            var context = new GameDashboardPageTestContext(this);
+            context.GameService
+                .GetGameAsync(oldGameId)
+                .Returns(oldGame);
+            context.GameService
+                .GetGameAsync(newGameId)
+                .Returns(newGame);
+            context.GameService
+                .MoveThunderbirdAsync(
+                    oldGameId,
+                    Arg.Any<string>(),
+                    Arg.Any<string>())
+                .Returns(oldMoveCompletion.Task);
+
+            context.MovementClientService
+                .GetAccessibleLocationsAsync("thunderbird-1")
+                .Returns(
+                [
+                    new("south-pacific", "South Pacific"),
+                    new("europe", "Europe"),
+                    new("australia", "Australia")
+                ]);
+
+            DialogJsInterop.Register(this);
+
+            var cut = Render<GameDashboardPage>(parameters => parameters
+                .Add(page => page.GameId, oldGameId));
+
+            cut.WaitForElement("[data-testid='move-thunderbird-1']")
+                .Click();
+
+            var dialog = cut.FindComponent<MoveThunderbirdDialog>();
+            dialog.Find("#move-destination").Change("europe");
+
+            // Start, but deliberately do not await, the old move.
+            var obsoleteMoveTask = dialog.Find("[data-testid='confirm-move']")
+                .ClickAsync(new MouseEventArgs());
+
+            // Ensure the old operation has reached the service boundary.
+            await context.GameService.Received(1)
+                .MoveThunderbirdAsync(
+                    oldGameId,
+                    Arg.Any<string>(),
+                    Arg.Any<string>());
+
+            // Load another game into the same component instance.
+            cut.Render(parameters => parameters
+                .Add(page => page.GameId, newGameId));
+
+            cut.WaitForAssertion(() =>
+            {
+                var row = cut.Find("[data-testid='machine-thunderbird-2']");
+                Assert.Contains("Europe", row.TextContent);
+                Assert.DoesNotContain("South Pacific", row.TextContent);
+            });
+
+            // Allow the previous game's request to complete.
+            oldMoveCompletion.SetResult(
+                new ThunderbirdMovementResult(
+                    ThunderbirdMovementOutcome.Success,
+                    oldMovedGame));
+
+            await obsoleteMoveTask;
+
+            cut.WaitForAssertion(() =>
+            {
+                var row = cut.Find("[data-testid='machine-thunderbird-2']");
+                Assert.Contains("Europe", row.TextContent);
+                Assert.DoesNotContain("South Pacific", row.TextContent);
+            });
+        }
+
+        [Fact]
+        public async Task ObsoleteDestinationResultDoesNotOverwriteCurrentMovementDialog()
+        {
+            // Arrange
+            var oldGameId = Guid.NewGuid();
+            var newGameId = Guid.NewGuid();
+
+            var oldGame = GameDashboardViewModelFactory.CreateDashboard(
+                gameId: oldGameId,
+                machines: [
+                    GameDashboardViewModelFactory.CreateMachine(
+                        thunderbirdCode: "thunderbird-1",
+                        locationCode: "south-pacific",
+                        locationDisplayName: "South Pacific",
+                        occupants: [
+                            GameDashboardViewModelFactory.CreateOccupant(characterCode: "scott", characterDisplayName: "Scott")
+                        ])
+                ]);
+
+            var newGame = GameDashboardViewModelFactory.CreateDashboard(
+                gameId: newGameId,
+                machines: [
+                    GameDashboardViewModelFactory.CreateMachine(
+                        thunderbirdCode: "thunderbird-3",
+                        locationCode: "the-sun",
+                        locationDisplayName: "The Sun",
+                        occupants: [
+                            GameDashboardViewModelFactory.CreateOccupant(characterCode: "alan", characterDisplayName: "Alan")
+                        ])
+                ]);
+
+            var oldDestinationsCompletion =
+                new TaskCompletionSource<IReadOnlyList<SelectionOptionViewModel>>(
+                    TaskCreationOptions.RunContinuationsAsynchronously);
+
+            var context = new GameDashboardPageTestContext(this);
+            context.GameService
+                .GetGameAsync(oldGameId)
+                .Returns(oldGame);
+            context.GameService
+                .GetGameAsync(newGameId)
+                .Returns(newGame);
+            context.MovementClientService
+                .GetAccessibleLocationsAsync("thunderbird-1")
+                .Returns(oldDestinationsCompletion.Task);
+            context.MovementClientService
+                .GetAccessibleLocationsAsync("thunderbird-3")
+                .Returns(
+                [
+                    new("the-sun", "The Sun"),
+                    new("mars", "Mars")
+                ]);
+
+            DialogJsInterop.Register(this);
+
+            var cut = Render<GameDashboardPage>(parameters => parameters
+                .Add(page => page.GameId, oldGameId));
+
+            // Start, but deliberately do not await, the old destination retrieval.
+            var obsoleteDestinationTask = cut.WaitForElement("[data-testid='move-thunderbird-1']")
+                .ClickAsync(new MouseEventArgs());
+
+            // Ensure the old operation has reached the service boundary.
+            await context.MovementClientService.Received(1)
+                .GetAccessibleLocationsAsync("thunderbird-1");
+
+            // Load another game into the same component instance.
+            cut.Render(parameters => parameters
+                .Add(page => page.GameId, newGameId));
+
+            var currentDestinationTask = cut.Find("[data-testid='move-thunderbird-3']")
+                .ClickAsync(new MouseEventArgs());
+
+            await currentDestinationTask;
+
+            var currentDialog = cut.FindComponent<MoveThunderbirdDialog>();
+
+            Assert.Contains("Mars", currentDialog.Markup);
+
+            // Allow the previous game's request to complete.
+            oldDestinationsCompletion.SetResult(
+            [
+                new("south-pacific", "South Pacific"),
+                new("europe", "Europe")
+            ]);
+
+            await obsoleteDestinationTask;
+
+            cut.WaitForAssertion(() =>
+            {
+                var dialog = cut.FindComponent<MoveThunderbirdDialog>();
+
+                var optionValues = dialog.FindAll("#move-destination option")
+                    .Select(option => option.GetAttribute("value"))
+                    .ToArray();
+
+                Assert.Contains("mars", optionValues);
+                Assert.DoesNotContain("europe", optionValues);
+                Assert.DoesNotContain("south-pacific", optionValues);
+            });
+        }
     }
 }
