@@ -43,6 +43,7 @@ public partial class GameDashboardPage
     private async Task LoadGameAsync()
     {
         ResetMovementState();
+        ResetTransferState();
 
         _game = null;
         _notFound = false;
@@ -220,11 +221,16 @@ public partial class GameDashboardPage
         }
     }
 
-    private void CancelTransfer()
+    private void ResetTransferState()
     {
         _transferSource = null;
         _transferDestinations = [];
         _transferError = null;
         _isTransferring = false;
+    }
+
+    private void CancelTransfer()
+    {
+        ResetTransferState();
     }
 }
