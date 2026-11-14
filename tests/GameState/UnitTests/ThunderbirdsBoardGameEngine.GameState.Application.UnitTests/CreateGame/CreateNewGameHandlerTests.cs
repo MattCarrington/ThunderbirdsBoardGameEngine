@@ -206,5 +206,81 @@ namespace ThunderbirdsBoardGameEngine.GameState.Application.UnitTests.CreateGame
             await Assert.ThrowsAsync<CharacterNotFoundException>(
                 () => handler.Handle(new CreateNewGameCommand(activeTurnOrder), CancellationToken.None));
         }
+
+        [Fact]
+        public async Task Handle_ShouldThrowInvalidTurnOrderException_WhenDuplicateCharactersInTurnOrder()
+        {
+            // Arrange
+            var validator = Substitute.For<IGameStateIntegrityValidator>();
+
+            var repository = Substitute.For<IGameRepository>();
+
+            var existenceLookup = Substitute.For<ICharacterExistenceLookup>();
+            existenceLookup.Exists(Arg.Any<CharacterCode>()).Returns(true);
+
+            var handler = new CreateNewGameHandler(
+                new StandardGameSetupFactory(),
+                validator,
+                repository,
+                existenceLookup);
+
+            var activeTurnOrder = new List<CharacterCode>
+            {
+                new("character-1"),
+                new("character-1"), // Duplicate character
+            };
+
+            // Act & Assert
+            await Assert.ThrowsAsync<InvalidTurnOrderException>(
+                () => handler.Handle(new CreateNewGameCommand(activeTurnOrder), CancellationToken.None));
+        }
+
+        [Fact]
+        public async Task Handle_ShouldThrowInvalidTurnOrderException_WhenTurnOrderEmpty()
+        {
+            // Arrange
+            var validator = Substitute.For<IGameStateIntegrityValidator>();
+
+            var repository = Substitute.For<IGameRepository>();
+
+            var existenceLookup = Substitute.For<ICharacterExistenceLookup>();
+            existenceLookup.Exists(Arg.Any<CharacterCode>()).Returns(true);
+
+            var handler = new CreateNewGameHandler(
+                new StandardGameSetupFactory(),
+                validator,
+                repository,
+                existenceLookup);
+
+            var activeTurnOrder = new List<CharacterCode>(); // Empty turn order
+
+            // Act & Assert
+            await Assert.ThrowsAsync<InvalidTurnOrderException>(
+                () => handler.Handle(new CreateNewGameCommand(activeTurnOrder), CancellationToken.None));
+        }
+
+        [Fact]
+        public async Task Handle_ShouldThrowArgumentNullException_WhenTurnOrderNull()
+        {
+            // Arrange
+            var validator = Substitute.For<IGameStateIntegrityValidator>();
+
+            var repository = Substitute.For<IGameRepository>();
+
+            var existenceLookup = Substitute.For<ICharacterExistenceLookup>();
+            existenceLookup.Exists(Arg.Any<CharacterCode>()).Returns(true);
+
+            var handler = new CreateNewGameHandler(
+                new StandardGameSetupFactory(),
+                validator,
+                repository,
+                existenceLookup);
+
+            List<CharacterCode> activeTurnOrder = null!; // Null turn order
+
+            // Act & Assert
+            await Assert.ThrowsAsync<ArgumentNullException>(
+                () => handler.Handle(new CreateNewGameCommand(activeTurnOrder), CancellationToken.None));
+        }
     }
 }

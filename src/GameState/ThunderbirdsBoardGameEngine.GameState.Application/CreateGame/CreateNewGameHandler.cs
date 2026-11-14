@@ -26,7 +26,9 @@ namespace ThunderbirdsBoardGameEngine.GameState.Application.CreateGame
 
         public async Task<CreateNewGameResult> Handle(CreateNewGameCommand request, CancellationToken cancellationToken)
         {
-            if (request.TurnOrder.Count == 1)
+            ArgumentNullException.ThrowIfNull(request.TurnOrder, nameof(request.TurnOrder));
+
+            if (request.TurnOrder.Count < 2)
             {
                 throw new InvalidTurnOrderException("A game must have at least 2 characters.");
             }
@@ -34,6 +36,11 @@ namespace ThunderbirdsBoardGameEngine.GameState.Application.CreateGame
             if (request.TurnOrder.Count > 4)
             {
                 throw new InvalidTurnOrderException($"A game can have a maximum of 4 characters, but received {request.TurnOrder.Count}.");
+            }
+
+            if (request.TurnOrder.Count != request.TurnOrder.Distinct().Count())
+            {
+                throw new InvalidTurnOrderException("The turn order contains duplicate characters.");
             }
 
             foreach (var character in request.TurnOrder)
