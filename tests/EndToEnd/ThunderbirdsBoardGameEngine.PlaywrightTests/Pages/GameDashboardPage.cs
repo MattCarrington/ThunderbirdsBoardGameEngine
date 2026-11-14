@@ -34,7 +34,7 @@ namespace ThunderbirdsBoardGameEngine.PlaywrightTests.Pages
             await AssertThunderbirdLocationAsync(thunderbirdName, location);
         }
 
-        public async Task TransferSingleCharacterAsync(string sourceMachineName, string destinationMachineName)
+        public async Task TransferSingleCharacterAsync(string sourceMachineName, string destinationMachineName, string characterName)
         {
             var transferButton = Page.GetByTestId($"transfer-{Slugify(sourceMachineName)}");
             await transferButton.WaitForAsync();
@@ -48,6 +48,7 @@ namespace ThunderbirdsBoardGameEngine.PlaywrightTests.Pages
             await confirmButton.WaitForAsync();
             await Assertions.Expect(confirmButton).ToBeEnabledAsync();
             await confirmButton.ClickAsync();
+            await AssertCharacterAboardAsync(characterName, destinationMachineName);
         }
 
         public async Task AssertPageDisplayedAsync()

@@ -66,10 +66,10 @@ namespace ThunderbirdsBoardGameEngine.PlaywrightTests.StepDefinitions
             await _gameDashboardPage.MoveThunderbirdAsync(thunderbird, location);
         }
 
-        [When("the player transfers the single occupant from {string} to {string}")]
-        public async Task WhenThePlayerTransfersTheSingleOccupantFromTo(string currentLocation, string destination)
+        [When("the player transfers the single occupant {string} from {string} to {string}")]
+        public async Task WhenThePlayerTransfersTheSingleOccupantFromTo(string characterName, string currentLocation, string destination)
         {
-            await _gameDashboardPage.TransferSingleCharacterAsync(currentLocation, destination);
+            await _gameDashboardPage.TransferSingleCharacterAsync(currentLocation, destination, characterName);
         }
 
         [Then("the game dashboard should be displayed")]

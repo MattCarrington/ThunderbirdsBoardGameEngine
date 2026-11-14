@@ -162,7 +162,8 @@ this.ScenarioInitialize(scenarioInfo, ruleInfo);
  await testRunner.AndAsync("the player has opened its dashboard", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
 #line 10
- await testRunner.WhenAsync("the player transfers the single occupant from \"Thunderbird 4\" to \"Thunderbird 2\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+ await testRunner.WhenAsync("the player transfers the single occupant \"Gordon\" from \"Thunderbird 4\" to \"Thunde" +
+                        "rbird 2\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
 #line 11
  await testRunner.ThenAsync("\"Gordon\" should be aboard \"Thunderbird 2\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
@@ -205,7 +206,8 @@ this.ScenarioInitialize(scenarioInfo, ruleInfo);
  await testRunner.AndAsync("the player has opened its dashboard", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
 #line 18
- await testRunner.WhenAsync("the player transfers the single occupant from \"Thunderbird 3\" to \"Thunderbird 2\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+ await testRunner.WhenAsync("the player transfers the single occupant \"Alan\" from \"Thunderbird 3\" to \"Thunderb" +
+                        "ird 2\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
 #line 19
  await testRunner.AndAsync("reloads the dashboard", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
