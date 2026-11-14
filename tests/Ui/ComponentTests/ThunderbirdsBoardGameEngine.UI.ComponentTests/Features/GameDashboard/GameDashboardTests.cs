@@ -691,5 +691,181 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Features.GameDashboard
                 Assert.Contains("Empty", destinationRow.TextContent);
             });
         }
+
+        [Fact]
+        public async Task ChangingGameIdWhileTheTransferDialogIsOpenLoadsTheNewGameAndClosesTheDialog()
+        {
+            // Arrange
+            var gameId1 = Guid.NewGuid();
+            var gameId2 = Guid.NewGuid();
+
+            var occupants = new List<OccupantsDashboardViewModel>
+            {
+                GameDashboardViewModelFactory.CreateOccupant()
+            };
+
+            var originalThunderbirds = new List<ThunderbirdMachinesDashboardViewModel>
+            {
+                GameDashboardViewModelFactory.CreateMachine(thunderbirdCode: "thunderbird-1", occupants: occupants),
+                GameDashboardViewModelFactory.CreateMachine(thunderbirdCode: "thunderbird-2")
+            };
+
+            var dashboard1 = GameDashboardViewModelFactory.CreateDashboard(gameId: gameId1, machines: originalThunderbirds);
+            var dashboard2 = GameDashboardViewModelFactory.CreateDashboard(gameId: gameId2, machines: originalThunderbirds);
+
+            var context = new GameDashboardPageTestContext(this);
+            context.GameService
+                .GetGameAsync(gameId1)
+                .Returns(dashboard1);
+            context.GameService
+                .GetGameAsync(gameId2)
+                .Returns(dashboard2);
+
+            DialogJsInterop.Register(this);
+
+            var cut = Render<GameDashboardPage>(parameters => parameters
+                .Add(p => p.GameId, gameId1));
+
+            // Act
+            cut.WaitForElement("[data-testid='transfer-thunderbird-1']")
+                .Click();
+
+            cut.Render(parameters => parameters
+                .Add(p => p.GameId, gameId2));
+
+            // Assert
+            cut.WaitForAssertion(() =>
+            {
+                Assert.Empty(cut.FindComponents<TransferCharactersDialog>());
+
+                var sourceRow = cut.Find("[data-testid='machine-thunderbird-1']");
+
+                Assert.Contains("Scott", sourceRow.TextContent);
+            });
+        }
+
+        [Fact]
+        public async Task ObsoleteTransferResultDoesNotReplaceNewGameOrCloseItsDialog()
+        {
+            // Arrange
+            var oldGameId = Guid.NewGuid();
+            var newGameId = Guid.NewGuid();
+
+            var oldGame = GameDashboardViewModelFactory.CreateDashboard(
+                gameId: oldGameId,
+                machines: [
+                    GameDashboardViewModelFactory.CreateMachine(
+                        thunderbirdCode: "thunderbird-1",
+                        occupants: [
+                            GameDashboardViewModelFactory.CreateOccupant(characterCode: "scott", characterDisplayName: "Scott")
+                        ]),
+                    GameDashboardViewModelFactory.CreateMachine(
+                        thunderbirdCode: "thunderbird-2")
+                ]);
+
+            var newGame = GameDashboardViewModelFactory.CreateDashboard(
+                gameId: oldGameId,
+                machines: [
+                    GameDashboardViewModelFactory.CreateMachine(
+                        thunderbirdCode: "thunderbird-3",
+                        occupants: [
+                            GameDashboardViewModelFactory.CreateOccupant(characterCode: "alan", characterDisplayName: "Alan"),
+                            GameDashboardViewModelFactory.CreateOccupant(characterCode: "virgil", characterDisplayName: "Virgil"),
+                            GameDashboardViewModelFactory.CreateOccupant(characterCode: "gordon", characterDisplayName: "Gordon")
+                        ]),
+                    GameDashboardViewModelFactory.CreateMachine(
+                        thunderbirdCode: "thunderbird-4")
+                ]);
+
+            var oldTransferredGame = GameDashboardViewModelFactory.CreateDashboard(
+                gameId: oldGameId,
+                machines: [
+                    GameDashboardViewModelFactory.CreateMachine(
+                        thunderbirdCode: "thunderbird-1"),
+                    GameDashboardViewModelFactory.CreateMachine(
+                        thunderbirdCode: "thunderbird-2",
+                        occupants: [
+                            GameDashboardViewModelFactory.CreateOccupant(characterCode: "scott")
+                        ])
+                ]);
+
+            var oldTransferCompletion =
+                new TaskCompletionSource<CharacterTransferResult>(
+                    TaskCreationOptions.RunContinuationsAsynchronously);
+
+            var context = new GameDashboardPageTestContext(this);
+
+            context.GameService
+                .GetGameAsync(oldGameId)
+                .Returns(oldGame);
+
+            context.GameService
+                .GetGameAsync(newGameId)
+                .Returns(newGame);
+
+            context.GameService
+                .TransferCharactersAsync(
+                    oldGameId,
+                    Arg.Any<CharacterTransferSelection>())
+                .Returns(oldTransferCompletion.Task);
+
+            DialogJsInterop.Register(this);
+
+            var cut = Render<GameDashboardPage>(parameters => parameters
+                .Add(page => page.GameId, oldGameId));
+
+            cut.WaitForElement("[data-testid='transfer-thunderbird-1']")
+                .Click();
+
+            var oldDialog = cut.FindComponent<TransferCharactersDialog>();
+
+            // Start, but deliberately do not await, the old transfer.
+            var obsoleteTransferTask = oldDialog
+                .Find("[data-testid='confirm-transfer']")
+                .ClickAsync(new MouseEventArgs());
+
+            // Ensure the old operation has reached the service boundary.
+            await context.GameService.Received(1)
+                .TransferCharactersAsync(
+                    oldGameId,
+                    Arg.Any<CharacterTransferSelection>());
+
+            // Load another game into the same component instance.
+            cut.Render(parameters => parameters
+                .Add(page => page.GameId, newGameId));
+
+            cut.WaitForAssertion(() =>
+            {
+                var row = cut.Find("[data-testid='machine-thunderbird-3']");
+
+                Assert.Contains("Virgil", row.TextContent);
+                Assert.DoesNotContain("Scott", row.TextContent);
+            });
+
+            // Open a dialog belonging to the new game. The obsolete result must not close this dialog.
+            cut.Find("[data-testid='transfer-thunderbird-3']")
+                .Click();
+
+            Assert.Single(cut.FindComponents<TransferCharactersDialog>());
+
+            // Allow the previous game's request to complete.
+            oldTransferCompletion.SetResult(
+                new CharacterTransferResult(
+                    CharacterTransferOutcome.Success,
+                    oldTransferredGame));
+
+            await obsoleteTransferTask;
+
+            // Assert
+            cut.WaitForAssertion(() =>
+            {
+                var row = cut.Find("[data-testid='machine-thunderbird-3']");
+
+                Assert.Contains("Virgil", row.TextContent);
+                Assert.DoesNotContain("Scott", row.TextContent);
+
+                Assert.Single(cut.FindComponents<TransferCharactersDialog>());
+            });
+        }
     }
 }

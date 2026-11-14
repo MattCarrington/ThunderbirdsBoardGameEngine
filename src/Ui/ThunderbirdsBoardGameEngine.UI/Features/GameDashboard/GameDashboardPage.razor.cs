@@ -34,6 +34,7 @@ public partial class GameDashboardPage
     private IReadOnlyList<ThunderbirdMachinesDashboardViewModel> _transferDestinations = [];
     private bool _isTransferring;
     private string? _transferError;
+    private long _dashboardGeneration;
 
     protected override Task OnParametersSetAsync()
     {
@@ -42,6 +43,9 @@ public partial class GameDashboardPage
 
     private async Task LoadGameAsync()
     {
+        var generation = ++_dashboardGeneration;
+        var requestedGameId = GameId;
+
         ResetMovementState();
         ResetTransferState();
 
@@ -52,11 +56,23 @@ public partial class GameDashboardPage
 
         try
         {
-            _game = await GameService.GetGameAsync(GameId);
+            var game = await GameService.GetGameAsync(requestedGameId);
+
+            if (!IsCurrentDashboard(generation, requestedGameId))
+            {
+                return;
+            }
+
+            _game = game;
             _notFound = _game is null;
         }
         catch (Exception exception)
         {
+            if (!IsCurrentDashboard(generation, requestedGameId))
+            {
+                return;
+            }
+
             _failed = true;
 
             Logger.LogError(
@@ -181,14 +197,22 @@ public partial class GameDashboardPage
             return;
         }
 
+        var generation = _dashboardGeneration;
+        var requestedGameId = GameId;
+
         _transferError = null;
         _isTransferring = true;
 
         try
         {
             var result = await GameService.TransferCharactersAsync(
-                GameId,
+                requestedGameId,
                 selection);
+
+            if (!IsCurrentDashboard(generation, requestedGameId))
+            {
+                return;
+            }
 
             switch (result.Outcome)
             {
@@ -210,14 +234,23 @@ public partial class GameDashboardPage
         }
         catch (Exception exception)
         {
+            if (!IsCurrentDashboard(generation, requestedGameId))
+            {
+                return;
+            }
+
             _transferError = "The character transfer could not be completed. Please try again.";
+
             Logger.LogError(
                 exception,
                 "Unable to transfer the requested character.");
         }
         finally
         {
-            _isTransferring = false;
+            if (IsCurrentDashboard(generation, requestedGameId))
+            {
+                _isLoading = false;
+            }
         }
     }
 
@@ -232,5 +265,11 @@ public partial class GameDashboardPage
     private void CancelTransfer()
     {
         ResetTransferState();
+    }
+
+    private bool IsCurrentDashboard(long generation, Guid gameId)
+    {
+        return generation == _dashboardGeneration
+            && gameId == GameId;
     }
 }
