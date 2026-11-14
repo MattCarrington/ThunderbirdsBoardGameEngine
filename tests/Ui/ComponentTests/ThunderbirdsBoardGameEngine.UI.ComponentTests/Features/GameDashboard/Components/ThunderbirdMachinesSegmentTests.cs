@@ -57,18 +57,39 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Features.GameDashboard.C
                     })));
 
             // Act
-            cut.Find("[data-testid='move-thunderbird-2']").Click();
+            cut.Find("[data-testid='move-thunderbird-1']").Click();
 
             // Assert
             Assert.NotNull(callbackParameter);
-            Assert.Equal("thunderbird-2", callbackParameter!.ThunderbirdCode);
+            Assert.Equal("thunderbird-1", callbackParameter!.ThunderbirdCode);
         }
 
         [Fact]
         public void InvokesTransferRequestedCallbackWhenTransferButtonClicked()
         {
             // Arrange
-            var machines = CreateThunderbirds();
+            var machines = new ThunderbirdMachinesDashboardViewModel[]
+            {
+                GameDashboardViewModelFactory.CreateMachine(
+                thunderbirdCode: "thunderbird-1",
+                thunderbirdDisplayName: "Thunderbird 1",
+                locationCode: "south-pacific",
+                locationDisplayName: "South Pacific",
+                occupants: [
+                    GameDashboardViewModelFactory.CreateOccupant(
+                        characterCode: "scott",
+                        characterDisplayName: "Scott"),
+                    GameDashboardViewModelFactory.CreateOccupant(
+                        characterCode: "alan",
+                        characterDisplayName: "Alan")
+                ]),
+                GameDashboardViewModelFactory.CreateMachine(
+                    thunderbirdCode: "thunderbird-2",
+                    thunderbirdDisplayName: "Thunderbird 2",
+                    locationCode: "south-pacific",
+                    locationDisplayName: "South Pacific",
+                    occupants: [])
+            };
 
             ThunderbirdMachinesDashboardViewModel? callbackParameter = null;
 
