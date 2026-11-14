@@ -17,7 +17,7 @@ namespace ThunderbirdsBoardGameEngine.UI.UnitTests.GameDashboard.Mappers
         {
             // Arrange
             var thunderbirdCode = new ThunderbirdCode("tb1");
-            var thunderbird = CreateThunderbird(thunderbirdCode.Value, "Thunderbird 1");
+            var thunderbird = CreateThunderbird(thunderbirdCode.Value, "Thunderbird 1", 3);
 
             var locationCode = new LocationCode("loc1");
             var location = CreateLocation(locationCode.Value, "Location 1");
@@ -60,6 +60,7 @@ namespace ThunderbirdsBoardGameEngine.UI.UnitTests.GameDashboard.Mappers
 
             var occupant = Assert.Single(thunderbirdMachine.Occupants);
             Assert.Equal(character.DisplayName, occupant.CharacterDisplayName);
+            Assert.Equal(thunderbird.CharacterCapacity, thunderbirdMachine.CharacterCapacity);
         }
 
         [Fact]
@@ -81,7 +82,7 @@ namespace ThunderbirdsBoardGameEngine.UI.UnitTests.GameDashboard.Mappers
             };
 
             var thunderbirdCatalog = Substitute.For<IThunderbirdDefinitionCatalog>();
-            thunderbirdCatalog.GetByCode(Arg.Any<ThunderbirdCode>()).Returns(CreateThunderbird("tb1", "Thunderbird 1"));
+            thunderbirdCatalog.GetByCode(Arg.Any<ThunderbirdCode>()).Returns(CreateThunderbird("tb1", "Thunderbird 1", 1));
 
             var locationCatalog = Substitute.For<ILocationDefinitionCatalog>();
             locationCatalog.GetByCode(Arg.Any<LocationCode>()).Returns(CreateLocation("loc1", "Location 1"));
@@ -130,8 +131,8 @@ namespace ThunderbirdsBoardGameEngine.UI.UnitTests.GameDashboard.Mappers
         public void ToViewModel_WhenMultipleThunderbirds_ShouldResolveAllLists()
         {
             // Arrange
-            var thunderbird1 = CreateThunderbird("tb1", "Thunderbird 1");
-            var thunderbird2 = CreateThunderbird("tb2", "Thunderbird 2");
+            var thunderbird1 = CreateThunderbird("tb1", "Thunderbird 1", 1);
+            var thunderbird2 = CreateThunderbird("tb2", "Thunderbird 2", 2);
 
             var location1 = CreateLocation("loc1", "Location 1");
             var location2 = CreateLocation("loc2", "Location 2");
@@ -185,14 +186,14 @@ namespace ThunderbirdsBoardGameEngine.UI.UnitTests.GameDashboard.Mappers
             Assert.Equal(2, tbMachine1.Occupants.Count);
         }
 
-        private static ReferenceThunderbirdDefinition CreateThunderbird(string code, string displayName)
+        private static ReferenceThunderbirdDefinition CreateThunderbird(string code, string displayName, int characterCapacity)
         {
             return ReferenceDefinitionFactory.Thunderbird(
                 new ThunderbirdCode(code),
                 displayName,
                 MovementDomain.Earth,
                 topSpeed: 1,
-                characterCapacity: 1);
+                characterCapacity: characterCapacity);
         }
 
         private static ReferenceLocationDefinition CreateLocation(string code, string displayName)

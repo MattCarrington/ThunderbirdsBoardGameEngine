@@ -393,7 +393,7 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Features.DisasterCards
             ];
         }
 
-        private static IReadOnlyList<CharacterViewModel> CreateCharacters()
+        private static IReadOnlyList<SelectionOptionViewModel> CreateCharacters()
         {
             return
             [

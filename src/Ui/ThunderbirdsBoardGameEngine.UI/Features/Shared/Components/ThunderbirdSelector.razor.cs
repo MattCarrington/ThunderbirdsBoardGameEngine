@@ -1,0 +1,33 @@
+﻿using Microsoft.AspNetCore.Components;
+using ThunderbirdsBoardGameEngine.UI.Features.Shared.ViewModels;
+
+namespace ThunderbirdsBoardGameEngine.UI.Features.Shared.Components
+{
+    public partial class ThunderbirdSelector
+    {
+        [Parameter, EditorRequired]
+        public IReadOnlyList<SelectionOptionViewModel> Thunderbirds { get; set; } = [];
+
+        [Parameter]
+        public string? SelectedThunderbirdCode { get; set; }
+
+        [Parameter]
+        public EventCallback<string?> SelectedThunderbirdCodeChanged { get; set; }
+
+        [Parameter]
+        public string ThunderbirdId { get; set; } = Guid.NewGuid().ToString();
+
+        [Parameter]
+        public string ThunderbirdTitle { get; set; } = "Thunderbird";
+
+        private Task OnChanged(ChangeEventArgs e)
+        {
+            var value = e.Value?.ToString();
+
+            return SelectedThunderbirdCodeChanged.InvokeAsync(
+                string.IsNullOrWhiteSpace(value)
+                    ? null
+                    : value);
+        }
+    }
+}

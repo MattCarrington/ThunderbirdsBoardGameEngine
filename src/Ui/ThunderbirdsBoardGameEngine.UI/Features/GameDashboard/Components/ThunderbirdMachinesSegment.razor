@@ -1,5 +1,4 @@
-﻿@using ThunderbirdsBoardGameEngine.UI.Features.GameDashboard.ViewModels
-
+﻿
 <section aria-labelledby="thunderbird-machines-heading">
     <h2 id="thunderbird-machines-heading" class="h3">
         Thunderbird Machines
@@ -18,7 +17,7 @@
             <tbody>
                 @foreach (var machine in Machines)
                 {
-                    <tr>
+                    <tr data-testid="@($"machine-{machine.ThunderbirdCode}")">
                         <th scope="row">
                             @machine.ThunderbirdDisplayName
                         </th>
@@ -40,8 +39,15 @@
                         <td>
                             <button class="btn btn-sm btn-primary"
                                     data-testid="@($"move-{machine.ThunderbirdCode}")"
+                                    disabled="@(!CanMove(machine))"
                                     @onclick="() => MoveRequested.InvokeAsync(machine)">
                                 Move
+                            </button>
+                            <button class="btn btn-sm btn-secondary"
+                                    data-testid="@($"transfer-{machine.ThunderbirdCode}")"
+                                    disabled="@(!CanTransferFrom(machine))"
+                                    @onclick="() => TransferRequested.InvokeAsync(machine)">
+                                Transfer
                             </button>
                         </td>
                     </tr>

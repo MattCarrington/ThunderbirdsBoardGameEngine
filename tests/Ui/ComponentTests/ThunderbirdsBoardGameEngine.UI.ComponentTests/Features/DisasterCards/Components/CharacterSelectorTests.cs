@@ -1,6 +1,6 @@
 ﻿using Bunit;
-using ThunderbirdsBoardGameEngine.UI.Features.DisasterCards.Components;
-using ThunderbirdsBoardGameEngine.UI.Features.DisasterCards.ViewModels;
+using ThunderbirdsBoardGameEngine.UI.Features.Shared.Components;
+using ThunderbirdsBoardGameEngine.UI.Features.Shared.ViewModels;
 using Xunit;
 
 namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Features.DisasterCards.Components
@@ -34,6 +34,7 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Features.DisasterCards.C
 
             var cut = Render<CharacterSelector>(parameters => parameters
                 .Add(p => p.Characters, characters)
+                .Add(p => p.CharacterId, "characterSelect")
                 .Add(
                     p => p.SelectedCharacterCodeChanged,
                     value => selectedCharacter = value));
@@ -45,12 +46,12 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Features.DisasterCards.C
             Assert.Equal("lady-penelope", selectedCharacter);
         }
 
-        private static IReadOnlyList<CharacterViewModel> CreateCharacters()
+        private static IReadOnlyList<SelectionOptionViewModel> CreateCharacters()
         {
             return
             [
-                new CharacterViewModel( Key: "scott", DisplayName: "Scott"),
-                new CharacterViewModel( Key: "lady-penelope", DisplayName: "Lady Penelope"),
+                new SelectionOptionViewModel( Key: "scott", DisplayName: "Scott"),
+                new SelectionOptionViewModel( Key: "lady-penelope", DisplayName: "Lady Penelope"),
             ];
         }
     }

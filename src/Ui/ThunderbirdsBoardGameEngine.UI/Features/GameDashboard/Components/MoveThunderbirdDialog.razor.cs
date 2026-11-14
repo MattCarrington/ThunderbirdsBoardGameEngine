@@ -11,7 +11,7 @@ namespace ThunderbirdsBoardGameEngine.UI.Features.GameDashboard.Components
         public ThunderbirdMachinesDashboardViewModel Machine { get; set; } = null!;
 
         [Parameter, EditorRequired]
-        public IReadOnlyList<LocationOptionsViewModel> Destinations { get; set; } = [];
+        public IReadOnlyList<SelectionOptionViewModel> Destinations { get; set; } = [];
 
         [Parameter]
         public bool IsLoadingDestinations { get; set; }

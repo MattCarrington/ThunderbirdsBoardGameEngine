@@ -31,12 +31,15 @@ namespace ThunderbirdsBoardGameEngine.UI.Features.GameDashboard.Mappers
 
         private ThunderbirdMachinesDashboardViewModel MapThunderbirds(ThunderbirdMachineStateDto dto)
         {
+            var thunderbirdDefinition = _thunderbirdDefinitionCatalog.GetByCode(new ThunderbirdCode(dto.ThunderbirdCode));
+
             return new ThunderbirdMachinesDashboardViewModel(
                 ThunderbirdCode: dto.ThunderbirdCode,
-                ThunderbirdDisplayName: _thunderbirdDefinitionCatalog.GetByCode(new ThunderbirdCode(dto.ThunderbirdCode)).DisplayName,
+                ThunderbirdDisplayName: thunderbirdDefinition.DisplayName,
                 LocationCode: dto.LocationCode,
                 LocationDisplayName: _locationDefinitionCatalog.GetByCode(new LocationCode(dto.LocationCode)).DisplayName,
-                Occupants: dto.OccupantCharacterCodes.Select(MapOccupants).ToList());
+                Occupants: dto.OccupantCharacterCodes.Select(MapOccupants).ToList(),
+                CharacterCapacity: thunderbirdDefinition.CharacterCapacity);
         }
 
         private OccupantsDashboardViewModel MapOccupants(string occupant)

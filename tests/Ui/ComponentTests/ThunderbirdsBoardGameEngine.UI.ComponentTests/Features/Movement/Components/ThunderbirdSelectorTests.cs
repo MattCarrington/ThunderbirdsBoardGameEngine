@@ -1,6 +1,6 @@
 ﻿using Bunit;
-using ThunderbirdsBoardGameEngine.UI.Features.Movement.Components;
-using ThunderbirdsBoardGameEngine.UI.Features.Movement.Models;
+using ThunderbirdsBoardGameEngine.UI.Features.Shared.Components;
+using ThunderbirdsBoardGameEngine.UI.Features.Shared.ViewModels;
 using Xunit;
 
 namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Features.Movement.Components
@@ -45,13 +45,13 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Features.Movement.Compon
             Assert.Equal("tb2", selectedKey);
         }
 
-        private static IReadOnlyList<ThunderbirdMovementOptions> CreateSampleThunderbirds()
+        private static IReadOnlyList<SelectionOptionViewModel> CreateSampleThunderbirds()
         {
             return
             [
-                new ThunderbirdMovementOptions(Key: "tb1", DisplayName: "Thunderbird 1"),
-                new ThunderbirdMovementOptions(Key: "tb2", DisplayName: "Thunderbird 2"),
-                new ThunderbirdMovementOptions(Key: "tb3", DisplayName: "Thunderbird 3"),
+                new(Key: "tb1", DisplayName: "Thunderbird 1"),
+                new(Key: "tb2", DisplayName: "Thunderbird 2"),
+                new(Key: "tb3", DisplayName: "Thunderbird 3"),
             ];
         }
     }

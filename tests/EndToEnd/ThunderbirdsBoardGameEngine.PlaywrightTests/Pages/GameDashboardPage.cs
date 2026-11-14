@@ -34,6 +34,23 @@ namespace ThunderbirdsBoardGameEngine.PlaywrightTests.Pages
             await AssertThunderbirdLocationAsync(thunderbirdName, location);
         }
 
+        public async Task TransferSingleCharacterAsync(string sourceMachineName, string destinationMachineName, string characterName)
+        {
+            var transferButton = Page.GetByTestId($"transfer-{Slugify(sourceMachineName)}");
+            await transferButton.WaitForAsync();
+            await Assertions.Expect(transferButton).ToBeEnabledAsync();
+            await transferButton.ClickAsync();
+
+            var destinationDropdown = Page.Locator("#transfer-destination");
+            await destinationDropdown.SelectOptionAsync(new SelectOptionValue { Label = destinationMachineName });
+
+            var confirmButton = Page.GetByTestId("confirm-transfer");
+            await confirmButton.WaitForAsync();
+            await Assertions.Expect(confirmButton).ToBeEnabledAsync();
+            await confirmButton.ClickAsync();
+            await AssertCharacterAboardAsync(characterName, destinationMachineName);
+        }
+
         public async Task AssertPageDisplayedAsync()
         {
             await Assertions.Expect(
@@ -58,6 +75,26 @@ namespace ThunderbirdsBoardGameEngine.PlaywrightTests.Pages
 
             await Assertions.Expect(locationCell)
                 .ToHaveTextAsync(expectedLocation);
+        }
+
+        public async Task AssertCharacterAboardAsync(string characterName, string thunderbirdCode)
+        {
+            var row = GetMachineRow(thunderbirdCode);
+            var locationCell = row.GetByRole(AriaRole.Cell).Nth(1);
+            await Assertions.Expect(locationCell)
+                .ToContainTextAsync(characterName);
+        }
+
+        public async Task AssertTransferDisabledAsync(string thunderbirdName)
+        {
+            var transferButton = Page.GetByTestId($"transfer-{Slugify(thunderbirdName)}");
+            await Assertions.Expect(transferButton).ToBeDisabledAsync();
+        }
+
+        public async Task AssertMoveDisabledAsync(string thunderbirdName)
+        {
+            var moveButton = Page.GetByTestId($"move-{Slugify(thunderbirdName)}");
+            await Assertions.Expect(moveButton).ToBeDisabledAsync();
         }
 
         private static string Slugify(string input)

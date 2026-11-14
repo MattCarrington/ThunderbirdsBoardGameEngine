@@ -4,8 +4,10 @@ using ThunderbirdsBoardGameEngine.Client.Core;
 using ThunderbirdsBoardGameEngine.GameState.Client.Interfaces.V1;
 using ThunderbirdsBoardGameEngine.GameState.Contracts.Dtos.V1;
 using ThunderbirdsBoardGameEngine.GameState.Contracts.Dtos.V1.ThunderbirdMachines;
+using ThunderbirdsBoardGameEngine.GameState.Contracts.Dtos.V1.TransferCharacters;
 using ThunderbirdsBoardGameEngine.ReferenceData.Runtime.Interfaces;
 using ThunderbirdsBoardGameEngine.TestUtils.xUnit.ClassData;
+using ThunderbirdsBoardGameEngine.UI.Features.GameDashboard;
 using ThunderbirdsBoardGameEngine.UI.Features.GameDashboard.Mappers;
 using ThunderbirdsBoardGameEngine.UI.Features.GameDashboard.Services;
 using Xunit;
@@ -268,6 +270,373 @@ namespace ThunderbirdsBoardGameEngine.UI.UnitTests.GameDashboard.Services
 
             // Act & Assert
             await Assert.ThrowsAnyAsync<ArgumentException>(() => service.MoveThunderbirdAsync(gameId, thunderbirdCode, destinationLocationCode));
+        }
+
+        [Fact]
+        public async Task TransferCharactersAsync_WhenValidSingleTransfer_BuildsSingleAssignmentRequest()
+        {
+            // Arrange
+            var gameId = Guid.NewGuid();
+
+            var selection = new CharacterTransferSelection
+            (
+                CharacterCode: "CHAR1",
+                SourceThunderbirdCode: "TB1",
+                DestinationThunderbirdCode: "TB2",
+                ReturningCharacterCode: null
+            );
+
+            var dto = new GameStateResponseDto
+            {
+                GameId = gameId,
+                ThunderbirdMachines = []
+            };
+
+            var apiResult = ApiResult<GameStateResponseDto>.SuccessResult(dto, HttpStatusCode.OK);
+
+            TransferCharactersRequestDto? capturedRequest = null;
+
+            var client = Substitute.For<IGameClient>();
+            client
+                .TransferCharactersAsync(
+                    gameId,
+                    Arg.Do<TransferCharactersRequestDto>(
+                        request => capturedRequest = request),
+                    Arg.Any<CancellationToken>())
+                .Returns(apiResult);
+
+            var service = CreateGameService(client);
+
+            // Act
+            await service.TransferCharactersAsync(gameId, selection);
+
+            // Assert
+            Assert.NotNull(capturedRequest);
+
+            var assignment = Assert.Single(capturedRequest.Assignments);
+            Assert.Equal(selection.CharacterCode, assignment.CharacterCode);
+            Assert.Equal(selection.DestinationThunderbirdCode, assignment.DestinationThunderbirdCode);
+        }
+
+        [Fact]
+        public async Task TransferCharactersAsync_WhenValidReciprocalSwap_BuildsTwoAssignments()
+        {
+            // Arrange
+            var gameId = Guid.NewGuid();
+
+            var selection = new CharacterTransferSelection
+            (
+                CharacterCode: "CHAR1",
+                SourceThunderbirdCode: "TB1",
+                DestinationThunderbirdCode: "TB2",
+                ReturningCharacterCode: "CHAR2"
+            );
+
+            var dto = new GameStateResponseDto
+            {
+                GameId = gameId,
+                ThunderbirdMachines = []
+            };
+
+            var apiResult = ApiResult<GameStateResponseDto>.SuccessResult(dto, HttpStatusCode.OK);
+
+            TransferCharactersRequestDto? capturedRequest = null;
+
+            var client = Substitute.For<IGameClient>();
+            client
+                .TransferCharactersAsync(
+                    gameId,
+                    Arg.Do<TransferCharactersRequestDto>(
+                        request => capturedRequest = request),
+                    Arg.Any<CancellationToken>())
+                .Returns(apiResult);
+
+            var service = CreateGameService(client);
+
+            // Act
+            await service.TransferCharactersAsync(gameId, selection);
+
+            // Assert
+            Assert.NotNull(capturedRequest);
+            Assert.Equal(2, capturedRequest.Assignments.Count);
+
+            var assignment1 = Assert.Single(capturedRequest.Assignments, a => a.CharacterCode == selection.CharacterCode);
+            Assert.Equal(selection.DestinationThunderbirdCode, assignment1.DestinationThunderbirdCode);
+            Assert.Equal(selection.CharacterCode, assignment1.CharacterCode);
+
+            var assignment2 = Assert.Single(capturedRequest.Assignments, a => a.CharacterCode == selection.ReturningCharacterCode);
+            Assert.Equal(selection.SourceThunderbirdCode, assignment2.DestinationThunderbirdCode);
+            Assert.Equal(selection.ReturningCharacterCode, assignment2.CharacterCode);
+        }
+
+        [Fact]
+        public async Task TransferCharactersAsync_SuccessfulResponse_ReturnsMappedGameState()
+        {
+            // Arrange
+            var gameId = Guid.NewGuid();
+
+            var selection = new CharacterTransferSelection
+            (
+                CharacterCode: "CHAR1",
+                SourceThunderbirdCode: "TB1",
+                DestinationThunderbirdCode: "TB2",
+                ReturningCharacterCode: "CHAR2"
+            );
+
+            var dto = new GameStateResponseDto
+            {
+                GameId = gameId,
+                ThunderbirdMachines = []
+            };
+
+            var apiResult = ApiResult<GameStateResponseDto>.SuccessResult(dto, HttpStatusCode.OK);
+
+            var client = Substitute.For<IGameClient>();
+            client.TransferCharactersAsync(gameId, Arg.Any<TransferCharactersRequestDto>(), Arg.Any<CancellationToken>()).Returns(apiResult);
+
+            var service = CreateGameService(client);
+
+            // Act
+            var result = await service.TransferCharactersAsync(gameId, selection);
+
+            // Assert
+            Assert.Equal(CharacterTransferOutcome.Success, result.Outcome);
+            Assert.NotNull(result.UpdatedGameState);
+            Assert.Equal(gameId, result.UpdatedGameState.GameId);
+
+            await client.Received(1).TransferCharactersAsync(gameId, Arg.Any<TransferCharactersRequestDto>(), Arg.Any<CancellationToken>());
+        }
+
+        [Fact]
+        public async Task TransferCharactersAsync_WhenClientReturnsUnprocessableEntity_ReturnsRejectedResult()
+        {
+            // Arrange
+            var gameId = Guid.NewGuid();
+
+            var selection = new CharacterTransferSelection
+            (
+                CharacterCode: "CHAR1",
+                SourceThunderbirdCode: "TB1",
+                DestinationThunderbirdCode: "TB2",
+                ReturningCharacterCode: null
+            );
+
+            var apiResult = ApiResult<GameStateResponseDto>.Failure("Unprocessable Entity", HttpStatusCode.UnprocessableEntity);
+
+            var client = Substitute.For<IGameClient>();
+            client.TransferCharactersAsync(gameId, Arg.Any<TransferCharactersRequestDto>(), Arg.Any<CancellationToken>()).Returns(apiResult);
+
+            var service = CreateGameService(client);
+
+            // Act
+            var result = await service.TransferCharactersAsync(gameId, selection);
+
+            // Assert
+            Assert.Equal(CharacterTransferOutcome.Rejected, result.Outcome);
+            Assert.Null(result.UpdatedGameState);
+        }
+
+        [Fact]
+        public async Task TransferCharactersAsync_WhenClientReturnsNotFound_ReturnsNotFoundResult()
+        {
+            // Arrange
+            var gameId = Guid.NewGuid();
+
+            var selection = new CharacterTransferSelection
+            (
+                CharacterCode: "CHAR1",
+                SourceThunderbirdCode: "TB1",
+                DestinationThunderbirdCode: "TB2",
+                ReturningCharacterCode: null
+            );
+
+            var apiResult = ApiResult<GameStateResponseDto>.Failure("Not Found", HttpStatusCode.NotFound);
+
+            var client = Substitute.For<IGameClient>();
+            client.TransferCharactersAsync(gameId, Arg.Any<TransferCharactersRequestDto>(), Arg.Any<CancellationToken>()).Returns(apiResult);
+
+            var service = CreateGameService(client);
+
+            // Act
+            var result = await service.TransferCharactersAsync(gameId, selection);
+
+            // Assert
+            Assert.Equal(CharacterTransferOutcome.NotFound, result.Outcome);
+            Assert.Null(result.UpdatedGameState);
+        }
+
+        [Fact]
+        public async Task TransferCharactersAsync_WhenClientReturnsError_ThrowsInvalidOperationException()
+        {
+            // Arrange
+            var gameId = Guid.NewGuid();
+
+            var selection = new CharacterTransferSelection
+            (
+                CharacterCode: "CHAR1",
+                SourceThunderbirdCode: "TB1",
+                DestinationThunderbirdCode: "TB2",
+                ReturningCharacterCode: null
+            );
+
+            var apiResult = ApiResult<GameStateResponseDto>.Failure("Error", HttpStatusCode.InternalServerError);
+
+            var client = Substitute.For<IGameClient>();
+            client.TransferCharactersAsync(gameId, Arg.Any<TransferCharactersRequestDto>(), Arg.Any<CancellationToken>()).Returns(apiResult);
+
+            var service = CreateGameService(client);
+
+            // Act & Assert
+            await Assert.ThrowsAsync<InvalidOperationException>(() => service.TransferCharactersAsync(gameId, selection));
+        }
+
+        [Fact]
+        public async Task TransferCharactersAsync_WhenSelectionIsNull_ThrowsArgumentNullException()
+        {
+            // Arrange
+            var gameId = Guid.NewGuid();
+
+            var client = Substitute.For<IGameClient>();
+
+            var service = CreateGameService(client);
+            // Act & Assert
+            await Assert.ThrowsAsync<ArgumentNullException>(() => service.TransferCharactersAsync(gameId, null!));
+        }
+
+        [Theory]
+        [ClassData(typeof(NullOrWhitespaceStringData))]
+        public async Task TransferCharactersAsync_WhenCharacterCodeIsNullOrWhitespace_ThrowsArgumentException(string? characterCode)
+        {
+            // Arrange
+            var gameId = Guid.NewGuid();
+
+            var selection = new CharacterTransferSelection
+            (
+                CharacterCode: characterCode,
+                SourceThunderbirdCode: "TB1",
+                DestinationThunderbirdCode: "TB2",
+                ReturningCharacterCode: null
+            );
+
+            var client = Substitute.For<IGameClient>();
+
+            var service = CreateGameService(client);
+
+            // Act & Assert
+            await Assert.ThrowsAnyAsync<ArgumentException>(() => service.TransferCharactersAsync(gameId, selection));
+        }
+
+        [Theory]
+        [ClassData(typeof(NullOrWhitespaceStringData))]
+        public async Task TransferCharactersAsync_WhenDestinationThunderbirdCodeIsNullOrWhitespace_ThrowsArgumentException(string? destinationThunderbirdCode)
+        {
+            // Arrange
+            var gameId = Guid.NewGuid();
+
+            var selection = new CharacterTransferSelection
+            (
+                CharacterCode: "CHAR1",
+                SourceThunderbirdCode: "TB1",
+                DestinationThunderbirdCode: destinationThunderbirdCode,
+                ReturningCharacterCode: null
+            );
+
+            var client = Substitute.For<IGameClient>();
+
+            var service = CreateGameService(client);
+
+            // Act & Assert
+            await Assert.ThrowsAnyAsync<ArgumentException>(() => service.TransferCharactersAsync(gameId, selection));
+        }
+
+        [Fact]
+        public async Task TransferCharactersAsync_WhenSourceAndDestinationThunderbirdCodesAreSame_ThrowsArgumentException()
+        {
+            // Arrange
+            var gameId = Guid.NewGuid();
+
+            var selection = new CharacterTransferSelection
+            (
+                CharacterCode: "CHAR1",
+                SourceThunderbirdCode: "thunderbirdCode",
+                DestinationThunderbirdCode: "thunderbirdCode",
+                ReturningCharacterCode: null
+            );
+
+            var client = Substitute.For<IGameClient>();
+
+            var service = CreateGameService(client);
+
+            // Act & Assert
+            await Assert.ThrowsAnyAsync<ArgumentException>(() => service.TransferCharactersAsync(gameId, selection));
+        }
+
+        [Fact]
+        public async Task TransferCharactersAsync_WhenReturningCharacterCodeIsSameAsCharacterCode_ThrowsArgumentException()
+        {
+            // Arrange
+            var gameId = Guid.NewGuid();
+
+            var selection = new CharacterTransferSelection
+            (
+                CharacterCode: "CHAR1",
+                SourceThunderbirdCode: "TB1",
+                DestinationThunderbirdCode: "TB2",
+                ReturningCharacterCode: "CHAR1"
+            );
+
+            var client = Substitute.For<IGameClient>();
+
+            var service = CreateGameService(client);
+
+            // Act & Assert
+            await Assert.ThrowsAnyAsync<ArgumentException>(() => service.TransferCharactersAsync(gameId, selection));
+        }
+
+        [Theory]
+        [ClassData(typeof(WhiteSpaceStringData))]
+        public async Task TransferCharactersAsync_WhenReturningCharacterCodeIsWhitespace_ThrowsArgumentException(string returningCharacterCode)
+        {
+            // Arrange
+            var gameId = Guid.NewGuid();
+
+            var selection = new CharacterTransferSelection
+            (
+                CharacterCode: "CHAR1",
+                SourceThunderbirdCode: "TB1",
+                DestinationThunderbirdCode: "TB2",
+                ReturningCharacterCode: returningCharacterCode
+            );
+
+            var client = Substitute.For<IGameClient>();
+
+            var service = CreateGameService(client);
+
+            // Act & Assert
+            await Assert.ThrowsAnyAsync<ArgumentException>(() => service.TransferCharactersAsync(gameId, selection));
+        }
+
+        [Theory]
+        [ClassData(typeof(NullOrWhitespaceStringData))]
+        public async Task TransferCharactersAsync_WhenSourceThunderbirdCodeIsNullOrWhitespace_ThrowsArgumentException(string? sourceThunderbirdCode)
+        {
+            // Arrange
+            var gameId = Guid.NewGuid();
+
+            var selection = new CharacterTransferSelection
+            (
+                CharacterCode: "CHAR1",
+                SourceThunderbirdCode: sourceThunderbirdCode,
+                DestinationThunderbirdCode: "TB2",
+                ReturningCharacterCode: "CHAR2"
+            );
+
+            var client = Substitute.For<IGameClient>();
+
+            var service = CreateGameService(client);
+
+            // Act & Assert
+            await Assert.ThrowsAnyAsync<ArgumentException>(() => service.TransferCharactersAsync(gameId, selection));
         }
 
         private static GameService CreateGameService(IGameClient client)

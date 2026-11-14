@@ -204,13 +204,13 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Features.Movement
             context.MovementService
                 .GetAccessibleLocationsAsync("TB1")
                 .Returns([
-                    new LocationOptionsViewModel("indian-ocean", "Indian Ocean")
+                    new SelectionOptionViewModel("indian-ocean", "Indian Ocean")
                 ]);
 
             context.MovementService
                 .GetAccessibleLocationsAsync("TB2")
                 .Returns([
-                    new LocationOptionsViewModel("the-sun", "The Sun")
+                    new SelectionOptionViewModel("the-sun", "The Sun")
                 ]);
 
             var cut = Render<MovementPage>();
@@ -244,7 +244,7 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Features.Movement
             return context;
         }
 
-        private static IReadOnlyList<ThunderbirdMovementOptions> CreateThunderbirdMovementOptions()
+        private static IReadOnlyList<SelectionOptionViewModel> CreateThunderbirdMovementOptions()
         {
             return
             [
@@ -253,7 +253,7 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Features.Movement
             ];
         }
 
-        private static IReadOnlyList<LocationOptionsViewModel> CreateMovementLocationOptions()
+        private static IReadOnlyList<SelectionOptionViewModel> CreateMovementLocationOptions()
         {
             return
             [

@@ -32,7 +32,7 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Features.GameDashboard.C
             var cut = Render<MoveThunderbirdDialog>(
                 parameters => parameters
                     .Add(p => p.Machine, thunderbird)
-                    .Add(p => p.Destinations, new List<LocationOptionsViewModel>
+                    .Add(p => p.Destinations, new List<SelectionOptionViewModel>
                     {
                         new("LOC2", "Location 2"),
                         new("LOC3", "Location 3")

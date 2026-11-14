@@ -26,10 +26,15 @@ public partial class GameDashboardPage
     private bool _notFound;
     private bool _failed;
     private ThunderbirdMachinesDashboardViewModel? _selectedMachine;
-    private IReadOnlyList<LocationOptionsViewModel> _destinations = [];
-    private bool _isLoadingDestinations;
+    private IReadOnlyList<SelectionOptionViewModel> _movementDestinations = [];
+    private bool _isLoadingMovementDestinations;
     private bool _isMoving;
     private string? _movementError;
+    private ThunderbirdMachinesDashboardViewModel? _transferSource;
+    private IReadOnlyList<ThunderbirdMachinesDashboardViewModel> _transferDestinations = [];
+    private bool _isTransferring;
+    private string? _transferError;
+    private long _dashboardGeneration;
 
     protected override Task OnParametersSetAsync()
     {
@@ -38,7 +43,11 @@ public partial class GameDashboardPage
 
     private async Task LoadGameAsync()
     {
+        var generation = ++_dashboardGeneration;
+        var requestedGameId = GameId;
+
         ResetMovementState();
+        ResetTransferState();
 
         _game = null;
         _notFound = false;
@@ -47,11 +56,23 @@ public partial class GameDashboardPage
 
         try
         {
-            _game = await GameService.GetGameAsync(GameId);
+            var game = await GameService.GetGameAsync(requestedGameId);
+
+            if (!IsCurrentDashboard(generation, requestedGameId))
+            {
+                return;
+            }
+
+            _game = game;
             _notFound = _game is null;
         }
         catch (Exception exception)
         {
+            if (!IsCurrentDashboard(generation, requestedGameId))
+            {
+                return;
+            }
+
             _failed = true;
 
             Logger.LogError(
@@ -60,30 +81,51 @@ public partial class GameDashboardPage
         }
         finally
         {
-            _isLoading = false;
+            if (IsCurrentDashboard(generation, requestedGameId))
+            {
+                _isLoading = false;
+            }
         }
     }
 
     private async Task BeginMoveAsync(ThunderbirdMachinesDashboardViewModel machine)
     {
+        var generation = _dashboardGeneration;
+        var requestedGameId = GameId;
+
         _selectedMachine = machine;
-        _destinations = [];
+        _movementDestinations = [];
         _movementError = null;
-        _isLoadingDestinations = true;
+        _isLoadingMovementDestinations = true;
 
         try
         {
-            _destinations = await MovementClientService.GetAccessibleLocationsAsync(machine.ThunderbirdCode);
+            var movementDestinations = await MovementClientService.GetAccessibleLocationsAsync(machine.ThunderbirdCode);
+
+            if (!IsCurrentDashboard(generation, requestedGameId))
+            {
+                return;
+            }
+
+            _movementDestinations = movementDestinations;
         }
         catch (Exception exception)
         {
+            if (!IsCurrentDashboard(generation, requestedGameId))
+            {
+                return;
+            }
+
             _movementError = "Movement destinations could not be loaded.";
 
             Logger.LogError(exception, "Unable to load movement destinations.");
         }
         finally
         {
-            _isLoadingDestinations = false;
+            if (IsCurrentDashboard(generation, requestedGameId))
+            {
+                _isLoadingMovementDestinations = false;
+            }
         }
     }
 
@@ -94,15 +136,23 @@ public partial class GameDashboardPage
             return;
         }
 
+        var generation = _dashboardGeneration;
+        var requestedGameId = GameId;
+
         _movementError = null;
         _isMoving = true;
 
         try
         {
             var result = await GameService.MoveThunderbirdAsync(
-                GameId,
+                requestedGameId,
                 _selectedMachine.ThunderbirdCode,
                 destinationCode);
+
+            if (!IsCurrentDashboard(generation, requestedGameId))
+            {
+                return;
+            }
 
             switch (result.Outcome)
             {
@@ -128,6 +178,11 @@ public partial class GameDashboardPage
         }
         catch (Exception exception)
         {
+            if (!IsCurrentDashboard(generation, requestedGameId))
+            {
+                return;
+            }
+
             _movementError = "The move could not be completed. Please try again.";
 
             Logger.LogError(
@@ -136,7 +191,10 @@ public partial class GameDashboardPage
         }
         finally
         {
-            _isMoving = false;
+            if (IsCurrentDashboard(generation, requestedGameId))
+            {
+                _isMoving = false;
+            }
         }
     }
 
@@ -148,9 +206,107 @@ public partial class GameDashboardPage
     private void ResetMovementState()
     {
         _selectedMachine = null;
-        _destinations = [];
+        _movementDestinations = [];
         _movementError = null;
-        _isLoadingDestinations = false;
+        _isLoadingMovementDestinations = false;
         _isMoving = false;
+    }
+
+    private void BeginTransfer(ThunderbirdMachinesDashboardViewModel source)
+    {
+        if (_game is null)
+        {
+            return;
+        }
+
+        _transferSource = source;
+
+        _transferDestinations = _game.ThunderbirdMachines
+            .Where(machine => machine.ThunderbirdCode != source.ThunderbirdCode
+                && machine.LocationCode == source.LocationCode)
+            .ToArray();
+    }
+
+    private async Task TransferCharactersAsync(CharacterTransferSelection selection)
+    {
+        if (_transferSource is null)
+        {
+            return;
+        }
+
+        var generation = _dashboardGeneration;
+        var requestedGameId = GameId;
+
+        _transferError = null;
+        _isTransferring = true;
+
+        try
+        {
+            var result = await GameService.TransferCharactersAsync(
+                requestedGameId,
+                selection);
+
+            if (!IsCurrentDashboard(generation, requestedGameId))
+            {
+                return;
+            }
+
+            switch (result.Outcome)
+            {
+                case CharacterTransferOutcome.Success
+                    when result.UpdatedGameState is not null:
+                    _game = result.UpdatedGameState;
+                    CancelTransfer();
+                    break;
+                case CharacterTransferOutcome.Rejected:
+                    _transferError = "That character transfer is not permitted.";
+                    break;
+                case CharacterTransferOutcome.NotFound:
+                    _transferError = "The game, character, or Thunderbird Machine could not be found.";
+                    break;
+                default:
+                    _transferError = "The character transfer could not be completed.";
+                    break;
+            }
+        }
+        catch (Exception exception)
+        {
+            if (!IsCurrentDashboard(generation, requestedGameId))
+            {
+                return;
+            }
+
+            _transferError = "The character transfer could not be completed. Please try again.";
+
+            Logger.LogError(
+                exception,
+                "Unable to transfer the requested character.");
+        }
+        finally
+        {
+            if (IsCurrentDashboard(generation, requestedGameId))
+            {
+                _isTransferring = false;
+            }
+        }
+    }
+
+    private void ResetTransferState()
+    {
+        _transferSource = null;
+        _transferDestinations = [];
+        _transferError = null;
+        _isTransferring = false;
+    }
+
+    private void CancelTransfer()
+    {
+        ResetTransferState();
+    }
+
+    private bool IsCurrentDashboard(long generation, Guid gameId)
+    {
+        return generation == _dashboardGeneration
+            && gameId == GameId;
     }
 }

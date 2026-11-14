@@ -1,6 +1,6 @@
 ﻿using ThunderbirdsBoardGameEngine.ReferenceData.Runtime.Interfaces;
 using ThunderbirdsBoardGameEngine.UI.Features.DisasterCards.Interfaces;
-using ThunderbirdsBoardGameEngine.UI.Features.DisasterCards.ViewModels;
+using ThunderbirdsBoardGameEngine.UI.Features.Shared.ViewModels;
 
 namespace ThunderbirdsBoardGameEngine.UI.Features.DisasterCards.Services
 {
@@ -13,9 +13,9 @@ namespace ThunderbirdsBoardGameEngine.UI.Features.DisasterCards.Services
             _catalog = catalog;
         }
 
-        public IReadOnlyList<CharacterViewModel> GetAll()
+        public IReadOnlyList<SelectionOptionViewModel> GetAll()
         {
-            return _catalog.GetAll().Select(c => new CharacterViewModel(c.Code.Value, c.DisplayName)).ToList();
+            return _catalog.GetAll().Select(c => new SelectionOptionViewModel(c.Code.Value, c.DisplayName)).ToList();
         }
     }
 }

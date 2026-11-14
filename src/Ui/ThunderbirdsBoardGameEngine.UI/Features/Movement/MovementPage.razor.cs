@@ -17,8 +17,8 @@ namespace ThunderbirdsBoardGameEngine.UI.Features.Movement
         [Inject]
         public IEventCardMovementService EventCardMovementService { get; set; } = null!;
 
-        private IReadOnlyList<ThunderbirdMovementOptions> _mobileThunderbirds = Array.Empty<ThunderbirdMovementOptions>();
-        private IReadOnlyList<LocationOptionsViewModel> _movementLocations = Array.Empty<LocationOptionsViewModel>();
+        private IReadOnlyList<SelectionOptionViewModel> _mobileThunderbirds = Array.Empty<SelectionOptionViewModel>();
+        private IReadOnlyList<SelectionOptionViewModel> _movementLocations = Array.Empty<SelectionOptionViewModel>();
         private IReadOnlyList<CardModifierViewModel> _eventCardModifiers = Array.Empty<CardModifierViewModel>();
 
         private string? _thunderbirdCode = string.Empty;
@@ -82,7 +82,7 @@ namespace ThunderbirdsBoardGameEngine.UI.Features.Movement
 
             _startLocationCode = string.Empty;
             _destinationCode = string.Empty;
-            _movementLocations = Array.Empty<LocationOptionsViewModel>();
+            _movementLocations = Array.Empty<SelectionOptionViewModel>();
 
             ClearValidationState();
 

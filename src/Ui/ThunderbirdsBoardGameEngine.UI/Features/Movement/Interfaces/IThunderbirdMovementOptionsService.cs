@@ -1,9 +1,9 @@
-﻿using ThunderbirdsBoardGameEngine.UI.Features.Movement.Models;
+﻿using ThunderbirdsBoardGameEngine.UI.Features.Shared.ViewModels;
 
 namespace ThunderbirdsBoardGameEngine.UI.Features.Movement.Interfaces
 {
     public interface IThunderbirdMovementOptionsService
     {
-        IReadOnlyList<ThunderbirdMovementOptions> GetAllMobileVehicles();
+        IReadOnlyList<SelectionOptionViewModel> GetAllMobileVehicles();
     }
 }

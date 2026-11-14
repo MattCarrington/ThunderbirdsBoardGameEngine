@@ -207,12 +207,97 @@ namespace ThunderbirdsBoardGameEngine.UI.IntegrationTests.Pages
                 .Find("[data-testid='confirm-move']")
                 .ClickAsync(new MouseEventArgs());
 
-            // Assert - The dashboard should refresh and show the new location
+            // Assert
             cut.WaitForAssertion(() =>
             {
                 Assert.Empty(cut.FindComponents<MoveThunderbirdDialog>());
                 Assert.Contains("North Atlantic", cut.Markup);
                 Assert.DoesNotContain("South Pacific", cut.Markup);
+            });
+        }
+
+        [Fact]
+        public async Task RefreshesDashboardOnSuccessfulTransfer()
+        {
+            // Arrange
+            var gameId = Guid.NewGuid();
+
+            var initialDto = new GameStateResponseDto
+            {
+                GameId = gameId,
+                ThunderbirdMachines =
+                [
+                    new()
+                    {
+                        ThunderbirdCode = KnownThunderbirdCodes.Thunderbird1.Value,
+                        LocationCode = KnownLocationCodes.SouthPacific.Value,
+                        OccupantCharacterCodes = [
+                            KnownCharacterCodes.Scott.Value
+                        ]
+                    },
+                    new()                     {
+                        ThunderbirdCode = KnownThunderbirdCodes.Thunderbird2.Value,
+                        LocationCode = KnownLocationCodes.SouthPacific.Value,
+                        OccupantCharacterCodes = [
+                            KnownCharacterCodes.Virgil.Value
+                        ]
+                    }
+                ]
+            };
+
+            var transferDto = new GameStateResponseDto
+            {
+                GameId = gameId,
+                ThunderbirdMachines =
+                [
+                    new()
+                    {
+                        ThunderbirdCode = KnownThunderbirdCodes.Thunderbird1.Value,
+                        LocationCode = KnownLocationCodes.SouthPacific.Value,
+                        OccupantCharacterCodes = []
+                    },
+                    new()                     {
+                        ThunderbirdCode = KnownThunderbirdCodes.Thunderbird2.Value,
+                        LocationCode = KnownLocationCodes.SouthPacific.Value,
+                        OccupantCharacterCodes = [
+                            KnownCharacterCodes.Virgil.Value,
+                            KnownCharacterCodes.Scott.Value
+                        ]
+                    }
+                ]
+            };
+
+            _gameStub.RegisterGetGameStateSuccess(initialDto);
+            _gameStub.RegisterTransferCharactersSuccess(transferDto);
+
+            var cut = Render<GameDashboardPage>(parameters => parameters
+                .Add(p => p.GameId, gameId));
+
+            // Act     
+            var transferButton = cut.WaitForElement("[data-testid='transfer-thunderbird-1']");
+            transferButton.Click();
+
+            cut.WaitForState(() =>
+                cut.FindComponents<TransferCharactersDialog>().Count == 1);
+
+            var dialog = cut.FindComponent<TransferCharactersDialog>();
+            dialog.Find("[data-testid='confirm-transfer']").Click();
+
+            // Assert
+            cut.WaitForAssertion(() =>
+            {
+                Assert.Empty(
+                    cut.FindComponents<TransferCharactersDialog>());
+
+                var sourceRow =
+                    cut.Find("[data-testid='machine-thunderbird-1']");
+
+                var destinationRow =
+                    cut.Find("[data-testid='machine-thunderbird-2']");
+
+                Assert.Contains("Empty", sourceRow.TextContent);
+                Assert.Contains("Virgil", destinationRow.TextContent);
+                Assert.Contains("Scott", destinationRow.TextContent);
             });
         }
 

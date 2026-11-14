@@ -13,7 +13,7 @@ namespace ThunderbirdsBoardGameEngine.UI.Features.Movement.Services
         private readonly MovementResultMapper _resultMapper;
         private readonly MovementLocationOptionsMapper _locationsMapper;
 
-        private readonly Dictionary<string, IReadOnlyList<LocationOptionsViewModel>> _accessibleLocationsCache = new();
+        private readonly Dictionary<string, IReadOnlyList<SelectionOptionViewModel>> _accessibleLocationsCache = new();
 
         public MovementClientService(IMovementClient client, MovementResultMapper resultMapper, MovementLocationOptionsMapper locationsMapper)
         {
@@ -40,7 +40,7 @@ namespace ThunderbirdsBoardGameEngine.UI.Features.Movement.Services
             return result.Success ? _resultMapper.ToViewModel(result.Data!) : null;
         }
 
-        public async Task<IReadOnlyList<LocationOptionsViewModel>> GetAccessibleLocationsAsync(string thunderbirdCode)
+        public async Task<IReadOnlyList<SelectionOptionViewModel>> GetAccessibleLocationsAsync(string thunderbirdCode)
         {
             if (_accessibleLocationsCache.TryGetValue(thunderbirdCode, out var cachedLocations))
             {
@@ -51,7 +51,7 @@ namespace ThunderbirdsBoardGameEngine.UI.Features.Movement.Services
 
             if (!result.Success || result.Data is null)
             {
-                return Array.Empty<LocationOptionsViewModel>();
+                return Array.Empty<SelectionOptionViewModel>();
             }
 
             var locations = _locationsMapper.ToViewModel(result.Data.AccessibleLocations);

@@ -36,19 +36,32 @@
     {
         <ThunderbirdMachinesSegment
             Machines="@_game.ThunderbirdMachines"
-            MoveRequested="BeginMoveAsync" />
+            MoveRequested="BeginMoveAsync"
+            TransferRequested="BeginTransfer" />
 
         @if (_selectedMachine is not null)
         {
             <MoveThunderbirdDialog
-            @key="_selectedMachine.ThunderbirdCode"
-            Machine="@_selectedMachine"
-            Destinations="@_destinations"
-            IsLoadingDestinations="@_isLoadingDestinations"
-            IsMoving="@_isMoving"
-            ErrorMessage="@_movementError"
-            MoveConfirmed="MoveAsync"
-            Cancelled="CancelMove" />
+                @key="_selectedMachine.ThunderbirdCode"
+                Machine="@_selectedMachine"
+                Destinations="@_movementDestinations"
+                IsLoadingDestinations="@_isLoadingMovementDestinations"
+                IsMoving="@_isMoving"
+                ErrorMessage="@_movementError"
+                MoveConfirmed="MoveAsync"
+                Cancelled="CancelMove" />
+        }
+
+        @if (_transferSource is not null)
+        {
+            <TransferCharactersDialog 
+                @key="_transferSource.ThunderbirdCode"
+                SourceMachine="@_transferSource"
+                DestinationMachines="@_transferDestinations"
+                IsTransferring="@_isTransferring"
+                ErrorMessage="@_transferError"
+                TransferConfirmed="TransferCharactersAsync"
+                Cancelled="CancelTransfer" />
         }
     }
 </div>

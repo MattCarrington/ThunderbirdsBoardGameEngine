@@ -1,0 +1,159 @@
+﻿@using ThunderbirdsBoardGameEngine.UI.Features.Shared.Components
+
+<dialog @ref="_dialog"
+        class="modal-dialog-native"
+        aria-labelledby="transfer-dialog-title"
+        data-testid="transfer-characters-dialog">
+
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="transfer-dialog-title"
+                    class="modal-title h5">
+                    Transfer from @SourceMachine.ThunderbirdDisplayName
+                </h2>
+            </div>
+
+            <div class="modal-body">
+                <p>
+                    Current location:
+                    <strong>@SourceMachine.LocationDisplayName</strong>
+                </p>
+
+                @if (DestinationMachines.Count == 0)
+                {
+                    <p>
+                        No co-located destination machines are available.
+                    </p>
+                }
+                else
+                {
+                    @if (SourceMachine.Occupants.Count == 1)
+                    {
+                        <p>
+                            Character:
+                            <strong>
+                                @SourceMachine.Occupants[0].CharacterDisplayName
+                            </strong>
+                        </p>
+                    }
+                    else
+                    {
+                        <CharacterSelector
+                            CharacterId="transfer-character"
+                            CharacterTitle="Character"
+                            Characters="@CharacterOptions"
+                            @bind-SelectedCharacterCode="_selectedCharacterCode" />
+                    }
+                    
+                    @if (DestinationMachines.Count == 1)
+                    {
+                        <p>
+                            Destination:
+                            <strong>
+                                @DestinationMachines[0].ThunderbirdDisplayName
+                            </strong>
+                        </p>
+                    }
+                    else if (DestinationMachines.Count > 1)
+                    {
+                        <ThunderbirdSelector ThunderbirdId="transfer-destination"
+                                             ThunderbirdTitle="Destination"
+                                             Thunderbirds="@DestinationOptions"
+                                             SelectedThunderbirdCode="@_selectedDestinationCode"
+                                             SelectedThunderbirdCodeChanged="DestinationChanged" />
+                    }
+
+                    @if (SelectedDestination is not null)
+                    {
+                        <fieldset class="mt-3">
+                            <legend class="h6">Operation</legend>
+
+                            <div class="form-check">
+                                <input id="transfer-mode-transfer"
+                                       data-testid="transfer-mode-transfer"
+                                       class="form-check-input"
+                                       type="radio"
+                                       name="transfer-mode"
+                                       checked="@(_selectedMode == CharacterTransferMode.Transfer)"
+                                       disabled="@(!CanTransfer)"
+                                       @onchange="@(_ => SelectMode(
+                                           CharacterTransferMode.Transfer))" />
+
+                                <label class="form-check-label"
+                                       for="transfer-mode-transfer">
+                                    Transfer
+                                </label>
+                            </div>
+
+                            <div class="form-check">
+                                <input id="transfer-mode-swap"
+                                       data-testid="transfer-mode-swap"
+                                       class="form-check-input"
+                                       type="radio"
+                                       name="transfer-mode"
+                                       checked="@(_selectedMode == CharacterTransferMode.Swap)"
+                                       disabled="@(!CanSwap)"
+                                       @onchange="@(_ => SelectMode(
+                                           CharacterTransferMode.Swap))" />
+
+                                <label class="form-check-label"
+                                       for="transfer-mode-swap">
+                                    Swap
+                                </label>
+                            </div>
+                        </fieldset>
+                    }
+                    
+                    @if (_selectedMode == CharacterTransferMode.Swap &&
+                         SelectedDestination is not null)
+                    {
+                        @if (SelectedDestination.Occupants.Count == 1)
+                        {
+                            <p data-testid="returning-character-summary">
+                                Character returning to
+                                @SourceMachine.ThunderbirdDisplayName:
+                                <strong>
+                                    @SelectedDestination.Occupants[0].CharacterDisplayName
+                                </strong>
+                            </p>
+                        }
+                        else
+                        {
+                            <CharacterSelector CharacterId="returning-character"
+                                               CharacterTitle="Character returning"
+                                               Characters="@ReturningCharacterOptions"
+                                               @bind-SelectedCharacterCode="_selectedReturningCharacterCode" />
+                        }
+                    }
+                }
+
+                @if (!string.IsNullOrWhiteSpace(ErrorMessage))
+                {
+                    <div class="alert alert-danger mt-3"
+                         role="alert">
+                        @ErrorMessage
+                    </div>
+                }
+            </div>
+
+            <div class="modal-footer">
+                <button type="button"
+                        class="btn btn-secondary"
+                        disabled="@IsTransferring"
+                        data-testid="cancel-transfer"
+                        @onclick="CancelAsync">
+                    Cancel
+                </button>
+
+                <button type="button"
+                        class="btn btn-primary"
+                        disabled="@CannotSubmit"
+                        data-testid="confirm-transfer"
+                        @onclick="ConfirmAsync">
+                    @(IsTransferring ? "Transferring…" : "Transfer")
+                </button>
+            </div>
+        </div>
+    </div>
+</dialog>
