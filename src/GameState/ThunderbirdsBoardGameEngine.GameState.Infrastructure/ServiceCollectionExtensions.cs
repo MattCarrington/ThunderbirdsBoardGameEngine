@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using ThunderbirdsBoardGameEngine.GameState.Application;
+using ThunderbirdsBoardGameEngine.GameState.Application.CreateGame;
 using ThunderbirdsBoardGameEngine.GameState.Application.MoveThunderbird;
 using ThunderbirdsBoardGameEngine.GameState.Application.TransferCharacters;
 using ThunderbirdsBoardGameEngine.GameState.Infrastructure.GameStateIntegrity;
@@ -43,6 +44,7 @@ namespace ThunderbirdsBoardGameEngine.GameState.Infrastructure
         public static IServiceCollection AddGameStateIntegrity(this IServiceCollection services)
         {
             services.AddSingleton<IGameStateIntegrityValidator, ReferenceDataGameStateIntegrityValidator>();
+            services.AddSingleton<ICharacterExistenceLookup, CharacterExistenceLookup>();
 
             return services;
         }
