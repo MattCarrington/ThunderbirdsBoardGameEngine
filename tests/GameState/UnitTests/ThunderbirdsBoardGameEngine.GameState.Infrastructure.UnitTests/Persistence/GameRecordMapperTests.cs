@@ -46,8 +46,20 @@ namespace ThunderbirdsBoardGameEngine.GameState.Infrastructure.UnitTests.Persist
             Assert.Equal(stateVersion, gameRecord.StateVersion);
             Assert.Equal(characters.Count, gameRecord.CharacterStates.Count);
             Assert.Equal(machines.Count, gameRecord.ThunderbirdMachineStates.Count);
-            Assert.Equal(turnOrder.Count, gameRecord.TurnOrderEntries.Count);
             Assert.Equal(activeTurnIndex, gameRecord.ActiveTurnIndex);
+
+            Assert.Collection(gameRecord.TurnOrderEntries
+                .OrderBy(entry => entry.Position),
+                    first =>
+                    {
+                        Assert.Equal(0, first.Position);
+                        Assert.Equal("CHAR1", first.CharacterCode);
+                    },
+                    second =>
+                    {
+                        Assert.Equal(1, second.Position);
+                        Assert.Equal("CHAR2", second.CharacterCode);
+                    });
         }
 
         [Fact]
@@ -63,7 +75,8 @@ namespace ThunderbirdsBoardGameEngine.GameState.Infrastructure.UnitTests.Persist
             var characterStates = new List<CharacterStateRecord>
             {
                 new() { GameId = gameId, CharacterCode = "character-1", ThunderbirdCode = "TB1" },
-                new() { GameId = gameId, CharacterCode = "character-2", ThunderbirdCode = "TB2" }
+                new() { GameId = gameId, CharacterCode = "character-2", ThunderbirdCode = "TB2" },
+                new() { GameId = gameId, CharacterCode = "character-3", ThunderbirdCode = "TB1" }
             };
 
             var machineStates = new List<ThunderbirdMachineStateRecord>
@@ -74,8 +87,9 @@ namespace ThunderbirdsBoardGameEngine.GameState.Infrastructure.UnitTests.Persist
 
             var turnOrderEntries = new List<GameTurnOrderEntryRecord>
             {
-                new() { GameId = gameId, Position = 0, CharacterCode = "character-1" },
-                new() { GameId = gameId, Position = 1, CharacterCode = "character-2" }
+                new() { GameId = gameId, Position = 1, CharacterCode = "character-1" },
+                new() { GameId = gameId, Position = 2, CharacterCode = "character-3" },
+                new() { GameId = gameId, Position = 0, CharacterCode = "character-2" }
             };
 
             var gameRecord = new GameRecord
@@ -102,8 +116,8 @@ namespace ThunderbirdsBoardGameEngine.GameState.Infrastructure.UnitTests.Persist
             Assert.Equal(stateVersion, game.StateVersion);
             Assert.Equal(characterStates.Count, game.Characters.Count);
             Assert.Equal(machineStates.Count, game.Machines.Count);
-            Assert.Equal(turnOrderEntries.Count, game.TurnOrder.Count);
             Assert.Equal(activeTurnIndex, game.ActiveTurnIndex);
+            Assert.Equal(["character-2", "character-1", "character-3"], game.TurnOrder.Select(code => code.Value));
         }
     }
 }
