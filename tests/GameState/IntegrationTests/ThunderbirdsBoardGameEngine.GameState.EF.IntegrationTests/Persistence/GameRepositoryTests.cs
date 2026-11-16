@@ -3,6 +3,7 @@ using ThunderbirdsBoardGameEngine.GameState.Application.Exceptions;
 using ThunderbirdsBoardGameEngine.GameState.Domain;
 using ThunderbirdsBoardGameEngine.GameState.Domain.Setup.V2;
 using ThunderbirdsBoardGameEngine.GameState.Infrastructure.Persistence;
+using ThunderbirdsBoardGameEngine.ReferenceData.Core.Identities;
 using ThunderbirdsBoardGameEngine.ReferenceData.Core.KnownIdentities;
 using Xunit;
 
@@ -10,8 +11,7 @@ namespace ThunderbirdsBoardGameEngine.GameState.EF.IntegrationTests.Persistence;
 
 public sealed class GameRepositoryTests
 {
-    private const string ConnectionStringEnvironmentVariable =
-        "GAME_STATE_TEST_CONNECTION_STRING";
+    private const string ConnectionStringEnvironmentVariable = "GAME_STATE_TEST_CONNECTION_STRING";
 
     private static readonly DateTimeOffset CreatedAtUtc = new(
         2026,
@@ -28,8 +28,16 @@ public sealed class GameRepositoryTests
         // Arrange
         var options = CreateDbContextOptions();
 
-        var game = new StandardGameSetupFactory()
-            .Create(Guid.NewGuid(), CreatedAtUtc, []);  // TODO: Add turn order
+        var turnOrder = new List<CharacterCode>
+        {
+            KnownCharacterCodes.Gordon,
+            KnownCharacterCodes.LadyPenelope,
+        };
+
+        var game = new StandardGameSetupFactory().Create(
+            Guid.NewGuid(),
+            CreatedAtUtc,
+            turnOrder);
 
         try
         {
@@ -52,6 +60,7 @@ public sealed class GameRepositoryTests
                 .AsNoTracking()
                 .Include(record => record.CharacterStates)
                 .Include(record => record.ThunderbirdMachineStates)
+                .Include(record => record.TurnOrderEntries)
                 .SingleAsync(
                     record => record.Id == game.Id,
                     TestContext.Current.CancellationToken);
@@ -59,10 +68,9 @@ public sealed class GameRepositoryTests
             Assert.Equal(game.Id, persistedGame.Id);
             Assert.Equal(game.CreatedAtUtc, persistedGame.CreatedAtUtc);
             Assert.Equal(game.SetupVersion, persistedGame.SetupVersion);
+            Assert.Equal(game.ActiveTurnIndex, persistedGame.ActiveTurnIndex);
 
-            Assert.Equal(
-                game.Machines.Count,
-                persistedGame.ThunderbirdMachineStates.Count);
+            Assert.Equal(game.Machines.Count, persistedGame.ThunderbirdMachineStates.Count);
 
             foreach (var expectedMachine in game.Machines)
             {
@@ -71,14 +79,10 @@ public sealed class GameRepositoryTests
                     record =>
                         record.ThunderbirdCode == expectedMachine.Key.Value);
 
-                Assert.Equal(
-                    expectedMachine.Value.Value,
-                    persistedMachine.LocationCode);
+                Assert.Equal(expectedMachine.Value.Value, persistedMachine.LocationCode);
             }
 
-            Assert.Equal(
-                game.Characters.Count,
-                persistedGame.CharacterStates.Count);
+            Assert.Equal(game.Characters.Count, persistedGame.CharacterStates.Count);
 
             foreach (var expectedCharacter in game.Characters)
             {
@@ -87,10 +91,15 @@ public sealed class GameRepositoryTests
                     record =>
                         record.CharacterCode == expectedCharacter.Key.Value);
 
-                Assert.Equal(
-                    expectedCharacter.Value.Value,
-                    persistedCharacter.ThunderbirdCode);
+                Assert.Equal(expectedCharacter.Value.Value, persistedCharacter.ThunderbirdCode);
             }
+
+            var persistedTurnOrder = persistedGame.TurnOrderEntries
+                .OrderBy(entry => entry.Position)
+                .Select(entry => entry.CharacterCode)
+                .ToArray();
+
+            Assert.Equal(game.TurnOrder.Select(c => c.Value), persistedTurnOrder);
         }
         finally
         {
@@ -104,8 +113,16 @@ public sealed class GameRepositoryTests
         // Arrange
         var options = CreateDbContextOptions();
 
-        var game = new StandardGameSetupFactory()
-            .Create(Guid.NewGuid(), CreatedAtUtc, []);  // TODO: Add turn order
+        var turnOrder = new List<CharacterCode>
+        {
+            KnownCharacterCodes.Alan,
+            KnownCharacterCodes.John
+        };
+
+        var game = new StandardGameSetupFactory().Create(
+            Guid.NewGuid(),
+            CreatedAtUtc,
+            turnOrder);
 
         try
         {
@@ -132,10 +149,12 @@ public sealed class GameRepositoryTests
                 TestContext.Current.CancellationToken);
 
             // Assert
+            Assert.NotNull(restoredGame);
             Assert.Equal(game.Id, restoredGame.Id);
             Assert.Equal(game.CreatedAtUtc, restoredGame.CreatedAtUtc);
             Assert.Equal(game.SetupVersion, restoredGame.SetupVersion);
             Assert.Equal(game.Machines.Count, restoredGame.Machines.Count);
+            Assert.Equal(game.ActiveTurnIndex, restoredGame.ActiveTurnIndex);
 
             foreach (var expectedMachine in game.Machines)
             {
@@ -146,6 +165,7 @@ public sealed class GameRepositoryTests
                 Assert.Equal(expectedMachine.Value, restoredLocation);
 
             }
+
             Assert.Equal(game.Characters.Count, restoredGame.Characters.Count);
 
             foreach (var expectedCharacter in game.Characters)
@@ -156,6 +176,8 @@ public sealed class GameRepositoryTests
                         out var restoredThunderbird));
                 Assert.Equal(expectedCharacter.Value, restoredThunderbird);
             }
+
+            Assert.Equal(game.TurnOrder, restoredGame.TurnOrder);
         }
         finally
         {
@@ -187,20 +209,26 @@ public sealed class GameRepositoryTests
     }
 
     [Fact]
-    public async Task UpdateGameSession_ShouldPersistMovedThunderbird()
+    public async Task UpdateGameSession_ShouldPersistUpdatedGameAfterChangesMade()
     {
         var options = CreateDbContextOptions();
+
+        var turnOrder = new List<CharacterCode>
+        {
+            KnownCharacterCodes.Scott,
+            KnownCharacterCodes.Virgil
+        };
+
         var game = new StandardGameSetupFactory().Create(
             Guid.NewGuid(),
             CreatedAtUtc,
-            []);  // TODO: Add turn order
+            turnOrder);
 
         var destination = KnownLocationCodes.Europe;
 
         try
         {
-            await using (var createContext =
-                         new GameStateDbContext(options))
+            await using (var createContext = new GameStateDbContext(options))
             {
                 var repository = new GameRepository(
                     createContext,
@@ -211,8 +239,7 @@ public sealed class GameRepositoryTests
                     TestContext.Current.CancellationToken);
             }
 
-            await using (var updateContext =
-                         new GameStateDbContext(options))
+            await using (var updateContext = new GameStateDbContext(options))
             {
                 var repository = new GameRepository(
                     updateContext,
@@ -239,17 +266,15 @@ public sealed class GameRepositoryTests
                     TestContext.Current.CancellationToken);
             }
 
-            await using var verificationContext =
-                new GameStateDbContext(options);
+            await using var verificationContext = new GameStateDbContext(options);
 
             var verificationRepository = new GameRepository(
                 verificationContext,
                 new GameRecordMapper());
 
-            var restoredGame =
-                await verificationRepository.GetGameSessionById(
-                    game.Id,
-                    TestContext.Current.CancellationToken);
+            var restoredGame = await verificationRepository.GetGameSessionById(
+                game.Id,
+                TestContext.Current.CancellationToken);
 
             Assert.NotNull(restoredGame);
 
@@ -281,8 +306,18 @@ public sealed class GameRepositoryTests
             context,
             new GameRecordMapper());
 
-        var nonExistentGame = new StandardGameSetupFactory()
-            .Create(nonExistentGameId, CreatedAtUtc, []);  // TODO: Add turn order
+        var turnOrder = new List<CharacterCode>
+        {
+            KnownCharacterCodes.Alan,
+            KnownCharacterCodes.John,
+            KnownCharacterCodes.Scott,
+            KnownCharacterCodes.Virgil
+        };
+
+        var nonExistentGame = new StandardGameSetupFactory().Create(
+            nonExistentGameId,
+            CreatedAtUtc,
+            turnOrder);
 
         // Act & Assert
         await Assert.ThrowsAsync<GameNotFoundException>(async () =>
@@ -297,8 +332,17 @@ public sealed class GameRepositoryTests
     public async Task UpdateGameSession_ShouldRejectStaleGameState()
     {
         var options = CreateDbContextOptions();
-        var originalGame = new StandardGameSetupFactory()
-            .Create(Guid.NewGuid(), CreatedAtUtc, []);  // TODO: Add turn order
+
+        var turnOrder = new List<CharacterCode>
+        {
+            KnownCharacterCodes.Gordon,
+            KnownCharacterCodes.LadyPenelope,
+        };
+
+        var originalGame = new StandardGameSetupFactory().Create(
+            Guid.NewGuid(),
+            CreatedAtUtc,
+            turnOrder);
 
         try
         {
@@ -322,8 +366,7 @@ public sealed class GameRepositoryTests
                     firstReadContext,
                     new GameRecordMapper());
 
-                firstSnapshot =
-                    await repository.GetGameSessionById(
+                firstSnapshot = await repository.GetGameSessionById(
                         originalGame.Id,
                         TestContext.Current.CancellationToken)
                     ?? throw new InvalidOperationException();
@@ -335,8 +378,7 @@ public sealed class GameRepositoryTests
                     secondReadContext,
                     new GameRecordMapper());
 
-                secondSnapshot =
-                    await repository.GetGameSessionById(
+                secondSnapshot = await repository.GetGameSessionById(
                         originalGame.Id,
                         TestContext.Current.CancellationToken)
                     ?? throw new InvalidOperationException();
@@ -373,24 +415,21 @@ public sealed class GameRepositoryTests
                         TestContext.Current.CancellationToken));
             }
 
-            await using var verificationContext =
-                new GameStateDbContext(options);
+            await using var verificationContext = new GameStateDbContext(options);
 
             var verificationRepository = new GameRepository(
                 verificationContext,
                 new GameRecordMapper());
 
-            var persistedGame =
-                await verificationRepository.GetGameSessionById(
-                    originalGame.Id,
-                    TestContext.Current.CancellationToken);
+            var persistedGame = await verificationRepository.GetGameSessionById(
+                originalGame.Id,
+                TestContext.Current.CancellationToken);
 
             Assert.NotNull(persistedGame);
 
             Assert.Equal(
                 KnownLocationCodes.Europe,
-                persistedGame.Machines[
-                    KnownThunderbirdCodes.Thunderbird1]);
+                persistedGame.Machines[KnownThunderbirdCodes.Thunderbird1]);
         }
         finally
         {
@@ -398,17 +437,93 @@ public sealed class GameRepositoryTests
         }
     }
 
+    [Fact]
+    public async Task UpdateGameSession_UpdatesDoNotChangeTurnOrder()
+    {
+        var options = CreateDbContextOptions();
+
+        var turnOrder = new List<CharacterCode>
+        {
+            KnownCharacterCodes.Alan,
+            KnownCharacterCodes.Scott,
+            KnownCharacterCodes.Virgil,
+            KnownCharacterCodes.LadyPenelope
+        };
+
+        var game = new StandardGameSetupFactory().Create(
+           Guid.NewGuid(),
+           CreatedAtUtc,
+           turnOrder);
+
+        try
+        {
+            await using (var createContext = new GameStateDbContext(options))
+            {
+                var repository = new GameRepository(
+                    createContext,
+                    new GameRecordMapper());
+
+                await repository.CreateNewGameSession(
+                    game,
+                    TestContext.Current.CancellationToken);
+            }
+
+            await using (var updateContext = new GameStateDbContext(options))
+            {
+                var repository = new GameRepository(
+                    updateContext,
+                    new GameRecordMapper());
+
+                var gameToUpdate =
+                    await repository.GetGameSessionById(
+                        game.Id,
+                        TestContext.Current.CancellationToken);
+
+                Assert.NotNull(gameToUpdate);
+
+                gameToUpdate.MoveThunderbirdMachine(
+                    KnownThunderbirdCodes.Thunderbird3,
+                    KnownLocationCodes.GeoStationaryOrbit);
+
+                gameToUpdate.TransferCharacters(
+                    [
+                        new CharacterAssignment(KnownCharacterCodes.Gordon, KnownThunderbirdCodes.Thunderbird2)
+                    ]);
+
+                await repository.UpdateGameSession(
+                    gameToUpdate,
+                    TestContext.Current.CancellationToken);
+            }
+
+            await using var verificationContext = new GameStateDbContext(options);
+
+            var verificationRepository = new GameRepository(
+                verificationContext,
+                new GameRecordMapper());
+
+            var restoredGame = await verificationRepository.GetGameSessionById(
+                game.Id,
+                TestContext.Current.CancellationToken);
+
+            Assert.NotNull(restoredGame);
+
+            Assert.Equal(turnOrder, restoredGame.TurnOrder);
+        }
+        finally
+        {
+            await DeleteGame(options, game.Id);
+        }
+    }
+
     private static DbContextOptions<GameStateDbContext>
         CreateDbContextOptions()
     {
-        var connectionString = Environment.GetEnvironmentVariable(
-            ConnectionStringEnvironmentVariable);
+        var connectionString = Environment.GetEnvironmentVariable(ConnectionStringEnvironmentVariable);
 
         if (string.IsNullOrWhiteSpace(connectionString))
         {
             throw new InvalidOperationException(
-                $"{ConnectionStringEnvironmentVariable} must contain the " +
-                "PostgreSQL integration-test connection string.");
+                $"{ConnectionStringEnvironmentVariable} must contain the PostgreSQL integration-test connection string.");
         }
 
         return new DbContextOptionsBuilder<GameStateDbContext>()
