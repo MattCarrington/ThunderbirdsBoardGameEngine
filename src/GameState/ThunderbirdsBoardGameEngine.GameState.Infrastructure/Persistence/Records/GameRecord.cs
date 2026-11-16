@@ -13,5 +13,9 @@
         public List<CharacterStateRecord> CharacterStates { get; set; } = [];
 
         public List<ThunderbirdMachineStateRecord> ThunderbirdMachineStates { get; set; } = [];
+
+        public int ActiveTurnIndex { get; set; }
+
+        public ICollection<GameTurnOrderEntryRecord> TurnOrderEntries { get; set; } = [];
     }
 }
