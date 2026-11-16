@@ -34,7 +34,7 @@ namespace ThunderbirdsBoardGameEngine.GameState.Application.UnitTests.CreateGame
             };
 
             // Act
-            var result = await handler.Handle(new CreateNewGameCommand(activeTurnOrder), CancellationToken.None);
+            var result = await handler.Handle(new CreateNewGameCommand(activeTurnOrder), TestContext.Current.CancellationToken);
 
             // Assert
             validator.Received(1)
@@ -73,7 +73,7 @@ namespace ThunderbirdsBoardGameEngine.GameState.Application.UnitTests.CreateGame
             };
 
             // Act
-            var result = await handler.Handle(new CreateNewGameCommand(activeTurnOrder), CancellationToken.None);
+            var result = await handler.Handle(new CreateNewGameCommand(activeTurnOrder), TestContext.Current.CancellationToken);
 
             // Assert
             validator.Received(1)
@@ -110,7 +110,12 @@ namespace ThunderbirdsBoardGameEngine.GameState.Application.UnitTests.CreateGame
 
             // Act & Assert
             await Assert.ThrowsAsync<InvalidTurnOrderException>(
-                () => handler.Handle(new CreateNewGameCommand(activeTurnOrder), CancellationToken.None));
+                () => handler.Handle(new CreateNewGameCommand(activeTurnOrder), TestContext.Current.CancellationToken));
+
+            await repository.DidNotReceive()
+                .CreateNewGameSession(
+                    Arg.Any<Game>(),
+                    Arg.Any<CancellationToken>());
         }
 
         [Fact]
@@ -140,7 +145,12 @@ namespace ThunderbirdsBoardGameEngine.GameState.Application.UnitTests.CreateGame
 
             // Act & Assert
             await Assert.ThrowsAsync<InvalidTurnOrderException>(
-                () => handler.Handle(new CreateNewGameCommand(activeTurnOrder), CancellationToken.None));
+                () => handler.Handle(new CreateNewGameCommand(activeTurnOrder), TestContext.Current.CancellationToken));
+
+            await repository.DidNotReceive()
+                .CreateNewGameSession(
+                    Arg.Any<Game>(),
+                    Arg.Any<CancellationToken>());
         }
 
         [Fact]
@@ -171,7 +181,7 @@ namespace ThunderbirdsBoardGameEngine.GameState.Application.UnitTests.CreateGame
 
             // Act
             await Assert.ThrowsAsync<InvalidOperationException>(
-                () => handler.Handle(new CreateNewGameCommand(activeTurnOrder), CancellationToken.None));
+                () => handler.Handle(new CreateNewGameCommand(activeTurnOrder), TestContext.Current.CancellationToken));
 
             // Assert
             validator.Received(1)
@@ -207,7 +217,12 @@ namespace ThunderbirdsBoardGameEngine.GameState.Application.UnitTests.CreateGame
 
             // Act & Assert
             await Assert.ThrowsAsync<CharacterNotFoundException>(
-                () => handler.Handle(new CreateNewGameCommand(activeTurnOrder), CancellationToken.None));
+                () => handler.Handle(new CreateNewGameCommand(activeTurnOrder), TestContext.Current.CancellationToken));
+
+            await repository.DidNotReceive()
+                .CreateNewGameSession(
+                    Arg.Any<Game>(),
+                    Arg.Any<CancellationToken>());
         }
 
         [Fact]
@@ -235,7 +250,12 @@ namespace ThunderbirdsBoardGameEngine.GameState.Application.UnitTests.CreateGame
 
             // Act & Assert
             await Assert.ThrowsAsync<InvalidTurnOrderException>(
-                () => handler.Handle(new CreateNewGameCommand(activeTurnOrder), CancellationToken.None));
+                () => handler.Handle(new CreateNewGameCommand(activeTurnOrder), TestContext.Current.CancellationToken));
+
+            await repository.DidNotReceive()
+                .CreateNewGameSession(
+                    Arg.Any<Game>(),
+                    Arg.Any<CancellationToken>());
         }
 
         [Fact]
@@ -259,7 +279,12 @@ namespace ThunderbirdsBoardGameEngine.GameState.Application.UnitTests.CreateGame
 
             // Act & Assert
             await Assert.ThrowsAsync<InvalidTurnOrderException>(
-                () => handler.Handle(new CreateNewGameCommand(activeTurnOrder), CancellationToken.None));
+                () => handler.Handle(new CreateNewGameCommand(activeTurnOrder), TestContext.Current.CancellationToken));
+
+            await repository.DidNotReceive()
+                .CreateNewGameSession(
+                    Arg.Any<Game>(),
+                    Arg.Any<CancellationToken>());
         }
 
         [Fact]
@@ -283,7 +308,12 @@ namespace ThunderbirdsBoardGameEngine.GameState.Application.UnitTests.CreateGame
 
             // Act & Assert
             await Assert.ThrowsAsync<ArgumentNullException>(
-                () => handler.Handle(new CreateNewGameCommand(activeTurnOrder), CancellationToken.None));
+                () => handler.Handle(new CreateNewGameCommand(activeTurnOrder), TestContext.Current.CancellationToken));
+
+            await repository.DidNotReceive()
+                .CreateNewGameSession(
+                    Arg.Any<Game>(),
+                    Arg.Any<CancellationToken>());
         }
     }
 }
