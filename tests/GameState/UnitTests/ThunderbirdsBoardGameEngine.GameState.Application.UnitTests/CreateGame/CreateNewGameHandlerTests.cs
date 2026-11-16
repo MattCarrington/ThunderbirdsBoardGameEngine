@@ -29,8 +29,8 @@ namespace ThunderbirdsBoardGameEngine.GameState.Application.UnitTests.CreateGame
 
             var activeTurnOrder = new List<CharacterCode>
             {
-                new("character-1"),
-                new("character-2"),
+                KnownCharacterCodes.Alan,
+                KnownCharacterCodes.Gordon,
             };
 
             // Act
@@ -66,10 +66,10 @@ namespace ThunderbirdsBoardGameEngine.GameState.Application.UnitTests.CreateGame
 
             var activeTurnOrder = new List<CharacterCode>
             {
-                new("character-1"),
-                new("character-2"),
-                new("character-3"),
-                new("character-4"),
+                KnownCharacterCodes.Scott,
+                KnownCharacterCodes.John,
+                KnownCharacterCodes.LadyPenelope,
+                KnownCharacterCodes.Virgil
             };
 
             // Act
@@ -105,7 +105,7 @@ namespace ThunderbirdsBoardGameEngine.GameState.Application.UnitTests.CreateGame
             var activeTurnOrder = new List<CharacterCode>
 
             {
-                new("character-1"),
+                KnownCharacterCodes.Virgil,
             };
 
             // Act & Assert
@@ -119,6 +119,7 @@ namespace ThunderbirdsBoardGameEngine.GameState.Application.UnitTests.CreateGame
             // Arrange
             var validator = Substitute.For<IGameStateIntegrityValidator>();
             var repository = Substitute.For<IGameRepository>();
+
             var existenceLookup = Substitute.For<ICharacterExistenceLookup>();
             existenceLookup.Exists(Arg.Any<CharacterCode>()).Returns(true);
 
@@ -148,6 +149,7 @@ namespace ThunderbirdsBoardGameEngine.GameState.Application.UnitTests.CreateGame
             // Arrange
             var validator = Substitute.For<IGameStateIntegrityValidator>();
             var repository = Substitute.For<IGameRepository>();
+
             var existenceLookup = Substitute.For<ICharacterExistenceLookup>();
             existenceLookup.Exists(Arg.Any<CharacterCode>()).Returns(true);
 
@@ -163,8 +165,8 @@ namespace ThunderbirdsBoardGameEngine.GameState.Application.UnitTests.CreateGame
 
             var activeTurnOrder = new List<CharacterCode>
             {
-                new("character-1"),
-                new("character-2"),
+                KnownCharacterCodes.Scott,
+                KnownCharacterCodes.John,
             };
 
             // Act
@@ -187,6 +189,7 @@ namespace ThunderbirdsBoardGameEngine.GameState.Application.UnitTests.CreateGame
             // Arrange
             var validator = Substitute.For<IGameStateIntegrityValidator>();
             var repository = Substitute.For<IGameRepository>();
+
             var existenceLookup = Substitute.For<ICharacterExistenceLookup>();
             existenceLookup.Exists(Arg.Any<CharacterCode>()).Returns(false);
 
@@ -226,8 +229,8 @@ namespace ThunderbirdsBoardGameEngine.GameState.Application.UnitTests.CreateGame
 
             var activeTurnOrder = new List<CharacterCode>
             {
-                new("character-1"),
-                new("character-1"), // Duplicate character
+                KnownCharacterCodes.LadyPenelope,
+                KnownCharacterCodes.LadyPenelope
             };
 
             // Act & Assert

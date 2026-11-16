@@ -58,8 +58,8 @@ namespace ThunderbirdsBoardGameEngine.GameState.Infrastructure.UnitTests.Persist
 
             var characterStates = new List<CharacterStateRecord>
             {
-                new() { GameId = gameId, CharacterCode = "CHAR1", ThunderbirdCode = "TB1" },
-                new() { GameId = gameId, CharacterCode = "CHAR2", ThunderbirdCode = "TB2" }
+                new() { GameId = gameId, CharacterCode = "character-1", ThunderbirdCode = "TB1" },
+                new() { GameId = gameId, CharacterCode = "character-2", ThunderbirdCode = "TB2" }
             };
 
             var machineStates = new List<ThunderbirdMachineStateRecord>

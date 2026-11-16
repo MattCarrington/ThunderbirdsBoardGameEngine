@@ -42,6 +42,8 @@ namespace ThunderbirdsBoardGameEngine.GameState.Domain
             IReadOnlyList<CharacterCode> turnOrder,
             int activeTurnIndex)
         {
+            ValidateTurnState(characters, turnOrder, activeTurnIndex);
+
             Id = id;
             CreatedAtUtc = createdAtUtc;
             SetupVersion = setupVersion;
@@ -186,6 +188,39 @@ namespace ThunderbirdsBoardGameEngine.GameState.Domain
                 .Select(kvp => kvp.Key)
                 .ToList()
                 .AsReadOnly();
+        }
+
+        private static void ValidateTurnState(IReadOnlyDictionary<CharacterCode, ThunderbirdCode> characters, IReadOnlyList<CharacterCode> turnOrder, int activeTurnIndex)
+        {
+            ArgumentNullException.ThrowIfNull(turnOrder);
+
+            if (turnOrder.Count is < 2 or > 4)
+            {
+                throw new ArgumentException(
+                    "Turn order must contain between two and four characters.",
+                    nameof(turnOrder));
+            }
+
+            if (turnOrder.Distinct().Count() != turnOrder.Count)
+            {
+                throw new ArgumentException(
+                    "Turn order cannot contain duplicate characters.",
+                    nameof(turnOrder));
+            }
+
+            if (turnOrder.Any(character => !characters.ContainsKey(character)))
+            {
+                throw new ArgumentException(
+                    "Every turn-order character must exist in the game.",
+                    nameof(turnOrder));
+            }
+
+            if (activeTurnIndex < 0
+                || activeTurnIndex >= turnOrder.Count)
+            {
+                throw new ArgumentOutOfRangeException(
+                    nameof(activeTurnIndex));
+            }
         }
     }
 }

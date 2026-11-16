@@ -37,12 +37,13 @@ namespace ThunderbirdsBoardGameEngine.GameState.Infrastructure.UnitTests.GameSta
                 machines: new Dictionary<ThunderbirdCode, LocationCode>
                 {
                     { new("thunderbird-1"), new("location-1") },
-                    { new("thunderbird-2"), new("location-2") }
+                    { new("thunderbird-2"), new("location-2") },
                 },
                 characters: new Dictionary<CharacterCode, ThunderbirdCode>
                 {
                     { new("character-1"), new("thunderbird-1") },
-                    { new("character-2"), new("thunderbird-2") }
+                    { new("character-2"), new("thunderbird-2") },
+                    { new("character-3"), new("thunderbird-1") }
                 },
                 turnOrder: [new("character-1"), new("character-2")]);
 
@@ -69,9 +70,10 @@ namespace ThunderbirdsBoardGameEngine.GameState.Infrastructure.UnitTests.GameSta
                 {
                     { new("character-1"), new("thunderbird-1") },
                     { new("character-2"), new("thunderbird-2") },
-                    { new("character-3"), new("thunderbird-1") }
+                    { new("character-3"), new("thunderbird-1") },
+                    { new("character-4"), new("thunderbird-2") }
                 },
-                turnOrder: [new("character-1"), new("character-2"), new("character-3")]);
+                turnOrder: [new("character-1"), new("character-2")]);
 
             // Act & Assert
             Assert.Throws<InvalidGameStateException>(() => validator.Validate(game));
@@ -94,9 +96,10 @@ namespace ThunderbirdsBoardGameEngine.GameState.Infrastructure.UnitTests.GameSta
                 },
                 characters: new Dictionary<CharacterCode, ThunderbirdCode>
                 {
-                    { new("character-1"), new("thunderbird-1") }
+                    { new("character-1"), new("thunderbird-1") },
+                    { new("character-2"), new("thunderbird-2") }
                 },
-                turnOrder: [new("character-1")]);
+                turnOrder: [new("character-1"), new("character-2")]);
 
             // Act & Assert
             Assert.Throws<InvalidGameStateException>(() => validator.Validate(game));
@@ -172,7 +175,8 @@ namespace ThunderbirdsBoardGameEngine.GameState.Infrastructure.UnitTests.GameSta
                 characters: new Dictionary<CharacterCode, ThunderbirdCode>
                 {
                     { new("character-1"), new("thunderbird-1") },
-                    { new("character-2"), new("thunderbird-x") } // character-2 is assigned to a non-existent thunderbird
+                    { new("character-2"), new("thunderbird-x") }, // character-2 is assigned to a non-existent thunderbird
+                    { new("character-3"), new("thunderbird-1") }
                 },
                 turnOrder: [new("character-1"), new("character-2")]);
 
@@ -196,7 +200,8 @@ namespace ThunderbirdsBoardGameEngine.GameState.Infrastructure.UnitTests.GameSta
                 characters: new Dictionary<CharacterCode, ThunderbirdCode>
                 {
                     { new("character-1"), new("thunderbird-1") },
-                    { new("character-2"), new("thunderbird-2") }
+                    { new("character-2"), new("thunderbird-2") },
+                    { new("character-3"), new("thunderbird-1") }
                 },
                 turnOrder: [new("character-1"), new("character-2")]);
 
@@ -221,7 +226,8 @@ namespace ThunderbirdsBoardGameEngine.GameState.Infrastructure.UnitTests.GameSta
                 characters: new Dictionary<CharacterCode, ThunderbirdCode>
                 {
                     { new("character-1"), new("thunderbird-1") },
-                    { new("character-2"), new("thunderbird-2") }
+                    { new("character-2"), new("thunderbird-2") },
+                    { new("character-3"), new("thunderbird-1") }
                 },
                 turnOrder: [new("character-1"), new("character-2")]);
 
@@ -246,7 +252,8 @@ namespace ThunderbirdsBoardGameEngine.GameState.Infrastructure.UnitTests.GameSta
                 characters: new Dictionary<CharacterCode, ThunderbirdCode>
                 {
                     { new("character-1"), new("thunderbird-1") },
-                    { new("character-2"), new("thunderbird-2") }
+                    { new("character-2"), new("thunderbird-2") },
+                    { new("character-3"), new("thunderbird-1") }
                 },
                 turnOrder: [new("character-1"), new("character-2")]);
 
@@ -272,7 +279,8 @@ namespace ThunderbirdsBoardGameEngine.GameState.Infrastructure.UnitTests.GameSta
                 characters: new Dictionary<CharacterCode, ThunderbirdCode>
                 {
                     { new("character-1"), new("thunderbird-1") },
-                    { new("character-2"), new("thunderbird-2") }
+                    { new("character-2"), new("thunderbird-2") },
+                    { new("character-3"), new("thunderbird-1") }
                 },
                 turnOrder: [new("character-1"), new("character-2")]);
 
@@ -285,6 +293,7 @@ namespace ThunderbirdsBoardGameEngine.GameState.Infrastructure.UnitTests.GameSta
         {
             var characterOne = ReferenceDefinitionFactory.Character(new CharacterCode("character-1"), "Character 1", null);
             var characterTwo = ReferenceDefinitionFactory.Character(new CharacterCode("character-2"), "Character 2", null);
+            var characterThree = ReferenceDefinitionFactory.Character(new CharacterCode("character-3"), "Character 3", null);
 
             var thunderbirdOne = ReferenceDefinitionFactory.Thunderbird(
                 code: new ThunderbirdCode("thunderbird-1"),
@@ -313,9 +322,10 @@ namespace ThunderbirdsBoardGameEngine.GameState.Infrastructure.UnitTests.GameSta
             thunderbirdCatalog.GetAll().Returns(new[] { thunderbirdOne, thunderbirdTwo }.ToImmutableArray());
 
             var characterCatalog = Substitute.For<ICharacterDefinitionCatalog>();
-            characterCatalog.GetAll().Returns(new[] { characterOne, characterTwo }.ToImmutableArray());
+            characterCatalog.GetAll().Returns(new[] { characterOne, characterTwo, characterThree }.ToImmutableArray());
             characterCatalog.GetByCode(characterOne.Code).Returns(characterOne);
             characterCatalog.GetByCode(characterTwo.Code).Returns(characterTwo);
+            characterCatalog.GetByCode(characterThree.Code).Returns(characterThree);
 
             return new ReferenceDataGameStateIntegrityValidator(
                 locationCatalog,
