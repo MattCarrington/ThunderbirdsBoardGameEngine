@@ -1,6 +1,6 @@
 ﻿namespace ThunderbirdsBoardGameEngine.GameState.Infrastructure.Persistence.Records
 {
-    internal sealed record GameTurnOrderEntryRecord
+    internal sealed class GameTurnOrderEntryRecord
     {
         public Guid GameId { get; set; }
 
