@@ -18,6 +18,11 @@ namespace ThunderbirdsBoardGameEngine.GameState.Infrastructure.Persistence
                     new ThunderbirdMachineStateRecord { GameId = game.Id, ThunderbirdCode = ms.Key.Value, LocationCode = ms.Value.Value })
                 .ToList();
 
+            var turnOrderEntries = game.TurnOrder
+                .Select((characterCode, index) =>
+                    new GameTurnOrderEntryRecord { GameId = game.Id, Position = index, CharacterCode = characterCode.Value })
+                .ToList();
+
             var gameRecord = new GameRecord
             {
                 Id = game.Id,
@@ -25,7 +30,9 @@ namespace ThunderbirdsBoardGameEngine.GameState.Infrastructure.Persistence
                 SetupVersion = game.SetupVersion,
                 StateVersion = game.StateVersion,
                 CharacterStates = characterStates,
-                ThunderbirdMachineStates = thunderbirdMachineStates
+                ThunderbirdMachineStates = thunderbirdMachineStates,
+                ActiveTurnIndex = game.ActiveTurnIndex,
+                TurnOrderEntries = turnOrderEntries
             };
 
             return gameRecord;
@@ -43,6 +50,11 @@ namespace ThunderbirdsBoardGameEngine.GameState.Infrastructure.Persistence
                     ms => new ThunderbirdCode(ms.ThunderbirdCode),
                     ms => new LocationCode(ms.LocationCode));
 
+            var turnOrder = gameRecord.TurnOrderEntries
+                .OrderBy(entry => entry.Position)
+                .Select(entry => new CharacterCode(entry.CharacterCode))
+                .ToList();
+
             var game = Game.Restore(
                 id: gameRecord.Id,
                 createdAtUtc: gameRecord.CreatedAtUtc,
@@ -50,8 +62,8 @@ namespace ThunderbirdsBoardGameEngine.GameState.Infrastructure.Persistence
                 stateVersion: gameRecord.StateVersion,
                 machines: machines,
                 characters: characters,
-                turnOrder: [new("character-1"), new("character-2")],    //  TODO: This is a placeholder. The turn order should be stored in the GameRecord and restored here.
-                activeTurnIndex: 0);                                    //  TODO: This is a placeholder. The active turn index should be stored in the GameRecord and restored here.
+                turnOrder: turnOrder,
+                activeTurnIndex: gameRecord.ActiveTurnIndex);
 
             return game;
         }
