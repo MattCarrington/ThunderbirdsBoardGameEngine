@@ -8,6 +8,8 @@ namespace ThunderbirdsBoardGameEngine.GameState.Infrastructure.Persistence.Recor
     {
         public void Configure(EntityTypeBuilder<GameTurnOrderEntryRecord> builder)
         {
+            builder.ToTable("game_turn_order");
+
             builder.HasKey(entry => new { entry.GameId, entry.Position });
 
             builder.HasIndex(entry => new { entry.GameId, entry.CharacterCode })
