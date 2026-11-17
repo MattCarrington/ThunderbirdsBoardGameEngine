@@ -3,6 +3,7 @@ using System.Net;
 using ThunderbirdsBoardGameEngine.Client.Core;
 using ThunderbirdsBoardGameEngine.GameState.Client.Interfaces.V1;
 using ThunderbirdsBoardGameEngine.GameState.Contracts.Dtos.V1;
+using ThunderbirdsBoardGameEngine.GameState.Contracts.Dtos.V1.CreateGame;
 using ThunderbirdsBoardGameEngine.GameState.Contracts.Dtos.V1.ThunderbirdMachines;
 using ThunderbirdsBoardGameEngine.GameState.Contracts.Dtos.V1.TransferCharacters;
 using ThunderbirdsBoardGameEngine.ReferenceData.Runtime.Interfaces;
@@ -26,10 +27,15 @@ namespace ThunderbirdsBoardGameEngine.UI.UnitTests.GameDashboard.Services
                 ThunderbirdMachines = []
             };
 
+            var request = new CreateGameRequestDto
+            {
+                TurnOrder = []  //  TODO: Populate with actual turn order values as needed
+            };
+
             var apiResult = ApiResult<GameStateResponseDto>.SuccessResult(dto, HttpStatusCode.Created);
 
             var client = Substitute.For<IGameClient>();
-            client.CreateGameAsync(Arg.Any<CancellationToken>()).Returns(apiResult);
+            client.CreateGameAsync(request, Arg.Any<CancellationToken>()).Returns(apiResult);
 
             var service = CreateGameService(client);
 
@@ -39,17 +45,22 @@ namespace ThunderbirdsBoardGameEngine.UI.UnitTests.GameDashboard.Services
             // Assert
             Assert.False(game == Guid.Empty);
 
-            await client.Received(1).CreateGameAsync(Arg.Any<CancellationToken>());
+            await client.Received(1).CreateGameAsync(request, Arg.Any<CancellationToken>());
         }
 
         [Fact]
         public async Task CreateGameAsync_WhenClientReturnsError_ThrowsInvalidOperationException()
         {
             // Arrange
-            var apiResult = ApiResult<GameStateResponseDto>.Failure("Error", HttpStatusCode.InternalServerError);
+
+
+            var request = new CreateGameRequestDto
+            {
+                TurnOrder = []  //  TODO: Populate with actual turn order values as needed
+            }; var apiResult = ApiResult<GameStateResponseDto>.Failure("Error", HttpStatusCode.InternalServerError);
 
             var client = Substitute.For<IGameClient>();
-            client.CreateGameAsync(Arg.Any<CancellationToken>()).Returns(apiResult);
+            client.CreateGameAsync(request, Arg.Any<CancellationToken>()).Returns(apiResult);
 
             var service = CreateGameService(client);
 
@@ -61,10 +72,14 @@ namespace ThunderbirdsBoardGameEngine.UI.UnitTests.GameDashboard.Services
         public async Task CreateGameAsync_WhenClientReturnsNullData_ThrowsInvalidOperationException()
         {
             // Arrange
+            var request = new CreateGameRequestDto
+            {
+                TurnOrder = []  //  TODO: Populate with actual turn order values as needed
+            };
             var apiResult = ApiResult<GameStateResponseDto>.SuccessResult(null, HttpStatusCode.Created);
 
             var client = Substitute.For<IGameClient>();
-            client.CreateGameAsync(Arg.Any<CancellationToken>()).Returns(apiResult);
+            client.CreateGameAsync(request, Arg.Any<CancellationToken>()).Returns(apiResult);
 
             var service = CreateGameService(client);
 

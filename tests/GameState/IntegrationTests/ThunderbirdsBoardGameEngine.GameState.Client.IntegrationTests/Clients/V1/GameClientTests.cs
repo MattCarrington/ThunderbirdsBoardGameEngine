@@ -3,6 +3,7 @@ using ThunderbirdsBoardGameEngine.Client.Core;
 using ThunderbirdsBoardGameEngine.GameState.Client.IntegrationTests.Fixtures;
 using ThunderbirdsBoardGameEngine.GameState.Client.Interfaces.V1;
 using ThunderbirdsBoardGameEngine.GameState.Contracts.Dtos.V1;
+using ThunderbirdsBoardGameEngine.GameState.Contracts.Dtos.V1.CreateGame;
 using ThunderbirdsBoardGameEngine.GameState.Contracts.Dtos.V1.ThunderbirdMachines;
 using ThunderbirdsBoardGameEngine.GameState.Contracts.Dtos.V1.TransferCharacters;
 using ThunderbirdsBoardGameEngine.ReferenceData.Core.Identities;
@@ -27,9 +28,17 @@ namespace ThunderbirdsBoardGameEngine.GameState.Client.IntegrationTests.Clients.
         public async Task CreateNewGame()
         {
             // Arrange
+            var request = new CreateGameRequestDto
+            {
+                TurnOrder =
+                [
+                    "scott",
+                    "gordon"
+                ]
+            };
 
             // Act
-            var response = await _client.CreateGameAsync(CancellationToken.None);
+            var response = await _client.CreateGameAsync(request, CancellationToken.None);
 
             // Assert
             AssertResponse(response, HttpStatusCode.Created);

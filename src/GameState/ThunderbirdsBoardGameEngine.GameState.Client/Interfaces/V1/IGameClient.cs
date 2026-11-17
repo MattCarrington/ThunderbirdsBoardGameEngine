@@ -1,5 +1,6 @@
 ﻿using ThunderbirdsBoardGameEngine.Client.Core;
 using ThunderbirdsBoardGameEngine.GameState.Contracts.Dtos.V1;
+using ThunderbirdsBoardGameEngine.GameState.Contracts.Dtos.V1.CreateGame;
 using ThunderbirdsBoardGameEngine.GameState.Contracts.Dtos.V1.ThunderbirdMachines;
 using ThunderbirdsBoardGameEngine.GameState.Contracts.Dtos.V1.TransferCharacters;
 
@@ -13,9 +14,10 @@ namespace ThunderbirdsBoardGameEngine.GameState.Client.Interfaces.V1
         /// <summary>
         /// Creates a new game and returns the initial game state.
         /// </summary>
-        /// <param name="cancellationToken">A cancellation token to cancel the operation.</param>
+        /// <param name="request">Request containing the details for creating a new game.</param>
         /// <returns>A task that yields an ApiResult containing the created game's state.</returns>
-        Task<ApiResult<GameStateResponseDto>> CreateGameAsync(CancellationToken cancellationToken = default);
+        /// <param name="cancellationToken">A cancellation token to cancel the operation.</param>
+        Task<ApiResult<GameStateResponseDto>> CreateGameAsync(CreateGameRequestDto request, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Retrieves the current state of the specified game.

@@ -1,5 +1,6 @@
 ﻿using System.Net;
 using ThunderbirdsBoardGameEngine.GameState.Client.Interfaces.V1;
+using ThunderbirdsBoardGameEngine.GameState.Contracts.Dtos.V1.CreateGame;
 using ThunderbirdsBoardGameEngine.GameState.Contracts.Dtos.V1.ThunderbirdMachines;
 using ThunderbirdsBoardGameEngine.GameState.Contracts.Dtos.V1.TransferCharacters;
 using ThunderbirdsBoardGameEngine.UI.Features.GameDashboard.Interfaces;
@@ -21,7 +22,12 @@ namespace ThunderbirdsBoardGameEngine.UI.Features.GameDashboard.Services
 
         public async Task<Guid> CreateGameAsync()
         {
-            var result = await _client.CreateGameAsync();
+            var request = new CreateGameRequestDto
+            {
+                TurnOrder = []  //  TODO: Populate with actual turn order values as needed
+            };
+
+            var result = await _client.CreateGameAsync(request);
 
             if (!result.Success || result.Data is null)
             {

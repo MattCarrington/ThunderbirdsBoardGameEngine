@@ -1,4 +1,5 @@
 ﻿using ThunderbirdsBoardGameEngine.GameState.Client.Interfaces.V1;
+using ThunderbirdsBoardGameEngine.GameState.Contracts.Dtos.V1.CreateGame;
 
 namespace ThunderbirdsBoardGameEngine.PlaywrightTests.Services
 {
@@ -6,7 +7,16 @@ namespace ThunderbirdsBoardGameEngine.PlaywrightTests.Services
     {
         public async Task<Guid> CreateGameAsync()
         {
-            var result = await gameClient.CreateGameAsync();
+            var dto = new CreateGameRequestDto
+            {
+                TurnOrder =
+                [
+                    "gordon",
+                    "virgil"
+                ]
+            };
+
+            var result = await gameClient.CreateGameAsync(dto);
 
             if (!result.Success || result.Data is null)
             {
