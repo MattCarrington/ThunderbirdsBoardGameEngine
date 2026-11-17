@@ -11,9 +11,9 @@ namespace ThunderbirdsBoardGameEngine.GameState.Contracts.Dtos.V1.CreateGame
         /// Gets the order in which players take turns.
         /// </summary>
         /// <remarks>The list must contain between 2 and 4 entries.</remarks>
-        [Required]
-        [MinLength(2)]
-        [MaxLength(4)]
+        [Required(ErrorMessage = "Turn order must be provided.")]
+        [MinLength(2, ErrorMessage = "Turn order must contain at least two characters.")]
+        [MaxLength(4, ErrorMessage = "Turn order must contain no more than four characters.")]
         public required IReadOnlyList<string> TurnOrder { get; init; }
 
         /// <summary>
