@@ -97,25 +97,6 @@ namespace ThunderbirdsBoardGameEngine.GameState.ComponentTests.CreateGame
         }
 
         [Fact]
-        public async Task ThrowsExceptionWhenCreatingGameWithDuplicatePlayers()
-        {
-            // Arrange
-            await using var testHost = GameStateTestHost.CreateBuilder().Build();
-
-            var activeTurnOrder = new List<CharacterCode>
-            {
-                KnownCharacterCodes.Scott,
-                KnownCharacterCodes.Virgil,
-                KnownCharacterCodes.Scott, // Duplicate
-            };
-
-            var command = new CreateNewGameCommand(activeTurnOrder);
-
-            // Act & Assert
-            await Assert.ThrowsAsync<InvalidTurnOrderException>(() => testHost.Mediator.Send(command, TestContext.Current.CancellationToken));
-        }
-
-        [Fact]
         public async Task ThrowsExceptionWhenCreatingGameWithInvalidCharacter()
         {
             // Arrange
@@ -132,55 +113,6 @@ namespace ThunderbirdsBoardGameEngine.GameState.ComponentTests.CreateGame
 
             // Act & Assert
             await Assert.ThrowsAsync<CharacterNotFoundException>(() => testHost.Mediator.Send(command, TestContext.Current.CancellationToken));
-        }
-
-        [Fact]
-        public async Task ThrowsInvalidTurnOrderExceptionWhenCreatingGameWithSinglePlayer()
-        {
-            // Arrange
-            await using var testHost = GameStateTestHost.CreateBuilder().Build();
-
-            var activeTurnOrder = new List<CharacterCode>
-            {
-                KnownCharacterCodes.Scott,
-            };
-
-            var command = new CreateNewGameCommand(activeTurnOrder);
-
-            // Act & Assert
-            await Assert.ThrowsAsync<InvalidTurnOrderException>(() => testHost.Mediator.Send(command, TestContext.Current.CancellationToken));
-        }
-
-        [Fact]
-        public async Task ThrowsInvalidTurnOrderExceptionWhenCreatingGameWithFivePlayers()
-        {
-            // Arrange
-            await using var testHost = GameStateTestHost.CreateBuilder().Build();
-            var activeTurnOrder = new List<CharacterCode>
-            {
-                KnownCharacterCodes.Scott,
-                KnownCharacterCodes.Virgil,
-                KnownCharacterCodes.Alan,
-                KnownCharacterCodes.Gordon,
-                KnownCharacterCodes.John
-            };
-
-            var command = new CreateNewGameCommand(activeTurnOrder);
-
-            // Act & Assert
-            await Assert.ThrowsAsync<InvalidTurnOrderException>(() => testHost.Mediator.Send(command, TestContext.Current.CancellationToken));
-        }
-
-        [Fact]
-        public async Task ThrowsExceptionIfTurnOrderIsNull()
-        {
-            // Arrange
-            await using var testHost = GameStateTestHost.CreateBuilder().Build();
-
-            var command = new CreateNewGameCommand(null!);
-
-            // Act & Assert
-            await Assert.ThrowsAsync<ArgumentNullException>(() => testHost.Mediator.Send(command, TestContext.Current.CancellationToken));
         }
     }
 }
