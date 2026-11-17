@@ -27,15 +27,17 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints.GameState.V1
         public async Task CanCreateNewGameWithFourActiveCharacters()
         {
             // Arrange
+            var turnOrder = new List<string>
+            {
+                KnownCharacterCodes.Scott.Value,
+                KnownCharacterCodes.John.Value,
+                KnownCharacterCodes.Virgil.Value,
+                KnownCharacterCodes.Gordon.Value
+            };
+
             var dto = new CreateGameRequestDto
             {
-                TurnOrder =
-                [
-                    KnownCharacterCodes.Scott.Value,
-                    KnownCharacterCodes.John.Value,
-                    KnownCharacterCodes.Virgil.Value,
-                    KnownCharacterCodes.Gordon.Value
-                ]
+                TurnOrder = turnOrder
             };
 
             var route = GameStateRoutes.CreateGame();
@@ -54,6 +56,7 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints.GameState.V1
             Assert.NotNull(result);
             Assert.True(result.GameId != Guid.Empty);
             Assert.NotNull(result.ThunderbirdMachines);
+            Assert.Equal(turnOrder, result.TurnOrder);
 
             var expectedLocation = GameStateRoutes.GetGame(result.GameId);
 
@@ -65,13 +68,15 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints.GameState.V1
         public async Task CanCreateNewGameWithTwoActiveCharacters()
         {
             // Arrange
+            var turnOrder = new List<string>
+            {
+                KnownCharacterCodes.Scott.Value,
+                KnownCharacterCodes.John.Value
+            };
+
             var dto = new CreateGameRequestDto
             {
-                TurnOrder =
-                [
-                    KnownCharacterCodes.Scott.Value,
-                    KnownCharacterCodes.John.Value
-                ]
+                TurnOrder = turnOrder
             };
 
             var route = GameStateRoutes.CreateGame();
@@ -90,6 +95,7 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints.GameState.V1
             Assert.NotNull(result);
             Assert.True(result.GameId != Guid.Empty);
             Assert.NotNull(result.ThunderbirdMachines);
+            Assert.Equal(turnOrder, result.TurnOrder);
 
             var expectedLocation = GameStateRoutes.GetGame(result.GameId);
             Assert.NotNull(response.Headers.Location);
