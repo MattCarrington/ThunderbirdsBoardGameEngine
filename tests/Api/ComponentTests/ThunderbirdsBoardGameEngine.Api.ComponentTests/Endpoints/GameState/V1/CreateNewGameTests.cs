@@ -2,6 +2,8 @@
 using System.Net.Http.Json;
 using ThunderbirdsBoardGameEngine.Api.ComponentTests.Factories;
 using ThunderbirdsBoardGameEngine.GameState.Contracts.Dtos.V1;
+using ThunderbirdsBoardGameEngine.GameState.Contracts.Dtos.V1.CreateGame;
+using ThunderbirdsBoardGameEngine.ReferenceData.Core.KnownIdentities;
 using Xunit;
 
 namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints.GameState.V1
@@ -21,10 +23,22 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints.GameState.V1
         public async Task CanCreateNewGame()
         {
             // Arrange
+            var dto = new CreateGameRequestDto
+            {
+                TurnOrder = new List<string>
+                {
+                    KnownCharacterCodes.Scott.Value,
+                    KnownCharacterCodes.John.Value,
+                    KnownCharacterCodes.Virgil.Value,
+                    KnownCharacterCodes.Gordon.Value
+                }
+            };
+
             var route = GameStateRoutes.CreateGame();
 
             using var request = new HttpRequestMessage(HttpMethod.Post, route);
             request.Headers.Add("X-API-Version", ApiVersion.ToString());
+            request.Content = JsonContent.Create(dto);
 
             // Act
             using var response = await _httpClient.SendAsync(request, TestContext.Current.CancellationToken);
