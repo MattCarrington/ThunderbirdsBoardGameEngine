@@ -126,8 +126,15 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints.GameState.V1
         public async Task ReturnsOkWhenNoChanges()
         {
             // Arrange
+            var turnOrder = new List<CharacterCode>
+            {
+                KnownCharacterCodes.Scott,
+                KnownCharacterCodes.Virgil,
+                KnownCharacterCodes.LadyPenelope
+            };
+
             var gameId = Guid.NewGuid();
-            var game = new StandardGameSetupFactory().Create(gameId, DateTimeOffset.UtcNow);
+            var game = new StandardGameSetupFactory().Create(gameId, DateTimeOffset.UtcNow, turnOrder);
 
             await _repository.CreateNewGameSession(game, TestContext.Current.CancellationToken);
 
