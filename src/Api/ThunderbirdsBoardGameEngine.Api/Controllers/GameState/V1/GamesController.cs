@@ -9,6 +9,7 @@ using ThunderbirdsBoardGameEngine.GameState.Application.CreateGame;
 using ThunderbirdsBoardGameEngine.GameState.Application.GetGame;
 using ThunderbirdsBoardGameEngine.GameState.Application.MoveThunderbird;
 using ThunderbirdsBoardGameEngine.GameState.Application.TransferCharacters;
+using ThunderbirdsBoardGameEngine.GameState.Contracts.Dtos.V1.CreateGame;
 using ThunderbirdsBoardGameEngine.GameState.Contracts.Dtos.V1.ThunderbirdMachines;
 using ThunderbirdsBoardGameEngine.GameState.Contracts.Dtos.V1.TransferCharacters;
 using ThunderbirdsBoardGameEngine.GameState.Domain;
@@ -31,9 +32,13 @@ namespace ThunderbirdsBoardGameEngine.Api.Controllers.GameState.V1
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateGame(CancellationToken cancellationToken)
+        public async Task<IActionResult> CreateGame([FromBody] CreateGameRequestDto request, CancellationToken cancellationToken)
         {
-            var result = await _mediator.Send(new CreateNewGameCommand(new List<CharacterCode>()), cancellationToken);  //  TODO: Replace with actual turn order when implemented
+            var command = new CreateNewGameCommand(
+                request.TurnOrder.Select(code => new CharacterCode(code))
+                    .ToArray());
+
+            var result = await _mediator.Send(command, cancellationToken);
 
             return CreatedAtAction(nameof(GetGame), new { gameId = result.GameSession.Id }, result.GameSession.ToDto());
         }
