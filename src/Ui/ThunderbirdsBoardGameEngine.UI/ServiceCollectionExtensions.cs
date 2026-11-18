@@ -7,6 +7,8 @@ using ThunderbirdsBoardGameEngine.UI.Features.GameDashboard.Services;
 using ThunderbirdsBoardGameEngine.UI.Features.Movement.Interfaces;
 using ThunderbirdsBoardGameEngine.UI.Features.Movement.Mappers;
 using ThunderbirdsBoardGameEngine.UI.Features.Movement.Services;
+using ThunderbirdsBoardGameEngine.UI.Features.Shared.Interfaces;
+using ThunderbirdsBoardGameEngine.UI.Features.Shared.Services;
 
 namespace ThunderbirdsBoardGameEngine.UI
 {

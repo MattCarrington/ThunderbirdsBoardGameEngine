@@ -4,10 +4,10 @@ using ThunderbirdsBoardGameEngine.ReferenceData.Core.Identities;
 using ThunderbirdsBoardGameEngine.ReferenceData.Core.Model;
 using ThunderbirdsBoardGameEngine.ReferenceData.Runtime.Interfaces;
 using ThunderbirdsBoardGameEngine.ReferenceData.Testing.Builders;
-using ThunderbirdsBoardGameEngine.UI.Features.DisasterCards.Services;
+using ThunderbirdsBoardGameEngine.UI.Features.Shared.Services;
 using Xunit;
 
-namespace ThunderbirdsBoardGameEngine.UI.UnitTests.DisasterCards.Services
+namespace ThunderbirdsBoardGameEngine.UI.UnitTests.Shared
 {
     public class CharactersServiceTests
     {
