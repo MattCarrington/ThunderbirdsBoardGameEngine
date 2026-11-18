@@ -30,20 +30,20 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Factories
                 CharacterDisplayName: characterDisplayName);
         }
 
-        public static TurnOrderCharacterDisplayModel CreateTurnOrderCharacter(
+        public static TurnOrderCharacterDashboardViewModel CreateTurnOrderCharacter(
             string characterCode = "scott",
             string characterDisplayName = "Scott")
         {
-            return new TurnOrderCharacterDisplayModel(
+            return new TurnOrderCharacterDashboardViewModel(
                 CharacterCode: characterCode,
                 CharacterDisplayName: characterDisplayName);
         }
 
-        public static TurnSummaryViewModel CreateTurnSummary(
-            IReadOnlyList<TurnOrderCharacterDisplayModel>? turnOrder = null,
+        public static TurnSummaryDashboardViewModel CreateTurnSummary(
+            IReadOnlyList<TurnOrderCharacterDashboardViewModel>? turnOrder = null,
             string activeCharacter = "scott")
         {
-            return new TurnSummaryViewModel(
+            return new TurnSummaryDashboardViewModel(
                 TurnOrder: turnOrder
                     ?? [CreateTurnOrderCharacter(), CreateTurnOrderCharacter("virgil", "Virgil")],
                 ActiveCharacter: CreateTurnOrderCharacter(activeCharacter));

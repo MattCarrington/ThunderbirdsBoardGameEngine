@@ -2,6 +2,6 @@
 {
     public record GameDashboardViewModel(
         Guid GameId,
-        TurnSummaryViewModel TurnSummary,
+        TurnSummaryDashboardViewModel TurnSummary,
         IReadOnlyList<ThunderbirdMachinesDashboardViewModel> ThunderbirdMachines);
 }

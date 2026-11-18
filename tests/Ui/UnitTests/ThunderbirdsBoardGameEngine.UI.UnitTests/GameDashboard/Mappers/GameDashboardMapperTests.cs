@@ -216,6 +216,52 @@ namespace ThunderbirdsBoardGameEngine.UI.UnitTests.GameDashboard.Mappers
             Assert.Equal(2, tbMachine1.Occupants.Count);
         }
 
+        [Fact]
+        public void ToViewModel_WhenTurnOrderHasDuplicates_ShouldThrow()
+        {
+            // Arrange
+            var thunderbirdCatalog = Substitute.For<IThunderbirdDefinitionCatalog>();
+            var locationCatalog = Substitute.For<ILocationDefinitionCatalog>();
+            var characterCatalog = Substitute.For<ICharacterDefinitionCatalog>();
+            characterCatalog.GetByCode(Arg.Any<CharacterCode>()).Returns(CreateCharacter("char1", "Character 1"));
+
+            var mapper = new GameDashboardMapper(thunderbirdCatalog, locationCatalog, characterCatalog);
+
+            var dto = new GameStateResponseDto
+            {
+                GameId = Guid.NewGuid(),
+                ThunderbirdMachines = [],
+                TurnOrder = ["char1", "char1"],
+                ActiveCharacterCode = "char1"
+            };
+
+            // Act & Assert
+            Assert.Throws<InvalidOperationException>(() => mapper.ToViewModel(dto));
+        }
+
+        [Fact]
+        public void ToViewModel_WhenActiveCharacterNotInTurnOrder_ShouldThrow()
+        {
+            // Arrange
+            var thunderbirdCatalog = Substitute.For<IThunderbirdDefinitionCatalog>();
+            var locationCatalog = Substitute.For<ILocationDefinitionCatalog>();
+            var characterCatalog = Substitute.For<ICharacterDefinitionCatalog>();
+            characterCatalog.GetByCode(Arg.Any<CharacterCode>()).Returns(CreateCharacter("char1", "Character 1"));
+
+            var mapper = new GameDashboardMapper(thunderbirdCatalog, locationCatalog, characterCatalog);
+
+            var dto = new GameStateResponseDto
+            {
+                GameId = Guid.NewGuid(),
+                ThunderbirdMachines = [],
+                TurnOrder = ["char1"],
+                ActiveCharacterCode = "char2"
+            };
+
+            // Act & Assert
+            Assert.Throws<InvalidOperationException>(() => mapper.ToViewModel(dto));
+        }
+
         private static ReferenceThunderbirdDefinition CreateThunderbird(string code, string displayName, int characterCapacity)
         {
             return ReferenceDefinitionFactory.Thunderbird(
