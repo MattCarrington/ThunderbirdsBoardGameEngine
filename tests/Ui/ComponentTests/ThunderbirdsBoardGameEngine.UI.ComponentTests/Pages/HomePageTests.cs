@@ -19,7 +19,7 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Pages
             var gameId = Guid.NewGuid();
 
             var context = new HomePageTestContext(this);
-            context.GameService.CreateGameAsync().Returns(gameId);
+            context.GameService.CreateGameAsync(Arg.Any<IReadOnlyList<string>>()).Returns(gameId);
 
             var navigation = Services.GetRequiredService<NavigationManager>();
 
@@ -37,7 +37,7 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Pages
         {
             // Arrange
             var context = new HomePageTestContext(this);
-            context.GameService.CreateGameAsync().ThrowsAsync(new Exception("Test exception"));
+            context.GameService.CreateGameAsync(Arg.Any<IReadOnlyList<string>>()).ThrowsAsync(new Exception("Test exception"));
 
             // Act
             var cut = Render<Home>();
@@ -55,7 +55,7 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Pages
             var gameId = Guid.NewGuid();
 
             var context = new HomePageTestContext(this);
-            context.GameService.CreateGameAsync().Returns(gameId);
+            context.GameService.CreateGameAsync(Arg.Any<IReadOnlyList<string>>()).Returns(gameId);
 
             var navigation = Services.GetRequiredService<NavigationManager>();
 
@@ -93,7 +93,7 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Pages
                 TaskCreationOptions.RunContinuationsAsynchronously);
 
             var context = new HomePageTestContext(this);
-            context.GameService.CreateGameAsync().Returns(pendingCreation.Task);
+            context.GameService.CreateGameAsync(Arg.Any<IReadOnlyList<string>>()).Returns(pendingCreation.Task);
 
             var component = Render<Home>();
             var button = component.Find("[data-testid='create-game']");

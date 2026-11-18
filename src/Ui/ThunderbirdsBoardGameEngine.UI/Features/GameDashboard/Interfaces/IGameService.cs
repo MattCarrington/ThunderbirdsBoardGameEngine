@@ -5,7 +5,7 @@ namespace ThunderbirdsBoardGameEngine.UI.Features.GameDashboard.Interfaces
 {
     public interface IGameService
     {
-        Task<Guid> CreateGameAsync();
+        Task<Guid> CreateGameAsync(IReadOnlyList<string> turnOrder);
 
         Task<GameDashboardViewModel?> GetGameAsync(Guid gameId);
 

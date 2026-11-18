@@ -27,7 +27,7 @@ public partial class Home
 
         try
         {
-            var gameId = await GameService.CreateGameAsync();
+            var gameId = await GameService.CreateGameAsync([]); //  TODO: Implement turn order selection logic
 
             Navigation.NavigateTo($"/games/{gameId:D}");
         }

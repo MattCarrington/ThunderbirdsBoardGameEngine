@@ -26,65 +26,157 @@ namespace ThunderbirdsBoardGameEngine.UI.UnitTests.GameDashboard.Services
             // Arrange
             var dto = CreateValidApiResponseDto(Guid.NewGuid());
 
+            var turnOrder = new List<string> { "scott", "virgil", "john", "gordon" };
+
             var request = new CreateGameRequestDto
             {
-                TurnOrder = []  //  TODO: Populate with actual turn order values as needed
+                TurnOrder = turnOrder
             };
 
             var apiResult = ApiResult<GameStateResponseDto>.SuccessResult(dto, HttpStatusCode.Created);
 
             var client = Substitute.For<IGameClient>();
-            client.CreateGameAsync(request, Arg.Any<CancellationToken>()).Returns(apiResult);
+            client.CreateGameAsync(Arg.Any<CreateGameRequestDto>(), Arg.Any<CancellationToken>()).Returns(apiResult);
 
             var service = CreateGameService(client);
 
             // Act
-            var game = await service.CreateGameAsync();
+            var game = await service.CreateGameAsync(turnOrder);
 
             // Assert
             Assert.False(game == Guid.Empty);
 
-            await client.Received(1).CreateGameAsync(request, Arg.Any<CancellationToken>());
+            await client.Received(1).CreateGameAsync(
+                Arg.Is<CreateGameRequestDto>(request =>
+                    request.TurnOrder.SequenceEqual(turnOrder)),
+                Arg.Any<CancellationToken>());
         }
 
         [Fact]
         public async Task CreateGameAsync_WhenClientReturnsError_ThrowsInvalidOperationException()
         {
             // Arrange
+            var turnOrder = new List<string> { "scott", "virgil", "john", "gordon" };
+
             var request = new CreateGameRequestDto
             {
-                TurnOrder = []  //  TODO: Populate with actual turn order values as needed
+                TurnOrder = turnOrder
             };
 
             var apiResult = ApiResult<GameStateResponseDto>.Failure("Error", HttpStatusCode.InternalServerError);
 
             var client = Substitute.For<IGameClient>();
-            client.CreateGameAsync(request, Arg.Any<CancellationToken>()).Returns(apiResult);
+            client.CreateGameAsync(Arg.Any<CreateGameRequestDto>(), Arg.Any<CancellationToken>()).Returns(apiResult);
 
             var service = CreateGameService(client);
 
             // Act & Assert
-            await Assert.ThrowsAsync<InvalidOperationException>(() => service.CreateGameAsync());
+            await Assert.ThrowsAsync<InvalidOperationException>(() => service.CreateGameAsync(turnOrder));
         }
 
         [Fact]
         public async Task CreateGameAsync_WhenClientReturnsNullData_ThrowsInvalidOperationException()
         {
             // Arrange
+            var turnOrder = new List<string> { "scott", "virgil", "john", "gordon" };
+
             var request = new CreateGameRequestDto
             {
-                TurnOrder = []  //  TODO: Populate with actual turn order values as needed
+                TurnOrder = turnOrder
             };
 
             var apiResult = ApiResult<GameStateResponseDto>.SuccessResult(null, HttpStatusCode.Created);
 
             var client = Substitute.For<IGameClient>();
-            client.CreateGameAsync(request, Arg.Any<CancellationToken>()).Returns(apiResult);
+            client.CreateGameAsync(Arg.Any<CreateGameRequestDto>(), Arg.Any<CancellationToken>()).Returns(apiResult);
 
             var service = CreateGameService(client);
 
             // Act & Assert
-            await Assert.ThrowsAsync<InvalidOperationException>(() => service.CreateGameAsync());
+            await Assert.ThrowsAsync<InvalidOperationException>(() => service.CreateGameAsync(turnOrder));
+        }
+
+        [Fact]
+        public async Task CreateGameAsync_WhenTurnOrderIsNull_ThrowsArgumentNullException()
+        {
+            // Arrange
+            var client = Substitute.For<IGameClient>();
+
+            var service = CreateGameService(client);
+
+            // Act & Assert
+            await Assert.ThrowsAsync<ArgumentNullException>(() => service.CreateGameAsync(null!));
+        }
+
+        [Fact]
+        public async Task CreateGameAsync_WhenTurnOrderEmpty_ThrowsArgumentException()
+        {
+            // Arrange
+            var turnOrder = Array.Empty<string>();
+
+            var client = Substitute.For<IGameClient>();
+
+            var service = CreateGameService(client);
+
+            // Act & Assert
+            await Assert.ThrowsAsync<ArgumentOutOfRangeException>(() => service.CreateGameAsync(turnOrder));
+        }
+
+        [Fact]
+        public async Task CreateGameAsync_WhenTurnOrderHasSinglePlayer_ThrowsArgumentOutOfRangeException()
+        {
+            // Arrange
+            var turnOrder = new List<string> { "scott" };
+
+            var client = Substitute.For<IGameClient>();
+
+            var service = CreateGameService(client);
+
+            // Act & Assert
+            await Assert.ThrowsAsync<ArgumentOutOfRangeException>(() => service.CreateGameAsync(turnOrder));
+        }
+
+        [Fact]
+        public async Task CreateGameAsync_WhenTurnOrderHasMoreThanFourPlayers_ThrowsArgumentOutOfRangeException()
+        {
+            // Arrange
+            var turnOrder = new List<string> { "scott", "virgil", "john", "gordon", "alan" };
+
+            var client = Substitute.For<IGameClient>();
+
+            var service = CreateGameService(client);
+
+            // Act & Assert
+            await Assert.ThrowsAsync<ArgumentOutOfRangeException>(() => service.CreateGameAsync(turnOrder));
+        }
+
+        [Fact]
+        public async Task CreateGameAsync_WhenTurnOrderHasDuplicatePlayers_ThrowsArgumentException()
+        {
+            // Arrange
+            var turnOrder = new List<string> { "scott", "scott" };
+
+            var client = Substitute.For<IGameClient>();
+
+            var service = CreateGameService(client);
+
+            // Act & Assert
+            await Assert.ThrowsAsync<ArgumentException>(() => service.CreateGameAsync(turnOrder));
+        }
+
+        [Theory]
+        [ClassData(typeof(NullOrWhitespaceStringData))]
+        public async Task CreateGameAsync_WhenTurnOrderHasNullOrWhitespacePlayer_ThrowsArgumentException(string? player)
+        {
+            // Arrange
+            var turnOrder = new List<string> { "scott", player };
+
+            var client = Substitute.For<IGameClient>();
+
+            var service = CreateGameService(client);
+
+            // Act & Assert
+            await Assert.ThrowsAsync<ArgumentException>(() => service.CreateGameAsync(turnOrder));
         }
 
         [Fact]

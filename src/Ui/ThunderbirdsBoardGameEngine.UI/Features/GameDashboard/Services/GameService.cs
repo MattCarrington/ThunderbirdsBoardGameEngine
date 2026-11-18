@@ -20,11 +20,35 @@ namespace ThunderbirdsBoardGameEngine.UI.Features.GameDashboard.Services
             _mapper = mapper;
         }
 
-        public async Task<Guid> CreateGameAsync()
+        public async Task<Guid> CreateGameAsync(IReadOnlyList<string> turnOrder)
         {
+            ArgumentNullException.ThrowIfNull(turnOrder);
+
+            if (turnOrder.Count is < 2 or > 4)
+            {
+                throw new ArgumentOutOfRangeException(
+                    nameof(turnOrder),
+                    turnOrder.Count,
+                    "Turn order must contain between two and four characters.");
+            }
+
+            if (turnOrder.Any(string.IsNullOrWhiteSpace))
+            {
+                throw new ArgumentException(
+                    "Turn order cannot contain null or whitespace values.",
+                    nameof(turnOrder));
+            }
+
+            if (turnOrder.Distinct(StringComparer.Ordinal).Count() != turnOrder.Count)
+            {
+                throw new ArgumentException(
+                    "Turn order cannot contain duplicate characters.",
+                    nameof(turnOrder));
+            }
+
             var request = new CreateGameRequestDto
             {
-                TurnOrder = []  //  TODO: Populate with actual turn order values as needed
+                TurnOrder = turnOrder.ToList()
             };
 
             var result = await _client.CreateGameAsync(request);
