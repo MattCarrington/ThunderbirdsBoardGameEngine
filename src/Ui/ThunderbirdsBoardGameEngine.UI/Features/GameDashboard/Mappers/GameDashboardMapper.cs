@@ -1,5 +1,4 @@
-﻿using Microsoft.JSInterop.Infrastructure;
-using ThunderbirdsBoardGameEngine.GameState.Contracts.Dtos.V1;
+﻿using ThunderbirdsBoardGameEngine.GameState.Contracts.Dtos.V1;
 using ThunderbirdsBoardGameEngine.ReferenceData.Core.Identities;
 using ThunderbirdsBoardGameEngine.ReferenceData.Runtime.Interfaces;
 using ThunderbirdsBoardGameEngine.UI.Features.GameDashboard.ViewModels;
@@ -27,7 +26,7 @@ namespace ThunderbirdsBoardGameEngine.UI.Features.GameDashboard.Mappers
             return new GameDashboardViewModel(
                 GameId: game.GameId,
                 ThunderbirdMachines: game.ThunderbirdMachines.Select(MapThunderbirds).ToList(),
-                TurnOrder: [],
+                TurnOrder: game.TurnOrder.Select(MapTurnOrder).ToList(),
                 ActiveCharacterDisplayName: _characterDefinitionCatalog.GetByCode(new CharacterCode(game.ActiveCharacterCode)).DisplayName,
                 ActiveCharacterCode: game.ActiveCharacterCode);
         }
@@ -50,6 +49,13 @@ namespace ThunderbirdsBoardGameEngine.UI.Features.GameDashboard.Mappers
             return new OccupantsDashboardViewModel(
                 CharacterCode: occupant,
                 CharacterDisplayName: _characterDefinitionCatalog.GetByCode(new CharacterCode(occupant)).DisplayName);
+        }
+
+        private TurnOrderCharacterDisplayModel MapTurnOrder(string characterCode)
+        {
+            return new TurnOrderCharacterDisplayModel(
+                CharacterDisplayName: _characterDefinitionCatalog.GetByCode(new CharacterCode(characterCode)).DisplayName,
+                CharacterCode: characterCode);
         }
     }
 }

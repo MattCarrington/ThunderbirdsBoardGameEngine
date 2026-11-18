@@ -3,7 +3,7 @@
     public record GameDashboardViewModel(
         Guid GameId,
         IReadOnlyList<ThunderbirdMachinesDashboardViewModel> ThunderbirdMachines,
-        IReadOnlyList<TurnOrderDisplayModel> TurnOrder,
+        IReadOnlyList<TurnOrderCharacterDisplayModel> TurnOrder,
         string ActiveCharacterDisplayName,
         string ActiveCharacterCode);
 }

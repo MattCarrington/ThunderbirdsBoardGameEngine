@@ -1,6 +1,6 @@
 ﻿namespace ThunderbirdsBoardGameEngine.UI.Features.GameDashboard.ViewModels
 {
-    public record TurnOrderDisplayModel(
+    public record TurnOrderCharacterDisplayModel(
         string CharacterDisplayName,
         string CharacterCode);
 }
