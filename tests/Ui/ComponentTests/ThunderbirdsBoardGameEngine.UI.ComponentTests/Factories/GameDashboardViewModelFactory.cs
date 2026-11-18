@@ -35,9 +35,13 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Factories
             IReadOnlyList<ThunderbirdMachinesDashboardViewModel>? machines = null)
         {
             return new GameDashboardViewModel(
-                GameId: gameId ?? Guid.NewGuid(),
-                ThunderbirdMachines:
-                    machines ?? [CreateMachine()]);
+                GameId: gameId
+                    ?? Guid.NewGuid(),
+                ThunderbirdMachines: machines
+                    ?? [CreateMachine()],
+                TurnOrder: [],
+                ActiveCharacterCode: "scott",
+                ActiveCharacterDisplayName: "Scott");
         }
     }
 }

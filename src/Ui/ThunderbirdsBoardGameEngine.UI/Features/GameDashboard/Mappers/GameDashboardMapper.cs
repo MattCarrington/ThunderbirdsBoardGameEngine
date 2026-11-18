@@ -26,7 +26,10 @@ namespace ThunderbirdsBoardGameEngine.UI.Features.GameDashboard.Mappers
         {
             return new GameDashboardViewModel(
                 GameId: game.GameId,
-                ThunderbirdMachines: game.ThunderbirdMachines.Select(MapThunderbirds).ToList());
+                ThunderbirdMachines: game.ThunderbirdMachines.Select(MapThunderbirds).ToList(),
+                TurnOrder: [],
+                ActiveCharacterDisplayName: _characterDefinitionCatalog.GetByCode(new CharacterCode(game.ActiveCharacterCode)).DisplayName,
+                ActiveCharacterCode: game.ActiveCharacterCode);
         }
 
         private ThunderbirdMachinesDashboardViewModel MapThunderbirds(ThunderbirdMachineStateDto dto)

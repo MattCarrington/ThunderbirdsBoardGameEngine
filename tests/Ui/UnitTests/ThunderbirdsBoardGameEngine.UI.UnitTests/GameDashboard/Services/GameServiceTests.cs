@@ -6,7 +6,10 @@ using ThunderbirdsBoardGameEngine.GameState.Contracts.Dtos.V1;
 using ThunderbirdsBoardGameEngine.GameState.Contracts.Dtos.V1.CreateGame;
 using ThunderbirdsBoardGameEngine.GameState.Contracts.Dtos.V1.ThunderbirdMachines;
 using ThunderbirdsBoardGameEngine.GameState.Contracts.Dtos.V1.TransferCharacters;
+using ThunderbirdsBoardGameEngine.ReferenceData.Core.Identities;
+using ThunderbirdsBoardGameEngine.ReferenceData.Core.Model;
 using ThunderbirdsBoardGameEngine.ReferenceData.Runtime.Interfaces;
+using ThunderbirdsBoardGameEngine.ReferenceData.Testing.Builders;
 using ThunderbirdsBoardGameEngine.TestUtils.xUnit.ClassData;
 using ThunderbirdsBoardGameEngine.UI.Features.GameDashboard;
 using ThunderbirdsBoardGameEngine.UI.Features.GameDashboard.Mappers;
@@ -21,11 +24,7 @@ namespace ThunderbirdsBoardGameEngine.UI.UnitTests.GameDashboard.Services
         public async Task CreateGameAsync_WhenCalled_CreatesGameSuccessfully()
         {
             // Arrange
-            var dto = new GameStateResponseDto
-            {
-                GameId = Guid.NewGuid(),
-                ThunderbirdMachines = []
-            };
+            var dto = CreateValidApiResponseDto(Guid.NewGuid());
 
             var request = new CreateGameRequestDto
             {
@@ -52,12 +51,12 @@ namespace ThunderbirdsBoardGameEngine.UI.UnitTests.GameDashboard.Services
         public async Task CreateGameAsync_WhenClientReturnsError_ThrowsInvalidOperationException()
         {
             // Arrange
-
-
             var request = new CreateGameRequestDto
             {
                 TurnOrder = []  //  TODO: Populate with actual turn order values as needed
-            }; var apiResult = ApiResult<GameStateResponseDto>.Failure("Error", HttpStatusCode.InternalServerError);
+            };
+
+            var apiResult = ApiResult<GameStateResponseDto>.Failure("Error", HttpStatusCode.InternalServerError);
 
             var client = Substitute.For<IGameClient>();
             client.CreateGameAsync(request, Arg.Any<CancellationToken>()).Returns(apiResult);
@@ -76,6 +75,7 @@ namespace ThunderbirdsBoardGameEngine.UI.UnitTests.GameDashboard.Services
             {
                 TurnOrder = []  //  TODO: Populate with actual turn order values as needed
             };
+
             var apiResult = ApiResult<GameStateResponseDto>.SuccessResult(null, HttpStatusCode.Created);
 
             var client = Substitute.For<IGameClient>();
@@ -93,11 +93,7 @@ namespace ThunderbirdsBoardGameEngine.UI.UnitTests.GameDashboard.Services
             // Arrange
             var gameId = Guid.NewGuid();
 
-            var dto = new GameStateResponseDto
-            {
-                GameId = gameId,
-                ThunderbirdMachines = []
-            };
+            var dto = CreateValidApiResponseDto(gameId);
 
             var apiResult = ApiResult<GameStateResponseDto>.SuccessResult(dto, HttpStatusCode.OK);
 
@@ -180,11 +176,7 @@ namespace ThunderbirdsBoardGameEngine.UI.UnitTests.GameDashboard.Services
 
             var destinationLocationCode = "LOC1";
 
-            var dto = new GameStateResponseDto
-            {
-                GameId = gameId,
-                ThunderbirdMachines = []
-            };
+            var dto = CreateValidApiResponseDto(gameId);
 
             var apiResult = ApiResult<GameStateResponseDto>.SuccessResult(dto, HttpStatusCode.OK);
 
@@ -301,11 +293,7 @@ namespace ThunderbirdsBoardGameEngine.UI.UnitTests.GameDashboard.Services
                 ReturningCharacterCode: null
             );
 
-            var dto = new GameStateResponseDto
-            {
-                GameId = gameId,
-                ThunderbirdMachines = []
-            };
+            var dto = CreateValidApiResponseDto(gameId);
 
             var apiResult = ApiResult<GameStateResponseDto>.SuccessResult(dto, HttpStatusCode.OK);
 
@@ -347,11 +335,7 @@ namespace ThunderbirdsBoardGameEngine.UI.UnitTests.GameDashboard.Services
                 ReturningCharacterCode: "CHAR2"
             );
 
-            var dto = new GameStateResponseDto
-            {
-                GameId = gameId,
-                ThunderbirdMachines = []
-            };
+            var dto = CreateValidApiResponseDto(gameId);
 
             var apiResult = ApiResult<GameStateResponseDto>.SuccessResult(dto, HttpStatusCode.OK);
 
@@ -398,11 +382,7 @@ namespace ThunderbirdsBoardGameEngine.UI.UnitTests.GameDashboard.Services
                 ReturningCharacterCode: "CHAR2"
             );
 
-            var dto = new GameStateResponseDto
-            {
-                GameId = gameId,
-                ThunderbirdMachines = []
-            };
+            var dto = CreateValidApiResponseDto(gameId);
 
             var apiResult = ApiResult<GameStateResponseDto>.SuccessResult(dto, HttpStatusCode.OK);
 
@@ -654,11 +634,27 @@ namespace ThunderbirdsBoardGameEngine.UI.UnitTests.GameDashboard.Services
             await Assert.ThrowsAnyAsync<ArgumentException>(() => service.TransferCharactersAsync(gameId, selection));
         }
 
+        private static GameStateResponseDto CreateValidApiResponseDto(Guid gameId)
+        {
+            return new GameStateResponseDto
+            {
+                GameId = gameId,
+                ThunderbirdMachines = [],
+                TurnOrder =
+                [
+                    "scott", "virgil", "john", "gordon"
+                ],
+                ActiveCharacterCode = "scott"
+            };
+        }
+
         private static GameService CreateGameService(IGameClient client)
         {
             var thunderbirdCatalog = Substitute.For<IThunderbirdDefinitionCatalog>();
             var locationCatalog = Substitute.For<ILocationDefinitionCatalog>();
             var characterCatalog = Substitute.For<ICharacterDefinitionCatalog>();
+            characterCatalog.GetByCode(Arg.Any<CharacterCode>())
+                .Returns(ci => ReferenceDefinitionFactory.Character(ci.Arg<CharacterCode>(), $"Character {ci.Arg<CharacterCode>().Value}"));
 
             var mapper = new GameDashboardMapper(thunderbirdCatalog, locationCatalog, characterCatalog);
 
