@@ -30,6 +30,25 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Factories
                 CharacterDisplayName: characterDisplayName);
         }
 
+        public static TurnOrderCharacterDisplayModel CreateTurnOrderCharacter(
+            string characterCode = "scott",
+            string characterDisplayName = "Scott")
+        {
+            return new TurnOrderCharacterDisplayModel(
+                CharacterCode: characterCode,
+                CharacterDisplayName: characterDisplayName);
+        }
+
+        public static TurnSummaryViewModel CreateTurnSummary(
+            IReadOnlyList<TurnOrderCharacterDisplayModel>? turnOrder = null,
+            string activeCharacter = "scott")
+        {
+            return new TurnSummaryViewModel(
+                TurnOrder: turnOrder
+                    ?? [CreateTurnOrderCharacter(), CreateTurnOrderCharacter("virgil", "Virgil")],
+                ActiveCharacter: CreateTurnOrderCharacter(activeCharacter));
+        }
+
         public static GameDashboardViewModel CreateDashboard(
             Guid? gameId = null,
             IReadOnlyList<ThunderbirdMachinesDashboardViewModel>? machines = null)
@@ -37,11 +56,9 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Factories
             return new GameDashboardViewModel(
                 GameId: gameId
                     ?? Guid.NewGuid(),
+                TurnSummary: CreateTurnSummary(),
                 ThunderbirdMachines: machines
-                    ?? [CreateMachine()],
-                TurnOrder: [],
-                ActiveCharacterCode: "scott",
-                ActiveCharacterDisplayName: "Scott");
+                    ?? [CreateMachine()]);
         }
     }
 }

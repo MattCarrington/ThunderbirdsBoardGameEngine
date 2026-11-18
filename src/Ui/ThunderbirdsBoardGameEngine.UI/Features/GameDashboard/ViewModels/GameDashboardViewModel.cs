@@ -2,8 +2,6 @@
 {
     public record GameDashboardViewModel(
         Guid GameId,
-        IReadOnlyList<ThunderbirdMachinesDashboardViewModel> ThunderbirdMachines,
-        IReadOnlyList<TurnOrderCharacterDisplayModel> TurnOrder,
-        string ActiveCharacterDisplayName,
-        string ActiveCharacterCode);
+        TurnSummaryViewModel TurnSummary,
+        IReadOnlyList<ThunderbirdMachinesDashboardViewModel> ThunderbirdMachines);
 }

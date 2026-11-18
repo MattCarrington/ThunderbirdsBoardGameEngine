@@ -68,16 +68,22 @@ namespace ThunderbirdsBoardGameEngine.UI.UnitTests.GameDashboard.Mappers
             Assert.Equal(characterOne.DisplayName, occupant.CharacterDisplayName);
             Assert.Equal(thunderbird.CharacterCapacity, thunderbirdMachine.CharacterCapacity);
 
-            Assert.Equal(characterOne.DisplayName, result.ActiveCharacterDisplayName);
-            Assert.Equal(characterOne.Code.Value, result.ActiveCharacterCode);
+            Assert.Collection(
+                result.TurnSummary.TurnOrder,
+                first =>
+                {
+                    Assert.Equal(characterTwo.Code.Value, first.CharacterCode);
+                    Assert.Equal(characterTwo.DisplayName, first.CharacterDisplayName);
+                },
+                second =>
+                {
+                    Assert.Equal(characterOne.Code.Value, second.CharacterCode);
+                    Assert.Equal(characterOne.DisplayName, second.CharacterDisplayName);
+                });
 
-            Assert.Equal(2, result.TurnOrder.Count);
+            Assert.Equal(characterOne.Code.Value, result.TurnSummary.ActiveCharacter.CharacterCode);
 
-            var turnOrderCharacter = Assert.Single(result.TurnOrder, to => to.CharacterCode == characterTwo.Code.Value);
-            Assert.Equal(characterTwo.DisplayName, turnOrderCharacter.CharacterDisplayName);
-
-            var turnOrderCharacter2 = Assert.Single(result.TurnOrder, to => to.CharacterCode == characterOne.Code.Value);
-            Assert.Equal(characterOne.DisplayName, turnOrderCharacter2.CharacterDisplayName);
+            Assert.Equal(characterOne.DisplayName, result.TurnSummary.ActiveCharacter.CharacterDisplayName);
         }
 
         [Fact]
