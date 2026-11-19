@@ -1,0 +1,39 @@
+﻿<section class="card mb-4"
+         aria-labelledby="turn-summary-heading"
+         data-testid="turn-summary">
+
+    <div class="card-body">
+        <h2 id="turn-summary-heading" class="h4">
+            Current Turn
+        </h2>
+
+        <p class="fs-5 mb-2">
+            <strong>
+                @Summary.ActiveCharacter.CharacterDisplayName
+            </strong>
+        </p>
+
+        <p class="mb-0">
+            <span class="fw-semibold">Turn order:</span>
+
+            @for (var index = 0;
+                  index < Summary.TurnOrder.Count;
+                  index++)
+            {
+                var character = Summary.TurnOrder[index];
+
+                @if (index > 0)
+                {
+                    <span aria-hidden="true"> → </span>
+                }
+
+                <span class="@(character.CharacterCode ==
+                               Summary.ActiveCharacter.CharacterCode
+                                   ? "fw-bold text-primary"
+                                   : null)">
+                    @character.CharacterDisplayName
+                </span>
+            }
+        </p>
+    </div>
+</section>
