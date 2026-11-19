@@ -46,7 +46,7 @@
     <PackageVersion Include="Swashbuckle.AspNetCore" Version="6.9.0" />
     <PackageVersion Include="System.Threading.Tasks" Version="4.3.0" />
     <PackageVersion Include="ThunderbirdsBoardGameEngine.ReferenceData.Core" Version="4.0.1" />
-    <PackageVersion Include="ThunderbirdsBoardGameEngine.ReferenceData.Runtime" Version="4.0.1" />
+    <PackageVersion Include="ThunderbirdsBoardGameEngine.ReferenceData.Runtime" Version="4.1.0" />
     <PackageVersion Include="ThunderbirdsBoardGameEngine.ReferenceData.Testing" Version="0.1.0" />
     <PackageVersion Include="ThunderbirdsBoardGameEngine.Rules.Client" Version="0.7.0" />
     <PackageVersion Include="WireMock.Net" Version="2.30.0" />
