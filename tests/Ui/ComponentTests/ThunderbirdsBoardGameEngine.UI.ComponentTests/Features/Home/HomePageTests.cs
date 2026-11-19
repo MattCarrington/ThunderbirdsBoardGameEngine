@@ -5,10 +5,10 @@ using Microsoft.Extensions.DependencyInjection;
 using NSubstitute;
 using NSubstitute.ExceptionExtensions;
 using ThunderbirdsBoardGameEngine.UI.ComponentTests.Fixtures;
-using ThunderbirdsBoardGameEngine.UI.Pages;
+using ThunderbirdsBoardGameEngine.UI.Features.Home;
 using Xunit;
 
-namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Pages
+namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Features.Home
 {
     public class HomePageTests : BunitContext
     {
@@ -24,7 +24,7 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Pages
             var navigation = Services.GetRequiredService<NavigationManager>();
 
             // Act
-            var cut = Render<Home>();
+            var cut = Render<HomePage>();
 
             cut.Find("[data-testid='create-game']").Click();
 
@@ -40,7 +40,7 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Pages
             context.GameService.CreateGameAsync(Arg.Any<IReadOnlyList<string>>()).ThrowsAsync(new Exception("Test exception"));
 
             // Act
-            var cut = Render<Home>();
+            var cut = Render<HomePage>();
 
             cut.Find("[data-testid='create-game']").Click();
 
@@ -60,7 +60,7 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Pages
             var navigation = Services.GetRequiredService<NavigationManager>();
 
             // Act
-            var cut = Render<Home>();
+            var cut = Render<HomePage>();
 
             cut.Find("#game-identifier").Change(gameId.ToString());
             cut.Find("[data-testid='resume-game']").Click();
@@ -76,7 +76,7 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Pages
             var context = new HomePageTestContext(this);
 
             // Act
-            var cut = Render<Home>();
+            var cut = Render<HomePage>();
 
             cut.Find("#game-identifier").Change("invalid-guid");
 
@@ -95,7 +95,7 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Pages
             var context = new HomePageTestContext(this);
             context.GameService.CreateGameAsync(Arg.Any<IReadOnlyList<string>>()).Returns(pendingCreation.Task);
 
-            var component = Render<Home>();
+            var component = Render<HomePage>();
             var button = component.Find("[data-testid='create-game']");
 
             var clickTask = button.ClickAsync(new MouseEventArgs());

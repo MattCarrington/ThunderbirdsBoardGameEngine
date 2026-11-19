@@ -9,7 +9,7 @@ using ThunderbirdsBoardGameEngine.GameState.WireMock;
 using ThunderbirdsBoardGameEngine.GameState.WireMock.Stubs.V1;
 using ThunderbirdsBoardGameEngine.ReferenceData.Runtime;
 using ThunderbirdsBoardGameEngine.TestUtils.WireMock.xUnit.Fixtures;
-using ThunderbirdsBoardGameEngine.UI.Pages;
+using ThunderbirdsBoardGameEngine.UI.Features.Home;
 using Xunit;
 
 namespace ThunderbirdsBoardGameEngine.UI.IntegrationTests.Pages
@@ -56,7 +56,7 @@ namespace ThunderbirdsBoardGameEngine.UI.IntegrationTests.Pages
 
             var navigation = Services.GetRequiredService<NavigationManager>();
 
-            var cut = Render<Home>();
+            var cut = Render<HomePage>();
 
             // Act
             cut.Find("[data-testid='create-game']").ClickAsync(new MouseEventArgs());
@@ -74,7 +74,7 @@ namespace ThunderbirdsBoardGameEngine.UI.IntegrationTests.Pages
             // Arrange
             _gameStub.RegisterCreateGameError(message: "The game could not be created. Please try again.");
 
-            var cut = Render<Home>();
+            var cut = Render<HomePage>();
 
             // Act
             cut.Find("[data-testid='create-game']").ClickAsync(new MouseEventArgs());
