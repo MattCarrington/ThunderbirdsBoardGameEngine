@@ -126,6 +126,7 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Features.GameDashboard
             // Assert
             cut.WaitForAssertion(() =>
             {
+                Assert.Single(cut.FindComponents<TurnSummarySegment>());
                 Assert.Contains("Thunderbird Machines", cut.Markup);
                 Assert.DoesNotContain(
                     "The game could not be loaded.",

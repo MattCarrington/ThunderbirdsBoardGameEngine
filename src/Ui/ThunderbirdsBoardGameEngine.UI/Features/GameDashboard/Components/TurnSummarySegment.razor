@@ -27,7 +27,9 @@
                     <span aria-hidden="true"> → </span>
                 }
 
-                <span class="@(character.CharacterCode ==
+                <span data-testid="turn-order-character"
+                      data-character-code="@character.CharacterCode"
+                        class="@(character.CharacterCode ==
                                Summary.ActiveCharacter.CharacterCode
                                    ? "fw-bold text-primary"
                                    : null)">
