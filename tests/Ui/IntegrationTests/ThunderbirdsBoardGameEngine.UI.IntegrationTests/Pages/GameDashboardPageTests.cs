@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Components.Web;
 using Microsoft.Extensions.Configuration;
 using ThunderbirdsBoardGameEngine.GameState.Client.Extensions;
 using ThunderbirdsBoardGameEngine.GameState.Contracts.Dtos.V1;
+using ThunderbirdsBoardGameEngine.GameState.Domain;
 using ThunderbirdsBoardGameEngine.GameState.WireMock;
 using ThunderbirdsBoardGameEngine.GameState.WireMock.Stubs.V1;
 using ThunderbirdsBoardGameEngine.ReferenceData.Core.KnownIdentities;
@@ -59,30 +60,7 @@ namespace ThunderbirdsBoardGameEngine.UI.IntegrationTests.Pages
             // Arrange
             var gameId = Guid.NewGuid();
 
-            var dto = new GameStateResponseDto
-            {
-                GameId = gameId,
-                ThunderbirdMachines =
-                [
-                    new()
-                    {
-                        ThunderbirdCode = KnownThunderbirdCodes.Thunderbird1.Value,
-                        LocationCode = KnownLocationCodes.SouthPacific.Value,
-                        OccupantCharacterCodes = [
-                            KnownCharacterCodes.Scott.Value,
-                            KnownCharacterCodes.Virgil.Value
-                        ]
-                    },
-                    new()
-                    {
-                        ThunderbirdCode = KnownThunderbirdCodes.Thunderbird2.Value,
-                        LocationCode = KnownLocationCodes.SouthPacific.Value,
-                        OccupantCharacterCodes = [
-                            KnownCharacterCodes.John.Value
-                        ]
-                    }
-                ]
-            };
+            var dto = CreateValidGameResponseDto(gameId);
 
             _gameStub.RegisterGetGameStateSuccess(dto);
 
@@ -132,28 +110,7 @@ namespace ThunderbirdsBoardGameEngine.UI.IntegrationTests.Pages
             // Arrange
             var gameId = Guid.NewGuid();
 
-            var initialDto = new GameStateResponseDto
-            {
-                GameId = gameId,
-                ThunderbirdMachines =
-                [
-                    new()
-                    {
-                        ThunderbirdCode = KnownThunderbirdCodes.Thunderbird1.Value,
-                        LocationCode = KnownLocationCodes.SouthPacific.Value,
-                        OccupantCharacterCodes = [
-                            KnownCharacterCodes.Scott.Value
-                        ]
-                    },
-                    new()                     {
-                        ThunderbirdCode = KnownThunderbirdCodes.Thunderbird2.Value,
-                        LocationCode = KnownLocationCodes.Europe.Value,
-                        OccupantCharacterCodes = [
-                            KnownCharacterCodes.Virgil.Value
-                        ]
-                    }
-                ]
-            };
+            var initialDto = CreateValidGameResponseDto(gameId);
 
             var moveDto = new GameStateResponseDto
             {
@@ -175,7 +132,13 @@ namespace ThunderbirdsBoardGameEngine.UI.IntegrationTests.Pages
                             KnownCharacterCodes.Virgil.Value
                         ]
                     }
-                ]
+                ],
+                TurnOrder = [
+                    KnownCharacterCodes.Scott.Value,
+                    KnownCharacterCodes.Virgil.Value,
+                    KnownCharacterCodes.John.Value
+                ],
+                ActiveCharacterCode = KnownCharacterCodes.Virgil.Value
             };
 
             var locations = new[] { "europe", "north-atlantic", "south-pacific" };
@@ -222,28 +185,7 @@ namespace ThunderbirdsBoardGameEngine.UI.IntegrationTests.Pages
             // Arrange
             var gameId = Guid.NewGuid();
 
-            var initialDto = new GameStateResponseDto
-            {
-                GameId = gameId,
-                ThunderbirdMachines =
-                [
-                    new()
-                    {
-                        ThunderbirdCode = KnownThunderbirdCodes.Thunderbird1.Value,
-                        LocationCode = KnownLocationCodes.SouthPacific.Value,
-                        OccupantCharacterCodes = [
-                            KnownCharacterCodes.Scott.Value
-                        ]
-                    },
-                    new()                     {
-                        ThunderbirdCode = KnownThunderbirdCodes.Thunderbird2.Value,
-                        LocationCode = KnownLocationCodes.SouthPacific.Value,
-                        OccupantCharacterCodes = [
-                            KnownCharacterCodes.Virgil.Value
-                        ]
-                    }
-                ]
-            };
+            var initialDto = CreateValidGameResponseDto(gameId);
 
             var transferDto = new GameStateResponseDto
             {
@@ -264,7 +206,13 @@ namespace ThunderbirdsBoardGameEngine.UI.IntegrationTests.Pages
                             KnownCharacterCodes.Scott.Value
                         ]
                     }
-                ]
+                ],
+                TurnOrder = [
+                    KnownCharacterCodes.Scott.Value,
+                    KnownCharacterCodes.Virgil.Value,
+                    KnownCharacterCodes.John.Value
+                ],
+                ActiveCharacterCode = KnownCharacterCodes.Virgil.Value
             };
 
             _gameStub.RegisterGetGameStateSuccess(initialDto);
@@ -310,6 +258,40 @@ namespace ThunderbirdsBoardGameEngine.UI.IntegrationTests.Pages
 
             module.SetupVoid("close", _ => true)
                 .SetVoidResult();
+        }
+
+        private static GameStateResponseDto CreateValidGameResponseDto(Guid gameId)
+        {
+            return new GameStateResponseDto
+            {
+                GameId = gameId,
+                ThunderbirdMachines =
+                [
+                    new()
+                    {
+                        ThunderbirdCode = KnownThunderbirdCodes.Thunderbird1.Value,
+                        LocationCode = KnownLocationCodes.SouthPacific.Value,
+                        OccupantCharacterCodes = [
+                            KnownCharacterCodes.Scott.Value,
+                            KnownCharacterCodes.Virgil.Value
+                        ]
+                    },
+                    new()
+                    {
+                        ThunderbirdCode = KnownThunderbirdCodes.Thunderbird2.Value,
+                        LocationCode = KnownLocationCodes.SouthPacific.Value,
+                        OccupantCharacterCodes = [
+                            KnownCharacterCodes.John.Value
+                        ]
+                    }
+                ],
+                TurnOrder = [
+                    KnownCharacterCodes.Scott.Value,
+                    KnownCharacterCodes.Virgil.Value,
+                    KnownCharacterCodes.John.Value
+                ],
+                ActiveCharacterCode = KnownCharacterCodes.Virgil.Value
+            };
         }
     }
 }
