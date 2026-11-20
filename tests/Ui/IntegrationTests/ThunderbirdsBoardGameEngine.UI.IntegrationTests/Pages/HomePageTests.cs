@@ -10,6 +10,7 @@ using ThunderbirdsBoardGameEngine.GameState.WireMock.Stubs.V1;
 using ThunderbirdsBoardGameEngine.ReferenceData.Runtime;
 using ThunderbirdsBoardGameEngine.TestUtils.WireMock.xUnit.Fixtures;
 using ThunderbirdsBoardGameEngine.UI.Features.Home;
+using ThunderbirdsBoardGameEngine.UI.Features.Home.Components;
 using Xunit;
 
 namespace ThunderbirdsBoardGameEngine.UI.IntegrationTests.Pages
@@ -21,6 +22,8 @@ namespace ThunderbirdsBoardGameEngine.UI.IntegrationTests.Pages
 
         public HomePageTests(WireMockFixture wireMockFixture)
         {
+            Register(this);
+
             var host = wireMockFixture.Host;
             host.Reset();
 
@@ -41,7 +44,7 @@ namespace ThunderbirdsBoardGameEngine.UI.IntegrationTests.Pages
         }
 
         [Fact]
-        public void NavigatesToGameDashboardOnSuccessfulCreate()
+        public async Task NavigatesToGameDashboardOnSuccessfulCreateAsync()
         {
             // Arrange
             var gameId = Guid.NewGuid();
@@ -49,7 +52,9 @@ namespace ThunderbirdsBoardGameEngine.UI.IntegrationTests.Pages
             var dto = new GameStateResponseDto
             {
                 GameId = gameId,
-                ThunderbirdMachines = []
+                ThunderbirdMachines = [],
+                TurnOrder = [],
+                ActiveCharacterCode = "John"
             };
 
             _gameStub.RegisterCreateGameSuccess(dto);
@@ -59,7 +64,15 @@ namespace ThunderbirdsBoardGameEngine.UI.IntegrationTests.Pages
             var cut = Render<HomePage>();
 
             // Act
-            cut.Find("[data-testid='create-game']").ClickAsync(new MouseEventArgs());
+            await cut.Find("[data-testid='create-game']").ClickAsync(new MouseEventArgs());
+
+            var dialog = cut.FindComponent<CreateGameDialog>();
+
+            dialog.Find("#player-character-0").Change("scott");
+            dialog.Find("#player-character-1").Change("virgil");
+
+            await dialog.Find("[data-testid='confirm-create']")
+                .ClickAsync(new MouseEventArgs());
 
             // Assert
             cut.WaitForAssertion(() =>
@@ -69,7 +82,7 @@ namespace ThunderbirdsBoardGameEngine.UI.IntegrationTests.Pages
         }
 
         [Fact]
-        public void StartingGameShouldDisplayErrorWhenApiFails()
+        public async Task StartingGameShouldDisplayErrorWhenApiFailsAsync()
         {
             // Arrange
             _gameStub.RegisterCreateGameError(message: "The game could not be created. Please try again.");
@@ -77,7 +90,15 @@ namespace ThunderbirdsBoardGameEngine.UI.IntegrationTests.Pages
             var cut = Render<HomePage>();
 
             // Act
-            cut.Find("[data-testid='create-game']").ClickAsync(new MouseEventArgs());
+            await cut.Find("[data-testid='create-game']").ClickAsync(new MouseEventArgs());
+
+            var dialog = cut.FindComponent<CreateGameDialog>();
+
+            dialog.Find("#player-character-0").Change("scott");
+            dialog.Find("#player-character-1").Change("virgil");
+
+            await dialog.Find("[data-testid='confirm-create']")
+                .ClickAsync(new MouseEventArgs());
 
             // Assert
             cut.WaitForAssertion(() =>
@@ -86,6 +107,17 @@ namespace ThunderbirdsBoardGameEngine.UI.IntegrationTests.Pages
                     "The game could not be created. Please try again.",
                     cut.Find("[role='alert']").TextContent.Trim());
             });
+        }
+
+        private static void Register(BunitContext context)
+        {
+            var module = context.JSInterop.SetupModule("./js/dialog.js");
+
+            module.SetupVoid("show", _ => true)
+                .SetVoidResult();
+
+            module.SetupVoid("close", _ => true)
+                .SetVoidResult();
         }
     }
 }
