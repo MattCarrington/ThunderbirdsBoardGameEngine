@@ -6,6 +6,7 @@ using ThunderbirdsBoardGameEngine.GameState.Client.Interfaces.V1;
 using ThunderbirdsBoardGameEngine.GameState.Domain;
 using ThunderbirdsBoardGameEngine.GameState.Domain.Setup.V2;
 using ThunderbirdsBoardGameEngine.GameState.Infrastructure;
+using ThunderbirdsBoardGameEngine.ReferenceData.Core.KnownIdentities;
 using Xunit;
 
 namespace ThunderbirdsBoardGameEngine.GameState.Client.IntegrationTests.Fixtures
@@ -42,7 +43,7 @@ namespace ThunderbirdsBoardGameEngine.GameState.Client.IntegrationTests.Fixtures
             var game = new StandardGameSetupFactory().Create(
                 Guid.NewGuid(),
                 DateTimeOffset.UtcNow,
-                []);    // TODO: Add turn order
+                [KnownCharacterCodes.Scott, KnownCharacterCodes.Virgil, KnownCharacterCodes.Alan]);
 
             await using var scope = _serviceProvider.CreateAsyncScope();
 
