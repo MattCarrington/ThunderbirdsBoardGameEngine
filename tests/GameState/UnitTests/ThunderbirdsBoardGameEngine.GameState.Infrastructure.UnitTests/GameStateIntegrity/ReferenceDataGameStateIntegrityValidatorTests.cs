@@ -136,6 +136,7 @@ namespace ThunderbirdsBoardGameEngine.GameState.Infrastructure.UnitTests.GameSta
         {
             // Arrange
             var validator = CreateValidator();
+            var unknownCharacter = new CharacterCode("unknown-character");
 
             var game = Game.Create(
                 id: Guid.NewGuid(),
@@ -149,9 +150,13 @@ namespace ThunderbirdsBoardGameEngine.GameState.Infrastructure.UnitTests.GameSta
                 characters: new Dictionary<CharacterCode, ThunderbirdCode>
                 {
                     { new("character-1"), new("thunderbird-1") },
-                    { new("character-3"), new("thunderbird-2") } // character-3 does not exist in reference data
+                    { unknownCharacter, new("thunderbird-2") }
                 },
-                turnOrder: [new("character-1"), new("character-3")]);
+                turnOrder:
+                [
+                    new("character-1"),
+                    unknownCharacter
+                ]);
 
             // Act & Assert
             Assert.Throws<InvalidGameStateException>(() => validator.Validate(game));
