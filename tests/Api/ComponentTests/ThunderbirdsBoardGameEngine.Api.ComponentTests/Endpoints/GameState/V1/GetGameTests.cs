@@ -51,7 +51,8 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints.GameState.V1
             var result = await response.Content.ReadFromJsonAsync<GameStateResponseDto>(cancellationToken: TestContext.Current.CancellationToken);
             Assert.NotNull(result);
             Assert.NotNull(result.ThunderbirdMachines);
-            // TODO: Assert on turn order
+            Assert.Equal(["scott", "virgil", "alan"], result.TurnOrder);
+            Assert.Equal("scott", result.ActiveCharacterCode);
         }
 
         [Fact]
