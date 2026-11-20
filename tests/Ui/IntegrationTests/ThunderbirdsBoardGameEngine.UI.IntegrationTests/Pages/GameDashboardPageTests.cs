@@ -272,8 +272,7 @@ namespace ThunderbirdsBoardGameEngine.UI.IntegrationTests.Pages
                         ThunderbirdCode = KnownThunderbirdCodes.Thunderbird1.Value,
                         LocationCode = KnownLocationCodes.SouthPacific.Value,
                         OccupantCharacterCodes = [
-                            KnownCharacterCodes.Scott.Value,
-                            KnownCharacterCodes.Virgil.Value
+                            KnownCharacterCodes.Scott.Value
                         ]
                     },
                     new()
@@ -281,7 +280,7 @@ namespace ThunderbirdsBoardGameEngine.UI.IntegrationTests.Pages
                         ThunderbirdCode = KnownThunderbirdCodes.Thunderbird2.Value,
                         LocationCode = KnownLocationCodes.SouthPacific.Value,
                         OccupantCharacterCodes = [
-                            KnownCharacterCodes.John.Value
+                            KnownCharacterCodes.Virgil.Value
                         ]
                     }
                 ],
