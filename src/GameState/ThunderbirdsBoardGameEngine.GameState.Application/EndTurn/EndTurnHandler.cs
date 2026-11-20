@@ -32,7 +32,7 @@ namespace ThunderbirdsBoardGameEngine.GameState.Application.EndTurn
         }
     }
 
-    public record EndTurnResult(Game Game);
+    public record EndTurnResult(Game GameSession);
 
     public record EndTurnCommand(Guid GameId) : IRequest<EndTurnResult>;
 }

@@ -28,9 +28,9 @@ namespace ThunderbirdsBoardGameEngine.GameState.Application.UnitTests.EndTurn
 
             // Assert
             Assert.NotNull(result);
-            Assert.Same(game, result.Game);
+            Assert.Same(game, result.GameSession);
             Assert.Equal(0, game.ActiveTurnIndex);
-            Assert.Equal(game.TurnOrder.First(), result.Game.ActiveCharacter);
+            Assert.Equal(game.TurnOrder.First(), result.GameSession.ActiveCharacter);
 
             await gameRespository.Received(1).UpdateGameSession(game, Arg.Any<CancellationToken>());
             integrityValidator.Received(2).Validate(game);
