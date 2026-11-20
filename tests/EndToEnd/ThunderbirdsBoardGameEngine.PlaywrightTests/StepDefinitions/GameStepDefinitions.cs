@@ -37,7 +37,7 @@ namespace ThunderbirdsBoardGameEngine.PlaywrightTests.StepDefinitions
         [When("the player starts a new game")]
         public async Task WhenThePlayerStartsANewGame()
         {
-            await _homePage.ClickNewGameAsync();
+            await _homePage.CreateNewGame();
         }
 
         [Given("the player has opened its dashboard")]
