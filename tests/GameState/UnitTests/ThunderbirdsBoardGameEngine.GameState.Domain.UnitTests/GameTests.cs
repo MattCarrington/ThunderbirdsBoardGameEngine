@@ -176,6 +176,99 @@ namespace ThunderbirdsBoardGameEngine.GameState.Domain.UnitTests
             Assert.Throws<ThunderbirdMachineNotFoundException>(() => game.MoveThunderbirdMachine(machineCode, newLocation));
         }
 
+        [Fact]
+        public void AdvanceTurn_WhenCalledOnCreatedGame_ShouldAdvanceToNextCharacter()
+        {
+            // Arrange
+            var game = CreateGame();
+            var originalTurnOrder = game.TurnOrder.ToList();
+
+            // Act
+            game.AdvanceTurn();
+
+            // Assert
+            Assert.Equal(1, game.ActiveTurnIndex);
+            Assert.Equal(new CharacterCode("character-2"), game.ActiveCharacter);
+            Assert.Equal(originalTurnOrder, game.TurnOrder);
+        }
+
+        [Fact]
+        public void AdvanceTurn_WhenActiveCharacterIsLast_ShouldWrapToFirstCharacter()
+        {
+            // Arrange
+            var game = Game.Restore(
+                id: Guid.NewGuid(),
+                createdAtUtc: DateTimeOffset.UtcNow,
+                setupVersion: "test",
+                stateVersion: 1,
+                machines: new Dictionary<ThunderbirdCode, LocationCode>
+                {
+                    [new("machine-1")] = new("location-1"),
+                    [new("machine-2")] = new("location-1")
+                },
+                characters: new Dictionary<CharacterCode, ThunderbirdCode>
+                {
+                    [new("character-1")] = new("machine-1"),
+                    [new("character-2")] = new("machine-2")
+                },
+                turnOrder:
+                [
+                    new("character-1"),
+                    new("character-2")
+                ],
+                activeTurnIndex: 1);
+
+            var originalTurnOrder = game.TurnOrder.ToList();
+
+            // Act
+            game.AdvanceTurn();
+
+            // Assert
+            Assert.Equal(0, game.ActiveTurnIndex);
+            Assert.Equal(new CharacterCode("character-1"), game.ActiveCharacter);
+            Assert.Equal(originalTurnOrder, game.TurnOrder);
+        }
+
+        [Fact]
+        public void AdvanceTurn_WhenActiveCharacterIsInMiddle_ShouldAdvanceToNextCharacter()
+        {
+            // Arrange
+            var game = Game.Restore(
+                id: Guid.NewGuid(),
+                createdAtUtc: DateTimeOffset.UtcNow,
+                setupVersion: "test",
+                stateVersion: 1,
+                machines: new Dictionary<ThunderbirdCode, LocationCode>
+                {
+                    [new("machine-1")] = new("location-1"),
+                    [new("machine-2")] = new("location-1"),
+                    [new("machine-3")] = new("location-1")
+                },
+                characters: new Dictionary<CharacterCode, ThunderbirdCode>
+                {
+                    [new("character-1")] = new("machine-1"),
+                    [new("character-2")] = new("machine-2"),
+                    [new("character-3")] = new("machine-3")
+                },
+                turnOrder:
+                [
+                    new("character-1"),
+                    new("character-2"),
+                    new("character-3")
+                ],
+                activeTurnIndex: 1);
+
+            var originalTurnOrder = game.TurnOrder.ToList();
+
+            // Act
+            game.AdvanceTurn();
+
+            // Assert
+            Assert.Equal(2, game.ActiveTurnIndex);
+            Assert.Equal(new CharacterCode("character-3"), game.ActiveCharacter);
+            Assert.Equal(originalTurnOrder, game.TurnOrder);
+        }
+
         private static Game CreateGame()
         {
             return Game.Create(

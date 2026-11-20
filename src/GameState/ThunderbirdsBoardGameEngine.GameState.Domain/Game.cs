@@ -190,6 +190,11 @@ namespace ThunderbirdsBoardGameEngine.GameState.Domain
                 .AsReadOnly();
         }
 
+        public void AdvanceTurn()
+        {
+            ActiveTurnIndex = (ActiveTurnIndex + 1) % _turnOrder.Count;
+        }
+
         private static void ValidateTurnState(IReadOnlyDictionary<CharacterCode, ThunderbirdCode> characters, IReadOnlyList<CharacterCode> turnOrder, int activeTurnIndex)
         {
             ArgumentNullException.ThrowIfNull(turnOrder);
