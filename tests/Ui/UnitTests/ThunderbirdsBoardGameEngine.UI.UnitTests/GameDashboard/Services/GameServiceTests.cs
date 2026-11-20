@@ -3,9 +3,13 @@ using System.Net;
 using ThunderbirdsBoardGameEngine.Client.Core;
 using ThunderbirdsBoardGameEngine.GameState.Client.Interfaces.V1;
 using ThunderbirdsBoardGameEngine.GameState.Contracts.Dtos.V1;
+using ThunderbirdsBoardGameEngine.GameState.Contracts.Dtos.V1.CreateGame;
 using ThunderbirdsBoardGameEngine.GameState.Contracts.Dtos.V1.ThunderbirdMachines;
 using ThunderbirdsBoardGameEngine.GameState.Contracts.Dtos.V1.TransferCharacters;
+using ThunderbirdsBoardGameEngine.ReferenceData.Core.Identities;
+using ThunderbirdsBoardGameEngine.ReferenceData.Core.Model;
 using ThunderbirdsBoardGameEngine.ReferenceData.Runtime.Interfaces;
+using ThunderbirdsBoardGameEngine.ReferenceData.Testing.Builders;
 using ThunderbirdsBoardGameEngine.TestUtils.xUnit.ClassData;
 using ThunderbirdsBoardGameEngine.UI.Features.GameDashboard;
 using ThunderbirdsBoardGameEngine.UI.Features.GameDashboard.Mappers;
@@ -20,56 +24,159 @@ namespace ThunderbirdsBoardGameEngine.UI.UnitTests.GameDashboard.Services
         public async Task CreateGameAsync_WhenCalled_CreatesGameSuccessfully()
         {
             // Arrange
-            var dto = new GameStateResponseDto
+            var dto = CreateValidApiResponseDto(Guid.NewGuid());
+
+            var turnOrder = new List<string> { "scott", "virgil", "john", "gordon" };
+
+            var request = new CreateGameRequestDto
             {
-                GameId = Guid.NewGuid(),
-                ThunderbirdMachines = []
+                TurnOrder = turnOrder
             };
 
             var apiResult = ApiResult<GameStateResponseDto>.SuccessResult(dto, HttpStatusCode.Created);
 
             var client = Substitute.For<IGameClient>();
-            client.CreateGameAsync(Arg.Any<CancellationToken>()).Returns(apiResult);
+            client.CreateGameAsync(Arg.Any<CreateGameRequestDto>(), Arg.Any<CancellationToken>()).Returns(apiResult);
 
             var service = CreateGameService(client);
 
             // Act
-            var game = await service.CreateGameAsync();
+            var game = await service.CreateGameAsync(turnOrder);
 
             // Assert
             Assert.False(game == Guid.Empty);
 
-            await client.Received(1).CreateGameAsync(Arg.Any<CancellationToken>());
+            await client.Received(1).CreateGameAsync(
+                Arg.Is<CreateGameRequestDto>(request =>
+                    request.TurnOrder.SequenceEqual(turnOrder)),
+                Arg.Any<CancellationToken>());
         }
 
         [Fact]
         public async Task CreateGameAsync_WhenClientReturnsError_ThrowsInvalidOperationException()
         {
             // Arrange
+            var turnOrder = new List<string> { "scott", "virgil", "john", "gordon" };
+
+            var request = new CreateGameRequestDto
+            {
+                TurnOrder = turnOrder
+            };
+
             var apiResult = ApiResult<GameStateResponseDto>.Failure("Error", HttpStatusCode.InternalServerError);
 
             var client = Substitute.For<IGameClient>();
-            client.CreateGameAsync(Arg.Any<CancellationToken>()).Returns(apiResult);
+            client.CreateGameAsync(Arg.Any<CreateGameRequestDto>(), Arg.Any<CancellationToken>()).Returns(apiResult);
 
             var service = CreateGameService(client);
 
             // Act & Assert
-            await Assert.ThrowsAsync<InvalidOperationException>(() => service.CreateGameAsync());
+            await Assert.ThrowsAsync<InvalidOperationException>(() => service.CreateGameAsync(turnOrder));
         }
 
         [Fact]
         public async Task CreateGameAsync_WhenClientReturnsNullData_ThrowsInvalidOperationException()
         {
             // Arrange
+            var turnOrder = new List<string> { "scott", "virgil", "john", "gordon" };
+
+            var request = new CreateGameRequestDto
+            {
+                TurnOrder = turnOrder
+            };
+
             var apiResult = ApiResult<GameStateResponseDto>.SuccessResult(null, HttpStatusCode.Created);
 
             var client = Substitute.For<IGameClient>();
-            client.CreateGameAsync(Arg.Any<CancellationToken>()).Returns(apiResult);
+            client.CreateGameAsync(Arg.Any<CreateGameRequestDto>(), Arg.Any<CancellationToken>()).Returns(apiResult);
 
             var service = CreateGameService(client);
 
             // Act & Assert
-            await Assert.ThrowsAsync<InvalidOperationException>(() => service.CreateGameAsync());
+            await Assert.ThrowsAsync<InvalidOperationException>(() => service.CreateGameAsync(turnOrder));
+        }
+
+        [Fact]
+        public async Task CreateGameAsync_WhenTurnOrderIsNull_ThrowsArgumentNullException()
+        {
+            // Arrange
+            var client = Substitute.For<IGameClient>();
+
+            var service = CreateGameService(client);
+
+            // Act & Assert
+            await Assert.ThrowsAsync<ArgumentNullException>(() => service.CreateGameAsync(null!));
+        }
+
+        [Fact]
+        public async Task CreateGameAsync_WhenTurnOrderEmpty_ThrowsArgumentException()
+        {
+            // Arrange
+            var turnOrder = Array.Empty<string>();
+
+            var client = Substitute.For<IGameClient>();
+
+            var service = CreateGameService(client);
+
+            // Act & Assert
+            await Assert.ThrowsAsync<ArgumentOutOfRangeException>(() => service.CreateGameAsync(turnOrder));
+        }
+
+        [Fact]
+        public async Task CreateGameAsync_WhenTurnOrderHasSinglePlayer_ThrowsArgumentOutOfRangeException()
+        {
+            // Arrange
+            var turnOrder = new List<string> { "scott" };
+
+            var client = Substitute.For<IGameClient>();
+
+            var service = CreateGameService(client);
+
+            // Act & Assert
+            await Assert.ThrowsAsync<ArgumentOutOfRangeException>(() => service.CreateGameAsync(turnOrder));
+        }
+
+        [Fact]
+        public async Task CreateGameAsync_WhenTurnOrderHasMoreThanFourPlayers_ThrowsArgumentOutOfRangeException()
+        {
+            // Arrange
+            var turnOrder = new List<string> { "scott", "virgil", "john", "gordon", "alan" };
+
+            var client = Substitute.For<IGameClient>();
+
+            var service = CreateGameService(client);
+
+            // Act & Assert
+            await Assert.ThrowsAsync<ArgumentOutOfRangeException>(() => service.CreateGameAsync(turnOrder));
+        }
+
+        [Fact]
+        public async Task CreateGameAsync_WhenTurnOrderHasDuplicatePlayers_ThrowsArgumentException()
+        {
+            // Arrange
+            var turnOrder = new List<string> { "scott", "scott" };
+
+            var client = Substitute.For<IGameClient>();
+
+            var service = CreateGameService(client);
+
+            // Act & Assert
+            await Assert.ThrowsAsync<ArgumentException>(() => service.CreateGameAsync(turnOrder));
+        }
+
+        [Theory]
+        [ClassData(typeof(NullOrWhitespaceStringData))]
+        public async Task CreateGameAsync_WhenTurnOrderHasNullOrWhitespacePlayer_ThrowsArgumentException(string? player)
+        {
+            // Arrange
+            var turnOrder = new List<string> { "scott", player };
+
+            var client = Substitute.For<IGameClient>();
+
+            var service = CreateGameService(client);
+
+            // Act & Assert
+            await Assert.ThrowsAsync<ArgumentException>(() => service.CreateGameAsync(turnOrder));
         }
 
         [Fact]
@@ -78,11 +185,7 @@ namespace ThunderbirdsBoardGameEngine.UI.UnitTests.GameDashboard.Services
             // Arrange
             var gameId = Guid.NewGuid();
 
-            var dto = new GameStateResponseDto
-            {
-                GameId = gameId,
-                ThunderbirdMachines = []
-            };
+            var dto = CreateValidApiResponseDto(gameId);
 
             var apiResult = ApiResult<GameStateResponseDto>.SuccessResult(dto, HttpStatusCode.OK);
 
@@ -165,11 +268,7 @@ namespace ThunderbirdsBoardGameEngine.UI.UnitTests.GameDashboard.Services
 
             var destinationLocationCode = "LOC1";
 
-            var dto = new GameStateResponseDto
-            {
-                GameId = gameId,
-                ThunderbirdMachines = []
-            };
+            var dto = CreateValidApiResponseDto(gameId);
 
             var apiResult = ApiResult<GameStateResponseDto>.SuccessResult(dto, HttpStatusCode.OK);
 
@@ -286,11 +385,7 @@ namespace ThunderbirdsBoardGameEngine.UI.UnitTests.GameDashboard.Services
                 ReturningCharacterCode: null
             );
 
-            var dto = new GameStateResponseDto
-            {
-                GameId = gameId,
-                ThunderbirdMachines = []
-            };
+            var dto = CreateValidApiResponseDto(gameId);
 
             var apiResult = ApiResult<GameStateResponseDto>.SuccessResult(dto, HttpStatusCode.OK);
 
@@ -332,11 +427,7 @@ namespace ThunderbirdsBoardGameEngine.UI.UnitTests.GameDashboard.Services
                 ReturningCharacterCode: "CHAR2"
             );
 
-            var dto = new GameStateResponseDto
-            {
-                GameId = gameId,
-                ThunderbirdMachines = []
-            };
+            var dto = CreateValidApiResponseDto(gameId);
 
             var apiResult = ApiResult<GameStateResponseDto>.SuccessResult(dto, HttpStatusCode.OK);
 
@@ -383,11 +474,7 @@ namespace ThunderbirdsBoardGameEngine.UI.UnitTests.GameDashboard.Services
                 ReturningCharacterCode: "CHAR2"
             );
 
-            var dto = new GameStateResponseDto
-            {
-                GameId = gameId,
-                ThunderbirdMachines = []
-            };
+            var dto = CreateValidApiResponseDto(gameId);
 
             var apiResult = ApiResult<GameStateResponseDto>.SuccessResult(dto, HttpStatusCode.OK);
 
@@ -639,11 +726,27 @@ namespace ThunderbirdsBoardGameEngine.UI.UnitTests.GameDashboard.Services
             await Assert.ThrowsAnyAsync<ArgumentException>(() => service.TransferCharactersAsync(gameId, selection));
         }
 
+        private static GameStateResponseDto CreateValidApiResponseDto(Guid gameId)
+        {
+            return new GameStateResponseDto
+            {
+                GameId = gameId,
+                ThunderbirdMachines = [],
+                TurnOrder =
+                [
+                    "scott", "virgil", "john", "gordon"
+                ],
+                ActiveCharacterCode = "scott"
+            };
+        }
+
         private static GameService CreateGameService(IGameClient client)
         {
             var thunderbirdCatalog = Substitute.For<IThunderbirdDefinitionCatalog>();
             var locationCatalog = Substitute.For<ILocationDefinitionCatalog>();
             var characterCatalog = Substitute.For<ICharacterDefinitionCatalog>();
+            characterCatalog.GetByCode(Arg.Any<CharacterCode>())
+                .Returns(ci => ReferenceDefinitionFactory.Character(ci.Arg<CharacterCode>(), $"Character {ci.Arg<CharacterCode>().Value}"));
 
             var mapper = new GameDashboardMapper(thunderbirdCatalog, locationCatalog, characterCatalog);
 

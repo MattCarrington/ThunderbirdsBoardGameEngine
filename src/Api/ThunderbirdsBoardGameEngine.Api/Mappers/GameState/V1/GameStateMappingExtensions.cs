@@ -30,7 +30,9 @@ namespace ThunderbirdsBoardGameEngine.Api.Mappers.GameState.V1
             return new GameStateResponseDto
             {
                 GameId = game.Id,
-                ThunderbirdMachines = machines
+                ThunderbirdMachines = machines,
+                TurnOrder = game.TurnOrder.Select(code => code.Value).ToList(),
+                ActiveCharacterCode = game.ActiveCharacter.Value
             };
         }
     }

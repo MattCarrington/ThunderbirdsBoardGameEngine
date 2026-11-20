@@ -18,6 +18,7 @@ namespace ThunderbirdsBoardGameEngine.Api.Composition
             services.AddExceptionHandler<InvalidCharacterTransferRequestExceptionHandler>();
             services.AddExceptionHandler<CharacterNotFoundExceptionHandler>();
             services.AddExceptionHandler<CharacterTransferRejectedExceptionHandler>();
+            services.AddExceptionHandler<InvalidTurnOrderExceptionHandler>();
             services.AddExceptionHandler<UnhandledExceptionHandler>();
 
             return services;

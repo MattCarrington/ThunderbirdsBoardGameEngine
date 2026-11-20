@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using NSubstitute;
 using ThunderbirdsBoardGameEngine.UI.Features.DisasterCards.Interfaces;
+using ThunderbirdsBoardGameEngine.UI.Features.Shared.Interfaces;
 
 namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Fixtures
 {

@@ -121,9 +121,11 @@ namespace ThunderbirdsBoardGameEngine.GameState.Application.UnitTests.MoveThunde
                 },
                 characters: new Dictionary<CharacterCode, ThunderbirdCode>
                 {
-                      { new CharacterCode("character-1"), new ThunderbirdCode("thunderbird-1") }
-                }
-            );
+                      { new CharacterCode("character-1"), new ThunderbirdCode("thunderbird-1") },
+                      { new CharacterCode("character-2"), new ThunderbirdCode("thunderbird-1") }
+                },
+                turnOrder: [new("character-1"), new("character-2")],
+                activeTurnIndex: 0);
         }
 
         private static MoveThunderbirdCommand CreateCommand()

@@ -2,7 +2,7 @@
 
 ## Status
 
-Proposed product vertical slice.
+Implemented and deployed to the development environment.
 
 ## User story
 
@@ -54,7 +54,10 @@ assignments.
 
 Active-character and turn enforcement remain outside this slice. Until those
 features are introduced, the presence of any character is sufficient to permit
-a movement attempt.
+a movement attempt. When active-character enforcement is introduced, a
+transfer may include other players' characters, but the participating machines
+must be in the active character's current space. Asking permission before
+moving another player's physical peg remains a social table rule.
 
 ### Request cardinality
 
@@ -342,9 +345,8 @@ migration.
 
 ## Non-goals
 
-- Player-controlled character selection
-- Active-player enforcement
-- Turn order or action-point accounting
+- Active-character enforcement
+- Ending turns or action-point accounting
 - Charging an action point for a transfer
 - Character assignment to Tracy Island
 - Thunderbird 2 cargo transport
@@ -355,9 +357,10 @@ migration.
 
 ## Follow-on stories
 
-- Record player-controlled characters and apply John's alternative Thunderbird
-  3 starting position.
-- Track turn order, the active player or character, and remaining action points.
+- End the active character's turn and advance to the next selected character.
+- Restrict movement and transfer availability using the active character's
+  current machine and space.
+- Track remaining action points.
 - Make committed movement and Transfer Characters actions consume action
   points.
 - Transport Thunderbird 4 or FAB 1 within Thunderbird 2.

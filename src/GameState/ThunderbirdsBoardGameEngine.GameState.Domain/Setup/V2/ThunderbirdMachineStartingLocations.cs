@@ -1,11 +1,11 @@
 ﻿using ThunderbirdsBoardGameEngine.ReferenceData.Core.Identities;
 using ThunderbirdsBoardGameEngine.ReferenceData.Core.KnownIdentities;
 
-namespace ThunderbirdsBoardGameEngine.GameState.Domain.Setup.V1
+namespace ThunderbirdsBoardGameEngine.GameState.Domain.Setup.V2
 {
     public sealed class ThunderbirdMachineStartingLocations
     {
-        public static IReadOnlyDictionary<ThunderbirdCode, LocationCode> GetStartingLocations()
+        public static Dictionary<ThunderbirdCode, LocationCode> GetStartingLocations()
         {
             return new Dictionary<ThunderbirdCode, LocationCode>
             {

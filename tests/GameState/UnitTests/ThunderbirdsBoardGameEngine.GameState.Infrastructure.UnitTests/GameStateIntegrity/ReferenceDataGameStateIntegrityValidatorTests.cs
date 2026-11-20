@@ -31,19 +31,21 @@ namespace ThunderbirdsBoardGameEngine.GameState.Infrastructure.UnitTests.GameSta
             var validator = CreateValidator();
 
             var game = Game.Create(
-                Guid.Empty,
-                DateTimeOffset.UtcNow,
-                "1.0.0",
-                new Dictionary<ThunderbirdCode, LocationCode>
+                id: Guid.Empty,
+                createdAtUtc: DateTimeOffset.UtcNow,
+                setupVersion: "1.0.0",
+                machines: new Dictionary<ThunderbirdCode, LocationCode>
                 {
                     { new("thunderbird-1"), new("location-1") },
-                    { new("thunderbird-2"), new("location-2") }
+                    { new("thunderbird-2"), new("location-2") },
                 },
-                new Dictionary<CharacterCode, ThunderbirdCode>
+                characters: new Dictionary<CharacterCode, ThunderbirdCode>
                 {
                     { new("character-1"), new("thunderbird-1") },
-                    { new("character-2"), new("thunderbird-2") }
-                });
+                    { new("character-2"), new("thunderbird-2") },
+                    { new("character-3"), new("thunderbird-1") }
+                },
+                turnOrder: [new("character-1"), new("character-2")]);
 
             // Act & Assert
             Assert.Throws<InvalidGameStateException>(() => validator.Validate(game));
@@ -56,20 +58,22 @@ namespace ThunderbirdsBoardGameEngine.GameState.Infrastructure.UnitTests.GameSta
             var validator = CreateValidator();
 
             var game = Game.Create(
-                Guid.NewGuid(),
-                DateTimeOffset.UtcNow,
-                "1.0.0",
-                new Dictionary<ThunderbirdCode, LocationCode>
+                id: Guid.NewGuid(),
+                createdAtUtc: DateTimeOffset.UtcNow,
+                setupVersion: "1.0.0",
+                machines: new Dictionary<ThunderbirdCode, LocationCode>
                 {
                     { new("thunderbird-1"), new("location-1") },
                     { new("thunderbird-2"), new("location-2") }
                 },
-                new Dictionary<CharacterCode, ThunderbirdCode>
+                characters: new Dictionary<CharacterCode, ThunderbirdCode>
                 {
                     { new("character-1"), new("thunderbird-1") },
                     { new("character-2"), new("thunderbird-2") },
-                    { new("character-3"), new("thunderbird-1") }
-                });
+                    { new("character-3"), new("thunderbird-1") },
+                    { new("character-4"), new("thunderbird-2") }
+                },
+                turnOrder: [new("character-1"), new("character-2")]);
 
             // Act & Assert
             Assert.Throws<InvalidGameStateException>(() => validator.Validate(game));
@@ -82,18 +86,20 @@ namespace ThunderbirdsBoardGameEngine.GameState.Infrastructure.UnitTests.GameSta
             var validator = CreateValidator();
 
             var game = Game.Create(
-                Guid.NewGuid(),
-                DateTimeOffset.UtcNow,
-                "1.0.0",
-                new Dictionary<ThunderbirdCode, LocationCode>
+                id: Guid.NewGuid(),
+                createdAtUtc: DateTimeOffset.UtcNow,
+                setupVersion: "1.0.0",
+                machines: new Dictionary<ThunderbirdCode, LocationCode>
                 {
                     { new("thunderbird-1"), new("location-1") },
                     { new("thunderbird-2"), new("location-2") }
                 },
-                new Dictionary<CharacterCode, ThunderbirdCode>
+                characters: new Dictionary<CharacterCode, ThunderbirdCode>
                 {
-                    { new("character-1"), new("thunderbird-1") }
-                });
+                    { new("character-1"), new("thunderbird-1") },
+                    { new("character-2"), new("thunderbird-2") }
+                },
+                turnOrder: [new("character-1"), new("character-2")]);
 
             // Act & Assert
             Assert.Throws<InvalidGameStateException>(() => validator.Validate(game));
@@ -105,20 +111,22 @@ namespace ThunderbirdsBoardGameEngine.GameState.Infrastructure.UnitTests.GameSta
             // Arrange
             var validator = CreateValidator();
             var game = Game.Create(
-                Guid.NewGuid(),
-                DateTimeOffset.UtcNow,
-                "1.0.0",
-                new Dictionary<ThunderbirdCode, LocationCode>
+                id: Guid.NewGuid(),
+                createdAtUtc: DateTimeOffset.UtcNow,
+                setupVersion: "1.0.0",
+                machines: new Dictionary<ThunderbirdCode, LocationCode>
                 {
                     { new("thunderbird-1"), new("location-1") },
                     { new("thunderbird-2"), new("location-2") },
                     { new("thunderbird-3"), new("location-1") }
                 },
-                new Dictionary<CharacterCode, ThunderbirdCode>
+                characters: new Dictionary<CharacterCode, ThunderbirdCode>
                 {
                     { new("character-1"), new("thunderbird-1") },
                     { new("character-2"), new("thunderbird-2") }
-                });
+                },
+                turnOrder: [new("character-1"), new("character-2")]);
+
             // Act & Assert
             Assert.Throws<InvalidGameStateException>(() => validator.Validate(game));
         }
@@ -128,21 +136,27 @@ namespace ThunderbirdsBoardGameEngine.GameState.Infrastructure.UnitTests.GameSta
         {
             // Arrange
             var validator = CreateValidator();
+            var unknownCharacter = new CharacterCode("unknown-character");
 
             var game = Game.Create(
-                Guid.NewGuid(),
-                DateTimeOffset.UtcNow,
-                "1.0.0",
-                new Dictionary<ThunderbirdCode, LocationCode>
+                id: Guid.NewGuid(),
+                createdAtUtc: DateTimeOffset.UtcNow,
+                setupVersion: "1.0.0",
+                machines: new Dictionary<ThunderbirdCode, LocationCode>
                 {
                     { new("thunderbird-1"), new("location-1") },
                     { new("thunderbird-2"), new("location-2") }
                 },
-                new Dictionary<CharacterCode, ThunderbirdCode>
+                characters: new Dictionary<CharacterCode, ThunderbirdCode>
                 {
                     { new("character-1"), new("thunderbird-1") },
-                    { new("character-3"), new("thunderbird-2") } // character-3 does not exist in reference data
-                });
+                    { unknownCharacter, new("thunderbird-2") }
+                },
+                turnOrder:
+                [
+                    new("character-1"),
+                    unknownCharacter
+                ]);
 
             // Act & Assert
             Assert.Throws<InvalidGameStateException>(() => validator.Validate(game));
@@ -155,19 +169,21 @@ namespace ThunderbirdsBoardGameEngine.GameState.Infrastructure.UnitTests.GameSta
             var validator = CreateValidator();
 
             var game = Game.Create(
-                Guid.NewGuid(),
-                DateTimeOffset.UtcNow,
-                "1.0.0",
-                new Dictionary<ThunderbirdCode, LocationCode>
+                id: Guid.NewGuid(),
+                createdAtUtc: DateTimeOffset.UtcNow,
+                setupVersion: "1.0.0",
+                machines: new Dictionary<ThunderbirdCode, LocationCode>
                 {
                     { new("thunderbird-1"), new("location-1") },
                     { new("thunderbird-2"), new("location-2") }
                 },
-                new Dictionary<CharacterCode, ThunderbirdCode>
+                characters: new Dictionary<CharacterCode, ThunderbirdCode>
                 {
                     { new("character-1"), new("thunderbird-1") },
-                    { new("character-2"), new("thunderbird-x") } // character-2 is assigned to a non-existent thunderbird
-                });
+                    { new("character-2"), new("thunderbird-x") }, // character-2 is assigned to a non-existent thunderbird
+                    { new("character-3"), new("thunderbird-1") }
+                },
+                turnOrder: [new("character-1"), new("character-2")]);
 
             // Act & Assert
             Assert.Throws<InvalidGameStateException>(() => validator.Validate(game));
@@ -179,18 +195,21 @@ namespace ThunderbirdsBoardGameEngine.GameState.Infrastructure.UnitTests.GameSta
             // Arrange
             var validator = CreateValidator();
             var game = Game.Create(
-                Guid.NewGuid(),
-                DateTimeOffset.UtcNow,
-                "1.0.0",
-                new Dictionary<ThunderbirdCode, LocationCode>
+                id: Guid.NewGuid(),
+                createdAtUtc: DateTimeOffset.UtcNow,
+                setupVersion: "1.0.0",
+                machines: new Dictionary<ThunderbirdCode, LocationCode>
                 {
                     { new("thunderbird-1"), new("location-1") }
                 },
-                new Dictionary<CharacterCode, ThunderbirdCode>
+                characters: new Dictionary<CharacterCode, ThunderbirdCode>
                 {
                     { new("character-1"), new("thunderbird-1") },
-                    { new("character-2"), new("thunderbird-2") }
-                });
+                    { new("character-2"), new("thunderbird-2") },
+                    { new("character-3"), new("thunderbird-1") }
+                },
+                turnOrder: [new("character-1"), new("character-2")]);
+
             // Act & Assert
             Assert.Throws<InvalidGameStateException>(() => validator.Validate(game));
         }
@@ -201,19 +220,22 @@ namespace ThunderbirdsBoardGameEngine.GameState.Infrastructure.UnitTests.GameSta
             // Arrange
             var validator = CreateValidator();
             var game = Game.Create(
-                Guid.NewGuid(),
-                DateTimeOffset.UtcNow,
-                "1.0.0",
-                new Dictionary<ThunderbirdCode, LocationCode>
+                id: Guid.NewGuid(),
+                createdAtUtc: DateTimeOffset.UtcNow,
+                setupVersion: "1.0.0",
+                machines: new Dictionary<ThunderbirdCode, LocationCode>
                 {
                     { new("thunderbird-1"), new("location-1") },
                     { new("thunderbird-2"), new("location-x") } // location-x does not exist in reference data
                 },
-                new Dictionary<CharacterCode, ThunderbirdCode>
+                characters: new Dictionary<CharacterCode, ThunderbirdCode>
                 {
                     { new("character-1"), new("thunderbird-1") },
-                    { new("character-2"), new("thunderbird-2") }
-                });
+                    { new("character-2"), new("thunderbird-2") },
+                    { new("character-3"), new("thunderbird-1") }
+                },
+                turnOrder: [new("character-1"), new("character-2")]);
+
             // Act & Assert
             Assert.Throws<InvalidGameStateException>(() => validator.Validate(game));
         }
@@ -224,19 +246,22 @@ namespace ThunderbirdsBoardGameEngine.GameState.Infrastructure.UnitTests.GameSta
             // Arrange
             var validator = CreateValidator();
             var game = Game.Create(
-                Guid.NewGuid(),
-                DateTimeOffset.UtcNow,
-                "1.0.0",
-                new Dictionary<ThunderbirdCode, LocationCode>
+                id: Guid.NewGuid(),
+                createdAtUtc: DateTimeOffset.UtcNow,
+                setupVersion: "1.0.0",
+                machines: new Dictionary<ThunderbirdCode, LocationCode>
                 {
                     { new("thunderbird-1"), new("location-1") },
                     { new("thunderbird-x"), new("location-2") } // thunderbird-x does not exist in reference data
                 },
-                new Dictionary<CharacterCode, ThunderbirdCode>
+                characters: new Dictionary<CharacterCode, ThunderbirdCode>
                 {
                     { new("character-1"), new("thunderbird-1") },
-                    { new("character-2"), new("thunderbird-2") }
-                });
+                    { new("character-2"), new("thunderbird-2") },
+                    { new("character-3"), new("thunderbird-1") }
+                },
+                turnOrder: [new("character-1"), new("character-2")]);
+
             // Act & Assert
             Assert.Throws<InvalidGameStateException>(() => validator.Validate(game));
         }
@@ -248,19 +273,21 @@ namespace ThunderbirdsBoardGameEngine.GameState.Infrastructure.UnitTests.GameSta
             var validator = CreateValidator();
 
             var game = Game.Create(
-                Guid.NewGuid(),
-                DateTimeOffset.UtcNow,
-                "1.0.0",
-                new Dictionary<ThunderbirdCode, LocationCode>
+                id: Guid.NewGuid(),
+                createdAtUtc: DateTimeOffset.UtcNow,
+                setupVersion: "1.0.0",
+                machines: new Dictionary<ThunderbirdCode, LocationCode>
                 {
                     { new("thunderbird-1"), new("location-1") },
                     { new("thunderbird-2"), new("location-2") }
                 },
-                new Dictionary<CharacterCode, ThunderbirdCode>
+                characters: new Dictionary<CharacterCode, ThunderbirdCode>
                 {
                     { new("character-1"), new("thunderbird-1") },
-                    { new("character-2"), new("thunderbird-2") }
-                });
+                    { new("character-2"), new("thunderbird-2") },
+                    { new("character-3"), new("thunderbird-1") }
+                },
+                turnOrder: [new("character-1"), new("character-2")]);
 
             // Act & Assert
             var exception = Record.Exception(() => validator.Validate(game));
@@ -271,6 +298,7 @@ namespace ThunderbirdsBoardGameEngine.GameState.Infrastructure.UnitTests.GameSta
         {
             var characterOne = ReferenceDefinitionFactory.Character(new CharacterCode("character-1"), "Character 1", null);
             var characterTwo = ReferenceDefinitionFactory.Character(new CharacterCode("character-2"), "Character 2", null);
+            var characterThree = ReferenceDefinitionFactory.Character(new CharacterCode("character-3"), "Character 3", null);
 
             var thunderbirdOne = ReferenceDefinitionFactory.Thunderbird(
                 code: new ThunderbirdCode("thunderbird-1"),
@@ -299,9 +327,10 @@ namespace ThunderbirdsBoardGameEngine.GameState.Infrastructure.UnitTests.GameSta
             thunderbirdCatalog.GetAll().Returns(new[] { thunderbirdOne, thunderbirdTwo }.ToImmutableArray());
 
             var characterCatalog = Substitute.For<ICharacterDefinitionCatalog>();
-            characterCatalog.GetAll().Returns(new[] { characterOne, characterTwo }.ToImmutableArray());
+            characterCatalog.GetAll().Returns(new[] { characterOne, characterTwo, characterThree }.ToImmutableArray());
             characterCatalog.GetByCode(characterOne.Code).Returns(characterOne);
             characterCatalog.GetByCode(characterTwo.Code).Returns(characterTwo);
+            characterCatalog.GetByCode(characterThree.Code).Returns(characterThree);
 
             return new ReferenceDataGameStateIntegrityValidator(
                 locationCatalog,

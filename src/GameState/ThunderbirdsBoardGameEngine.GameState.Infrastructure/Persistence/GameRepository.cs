@@ -35,6 +35,7 @@ namespace ThunderbirdsBoardGameEngine.GameState.Infrastructure.Persistence
                 .AsSplitQuery()
                 .Include(game => game.CharacterStates)
                 .Include(game => game.ThunderbirdMachineStates)
+                .Include(game => game.TurnOrderEntries)
                 .SingleOrDefaultAsync(
                     game => game.Id == gameId,
                     cancellationToken);
@@ -71,6 +72,8 @@ namespace ThunderbirdsBoardGameEngine.GameState.Infrastructure.Persistence
 
             UpdateMachineStates(game, persistedGame);
             UpdateCharacterStates(game, persistedGame);
+
+            persistedGame.ActiveTurnIndex = game.ActiveTurnIndex;
 
             try
             {

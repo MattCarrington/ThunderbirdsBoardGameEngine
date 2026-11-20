@@ -1,5 +1,4 @@
-﻿using Microsoft.JSInterop.Infrastructure;
-using ThunderbirdsBoardGameEngine.GameState.Contracts.Dtos.V1;
+﻿using ThunderbirdsBoardGameEngine.GameState.Contracts.Dtos.V1;
 using ThunderbirdsBoardGameEngine.ReferenceData.Core.Identities;
 using ThunderbirdsBoardGameEngine.ReferenceData.Runtime.Interfaces;
 using ThunderbirdsBoardGameEngine.UI.Features.GameDashboard.ViewModels;
@@ -26,6 +25,7 @@ namespace ThunderbirdsBoardGameEngine.UI.Features.GameDashboard.Mappers
         {
             return new GameDashboardViewModel(
                 GameId: game.GameId,
+                TurnSummary: MapTurnSummary(game),
                 ThunderbirdMachines: game.ThunderbirdMachines.Select(MapThunderbirds).ToList());
         }
 
@@ -47,6 +47,22 @@ namespace ThunderbirdsBoardGameEngine.UI.Features.GameDashboard.Mappers
             return new OccupantsDashboardViewModel(
                 CharacterCode: occupant,
                 CharacterDisplayName: _characterDefinitionCatalog.GetByCode(new CharacterCode(occupant)).DisplayName);
+        }
+
+        private TurnSummaryDashboardViewModel MapTurnSummary(GameStateResponseDto game)
+        {
+            var turnOrder = game.TurnOrder.Select(MapTurnOrderCharacter).ToList();
+
+            return new TurnSummaryDashboardViewModel(
+                TurnOrder: turnOrder,
+                ActiveCharacter: turnOrder.Single(c => c.CharacterCode == game.ActiveCharacterCode));
+        }
+
+        private TurnOrderCharacterDashboardViewModel MapTurnOrderCharacter(string characterCode)
+        {
+            return new TurnOrderCharacterDashboardViewModel(
+                CharacterDisplayName: _characterDefinitionCatalog.GetByCode(new CharacterCode(characterCode)).DisplayName,
+                CharacterCode: characterCode);
         }
     }
 }

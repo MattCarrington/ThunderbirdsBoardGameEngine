@@ -5,6 +5,7 @@ using ThunderbirdsBoardGameEngine.Api.UserJourneys.Support;
 using ThunderbirdsBoardGameEngine.Client.Core;
 using ThunderbirdsBoardGameEngine.GameState.Client.Interfaces.V1;
 using ThunderbirdsBoardGameEngine.GameState.Contracts.Dtos.V1;
+using ThunderbirdsBoardGameEngine.GameState.Contracts.Dtos.V1.CreateGame;
 using ThunderbirdsBoardGameEngine.GameState.Contracts.Dtos.V1.ThunderbirdMachines;
 using ThunderbirdsBoardGameEngine.GameState.Contracts.Dtos.V1.TransferCharacters;
 using Xunit;
@@ -27,7 +28,16 @@ namespace ThunderbirdsBoardGameEngine.Api.UserJourneys.StepDefinitions
         [Given("a new game has been created")]
         public async Task GivenANewGameHasBeenCreated()
         {
-            var result = await _client.CreateGameAsync(TestContext.Current.CancellationToken);
+            var request = new CreateGameRequestDto
+            {
+                TurnOrder =
+                [
+                    "scott",
+                    "virgil"
+                ]
+            };
+
+            var result = await _client.CreateGameAsync(request, TestContext.Current.CancellationToken);
 
             UpdateGameContext(result);
 

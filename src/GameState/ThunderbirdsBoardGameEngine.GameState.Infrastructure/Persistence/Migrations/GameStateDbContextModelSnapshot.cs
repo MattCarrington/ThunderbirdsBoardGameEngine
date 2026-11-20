@@ -18,7 +18,7 @@ namespace ThunderbirdsBoardGameEngine.GameState.Infrastructure.Persistence.Migra
 #pragma warning disable 612, 618
             modelBuilder
                 .HasDefaultSchema("game_state")
-                .HasAnnotation("ProductVersion", "10.0.12")
+                .HasAnnotation("ProductVersion", "10.0.14")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -47,6 +47,9 @@ namespace ThunderbirdsBoardGameEngine.GameState.Infrastructure.Persistence.Migra
                     b.Property<Guid>("Id")
                         .HasColumnType("uuid");
 
+                    b.Property<int>("ActiveTurnIndex")
+                        .HasColumnType("integer");
+
                     b.Property<DateTimeOffset>("CreatedAtUtc")
                         .HasColumnType("timestamp with time zone");
 
@@ -62,6 +65,27 @@ namespace ThunderbirdsBoardGameEngine.GameState.Infrastructure.Persistence.Migra
                     b.HasKey("Id");
 
                     b.ToTable("games", "game_state");
+                });
+
+            modelBuilder.Entity("ThunderbirdsBoardGameEngine.GameState.Infrastructure.Persistence.Records.GameTurnOrderEntryRecord", b =>
+                {
+                    b.Property<Guid>("GameId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("Position")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("CharacterCode")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.HasKey("GameId", "Position");
+
+                    b.HasIndex("GameId", "CharacterCode")
+                        .IsUnique();
+
+                    b.ToTable("game_turn_order", "game_state");
                 });
 
             modelBuilder.Entity("ThunderbirdsBoardGameEngine.GameState.Infrastructure.Persistence.Records.ThunderbirdMachineStateRecord", b =>
@@ -94,6 +118,17 @@ namespace ThunderbirdsBoardGameEngine.GameState.Infrastructure.Persistence.Migra
                     b.Navigation("Game");
                 });
 
+            modelBuilder.Entity("ThunderbirdsBoardGameEngine.GameState.Infrastructure.Persistence.Records.GameTurnOrderEntryRecord", b =>
+                {
+                    b.HasOne("ThunderbirdsBoardGameEngine.GameState.Infrastructure.Persistence.Records.GameRecord", "Game")
+                        .WithMany("TurnOrderEntries")
+                        .HasForeignKey("GameId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Game");
+                });
+
             modelBuilder.Entity("ThunderbirdsBoardGameEngine.GameState.Infrastructure.Persistence.Records.ThunderbirdMachineStateRecord", b =>
                 {
                     b.HasOne("ThunderbirdsBoardGameEngine.GameState.Infrastructure.Persistence.Records.GameRecord", "Game")
@@ -110,6 +145,8 @@ namespace ThunderbirdsBoardGameEngine.GameState.Infrastructure.Persistence.Migra
                     b.Navigation("CharacterStates");
 
                     b.Navigation("ThunderbirdMachineStates");
+
+                    b.Navigation("TurnOrderEntries");
                 });
 #pragma warning restore 612, 618
         }

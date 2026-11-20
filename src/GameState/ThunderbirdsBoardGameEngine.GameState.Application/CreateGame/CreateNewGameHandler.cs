@@ -1,5 +1,7 @@
 ﻿using MediatR;
-using ThunderbirdsBoardGameEngine.GameState.Domain.Setup.V1;
+using ThunderbirdsBoardGameEngine.GameState.Application.Exceptions;
+using ThunderbirdsBoardGameEngine.GameState.Domain.Exceptions;
+using ThunderbirdsBoardGameEngine.GameState.Domain.Setup.V2;
 
 namespace ThunderbirdsBoardGameEngine.GameState.Application.CreateGame
 {
@@ -8,17 +10,48 @@ namespace ThunderbirdsBoardGameEngine.GameState.Application.CreateGame
         private readonly StandardGameSetupFactory _gameFactory;
         private readonly IGameStateIntegrityValidator _gameStateIntegrityValidator;
         private readonly IGameRepository _gameRepository;
+        private readonly ICharacterExistenceLookup _characterExistenceLookup;
 
-        public CreateNewGameHandler(StandardGameSetupFactory standardGameSetupFactory, IGameStateIntegrityValidator gameStateIntegrityValidator, IGameRepository gameRepository)
+        public CreateNewGameHandler(
+            StandardGameSetupFactory standardGameSetupFactory,
+            IGameStateIntegrityValidator gameStateIntegrityValidator,
+            IGameRepository gameRepository,
+            ICharacterExistenceLookup characterExistenceLookup)
         {
             _gameFactory = standardGameSetupFactory;
             _gameStateIntegrityValidator = gameStateIntegrityValidator;
             _gameRepository = gameRepository;
+            _characterExistenceLookup = characterExistenceLookup;
         }
 
         public async Task<CreateNewGameResult> Handle(CreateNewGameCommand request, CancellationToken cancellationToken)
         {
-            var game = _gameFactory.Create(Guid.NewGuid(), DateTimeOffset.UtcNow);
+            ArgumentNullException.ThrowIfNull(request.TurnOrder, nameof(request.TurnOrder));
+
+            if (request.TurnOrder.Count < 2)
+            {
+                throw InvalidTurnOrderException.TooFewCharacters(request.TurnOrder.Count);
+            }
+
+            if (request.TurnOrder.Count > 4)
+            {
+                throw InvalidTurnOrderException.TooManyCharacters(request.TurnOrder.Count);
+            }
+
+            if (request.TurnOrder.Count != request.TurnOrder.Distinct().Count())
+            {
+                throw InvalidTurnOrderException.DuplicateCharacters();
+            }
+
+            foreach (var character in request.TurnOrder)
+            {
+                if (!_characterExistenceLookup.Exists(character))
+                {
+                    throw CharacterNotFoundException.Create(character);
+                }
+            }
+
+            var game = _gameFactory.Create(Guid.NewGuid(), DateTimeOffset.UtcNow, request.TurnOrder);
 
             _gameStateIntegrityValidator.Validate(game);
 

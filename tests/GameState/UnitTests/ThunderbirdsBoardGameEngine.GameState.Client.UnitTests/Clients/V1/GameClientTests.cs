@@ -3,6 +3,7 @@ using System.Net;
 using ThunderbirdsBoardGameEngine.Client.Core;
 using ThunderbirdsBoardGameEngine.GameState.Client.Clients.V1;
 using ThunderbirdsBoardGameEngine.GameState.Contracts.Dtos.V1;
+using ThunderbirdsBoardGameEngine.GameState.Contracts.Dtos.V1.CreateGame;
 using ThunderbirdsBoardGameEngine.GameState.Contracts.Dtos.V1.ThunderbirdMachines;
 using ThunderbirdsBoardGameEngine.GameState.Contracts.Dtos.V1.TransferCharacters;
 using ThunderbirdsBoardGameEngine.Rules.Client.UnitTests.Helpers;
@@ -18,6 +19,8 @@ namespace ThunderbirdsBoardGameEngine.GameState.Client.UnitTests.Clients.V1
         public async Task CreateGameAsync_WhenCalled_ShouldCallCorrectEndpoint()
         {
             // Arrange
+            var createGameRequestDto = CreateCreateGameRequestDto();
+
             var stubHandler = new StubHttpMessageHandler("{}", HttpStatusCode.OK);
 
             var gameId = Guid.NewGuid();
@@ -27,7 +30,7 @@ namespace ThunderbirdsBoardGameEngine.GameState.Client.UnitTests.Clients.V1
             var gameClient = CreateGameClient(stubHandler, apiResult);
 
             // Act
-            _ = await gameClient.CreateGameAsync(TestContext.Current.CancellationToken);
+            _ = await gameClient.CreateGameAsync(createGameRequestDto, TestContext.Current.CancellationToken);
 
             // Assert
             Assert.Equal($"https://localhost:5001/api/games", stubHandler.CapturedRequest?.RequestUri?.ToString());
@@ -38,6 +41,8 @@ namespace ThunderbirdsBoardGameEngine.GameState.Client.UnitTests.Clients.V1
         {
             // Arrange
             var gameId = Guid.NewGuid();
+
+            var createGameRequestDto = CreateCreateGameRequestDto();
 
             var stubHandler = new StubHttpMessageHandler("{}", HttpStatusCode.OK);
 
@@ -50,7 +55,7 @@ namespace ThunderbirdsBoardGameEngine.GameState.Client.UnitTests.Clients.V1
             var client = new GameClient(httpClient, handler);
 
             // Act
-            _ = await client.CreateGameAsync(TestContext.Current.CancellationToken);
+            _ = await client.CreateGameAsync(createGameRequestDto, TestContext.Current.CancellationToken);
 
             // Assert
             await handler.Received(1).HandleResponseAsync<GameStateResponseDto>(Arg.Any<HttpResponseMessage>(), Arg.Any<CancellationToken>());
@@ -62,12 +67,14 @@ namespace ThunderbirdsBoardGameEngine.GameState.Client.UnitTests.Clients.V1
             // Arrange
             var gameId = Guid.NewGuid();
 
+            var createGameRequestDto = CreateCreateGameRequestDto();
+
             var apiResult = CreateGameStateResponseApiResult(gameId);
 
             var gameClient = CreateGameClient(apiResult);
 
             // Act            
-            var result = await gameClient.CreateGameAsync(TestContext.Current.CancellationToken);
+            var result = await gameClient.CreateGameAsync(createGameRequestDto, TestContext.Current.CancellationToken);
 
             // Assert
             Assert.Equal(apiResult, result);
@@ -78,6 +85,8 @@ namespace ThunderbirdsBoardGameEngine.GameState.Client.UnitTests.Clients.V1
         public async Task CreateGameAsync_WhenCalledWithErrorResponse_ShouldReturnExpectedResult(HttpStatusCode statusCode, string reasonPhrase)
         {
             // Arrange
+            var createGameRequestDto = CreateCreateGameRequestDto();
+
             var stubHandler = new StubHttpMessageHandler("{}", statusCode);
 
             var apiResult = ApiResult<GameStateResponseDto>.Failure(reasonPhrase, statusCode);
@@ -85,10 +94,25 @@ namespace ThunderbirdsBoardGameEngine.GameState.Client.UnitTests.Clients.V1
             var gameClient = CreateGameClient(stubHandler, apiResult);
 
             // Act            
-            var result = await gameClient.CreateGameAsync(TestContext.Current.CancellationToken);
+            var result = await gameClient.CreateGameAsync(createGameRequestDto, TestContext.Current.CancellationToken);
 
             // Assert
             Assert.Equal(apiResult, result);
+        }
+
+        [Fact]
+        public async Task CreateGameAsync_WhenRequestNull_ShouldThrowArgumentNullException()
+        {
+            // Arrange
+            var apiResult = CreateGameStateResponseApiResult(Guid.NewGuid());
+
+            var gameClient = CreateGameClient(apiResult);
+
+            // Act & Assert
+            var exception = await Assert.ThrowsAsync<ArgumentNullException>(() =>
+                gameClient.CreateGameAsync(null!, TestContext.Current.CancellationToken));
+
+            Assert.Equal("Value cannot be null. (Parameter 'request')", exception.Message);
         }
 
         [Fact]
@@ -463,6 +487,14 @@ namespace ThunderbirdsBoardGameEngine.GameState.Client.UnitTests.Clients.V1
             var responseHandler = HttpResponseHandlerHelper.CreateMockHttpResponseHandler(apiResult);
 
             return new GameClient(httpClient, responseHandler);
+        }
+
+        private static CreateGameRequestDto CreateCreateGameRequestDto()
+        {
+            return new CreateGameRequestDto
+            {
+                TurnOrder = ["character-1", "character-2"]
+            };
         }
 
         private static MoveThunderbirdMachineRequestDto CreateMoveThunderbirdMachineRequestDto()

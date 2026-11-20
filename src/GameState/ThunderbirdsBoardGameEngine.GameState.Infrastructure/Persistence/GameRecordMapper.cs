@@ -18,6 +18,11 @@ namespace ThunderbirdsBoardGameEngine.GameState.Infrastructure.Persistence
                     new ThunderbirdMachineStateRecord { GameId = game.Id, ThunderbirdCode = ms.Key.Value, LocationCode = ms.Value.Value })
                 .ToList();
 
+            var turnOrderEntries = game.TurnOrder
+                .Select((characterCode, index) =>
+                    new GameTurnOrderEntryRecord { GameId = game.Id, Position = index, CharacterCode = characterCode.Value })
+                .ToList();
+
             var gameRecord = new GameRecord
             {
                 Id = game.Id,
@@ -25,7 +30,9 @@ namespace ThunderbirdsBoardGameEngine.GameState.Infrastructure.Persistence
                 SetupVersion = game.SetupVersion,
                 StateVersion = game.StateVersion,
                 CharacterStates = characterStates,
-                ThunderbirdMachineStates = thunderbirdMachineStates
+                ThunderbirdMachineStates = thunderbirdMachineStates,
+                ActiveTurnIndex = game.ActiveTurnIndex,
+                TurnOrderEntries = turnOrderEntries
             };
 
             return gameRecord;
@@ -43,7 +50,20 @@ namespace ThunderbirdsBoardGameEngine.GameState.Infrastructure.Persistence
                     ms => new ThunderbirdCode(ms.ThunderbirdCode),
                     ms => new LocationCode(ms.LocationCode));
 
-            var game = Game.Restore(gameRecord.Id, gameRecord.CreatedAtUtc, gameRecord.SetupVersion, gameRecord.StateVersion, machines, characters);
+            var turnOrder = gameRecord.TurnOrderEntries
+                .OrderBy(entry => entry.Position)
+                .Select(entry => new CharacterCode(entry.CharacterCode))
+                .ToList();
+
+            var game = Game.Restore(
+                id: gameRecord.Id,
+                createdAtUtc: gameRecord.CreatedAtUtc,
+                setupVersion: gameRecord.SetupVersion,
+                stateVersion: gameRecord.StateVersion,
+                machines: machines,
+                characters: characters,
+                turnOrder: turnOrder,
+                activeTurnIndex: gameRecord.ActiveTurnIndex);
 
             return game;
         }

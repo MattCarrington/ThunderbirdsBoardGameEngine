@@ -5,6 +5,7 @@ using ThunderbirdsBoardGameEngine.Client.Core.Interfaces;
 using ThunderbirdsBoardGameEngine.GameState.Client.Interfaces.V1;
 using ThunderbirdsBoardGameEngine.GameState.Client.Routing.V1;
 using ThunderbirdsBoardGameEngine.GameState.Contracts.Dtos.V1;
+using ThunderbirdsBoardGameEngine.GameState.Contracts.Dtos.V1.CreateGame;
 using ThunderbirdsBoardGameEngine.GameState.Contracts.Dtos.V1.ThunderbirdMachines;
 using ThunderbirdsBoardGameEngine.GameState.Contracts.Dtos.V1.TransferCharacters;
 
@@ -21,11 +22,16 @@ namespace ThunderbirdsBoardGameEngine.GameState.Client.Clients.V1
             _httpResponseHandler = httpResponseHandler;
         }
 
-        public async Task<ApiResult<GameStateResponseDto>> CreateGameAsync(CancellationToken cancellationToken = default)
+        public async Task<ApiResult<GameStateResponseDto>> CreateGameAsync(CreateGameRequestDto request, CancellationToken cancellationToken = default)
         {
+            ArgumentNullException.ThrowIfNull(request, nameof(request));
+
             var route = ApiRoutes.Games;
 
-            using var message = new HttpRequestMessage(HttpMethod.Post, route);
+            using var message = new HttpRequestMessage(HttpMethod.Post, route)
+            {
+                Content = new StringContent(JsonSerializer.Serialize(request), Encoding.UTF8, "application/json")
+            };
 
             using var response = await _httpClient.SendAsync(message, cancellationToken);
 

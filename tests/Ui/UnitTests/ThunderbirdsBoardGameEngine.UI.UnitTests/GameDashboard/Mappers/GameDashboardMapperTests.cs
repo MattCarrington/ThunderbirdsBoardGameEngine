@@ -22,8 +22,11 @@ namespace ThunderbirdsBoardGameEngine.UI.UnitTests.GameDashboard.Mappers
             var locationCode = new LocationCode("loc1");
             var location = CreateLocation(locationCode.Value, "Location 1");
 
-            var characterCode = new CharacterCode("char1");
-            var character = CreateCharacter(characterCode.Value, "Character 1");
+            var characterOneCode = new CharacterCode("char1");
+            var characterOne = CreateCharacter(characterOneCode.Value, "Character 1");
+
+            var characterTwoCode = new CharacterCode("char2");
+            var characterTwo = CreateCharacter(characterTwoCode.Value, "Character 2");
 
             var thunderbirdCatalog = Substitute.For<IThunderbirdDefinitionCatalog>();
             thunderbirdCatalog.GetByCode(thunderbirdCode).Returns(thunderbird);
@@ -32,7 +35,8 @@ namespace ThunderbirdsBoardGameEngine.UI.UnitTests.GameDashboard.Mappers
             locationCatalog.GetByCode(locationCode).Returns(location);
 
             var characterCatalog = Substitute.For<ICharacterDefinitionCatalog>();
-            characterCatalog.GetByCode(characterCode).Returns(character);
+            characterCatalog.GetByCode(characterOneCode).Returns(characterOne);
+            characterCatalog.GetByCode(characterTwoCode).Returns(characterTwo);
 
             var mapper = new GameDashboardMapper(thunderbirdCatalog, locationCatalog, characterCatalog);
 
@@ -45,9 +49,11 @@ namespace ThunderbirdsBoardGameEngine.UI.UnitTests.GameDashboard.Mappers
                     {
                         ThunderbirdCode = thunderbirdCode.Value,
                         LocationCode = locationCode.Value,
-                        OccupantCharacterCodes = [ characterCode.Value ]
+                        OccupantCharacterCodes = [ characterOneCode.Value ]
                     }
-                ]
+                ],
+                TurnOrder = [characterTwoCode.Value, characterOneCode.Value],
+                ActiveCharacterCode = characterOneCode.Value
             };
 
             // Act
@@ -59,8 +65,25 @@ namespace ThunderbirdsBoardGameEngine.UI.UnitTests.GameDashboard.Mappers
             Assert.Equal(location.DisplayName, thunderbirdMachine.LocationDisplayName);
 
             var occupant = Assert.Single(thunderbirdMachine.Occupants);
-            Assert.Equal(character.DisplayName, occupant.CharacterDisplayName);
+            Assert.Equal(characterOne.DisplayName, occupant.CharacterDisplayName);
             Assert.Equal(thunderbird.CharacterCapacity, thunderbirdMachine.CharacterCapacity);
+
+            Assert.Collection(
+                result.TurnSummary.TurnOrder,
+                first =>
+                {
+                    Assert.Equal(characterTwo.Code.Value, first.CharacterCode);
+                    Assert.Equal(characterTwo.DisplayName, first.CharacterDisplayName);
+                },
+                second =>
+                {
+                    Assert.Equal(characterOne.Code.Value, second.CharacterCode);
+                    Assert.Equal(characterOne.DisplayName, second.CharacterDisplayName);
+                });
+
+            Assert.Equal(characterOne.Code.Value, result.TurnSummary.ActiveCharacter.CharacterCode);
+
+            Assert.Equal(characterOne.DisplayName, result.TurnSummary.ActiveCharacter.CharacterDisplayName);
         }
 
         [Fact]
@@ -78,7 +101,9 @@ namespace ThunderbirdsBoardGameEngine.UI.UnitTests.GameDashboard.Mappers
                         LocationCode = "loc1",
                         OccupantCharacterCodes = []
                     }
-                ]
+                ],
+                TurnOrder = ["char1"],
+                ActiveCharacterCode = "char1"
             };
 
             var thunderbirdCatalog = Substitute.For<IThunderbirdDefinitionCatalog>();
@@ -88,6 +113,7 @@ namespace ThunderbirdsBoardGameEngine.UI.UnitTests.GameDashboard.Mappers
             locationCatalog.GetByCode(Arg.Any<LocationCode>()).Returns(CreateLocation("loc1", "Location 1"));
 
             var characterCatalog = Substitute.For<ICharacterDefinitionCatalog>();
+            characterCatalog.GetByCode(Arg.Any<CharacterCode>()).Returns(CreateCharacter("char1", "Character 1"));
 
             var mapper = new GameDashboardMapper(thunderbirdCatalog, locationCatalog, characterCatalog);
 
@@ -97,8 +123,6 @@ namespace ThunderbirdsBoardGameEngine.UI.UnitTests.GameDashboard.Mappers
             // Assert
             var thunderbirdMachine = Assert.Single(result.ThunderbirdMachines);
             Assert.Empty(thunderbirdMachine.Occupants);
-
-            characterCatalog.DidNotReceive().GetByCode(Arg.Any<CharacterCode>());
         }
 
         [Fact]
@@ -108,12 +132,16 @@ namespace ThunderbirdsBoardGameEngine.UI.UnitTests.GameDashboard.Mappers
             var dto = new GameStateResponseDto
             {
                 GameId = Guid.NewGuid(),
-                ThunderbirdMachines = []
+                ThunderbirdMachines = [],
+                TurnOrder = ["char1"],
+                ActiveCharacterCode = "char1"
             };
 
             var thunderbirdCatalog = Substitute.For<IThunderbirdDefinitionCatalog>();
             var locationCatalog = Substitute.For<ILocationDefinitionCatalog>();
+
             var characterCatalog = Substitute.For<ICharacterDefinitionCatalog>();
+            characterCatalog.GetByCode(Arg.Any<CharacterCode>()).Returns(CreateCharacter("char1", "Character 1"));
 
             var mapper = new GameDashboardMapper(thunderbirdCatalog, locationCatalog, characterCatalog);
 
@@ -173,7 +201,9 @@ namespace ThunderbirdsBoardGameEngine.UI.UnitTests.GameDashboard.Mappers
                         LocationCode = location2.Code.Value,
                         OccupantCharacterCodes = [ character2.Code.Value ]
                     }
-                ]
+                ],
+                TurnOrder = [character3.Code.Value, character1.Code.Value, character2.Code.Value],
+                ActiveCharacterCode = character1.Code.Value
             };
 
             // Act
@@ -184,6 +214,52 @@ namespace ThunderbirdsBoardGameEngine.UI.UnitTests.GameDashboard.Mappers
             var tbMachine1 = result.ThunderbirdMachines.First(tm => tm.ThunderbirdCode == thunderbird1.Code.Value);
 
             Assert.Equal(2, tbMachine1.Occupants.Count);
+        }
+
+        [Fact]
+        public void ToViewModel_WhenTurnOrderHasDuplicates_ShouldThrow()
+        {
+            // Arrange
+            var thunderbirdCatalog = Substitute.For<IThunderbirdDefinitionCatalog>();
+            var locationCatalog = Substitute.For<ILocationDefinitionCatalog>();
+            var characterCatalog = Substitute.For<ICharacterDefinitionCatalog>();
+            characterCatalog.GetByCode(Arg.Any<CharacterCode>()).Returns(CreateCharacter("char1", "Character 1"));
+
+            var mapper = new GameDashboardMapper(thunderbirdCatalog, locationCatalog, characterCatalog);
+
+            var dto = new GameStateResponseDto
+            {
+                GameId = Guid.NewGuid(),
+                ThunderbirdMachines = [],
+                TurnOrder = ["char1", "char1"],
+                ActiveCharacterCode = "char1"
+            };
+
+            // Act & Assert
+            Assert.Throws<InvalidOperationException>(() => mapper.ToViewModel(dto));
+        }
+
+        [Fact]
+        public void ToViewModel_WhenActiveCharacterNotInTurnOrder_ShouldThrow()
+        {
+            // Arrange
+            var thunderbirdCatalog = Substitute.For<IThunderbirdDefinitionCatalog>();
+            var locationCatalog = Substitute.For<ILocationDefinitionCatalog>();
+            var characterCatalog = Substitute.For<ICharacterDefinitionCatalog>();
+            characterCatalog.GetByCode(Arg.Any<CharacterCode>()).Returns(CreateCharacter("char1", "Character 1"));
+
+            var mapper = new GameDashboardMapper(thunderbirdCatalog, locationCatalog, characterCatalog);
+
+            var dto = new GameStateResponseDto
+            {
+                GameId = Guid.NewGuid(),
+                ThunderbirdMachines = [],
+                TurnOrder = ["char1"],
+                ActiveCharacterCode = "char2"
+            };
+
+            // Act & Assert
+            Assert.Throws<InvalidOperationException>(() => mapper.ToViewModel(dto));
         }
 
         private static ReferenceThunderbirdDefinition CreateThunderbird(string code, string displayName, int characterCapacity)

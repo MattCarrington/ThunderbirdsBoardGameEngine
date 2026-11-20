@@ -1,6 +1,9 @@
 ﻿using System.Net;
+using System.Net.Http.Json;
 using ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints.GameState;
 using ThunderbirdsBoardGameEngine.Api.ComponentTests.Factories;
+using ThunderbirdsBoardGameEngine.GameState.Contracts.Dtos.V1.CreateGame;
+using ThunderbirdsBoardGameEngine.ReferenceData.Core.KnownIdentities;
 using Xunit;
 
 namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.CrossCutting
@@ -17,9 +20,21 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.CrossCutting
         [Fact]
         public async Task GameApiResponseDisablesCachingAndReferrers()
         {
+            var dto = new CreateGameRequestDto
+            {
+                TurnOrder = new List<string>
+                {
+                    KnownCharacterCodes.Scott.Value,
+                    KnownCharacterCodes.John.Value,
+                    KnownCharacterCodes.Virgil.Value,
+                    KnownCharacterCodes.Gordon.Value
+                }
+            };
+
             var route = GameStateRoutes.CreateGame();
 
             using var request = new HttpRequestMessage(HttpMethod.Post, route);
+            request.Content = JsonContent.Create(dto);
 
             request.Headers.Add("X-API-Version", "1");
 

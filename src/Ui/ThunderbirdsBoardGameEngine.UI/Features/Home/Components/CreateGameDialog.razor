@@ -1,0 +1,82 @@
+﻿@using ThunderbirdsBoardGameEngine.UI.Features.Shared.Components
+
+<dialog @ref="_dialog"
+        class="modal-dialog-native"
+        aria-labelledby="create-game-dialog-title">
+
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="create-game-dialog-title" class="modal-title h5">
+                    Create New Game
+                </h2>
+            </div>
+
+            <div class="modal-body">
+                <p>
+                    Select between two and four characters in turn order.
+                    The first character will take the first turn.
+                </p>
+
+                @for (var index = 0;
+                      index < _selectedCharacters.Count;
+                      index++)
+                {
+                    var slotIndex = index;
+
+                    <div class="mb-3">
+                        <CharacterSelector CharacterId="@($"player-character-{slotIndex}")"
+                                           CharacterTitle="@($"Player {slotIndex + 1} character")"
+                                           Characters="@GetOptionsFor(slotIndex)"
+                                           SelectedCharacterCode="@_selectedCharacters[slotIndex]"
+                                           SelectedCharacterCodeChanged="@(code => SelectCharacter(slotIndex, code))" />
+                    </div>
+                }
+
+                <div class="d-flex gap-2">
+                    <button type="button"
+                            class="btn btn-outline-secondary"
+                            disabled="@(!CanRemovePlayer)"
+                            data-testid="remove-player"
+                            @onclick="RemovePlayer">
+                        Remove player
+                    </button>
+
+                    <button type="button"
+                            class="btn btn-outline-primary"
+                            disabled="@(!CanAddPlayer)"
+                            data-testid="add-player"
+                            @onclick="AddPlayer">
+                        Add player
+                    </button>
+                </div>
+
+                @if (!string.IsNullOrWhiteSpace(ErrorMessage))
+                {
+                    <div class="alert alert-danger mt-3"
+                         role="alert">
+                        @ErrorMessage
+                    </div>
+                }
+            </div>
+
+            <div class="modal-footer">
+                <button type="button"
+                        class="btn btn-secondary"
+                        disabled="@IsCreating"
+                        data-testid="cancel-create"
+                        @onclick="CancelAsync">
+                    Cancel
+                </button>
+
+                <button type="button"
+                        class="btn btn-primary"
+                        disabled="@CannotSubmit"
+                        data-testid="confirm-create"
+                        @onclick="ConfirmAsync">
+                    @(IsCreating ? "Creating…" : "Create")
+                </button>
+            </div>
+        </div>
+    </div>
+</dialog>

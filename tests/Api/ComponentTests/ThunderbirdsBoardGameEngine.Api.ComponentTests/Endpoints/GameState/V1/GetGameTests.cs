@@ -4,7 +4,7 @@ using ThunderbirdsBoardGameEngine.Api.ComponentTests.Factories;
 using ThunderbirdsBoardGameEngine.GameState.Application;
 using ThunderbirdsBoardGameEngine.GameState.Contracts.Dtos.V1;
 using ThunderbirdsBoardGameEngine.GameState.Domain;
-using ThunderbirdsBoardGameEngine.GameState.Domain.Setup.V1;
+using ThunderbirdsBoardGameEngine.GameState.Domain.Setup.V2;
 using ThunderbirdsBoardGameEngine.ReferenceData.Core.Identities;
 using ThunderbirdsBoardGameEngine.ReferenceData.Core.KnownIdentities;
 using ThunderbirdsBoardGameEngine.TestUtils.xUnit.Assertions;
@@ -31,7 +31,9 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints.GameState.V1
             // Arrange
             var gameId = Guid.NewGuid();
 
-            var game = new StandardGameSetupFactory().Create(gameId, DateTimeOffset.UtcNow);
+            var turnOrder = new List<CharacterCode> { KnownCharacterCodes.Scott, KnownCharacterCodes.Virgil, KnownCharacterCodes.Alan };
+
+            var game = new StandardGameSetupFactory().Create(gameId, DateTimeOffset.UtcNow, turnOrder);
 
             await _repository.CreateNewGameSession(game, TestContext.Current.CancellationToken);
 
@@ -49,6 +51,8 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints.GameState.V1
             var result = await response.Content.ReadFromJsonAsync<GameStateResponseDto>(cancellationToken: TestContext.Current.CancellationToken);
             Assert.NotNull(result);
             Assert.NotNull(result.ThunderbirdMachines);
+            Assert.Equal(["scott", "virgil", "alan"], result.TurnOrder);
+            Assert.Equal("scott", result.ActiveCharacterCode);
         }
 
         [Fact]
@@ -93,7 +97,9 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints.GameState.V1
                 { KnownCharacterCodes.John, KnownThunderbirdCodes.Thunderbird5 }
             };
 
-            var game = Game.Create(gameId, DateTimeOffset.UtcNow, "invalid-setup", thunderbirds, characters);
+            var turnOrder = new List<CharacterCode> { KnownCharacterCodes.Scott, KnownCharacterCodes.Virgil, KnownCharacterCodes.Alan };
+
+            var game = Game.Create(gameId, DateTimeOffset.UtcNow, "invalid-setup", thunderbirds, characters, turnOrder);
 
             await _repository.CreateNewGameSession(game, TestContext.Current.CancellationToken);
 

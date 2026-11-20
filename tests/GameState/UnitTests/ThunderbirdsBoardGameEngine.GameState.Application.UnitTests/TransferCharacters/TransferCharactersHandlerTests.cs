@@ -465,8 +465,9 @@ namespace ThunderbirdsBoardGameEngine.GameState.Application.UnitTests.TransferCh
                 {
                       { new CharacterCode("character-1"), new ThunderbirdCode("thunderbird-1") },
                       { new CharacterCode("character-2"), new ThunderbirdCode("thunderbird-2") }
-                }
-            );
+                },
+                turnOrder: [new("character-1"), new("character-2")],
+                activeTurnIndex: 0);
         }
 
         private static IGameRepository CreateRepository(Game game)

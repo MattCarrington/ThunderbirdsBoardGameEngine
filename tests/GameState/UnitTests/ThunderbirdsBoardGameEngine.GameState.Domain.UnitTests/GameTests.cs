@@ -182,19 +182,22 @@ namespace ThunderbirdsBoardGameEngine.GameState.Domain.UnitTests
                 id: Guid.NewGuid(),
                 createdAtUtc: DateTimeOffset.UtcNow,
                 setupVersion: "test",
-                machines:
-                    new Dictionary<ThunderbirdCode, LocationCode>
-                    {
-                        [new("machine-1")] = new("location-1"),
-                        [new("machine-2")] = new("location-1"),
-                        [new("machine-3")] = new("location-1")
-                    },
-                characters:
-                    new Dictionary<CharacterCode, ThunderbirdCode>
-                    {
-                        [new("character-1")] = new("machine-1"),
-                        [new("character-2")] = new("machine-2")
-                    });
+                machines: new Dictionary<ThunderbirdCode, LocationCode>
+                {
+                    [new("machine-1")] = new("location-1"),
+                    [new("machine-2")] = new("location-1"),
+                    [new("machine-3")] = new("location-1")
+                },
+                characters: new Dictionary<CharacterCode, ThunderbirdCode>
+                {
+                    [new("character-1")] = new("machine-1"),
+                    [new("character-2")] = new("machine-2")
+                },
+                turnOrder: new List<CharacterCode>
+                {
+                    new("character-1"),
+                    new("character-2")
+                });
         }
 
         private static void AssertCharacterAssignment(Game game, CharacterCode characterCode, ThunderbirdCode expectedThunderbirdCode)

@@ -34,6 +34,8 @@
     }
     else if (_game is not null)
     {
+        <TurnSummarySegment Summary="@_game.TurnSummary" />
+        
         <ThunderbirdMachinesSegment
             Machines="@_game.ThunderbirdMachines"
             MoveRequested="BeginMoveAsync"

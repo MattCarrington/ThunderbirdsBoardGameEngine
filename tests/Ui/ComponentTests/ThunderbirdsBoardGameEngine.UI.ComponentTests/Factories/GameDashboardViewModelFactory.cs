@@ -30,14 +30,35 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Factories
                 CharacterDisplayName: characterDisplayName);
         }
 
+        public static TurnOrderCharacterDashboardViewModel CreateTurnOrderCharacter(
+            string characterCode = "scott",
+            string characterDisplayName = "Scott")
+        {
+            return new TurnOrderCharacterDashboardViewModel(
+                CharacterCode: characterCode,
+                CharacterDisplayName: characterDisplayName);
+        }
+
+        public static TurnSummaryDashboardViewModel CreateTurnSummary(
+            IReadOnlyList<TurnOrderCharacterDashboardViewModel>? turnOrder = null,
+            string activeCharacter = "scott")
+        {
+            return new TurnSummaryDashboardViewModel(
+                TurnOrder: turnOrder
+                    ?? [CreateTurnOrderCharacter(), CreateTurnOrderCharacter("virgil", "Virgil")],
+                ActiveCharacter: CreateTurnOrderCharacter(activeCharacter));
+        }
+
         public static GameDashboardViewModel CreateDashboard(
             Guid? gameId = null,
             IReadOnlyList<ThunderbirdMachinesDashboardViewModel>? machines = null)
         {
             return new GameDashboardViewModel(
-                GameId: gameId ?? Guid.NewGuid(),
-                ThunderbirdMachines:
-                    machines ?? [CreateMachine()]);
+                GameId: gameId
+                    ?? Guid.NewGuid(),
+                TurnSummary: CreateTurnSummary(),
+                ThunderbirdMachines: machines
+                    ?? [CreateMachine()]);
         }
     }
 }

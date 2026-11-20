@@ -22,5 +22,15 @@
         /// after initialization but its contents are mutable. Not safe for concurrent modification without
         /// synchronization.</remarks>
         public List<ThunderbirdMachineStateDto> ThunderbirdMachines { get; init; } = new();
+
+        /// <summary>
+        /// Gets the order in which players take their turns.
+        /// </summary>
+        public IReadOnlyList<string> TurnOrder { get; init; } = new List<string>();
+
+        /// <summary>
+        /// Gets or initializes the code identifying the active character.
+        /// </summary>
+        public string ActiveCharacterCode { get; init; } = string.Empty;
     }
 }

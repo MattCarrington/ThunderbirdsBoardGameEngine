@@ -24,15 +24,17 @@ namespace ThunderbirdsBoardGameEngine.PlaywrightTests.Pages
             await Page.WaitForSelectorAsync("h1:text-is('Thunderbirds Companion')");
         }
 
-        public async Task ClickNewGameAsync()
+        public async Task CreateNewGame(string firstCharacter = "scott", string secondCharacter = "virgil")
         {
-            var button = Page.GetByTestId("create-game");
+            await Page.GetByTestId("create-game").ClickAsync();
 
-            await button.WaitForAsync();
+            await Page.Locator("#player-character-0")
+                .SelectOptionAsync(firstCharacter);
 
-            await Assertions.Expect(button).ToBeEnabledAsync();
+            await Page.Locator("#player-character-1")
+                .SelectOptionAsync(secondCharacter);
 
-            await button.ClickAsync();
+            await Page.GetByTestId("confirm-create").ClickAsync();
         }
 
         public async Task ResumeGameAsync(Guid gameId)

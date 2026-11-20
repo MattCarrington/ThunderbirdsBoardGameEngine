@@ -37,6 +37,9 @@ Game
 |- CreatedAtUtc
 |- SetupVersion
 |- StateVersion
+|- TurnOrder
+|- ActiveTurnIndex
+|- ActiveCharacter (derived)
 |- Thunderbird Machine positions
 |  `- ThunderbirdCode -> LocationCode
 `- Character assignments
@@ -59,6 +62,10 @@ name is `ThunderbirdMachineCode`; changing the shared public type is deferred.
   machine and is not stored separately.
 - Callers cannot mutate positions or assignments without using a domain
   operation.
+- The turn order contains two to four distinct characters participating in the
+  game and cannot change after setup.
+- The active turn index refers to an entry in the turn order.
+- The active character is derived from the turn order and active turn index.
 
 The canonical assignment direction is:
 
@@ -85,15 +92,15 @@ the first slice it resolves:
 |---|---|---|
 | Thunderbird 1 | South Pacific | Scott |
 | Thunderbird 2 | South Pacific | Virgil |
-| Thunderbird 3 | South Pacific | Alan |
+| Thunderbird 3 | Geostationary Orbit when John is selected; otherwise South Pacific | Alan |
 | Thunderbird 4 | South Pacific | Gordon |
 | Thunderbird 5 | Geostationary Orbit | John |
 | FAB 1 | Europe | Lady Penelope |
 
-The rulebook places Thunderbird 3 in Geostationary Orbit when John is
-player-controlled. Player-character selection is not recorded in the first
-slice, so the supported MVP setup uses the South Pacific default. That
-limitation is explicit and is not encoded into ReferenceData.
+The standard-v2 setup receives the ordered player-controlled character
+selection. It places Thunderbird 3 in Geostationary Orbit when John is in that
+selection and at the South Pacific otherwise. This arrangement is setup policy
+owned by GameState rather than reusable ReferenceData.
 
 ## Layer responsibilities
 
@@ -101,6 +108,8 @@ limitation is explicit and is not encoded into ReferenceData.
 
 - Define and validate a game and its invariants.
 - Resolve the supported standard setup deterministically.
+- Protect the immutable turn order and derive the active character from the
+  active turn index.
 - Expose controlled future operations such as moving a machine or transferring
   characters.
 
