@@ -2,6 +2,7 @@
 using NSubstitute.ExceptionExtensions;
 using ThunderbirdsBoardGameEngine.ReferenceData.Core.Enums;
 using ThunderbirdsBoardGameEngine.ReferenceData.Core.Identities;
+using ThunderbirdsBoardGameEngine.ReferenceData.Core.Model;
 using ThunderbirdsBoardGameEngine.ReferenceData.Runtime.Interfaces;
 using ThunderbirdsBoardGameEngine.ReferenceData.Testing.Builders;
 using ThunderbirdsBoardGameEngine.Rules.Application.Exceptions;
@@ -39,7 +40,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Infrastructure.UnitTests.Lookups
             );
 
             var catalog = Substitute.For<IDisasterDefinitionCatalog>();
-            catalog.GetByCode(Arg.Any<CardCode>()).Returns(disaster);
+            catalog.TryGetByCode(Arg.Any<CardCode>(), out Arg.Any<ReferenceDisasterDefinition>()).Returns(x => { x[1] = disaster; return true; });
 
             var lookup = new ReferenceDisasterCatalogLookup(catalog);
 
@@ -70,7 +71,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Infrastructure.UnitTests.Lookups
             var code = new CardCode("non-existent-disaster-card");
 
             var catalog = Substitute.For<IDisasterDefinitionCatalog>();
-            catalog.GetByCode(Arg.Any<CardCode>()).Throws(new KeyNotFoundException());
+            catalog.TryGetByCode(Arg.Any<CardCode>(), out Arg.Any<ReferenceDisasterDefinition>()).Returns(x => { x[1] = null; return false; });
 
             var lookup = new ReferenceDisasterCatalogLookup(catalog);
 

@@ -64,7 +64,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Infrastructure.UnitTests.Lookups
             var code = new CharacterCode("unknown_character");
 
             var catalog = Substitute.For<ICharacterDefinitionCatalog>();
-            catalog.GetByCode(Arg.Any<CharacterCode>()).Throws(new KeyNotFoundException());
+            catalog.TryGetByCode(Arg.Any<CharacterCode>(), out Arg.Any<ReferenceCharacterDefinition>()).Returns(x => { x[1] = null; return false; });
 
             var lookup = new ReferenceCharacterCatalogLookup(catalog);
 
@@ -77,7 +77,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Infrastructure.UnitTests.Lookups
         private static ReferenceCharacterCatalogLookup CreateLookup(ReferenceCharacterDefinition characterDefinition)
         {
             var catalog = Substitute.For<ICharacterDefinitionCatalog>();
-            catalog.GetByCode(Arg.Any<CharacterCode>()).Returns(characterDefinition);
+            catalog.TryGetByCode(Arg.Any<CharacterCode>(), out Arg.Any<ReferenceCharacterDefinition>()).Returns(x => { x[1] = characterDefinition; return true; });
 
             return new ReferenceCharacterCatalogLookup(catalog);
         }

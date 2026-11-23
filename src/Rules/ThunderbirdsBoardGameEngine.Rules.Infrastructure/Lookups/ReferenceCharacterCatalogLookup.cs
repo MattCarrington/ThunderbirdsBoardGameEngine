@@ -17,23 +17,16 @@ namespace ThunderbirdsBoardGameEngine.Rules.Infrastructure.Lookups
 
         public CharacterContribution GetCharacterRescueContribution(CharacterCode characterCode)
         {
-            try
+            if (!_characterDefinitionCatalog.TryGetByCode(characterCode, out var characterDefinition))
             {
-                var definition = _characterDefinitionCatalog.GetByCode(characterCode);
-
-                var rescueBonusContribution = definition.RescueBonus is null
-                        ? null
-                        : new CharacterRescueBonusContribution(definition.RescueBonus.RescueType, definition.RescueBonus.Value);
-
-                return new CharacterContribution(characterCode, rescueBonusContribution);
-            }
-            catch (KeyNotFoundException)
-            {
-                // Technically, changing the exception type thrown here would be a breaking change to the API,
-                // as the handler for this exception type returns a Bad Request, while the handler for the original exception type returns a Not Found.
-                // However, as the contract is still evolving, it should be safe to do so.
                 throw new InvalidRescueCalculationRequestException("Character", characterCode.ToString());
             }
+
+            var rescueBonusContribution = characterDefinition.RescueBonus is null
+                ? null
+                : new CharacterRescueBonusContribution(characterDefinition.RescueBonus.RescueType, characterDefinition.RescueBonus.Value);
+
+            return new CharacterContribution(characterCode, rescueBonusContribution);
         }
     }
 }
