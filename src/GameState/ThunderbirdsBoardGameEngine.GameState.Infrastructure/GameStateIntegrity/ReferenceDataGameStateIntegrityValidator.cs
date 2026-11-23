@@ -50,7 +50,7 @@ namespace ThunderbirdsBoardGameEngine.GameState.Infrastructure.GameStateIntegrit
 
             foreach (var thunderbirdMachine in characterState.Values)
             {
-                if (!_thunderbirdCatalog.TryGetByCode(thunderbirdMachine, out _))
+                if (!_thunderbirdCatalog.Exists(thunderbirdMachine))
                 {
                     throw new InvalidGameStateException($"Thunderbird {thunderbirdMachine.Value} does not exist in reference data.");
                 }

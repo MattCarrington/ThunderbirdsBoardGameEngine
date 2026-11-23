@@ -322,8 +322,8 @@ namespace ThunderbirdsBoardGameEngine.GameState.Infrastructure.UnitTests.GameSta
             locationCatalog.Exists(locationTwo.Code).Returns(true);
 
             var thunderbirdCatalog = Substitute.For<IThunderbirdDefinitionCatalog>();
-            thunderbirdCatalog.TryGetByCode(thunderbirdOne.Code, out Arg.Any<ReferenceThunderbirdDefinition>()).Returns(x => { x[1] = thunderbirdOne; return true; });
-            thunderbirdCatalog.TryGetByCode(thunderbirdTwo.Code, out Arg.Any<ReferenceThunderbirdDefinition>()).Returns(x => { x[1] = thunderbirdTwo; return true; });
+            thunderbirdCatalog.Exists(thunderbirdOne.Code).Returns(true);
+            thunderbirdCatalog.Exists(thunderbirdTwo.Code).Returns(true);
             thunderbirdCatalog.GetAll().Returns(new[] { thunderbirdOne, thunderbirdTwo }.ToImmutableArray());
 
             var characterCatalog = Substitute.For<ICharacterDefinitionCatalog>();
