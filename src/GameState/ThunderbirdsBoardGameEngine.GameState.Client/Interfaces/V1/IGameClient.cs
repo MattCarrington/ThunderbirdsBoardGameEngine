@@ -49,5 +49,14 @@ namespace ThunderbirdsBoardGameEngine.GameState.Client.Interfaces.V1
         /// <param name="cancellationToken">Token used to cancel the asynchronous operation.</param>
         /// <returns>A task that resolves to an API result containing the updated game state after the transfer operation.</returns>
         Task<ApiResult<GameStateResponseDto>> TransferCharactersAsync(Guid gameId, TransferCharactersRequestDto request, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Ends the current turn in the specified game.
+        /// </summary>
+        /// <param name="gameId">The identifier of the game.</param>
+        /// <param name="cancellationToken">A token that can be used to cancel the operation.</param>
+        /// <returns>A task that represents the asynchronous operation. The task result contains the API result and game state
+        /// response.</returns>
+        Task<ApiResult<GameStateResponseDto>> EndTurnAsync(Guid gameId, CancellationToken cancellationToken = default);
     }
 }

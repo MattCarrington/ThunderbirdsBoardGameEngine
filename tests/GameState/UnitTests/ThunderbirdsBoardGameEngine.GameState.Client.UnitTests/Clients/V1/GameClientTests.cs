@@ -461,6 +461,98 @@ namespace ThunderbirdsBoardGameEngine.GameState.Client.UnitTests.Clients.V1
             Assert.Equal("Value cannot be null. (Parameter 'request')", exception.Message);
         }
 
+        [Fact]
+        public async Task EndTurnAsync_WhenCalled_ShouldCallCorrectEndpoint()
+        {
+            // Arrange
+            var stubHandler = new StubHttpMessageHandler("{}", HttpStatusCode.OK);
+
+            var gameId = Guid.NewGuid();
+
+            var apiResult = CreateGameStateResponseApiResult(gameId);
+
+            var gameClient = CreateGameClient(stubHandler, apiResult);
+
+            // Act
+            _ = await gameClient.EndTurnAsync(gameId, TestContext.Current.CancellationToken);
+
+            // Assert
+            Assert.Equal($"https://localhost:5001/api/games/{gameId}/end-turn", stubHandler.CapturedRequest?.RequestUri?.ToString());
+        }
+
+        [Fact]
+        public async Task EndTurnAsync_WhenCalled_ShouldCallResponseHandler()
+        {
+            // Arrange
+            var gameId = Guid.NewGuid();
+
+            var stubHandler = new StubHttpMessageHandler("{}", HttpStatusCode.OK);
+
+            var httpClient = CreateHttpClient(stubHandler);
+
+            var apiResult = CreateGameStateResponseApiResult(gameId);
+
+            var handler = HttpResponseHandlerHelper.CreateMockHttpResponseHandler(apiResult);
+
+            var client = new GameClient(httpClient, handler);
+
+            // Act
+            _ = await client.EndTurnAsync(gameId, TestContext.Current.CancellationToken);
+
+            // Assert
+            await handler.Received(1).HandleResponseAsync<GameStateResponseDto>(Arg.Any<HttpResponseMessage>(), Arg.Any<CancellationToken>());
+        }
+
+        [Fact]
+        public async Task EndTurnAsync_WhenCalled_ShouldReturnExpectedResult()
+        {
+            // Arrange
+            var gameId = Guid.NewGuid();
+
+            var apiResult = CreateGameStateResponseApiResult(gameId);
+
+            var gameClient = CreateGameClient(apiResult);
+
+            // Act            
+            var result = await gameClient.EndTurnAsync(gameId, TestContext.Current.CancellationToken);
+
+            // Assert
+            Assert.Equal(apiResult, result);
+        }
+
+        [Theory]
+        [ClassData(typeof(ErrorResponseClassData))]
+        public async Task EndTurnAsync_WhenCalledWithErrorResponse_ShouldReturnExpectedResult(HttpStatusCode statusCode, string reasonPhrase)
+        {
+            // Arrange
+            var stubHandler = new StubHttpMessageHandler("{}", statusCode);
+
+            var gameId = Guid.NewGuid();
+
+            var apiResult = ApiResult<GameStateResponseDto>.Failure(reasonPhrase, statusCode);
+
+            var gameClient = CreateGameClient(stubHandler, apiResult);
+
+            // Act            
+            var result = await gameClient.EndTurnAsync(gameId, TestContext.Current.CancellationToken);
+
+            // Assert
+            Assert.Equal(apiResult, result);
+        }
+
+        [Fact]
+        public async Task EndTurnAsync_WhenGuidEmpty_ShouldThrowArgumentException()
+        {
+            // Arrange
+            var gameClient = CreateGameClient(CreateGameStateResponseApiResult(Guid.NewGuid()));
+
+            // Act & Assert
+            var exception = await Assert.ThrowsAsync<ArgumentException>(() =>
+               gameClient.EndTurnAsync(Guid.Empty, TestContext.Current.CancellationToken));
+
+            Assert.Equal("Game ID cannot be empty. (Parameter 'gameId')", exception.Message);
+        }
+
         private static ApiResult<GameStateResponseDto> CreateGameStateResponseApiResult(Guid gameId)
         {
             var gameStateResponseDto = new GameStateResponseDto

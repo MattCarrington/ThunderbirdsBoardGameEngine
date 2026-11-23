@@ -108,5 +108,21 @@ namespace ThunderbirdsBoardGameEngine.GameState.Client.Clients.V1
 
             return await _httpResponseHandler.HandleResponseAsync<GameStateResponseDto>(response, cancellationToken);
         }
+
+        public async Task<ApiResult<GameStateResponseDto>> EndTurnAsync(Guid gameId, CancellationToken cancellationToken = default)
+        {
+            if (gameId == Guid.Empty)
+            {
+                throw new ArgumentException("Game ID cannot be empty.", nameof(gameId));
+            }
+
+            var route = ApiRoutes.EndTurn(gameId);
+
+            using var message = new HttpRequestMessage(HttpMethod.Post, route);
+
+            using var response = await _httpClient.SendAsync(message, cancellationToken);
+
+            return await _httpResponseHandler.HandleResponseAsync<GameStateResponseDto>(response, cancellationToken);
+        }
     }
 }
