@@ -1,5 +1,6 @@
 ﻿using ThunderbirdsBoardGameEngine.Client.Core;
 using ThunderbirdsBoardGameEngine.Rules.Contracts.Dtos.Rescue.CalculateRescueTarget.V1;
+using ThunderbirdsBoardGameEngine.Rules.Contracts.Dtos.Rescue.DetermineFabCardBonus.V1;
 
 namespace ThunderbirdsBoardGameEngine.Rules.Client.Interfaces.V1
 {
@@ -22,5 +23,13 @@ namespace ThunderbirdsBoardGameEngine.Rules.Client.Interfaces.V1
             string disasterCardCode,
             CalculateRescueTargetRequestDto request,
             CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Determines the FAB card bonus associated with the specified disaster card.
+        /// </summary>
+        /// <param name="disasterCardCode">The code identifying the disaster card.</param>
+        /// <param name="cancellationToken">A cancellation token that can be used to cancel the operation.</param>
+        /// <returns>A task containing the API result with the FAB card bonus response.</returns>
+        Task<ApiResult<FabCardBonusResponseDto>> DetermineFabCardBonusAsync(string disasterCardCode, CancellationToken cancellationToken = default);
     }
 }
