@@ -2,5 +2,5 @@
 
 namespace ThunderbirdsBoardGameEngine.Rules.Domain.Rescue.Contributions
 {
-    public sealed record DisasterBonus(DisasterBonusKey Key, int Value);
+    public sealed record DisasterBonusContribution(DisasterBonusKey Key, int Value);
 }

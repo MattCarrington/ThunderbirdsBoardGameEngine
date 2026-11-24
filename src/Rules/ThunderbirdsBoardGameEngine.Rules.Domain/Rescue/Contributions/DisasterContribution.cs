@@ -15,11 +15,11 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.Rescue.Contributions
     {
         public int DifficultyNumber { get; }
 
-        public IReadOnlyList<DisasterBonus> AvailableBonuses { get; }
+        public IReadOnlyList<DisasterBonusContribution> AvailableBonuses { get; }
 
         public RescueType RescueType { get; }
 
-        public DisasterContribution(int difficultyNumber, IReadOnlyList<DisasterBonus> availableBonuses, RescueType rescueType)
+        public DisasterContribution(int difficultyNumber, IReadOnlyList<DisasterBonusContribution> availableBonuses, RescueType rescueType)
         {
             DifficultyNumber = difficultyNumber;
             AvailableBonuses = availableBonuses;

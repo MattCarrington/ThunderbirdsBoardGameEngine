@@ -35,9 +35,9 @@ namespace ThunderbirdsBoardGameEngine.Rules.Infrastructure.Lookups
             }
         }
 
-        private static DisasterBonus ProjectBonus(ReferenceDisasterBonus condition)
+        private static DisasterBonusContribution ProjectBonus(ReferenceDisasterBonus condition)
         {
-            return new DisasterBonus
+            return new DisasterBonusContribution
             (
                 Key: condition.Key,
                 Value: condition.Value
