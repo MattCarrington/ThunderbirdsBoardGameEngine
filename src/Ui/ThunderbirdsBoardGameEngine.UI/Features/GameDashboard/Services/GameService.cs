@@ -1,6 +1,7 @@
 ﻿using System.Net;
 using ThunderbirdsBoardGameEngine.GameState.Client.Interfaces.V1;
 using ThunderbirdsBoardGameEngine.GameState.Contracts.Dtos.V1.CreateGame;
+using ThunderbirdsBoardGameEngine.GameState.Contracts.Dtos.V1.EndTurn;
 using ThunderbirdsBoardGameEngine.GameState.Contracts.Dtos.V1.ThunderbirdMachines;
 using ThunderbirdsBoardGameEngine.GameState.Contracts.Dtos.V1.TransferCharacters;
 using ThunderbirdsBoardGameEngine.UI.Features.GameDashboard.Interfaces;
@@ -181,6 +182,39 @@ namespace ThunderbirdsBoardGameEngine.UI.Features.GameDashboard.Services
 
             throw new InvalidOperationException(
                 "The character could not be transferred.");
+        }
+
+        public async Task<EndTurnResult> EndTurnAsync(Guid gameId, string activeCharacterCode)
+        {
+            ArgumentException.ThrowIfNullOrWhiteSpace(activeCharacterCode, nameof(activeCharacterCode));
+
+            var request = new EndTurnRequestDto
+            {
+                ExpectedActiveCharacterCode = activeCharacterCode
+            };
+
+            var result = await _client.EndTurnAsync(gameId, request);
+
+            if (result.Success && result.Data is not null)
+            {
+                return new EndTurnResult(
+                    Outcome: EndTurnOutcome.Success,
+                    UpdatedGameState: _mapper.ToViewModel(result.Data));
+            }
+
+            if (result.StatusCode == HttpStatusCode.Conflict)
+            {
+                return new EndTurnResult(
+                    Outcome: EndTurnOutcome.Conflict);
+            }
+
+            if (result.StatusCode == HttpStatusCode.NotFound)
+            {
+                return new EndTurnResult(
+                    Outcome: EndTurnOutcome.NotFound);
+            }
+
+            throw new InvalidOperationException("The turn could not be ended.");
         }
     }
 }
