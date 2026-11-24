@@ -18,21 +18,17 @@ namespace ThunderbirdsBoardGameEngine.Rules.Infrastructure.Lookups
 
         public DisasterContribution GetDisasterRescueContribution(CardCode disasterCode)
         {
-            try
-            {
-                var disasterCard = _disasterCardReferenceSource.GetByCode(disasterCode);
-
-                return new DisasterContribution
-                (
-                    difficultyNumber: disasterCard.DifficultyNumber,
-                    availableBonuses: disasterCard.Bonuses.Select(ProjectBonus).ToList(),
-                    rescueType: disasterCard.RescueType
-                );
-            }
-            catch (KeyNotFoundException)
+            if (!_disasterCardReferenceSource.TryGetByCode(disasterCode, out var disasterDefinition))
             {
                 throw new ReferenceDataNotFoundException("Disaster", disasterCode.ToString());
             }
+
+            return new DisasterContribution
+            (
+                difficultyNumber: disasterDefinition.DifficultyNumber,
+                availableBonuses: disasterDefinition.Bonuses.Select(ProjectBonus).ToList(),
+                rescueType: disasterDefinition.RescueType
+            );
         }
 
         private static DisasterBonus ProjectBonus(ReferenceDisasterBonus condition)
