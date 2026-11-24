@@ -1,9 +1,12 @@
 ﻿using NSubstitute;
 using System.Net;
 using ThunderbirdsBoardGameEngine.Client.Core;
+using ThunderbirdsBoardGameEngine.ReferenceData.Core.Identities;
 using ThunderbirdsBoardGameEngine.Rules.Client.Clients.V1;
 using ThunderbirdsBoardGameEngine.Rules.Client.UnitTests.Helpers;
+using ThunderbirdsBoardGameEngine.Rules.Contracts.Dtos.Movement.AccessibleLocations.V1;
 using ThunderbirdsBoardGameEngine.Rules.Contracts.Dtos.Rescue.CalculateRescueTarget.V1;
+using ThunderbirdsBoardGameEngine.Rules.Contracts.Dtos.Rescue.DetermineFabCardBonus.V1;
 using ThunderbirdsBoardGameEngine.TestUtils.Stubs;
 using ThunderbirdsBoardGameEngine.TestUtils.xUnit.ClassData;
 
@@ -17,7 +20,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Client.UnitTests.Clients.V1
             // Arrange
             var stubHandler = new StubHttpMessageHandler("{}", HttpStatusCode.OK);
 
-            var apiResult = CreateSuccessApiResult();
+            var apiResult = CreateSuccessRescueResultApiResult();
 
             var client = CreateRescueClient(stubHandler, apiResult);
 
@@ -41,7 +44,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Client.UnitTests.Clients.V1
                 BaseAddress = new Uri("http://localhost/")
             };
 
-            var apiResult = CreateSuccessApiResult();
+            var apiResult = CreateSuccessRescueResultApiResult();
 
             var handler = HttpResponseHandlerHelper.CreateMockHttpResponseHandler(apiResult);
 
@@ -60,7 +63,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Client.UnitTests.Clients.V1
         public async Task CalculateRescueTargetAsync_WhenResponseIsSuccessful_ShouldReturnSuccessApiResult()
         {
             // Arrange
-            var apiResult = CreateSuccessApiResult();
+            var apiResult = CreateSuccessRescueResultApiResult();
 
             if (apiResult.Data == null)
             {
@@ -117,7 +120,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Client.UnitTests.Clients.V1
             // Arrange
             var stubHandler = new StubHttpMessageHandler("{}", HttpStatusCode.OK);
 
-            var apiResult = CreateSuccessApiResult();
+            var apiResult = CreateSuccessRescueResultApiResult();
 
             var client = CreateRescueClient(stubHandler, apiResult);
 
@@ -141,7 +144,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Client.UnitTests.Clients.V1
         public async Task CalculateRescueTargetAsync_WhenDisasterCardCodeWhiteSpace_ThrowsArgumentException(string input)
         {
             // Arrange
-            var apiResult = CreateSuccessApiResult();
+            var apiResult = CreateSuccessRescueResultApiResult();
 
             var client = CreateRescueClient(apiResult);
 
@@ -159,7 +162,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Client.UnitTests.Clients.V1
         public async Task CalculateRescueTargetAsync_WhenDisasterCardCodeIsNull_ThrowsArgumentNullException()
         {
             // Arrange
-            var apiResult = CreateSuccessApiResult();
+            var apiResult = CreateSuccessRescueResultApiResult();
 
             var client = CreateRescueClient(apiResult);
 
@@ -177,7 +180,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Client.UnitTests.Clients.V1
         public async Task CalculateRescueTargetAsync_WhenRequestIsNull_ThrowsArgumentNullException()
         {
             // Arrange
-            var apiResult = CreateSuccessApiResult();
+            var apiResult = CreateSuccessRescueResultApiResult();
 
             var client = CreateRescueClient(apiResult);
 
@@ -185,6 +188,84 @@ namespace ThunderbirdsBoardGameEngine.Rules.Client.UnitTests.Clients.V1
 
             // Act & Assert
             await Assert.ThrowsAsync<ArgumentNullException>(() => client.CalculateRescueTargetAsync(cardCode, null!, TestContext.Current.CancellationToken));
+        }
+
+        [Fact]
+        public async Task DetermineFabCardBonusAsync_WhenCalled_ShouldCallCorrectEndpoint()
+        {
+            // Arrange
+            var disasterCardCode = "disaster-card-1";
+
+            var stubHandler = new StubHttpMessageHandler("{}", HttpStatusCode.OK);
+
+            var apiResult = CreateFabCardApiResult();
+
+            var client = CreateRescueClient(stubHandler, apiResult);
+
+            // Act
+            _ = await client.DetermineFabCardBonusAsync(disasterCardCode, TestContext.Current.CancellationToken);
+
+            // Assert
+            Assert.Equal($"http://localhost/api/rules/rescue/{disasterCardCode}/fab-card-bonus", stubHandler.CapturedRequest?.RequestUri?.ToString());
+        }
+
+        [Fact]
+        public async Task DetermineFabCardBonusAsync_WhenResponseIsSuccessful_ShouldReturnSuccessApiResult()
+        {
+            // Arrange
+            var apiResult = CreateFabCardApiResult();
+
+            if (apiResult.Data == null)
+            {
+                throw new InvalidOperationException("API result data should not be null in this test.");
+            }
+
+            var client = CreateRescueClient(apiResult);
+
+            // Act
+            var result = await client.DetermineFabCardBonusAsync("disaster-card-1", TestContext.Current.CancellationToken);
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.True(result.Success);
+            Assert.Equal(HttpStatusCode.OK, result.StatusCode);
+            Assert.Null(result.ErrorMessage);
+            Assert.NotNull(result.Data);
+            Assert.Equal(apiResult.Data.FabCardCode, result.Data.FabCardCode);
+            Assert.Equal(apiResult.Data.BonusValue, result.Data.BonusValue);
+        }
+
+        [Theory]
+        [InlineData(HttpStatusCode.NotFound, "Thunderbird Not Found")]
+        [InlineData(HttpStatusCode.InternalServerError, "Internal Server Error")]
+        public async Task DetermineFabCardBonusAsync_WhenApiReturnsError_ReturnsFailure(HttpStatusCode statusCode, string errorMessage)
+        {
+            // Arrange
+            var apiResult = ApiResult<FabCardBonusResponseDto>.Failure(errorMessage, statusCode);
+
+            var client = CreateRescueClient(apiResult);
+
+            // Act
+            var result = await client.DetermineFabCardBonusAsync("disaster-card-1", TestContext.Current.CancellationToken);
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.False(result.Success);
+            Assert.Equal(statusCode, result.StatusCode);
+            Assert.Equal(errorMessage, result.ErrorMessage);
+            Assert.Null(result.Data);
+        }
+
+        [Fact]
+        public async Task DetermineFabCardBonusAsync_WhenThunderbirdCodeIsNull_ThrowsArgumentNullException()
+        {
+            // Arrange
+            var apiResult = CreateFabCardApiResult();
+
+            var client = CreateRescueClient(apiResult);
+
+            // Act & Assert
+            await Assert.ThrowsAsync<ArgumentNullException>(() => client.DetermineFabCardBonusAsync(null!, TestContext.Current.CancellationToken));
         }
 
         private static (string, CalculateRescueTargetRequestDto) CreateRequest()
@@ -200,7 +281,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Client.UnitTests.Clients.V1
             return (cardCode, request);
         }
 
-        private static ApiResult<CalculateRescueTargetResponseDto> CreateSuccessApiResult()
+        private static ApiResult<CalculateRescueTargetResponseDto> CreateSuccessRescueResultApiResult()
         {
             var responseDto = new CalculateRescueTargetResponseDto
             {
@@ -212,14 +293,25 @@ namespace ThunderbirdsBoardGameEngine.Rules.Client.UnitTests.Clients.V1
             return ApiResult<CalculateRescueTargetResponseDto>.SuccessResult(responseDto, HttpStatusCode.OK);
         }
 
-        private static RescueClient CreateRescueClient(ApiResult<CalculateRescueTargetResponseDto> apiResult)
+        private static ApiResult<FabCardBonusResponseDto> CreateFabCardApiResult()
+        {
+            var responseDto = new FabCardBonusResponseDto
+            {
+                FabCardCode = "fab-card-1",
+                BonusValue = 3
+            };
+
+            return ApiResult<FabCardBonusResponseDto>.SuccessResult(responseDto, HttpStatusCode.OK);
+        }
+
+        private static RescueClient CreateRescueClient<T>(ApiResult<T> apiResult)
         {
             var stubHandler = new StubHttpMessageHandler("{}", HttpStatusCode.OK);
 
             return CreateRescueClient(stubHandler, apiResult);
         }
 
-        private static RescueClient CreateRescueClient(HttpMessageHandler httpMessageHandler, ApiResult<CalculateRescueTargetResponseDto> apiResult)
+        private static RescueClient CreateRescueClient<T>(HttpMessageHandler httpMessageHandler, ApiResult<T> apiResult)
         {
             var httpClient = new HttpClient(httpMessageHandler)
             {
