@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using ThunderbirdsBoardGameEngine.GameState.Application.Exceptions;
 using ThunderbirdsBoardGameEngine.GameState.Domain;
+using ThunderbirdsBoardGameEngine.ReferenceData.Core.Identities;
 
 namespace ThunderbirdsBoardGameEngine.GameState.Application.EndTurn
 {
@@ -34,5 +35,5 @@ namespace ThunderbirdsBoardGameEngine.GameState.Application.EndTurn
 
     public record EndTurnResult(Game GameSession);
 
-    public record EndTurnCommand(Guid GameId) : IRequest<EndTurnResult>;
+    public record EndTurnCommand(Guid GameId, CharacterCode CharacterCode) : IRequest<EndTurnResult>;
 }

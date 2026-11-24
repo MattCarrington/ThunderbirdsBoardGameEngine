@@ -30,7 +30,8 @@ namespace ThunderbirdsBoardGameEngine.GameState.ComponentTests.EndTurn
 
             await testHost.Repository.CreateNewGameSession(game, TestContext.Current.CancellationToken);
 
-            var command = new EndTurnCommand(gameId);
+            var command = new EndTurnCommand(gameId, KnownCharacterCodes.Gordon);
+
             // Act
             var result = await testHost.Mediator.Send(command, TestContext.Current.CancellationToken);
 

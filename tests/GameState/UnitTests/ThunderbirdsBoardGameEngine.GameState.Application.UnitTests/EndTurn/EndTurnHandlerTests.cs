@@ -16,6 +16,8 @@ namespace ThunderbirdsBoardGameEngine.GameState.Application.UnitTests.EndTurn
             var gameId = Guid.NewGuid();
             var game = CreateValidGame(gameId);
 
+            var command = new EndTurnCommand(gameId, new CharacterCode("CHAR4"));
+
             var gameRespository = Substitute.For<IGameRepository>();
             gameRespository.GetGameSessionById(Arg.Any<Guid>(), Arg.Any<CancellationToken>()).Returns(game);
 
@@ -24,7 +26,7 @@ namespace ThunderbirdsBoardGameEngine.GameState.Application.UnitTests.EndTurn
             var handler = new EndTurnHandler(gameRespository, integrityValidator);
 
             // Act
-            var result = await handler.Handle(new EndTurnCommand(gameId), CancellationToken.None);
+            var result = await handler.Handle(command, TestContext.Current.CancellationToken);
 
             // Assert
             Assert.NotNull(result);
@@ -42,6 +44,8 @@ namespace ThunderbirdsBoardGameEngine.GameState.Application.UnitTests.EndTurn
             // Arrange
             var gameId = Guid.NewGuid();
 
+            var command = new EndTurnCommand(gameId, new CharacterCode("CHAR4"));
+
             var gameRespository = Substitute.For<IGameRepository>();
             gameRespository.GetGameSessionById(Arg.Any<Guid>(), Arg.Any<CancellationToken>()).Returns((Game?)null);
 
@@ -50,7 +54,7 @@ namespace ThunderbirdsBoardGameEngine.GameState.Application.UnitTests.EndTurn
             var handler = new EndTurnHandler(gameRespository, integrityValidator);
 
             // Act & Assert
-            await Assert.ThrowsAsync<GameNotFoundException>(() => handler.Handle(new EndTurnCommand(gameId), CancellationToken.None));
+            await Assert.ThrowsAsync<GameNotFoundException>(() => handler.Handle(command, TestContext.Current.CancellationToken));
 
             await gameRespository.DidNotReceive().UpdateGameSession(Arg.Any<Game>(), Arg.Any<CancellationToken>());
         }
@@ -62,6 +66,8 @@ namespace ThunderbirdsBoardGameEngine.GameState.Application.UnitTests.EndTurn
             var gameId = Guid.NewGuid();
             var game = CreateValidGame(gameId);
 
+            var command = new EndTurnCommand(gameId, new CharacterCode("CHAR4"));
+
             var gameRespository = Substitute.For<IGameRepository>();
             gameRespository.GetGameSessionById(Arg.Any<Guid>(), Arg.Any<CancellationToken>()).Returns(game);
 
@@ -71,7 +77,7 @@ namespace ThunderbirdsBoardGameEngine.GameState.Application.UnitTests.EndTurn
             var handler = new EndTurnHandler(gameRespository, integrityValidator);
 
             // Act & Assert
-            await Assert.ThrowsAsync<InvalidOperationException>(() => handler.Handle(new EndTurnCommand(gameId), CancellationToken.None));
+            await Assert.ThrowsAsync<InvalidOperationException>(() => handler.Handle(command, TestContext.Current.CancellationToken));
             await gameRespository.DidNotReceive().UpdateGameSession(Arg.Any<Game>(), Arg.Any<CancellationToken>());
         }
 
