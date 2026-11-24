@@ -1,6 +1,5 @@
 ﻿using MediatR;
 using Microsoft.Extensions.DependencyInjection;
-using System.Runtime.CompilerServices;
 using ThunderbirdsBoardGameEngine.Rules.Application.Movement.Interfaces;
 using ThunderbirdsBoardGameEngine.Rules.Application.Movement.MapTraversal;
 using ThunderbirdsBoardGameEngine.Rules.Application.Rescue.CalculateRescueTarget;
