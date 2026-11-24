@@ -4,6 +4,7 @@ using ThunderbirdsBoardGameEngine.Client.Core;
 using ThunderbirdsBoardGameEngine.GameState.Client.Clients.V1;
 using ThunderbirdsBoardGameEngine.GameState.Contracts.Dtos.V1;
 using ThunderbirdsBoardGameEngine.GameState.Contracts.Dtos.V1.CreateGame;
+using ThunderbirdsBoardGameEngine.GameState.Contracts.Dtos.V1.EndTurn;
 using ThunderbirdsBoardGameEngine.GameState.Contracts.Dtos.V1.ThunderbirdMachines;
 using ThunderbirdsBoardGameEngine.GameState.Contracts.Dtos.V1.TransferCharacters;
 using ThunderbirdsBoardGameEngine.Rules.Client.UnitTests.Helpers;
@@ -473,8 +474,10 @@ namespace ThunderbirdsBoardGameEngine.GameState.Client.UnitTests.Clients.V1
 
             var gameClient = CreateGameClient(stubHandler, apiResult);
 
+            var endTurnRequestDto = CreateEndTurnRequestDto();
+
             // Act
-            _ = await gameClient.EndTurnAsync(gameId, TestContext.Current.CancellationToken);
+            _ = await gameClient.EndTurnAsync(gameId, endTurnRequestDto, TestContext.Current.CancellationToken);
 
             // Assert
             Assert.Equal($"https://localhost:5001/api/games/{gameId}/end-turn", stubHandler.CapturedRequest?.RequestUri?.ToString());
@@ -496,8 +499,10 @@ namespace ThunderbirdsBoardGameEngine.GameState.Client.UnitTests.Clients.V1
 
             var client = new GameClient(httpClient, handler);
 
+            var endTurnRequestDto = CreateEndTurnRequestDto();
+
             // Act
-            _ = await client.EndTurnAsync(gameId, TestContext.Current.CancellationToken);
+            _ = await client.EndTurnAsync(gameId, endTurnRequestDto, TestContext.Current.CancellationToken);
 
             // Assert
             await handler.Received(1).HandleResponseAsync<GameStateResponseDto>(Arg.Any<HttpResponseMessage>(), Arg.Any<CancellationToken>());
@@ -513,8 +518,10 @@ namespace ThunderbirdsBoardGameEngine.GameState.Client.UnitTests.Clients.V1
 
             var gameClient = CreateGameClient(apiResult);
 
+            var endTurnRequestDto = CreateEndTurnRequestDto();
+
             // Act            
-            var result = await gameClient.EndTurnAsync(gameId, TestContext.Current.CancellationToken);
+            var result = await gameClient.EndTurnAsync(gameId, endTurnRequestDto, TestContext.Current.CancellationToken);
 
             // Assert
             Assert.Equal(apiResult, result);
@@ -533,8 +540,10 @@ namespace ThunderbirdsBoardGameEngine.GameState.Client.UnitTests.Clients.V1
 
             var gameClient = CreateGameClient(stubHandler, apiResult);
 
+            var endTurnRequestDto = CreateEndTurnRequestDto();
+
             // Act            
-            var result = await gameClient.EndTurnAsync(gameId, TestContext.Current.CancellationToken);
+            var result = await gameClient.EndTurnAsync(gameId, endTurnRequestDto, TestContext.Current.CancellationToken);
 
             // Assert
             Assert.Equal(apiResult, result);
@@ -546,11 +555,28 @@ namespace ThunderbirdsBoardGameEngine.GameState.Client.UnitTests.Clients.V1
             // Arrange
             var gameClient = CreateGameClient(CreateGameStateResponseApiResult(Guid.NewGuid()));
 
+            var endTurnRequestDto = CreateEndTurnRequestDto();
+
             // Act & Assert
             var exception = await Assert.ThrowsAsync<ArgumentException>(() =>
-               gameClient.EndTurnAsync(Guid.Empty, TestContext.Current.CancellationToken));
+               gameClient.EndTurnAsync(Guid.Empty, endTurnRequestDto, TestContext.Current.CancellationToken));
 
             Assert.Equal("Game ID cannot be empty. (Parameter 'gameId')", exception.Message);
+        }
+
+        [Fact]
+        public async Task EndTurnAsync_WhenRequestNull_ShouldThrowArgumentNullException()
+        {
+            // Arrange
+            var gameId = Guid.NewGuid();
+
+            var gameClient = CreateGameClient(CreateGameStateResponseApiResult(gameId));
+
+            // Act & Assert
+            var exception = await Assert.ThrowsAsync<ArgumentNullException>(() =>
+                gameClient.EndTurnAsync(gameId, null!, TestContext.Current.CancellationToken));
+
+            Assert.Equal("Value cannot be null. (Parameter 'request')", exception.Message);
         }
 
         private static ApiResult<GameStateResponseDto> CreateGameStateResponseApiResult(Guid gameId)
@@ -594,6 +620,14 @@ namespace ThunderbirdsBoardGameEngine.GameState.Client.UnitTests.Clients.V1
             return new MoveThunderbirdMachineRequestDto
             {
                 Destination = "destination"
+            };
+        }
+
+        private static EndTurnRequestDto CreateEndTurnRequestDto()
+        {
+            return new EndTurnRequestDto
+            {
+                ExpectedActiveCharacterCode = "character-1"
             };
         }
 

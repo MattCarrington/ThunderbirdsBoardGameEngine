@@ -1,6 +1,7 @@
 ﻿using ThunderbirdsBoardGameEngine.Client.Core;
 using ThunderbirdsBoardGameEngine.GameState.Contracts.Dtos.V1;
 using ThunderbirdsBoardGameEngine.GameState.Contracts.Dtos.V1.CreateGame;
+using ThunderbirdsBoardGameEngine.GameState.Contracts.Dtos.V1.EndTurn;
 using ThunderbirdsBoardGameEngine.GameState.Contracts.Dtos.V1.ThunderbirdMachines;
 using ThunderbirdsBoardGameEngine.GameState.Contracts.Dtos.V1.TransferCharacters;
 
@@ -54,9 +55,10 @@ namespace ThunderbirdsBoardGameEngine.GameState.Client.Interfaces.V1
         /// Ends the current turn in the specified game.
         /// </summary>
         /// <param name="gameId">The identifier of the game.</param>
-        /// <param name="cancellationToken">A token that can be used to cancel the operation.</param>
+        /// <param name="request">Request containing the expected active character code.</param>
         /// <returns>A task that represents the asynchronous operation. The task result contains the API result and game state
         /// response.</returns>
-        Task<ApiResult<GameStateResponseDto>> EndTurnAsync(Guid gameId, CancellationToken cancellationToken = default);
+        /// <param name="cancellationToken">A token that can be used to cancel the operation.</param>
+        Task<ApiResult<GameStateResponseDto>> EndTurnAsync(Guid gameId, EndTurnRequestDto request, CancellationToken cancellationToken = default);
     }
 }
