@@ -75,10 +75,30 @@ namespace ThunderbirdsBoardGameEngine.Rules.Infrastructure
 
             services.AddSingleton<ICardBonusModifierSourceRegistry, CardBonusModifierSourceRegistry>();
             services.AddSingleton<ICardRescueModifierSource, TheHoodInterferes>();
-            services.AddSingleton<ICardRescueModifierSource, AstronautSpacewalk>();
-            services.AddSingleton<ICardRescueModifierSource, PersonalHoverjet>();
-            services.AddSingleton<ICardRescueModifierSource, RemoteControlHoverCamera>();
-            services.AddSingleton<ICardRescueModifierSource, UnderwaterSealingUnit>();
+
+            services.AddSingleton<AstronautSpacewalk>();
+            services.AddSingleton<ICardRescueModifierSource>(
+                sp => sp.GetRequiredService<AstronautSpacewalk>());
+            services.AddSingleton<IFabCardRescueModifierSource>(
+                sp => sp.GetRequiredService<AstronautSpacewalk>());
+
+            services.AddSingleton<PersonalHoverjet>();
+            services.AddSingleton<ICardRescueModifierSource>(
+                sp => sp.GetRequiredService<PersonalHoverjet>());
+            services.AddSingleton<IFabCardRescueModifierSource>(
+                sp => sp.GetRequiredService<PersonalHoverjet>());
+
+            services.AddSingleton<RemoteControlHoverCamera>();
+            services.AddSingleton<ICardRescueModifierSource>(
+                sp => sp.GetRequiredService<RemoteControlHoverCamera>());
+            services.AddSingleton<IFabCardRescueModifierSource>(
+                sp => sp.GetRequiredService<RemoteControlHoverCamera>());
+
+            services.AddSingleton<UnderwaterSealingUnit>();
+            services.AddSingleton<ICardRescueModifierSource>(
+                sp => sp.GetRequiredService<UnderwaterSealingUnit>());
+            services.AddSingleton<IFabCardRescueModifierSource>(
+                sp => sp.GetRequiredService<UnderwaterSealingUnit>());
         }
 
         private static void RegisterMovementServices(IServiceCollection services)
