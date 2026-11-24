@@ -3,7 +3,7 @@ using ThunderbirdsBoardGameEngine.ReferenceData.Core.Model;
 using ThunderbirdsBoardGameEngine.ReferenceData.Runtime.Interfaces;
 using ThunderbirdsBoardGameEngine.Rules.Application.Exceptions;
 using ThunderbirdsBoardGameEngine.Rules.Application.Rescue.Interfaces;
-using ThunderbirdsBoardGameEngine.Rules.Domain.Rescue;
+using ThunderbirdsBoardGameEngine.Rules.Domain.Rescue.Contributions;
 
 namespace ThunderbirdsBoardGameEngine.Rules.Infrastructure.Lookups
 {

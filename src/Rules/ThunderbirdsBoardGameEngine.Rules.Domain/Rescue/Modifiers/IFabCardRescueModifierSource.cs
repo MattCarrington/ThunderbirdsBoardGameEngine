@@ -1,6 +1,6 @@
 ﻿using ThunderbirdsBoardGameEngine.ReferenceData.Core.Enums;
 
-namespace ThunderbirdsBoardGameEngine.Rules.Domain.Rescue
+namespace ThunderbirdsBoardGameEngine.Rules.Domain.Rescue.Modifiers
 {
     public interface IFabCardRescueModifierSource : ICardRescueModifierSource
     {

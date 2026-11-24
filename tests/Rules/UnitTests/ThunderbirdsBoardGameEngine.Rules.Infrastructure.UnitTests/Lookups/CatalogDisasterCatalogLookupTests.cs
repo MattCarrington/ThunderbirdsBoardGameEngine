@@ -6,6 +6,7 @@ using ThunderbirdsBoardGameEngine.ReferenceData.Runtime.Interfaces;
 using ThunderbirdsBoardGameEngine.ReferenceData.Testing.Builders;
 using ThunderbirdsBoardGameEngine.Rules.Application.Exceptions;
 using ThunderbirdsBoardGameEngine.Rules.Domain.Rescue;
+using ThunderbirdsBoardGameEngine.Rules.Domain.Rescue.Contributions;
 using ThunderbirdsBoardGameEngine.Rules.Infrastructure.Lookups;
 using Xunit;
 

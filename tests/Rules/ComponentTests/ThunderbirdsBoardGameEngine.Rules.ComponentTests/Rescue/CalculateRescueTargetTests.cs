@@ -6,7 +6,7 @@ using ThunderbirdsBoardGameEngine.ReferenceData.Testing.Fixtures;
 using ThunderbirdsBoardGameEngine.ReferenceData.Testing.TestData;
 using ThunderbirdsBoardGameEngine.Rules.Application.Rescue.CalculateRescueTarget;
 using ThunderbirdsBoardGameEngine.Rules.Application.Rescue.Exceptions;
-using ThunderbirdsBoardGameEngine.Rules.Domain.Rescue;
+using ThunderbirdsBoardGameEngine.Rules.Domain.Rescue.Modifiers;
 using ThunderbirdsBoardGameEngine.Rules.Infrastructure;
 using Xunit;
 

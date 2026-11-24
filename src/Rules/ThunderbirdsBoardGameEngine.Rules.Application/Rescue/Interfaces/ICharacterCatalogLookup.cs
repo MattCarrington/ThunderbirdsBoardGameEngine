@@ -1,5 +1,5 @@
 ﻿using ThunderbirdsBoardGameEngine.ReferenceData.Core.Identities;
-using ThunderbirdsBoardGameEngine.Rules.Domain.Rescue;
+using ThunderbirdsBoardGameEngine.Rules.Domain.Rescue.Contributions;
 
 namespace ThunderbirdsBoardGameEngine.Rules.Application.Rescue.Interfaces
 {

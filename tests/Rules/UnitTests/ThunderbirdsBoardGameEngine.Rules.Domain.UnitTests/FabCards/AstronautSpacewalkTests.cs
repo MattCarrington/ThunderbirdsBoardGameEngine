@@ -1,7 +1,8 @@
 ﻿using ThunderbirdsBoardGameEngine.ReferenceData.Core.Enums;
 using ThunderbirdsBoardGameEngine.ReferenceData.Core.Identities;
 using ThunderbirdsBoardGameEngine.Rules.Domain.FabCards;
-using ThunderbirdsBoardGameEngine.Rules.Domain.Rescue;
+using ThunderbirdsBoardGameEngine.Rules.Domain.Rescue.Calculation;
+using ThunderbirdsBoardGameEngine.Rules.Domain.Rescue.Modifiers;
 using Xunit;
 
 namespace ThunderbirdsBoardGameEngine.Rules.Domain.UnitTests.FabCards

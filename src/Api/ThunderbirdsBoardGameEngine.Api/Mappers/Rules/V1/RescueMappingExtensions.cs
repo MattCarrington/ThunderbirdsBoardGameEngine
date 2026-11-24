@@ -1,7 +1,7 @@
 ﻿using ThunderbirdsBoardGameEngine.ReferenceData.Core.Identities;
 using ThunderbirdsBoardGameEngine.Rules.Application.Rescue.CalculateRescueTarget;
 using ThunderbirdsBoardGameEngine.Rules.Contracts.Dtos.Rescue.CalculateRescueTarget.V1;
-using ThunderbirdsBoardGameEngine.Rules.Domain.Rescue;
+using ThunderbirdsBoardGameEngine.Rules.Domain.Rescue.Modifiers;
 
 namespace ThunderbirdsBoardGameEngine.Api.Mappers.Rules.V1
 {

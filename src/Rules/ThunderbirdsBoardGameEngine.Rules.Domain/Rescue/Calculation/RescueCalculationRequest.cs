@@ -1,6 +1,6 @@
 ﻿using ThunderbirdsBoardGameEngine.ReferenceData.Core.Identities;
 
-namespace ThunderbirdsBoardGameEngine.Rules.Domain.Rescue
+namespace ThunderbirdsBoardGameEngine.Rules.Domain.Rescue.Calculation
 {
     public record RescueCalculationRequest(
         CardCode DisasterCardCode,

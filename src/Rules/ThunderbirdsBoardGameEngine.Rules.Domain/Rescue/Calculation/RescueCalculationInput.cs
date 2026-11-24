@@ -1,7 +1,7 @@
 ﻿using ThunderbirdsBoardGameEngine.ReferenceData.Core.Enums;
 using ThunderbirdsBoardGameEngine.ReferenceData.Core.Identities;
 
-namespace ThunderbirdsBoardGameEngine.Rules.Domain.Rescue
+namespace ThunderbirdsBoardGameEngine.Rules.Domain.Rescue.Calculation
 {
     /// <summary>
     /// Represents the input parameters required to perform a rescue calculation, including the applicable disaster

@@ -1,6 +1,8 @@
 ﻿using ThunderbirdsBoardGameEngine.ReferenceData.Core.Enums;
+using ThunderbirdsBoardGameEngine.Rules.Domain.Rescue.Calculation;
+using ThunderbirdsBoardGameEngine.Rules.Domain.Rescue.Modifiers;
 
-namespace ThunderbirdsBoardGameEngine.Rules.Domain.Rescue
+namespace ThunderbirdsBoardGameEngine.Rules.Domain.Rescue.Contributions
 {
     /// <summary>
     /// Represents a source of rescue modifiers contributed by a disaster card, including its difficulty, available
