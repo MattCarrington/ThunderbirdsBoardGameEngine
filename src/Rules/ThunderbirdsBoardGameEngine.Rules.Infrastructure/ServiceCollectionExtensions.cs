@@ -16,6 +16,7 @@ using ThunderbirdsBoardGameEngine.Rules.Domain.Movement.Speed;
 using ThunderbirdsBoardGameEngine.Rules.Domain.Movement.Topology;
 using ThunderbirdsBoardGameEngine.Rules.Domain.Rescue.Calculation;
 using ThunderbirdsBoardGameEngine.Rules.Domain.Rescue.Modifiers;
+using ThunderbirdsBoardGameEngine.Rules.Domain.Rescue.Registries;
 using ThunderbirdsBoardGameEngine.Rules.Domain.TransferCharacters.Evaluation;
 using ThunderbirdsBoardGameEngine.Rules.Infrastructure.Lookups;
 
@@ -74,6 +75,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.Infrastructure
             services.AddSingleton<RescueTargetCalculator>();
             services.AddSingleton<ICalculateRescueTargetResolutionService, CalculateRescueTargetResolutionService>();
 
+            services.AddSingleton<IFabCardRescueModifierSourceRegistry, FabCardRescueModifierSourceRegistry>();
             services.AddSingleton<ICardBonusModifierSourceRegistry, CardBonusModifierSourceRegistry>();
             services.AddSingleton<ICardRescueModifierSource, TheHoodInterferes>();
 

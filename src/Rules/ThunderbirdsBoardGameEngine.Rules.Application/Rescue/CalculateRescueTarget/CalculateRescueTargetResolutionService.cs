@@ -2,6 +2,7 @@
 using ThunderbirdsBoardGameEngine.Rules.Application.Rescue.Interfaces;
 using ThunderbirdsBoardGameEngine.Rules.Domain.Rescue.Calculation;
 using ThunderbirdsBoardGameEngine.Rules.Domain.Rescue.Modifiers;
+using ThunderbirdsBoardGameEngine.Rules.Domain.Rescue.Registries;
 
 namespace ThunderbirdsBoardGameEngine.Rules.Application.Rescue.CalculateRescueTarget
 {

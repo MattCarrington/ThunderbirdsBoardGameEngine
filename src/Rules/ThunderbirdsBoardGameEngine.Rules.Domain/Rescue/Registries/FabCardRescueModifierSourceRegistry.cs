@@ -1,9 +1,10 @@
 ﻿using System.Collections.Frozen;
 using ThunderbirdsBoardGameEngine.ReferenceData.Core.Enums;
+using ThunderbirdsBoardGameEngine.Rules.Domain.Rescue.Modifiers;
 
-namespace ThunderbirdsBoardGameEngine.Rules.Domain.Rescue.Modifiers
+namespace ThunderbirdsBoardGameEngine.Rules.Domain.Rescue.Registries
 {
-    public class FabCardRescueModifierSourceRegistry
+    public class FabCardRescueModifierSourceRegistry : IFabCardRescueModifierSourceRegistry
     {
         private readonly FrozenDictionary<RescueType, IFabCardRescueModifierSource> _registry;
 

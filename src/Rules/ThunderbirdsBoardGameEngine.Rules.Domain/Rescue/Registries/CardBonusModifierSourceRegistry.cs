@@ -1,7 +1,8 @@
 ﻿using System.Collections.Frozen;
 using ThunderbirdsBoardGameEngine.ReferenceData.Core.Identities;
+using ThunderbirdsBoardGameEngine.Rules.Domain.Rescue.Modifiers;
 
-namespace ThunderbirdsBoardGameEngine.Rules.Domain.Rescue.Modifiers
+namespace ThunderbirdsBoardGameEngine.Rules.Domain.Rescue.Registries
 {
     public class CardBonusModifierSourceRegistry : ICardBonusModifierSourceRegistry
     {
