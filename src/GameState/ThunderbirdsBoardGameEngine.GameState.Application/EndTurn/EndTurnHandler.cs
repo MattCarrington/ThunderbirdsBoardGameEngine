@@ -23,6 +23,11 @@ namespace ThunderbirdsBoardGameEngine.GameState.Application.EndTurn
 
             _gameStateIntegrityValidator.Validate(game);
 
+            if (request.ExpectedActiveCharacter != game.ActiveCharacter)
+            {
+                throw new GameStateConcurrencyException();
+            }
+
             game.AdvanceTurn();
 
             _gameStateIntegrityValidator.Validate(game);
@@ -35,5 +40,5 @@ namespace ThunderbirdsBoardGameEngine.GameState.Application.EndTurn
 
     public record EndTurnResult(Game GameSession);
 
-    public record EndTurnCommand(Guid GameId, CharacterCode CharacterCode) : IRequest<EndTurnResult>;
+    public record EndTurnCommand(Guid GameId, CharacterCode ExpectedActiveCharacter) : IRequest<EndTurnResult>;
 }

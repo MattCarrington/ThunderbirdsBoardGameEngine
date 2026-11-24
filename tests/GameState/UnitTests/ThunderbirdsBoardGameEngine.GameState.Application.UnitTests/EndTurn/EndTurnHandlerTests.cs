@@ -81,6 +81,27 @@ namespace ThunderbirdsBoardGameEngine.GameState.Application.UnitTests.EndTurn
             await gameRespository.DidNotReceive().UpdateGameSession(Arg.Any<Game>(), Arg.Any<CancellationToken>());
         }
 
+        [Fact]
+        public async Task Handle_ShouldThrowGameStateConcurrencyException_WhenActiveCharacterCodeDoesNotMatchExpected()
+        {
+            // Arrange
+            var gameId = Guid.NewGuid();
+            var game = CreateValidGame(gameId);
+
+            var command = new EndTurnCommand(gameId, new CharacterCode("CHAR2")); // CHAR2 is not the active character
+
+            var gameRespository = Substitute.For<IGameRepository>();
+            gameRespository.GetGameSessionById(Arg.Any<Guid>(), Arg.Any<CancellationToken>()).Returns(game);
+
+            var integrityValidator = Substitute.For<IGameStateIntegrityValidator>();
+
+            var handler = new EndTurnHandler(gameRespository, integrityValidator);
+
+            // Act & Assert
+            await Assert.ThrowsAsync<GameStateConcurrencyException>(() => handler.Handle(command, TestContext.Current.CancellationToken));
+            await gameRespository.DidNotReceive().UpdateGameSession(Arg.Any<Game>(), Arg.Any<CancellationToken>());
+        }
+
         private static Game CreateValidGame(Guid gameId)
         {
             var createdAtUtc = DateTime.UtcNow;
