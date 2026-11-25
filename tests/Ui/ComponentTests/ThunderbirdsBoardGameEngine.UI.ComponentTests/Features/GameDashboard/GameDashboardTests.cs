@@ -1,4 +1,5 @@
-﻿using Bunit;
+﻿using AngleSharp.Dom;
+using Bunit;
 using Microsoft.AspNetCore.Components.Web;
 using NSubstitute;
 using NSubstitute.ExceptionExtensions;
@@ -1088,6 +1089,280 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Features.GameDashboard
                 Assert.DoesNotContain("europe", optionValues);
                 Assert.DoesNotContain("south-pacific", optionValues);
             });
+        }
+
+        [Fact]
+        public async Task SuccessfulEndTurnShouldUpdateDashboardAndCloseDialogAsync()
+        {
+            // Arrange
+            var gameId = Guid.NewGuid();
+
+            var originalGame = GameDashboardViewModelFactory.CreateDashboard(gameId: gameId);
+
+            var updatedGame = GameDashboardViewModelFactory.CreateDashboard(
+                gameId: gameId,
+                turnSummary: GameDashboardViewModelFactory.CreateTurnSummary(
+                    activeCharacter: "virgil",
+                    activeCharacterDisplayName: "Virgil",
+                    turnOrder: [
+                        GameDashboardViewModelFactory.CreateTurnOrderCharacter(characterCode: "virgil", characterDisplayName: "Virgil"),
+                        GameDashboardViewModelFactory.CreateTurnOrderCharacter(characterCode: "gordon", characterDisplayName: "Gordon"),
+                        GameDashboardViewModelFactory.CreateTurnOrderCharacter(characterCode: "scott", characterDisplayName: "Scott")
+                    ]));
+
+            var context = new GameDashboardPageTestContext(this);
+            context.GameService
+                .GetGameAsync(gameId)
+                .Returns(originalGame);
+            context.GameService
+                .EndTurnAsync(gameId, originalGame.TurnSummary.ActiveCharacter.CharacterCode)
+                .Returns(new EndTurnResult(EndTurnOutcome.Success, updatedGame));
+
+            var cut = Render<GameDashboardPage>(parameters => parameters
+                .Add(p => p.GameId, gameId));
+
+            // Act
+            cut.WaitForElement("[data-testid='end-turn']")
+                .Click();
+
+            // Assert
+            cut.WaitForAssertion(() =>
+            {
+                var activeCharacterRow = cut.Find("[data-testid='active-character']");
+
+                Assert.Contains("Virgil", activeCharacterRow.TextContent.Trim());
+                Assert.DoesNotContain("Scott", activeCharacterRow.TextContent.Trim());
+            });
+
+            await context.GameService.Received(1)
+                .GetGameAsync(gameId);
+
+            await context.GameService.Received(1)
+                .EndTurnAsync(
+                    gameId,
+                    "scott");
+        }
+
+        [Fact]
+        public async Task EndTurnButtonIsDisabledWhilstWaitingForEndTurnResult()
+        {
+            // Arrange
+            var gameId = Guid.NewGuid();
+
+            var originalGame = GameDashboardViewModelFactory.CreateDashboard(gameId: gameId);
+
+            var updatedGame = GameDashboardViewModelFactory.CreateDashboard(
+                gameId: gameId,
+                turnSummary: GameDashboardViewModelFactory.CreateTurnSummary(
+                    activeCharacter: "virgil",
+                    activeCharacterDisplayName: "Virgil",
+                    turnOrder: [
+                        GameDashboardViewModelFactory.CreateTurnOrderCharacter(characterCode: "virgil", characterDisplayName: "Virgil"),
+                        GameDashboardViewModelFactory.CreateTurnOrderCharacter(characterCode: "gordon", characterDisplayName: "Gordon"),
+                        GameDashboardViewModelFactory.CreateTurnOrderCharacter(characterCode: "scott", characterDisplayName: "Scott")
+                    ]));
+
+            var endTurnCompletion = new TaskCompletionSource<EndTurnResult>(TaskCreationOptions.RunContinuationsAsynchronously);
+
+            var context = new GameDashboardPageTestContext(this);
+            context.GameService
+                .GetGameAsync(gameId)
+                .Returns(originalGame);
+            context.GameService
+                .EndTurnAsync(gameId, originalGame.TurnSummary.ActiveCharacter.CharacterCode)
+                .Returns(endTurnCompletion.Task);
+
+            var cut = Render<GameDashboardPage>(parameters => parameters
+                .Add(p => p.GameId, gameId));
+
+            // Act
+            const string selector = "[data-testid='end-turn']";
+
+            var clickTask = cut.Find(selector).ClickAsync(new MouseEventArgs());
+
+            cut.WaitForAssertion(() => Assert.True(cut.Find(selector).IsDisabled()));
+
+            endTurnCompletion.SetResult(
+                new EndTurnResult(EndTurnOutcome.Success, updatedGame));
+
+            await clickTask;
+
+            // Assert
+            cut.WaitForAssertion(() => Assert.False(cut.Find(selector).IsDisabled()));
+        }
+
+        [Fact]
+        public void ConflictRefreshesTheDashboardWithoutRetryingEndTurn()
+        {
+            // Arrange
+            var gameId = Guid.NewGuid();
+
+            var originalGame = GameDashboardViewModelFactory.CreateDashboard(gameId: gameId);
+
+            var updatedGame = GameDashboardViewModelFactory.CreateDashboard(
+                gameId: gameId,
+                turnSummary: GameDashboardViewModelFactory.CreateTurnSummary(
+                    activeCharacter: "virgil",
+                    activeCharacterDisplayName: "Virgil",
+                    turnOrder: [
+                        GameDashboardViewModelFactory.CreateTurnOrderCharacter(characterCode: "virgil", characterDisplayName: "Virgil"),
+                        GameDashboardViewModelFactory.CreateTurnOrderCharacter(characterCode: "gordon", characterDisplayName: "Gordon"),
+                        GameDashboardViewModelFactory.CreateTurnOrderCharacter(characterCode: "scott", characterDisplayName: "Scott")
+                    ]));
+
+            var context = new GameDashboardPageTestContext(this);
+            context.GameService
+                .GetGameAsync(gameId)
+                .Returns(originalGame, updatedGame);
+            context.GameService
+                .EndTurnAsync(gameId, originalGame.TurnSummary.ActiveCharacter.CharacterCode)
+                .Returns(new EndTurnResult(EndTurnOutcome.Conflict, null));
+
+            var cut = Render<GameDashboardPage>(parameters => parameters
+                .Add(p => p.GameId, gameId));
+
+            // Act
+            cut.WaitForElement("[data-testid='end-turn']")
+                .Click();
+
+            // Assert
+            cut.WaitForAssertion(() =>
+            {
+                var activeCharacterRow = cut.Find("[data-testid='active-character']");
+                Assert.Contains("Virgil", activeCharacterRow.TextContent.Trim());
+                Assert.DoesNotContain("Scott", activeCharacterRow.TextContent.Trim());
+            });
+
+            context.GameService.Received(2)
+                .GetGameAsync(gameId);
+            context.GameService.ReceivedWithAnyArgs(1)
+                .EndTurnAsync(default, default!);
+        }
+
+        [Fact]
+        public void ObsoleteEndTurnResultDoesNotReplaceNewGame()
+        {
+            // Arrange
+            var oldGameId = Guid.NewGuid();
+            var newGameId = Guid.NewGuid();
+
+            var oldGame = GameDashboardViewModelFactory.CreateDashboard(gameId: oldGameId);
+
+            var newGame = GameDashboardViewModelFactory.CreateDashboard(
+                gameId: newGameId,
+                turnSummary: GameDashboardViewModelFactory.CreateTurnSummary(
+                    activeCharacter: "virgil",
+                    activeCharacterDisplayName: "Virgil"));
+
+            var context = new GameDashboardPageTestContext(this);
+            context.GameService
+                .GetGameAsync(oldGameId)
+                .Returns(oldGame);
+            context.GameService
+                .GetGameAsync(newGameId)
+                .Returns(newGame);
+            context.GameService
+                .EndTurnAsync(oldGameId, oldGame.TurnSummary.ActiveCharacter.CharacterCode)
+                .Returns(new EndTurnResult(EndTurnOutcome.Success, oldGame));
+
+            var cut = Render<GameDashboardPage>(parameters => parameters
+                .Add(p => p.GameId, oldGameId));
+
+            // Act
+            cut.WaitForElement("[data-testid='end-turn']")
+                .Click();
+
+            cut.Render(parameters => parameters
+                .Add(p => p.GameId, newGameId));
+
+            // Assert
+            cut.WaitForAssertion(() =>
+            {
+                var activeCharacterRow = cut.Find("[data-testid='active-character']");
+                Assert.Contains("Virgil", activeCharacterRow.TextContent.Trim());
+                Assert.DoesNotContain("Scott", activeCharacterRow.TextContent.Trim());
+            });
+
+            context.GameService.Received(1)
+                .GetGameAsync(oldGameId);
+            context.GameService.Received(1)
+                .GetGameAsync(newGameId);
+        }
+
+        [Fact]
+        public void NotFoundGameOnEndTurnShouldDisplayErrorMessage()
+        {
+            // Arrange
+            var gameId = Guid.NewGuid();
+
+            var originalGame = GameDashboardViewModelFactory.CreateDashboard(gameId: gameId);
+
+            var context = new GameDashboardPageTestContext(this);
+            context.GameService
+                .GetGameAsync(gameId)
+                .Returns(originalGame);
+            context.GameService
+                .EndTurnAsync(gameId, originalGame.TurnSummary.ActiveCharacter.CharacterCode)
+                .Returns(new EndTurnResult(EndTurnOutcome.NotFound, null));
+
+            var cut = Render<GameDashboardPage>(parameters => parameters
+                .Add(p => p.GameId, gameId));
+
+            // Act
+            cut.WaitForElement("[data-testid='end-turn']")
+                .Click();
+
+            // Assert
+            cut.WaitForAssertion(() =>
+            {
+                var alert = cut.Find("[role='alert']");
+                Assert.Contains("The game could not be found.", alert.TextContent);
+            });
+
+            context.GameService.Received(1)
+                .GetGameAsync(gameId);
+            context.GameService.Received(1)
+                .EndTurnAsync(
+                    gameId,
+                    "scott");
+        }
+
+        [Fact]
+        public void DisplaysErrorMessageWhenGameServiceThrowsExceptionDuringEndTurn()
+        {
+            // Arrange
+            var gameId = Guid.NewGuid();
+
+            var originalGame = GameDashboardViewModelFactory.CreateDashboard(gameId: gameId);
+
+            var context = new GameDashboardPageTestContext(this);
+            context.GameService
+                .GetGameAsync(gameId)
+                .Returns(originalGame);
+            context.GameService
+                .EndTurnAsync(gameId, originalGame.TurnSummary.ActiveCharacter.CharacterCode)
+                .Throws(new Exception("Unexpected error"));
+
+            var cut = Render<GameDashboardPage>(parameters => parameters
+                .Add(p => p.GameId, gameId));
+
+            // Act
+            cut.WaitForElement("[data-testid='end-turn']")
+                .Click();
+
+            // Assert
+            cut.WaitForAssertion(() =>
+            {
+                var alert = cut.Find("[role='alert']");
+                Assert.Contains("The turn could not be ended. Please try again.", alert.TextContent);
+            });
+
+            context.GameService.Received(1)
+                .GetGameAsync(gameId);
+            context.GameService.Received(1)
+                .EndTurnAsync(
+                    gameId,
+                    "scott");
         }
     }
 }

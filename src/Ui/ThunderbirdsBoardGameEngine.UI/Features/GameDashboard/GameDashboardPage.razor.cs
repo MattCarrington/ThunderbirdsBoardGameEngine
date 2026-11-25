@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
+using System.Diagnostics.CodeAnalysis;
 using ThunderbirdsBoardGameEngine.UI.Features.GameDashboard.Interfaces;
 using ThunderbirdsBoardGameEngine.UI.Features.GameDashboard.Services;
 using ThunderbirdsBoardGameEngine.UI.Features.GameDashboard.ViewModels;
@@ -35,6 +36,8 @@ public partial class GameDashboardPage
     private bool _isTransferring;
     private string? _transferError;
     private long _dashboardGeneration;
+    private bool _isEndingTurn;
+    private string? _endTurnError;
 
     protected override Task OnParametersSetAsync()
     {
@@ -308,5 +311,71 @@ public partial class GameDashboardPage
     {
         return generation == _dashboardGeneration
             && gameId == GameId;
+    }
+
+    private async Task EndTurnAsync()
+    {
+        if (_isEndingTurn)
+        {
+            return;
+        }
+
+        if (_game is null)
+        {
+            return;
+        }
+
+        var generation = _dashboardGeneration;
+        var requestedGameId = GameId;
+
+        _endTurnError = null;
+        _isEndingTurn = true;
+
+        try
+        {
+            var result = await GameService.EndTurnAsync(requestedGameId, _game.TurnSummary.ActiveCharacter.CharacterCode);
+
+            if (!IsCurrentDashboard(generation, requestedGameId))
+            {
+                return;
+            }
+
+            switch (result.Outcome)
+            {
+                case EndTurnOutcome.Success
+                    when result.UpdatedGameState is not null:
+                    _game = result.UpdatedGameState;
+                    break;
+                case EndTurnOutcome.Conflict:
+                    await LoadGameAsync();
+                    break;
+                case EndTurnOutcome.NotFound:
+                    _endTurnError = "The game could not be found.";
+                    break;
+                default:
+                    _endTurnError = "The turn could not be ended. Please try again.";
+                    break;
+            }
+        }
+        catch (Exception exception)
+        {
+            if (!IsCurrentDashboard(generation, requestedGameId))
+            {
+                return;
+            }
+
+            _endTurnError = "The turn could not be ended. Please try again.";
+
+            Logger.LogError(
+                exception,
+                "Unable to end the current turn.");
+        }
+        finally
+        {
+            if (IsCurrentDashboard(generation, requestedGameId))
+            {
+                _isEndingTurn = false;
+            }
+        }
     }
 }

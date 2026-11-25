@@ -34,7 +34,10 @@
     }
     else if (_game is not null)
     {
-        <TurnSummarySegment Summary="@_game.TurnSummary" />
+        <TurnSummarySegment Summary="@_game.TurnSummary"
+                IsEndingTurn="@_isEndingTurn"
+                EndTurnRequested="EndTurnAsync" 
+                ErrorMessage="@_endTurnError"/>
         
         <ThunderbirdMachinesSegment
             Machines="@_game.ThunderbirdMachines"

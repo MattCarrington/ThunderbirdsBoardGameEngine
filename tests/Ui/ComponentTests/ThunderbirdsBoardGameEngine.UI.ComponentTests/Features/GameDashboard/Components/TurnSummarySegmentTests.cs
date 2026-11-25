@@ -1,4 +1,5 @@
 ﻿using Bunit;
+using Microsoft.AspNetCore.Components;
 using ThunderbirdsBoardGameEngine.UI.ComponentTests.Factories;
 using ThunderbirdsBoardGameEngine.UI.Features.GameDashboard.Components;
 using ThunderbirdsBoardGameEngine.UI.Features.GameDashboard.ViewModels;
@@ -63,6 +64,29 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Features.GameDashboard.C
             // Assert
             Assert.Contains("fw-bold", active.ClassList);
             Assert.Contains("text-primary", active.ClassList);
+        }
+
+        [Fact]
+        public void InvokesEndTurnRequestedCallbackWhenEndTurnButtonClicked()
+        {
+            // Arrange
+            var summary = CreateSummary();
+
+            var endTurnRequestedInvoked = false;
+
+            var cut = Render<TurnSummarySegment>(
+                parameters => parameters
+                    .Add(component => component.Summary, summary)
+                    .Add(component => component.EndTurnRequested, EventCallback.Factory.Create(this, () =>
+                    {
+                        endTurnRequestedInvoked = true;
+                    })));
+
+            // Act
+            cut.Find("[data-testid='end-turn']").Click();
+
+            // Assert
+            Assert.True(endTurnRequestedInvoked);
         }
 
         private static TurnSummaryDashboardViewModel CreateSummary()

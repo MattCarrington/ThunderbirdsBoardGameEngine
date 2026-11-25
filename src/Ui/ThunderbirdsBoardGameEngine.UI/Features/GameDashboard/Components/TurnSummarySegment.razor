@@ -7,7 +7,8 @@
             Current Turn
         </h2>
 
-        <p class="fs-5 mb-2">
+        <p class="fs-5 mb-2"
+            data-testid="active-character">
             <strong>
                 @Summary.ActiveCharacter.CharacterDisplayName
             </strong>
@@ -37,5 +38,22 @@
                 </span>
             }
         </p>
+
+        <button type="button"
+                class="btn btn-primary"
+                data-testid="end-turn"
+                disabled="@IsEndingTurn"
+                @onclick="() => EndTurnRequested.InvokeAsync()">
+            @(IsEndingTurn ? "Ending turn…" : "End Turn")
+        </button>
+
+        @if (!string.IsNullOrWhiteSpace(ErrorMessage))
+        {
+            <div class="alert alert-danger mt-2"
+                 role="alert"
+                 data-testid="end-turn-error">
+                @ErrorMessage
+            </div>
+        }
     </div>
 </section>
