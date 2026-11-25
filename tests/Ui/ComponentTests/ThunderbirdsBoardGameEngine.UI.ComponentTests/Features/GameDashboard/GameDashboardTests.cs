@@ -1241,7 +1241,7 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Features.GameDashboard
         }
 
         [Fact]
-        public void ObsoleteEndTurnResultDoesNotReplaceNewGame()
+        public async Task ObsoleteEndTurnResultDoesNotReplaceNewGameAsync()
         {
             // Arrange
             var oldGameId = Guid.NewGuid();
@@ -1255,6 +1255,10 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Features.GameDashboard
                     activeCharacter: "virgil",
                     activeCharacterDisplayName: "Virgil"));
 
+            var oldEndTurnCompletion =
+                new TaskCompletionSource<EndTurnResult>(
+                    TaskCreationOptions.RunContinuationsAsynchronously);
+
             var context = new GameDashboardPageTestContext(this);
             context.GameService
                 .GetGameAsync(oldGameId)
@@ -1264,17 +1268,39 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Features.GameDashboard
                 .Returns(newGame);
             context.GameService
                 .EndTurnAsync(oldGameId, oldGame.TurnSummary.ActiveCharacter.CharacterCode)
-                .Returns(new EndTurnResult(EndTurnOutcome.Success, oldGame));
+                .Returns(oldEndTurnCompletion.Task);
 
             var cut = Render<GameDashboardPage>(parameters => parameters
                 .Add(p => p.GameId, oldGameId));
 
             // Act
-            cut.WaitForElement("[data-testid='end-turn']")
-                .Click();
+            const string endTurn = "[data-testid='end-turn']";
+            const string activeCharacter = "[data-testid='active-character']";
 
-            cut.Render(parameters => parameters
-                .Add(p => p.GameId, newGameId));
+            // Start End Turn on the old game and leave its response pending.
+            var obsoleteEndTurnTask = cut.WaitForElement(endTurn)
+                .ClickAsync(new MouseEventArgs());
+
+            cut.WaitForAssertion(() =>
+                Assert.True(cut.Find(endTurn).IsDisabled()));
+
+            // Switch games while the old request is still pending.
+            cut.Render(parameters => parameters.Add(p => p.GameId, newGameId));
+
+            cut.WaitForAssertion(() =>
+            {
+                Assert.Equal("Virgil", cut.Find(activeCharacter).TextContent.Trim());
+                Assert.False(cut.Find(endTurn).IsDisabled());
+            });
+
+            // Release the old response, then wait for the old handler to finish.
+            oldEndTurnCompletion.SetResult(
+                new EndTurnResult(EndTurnOutcome.Success, oldGame));
+
+            await obsoleteEndTurnTask;
+
+            Assert.Equal("Virgil", cut.Find(activeCharacter).TextContent.Trim());
+            Assert.False(cut.Find(endTurn).IsDisabled());
 
             // Assert
             cut.WaitForAssertion(() =>
@@ -1284,9 +1310,9 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Features.GameDashboard
                 Assert.DoesNotContain("Scott", activeCharacterRow.TextContent.Trim());
             });
 
-            context.GameService.Received(1)
+            await context.GameService.Received(1)
                 .GetGameAsync(oldGameId);
-            context.GameService.Received(1)
+            await context.GameService.Received(1)
                 .GetGameAsync(newGameId);
         }
 
