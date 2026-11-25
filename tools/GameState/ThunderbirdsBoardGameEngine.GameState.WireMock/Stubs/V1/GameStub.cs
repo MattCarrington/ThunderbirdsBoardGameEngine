@@ -41,6 +41,12 @@ namespace ThunderbirdsBoardGameEngine.GameState.WireMock.Stubs.V1
         public const string TransferCharactersRoute = "/api/games/*/character-transfers";
 
         /// <summary>
+        /// Route template for ending a game's turn.
+        /// </summary>
+        /// <remarks>The `*` segment represents the game-specific route segment.</remarks>
+        public const string EndTurnRoute = "/api/games/*/end-turn";
+
+        /// <summary>
         /// Identifies the current version of the component.
         /// </summary>
         /// <remarks>Update when the component version changes.</remarks>
@@ -268,6 +274,65 @@ namespace ThunderbirdsBoardGameEngine.GameState.WireMock.Stubs.V1
         }
 
         /// <summary>
+        /// Configures a successful JSON response for the end-turn request.
+        /// </summary>
+        /// <param name="response">The response body to return; if <see langword="null"/>, a representative game response is used.</param>
+        public void RegisterEndTurnSuccess(GameStateResponseDto? response = null)
+        {
+            response ??= CreateRepresentativeGameResponse();
+            Server
+                .Given(CreatePost(EndTurnRoute, VersionValue))
+                .RespondWith(CreateJsonResponse(response, HttpStatusCode.OK));
+        }
+
+        /// <summary>
+        /// Registers a 404 response for an end-turn request when the specified game is not found.
+        /// </summary>
+        /// <param name="detail">Optional detail to include in the 404 response. If omitted, a default message is used.</param>
+        public void RegisterEndTurnNotFound(string? detail = null)
+        {
+            Server
+                .Given(CreatePost(EndTurnRoute, VersionValue))
+                .RespondWith(ProblemJson(
+                    "Resource not found",
+                    HttpStatusCode.NotFound,
+                    detail ?? "The specified game was not found."));
+        }
+
+        /// <summary>
+        /// Registers a 409 Conflict response for an end-turn request.
+        /// </summary>
+        /// <param name="detail">Optional explanation included in the conflict response; defaults to a standard message.</param>
+        public void RegisterEndTurnConflict(string? detail = null)
+        {
+            Server
+                .Given(CreatePost(EndTurnRoute, VersionValue))
+                .RespondWith(ProblemJson(
+                    "Conflict",
+                    HttpStatusCode.Conflict,
+                    detail ?? "The turn could not be ended due to a conflict."));
+        }
+
+        /// <summary>
+        /// Registers a problem response for a POST request to the end-turn route.
+        /// </summary>
+        /// <param name="statusCode">The HTTP status code to return.</param>
+        /// <param name="message">The error message to include in the response.</param>
+        /// <param name="detail">Optional additional detail to include in the response.</param>
+        public void RegisterEndTurnError(
+            HttpStatusCode statusCode = HttpStatusCode.InternalServerError,
+            string message = "An unexpected error occurred.",
+            string? detail = null)
+        {
+            Server
+                .Given(CreatePost(EndTurnRoute, VersionValue))
+                .RespondWith(ProblemJson(
+                    message,
+                    statusCode,
+                    detail));
+        }
+
+        /// <summary>
         /// Registers a guard that enforces the presence of a required version header for POST requests on the
         /// configured route.
         /// </summary>
@@ -277,6 +342,7 @@ namespace ThunderbirdsBoardGameEngine.GameState.WireMock.Stubs.V1
             RegisterMissingVersionHeaderGuard(GetGameStateRoute, "GET");
             RegisterMissingVersionHeaderGuard(MoveThunderbirdMachineRoute, "POST");
             RegisterMissingVersionHeaderGuard(TransferCharactersRoute, "POST");
+            RegisterMissingVersionHeaderGuard(EndTurnRoute, "POST");
         }
 
         /// <summary>
@@ -289,6 +355,7 @@ namespace ThunderbirdsBoardGameEngine.GameState.WireMock.Stubs.V1
             RegisterUnsupportedVersionHeaderGuard(GetGameStateRoute, "GET", VersionValue);
             RegisterUnsupportedVersionHeaderGuard(MoveThunderbirdMachineRoute, "POST", VersionValue);
             RegisterUnsupportedVersionHeaderGuard(TransferCharactersRoute, "POST", VersionValue);
+            RegisterUnsupportedVersionHeaderGuard(EndTurnRoute, "POST", VersionValue);
         }
 
         private static GameStateResponseDto CreateRepresentativeGameResponse()
@@ -296,7 +363,6 @@ namespace ThunderbirdsBoardGameEngine.GameState.WireMock.Stubs.V1
             return new()
             {
                 GameId = Guid.NewGuid(),
-
                 ThunderbirdMachines =
                 [
                     new ThunderbirdMachineStateDto
@@ -311,7 +377,9 @@ namespace ThunderbirdsBoardGameEngine.GameState.WireMock.Stubs.V1
                         LocationCode = "north-america",
                         OccupantCharacterCodes = [ "virgil", "gordon" ]
                     }
-                ]
+                ],
+                TurnOrder = ["scott", "virgil", "gordon"],
+                ActiveCharacterCode = "virgil"
             };
         }
     }

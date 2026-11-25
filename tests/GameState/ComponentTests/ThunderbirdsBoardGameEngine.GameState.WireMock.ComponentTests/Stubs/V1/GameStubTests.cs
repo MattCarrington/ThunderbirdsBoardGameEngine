@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using System.Net.Http.Json;
 using ThunderbirdsBoardGameEngine.GameState.Contracts.Dtos.V1;
+using ThunderbirdsBoardGameEngine.GameState.Contracts.Dtos.V1.EndTurn;
 using ThunderbirdsBoardGameEngine.GameState.Contracts.Dtos.V1.ThunderbirdMachines;
 using ThunderbirdsBoardGameEngine.GameState.Contracts.Dtos.V1.TransferCharacters;
 using ThunderbirdsBoardGameEngine.GameState.WireMock.Stubs.V1;
@@ -808,6 +809,257 @@ namespace ThunderbirdsBoardGameEngine.GameState.WireMock.ComponentTests.Stubs.V1
 
             // Act
             using var response = await client.PostAsJsonAsync(GameStub.TransferCharactersRoute, request, TestContext.Current.CancellationToken);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+
+            var problem = await response.Content.ReadFromJsonAsync<ProblemDetails>(cancellationToken: TestContext.Current.CancellationToken);
+            Assert.NotNull(problem);
+            Assert.Equal(StatusCodes.Status400BadRequest, problem.Status);
+            Assert.Contains("Unsupported version in header", problem.Title);
+        }
+
+        [Fact]
+        public async Task EndTurnAsync_WhenSuccess_ReturnsOk()
+        {
+            // Arrange
+            _stub.RegisterEndTurnSuccess();
+
+            var request = new EndTurnRequestDto
+            {
+                ExpectedActiveCharacterCode = "scott"
+            };
+
+            using var client = CreateClient();
+
+            // Act
+            using var response = await client.PostAsJsonAsync(GameStub.EndTurnRoute, request, TestContext.Current.CancellationToken);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+            var result = await response.Content.ReadFromJsonAsync<GameStateResponseDto>(cancellationToken: TestContext.Current.CancellationToken);
+            Assert.NotNull(result);
+            AssertDefaultResult(result);
+        }
+
+        [Fact]
+        public async Task EndTurnAsync_WhenGivenDto_ReturnsDto()
+        {
+            // Arrange
+            var dto = CreateDto();
+
+            _stub.RegisterEndTurnSuccess(dto);
+
+            var request = new EndTurnRequestDto
+            {
+                ExpectedActiveCharacterCode = "scott"
+            };
+
+            using var client = CreateClient();
+
+            // Act
+            using var response = await client.PostAsJsonAsync(GameStub.EndTurnRoute, request, TestContext.Current.CancellationToken);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+            var result = await response.Content.ReadFromJsonAsync<GameStateResponseDto>(cancellationToken: TestContext.Current.CancellationToken);
+            Assert.NotNull(result);
+            AssertCreatedDto(dto, result);
+        }
+
+        [Fact]
+        public async Task EndTurnAsync_WhenNotFound_ReturnsNotFound()
+        {
+            // Arrange
+            _stub.RegisterEndTurnNotFound("Game not found.");
+
+            var request = new EndTurnRequestDto
+            {
+                ExpectedActiveCharacterCode = "scott"
+            };
+
+            using var client = CreateClient();
+
+            // Act
+            using var response = await client.PostAsJsonAsync(GameStub.EndTurnRoute, request, TestContext.Current.CancellationToken);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+
+            var result = await response.Content.ReadFromJsonAsync<ProblemDetails>(cancellationToken: TestContext.Current.CancellationToken);
+            Assert.NotNull(result);
+            Assert.Equal("Resource not found", result.Title);
+            Assert.Equal("Game not found.", result.Detail);
+        }
+
+        [Fact]
+        public async Task EndTurnAsync_WhenDefaultNotFoundRegistered_ReturnsDefaultMessage()
+        {
+            // Arrange
+            _stub.RegisterEndTurnNotFound();
+
+            var request = new EndTurnRequestDto
+            {
+                ExpectedActiveCharacterCode = "scott"
+            };
+
+            using var client = CreateClient();
+
+            // Act
+            using var response = await client.PostAsJsonAsync(GameStub.EndTurnRoute, request, TestContext.Current.CancellationToken);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+
+            var result = await response.Content.ReadFromJsonAsync<ProblemDetails>(cancellationToken: TestContext.Current.CancellationToken);
+            Assert.NotNull(result);
+            Assert.Equal("Resource not found", result.Title);
+            Assert.Equal("The specified game was not found.", result.Detail);
+        }
+
+        [Fact]
+        public async Task EndTurnAsync_WhenConflict_ReturnsConflict()
+        {
+            // Arrange
+            _stub.RegisterEndTurnConflict("Cannot end turn at this time.");
+
+            var request = new EndTurnRequestDto
+            {
+                ExpectedActiveCharacterCode = "scott"
+            };
+
+            using var client = CreateClient();
+
+            // Act
+            using var response = await client.PostAsJsonAsync(GameStub.EndTurnRoute, request, TestContext.Current.CancellationToken);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.Conflict, response.StatusCode);
+
+            var result = await response.Content.ReadFromJsonAsync<ProblemDetails>(cancellationToken: TestContext.Current.CancellationToken);
+            Assert.NotNull(result);
+            Assert.Equal("Conflict", result.Title);
+            Assert.Equal("Cannot end turn at this time.", result.Detail);
+        }
+
+        [Fact]
+        public async Task EndTurnAsync_WhenDefaultConflictRegistered_ReturnsDefaultMessage()
+        {
+            // Arrange
+            _stub.RegisterEndTurnConflict();
+
+            var request = new EndTurnRequestDto
+            {
+                ExpectedActiveCharacterCode = "scott"
+            };
+
+            using var client = CreateClient();
+
+            // Act
+            using var response = await client.PostAsJsonAsync(GameStub.EndTurnRoute, request, TestContext.Current.CancellationToken);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.Conflict, response.StatusCode);
+
+            var result = await response.Content.ReadFromJsonAsync<ProblemDetails>(cancellationToken: TestContext.Current.CancellationToken);
+            Assert.NotNull(result);
+            Assert.Equal("Conflict", result.Title);
+            Assert.Equal("The turn could not be ended due to a conflict.", result.Detail);
+        }
+
+        [Fact]
+        public async Task EndTurnAsync_WhenErrorRegistered_ReturnsSpecifiedError()
+        {
+            // Arrange
+            _stub.RegisterEndTurnError(HttpStatusCode.BadRequest, "Bad request", "Cannot end turn at this time.");
+
+            var request = new EndTurnRequestDto
+            {
+                ExpectedActiveCharacterCode = "scott"
+            };
+
+            using var client = CreateClient();
+
+            // Act
+            using var response = await client.PostAsJsonAsync(GameStub.EndTurnRoute, request, TestContext.Current.CancellationToken);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+
+            var result = await response.Content.ReadFromJsonAsync<ProblemDetails>(cancellationToken: TestContext.Current.CancellationToken);
+            Assert.NotNull(result);
+            Assert.Equal("Bad request", result.Title);
+            Assert.Equal("Cannot end turn at this time.", result.Detail);
+        }
+
+        [Fact]
+        public async Task EndTurnAsync_WhenDefaultErrorRegistered_ReturnsDefaultError()
+        {
+            // Arrange
+            _stub.RegisterEndTurnError();
+
+            var request = new EndTurnRequestDto
+            {
+                ExpectedActiveCharacterCode = "scott"
+            };
+
+            using var client = CreateClient();
+
+            // Act
+            using var response = await client.PostAsJsonAsync(GameStub.EndTurnRoute, request, TestContext.Current.CancellationToken);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.InternalServerError, response.StatusCode);
+
+            var result = await response.Content.ReadFromJsonAsync<ProblemDetails>(cancellationToken: TestContext.Current.CancellationToken);
+            Assert.NotNull(result);
+            Assert.Equal("An unexpected error occurred.", result.Title);
+            Assert.Null(result.Detail);
+        }
+
+        [Fact]
+        public async Task EndTurnAsync_WhenNoVersionHeader_ReturnsBadRequestAsync()
+        {
+            // Arrange
+            using var client = new HttpClient { BaseAddress = new Uri(_server.Urls[0]) };
+
+            _stub.RegisterEndTurnSuccess(); // should not be called
+
+            var request = new EndTurnRequestDto
+            {
+                ExpectedActiveCharacterCode = "scott"
+            };
+
+            // Act
+            using var response = await client.PostAsJsonAsync(GameStub.EndTurnRoute, request, TestContext.Current.CancellationToken);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+
+            var problem = await response.Content.ReadFromJsonAsync<ProblemDetails>(cancellationToken: TestContext.Current.CancellationToken);
+            Assert.NotNull(problem);
+            Assert.Contains("Missing header", problem.Detail);
+            Assert.Equal(StatusCodes.Status400BadRequest, problem.Status);
+            Assert.Equal("Missing API version header", problem.Title);
+        }
+
+        [Fact]
+        public async Task EndTurnAsync_WhenWrongVersionHeader_ReturnsBadRequestAsync()
+        {
+            // Arrange
+            _stub.RegisterEndTurnSuccess(); // should not be called
+
+            var request = new EndTurnRequestDto
+            {
+                ExpectedActiveCharacterCode = "scott"
+            };
+
+            using var client = CreateClient("2.0");
+
+            // Act
+            using var response = await client.PostAsJsonAsync(GameStub.EndTurnRoute, request, TestContext.Current.CancellationToken);
 
             // Assert
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
