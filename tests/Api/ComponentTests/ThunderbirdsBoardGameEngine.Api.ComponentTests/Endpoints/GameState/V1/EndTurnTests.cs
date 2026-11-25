@@ -1,8 +1,10 @@
-﻿using System.Net;
+﻿using Microsoft.AspNetCore.Mvc;
+using System.Net;
 using System.Net.Http.Json;
 using ThunderbirdsBoardGameEngine.Api.ComponentTests.Factories;
 using ThunderbirdsBoardGameEngine.GameState.Application;
 using ThunderbirdsBoardGameEngine.GameState.Contracts.Dtos.V1;
+using ThunderbirdsBoardGameEngine.GameState.Contracts.Dtos.V1.EndTurn;
 using ThunderbirdsBoardGameEngine.GameState.Domain.Setup.V2;
 using ThunderbirdsBoardGameEngine.ReferenceData.Core.Identities;
 using ThunderbirdsBoardGameEngine.ReferenceData.Core.KnownIdentities;
@@ -44,6 +46,7 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints.GameState.V1
             await _repository.CreateNewGameSession(game, TestContext.Current.CancellationToken);
 
             var route = GameStateRoutes.EndTurn(gameId);
+
             using var request = new HttpRequestMessage(HttpMethod.Post, route);
             request.Headers.Add("X-API-Version", ApiVersion.ToString());
 
@@ -94,6 +97,46 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints.GameState.V1
 
             // Assert
             await ProblemDetailsAssertions.AssertNotFoundAsync(response, "Not Found");
+        }
+
+        [Fact]
+        public async Task ReturnsConflictWhenExpectedCharacterNotActiveCharacter()
+        {
+            // Arrange
+            var gameId = Guid.NewGuid();
+
+            var turnOrder = new List<CharacterCode>
+            {
+                KnownCharacterCodes.Gordon,
+                KnownCharacterCodes.John
+            };
+
+            var gameFactory = new StandardGameSetupFactory();
+            gameFactory.Create(gameId, DateTimeOffset.UtcNow, turnOrder);
+
+            await _repository.CreateNewGameSession(gameFactory.Create(gameId, DateTimeOffset.UtcNow, turnOrder), TestContext.Current.CancellationToken);
+
+            var route = GameStateRoutes.EndTurn(gameId);
+
+            var dto = new EndTurnRequestDto
+            {
+                ExpectedActiveCharacterCode = KnownCharacterCodes.John.Value
+            };
+
+            using var request = new HttpRequestMessage(HttpMethod.Post, route);
+            request.Headers.Add("X-API-Version", ApiVersion.ToString());
+            request.Content = JsonContent.Create(dto);
+
+            // Act
+            using var response = await _httpClient.SendAsync(request, TestContext.Current.CancellationToken);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.Conflict, response.StatusCode);
+
+            var problemDetails = await response.Content.ReadFromJsonAsync<ProblemDetails>(cancellationToken: TestContext.Current.CancellationToken);
+            Assert.NotNull(problemDetails);
+            Assert.Equal("Game state conflict.", problemDetails.Title);
+            Assert.Equal("The game state has been modified by another process. Please refresh and try again.", problemDetails.Detail);
         }
     }
 }
