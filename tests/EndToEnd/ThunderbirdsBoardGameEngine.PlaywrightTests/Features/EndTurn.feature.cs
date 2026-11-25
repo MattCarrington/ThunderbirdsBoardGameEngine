@@ -176,6 +176,9 @@ this.ScenarioInitialize(scenarioInfo, ruleInfo);
  await testRunner.WhenAsync("the player ends the turn", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
 #line 16
+ await testRunner.AndAsync("reloads the dashboard", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
+#line hidden
+#line 17
  await testRunner.ThenAsync("\"Virgil\" should be the active character", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
             }

@@ -13,4 +13,5 @@ Scenario: A turn can be ended successfully
 	And the player has opened its dashboard
 	And "John" is the active character
 	When the player ends the turn
+	And reloads the dashboard
 	Then "Virgil" should be the active character
