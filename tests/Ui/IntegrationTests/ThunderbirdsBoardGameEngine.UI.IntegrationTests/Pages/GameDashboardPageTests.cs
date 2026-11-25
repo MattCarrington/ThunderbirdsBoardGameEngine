@@ -249,6 +249,64 @@ namespace ThunderbirdsBoardGameEngine.UI.IntegrationTests.Pages
             });
         }
 
+        [Fact]
+        public async Task RefreshesDashboardOnSuccessfulEndTurn()
+        {
+            // Arrange
+            var gameId = Guid.NewGuid();
+
+            var initialDto = CreateValidGameResponseDto(gameId);
+
+            var endTurnDto = new GameStateResponseDto
+            {
+                GameId = gameId,
+                ThunderbirdMachines =
+                [
+                    new()
+                    {
+                        ThunderbirdCode = KnownThunderbirdCodes.Thunderbird1.Value,
+                        LocationCode = KnownLocationCodes.SouthPacific.Value,
+                        OccupantCharacterCodes = [
+                            KnownCharacterCodes.Scott.Value
+                        ]
+                    },
+                    new()                     {
+                        ThunderbirdCode = KnownThunderbirdCodes.Thunderbird2.Value,
+                        LocationCode = KnownLocationCodes.SouthPacific.Value,
+                        OccupantCharacterCodes = [
+                            KnownCharacterCodes.Virgil.Value
+                        ]
+                    }
+                ],
+                TurnOrder = [
+                    KnownCharacterCodes.Scott.Value,
+                    KnownCharacterCodes.Virgil.Value,
+                    KnownCharacterCodes.John.Value
+                ],
+                ActiveCharacterCode = KnownCharacterCodes.John.Value
+            };
+
+            _gameStub.RegisterGetGameStateSuccess(initialDto);
+            _gameStub.RegisterEndTurnSuccess(endTurnDto);
+
+            var cut = Render<GameDashboardPage>(parameters => parameters
+                .Add(p => p.GameId, gameId));
+
+            // Act     
+            var endTurnButton = cut.WaitForElement("[data-testid='end-turn']");
+            await endTurnButton.ClickAsync(new MouseEventArgs());
+
+            // Assert
+            cut.WaitForAssertion(() =>
+            {
+                var activeCharacter = cut.Find("[data-testid='active-character']");
+
+                Assert.Contains("John", activeCharacter.TextContent);
+                Assert.DoesNotContain("Virgil", activeCharacter.TextContent);
+                Assert.DoesNotContain("Scott", activeCharacter.TextContent);
+            });
+        }
+
         private static void Register(BunitContext context)
         {
             var module = context.JSInterop.SetupModule("./js/dialog.js");
