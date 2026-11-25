@@ -1092,7 +1092,7 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Features.GameDashboard
         }
 
         [Fact]
-        public async Task SuccessfulEndTurnShouldUpdateDashboardAndCloseDialogAsync()
+        public async Task SuccessfulEndTurnShouldUpdateDashboard()
         {
             // Arrange
             var gameId = Guid.NewGuid();
