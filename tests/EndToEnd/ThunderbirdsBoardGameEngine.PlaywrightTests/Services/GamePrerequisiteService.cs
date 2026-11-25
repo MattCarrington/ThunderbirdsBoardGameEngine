@@ -5,15 +5,16 @@ namespace ThunderbirdsBoardGameEngine.PlaywrightTests.Services
 {
     public sealed class GamePrerequisiteService(IGameClient gameClient)
     {
-        public async Task<Guid> CreateGameAsync()
+        public Task<Guid> CreateGameAsync()
+        {
+            return CreateGameAsync(["gordon", "virgil"]);
+        }
+
+        public async Task<Guid> CreateGameAsync(IReadOnlyList<string> turnOrder)
         {
             var dto = new CreateGameRequestDto
             {
-                TurnOrder =
-                [
-                    "gordon",
-                    "virgil"
-                ]
+                TurnOrder = turnOrder.ToList()
             };
 
             var result = await gameClient.CreateGameAsync(dto);

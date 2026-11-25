@@ -28,6 +28,16 @@ namespace ThunderbirdsBoardGameEngine.PlaywrightTests.StepDefinitions
             _textContext.GameId = await _gamePrerequisiteService.CreateGameAsync();
         }
 
+        [Given("a game has been created with the following characters:")]
+        public async Task GivenAGameHasBeenCreatedWithTheFollowingCharacters(DataTable dataTable)
+        {
+            var turnOrder = dataTable.Rows
+                .Select(row => row["Character Code"])
+                .ToArray();
+
+            _textContext.GameId = await _gamePrerequisiteService.CreateGameAsync(turnOrder);
+        }
+
         [Given("the companion application is open")]
         public async Task GivenTheCompanionApplicationIsOpen()
         {
@@ -72,6 +82,12 @@ namespace ThunderbirdsBoardGameEngine.PlaywrightTests.StepDefinitions
             await _gameDashboardPage.TransferSingleCharacterAsync(currentLocation, destination, characterName);
         }
 
+        [When("the player ends the turn")]
+        public async Task WhenThePlayerEndsTheTurn()
+        {
+            await _gameDashboardPage.EndTurnAsync();
+        }
+
         [Then("the game dashboard should be displayed")]
         public async Task ThenTheGameDashboardShouldBeDisplayed()
         {
@@ -100,6 +116,12 @@ namespace ThunderbirdsBoardGameEngine.PlaywrightTests.StepDefinitions
         public async Task ThenCannotTransferAsItHasNoOccupants(string thunderbird)
         {
             await _gameDashboardPage.AssertTransferDisabledAsync(thunderbird);
+        }
+        [Given("{string} is the active character")]
+        [Then("{string} should be the active character")]
+        public async Task ThenShouldBeTheActiveCharacter(string characterName)
+        {
+            await _gameDashboardPage.AssertActiveCharacterAsync(characterName);
         }
     }
 }
