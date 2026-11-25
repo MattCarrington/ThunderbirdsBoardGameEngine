@@ -28,6 +28,9 @@ namespace ThunderbirdsBoardGameEngine.UI.Features.GameDashboard.Components
         [Parameter]
         public string? ErrorMessage { get; set; }
 
+        [Parameter]
+        public bool IsMutationPending { get; set; }
+
         private IReadOnlyList<SelectionOptionViewModel> CharacterOptions =>
             SourceMachine.Occupants
                 .Select(occupant => new SelectionOptionViewModel(

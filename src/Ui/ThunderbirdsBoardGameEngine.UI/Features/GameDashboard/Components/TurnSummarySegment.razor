@@ -42,7 +42,7 @@
         <button type="button"
                 class="btn btn-primary"
                 data-testid="end-turn"
-                disabled="@IsEndingTurn"
+                disabled="@IsMutationPending"
                 @onclick="() => EndTurnRequested.InvokeAsync()">
             @(IsEndingTurn ? "Ending turn…" : "End Turn")
         </button>

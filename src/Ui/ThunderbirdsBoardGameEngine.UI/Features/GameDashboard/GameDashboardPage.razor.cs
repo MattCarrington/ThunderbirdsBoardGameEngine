@@ -38,6 +38,7 @@ public partial class GameDashboardPage
     private long _dashboardGeneration;
     private bool _isEndingTurn;
     private string? _endTurnError;
+    private bool IsMutationPending => _isMoving || _isTransferring || _isEndingTurn;
 
     protected override Task OnParametersSetAsync()
     {
@@ -94,6 +95,11 @@ public partial class GameDashboardPage
 
     private async Task BeginMoveAsync(ThunderbirdMachinesDashboardViewModel machine)
     {
+        if (_game is null || IsMutationPending)
+        {
+            return;
+        }
+
         var generation = _dashboardGeneration;
         var requestedGameId = GameId;
 
@@ -135,7 +141,7 @@ public partial class GameDashboardPage
 
     private async Task MoveAsync(string destinationCode)
     {
-        if (_selectedMachine is null)
+        if (_selectedMachine is null || IsMutationPending)
         {
             return;
         }
@@ -218,7 +224,7 @@ public partial class GameDashboardPage
 
     private void BeginTransfer(ThunderbirdMachinesDashboardViewModel source)
     {
-        if (_game is null)
+        if (_game is null || IsMutationPending)
         {
             return;
         }
@@ -233,7 +239,7 @@ public partial class GameDashboardPage
 
     private async Task TransferCharactersAsync(CharacterTransferSelection selection)
     {
-        if (_transferSource is null)
+        if (_transferSource is null || IsMutationPending)
         {
             return;
         }
@@ -316,12 +322,7 @@ public partial class GameDashboardPage
 
     private async Task EndTurnAsync()
     {
-        if (_isEndingTurn)
-        {
-            return;
-        }
-
-        if (_game is null)
+        if (_game is null || IsMutationPending)
         {
             return;
         }

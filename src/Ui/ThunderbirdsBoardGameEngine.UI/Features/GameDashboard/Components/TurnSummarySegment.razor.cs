@@ -17,25 +17,7 @@ namespace ThunderbirdsBoardGameEngine.UI.Features.GameDashboard.Components
         [Parameter]
         public string? ErrorMessage { get; set; }
 
-        private bool _isEndingTurn;
-
-        private async Task EndTurnAsync()
-        {
-            if (_isEndingTurn)
-            {
-                return;
-            }
-
-            _isEndingTurn = true;
-
-            try
-            {
-                await EndTurnRequested.InvokeAsync();
-            }
-            finally
-            {
-                _isEndingTurn = false;
-            }
-        }
+        [Parameter]
+        public bool IsMutationPending { get; set; }
     }
 }

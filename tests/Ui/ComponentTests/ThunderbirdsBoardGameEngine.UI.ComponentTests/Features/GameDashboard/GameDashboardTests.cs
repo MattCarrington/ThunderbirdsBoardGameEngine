@@ -1391,5 +1391,53 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Features.GameDashboard
                     gameId,
                     "scott");
         }
+
+        [Fact]
+        public void ActionsDisabledWhenIsMutationPending()
+        {
+            // Arrange
+            var gameId = Guid.NewGuid();
+
+            var originalGame = GameDashboardViewModelFactory.CreateDashboard(
+                gameId: gameId,
+                machines: [
+                    GameDashboardViewModelFactory.CreateMachine(
+                        thunderbirdCode: "thunderbird-1",
+                        occupants: [
+                            GameDashboardViewModelFactory.CreateOccupant(characterCode: "scott", characterDisplayName: "Scott")
+                        ]),
+                    GameDashboardViewModelFactory.CreateMachine(
+                        thunderbirdCode: "thunderbird-2")
+                    ]);
+
+            var endTurnCompletion = new TaskCompletionSource<EndTurnResult>(TaskCreationOptions.RunContinuationsAsynchronously);
+
+            var context = new GameDashboardPageTestContext(this);
+            context.GameService
+                .GetGameAsync(gameId)
+                .Returns(originalGame);
+            context.GameService
+                .EndTurnAsync(gameId, originalGame.TurnSummary.ActiveCharacter.CharacterCode)
+                .Returns(endTurnCompletion.Task);
+
+            var cut = Render<GameDashboardPage>(parameters => parameters
+                .Add(p => p.GameId, gameId));
+
+            // Act
+            var endTurnButton = cut.Find("[data-testid='end-turn']");
+            var transferButton = cut.Find("[data-testid='transfer-thunderbird-1']");
+            var moveButton = cut.Find("[data-testid='move-thunderbird-1']");
+
+            Assert.False(endTurnButton.IsDisabled());
+            Assert.False(transferButton.IsDisabled());
+            Assert.False(moveButton.IsDisabled());
+
+            endTurnButton.Click();
+
+            // Assert
+            Assert.True(endTurnButton.IsDisabled());
+            Assert.True(transferButton.IsDisabled());
+            Assert.True(moveButton.IsDisabled());
+        }
     }
 }

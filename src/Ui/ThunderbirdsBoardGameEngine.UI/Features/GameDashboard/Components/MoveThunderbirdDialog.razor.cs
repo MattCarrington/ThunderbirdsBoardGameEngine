@@ -28,6 +28,9 @@ namespace ThunderbirdsBoardGameEngine.UI.Features.GameDashboard.Components
         [Parameter]
         public EventCallback Cancelled { get; set; }
 
+        [Parameter]
+        public bool IsMutationPending { get; set; }
+
         [Inject]
         public IJSRuntime JSRuntime { get; set; } = null!;
 
