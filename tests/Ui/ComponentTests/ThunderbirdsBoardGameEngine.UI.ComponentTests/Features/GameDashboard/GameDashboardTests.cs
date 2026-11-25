@@ -1231,6 +1231,7 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Features.GameDashboard
                 var activeCharacterRow = cut.Find("[data-testid='active-character']");
                 Assert.Contains("Virgil", activeCharacterRow.TextContent.Trim());
                 Assert.DoesNotContain("Scott", activeCharacterRow.TextContent.Trim());
+                Assert.False(cut.Find("[data-testid='end-turn']").IsDisabled());
             });
 
             context.GameService.Received(2)

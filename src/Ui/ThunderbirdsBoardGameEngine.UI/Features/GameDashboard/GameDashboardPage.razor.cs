@@ -51,6 +51,7 @@ public partial class GameDashboardPage
 
         ResetMovementState();
         ResetTransferState();
+        ResetEndTurnState();
 
         _game = null;
         _notFound = false;
@@ -377,5 +378,11 @@ public partial class GameDashboardPage
                 _isEndingTurn = false;
             }
         }
+    }
+
+    private void ResetEndTurnState()
+    {
+        _isEndingTurn = false;
+        _endTurnError = null;
     }
 }
