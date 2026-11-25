@@ -45,10 +45,16 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints.GameState.V1
 
             await _repository.CreateNewGameSession(game, TestContext.Current.CancellationToken);
 
+            var dto = new EndTurnRequestDto
+            {
+                ExpectedActiveCharacterCode = KnownCharacterCodes.Gordon.Value
+            };
+
             var route = GameStateRoutes.EndTurn(gameId);
 
             using var request = new HttpRequestMessage(HttpMethod.Post, route);
             request.Headers.Add("X-API-Version", ApiVersion.ToString());
+            request.Content = JsonContent.Create(dto);
 
             // Act
             using var response = await _httpClient.SendAsync(request, TestContext.Current.CancellationToken);
@@ -68,11 +74,16 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints.GameState.V1
             // Arrange
             var gameId = Guid.NewGuid();
 
+            var dto = new EndTurnRequestDto
+            {
+                ExpectedActiveCharacterCode = KnownCharacterCodes.Gordon.Value
+            };
+
             var route = GameStateRoutes.EndTurn(gameId);
 
             using var request = new HttpRequestMessage(HttpMethod.Post, route);
-
             request.Headers.Add("X-API-Version", ApiVersion.ToString());
+            request.Content = JsonContent.Create(dto);
 
             // Act
             using var response = await _httpClient.SendAsync(request, TestContext.Current.CancellationToken);
@@ -87,10 +98,16 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints.GameState.V1
             // Arrange
             var invalidGameId = "invalid-guid";
 
+            var dto = new EndTurnRequestDto
+            {
+                ExpectedActiveCharacterCode = KnownCharacterCodes.John.Value
+            };
+
             var route = $"/api/games/{invalidGameId}/end-turn";
 
             using var request = new HttpRequestMessage(HttpMethod.Post, route);
             request.Headers.Add("X-API-Version", ApiVersion.ToString());
+            request.Content = JsonContent.Create(dto);
 
             // Act
             using var response = await _httpClient.SendAsync(request, TestContext.Current.CancellationToken);
@@ -116,12 +133,12 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints.GameState.V1
 
             await _repository.CreateNewGameSession(gameFactory.Create(gameId, DateTimeOffset.UtcNow, turnOrder), TestContext.Current.CancellationToken);
 
-            var route = GameStateRoutes.EndTurn(gameId);
-
             var dto = new EndTurnRequestDto
             {
                 ExpectedActiveCharacterCode = KnownCharacterCodes.John.Value
             };
+
+            var route = GameStateRoutes.EndTurn(gameId);
 
             using var request = new HttpRequestMessage(HttpMethod.Post, route);
             request.Headers.Add("X-API-Version", ApiVersion.ToString());
