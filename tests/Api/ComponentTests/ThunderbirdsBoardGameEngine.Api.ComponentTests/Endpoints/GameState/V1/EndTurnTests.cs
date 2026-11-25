@@ -9,6 +9,7 @@ using ThunderbirdsBoardGameEngine.GameState.Domain.Setup.V2;
 using ThunderbirdsBoardGameEngine.ReferenceData.Core.Identities;
 using ThunderbirdsBoardGameEngine.ReferenceData.Core.KnownIdentities;
 using ThunderbirdsBoardGameEngine.TestUtils.xUnit.Assertions;
+using ThunderbirdsBoardGameEngine.TestUtils.xUnit.ClassData;
 using Xunit;
 
 namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints.GameState.V1
@@ -154,6 +155,60 @@ namespace ThunderbirdsBoardGameEngine.Api.ComponentTests.Endpoints.GameState.V1
             Assert.NotNull(problemDetails);
             Assert.Equal("Game state conflict.", problemDetails.Title);
             Assert.Equal("The game state has been modified by another process. Please refresh and try again.", problemDetails.Detail);
+        }
+
+        [Fact]
+        public async Task EndTurnWithNullDtoReturnsBadRequest()
+        {
+            // Arrange
+            var gameId = Guid.NewGuid();
+
+            var route = GameStateRoutes.EndTurn(gameId);
+
+            using var request = new HttpRequestMessage(HttpMethod.Post, route);
+            request.Headers.Add("X-API-Version", ApiVersion.ToString());
+            request.Content = JsonContent.Create((EndTurnRequestDto?)null);
+
+            // Act
+            using var response = await _httpClient.SendAsync(request, TestContext.Current.CancellationToken);
+
+            // Assert
+            await ProblemDetailsAssertions.AssertBadRequestAsync(response, "Request validation failed.");
+        }
+
+        [Theory]
+        [ClassData(typeof(NullOrWhitespaceStringData))]
+        public async Task EndTurnWithNullOrWhitespaceExpectedActiveCharacterCode(string? expectedActiveCharacterCode)
+        {
+            // Arrange
+            var gameId = Guid.NewGuid();
+            var turnOrder = new List<CharacterCode>
+            {
+                KnownCharacterCodes.Virgil,
+                KnownCharacterCodes.Scott
+            };
+
+            var gameFactory = new StandardGameSetupFactory();
+            gameFactory.Create(gameId, DateTimeOffset.UtcNow, turnOrder);
+
+            await _repository.CreateNewGameSession(gameFactory.Create(gameId, DateTimeOffset.UtcNow, turnOrder), TestContext.Current.CancellationToken);
+
+            var dto = new EndTurnRequestDto
+            {
+                ExpectedActiveCharacterCode = expectedActiveCharacterCode
+            };
+
+            var route = GameStateRoutes.EndTurn(gameId);
+
+            using var request = new HttpRequestMessage(HttpMethod.Post, route);
+            request.Headers.Add("X-API-Version", ApiVersion.ToString());
+            request.Content = JsonContent.Create(dto);
+
+            // Act
+            using var response = await _httpClient.SendAsync(request, TestContext.Current.CancellationToken);
+
+            // Assert
+            await ProblemDetailsAssertions.AssertBadRequestAsync(response, "Request validation failed.");
         }
     }
 }
