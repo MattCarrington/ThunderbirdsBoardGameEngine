@@ -150,13 +150,15 @@ namespace ThunderbirdsBoardGameEngine.GameState.Domain.UnitTests
             Assert.Equal(newLocation, actualLocation);
         }
 
-        [Fact]
-        public void MoveThunderbirdMachine_WhenMachineHasNoOccupants_ShouldThrow()
+        [Theory]
+        [InlineData("machine-2")]
+        [InlineData("machine-3")]
+        public void MoveThunderbirdMachine_WhenActiveCharacterNotAboard_ShouldThrowThunderbirdMachineCannotMoveException(string machine)
         {
             // Arrange
             var game = CreateGame();
 
-            var machineCode = new ThunderbirdCode("machine-3");
+            var machineCode = new ThunderbirdCode(machine);
 
             var newLocation = new LocationCode("location-2");
 

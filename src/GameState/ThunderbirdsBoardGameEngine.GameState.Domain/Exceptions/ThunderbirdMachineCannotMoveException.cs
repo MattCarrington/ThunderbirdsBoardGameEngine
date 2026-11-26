@@ -9,9 +9,10 @@ namespace ThunderbirdsBoardGameEngine.GameState.Domain.Exceptions
         {
         }
 
-        public static ThunderbirdMachineCannotMoveException NoCharactersAboard(ThunderbirdCode thunderbird)
+        public static ThunderbirdMachineCannotMoveException ActiveCharacterNotAboard(ThunderbirdCode machineCode, CharacterCode activeCharacter)
         {
-            return new ThunderbirdMachineCannotMoveException($"Thunderbird machine '{thunderbird.Value}' cannot move because there are no characters aboard.");
+            return new ThunderbirdMachineCannotMoveException(
+                $"Thunderbird machine '{machineCode.Value}' cannot move because the active character '{activeCharacter.Value}' is not aboard.");
         }
     }
 }
