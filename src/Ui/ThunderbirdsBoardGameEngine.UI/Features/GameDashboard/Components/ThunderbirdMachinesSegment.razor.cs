@@ -17,16 +17,31 @@ namespace ThunderbirdsBoardGameEngine.UI.Features.GameDashboard.Components
         [Parameter]
         public bool IsMutationPending { get; set; }
 
+        [Parameter]
+        public string ActiveCharacterCode { get; set; } = string.Empty;
+
+        private string ActiveCharacterLocation => Machines.First(m => HasActiveCharacterAboard(m)).LocationCode;
+
         private bool CanTransferFrom(ThunderbirdMachinesDashboardViewModel source)
         {
+            var activeMachine = Machines.FirstOrDefault(HasActiveCharacterAboard);
+
             return source.Occupants.Count > 0
-                && Machines.Any(destination => destination.ThunderbirdCode != source.ThunderbirdCode
-                    && destination.LocationCode == source.LocationCode);
+                && activeMachine is not null
+                && source.LocationCode == activeMachine.LocationCode
+                && Machines.Any(machine =>
+                    machine.ThunderbirdCode != source.ThunderbirdCode
+                    && machine.LocationCode == source.LocationCode);
         }
 
-        private static bool CanMove(ThunderbirdMachinesDashboardViewModel machine)
+        private bool CanMove(ThunderbirdMachinesDashboardViewModel machine)
         {
-            return machine.Occupants.Count > 0;
+            return HasActiveCharacterAboard(machine);
+        }
+
+        private bool HasActiveCharacterAboard(ThunderbirdMachinesDashboardViewModel machine)
+        {
+            return machine.Occupants.Any(occupant => occupant.CharacterCode == ActiveCharacterCode);
         }
     }
 }

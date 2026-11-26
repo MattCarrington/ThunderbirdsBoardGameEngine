@@ -1159,7 +1159,8 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Features.GameDashboard
                         locationCode: "south-pacific",
                         locationDisplayName: "South Pacific",
                         occupants: [
-                            GameDashboardViewModelFactory.CreateOccupant(characterCode: "scott", characterDisplayName: "Scott")
+                            GameDashboardViewModelFactory.CreateOccupant(characterCode: "scott", characterDisplayName: "Scott"),
+                            GameDashboardViewModelFactory.CreateOccupant(characterCode: "virgil", characterDisplayName: "Virgil")
                         ]),
                     GameDashboardViewModelFactory.CreateMachine(
                         thunderbirdCode: "thunderbird-2",

@@ -44,7 +44,8 @@
             Machines="@_game.ThunderbirdMachines"
             MoveRequested="BeginMoveAsync"
             TransferRequested="BeginTransfer"
-            IsMutationPending="@IsMutationPending" />
+            IsMutationPending="@IsMutationPending"
+            ActiveCharacterCode="@_game.TurnSummary.ActiveCharacter.CharacterCode"/>
 
         @if (_selectedMachine is not null)
         {
