@@ -1144,7 +1144,7 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Features.GameDashboard
         }
 
         [Fact]
-        public async Task EndTurnButtonIsDisabledWhilstWaitingForEndTurnResult()
+        public async Task ActionsDisabledWhilstWaitingForEndTurnResult()
         {
             // Arrange
             var gameId = Guid.NewGuid();
@@ -1153,6 +1153,18 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Features.GameDashboard
 
             var updatedGame = GameDashboardViewModelFactory.CreateDashboard(
                 gameId: gameId,
+                machines: [
+                    GameDashboardViewModelFactory.CreateMachine(
+                        thunderbirdCode: "thunderbird-1",
+                        locationCode: "south-pacific",
+                        locationDisplayName: "South Pacific",
+                        occupants: [
+                            GameDashboardViewModelFactory.CreateOccupant(characterCode: "scott", characterDisplayName: "Scott")
+                        ]),
+                    GameDashboardViewModelFactory.CreateMachine(
+                        thunderbirdCode: "thunderbird-2",
+                        locationCode: "south-pacific")
+                ],
                 turnSummary: GameDashboardViewModelFactory.CreateTurnSummary(
                     activeCharacter: "virgil",
                     activeCharacterDisplayName: "Virgil",
@@ -1176,11 +1188,18 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Features.GameDashboard
                 .Add(p => p.GameId, gameId));
 
             // Act
-            const string selector = "[data-testid='end-turn']";
+            const string endTurnSelector = "[data-testid='end-turn']";
+            const string moveSelector = "[data-testid='move-thunderbird-1']";
+            const string transferSelector = "[data-testid='transfer-thunderbird-1']";
 
-            var clickTask = cut.Find(selector).ClickAsync(new MouseEventArgs());
+            var clickTask = cut.Find(endTurnSelector).ClickAsync(new MouseEventArgs());
 
-            cut.WaitForAssertion(() => Assert.True(cut.Find(selector).IsDisabled()));
+            cut.WaitForAssertion(() =>
+            {
+                Assert.True(cut.Find(endTurnSelector).IsDisabled());
+                Assert.True(cut.Find(moveSelector).IsDisabled());
+                Assert.True(cut.Find(transferSelector).IsDisabled());
+            });
 
             endTurnCompletion.SetResult(
                 new EndTurnResult(EndTurnOutcome.Success, updatedGame));
@@ -1188,7 +1207,12 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Features.GameDashboard
             await clickTask;
 
             // Assert
-            cut.WaitForAssertion(() => Assert.False(cut.Find(selector).IsDisabled()));
+            cut.WaitForAssertion(() =>
+            {
+                Assert.False(cut.Find(endTurnSelector).IsDisabled());
+                Assert.False(cut.Find(moveSelector).IsDisabled());
+                Assert.False(cut.Find(transferSelector).IsDisabled());
+            });
         }
 
         [Fact]
@@ -1390,54 +1414,6 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Features.GameDashboard
                 .EndTurnAsync(
                     gameId,
                     "scott");
-        }
-
-        [Fact]
-        public void ActionsDisabledWhenIsMutationPending()
-        {
-            // Arrange
-            var gameId = Guid.NewGuid();
-
-            var originalGame = GameDashboardViewModelFactory.CreateDashboard(
-                gameId: gameId,
-                machines: [
-                    GameDashboardViewModelFactory.CreateMachine(
-                        thunderbirdCode: "thunderbird-1",
-                        occupants: [
-                            GameDashboardViewModelFactory.CreateOccupant(characterCode: "scott", characterDisplayName: "Scott")
-                        ]),
-                    GameDashboardViewModelFactory.CreateMachine(
-                        thunderbirdCode: "thunderbird-2")
-                    ]);
-
-            var endTurnCompletion = new TaskCompletionSource<EndTurnResult>(TaskCreationOptions.RunContinuationsAsynchronously);
-
-            var context = new GameDashboardPageTestContext(this);
-            context.GameService
-                .GetGameAsync(gameId)
-                .Returns(originalGame);
-            context.GameService
-                .EndTurnAsync(gameId, originalGame.TurnSummary.ActiveCharacter.CharacterCode)
-                .Returns(endTurnCompletion.Task);
-
-            var cut = Render<GameDashboardPage>(parameters => parameters
-                .Add(p => p.GameId, gameId));
-
-            // Act
-            var endTurnButton = cut.Find("[data-testid='end-turn']");
-            var transferButton = cut.Find("[data-testid='transfer-thunderbird-1']");
-            var moveButton = cut.Find("[data-testid='move-thunderbird-1']");
-
-            Assert.False(endTurnButton.IsDisabled());
-            Assert.False(transferButton.IsDisabled());
-            Assert.False(moveButton.IsDisabled());
-
-            endTurnButton.Click();
-
-            // Assert
-            Assert.True(endTurnButton.IsDisabled());
-            Assert.True(transferButton.IsDisabled());
-            Assert.True(moveButton.IsDisabled());
         }
     }
 }
