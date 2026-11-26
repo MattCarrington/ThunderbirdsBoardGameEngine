@@ -133,6 +133,94 @@ namespace ThunderbirdsBoardGameEngine.GameState.Domain.UnitTests
         }
 
         [Fact]
+        public void TransferCharacters_WhenDestinationMachinesAreNotAtSameLocationAsActiveCharacter_ShouldThrowCharacterTransferOutsideActiveSpaceException()
+        {
+            // Arrange
+            var game = Game.Restore(
+                id: Guid.NewGuid(),
+                createdAtUtc: DateTimeOffset.UtcNow,
+                setupVersion: "test",
+                stateVersion: 1,
+                machines: new Dictionary<ThunderbirdCode, LocationCode>
+                {
+                    [new("machine-1")] = new("location-1"),
+                    [new("machine-2")] = new("location-2"),
+                    [new("machine-3")] = new("location-2")
+                },
+                characters: new Dictionary<CharacterCode, ThunderbirdCode>
+                {
+                    [new("character-1")] = new("machine-1"),
+                    [new("character-2")] = new("machine-2")
+                },
+                turnOrder:
+                [
+                    new("character-1"),
+                    new("character-2")
+                ],
+                activeTurnIndex: 0);
+
+            var assignments = new List<CharacterAssignment>
+            {
+                new(
+                    CharacterCode: new("character-1"),
+                    DestinationThunderbirdCode: new("machine-2")),
+                new(
+                    CharacterCode: new("character-2"),
+                    DestinationThunderbirdCode: new("machine-3"))
+            };
+
+            // Act & Assert
+            Assert.Throws<CharacterTransferCannotCompleteException>(() => game.TransferCharacters(assignments));
+        }
+
+        [Fact]
+        public void TransferCharacters_WhenDestinationMachinesAreAtSameLocationAsActiveCharacter_ShouldSucceed()
+        {
+            // Arrange
+            var game = Game.Restore(
+                id: Guid.NewGuid(),
+                createdAtUtc: DateTimeOffset.UtcNow,
+                setupVersion: "test",
+                stateVersion: 1,
+                machines: new Dictionary<ThunderbirdCode, LocationCode>
+                {
+                    [new("machine-1")] = new("location-1"),
+                    [new("machine-2")] = new("location-1"),
+                    [new("machine-3")] = new("location-1")
+                },
+                characters: new Dictionary<CharacterCode, ThunderbirdCode>
+                {
+                    [new("character-1")] = new("machine-1"),
+                    [new("character-2")] = new("machine-2")
+                },
+                turnOrder:
+                [
+                    new("character-1"),
+                    new("character-2")
+                ],
+                activeTurnIndex: 0);
+
+            var assignments = new List<CharacterAssignment>
+            {
+                new(
+                    CharacterCode: new("character-1"),
+                    DestinationThunderbirdCode: new("machine-2")),
+                new(
+                    CharacterCode: new("character-2"),
+                    DestinationThunderbirdCode: new("machine-3"))
+            };
+
+            // Act
+            game.TransferCharacters(assignments);
+
+            // Assert
+            foreach (var assignment in assignments)
+            {
+                AssertCharacterAssignment(game, assignment.CharacterCode, assignment.DestinationThunderbirdCode);
+            }
+        }
+
+        [Fact]
         public void MoveThunderbirdMachine_WhenMachineHasAnOccupant_ShouldUpdateLocation()
         {
             // Arrange
@@ -244,7 +332,7 @@ namespace ThunderbirdsBoardGameEngine.GameState.Domain.UnitTests
                 {
                     [new("machine-1")] = new("location-1"),
                     [new("machine-2")] = new("location-1"),
-                    [new("machine-3")] = new("location-1")
+                    [new("machine-3")] = new("location-2")
                 },
                 characters: new Dictionary<CharacterCode, ThunderbirdCode>
                 {

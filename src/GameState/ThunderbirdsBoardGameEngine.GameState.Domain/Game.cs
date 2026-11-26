@@ -141,6 +141,14 @@ namespace ThunderbirdsBoardGameEngine.GameState.Domain
                     nameof(assignments));
             }
 
+            var activeMachine = GetCharacterAssignment(ActiveCharacter);
+            var activeLocation = GetThunderbirdMachineLocation(activeMachine);
+
+            if (assignments.Any(assignment => GetThunderbirdMachineLocation(assignment.DestinationThunderbirdCode) != activeLocation))
+            {
+                throw CharacterTransferCannotCompleteException.OutsideActiveCharacterLocation(activeLocation);
+            }
+
             foreach (var assignment in assignments)
             {
                 if (!_charactersState.TryGetValue(assignment.CharacterCode, out var currentMachine))
@@ -158,6 +166,14 @@ namespace ThunderbirdsBoardGameEngine.GameState.Domain
                     throw new ArgumentException(
                         "Every assignment must transfer its character to another machine.",
                         nameof(assignments));
+                }
+
+                var sourceLocation = GetThunderbirdMachineLocation(currentMachine);
+                var destinationLocation = GetThunderbirdMachineLocation(assignment.DestinationThunderbirdCode);
+
+                if (sourceLocation != activeLocation || destinationLocation != activeLocation)
+                {
+                    throw CharacterTransferCannotCompleteException.OutsideActiveCharacterLocation(activeLocation);
                 }
             }
 
