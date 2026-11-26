@@ -18,5 +18,10 @@
         {
             return $"api/games/{gameId}/character-transfers";
         }
+
+        public static string EndTurn(Guid gameId)
+        {
+            return $"api/games/{gameId}/end-turn";
+        }
     }
 }

@@ -6,11 +6,12 @@ namespace ThunderbirdsBoardGameEngine.UI.Features.GameDashboard.Interfaces
     public interface IGameService
     {
         Task<Guid> CreateGameAsync(IReadOnlyList<string> turnOrder);
-
         Task<GameDashboardViewModel?> GetGameAsync(Guid gameId);
 
         Task<ThunderbirdMovementResult> MoveThunderbirdAsync(Guid gameId, string thunderbirdMachineCode, string destinationLocationCode);
 
         Task<CharacterTransferResult> TransferCharactersAsync(Guid gameId, CharacterTransferSelection selection);
+
+        Task<EndTurnResult> EndTurnAsync(Guid gameId, string activeCharacterCode);
     }
 }

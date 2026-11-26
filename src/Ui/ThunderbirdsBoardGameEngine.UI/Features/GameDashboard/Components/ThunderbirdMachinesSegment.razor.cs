@@ -14,6 +14,9 @@ namespace ThunderbirdsBoardGameEngine.UI.Features.GameDashboard.Components
         [Parameter]
         public EventCallback<ThunderbirdMachinesDashboardViewModel> TransferRequested { get; set; }
 
+        [Parameter]
+        public bool IsMutationPending { get; set; }
+
         private bool CanTransferFrom(ThunderbirdMachinesDashboardViewModel source)
         {
             return source.Occupants.Count > 0

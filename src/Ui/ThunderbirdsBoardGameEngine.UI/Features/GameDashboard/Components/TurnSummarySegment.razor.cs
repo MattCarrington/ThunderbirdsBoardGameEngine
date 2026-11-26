@@ -7,5 +7,17 @@ namespace ThunderbirdsBoardGameEngine.UI.Features.GameDashboard.Components
     {
         [Parameter, EditorRequired]
         public TurnSummaryDashboardViewModel Summary { get; set; } = null!;
+
+        [Parameter]
+        public EventCallback EndTurnRequested { get; set; }
+
+        [Parameter]
+        public bool IsEndingTurn { get; set; }
+
+        [Parameter]
+        public string? ErrorMessage { get; set; }
+
+        [Parameter]
+        public bool IsMutationPending { get; set; }
     }
 }

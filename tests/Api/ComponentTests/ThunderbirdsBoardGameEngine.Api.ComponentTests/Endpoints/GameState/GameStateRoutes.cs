@@ -23,5 +23,10 @@
         {
             return $"{Games}/{gameId}/character-transfers";
         }
+
+        internal static string EndTurn(Guid gameId)
+        {
+            return $"{Games}/{gameId}/end-turn";
+        }
     }
 }

@@ -4,6 +4,7 @@ using ThunderbirdsBoardGameEngine.Client.Core;
 using ThunderbirdsBoardGameEngine.GameState.Client.Interfaces.V1;
 using ThunderbirdsBoardGameEngine.GameState.Contracts.Dtos.V1;
 using ThunderbirdsBoardGameEngine.GameState.Contracts.Dtos.V1.CreateGame;
+using ThunderbirdsBoardGameEngine.GameState.Contracts.Dtos.V1.EndTurn;
 using ThunderbirdsBoardGameEngine.GameState.Contracts.Dtos.V1.ThunderbirdMachines;
 using ThunderbirdsBoardGameEngine.GameState.Contracts.Dtos.V1.TransferCharacters;
 using ThunderbirdsBoardGameEngine.ReferenceData.Core.Identities;
@@ -724,6 +725,114 @@ namespace ThunderbirdsBoardGameEngine.UI.UnitTests.GameDashboard.Services
 
             // Act & Assert
             await Assert.ThrowsAnyAsync<ArgumentException>(() => service.TransferCharactersAsync(gameId, selection));
+        }
+
+        [Fact]
+        public async Task EndTurnAsync_WhenCalled_ReturnsSuccessResult()
+        {
+            // Arrange
+            var gameId = Guid.NewGuid();
+
+            var activeCharacterCode = "scott";
+            var dto = CreateValidApiResponseDto(gameId);
+
+            var apiResult = ApiResult<GameStateResponseDto>.SuccessResult(dto, HttpStatusCode.OK);
+
+            var client = Substitute.For<IGameClient>();
+            client.EndTurnAsync(gameId, Arg.Any<EndTurnRequestDto>(), Arg.Any<CancellationToken>()).Returns(apiResult);
+
+            var service = CreateGameService(client);
+
+            // Act
+            var result = await service.EndTurnAsync(gameId, activeCharacterCode);
+
+            // Assert
+            Assert.Equal(EndTurnOutcome.Success, result.Outcome);
+            Assert.NotNull(result.UpdatedGameState);
+            Assert.Equal(gameId, result.UpdatedGameState.GameId);
+
+            await client.Received(1).EndTurnAsync(gameId, Arg.Any<EndTurnRequestDto>(), Arg.Any<CancellationToken>());
+        }
+
+        [Fact]
+        public async Task EndTurnAsync_WhenClientReturnsConflict_ReturnsConflictResult()
+        {
+            // Arrange
+            var gameId = Guid.NewGuid();
+
+            var activeCharacterCode = "scott";
+
+            var apiResult = ApiResult<GameStateResponseDto>.Failure("Conflict", HttpStatusCode.Conflict);
+
+            var client = Substitute.For<IGameClient>();
+            client.EndTurnAsync(gameId, Arg.Any<EndTurnRequestDto>(), Arg.Any<CancellationToken>()).Returns(apiResult);
+
+            var service = CreateGameService(client);
+
+            // Act
+            var result = await service.EndTurnAsync(gameId, activeCharacterCode);
+
+            // Assert
+            Assert.Equal(EndTurnOutcome.Conflict, result.Outcome);
+            Assert.Null(result.UpdatedGameState);
+        }
+
+        [Fact]
+        public async Task EndTurnAsync_WhenClientReturnsNotFound_ReturnsNotFoundResult()
+        {
+            // Arrange
+            var gameId = Guid.NewGuid();
+
+            var activeCharacterCode = "scott";
+
+            var apiResult = ApiResult<GameStateResponseDto>.Failure("Not Found", HttpStatusCode.NotFound);
+
+            var client = Substitute.For<IGameClient>();
+            client.EndTurnAsync(gameId, Arg.Any<EndTurnRequestDto>(), Arg.Any<CancellationToken>()).Returns(apiResult);
+
+            var service = CreateGameService(client);
+
+            // Act
+            var result = await service.EndTurnAsync(gameId, activeCharacterCode);
+
+            // Assert
+            Assert.Equal(EndTurnOutcome.NotFound, result.Outcome);
+            Assert.Null(result.UpdatedGameState);
+        }
+
+        [Fact]
+        public async Task EndTurnAsync_WhenClientReturnsError_ThrowsInvalidOperationException()
+        {
+            // Arrange
+            var gameId = Guid.NewGuid();
+
+            var activeCharacterCode = "scott";
+
+            var apiResult = ApiResult<GameStateResponseDto>.Failure("Error", HttpStatusCode.InternalServerError);
+
+            var client = Substitute.For<IGameClient>();
+
+            client.EndTurnAsync(gameId, Arg.Any<EndTurnRequestDto>(), Arg.Any<CancellationToken>()).Returns(apiResult);
+
+            var service = CreateGameService(client);
+
+            // Act & Assert
+            await Assert.ThrowsAsync<InvalidOperationException>(() => service.EndTurnAsync(gameId, activeCharacterCode));
+        }
+
+        [Theory]
+        [ClassData(typeof(NullOrWhitespaceStringData))]
+        public async Task EndTurnAsync_WhenActiveCharacterCodeIsNullOrWhitespace_ThrowsArgumentException(string? activeCharacterCode)
+        {
+            // Arrange
+            var gameId = Guid.NewGuid();
+
+            var client = Substitute.For<IGameClient>();
+
+            var service = CreateGameService(client);
+
+            // Act & Assert
+            await Assert.ThrowsAnyAsync<ArgumentException>(() => service.EndTurnAsync(gameId, activeCharacterCode));
         }
 
         private static GameStateResponseDto CreateValidApiResponseDto(Guid gameId)

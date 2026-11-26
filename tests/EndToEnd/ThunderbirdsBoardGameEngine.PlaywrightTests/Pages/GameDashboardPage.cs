@@ -51,6 +51,18 @@ namespace ThunderbirdsBoardGameEngine.PlaywrightTests.Pages
             await AssertCharacterAboardAsync(characterName, destinationMachineName);
         }
 
+        public async Task EndTurnAsync()
+        {
+            var activeCharacter = Page.GetByTestId("active-character");
+            var previousName = (await activeCharacter.InnerTextAsync()).Trim();
+
+            var endTurnButton = Page.GetByTestId("end-turn");
+            await Assertions.Expect(endTurnButton).ToBeEnabledAsync();
+            await endTurnButton.ClickAsync();
+
+            await Assertions.Expect(activeCharacter).Not.ToHaveTextAsync(previousName);
+        }
+
         public async Task AssertPageDisplayedAsync()
         {
             await Assertions.Expect(
@@ -95,6 +107,12 @@ namespace ThunderbirdsBoardGameEngine.PlaywrightTests.Pages
         {
             var moveButton = Page.GetByTestId($"move-{Slugify(thunderbirdName)}");
             await Assertions.Expect(moveButton).ToBeDisabledAsync();
+        }
+
+        public async Task AssertActiveCharacterAsync(string expectedCharacterName)
+        {
+            var activeCharacter = Page.GetByTestId("active-character");
+            await Assertions.Expect(activeCharacter).ToHaveTextAsync(expectedCharacterName);
         }
 
         private static string Slugify(string input)

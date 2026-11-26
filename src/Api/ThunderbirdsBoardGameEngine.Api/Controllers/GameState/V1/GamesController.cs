@@ -6,10 +6,12 @@ using Microsoft.AspNetCore.RateLimiting;
 using ThunderbirdsBoardGameEngine.Api.Exceptions;
 using ThunderbirdsBoardGameEngine.Api.Mappers.GameState.V1;
 using ThunderbirdsBoardGameEngine.GameState.Application.CreateGame;
+using ThunderbirdsBoardGameEngine.GameState.Application.EndTurn;
 using ThunderbirdsBoardGameEngine.GameState.Application.GetGame;
 using ThunderbirdsBoardGameEngine.GameState.Application.MoveThunderbird;
 using ThunderbirdsBoardGameEngine.GameState.Application.TransferCharacters;
 using ThunderbirdsBoardGameEngine.GameState.Contracts.Dtos.V1.CreateGame;
+using ThunderbirdsBoardGameEngine.GameState.Contracts.Dtos.V1.EndTurn;
 using ThunderbirdsBoardGameEngine.GameState.Contracts.Dtos.V1.ThunderbirdMachines;
 using ThunderbirdsBoardGameEngine.GameState.Contracts.Dtos.V1.TransferCharacters;
 using ThunderbirdsBoardGameEngine.GameState.Domain;
@@ -87,6 +89,18 @@ namespace ThunderbirdsBoardGameEngine.Api.Controllers.GameState.V1
                 .ToArray();
 
             var command = new TransferCharactersCommand(gameId, assignments);
+
+            var result = await _mediator.Send(command, cancellationToken);
+
+            return Ok(result.GameSession.ToDto());
+        }
+
+        [HttpPost("{gameId:guid}/end-turn")]
+        public async Task<IActionResult> EndTurn([FromRoute] Guid gameId, [FromBody] EndTurnRequestDto request, CancellationToken cancellationToken)
+        {
+            ValidateGameId(gameId);
+
+            var command = new EndTurnCommand(gameId, new CharacterCode(request.ExpectedActiveCharacterCode));
 
             var result = await _mediator.Send(command, cancellationToken);
 

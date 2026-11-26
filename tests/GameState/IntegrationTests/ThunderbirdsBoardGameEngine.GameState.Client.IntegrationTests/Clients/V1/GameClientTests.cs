@@ -1,9 +1,11 @@
-﻿using System.Net;
+﻿using Microsoft.Extensions.DependencyInjection;
+using System.Net;
 using ThunderbirdsBoardGameEngine.Client.Core;
 using ThunderbirdsBoardGameEngine.GameState.Client.IntegrationTests.Fixtures;
 using ThunderbirdsBoardGameEngine.GameState.Client.Interfaces.V1;
 using ThunderbirdsBoardGameEngine.GameState.Contracts.Dtos.V1;
 using ThunderbirdsBoardGameEngine.GameState.Contracts.Dtos.V1.CreateGame;
+using ThunderbirdsBoardGameEngine.GameState.Contracts.Dtos.V1.EndTurn;
 using ThunderbirdsBoardGameEngine.GameState.Contracts.Dtos.V1.ThunderbirdMachines;
 using ThunderbirdsBoardGameEngine.GameState.Contracts.Dtos.V1.TransferCharacters;
 using ThunderbirdsBoardGameEngine.ReferenceData.Core.Identities;
@@ -149,6 +151,35 @@ namespace ThunderbirdsBoardGameEngine.GameState.Client.IntegrationTests.Clients.
 
             var updatedCharacter = updatedGame.Characters.Single(c => c.Key == character);
             Assert.Equal(thunderbird, updatedCharacter.Value);
+        }
+
+        [Fact]
+        public async Task EndTurn()
+        {
+            // Arrange
+            var seededGame = await _fixture.SeedGame(CancellationToken.None);
+
+            var initialActiveCharacter = seededGame.TurnOrder[0];
+
+            var request = new EndTurnRequestDto
+            {
+                ExpectedActiveCharacterCode = initialActiveCharacter.Value
+            };
+
+            // Act
+            var response = await _client.EndTurnAsync(seededGame.Id, request, CancellationToken.None);
+
+            // Assert
+            AssertResponse(response);
+
+            var result = AssertGameResponseDto(response, seededGame.Id);
+            Assert.NotEqual(initialActiveCharacter.Value, result.ActiveCharacterCode);
+
+            var updatedGame = await _fixture.LoadGame(seededGame.Id, CancellationToken.None);
+            Assert.NotNull(updatedGame);
+
+            var updatedActiveCharacter = updatedGame.ActiveCharacter;
+            Assert.NotEqual(initialActiveCharacter, updatedActiveCharacter);
         }
 
         private static void AssertResponse(ApiResult<GameStateResponseDto> response, HttpStatusCode expectedStatusCode = HttpStatusCode.OK)

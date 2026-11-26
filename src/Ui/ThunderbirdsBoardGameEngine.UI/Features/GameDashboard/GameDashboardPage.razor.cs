@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
+using System.Diagnostics.CodeAnalysis;
 using ThunderbirdsBoardGameEngine.UI.Features.GameDashboard.Interfaces;
 using ThunderbirdsBoardGameEngine.UI.Features.GameDashboard.Services;
 using ThunderbirdsBoardGameEngine.UI.Features.GameDashboard.ViewModels;
@@ -35,6 +36,9 @@ public partial class GameDashboardPage
     private bool _isTransferring;
     private string? _transferError;
     private long _dashboardGeneration;
+    private bool _isEndingTurn;
+    private string? _endTurnError;
+    private bool IsMutationPending => _isMoving || _isTransferring || _isEndingTurn;
 
     protected override Task OnParametersSetAsync()
     {
@@ -48,6 +52,7 @@ public partial class GameDashboardPage
 
         ResetMovementState();
         ResetTransferState();
+        ResetEndTurnState();
 
         _game = null;
         _notFound = false;
@@ -90,6 +95,11 @@ public partial class GameDashboardPage
 
     private async Task BeginMoveAsync(ThunderbirdMachinesDashboardViewModel machine)
     {
+        if (_game is null || IsMutationPending)
+        {
+            return;
+        }
+
         var generation = _dashboardGeneration;
         var requestedGameId = GameId;
 
@@ -131,7 +141,7 @@ public partial class GameDashboardPage
 
     private async Task MoveAsync(string destinationCode)
     {
-        if (_selectedMachine is null)
+        if (_selectedMachine is null || IsMutationPending)
         {
             return;
         }
@@ -214,7 +224,7 @@ public partial class GameDashboardPage
 
     private void BeginTransfer(ThunderbirdMachinesDashboardViewModel source)
     {
-        if (_game is null)
+        if (_game is null || IsMutationPending)
         {
             return;
         }
@@ -229,7 +239,7 @@ public partial class GameDashboardPage
 
     private async Task TransferCharactersAsync(CharacterTransferSelection selection)
     {
-        if (_transferSource is null)
+        if (_transferSource is null || IsMutationPending)
         {
             return;
         }
@@ -308,5 +318,72 @@ public partial class GameDashboardPage
     {
         return generation == _dashboardGeneration
             && gameId == GameId;
+    }
+
+    private async Task EndTurnAsync()
+    {
+        if (_game is null || IsMutationPending)
+        {
+            return;
+        }
+
+        var generation = _dashboardGeneration;
+        var requestedGameId = GameId;
+
+        _endTurnError = null;
+        _isEndingTurn = true;
+
+        try
+        {
+            var result = await GameService.EndTurnAsync(requestedGameId, _game.TurnSummary.ActiveCharacter.CharacterCode);
+
+            if (!IsCurrentDashboard(generation, requestedGameId))
+            {
+                return;
+            }
+
+            switch (result.Outcome)
+            {
+                case EndTurnOutcome.Success
+                    when result.UpdatedGameState is not null:
+                    _game = result.UpdatedGameState;
+                    break;
+                case EndTurnOutcome.Conflict:
+                    await LoadGameAsync();
+                    break;
+                case EndTurnOutcome.NotFound:
+                    _endTurnError = "The game could not be found.";
+                    break;
+                default:
+                    _endTurnError = "The turn could not be ended. Please try again.";
+                    break;
+            }
+        }
+        catch (Exception exception)
+        {
+            if (!IsCurrentDashboard(generation, requestedGameId))
+            {
+                return;
+            }
+
+            _endTurnError = "The turn could not be ended. Please try again.";
+
+            Logger.LogError(
+                exception,
+                "Unable to end the current turn.");
+        }
+        finally
+        {
+            if (IsCurrentDashboard(generation, requestedGameId))
+            {
+                _isEndingTurn = false;
+            }
+        }
+    }
+
+    private void ResetEndTurnState()
+    {
+        _isEndingTurn = false;
+        _endTurnError = null;
     }
 }

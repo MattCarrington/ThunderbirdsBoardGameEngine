@@ -41,22 +41,25 @@ namespace ThunderbirdsBoardGameEngine.UI.ComponentTests.Factories
 
         public static TurnSummaryDashboardViewModel CreateTurnSummary(
             IReadOnlyList<TurnOrderCharacterDashboardViewModel>? turnOrder = null,
-            string activeCharacter = "scott")
+            string activeCharacter = "scott",
+            string activeCharacterDisplayName = "Scott")
         {
             return new TurnSummaryDashboardViewModel(
                 TurnOrder: turnOrder
                     ?? [CreateTurnOrderCharacter(), CreateTurnOrderCharacter("virgil", "Virgil")],
-                ActiveCharacter: CreateTurnOrderCharacter(activeCharacter));
+                ActiveCharacter: CreateTurnOrderCharacter(activeCharacter, activeCharacterDisplayName));
         }
 
         public static GameDashboardViewModel CreateDashboard(
             Guid? gameId = null,
-            IReadOnlyList<ThunderbirdMachinesDashboardViewModel>? machines = null)
+            IReadOnlyList<ThunderbirdMachinesDashboardViewModel>? machines = null,
+            TurnSummaryDashboardViewModel? turnSummary = null)
         {
             return new GameDashboardViewModel(
                 GameId: gameId
                     ?? Guid.NewGuid(),
-                TurnSummary: CreateTurnSummary(),
+                TurnSummary: turnSummary
+                    ?? CreateTurnSummary(),
                 ThunderbirdMachines: machines
                     ?? [CreateMachine()]);
         }
