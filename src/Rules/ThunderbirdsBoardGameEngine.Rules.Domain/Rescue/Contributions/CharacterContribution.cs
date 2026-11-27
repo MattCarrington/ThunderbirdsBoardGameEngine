@@ -1,8 +1,8 @@
-﻿
+﻿using ThunderbirdsBoardGameEngine.ReferenceData.Core.Identities;
+using ThunderbirdsBoardGameEngine.Rules.Domain.Rescue.Calculation;
+using ThunderbirdsBoardGameEngine.Rules.Domain.Rescue.Modifiers;
 
-using ThunderbirdsBoardGameEngine.ReferenceData.Core.Identities;
-
-namespace ThunderbirdsBoardGameEngine.Rules.Domain.Rescue
+namespace ThunderbirdsBoardGameEngine.Rules.Domain.Rescue.Contributions
 {
     /// <summary>
     /// Provides rescue modifiers based on the acting character's special ability.

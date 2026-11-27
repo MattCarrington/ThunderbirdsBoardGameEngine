@@ -1,5 +1,6 @@
-﻿
-namespace ThunderbirdsBoardGameEngine.Rules.Domain.Rescue
+﻿using ThunderbirdsBoardGameEngine.Rules.Domain.Rescue.Modifiers;
+
+namespace ThunderbirdsBoardGameEngine.Rules.Domain.Rescue.Calculation
 {
     /// <summary>
     /// Provides functionality to calculate the rescue target value based on difficulty, input parameters, and

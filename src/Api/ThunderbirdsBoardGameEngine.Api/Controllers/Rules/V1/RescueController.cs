@@ -4,7 +4,10 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
 using ThunderbirdsBoardGameEngine.Api.Mappers.Rules.V1;
+using ThunderbirdsBoardGameEngine.ReferenceData.Core.Identities;
+using ThunderbirdsBoardGameEngine.Rules.Application.Rescue.DetermineFabCardBonus;
 using ThunderbirdsBoardGameEngine.Rules.Contracts.Dtos.Rescue.CalculateRescueTarget.V1;
+using ThunderbirdsBoardGameEngine.Rules.Contracts.Dtos.Rescue.DetermineFabCardBonus.V1;
 
 namespace ThunderbirdsBoardGameEngine.Api.Controllers.Rules.V1
 {
@@ -30,6 +33,22 @@ namespace ThunderbirdsBoardGameEngine.Api.Controllers.Rules.V1
             var response = await _mediator.Send(query, cancellationToken);
 
             return Ok(response.ToDto());
+        }
+
+        [HttpGet("{disasterCardCode}/fab-card-bonus")]
+        public async Task<IActionResult> GetApplicableFabCardBonus([FromRoute] string disasterCardCode, CancellationToken cancellationToken)
+        {
+            var query = new DetermineFabCardBonusQuery(new CardCode(disasterCardCode));
+
+            var result = await _mediator.Send(query, cancellationToken);
+
+            var response = new FabCardBonusResponseDto
+            {
+                FabCardCode = result.FabCardCode.Value,
+                BonusValue = result.BonusValue
+            };
+
+            return Ok(response);
         }
     }
 }

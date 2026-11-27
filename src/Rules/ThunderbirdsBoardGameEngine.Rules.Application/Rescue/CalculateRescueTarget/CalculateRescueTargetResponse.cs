@@ -1,4 +1,4 @@
-﻿using ThunderbirdsBoardGameEngine.Rules.Domain.Rescue;
+﻿using ThunderbirdsBoardGameEngine.Rules.Domain.Rescue.Modifiers;
 
 namespace ThunderbirdsBoardGameEngine.Rules.Application.Rescue.CalculateRescueTarget
 {

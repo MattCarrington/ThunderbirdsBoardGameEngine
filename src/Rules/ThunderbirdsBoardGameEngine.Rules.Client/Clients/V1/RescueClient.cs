@@ -5,6 +5,7 @@ using ThunderbirdsBoardGameEngine.Client.Core.Interfaces;
 using ThunderbirdsBoardGameEngine.Rules.Client.Interfaces.V1;
 using ThunderbirdsBoardGameEngine.Rules.Client.Routing.V1;
 using ThunderbirdsBoardGameEngine.Rules.Contracts.Dtos.Rescue.CalculateRescueTarget.V1;
+using ThunderbirdsBoardGameEngine.Rules.Contracts.Dtos.Rescue.DetermineFabCardBonus.V1;
 
 namespace ThunderbirdsBoardGameEngine.Rules.Client.Clients.V1
 {
@@ -41,6 +42,23 @@ namespace ThunderbirdsBoardGameEngine.Rules.Client.Clients.V1
             using var response = await _httpClient.SendAsync(message, cancellationToken);
 
             return await _httpResponseHandler.HandleResponseAsync<CalculateRescueTargetResponseDto>(response, cancellationToken);
+        }
+
+        public async Task<ApiResult<FabCardBonusResponseDto>> DetermineFabCardBonusAsync(
+            string disasterCardCode,
+            CancellationToken cancellationToken = default)
+        {
+            ArgumentException.ThrowIfNullOrWhiteSpace(disasterCardCode);
+
+            var encodedCode = Uri.EscapeDataString(disasterCardCode);
+
+            var route = ApiRoutes.FabCardBonus.Replace("{disasterCardCode}", encodedCode);
+
+            using var message = new HttpRequestMessage(HttpMethod.Get, route);
+
+            using var response = await _httpClient.SendAsync(message, cancellationToken);
+
+            return await _httpResponseHandler.HandleResponseAsync<FabCardBonusResponseDto>(response, cancellationToken);
         }
     }
 }

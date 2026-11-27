@@ -1,4 +1,6 @@
-﻿namespace ThunderbirdsBoardGameEngine.Rules.Domain.Rescue
+﻿using ThunderbirdsBoardGameEngine.Rules.Domain.Rescue.Calculation;
+
+namespace ThunderbirdsBoardGameEngine.Rules.Domain.Rescue.Modifiers
 {
     /// <summary>
     /// Defines a contract for sources that provide rescue bonus modifiers based on calculation input.

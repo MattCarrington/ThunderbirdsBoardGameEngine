@@ -1,22 +1,27 @@
 ﻿using ThunderbirdsBoardGameEngine.ReferenceData.Core.Enums;
 using ThunderbirdsBoardGameEngine.ReferenceData.Core.Identities;
 using ThunderbirdsBoardGameEngine.ReferenceData.Core.KnownIdentities;
-using ThunderbirdsBoardGameEngine.Rules.Domain.Rescue;
+using ThunderbirdsBoardGameEngine.Rules.Domain.Rescue.Calculation;
+using ThunderbirdsBoardGameEngine.Rules.Domain.Rescue.Modifiers;
 
 namespace ThunderbirdsBoardGameEngine.Rules.Domain.FabCards
 {
-    public sealed class RemoteControlHoverCamera : ICardRescueModifierSource
+    public sealed class RemoteControlHoverCamera : IFabCardRescueModifierSource
     {
         public CardCode CardCode => KnownFabCardCodes.RemoteControlHoverCamera;
 
+        public RescueType RescueType => RescueType.Air;
+
+        public int BonusValue => 3;
+
         public IEnumerable<AppliedRescueModifier> ApplyRescueModifier(RescueCalculationInput input)
         {
-            if (input.RescueType == RescueType.Air)
+            if (input.RescueType == RescueType)
             {
                 yield return new AppliedRescueModifier
                 {
                     Key = CardCode.Value,
-                    Value = 3,
+                    Value = BonusValue,
                     SourceType = SourceType.FabCard
                 };
             }

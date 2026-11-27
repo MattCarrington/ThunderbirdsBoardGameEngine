@@ -1,4 +1,6 @@
-﻿namespace ThunderbirdsBoardGameEngine.Rules.Domain.Rescue
+﻿using ThunderbirdsBoardGameEngine.Rules.Domain.Rescue.Modifiers;
+
+namespace ThunderbirdsBoardGameEngine.Rules.Domain.Rescue.Calculation
 {
     public record RescueTargetResult
     {

@@ -7,6 +7,7 @@ using ThunderbirdsBoardGameEngine.ReferenceData.Runtime.Interfaces;
 using ThunderbirdsBoardGameEngine.ReferenceData.Testing.Builders;
 using ThunderbirdsBoardGameEngine.Rules.Application.Exceptions;
 using ThunderbirdsBoardGameEngine.Rules.Domain.Rescue;
+using ThunderbirdsBoardGameEngine.Rules.Domain.Rescue.Contributions;
 using ThunderbirdsBoardGameEngine.Rules.Infrastructure.Lookups;
 using Xunit;
 
@@ -54,9 +55,9 @@ namespace ThunderbirdsBoardGameEngine.Rules.Infrastructure.UnitTests.Lookups
 
             var expectedBonuses = new[]
             {
-                new DisasterBonus(new("character-1"), 1),
-                new DisasterBonus(new("thunderbird-1"), 2),
-                new DisasterBonus(new("pod-vehicle-1"), 3)
+                new DisasterBonusContribution(new("character-1"), 1),
+                new DisasterBonusContribution(new("thunderbird-1"), 2),
+                new DisasterBonusContribution(new("pod-vehicle-1"), 3)
             };
 
             Assert.Equal(expectedBonuses.Length, result.AvailableBonuses.Count);

@@ -1,5 +1,6 @@
 ﻿using System.Net;
 using ThunderbirdsBoardGameEngine.Rules.Contracts.Dtos.Rescue.CalculateRescueTarget.V1;
+using ThunderbirdsBoardGameEngine.Rules.Contracts.Dtos.Rescue.DetermineFabCardBonus.V1;
 using ThunderbirdsBoardGameEngine.WireMock.Hosting;
 using WireMock.Server;
 
@@ -21,7 +22,12 @@ namespace ThunderbirdsBoardGameEngine.Rules.WireMock.Stubs.V1
         /// <remarks>This constant can be used to configure routing or to reference the endpoint path for
         /// operations related to rescue targets. The asterisk ('*') in the route indicates a placeholder for a variable
         /// segment, such as an identifier.</remarks>
-        public const string Route = "/api/rules/rescue/*/target";
+        public const string CalculateRescueResultRoute = "/api/rules/rescue/*/target";
+
+        /// <summary>
+        /// Gets the API route for the FAB card bonus applied to a rescue.
+        /// </summary>
+        public const string GetFabCardsBonusRoute = "/api/rules/rescue/*/fab-card-bonus";
 
         /// <summary>
         /// Represents the current version of the API as a string constant.
@@ -47,7 +53,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.WireMock.Stubs.V1
         public void RegisterCalculateRescueTargetSuccess(CalculateRescueTargetResponseDto response)
         {
             Server
-                .Given(CreatePost(Route, VersionValue))
+                .Given(CreatePost(CalculateRescueResultRoute, VersionValue))
                 .RespondWith(CreateJsonResponse(response, HttpStatusCode.OK));
         }
 
@@ -62,7 +68,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.WireMock.Stubs.V1
         public void RegisterCalculateRescueTargetNotFound(string? detail = null)
         {
             Server
-                .Given(CreatePost(Route, VersionValue))
+                .Given(CreatePost(CalculateRescueResultRoute, VersionValue))
                 .RespondWith(ProblemJson(
                     "Resource not found",
                     HttpStatusCode.NotFound,
@@ -77,7 +83,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.WireMock.Stubs.V1
         public void RegisterInvalidCalculateRescueTargetRequest(string? detail = null)
         {
             Server
-                .Given(CreatePost(Route, VersionValue))
+                .Given(CreatePost(CalculateRescueResultRoute, VersionValue))
                 .RespondWith(ProblemJson(
                     "Invalid request",
                     HttpStatusCode.BadRequest,
@@ -101,7 +107,54 @@ namespace ThunderbirdsBoardGameEngine.Rules.WireMock.Stubs.V1
             string? detail = null)
         {
             Server.
-                Given(CreatePost(Route, VersionValue))
+                Given(CreatePost(CalculateRescueResultRoute, VersionValue))
+                .RespondWith(ProblemJson(
+                    message,
+                    statusCode,
+                    detail));
+        }
+
+        /// <summary>
+        /// Registers a stub for a successful FAB card bonus response. When a GET request is made to the configured route
+        /// with the correct version header, the stub will respond with the provided <see cref="FabCardBonusResponseDto"/>.
+        /// </summary>
+        /// <param name="response">The response to be returned for a successful FAB card bonus request.</param>
+        public void RegisterGetFabCardBonusSuccess(FabCardBonusResponseDto response)
+        {
+            Server
+                .Given(CreateGet(GetFabCardsBonusRoute, VersionValue))
+                .RespondWith(CreateJsonResponse(response, System.Net.HttpStatusCode.OK));
+        }
+
+        /// <summary>
+        /// Registers a stub for a not found response when retrieving FAB card bonus. When a GET request is made to the configured route
+        /// with the correct version header, the stub will respond with a not found error.
+        /// </summary>
+        /// <param name="detail">Optional detail message to include in the response.</param>
+        public void RegisterGetFabCardBonusNotFound(string? detail = null)
+        {
+            Server
+                .Given(CreateGet(GetFabCardsBonusRoute, VersionValue))
+                .RespondWith(ProblemJson(
+                    "Resource not found",
+                    HttpStatusCode.NotFound,
+                    detail ?? "The specified Thunderbird was not found."));
+        }
+
+        /// <summary>
+        /// Registers a stub for an unexpected error during FAB card bonus retrieval. When a GET request is made to the configured route
+        /// with the correct version header, the stub will respond with the specified error.
+        /// </summary>
+        /// <param name="statusCode">The HTTP status code to be returned in the response.</param>
+        /// <param name="message">The error message to be included in the response.</param>
+        /// <param name="detail">Optional detail message to include in the response.</param>
+        public void RegisterGetFabCardBonusError(
+            HttpStatusCode statusCode = HttpStatusCode.InternalServerError,
+            string message = "An unexpected error occurred.",
+            string? detail = null)
+        {
+            Server
+                .Given(CreateGet(GetFabCardsBonusRoute, VersionValue))
                 .RespondWith(ProblemJson(
                     message,
                     statusCode,
@@ -114,7 +167,8 @@ namespace ThunderbirdsBoardGameEngine.Rules.WireMock.Stubs.V1
         /// </summary>
         public void RegisterMissingHeaderGuard()
         {
-            RegisterMissingVersionHeaderGuard(Route, "POST");
+            RegisterMissingVersionHeaderGuard(CalculateRescueResultRoute, "POST");
+            RegisterMissingVersionHeaderGuard(GetFabCardsBonusRoute, "GET");
         }
 
         /// <summary>
@@ -123,7 +177,8 @@ namespace ThunderbirdsBoardGameEngine.Rules.WireMock.Stubs.V1
         /// </summary>
         public void RegisterIncorrectHeaderGuard()
         {
-            RegisterUnsupportedVersionHeaderGuard(Route, "POST", VersionValue);
+            RegisterUnsupportedVersionHeaderGuard(CalculateRescueResultRoute, "POST", VersionValue);
+            RegisterUnsupportedVersionHeaderGuard(GetFabCardsBonusRoute, "GET", VersionValue);
         }
     }
 }

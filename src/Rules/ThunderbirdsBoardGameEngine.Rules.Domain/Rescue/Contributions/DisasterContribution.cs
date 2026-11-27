@@ -1,6 +1,8 @@
 ﻿using ThunderbirdsBoardGameEngine.ReferenceData.Core.Enums;
+using ThunderbirdsBoardGameEngine.Rules.Domain.Rescue.Calculation;
+using ThunderbirdsBoardGameEngine.Rules.Domain.Rescue.Modifiers;
 
-namespace ThunderbirdsBoardGameEngine.Rules.Domain.Rescue
+namespace ThunderbirdsBoardGameEngine.Rules.Domain.Rescue.Contributions
 {
     /// <summary>
     /// Represents a source of rescue modifiers contributed by a disaster card, including its difficulty, available
@@ -13,11 +15,11 @@ namespace ThunderbirdsBoardGameEngine.Rules.Domain.Rescue
     {
         public int DifficultyNumber { get; }
 
-        public IReadOnlyList<DisasterBonus> AvailableBonuses { get; }
+        public IReadOnlyList<DisasterBonusContribution> AvailableBonuses { get; }
 
         public RescueType RescueType { get; }
 
-        public DisasterContribution(int difficultyNumber, IReadOnlyList<DisasterBonus> availableBonuses, RescueType rescueType)
+        public DisasterContribution(int difficultyNumber, IReadOnlyList<DisasterBonusContribution> availableBonuses, RescueType rescueType)
         {
             DifficultyNumber = difficultyNumber;
             AvailableBonuses = availableBonuses;

@@ -1,6 +1,5 @@
 ﻿using MediatR;
 using Microsoft.Extensions.DependencyInjection;
-using System.Runtime.CompilerServices;
 using ThunderbirdsBoardGameEngine.Rules.Application.Movement.Interfaces;
 using ThunderbirdsBoardGameEngine.Rules.Application.Movement.MapTraversal;
 using ThunderbirdsBoardGameEngine.Rules.Application.Rescue.CalculateRescueTarget;
@@ -14,7 +13,9 @@ using ThunderbirdsBoardGameEngine.Rules.Domain.Movement.Evaluation;
 using ThunderbirdsBoardGameEngine.Rules.Domain.Movement.Routing;
 using ThunderbirdsBoardGameEngine.Rules.Domain.Movement.Speed;
 using ThunderbirdsBoardGameEngine.Rules.Domain.Movement.Topology;
-using ThunderbirdsBoardGameEngine.Rules.Domain.Rescue;
+using ThunderbirdsBoardGameEngine.Rules.Domain.Rescue.Calculation;
+using ThunderbirdsBoardGameEngine.Rules.Domain.Rescue.Modifiers;
+using ThunderbirdsBoardGameEngine.Rules.Domain.Rescue.Registries;
 using ThunderbirdsBoardGameEngine.Rules.Domain.TransferCharacters.Evaluation;
 using ThunderbirdsBoardGameEngine.Rules.Infrastructure.Lookups;
 
@@ -73,12 +74,33 @@ namespace ThunderbirdsBoardGameEngine.Rules.Infrastructure
             services.AddSingleton<RescueTargetCalculator>();
             services.AddSingleton<ICalculateRescueTargetResolutionService, CalculateRescueTargetResolutionService>();
 
+            services.AddSingleton<IFabCardRescueModifierSourceRegistry, FabCardRescueModifierSourceRegistry>();
             services.AddSingleton<ICardBonusModifierSourceRegistry, CardBonusModifierSourceRegistry>();
             services.AddSingleton<ICardRescueModifierSource, TheHoodInterferes>();
-            services.AddSingleton<ICardRescueModifierSource, AstronautSpacewalk>();
-            services.AddSingleton<ICardRescueModifierSource, PersonalHoverjet>();
-            services.AddSingleton<ICardRescueModifierSource, RemoteControlHoverCamera>();
-            services.AddSingleton<ICardRescueModifierSource, UnderwaterSealingUnit>();
+
+            services.AddSingleton<AstronautSpacewalk>();
+            services.AddSingleton<ICardRescueModifierSource>(
+                sp => sp.GetRequiredService<AstronautSpacewalk>());
+            services.AddSingleton<IFabCardRescueModifierSource>(
+                sp => sp.GetRequiredService<AstronautSpacewalk>());
+
+            services.AddSingleton<PersonalHoverjet>();
+            services.AddSingleton<ICardRescueModifierSource>(
+                sp => sp.GetRequiredService<PersonalHoverjet>());
+            services.AddSingleton<IFabCardRescueModifierSource>(
+                sp => sp.GetRequiredService<PersonalHoverjet>());
+
+            services.AddSingleton<RemoteControlHoverCamera>();
+            services.AddSingleton<ICardRescueModifierSource>(
+                sp => sp.GetRequiredService<RemoteControlHoverCamera>());
+            services.AddSingleton<IFabCardRescueModifierSource>(
+                sp => sp.GetRequiredService<RemoteControlHoverCamera>());
+
+            services.AddSingleton<UnderwaterSealingUnit>();
+            services.AddSingleton<ICardRescueModifierSource>(
+                sp => sp.GetRequiredService<UnderwaterSealingUnit>());
+            services.AddSingleton<IFabCardRescueModifierSource>(
+                sp => sp.GetRequiredService<UnderwaterSealingUnit>());
         }
 
         private static void RegisterMovementServices(IServiceCollection services)

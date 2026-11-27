@@ -7,5 +7,7 @@
         public const string ValidateMovement = "api/rules/movement/{thunderbirdCode}/validate";
 
         public const string GetAccessibleLocations = "api/rules/movement/{thunderbirdCode}/accessible-locations";
+
+        public const string FabCardBonus = "api/rules/rescue/{disasterCardCode}/fab-card-bonus";
     }
 }

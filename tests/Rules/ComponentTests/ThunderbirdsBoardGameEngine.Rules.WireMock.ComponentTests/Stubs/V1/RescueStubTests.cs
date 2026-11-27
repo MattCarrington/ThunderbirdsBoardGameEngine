@@ -2,7 +2,9 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using System.Net.Http.Json;
+using ThunderbirdsBoardGameEngine.Rules.Contracts.Dtos.Movement.AccessibleLocations.V1;
 using ThunderbirdsBoardGameEngine.Rules.Contracts.Dtos.Rescue.CalculateRescueTarget.V1;
+using ThunderbirdsBoardGameEngine.Rules.Contracts.Dtos.Rescue.DetermineFabCardBonus.V1;
 using ThunderbirdsBoardGameEngine.Rules.WireMock.Stubs.V1;
 using ThunderbirdsBoardGameEngine.TestUtils.WireMock.xUnit.Fixtures;
 using WireMock.Server;
@@ -37,7 +39,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.WireMock.ComponentTests.Stubs.V1
             using var client = CreateClient();
 
             // Act
-            using var response = await client.PostAsJsonAsync(RescueStub.Route, CreateValidRescueTargetRequest(), TestContext.Current.CancellationToken);
+            using var response = await client.PostAsJsonAsync(RescueStub.CalculateRescueResultRoute, CreateValidRescueTargetRequest(), TestContext.Current.CancellationToken);
 
             // Assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
@@ -59,7 +61,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.WireMock.ComponentTests.Stubs.V1
             using var client = CreateClient();
 
             // Act
-            using var response = await client.PostAsJsonAsync(RescueStub.Route, CreateValidRescueTargetRequest(), TestContext.Current.CancellationToken);
+            using var response = await client.PostAsJsonAsync(RescueStub.CalculateRescueResultRoute, CreateValidRescueTargetRequest(), TestContext.Current.CancellationToken);
 
             // Assert
             Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
@@ -80,7 +82,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.WireMock.ComponentTests.Stubs.V1
             using var client = CreateClient();
 
             // Act
-            using var response = await client.PostAsJsonAsync(RescueStub.Route, CreateValidRescueTargetRequest(), TestContext.Current.CancellationToken);
+            using var response = await client.PostAsJsonAsync(RescueStub.CalculateRescueResultRoute, CreateValidRescueTargetRequest(), TestContext.Current.CancellationToken);
 
             // Assert
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
@@ -100,7 +102,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.WireMock.ComponentTests.Stubs.V1
             using var client = CreateClient();
 
             // Act
-            using var response = await client.PostAsJsonAsync(RescueStub.Route, CreateValidRescueTargetRequest(), TestContext.Current.CancellationToken);
+            using var response = await client.PostAsJsonAsync(RescueStub.CalculateRescueResultRoute, CreateValidRescueTargetRequest(), TestContext.Current.CancellationToken);
 
             // Assert
             Assert.Equal(HttpStatusCode.InternalServerError, response.StatusCode);
@@ -122,7 +124,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.WireMock.ComponentTests.Stubs.V1
             using var client = CreateClient();
 
             // Act
-            using var response = await client.PostAsJsonAsync(RescueStub.Route, CreateValidRescueTargetRequest(), TestContext.Current.CancellationToken);
+            using var response = await client.PostAsJsonAsync(RescueStub.CalculateRescueResultRoute, CreateValidRescueTargetRequest(), TestContext.Current.CancellationToken);
 
             // Assert
             Assert.Equal(HttpStatusCode.ServiceUnavailable, response.StatusCode);
@@ -144,7 +146,7 @@ namespace ThunderbirdsBoardGameEngine.Rules.WireMock.ComponentTests.Stubs.V1
             _stub.RegisterCalculateRescueTargetSuccess(dto); // should not be called
 
             // Act
-            using var response = await client.PostAsJsonAsync(RescueStub.Route, CreateValidRescueTargetRequest(), TestContext.Current.CancellationToken);
+            using var response = await client.PostAsJsonAsync(RescueStub.CalculateRescueResultRoute, CreateValidRescueTargetRequest(), TestContext.Current.CancellationToken);
 
             // Assert
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
@@ -167,7 +169,116 @@ namespace ThunderbirdsBoardGameEngine.Rules.WireMock.ComponentTests.Stubs.V1
             using var client = CreateClient("2.0");
 
             // Act
-            using var response = await client.PostAsJsonAsync(RescueStub.Route, CreateValidRescueTargetRequest(), TestContext.Current.CancellationToken);
+            using var response = await client.PostAsJsonAsync(RescueStub.CalculateRescueResultRoute, CreateValidRescueTargetRequest(), TestContext.Current.CancellationToken);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+
+            var problem = await response.Content.ReadFromJsonAsync<ProblemDetails>(cancellationToken: TestContext.Current.CancellationToken);
+            Assert.NotNull(problem);
+            Assert.Equal(StatusCodes.Status400BadRequest, problem.Status);
+            Assert.Contains("Unsupported version in header", problem.Title);
+        }
+
+        [Fact]
+        public async Task GetFabCardBonus_WhenSuccessSpecified_ReturnsSuccess()
+        {
+            // Arrange
+            var dto = CreateValidFabCardBonusResponse();
+
+            _stub.RegisterGetFabCardBonusSuccess(dto);
+
+            using var client = CreateClient();
+
+            // Act
+            using var response = await client.GetAsync(RescueStub.GetFabCardsBonusRoute, TestContext.Current.CancellationToken);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+            var result = await response.Content.ReadFromJsonAsync<FabCardBonusResponseDto>(cancellationToken: TestContext.Current.CancellationToken);
+            Assert.NotNull(result);
+            Assert.Equal(dto.FabCardCode, result.FabCardCode);
+            Assert.Equal(dto.BonusValue, result.BonusValue);
+        }
+
+        [Fact]
+        public async Task GetFabCardBonus_WhenErrorUnspecified_ReturnsError()
+        {
+            // Arrange
+            _stub.RegisterGetFabCardBonusError();
+
+            using var client = CreateClient();
+
+            // Act
+            using var response = await client.GetAsync(RescueStub.GetFabCardsBonusRoute, TestContext.Current.CancellationToken);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.InternalServerError, response.StatusCode);
+
+            var problem = await response.Content.ReadFromJsonAsync<ProblemDetails>(cancellationToken: TestContext.Current.CancellationToken);
+            Assert.NotNull(problem);
+            Assert.Equal(StatusCodes.Status500InternalServerError, problem.Status);
+            Assert.Equal("An unexpected error occurred.", problem.Title);
+        }
+
+        [Fact]
+        public async Task GetFabCardBonus_WhenErrorSpecified_ReturnsError()
+        {
+            // Arrange
+            var errorMessage = "The service is unavailable right now";
+
+            _stub.RegisterGetFabCardBonusError(HttpStatusCode.ServiceUnavailable, errorMessage);
+
+            using var client = CreateClient();
+
+            // Act
+            using var response = await client.GetAsync(RescueStub.GetFabCardsBonusRoute, TestContext.Current.CancellationToken);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.ServiceUnavailable, response.StatusCode);
+
+            var problem = await response.Content.ReadFromJsonAsync<ProblemDetails>(cancellationToken: TestContext.Current.CancellationToken);
+            Assert.NotNull(problem);
+            Assert.Equal(StatusCodes.Status503ServiceUnavailable, problem.Status);
+            Assert.Equal(errorMessage, problem.Title);
+        }
+
+        [Fact]
+        public async Task GetFabCardBonus_WhenNoVersionHeader_ReturnsBadRequestAsync()
+        {
+            // Arrange
+            using var client = new HttpClient { BaseAddress = new Uri(_server.Urls[0]) };
+
+            var dto = CreateValidFabCardBonusResponse();
+
+            _stub.RegisterGetFabCardBonusSuccess(dto); // should not be called
+
+            // Act
+            using var response = await client.GetAsync(RescueStub.GetFabCardsBonusRoute, TestContext.Current.CancellationToken);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+
+            var problem = await response.Content.ReadFromJsonAsync<ProblemDetails>(cancellationToken: TestContext.Current.CancellationToken);
+            Assert.NotNull(problem);
+            Assert.Contains("Missing header", problem.Detail);
+            Assert.Equal(StatusCodes.Status400BadRequest, problem.Status);
+            Assert.Equal("Missing API version header", problem.Title);
+        }
+
+        [Fact]
+        public async Task GetFabCardBonus_WhenWrongVersionHeader_ReturnsBadRequestAsync()
+        {
+            // Arrange
+            var dto = CreateValidFabCardBonusResponse();
+
+            _stub.RegisterGetFabCardBonusSuccess(dto); // should not be called
+
+            using var client = CreateClient("2.0");
+
+            // Act
+            using var response = await client.GetAsync(RescueStub.GetFabCardsBonusRoute, TestContext.Current.CancellationToken);
 
             // Assert
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
@@ -221,6 +332,15 @@ namespace ThunderbirdsBoardGameEngine.Rules.WireMock.ComponentTests.Stubs.V1
                         SourceType = "disaster-card"
                     }
                 ]
+            };
+        }
+
+        private static FabCardBonusResponseDto CreateValidFabCardBonusResponse()
+        {
+            return new FabCardBonusResponseDto
+            {
+                FabCardCode = "FAB-001",
+                BonusValue = 5
             };
         }
     }

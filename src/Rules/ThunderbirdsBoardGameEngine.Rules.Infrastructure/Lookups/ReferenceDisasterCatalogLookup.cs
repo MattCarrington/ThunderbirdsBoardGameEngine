@@ -3,7 +3,7 @@ using ThunderbirdsBoardGameEngine.ReferenceData.Core.Model;
 using ThunderbirdsBoardGameEngine.ReferenceData.Runtime.Interfaces;
 using ThunderbirdsBoardGameEngine.Rules.Application.Exceptions;
 using ThunderbirdsBoardGameEngine.Rules.Application.Rescue.Interfaces;
-using ThunderbirdsBoardGameEngine.Rules.Domain.Rescue;
+using ThunderbirdsBoardGameEngine.Rules.Domain.Rescue.Contributions;
 
 namespace ThunderbirdsBoardGameEngine.Rules.Infrastructure.Lookups
 {
@@ -31,9 +31,9 @@ namespace ThunderbirdsBoardGameEngine.Rules.Infrastructure.Lookups
             );
         }
 
-        private static DisasterBonus ProjectBonus(ReferenceDisasterBonus condition)
+        private static DisasterBonusContribution ProjectBonus(ReferenceDisasterBonus condition)
         {
-            return new DisasterBonus
+            return new DisasterBonusContribution
             (
                 Key: condition.Key,
                 Value: condition.Value
